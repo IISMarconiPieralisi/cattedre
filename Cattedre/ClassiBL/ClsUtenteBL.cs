@@ -7,76 +7,82 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using System.Data;
 
 namespace Cattedre
 {
     public static class ClsUtenteBL
     {
-        
 
         public static long RilevaIDutente(string nome, string cognome)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            ClsUtenteDL utente = null;
+            long IDutente = 0;
             try
             {
-                conn.Open();
-                string sql = "SELECT ID " +
-                             "FROM utenti " +
-                             "WHERE nome = '" + nome + "' AND cognome = '" + cognome + "'";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                DataTable dt = new DataTable();
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    dr.Read();
-                    utente = new ClsUtenteDL();
-                    utente.ID = Convert.ToInt64(dr["ID"]);
+                    conn.Open();
+                    string sql = @"SELECT ID  FROM utenti 
+                                    WHERE nome= @nome AND cognome = @cognome";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@nome", nome);
+                        cmd.Parameters.AddWithValue("@cognome", cognome);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                            if(dt.Rows.Count>0)
+                                IDutente = Convert.ToInt64(dt.Rows[0]["ID"]);
+                        }
+
+                    }
+                    conn.Close();
                 }
-                conn.Close();
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex);
             }
-            if (utente != null)
-                return utente.ID;
-            else
-                return 0;
+            return IDutente == null ? IDutente : 0;
         }
 
         public static string RilevaNomeUtente(long id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            ClsUtenteDL utente = null;
+            string risultato = null;
             try
             {
-                conn.Open();
-                string sql = "SELECT u.nome, u.cognome " +
-                             "FROM utenti u " +
-                             "WHERE u.ID = " + id;
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    dr.Read();
-                    utente = new ClsUtenteDL();
-                    utente.Nome = dr["nome"].ToString();
-                    utente.Cognome = dr["cognome"].ToString();
-                }
-                conn.Close();
+                    conn.Open();
+                    string sql = @"SELECT u.nome, u.cognome 
+                                 FROM utenti u  
+                                 WHERE u.ID = @ID";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", id);
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                            {
+                                string nome = dr.IsDBNull(0) ? "" : dr.GetString(0);
+                                string cognome = dr.IsDBNull(1) ? "" : dr.GetString(1);
+                                risultato = $"{nome} {cognome}".Trim();
+                            }
+                        }
+                        conn.Close();
+                    }
+                    }
+
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex);
             }
-            if (utente != null)
-                return utente.Nome + " " + utente.Cognome;
-            else
-                return "-";
+            return !string.IsNullOrEmpty(risultato) ? risultato : "-";
         }
 
         public static List<ClsUtenteDL> CaricaCoordinatoriDipartimenti()
@@ -117,7 +123,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex);
             }
             return utenti;
         }
@@ -125,85 +131,86 @@ namespace Cattedre
         public static List<ClsUtenteDL> CaricaCoordinatoriClassi()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
+
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+            DataTable dt = new DataTable();
             try
             {
-                conn.Open();
-                string sql = "SELECT * FROM utenti u WHERE u.tipoUtente LIKE '%D'";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    while (dr.Read())
+                    conn.Open();
+                    string sql = "SELECT * FROM utenti u WHERE u.tipoUtente LIKE '%D'";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+
+                    }
+                    foreach (DataRow row in dt.Rows)
                     {
                         ClsUtenteDL utente = new ClsUtenteDL();
-                        utente.ID = Convert.ToInt64(dr["ID"]);
-                        utente.Email = dr["email"].ToString();
-                        utente.Cognome = dr["cognome"].ToString();
-                        utente.Nome = dr["nome"].ToString();
-                        utente.TipoUtente = dr["tipoUtente"].ToString();
-                        if (!dr.IsDBNull(dr.GetOrdinal("tipoDocente")))
-                        {
-                            utente.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
-                        }
-                        else
-                        {
-                            utente.TipoDocente = '\0'; // oppure un altro valore di default
-                        }
+                        utente.ID = Convert.ToInt64(row["ID"]);
+                        utente.Email = row["email"].ToString();
+                        //anche se la query non restituisce la password, la proprietà non la userà e non ha senso inizarlizzarla,  essendo un dato sensibile
+                        utente.Cognome = row["cognome"].ToString();
+                        utente.Nome = row["nome"].ToString();
+                        utente.TipoUtente = row["tipoUtente"].ToString();
+                        //utente.Colore = row["colore"].ToString();
+                        utente.TipoDocente = row["tipoDocente"] == null ? Convert.ToChar(row["tipoDocente"]) : '\0';
                         utenti.Add(utente);
                     }
+                    conn.Close();
+
                 }
-                conn.Close();
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex);
             }
             return utenti;
         }
+    
 
         public static List<ClsUtenteDL> CaricaUtenti()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
+            DataTable ds = new DataTable();
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             try
             {
                 conn.Open();
                 string sql = "SELECT * FROM utenti ";
 
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    while (dr.Read())
+                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                     {
-                        ClsUtenteDL utente = new ClsUtenteDL();
-                        utente.ID = Convert.ToInt64(dr["ID"]);
-                        utente.Email = dr["email"].ToString();
-                        //anche se la query non restituisce la password, la proprietà non la userà e non ha senso inizarlizzarla,  essendo un dato sensibile
-                        utente.Cognome = dr["cognome"].ToString();
-                        utente.Nome = dr["nome"].ToString();
-                        utente.TipoUtente = dr["tipoUtente"].ToString();
-                        //utente.Colore = dr["colore"].ToString();
-                        if (!dr.IsDBNull(dr.GetOrdinal("tipoDocente")))
-                        {
-                            utente.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
-                        }
-                        else
-                        {
-                            utente.TipoDocente = '\0'; // oppure un altro valore di default
-                        }
-                        utenti.Add(utente);
+                        dr.Fill(ds);
                     }
+
+                }
+                foreach(DataRow row  in ds.Rows)
+                {
+                    ClsUtenteDL utente = new ClsUtenteDL();
+                    utente.ID = Convert.ToInt64(row["ID"]);
+                    utente.Email = row["email"].ToString();
+                    //anche se la query non restituisce la password, la proprietà non la userà e non ha senso inizarlizzarla,  essendo un dato sensibile
+                    utente.Cognome = row["cognome"].ToString();
+                    utente.Nome = row["nome"].ToString();
+                    utente.TipoUtente = row["tipoUtente"].ToString();
+                    //utente.Colore = row["colore"].ToString();
+                    utente.TipoDocente = row["tipoDocente"] == null ? Convert.ToChar(row["tipoDocente"]):'\0';
+                    utenti.Add(utente);
                 }
                 conn.Close();
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex);
             }
             return utenti;
         }

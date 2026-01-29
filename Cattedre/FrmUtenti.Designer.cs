@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmUtenti));
             this.lvUtenti = new System.Windows.Forms.ListView();
             this.chNome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chCognome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -42,6 +41,12 @@
             this.btInserisci = new System.Windows.Forms.Button();
             this.btModifica = new System.Windows.Forms.Button();
             this.btElimina = new System.Windows.Forms.Button();
+            this.pnFiltra = new System.Windows.Forms.Panel();
+            this.btFiltro = new System.Windows.Forms.Button();
+            this.cbFiltro = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pnfiltri = new System.Windows.Forms.Panel();
+            this.pnFiltra.SuspendLayout();
             this.SuspendLayout();
             // 
             // lvUtenti
@@ -61,9 +66,9 @@
             this.chDataFine});
             this.lvUtenti.FullRowSelect = true;
             this.lvUtenti.HideSelection = false;
-            this.lvUtenti.Location = new System.Drawing.Point(45, 56);
+            this.lvUtenti.Location = new System.Drawing.Point(45, 85);
             this.lvUtenti.Name = "lvUtenti";
-            this.lvUtenti.Size = new System.Drawing.Size(1008, 389);
+            this.lvUtenti.Size = new System.Drawing.Size(1008, 551);
             this.lvUtenti.TabIndex = 0;
             this.lvUtenti.UseCompatibleStateImageBehavior = false;
             this.lvUtenti.View = System.Windows.Forms.View.Details;
@@ -116,7 +121,7 @@
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(1059, 56);
+            this.btInserisci.Location = new System.Drawing.Point(1059, 85);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.Size = new System.Drawing.Size(118, 23);
             this.btInserisci.TabIndex = 1;
@@ -127,7 +132,7 @@
             // btModifica
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btModifica.Location = new System.Drawing.Point(1059, 85);
+            this.btModifica.Location = new System.Drawing.Point(1059, 114);
             this.btModifica.Name = "btModifica";
             this.btModifica.Size = new System.Drawing.Size(118, 23);
             this.btModifica.TabIndex = 2;
@@ -138,7 +143,7 @@
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(1059, 114);
+            this.btElimina.Location = new System.Drawing.Point(1059, 143);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(118, 23);
             this.btElimina.TabIndex = 3;
@@ -146,19 +151,71 @@
             this.btElimina.UseVisualStyleBackColor = true;
             this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
             // 
+            // pnFiltra
+            // 
+            this.pnFiltra.Controls.Add(this.pnfiltri);
+            this.pnFiltra.Controls.Add(this.btFiltro);
+            this.pnFiltra.Controls.Add(this.cbFiltro);
+            this.pnFiltra.Controls.Add(this.label1);
+            this.pnFiltra.Location = new System.Drawing.Point(45, 28);
+            this.pnFiltra.Name = "pnFiltra";
+            this.pnFiltra.Size = new System.Drawing.Size(1008, 51);
+            this.pnFiltra.TabIndex = 4;
+            // 
+            // btFiltro
+            // 
+            this.btFiltro.Enabled = false;
+            this.btFiltro.Location = new System.Drawing.Point(881, 16);
+            this.btFiltro.Name = "btFiltro";
+            this.btFiltro.Size = new System.Drawing.Size(109, 23);
+            this.btFiltro.TabIndex = 2;
+            this.btFiltro.Text = "Filtra";
+            this.btFiltro.UseVisualStyleBackColor = true;
+            // 
+            // cbFiltro
+            // 
+            this.cbFiltro.FormattingEnabled = true;
+            this.cbFiltro.Items.AddRange(new object[] {
+            "Tipo Utente",
+            "Tipo Docente",
+            "Tipo Contratto"});
+            this.cbFiltro.Location = new System.Drawing.Point(68, 18);
+            this.cbFiltro.Name = "cbFiltro";
+            this.cbFiltro.Size = new System.Drawing.Size(130, 21);
+            this.cbFiltro.TabIndex = 1;
+            this.cbFiltro.SelectedIndexChanged += new System.EventHandler(this.cbFiltro_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Filtra per:";
+            // 
+            // pnfiltri
+            // 
+            this.pnfiltri.Location = new System.Drawing.Point(214, 8);
+            this.pnfiltri.Name = "pnfiltri";
+            this.pnfiltri.Size = new System.Drawing.Size(614, 31);
+            this.pnfiltri.TabIndex = 5;
+            // 
             // FrmUtenti
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1203, 495);
+            this.ClientSize = new System.Drawing.Size(1203, 657);
+            this.Controls.Add(this.pnFiltra);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.btModifica);
             this.Controls.Add(this.btInserisci);
             this.Controls.Add(this.lvUtenti);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmUtenti";
             this.Text = "Utenti";
             this.Load += new System.EventHandler(this.FrmUtenti_Load);
+            this.pnFiltra.ResumeLayout(false);
+            this.pnFiltra.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -178,5 +235,10 @@
         private System.Windows.Forms.ColumnHeader chMonteOre;
         private System.Windows.Forms.ColumnHeader chDataInzio;
         private System.Windows.Forms.ColumnHeader chDataFine;
+        private System.Windows.Forms.Panel pnFiltra;
+        private System.Windows.Forms.Button btFiltro;
+        private System.Windows.Forms.ComboBox cbFiltro;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel pnfiltri;
     }
 }

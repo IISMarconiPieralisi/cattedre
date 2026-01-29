@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Cattedre
+{
+    public partial class FrmCdCs : Form
+    {
+        List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+        public int indiceDaModificare = 0;
+
+        public FrmCdCs()
+        {
+            InitializeComponent();
+        }
+
+        private void CaricaListView(List<ClsClasseDiConcorsoDL> cdcs)
+        {
+            lvCdCs.Items.Clear();
+
+            int i = 0;
+            foreach (ClsClasseDiConcorsoDL cdc in cdcs)
+            {
+                ListViewItem lvi = new ListViewItem(cdc.Livello);
+                lvi.SubItems.Add(cdc.Nome);
+                lvi.SubItems.Add(cdc.AbilitazioniRichieste);
+                lvi.Tag = cdc.ID;
+                lvCdCs.Items.Add(lvi);
+
+                i++;
+            }
+        }
+
+        private void btInserisci_Click(object sender, EventArgs e)
+        {
+            FrmCdC frmCdC = new FrmCdC();
+            DialogResult dr = frmCdC.ShowDialog();
+
+            if (frmCdC._cdc.Nome == string.Empty)
+                dr = DialogResult.No;
+            if (dr == DialogResult.OK)
+            {
+                ClsClasseDiConcorsoBL.InserisciCdc(frmCdC._cdc);
+                cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+                CaricaListView(cdcs);
+            }
+        }
+
+        private void FrmCdCs_Load(object sender, EventArgs e)
+        {
+            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+            CaricaListView(cdcs);
+        }
+
+        private void brModifica_Click(object sender, EventArgs e)
+        {
+            if (lvCdCs.SelectedIndices.Count == 1)
+            {
+                indiceDaModificare = lvCdCs.SelectedIndices[0];
+                FrmCdC frmCdC = new FrmCdC();
+                frmCdC._cdc = cdcs[indiceDaModificare];
+                DialogResult dr = frmCdC.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    ClsClasseDiConcorsoBL.ModificaCdc(frmCdC._cdc, cdcs, indiceDaModificare);
+                    CaricaListView(cdcs);
+                }
+            }
+        }
+
+        private void btElimina_Click(object sender, EventArgs e)
+        {
+            if (lvCdCs.SelectedIndices.Count == 1)
+            {
+                int indiceDaEliminare = lvCdCs.SelectedIndices[0];
+                int idDaEliminare = Convert.ToInt32(lvCdCs.Items[indiceDaEliminare].Tag);
+                DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
+                if (dr == DialogResult.Yes)
+                {
+                    cdcs = ClsClasseDiConcorsoBL.EliminaCdc(idDaEliminare);
+                }
+                CaricaListView(cdcs);
+            }
+        }
+    }
+}

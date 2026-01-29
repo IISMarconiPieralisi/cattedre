@@ -1,0 +1,445 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ACA3EC2F-EDC2-4970-9D8E-1D57C33012FC}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Cattedre</RootNamespace>
+    <AssemblyName>Cattedre</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>1-47b4fe04.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.Cryptography.2.5.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="Bunifu_UI_v1.5.3">
+      <HintPath>..\..\..\..\Downloads\Bunifu_UI_v1.5.3.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Ribbon">
+      <HintPath>..\..\..\..\Downloads\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Ribbon.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Toolkit">
+      <HintPath>..\..\..\..\Downloads\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.30.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.30.0\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4, Version=1.3.8.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>..\packages\K4os.Compression.LZ4.1.3.8\lib\netstandard2.0\K4os.Compression.LZ4.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4.Streams, Version=1.3.8.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>..\packages\K4os.Compression.LZ4.Streams.1.3.8\lib\netstandard2.0\K4os.Compression.LZ4.Streams.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Hash.xxHash, Version=1.0.8.0, Culture=neutral, PublicKeyToken=32cd54395057cec3, processorArchitecture=MSIL">
+      <HintPath>..\packages\K4os.Hash.xxHash.1.0.8\lib\netstandard2.0\K4os.Hash.xxHash.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.0\lib\netstandard2.0\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.8.0.2\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.8.0.2\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="MySql.Data, Version=8.4.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.8.4.0\lib\netstandard2.0\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySqlConnector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d33d3e53aa5f8c92, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySqlConnector.2.4.0\lib\netstandard2.0\MySqlConnector.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.6.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.8.0.1\lib\netstandard2.0\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Pipelines, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Pipelines.9.0.0\lib\netstandard2.0\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Loader, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Loader.4.3.0\lib\netstandard1.5\System.Runtime.Loader.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.AccessControl, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.AccessControl.6.0.0\lib\net461\System.Security.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.ProtectedData, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.ProtectedData.9.0.9\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Permissions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Permissions.8.0.0\lib\netstandard2.0\System.Security.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encoding.CodePages.8.0.0\lib\netstandard2.0\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.9.0.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.9.0.0\lib\netstandard2.0\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ZstdSharp, Version=0.8.5.0, Culture=neutral, PublicKeyToken=8d151af33a4ad5cf, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZstdSharp.Port.0.8.5\lib\netstandard2.0\ZstdSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClassiBL\ClsAfferireBL.cs" />
+    <Compile Include="ClassiBL\ClsAnnoScolasticoBL.cs" />
+    <Compile Include="ClassiBL\ClsAssegnareBL.cs" />
+    <Compile Include="ClassiBL\ClsClasseBL.cs" />
+    <Compile Include="ClassiBL\ClsClasseDiConcorsoBL.cs" />
+    <Compile Include="ClassiBL\ClsContrattoBL.cs" />
+    <Compile Include="ClassiBL\ClsDipartimentoBL.cs" />
+    <Compile Include="ClassiBL\ClsDisciplinaBL.cs" />
+    <Compile Include="ClassiBL\ClsIndirizzoBL.cs" />
+    <Compile Include="ClassiBL\ClsUtenteBL.cs" />
+    <Compile Include="ClassiDL\ClsAfferireDL.cs" />
+    <Compile Include="ClassiDL\ClsAnnoScolasticoDL.cs" />
+    <Compile Include="ClassiDL\ClsAssegnareDL.cs" />
+    <Compile Include="ClassiDL\ClsClasseDiConcorsoDL.cs" />
+    <Compile Include="ClassiDL\ClsClasseDL.cs" />
+    <Compile Include="ClassiDL\ClsContrattoDL.cs" />
+    <Compile Include="ClassiDL\ClsDipartimentoDL.cs" />
+    <Compile Include="ClassiDL\ClsDisciplinaDL.cs" />
+    <Compile Include="ClassiDL\ClsIndirizzoDL.cs" />
+    <Compile Include="ClassiDL\ClsUtenteDL.cs" />
+    <Compile Include="ClassiBL\ClsRichiedereBL.cs" />
+    <Compile Include="ClassiDL\ClsRichiedereDL.cs" />
+    <Compile Include="Persona.cs" />
+    <Compile Include="FrmAnniScolastici.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAnniScolastici.Designer.cs">
+      <DependentUpon>FrmAnniScolastici.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmAnnoScolastico.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAnnoScolastico.Designer.cs">
+      <DependentUpon>FrmAnnoScolastico.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmCattedre.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCattedre.Designer.cs">
+      <DependentUpon>FrmCattedre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmCdC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCdC.Designer.cs">
+      <DependentUpon>FrmCdC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmCdCs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCdCs.Designer.cs">
+      <DependentUpon>FrmCdCs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmClasse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmClasse.Designer.cs">
+      <DependentUpon>FrmClasse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmClassi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmClassi.Designer.cs">
+      <DependentUpon>FrmClassi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmContratti.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmContratti.Designer.cs">
+      <DependentUpon>FrmContratti.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmContratto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmContratto.Designer.cs">
+      <DependentUpon>FrmContratto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmCredits.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCredits.Designer.cs">
+      <DependentUpon>FrmCredits.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmDisciplina.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDisciplina.Designer.cs">
+      <DependentUpon>FrmDisciplina.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmDiscipline.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDiscipline.Designer.cs">
+      <DependentUpon>FrmDiscipline.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmDipartimento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDipartimento.Designer.cs">
+      <DependentUpon>FrmDipartimento.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmDipartimenti.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDipartimenti.Designer.cs">
+      <DependentUpon>FrmDipartimenti.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmHome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmHome.Designer.cs">
+      <DependentUpon>FrmHome.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmIndirizzi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmIndirizzi.Designer.cs">
+      <DependentUpon>FrmIndirizzi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmIndirizzo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmIndirizzo.Designer.cs">
+      <DependentUpon>FrmIndirizzo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLogin.Designer.cs">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucOreDoc.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucOreDoc.Designer.cs">
+      <DependentUpon>ucOreDoc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucOreTotali.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucOreTotali.Designer.cs">
+      <DependentUpon>ucOreTotali.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucOreTotalixClasse.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucOreTotalixClasse.Designer.cs">
+      <DependentUpon>ucOreTotalixClasse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmUtente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmUtente.Designer.cs">
+      <DependentUpon>FrmUtente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmUtenti.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmUtenti.Designer.cs">
+      <DependentUpon>FrmUtenti.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\ucOre.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucOre.Designer.cs">
+      <DependentUpon>ucOre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucAssegnazioni.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucAssegnazioni.Designer.cs">
+      <DependentUpon>ucAssegnazioni.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucClasse.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucClasse.Designer.cs">
+      <DependentUpon>ucClasse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucDisciplina.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucDisciplina.Designer.cs">
+      <DependentUpon>ucDisciplina.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="FrmAnniScolastici.resx">
+      <DependentUpon>FrmAnniScolastici.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmAnnoScolastico.resx">
+      <DependentUpon>FrmAnnoScolastico.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmCattedre.resx">
+      <DependentUpon>FrmCattedre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmCdC.resx">
+      <DependentUpon>FrmCdC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmCdCs.resx">
+      <DependentUpon>FrmCdCs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmClasse.resx">
+      <DependentUpon>FrmClasse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmClassi.resx">
+      <DependentUpon>FrmClassi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmContratti.resx">
+      <DependentUpon>FrmContratti.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmContratto.resx">
+      <DependentUpon>FrmContratto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmCredits.resx">
+      <DependentUpon>FrmCredits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDisciplina.resx">
+      <DependentUpon>FrmDisciplina.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDiscipline.resx">
+      <DependentUpon>FrmDiscipline.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDipartimento.resx">
+      <DependentUpon>FrmDipartimento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDipartimenti.resx">
+      <DependentUpon>FrmDipartimenti.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmHome.resx">
+      <DependentUpon>FrmHome.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmIndirizzi.resx">
+      <DependentUpon>FrmIndirizzi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmIndirizzo.resx">
+      <DependentUpon>FrmIndirizzo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLogin.resx">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucOreDoc.resx">
+      <DependentUpon>ucOreDoc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucOreTotali.resx">
+      <DependentUpon>ucOreTotali.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucOreTotalixClasse.resx">
+      <DependentUpon>ucOreTotalixClasse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmUtente.resx">
+      <DependentUpon>FrmUtente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmUtenti.resx">
+      <DependentUpon>FrmUtenti.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="UserControls\ucAssegnazioni.resx">
+      <DependentUpon>ucAssegnazioni.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucClasse.resx">
+      <DependentUpon>ucClasse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucDisciplina.resx">
+      <DependentUpon>ucDisciplina.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucOre.resx">
+      <DependentUpon>ucOre.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="1-47b4fe04.ico" />
+    <None Include="Resources\user-account-management-logo-user-icon-11562867145a56rus2zwu.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

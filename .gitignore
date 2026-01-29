@@ -1,27 +1,10 @@
 
-.vs/Cattedre/v15/
-
-Cattedre/obj/Debug/
-
+.vs/
+Cattedre/bin/
+Cattedre/obj/
 *.cache
-
 *.ide-wal
-
 *.ide-shm
-
-Cattedre/Cattedre.csproj
-<<<<<<< HEAD
-
-Cattedre/bin/Debug/
-
 *.exe
-
 *.pdb
-=======
 
-Cattedre/bin/Debug/Cattedre.exe
-
-Cattedre/bin/Debug/Cattedre.pdb
->>>>>>> Brutti
-
-.vs/Cattedre/v16/

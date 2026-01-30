@@ -217,7 +217,52 @@ namespace Cattedre
                 CaricaListView();
             }
         }
+        #region filtri
+        private void cbFiltro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string TipoFiltro = cbFiltro.SelectedItem.ToString();
+            switch (TipoFiltro)
+            {
+                case "Tipo Docente":
+                    pnfiltri.Controls.Clear();
+                    //creo gli elmenti grafici da codice cioè due radiobutton all'interno del panel pnfiltri
+                    RadioButton rbTeorico = new RadioButton
+                    {
+                        Text = "Teorico",
+                        Location = new Point(10, 5),
+                        AutoSize = true
+                    };
+                    RadioButton rbLaboratorio = new RadioButton
+                    {
+                        Text = "Laboratorio",
+                        Location = new Point(10, 35),
+                        AutoSize = true
+                    };
+                    btFiltro.Enabled = true;
+                    pnfiltri.Controls.Add(rbTeorico);
+                    pnfiltri.Controls.Add(rbLaboratorio);
+                    break;
+                case "Tipo Contratto":
+                    pnfiltri.Controls.Clear();
+                    break;
+                case "Tipo Utente":
+                    pnfiltri.Controls.Clear();
+                    CheckBox cbAmministratiore = new CheckBox
+                    {
+                        Text = "Amministratore",
+                        Location = new Point(10, 5),
+                        AutoSize =true
+                    };
+                    break;
+                 default:
+                    pnfiltri.Controls.Clear();
+                    btFiltro.Enabled = false;
+                    utenti = ClsUtenteBL.CaricaUtenti();
+                    CaricaListView();
+                    break;
+            }
 
-
+        }
+        #endregion
     }
 }

@@ -37,17 +37,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.rtbAbilitazioni = new System.Windows.Forms.RichTextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btSava
             // 
             this.btSava.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSava.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.btSava.Location = new System.Drawing.Point(39, 254);
+            this.btSava.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btSava.Location = new System.Drawing.Point(208, 191);
             this.btSava.Margin = new System.Windows.Forms.Padding(2);
             this.btSava.Name = "btSava";
-            this.btSava.Size = new System.Drawing.Size(175, 30);
+            this.btSava.Size = new System.Drawing.Size(56, 19);
             this.btSava.TabIndex = 19;
             this.btSava.Text = "Salva";
             this.btSava.UseVisualStyleBackColor = true;
@@ -55,11 +54,11 @@
             // 
             // btAnnulla
             // 
-            this.btAnnulla.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.btAnnulla.Location = new System.Drawing.Point(236, 254);
+            this.btAnnulla.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btAnnulla.Location = new System.Drawing.Point(79, 191);
             this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
             this.btAnnulla.Name = "btAnnulla";
-            this.btAnnulla.Size = new System.Drawing.Size(169, 30);
+            this.btAnnulla.Size = new System.Drawing.Size(56, 19);
             this.btAnnulla.TabIndex = 18;
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
@@ -67,81 +66,70 @@
             // 
             // tbLivello
             // 
-            this.tbLivello.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.tbLivello.Location = new System.Drawing.Point(141, 64);
+            this.tbLivello.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbLivello.Location = new System.Drawing.Point(138, 11);
             this.tbLivello.Margin = new System.Windows.Forms.Padding(2);
             this.tbLivello.Name = "tbLivello";
-            this.tbLivello.Size = new System.Drawing.Size(264, 20);
+            this.tbLivello.Size = new System.Drawing.Size(126, 21);
             this.tbLivello.TabIndex = 15;
             // 
             // tbNome
             // 
-            this.tbNome.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.tbNome.Location = new System.Drawing.Point(141, 105);
+            this.tbNome.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbNome.Location = new System.Drawing.Point(138, 52);
             this.tbNome.Margin = new System.Windows.Forms.Padding(2);
             this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(264, 20);
+            this.tbNome.Size = new System.Drawing.Size(232, 21);
             this.tbNome.TabIndex = 14;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label3.Location = new System.Drawing.Point(36, 159);
+            this.label3.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(35, 102);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(99, 13);
+            this.label3.Size = new System.Drawing.Size(111, 16);
             this.label3.TabIndex = 12;
             this.label3.Text = "Abilitazioni richeste:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label2.Location = new System.Drawing.Point(36, 66);
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(33, 13);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 13);
+            this.label2.Size = new System.Drawing.Size(44, 16);
             this.label2.TabIndex = 11;
             this.label2.Text = "Livello:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label1.Location = new System.Drawing.Point(36, 108);
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(33, 55);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.Size = new System.Drawing.Size(43, 16);
             this.label1.TabIndex = 10;
             this.label1.Text = "Nome:";
             // 
             // rtbAbilitazioni
             // 
-            this.rtbAbilitazioni.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.rtbAbilitazioni.Location = new System.Drawing.Point(143, 147);
+            this.rtbAbilitazioni.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rtbAbilitazioni.Location = new System.Drawing.Point(140, 94);
             this.rtbAbilitazioni.Margin = new System.Windows.Forms.Padding(2);
             this.rtbAbilitazioni.Name = "rtbAbilitazioni";
-            this.rtbAbilitazioni.Size = new System.Drawing.Size(262, 71);
+            this.rtbAbilitazioni.Size = new System.Drawing.Size(126, 71);
             this.rtbAbilitazioni.TabIndex = 20;
             this.rtbAbilitazioni.Text = "";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft YaHei UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(34, 21);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(136, 26);
-            this.label4.TabIndex = 21;
-            this.label4.Text = "Inserisci CDC";
             // 
             // FrmCdC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(471, 311);
-            this.Controls.Add(this.label4);
+            this.ClientSize = new System.Drawing.Size(383, 260);
             this.Controls.Add(this.rtbAbilitazioni);
             this.Controls.Add(this.btSava);
             this.Controls.Add(this.btAnnulla);
@@ -170,6 +158,5 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox rtbAbilitazioni;
-        private System.Windows.Forms.Label label4;
     }
 }

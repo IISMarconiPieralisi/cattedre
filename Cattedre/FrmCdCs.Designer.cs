@@ -40,9 +40,9 @@ namespace Cattedre
             // 
             // btElimina
             // 
-            this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btElimina.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btElimina.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btElimina.Location = new System.Drawing.Point(783, 85);
+            this.btElimina.Location = new System.Drawing.Point(783, 114);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(75, 23);
             this.btElimina.TabIndex = 10;
@@ -52,9 +52,9 @@ namespace Cattedre
             // 
             // brModifica
             // 
-            this.brModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.brModifica.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.brModifica.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.brModifica.Location = new System.Drawing.Point(783, 56);
+            this.brModifica.Location = new System.Drawing.Point(783, 69);
             this.brModifica.Name = "brModifica";
             this.brModifica.Size = new System.Drawing.Size(75, 23);
             this.brModifica.TabIndex = 9;
@@ -64,7 +64,7 @@ namespace Cattedre
             // 
             // btInserisci
             // 
-            this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btInserisci.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btInserisci.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btInserisci.Location = new System.Drawing.Point(783, 27);
             this.btInserisci.Name = "btInserisci";
@@ -76,6 +76,7 @@ namespace Cattedre
             // 
             // lvCdCs
             // 
+            this.lvCdCs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lvCdCs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chLivello,
             this.chNome,
@@ -83,7 +84,7 @@ namespace Cattedre
             this.lvCdCs.FullRowSelect = true;
             this.lvCdCs.HideSelection = false;
             this.lvCdCs.Location = new System.Drawing.Point(22, 27);
-            this.lvCdCs.Margin = new System.Windows.Forms.Padding(2);
+            this.lvCdCs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lvCdCs.Name = "lvCdCs";
             this.lvCdCs.Size = new System.Drawing.Size(756, 205);
             this.lvCdCs.Sorting = System.Windows.Forms.SortOrder.Ascending;
@@ -93,7 +94,7 @@ namespace Cattedre
             // 
             // chLivello
             // 
-            this.chLivello.Text = "Livello";
+            this.chLivello.Text = "Codice";
             this.chLivello.Width = 191;
             // 
             // chNome

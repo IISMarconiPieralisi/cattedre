@@ -43,7 +43,6 @@ namespace Cattedre
                 tbNome.Text = _cdc.Nome;
                 tbLivello.Text = _cdc.Livello;
                 rtbAbilitazioni.Text = _cdc.AbilitazioniRichieste;
-                label4.Text = "Modifica CDC";
             }
         }
 

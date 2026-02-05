@@ -20,8 +20,9 @@ namespace Cattedre
             InitializeComponent();
         }
 
-        private void CaricaListView(List<ClsClasseDiConcorsoDL> cdcs)
+        private void CaricaListView()
         {
+            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
             lvCdCs.Items.Clear();
 
             int i = 0;
@@ -46,16 +47,22 @@ namespace Cattedre
                 dr = DialogResult.No;
             if (dr == DialogResult.OK)
             {
-                ClsClasseDiConcorsoBL.InserisciCdc(frmCdC._cdc);
-                cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
-                CaricaListView(cdcs);
+                try
+                {
+                    ClsClasseDiConcorsoBL.InserisciCdc(frmCdC._cdc);
+                    CaricaListView();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Errore:{ex.Message}, riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
             }
         }
 
         private void FrmCdCs_Load(object sender, EventArgs e)
         {
-            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
-            CaricaListView(cdcs);
+            CaricaListView();
         }
 
         private void brModifica_Click(object sender, EventArgs e)
@@ -68,9 +75,19 @@ namespace Cattedre
                 DialogResult dr = frmCdC.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
-                    ClsClasseDiConcorsoBL.ModificaCdc(frmCdC._cdc, cdcs, indiceDaModificare);
-                    CaricaListView(cdcs);
+                    try
+                    {
+                        ClsClasseDiConcorsoBL.ModificaCdc(frmCdC._cdc, indiceDaModificare);
+                        CaricaListView();
+                    }catch (Exception ex)
+                    {
+                        MessageBox.Show($"Errore:{ex.Message}, riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
                 }
+            }else
+            {
+                MessageBox.Show("selezionare solo un elemento.", "warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -83,9 +100,9 @@ namespace Cattedre
                 DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
                 if (dr == DialogResult.Yes)
                 {
-                    cdcs = ClsClasseDiConcorsoBL.EliminaCdc(idDaEliminare);
+                    ClsClasseDiConcorsoBL.EliminaCdc(idDaEliminare);
                 }
-                CaricaListView(cdcs);
+                CaricaListView();
             }
         }
     }

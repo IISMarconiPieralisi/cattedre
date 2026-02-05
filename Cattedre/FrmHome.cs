@@ -35,10 +35,10 @@ namespace Cattedre
         }
         private void MostraFormMDI(Form frm)
         {
-            frm.StartPosition = FormStartPosition.CenterParent;
+            frm.StartPosition = FormStartPosition.CenterParent; // Su MDI non serve
             frm.MdiParent = this;
             frm.BringToFront();
-            frm.WindowState = FormWindowState.Maximized;
+            frm.WindowState = FormWindowState.Maximized; // Di default nelle proprietà deve essere a Normal!
             frm.Show();
         }
         private void FrmHomeUpdate_Load(object sender, EventArgs e)
@@ -92,9 +92,9 @@ namespace Cattedre
 
         private void cDCToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Application.OpenForms["FrmCdCs"] == null)
-                frmCdCs = new FrmCdCs();
-            MostraFormMDI(frmCdCs);
+            if (Application.OpenForms["FrmCdC"] == null)
+                frmCdC = new FrmCdC();
+            MostraFormMDI(frmCdC);
         }
 
         private void iNDIRIZZIToolStripMenuItem_Click(object sender, EventArgs e)

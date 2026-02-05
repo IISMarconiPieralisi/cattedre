@@ -168,7 +168,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("errore nella query" + ex.Message);
             }
             return utenti;
         }
@@ -210,7 +210,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("errore nella query" + ex.Message);
             }
             return utenti;
         }
@@ -242,7 +242,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("errore nella query" + ex.Message);
             }
 
             return risultato;
@@ -275,7 +275,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("errore nella query" + ex.Message);
             }
             return false;
         }
@@ -361,7 +361,7 @@ namespace Cattedre
 
         }
 
-        public static void ModificaUtente(ClsUtenteDL utente, int IDutente)
+        public static void ModificaUtente(ClsUtenteDL utente, long IDutente)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
@@ -376,7 +376,7 @@ namespace Cattedre
                                email = @email, 
                                password = @password, 
                                tipoUtente = @tipoUtente,
-                               tipoDocente = @tipoDocente 
+                               tipoDocente = @tipoDocente,
                                colore=@colore
                            WHERE id = @IDutente";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -399,7 +399,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("errore nella query" + ex.Message);
             }
         }
 

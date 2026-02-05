@@ -147,6 +147,7 @@ namespace Cattedre
             this.btCaricaDipartimento.TabIndex = 2;
             this.btCaricaDipartimento.Text = "Carica";
             this.btCaricaDipartimento.UseVisualStyleBackColor = true;
+            this.btCaricaDipartimento.Click += new System.EventHandler(this.btCaricaDipartimento_Click_1);
             // 
             // cbDipartimenti
             // 

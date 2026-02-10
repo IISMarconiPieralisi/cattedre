@@ -18,7 +18,7 @@ namespace Cattedre
             InitializeComponent();
         }
 
-        private void CaricaListView()
+        private void CaricaListView(List<ClsIndirizzoDL> indirizzi)
         {
             lvIndirizzi.Items.Clear();
 
@@ -38,7 +38,7 @@ namespace Cattedre
             {
                 ClsIndirizzoBL.InserisciIndirizzo(frmIndirizzo._indirizzo);
                 indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
-                CaricaListView();
+                CaricaListView(indirizzi);
             }
         }
 
@@ -80,9 +80,13 @@ namespace Cattedre
             }
         }
 
-        private void btCerca_Click(object sender, EventArgs e)
+        private void btCerca_Click_1(object sender, EventArgs e)
         {
+            if(!string.IsNullOrWhiteSpace(tbRicerca.Text))
+            {
 
+
+            }
         }
     }
 }

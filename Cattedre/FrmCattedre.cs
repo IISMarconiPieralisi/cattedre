@@ -48,19 +48,18 @@ namespace Cattedre
             if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
             {
                 // Preside: può selezionare tutti i dipartimenti, ma non modificare le combobox
-                pnlSceltaDipartimentoCattedre.Visible = true;
                 LoadDipartimenti();
             }
             else if (utenteLoggato.TipoUtente == "C")
             {
                 // Coordinatore del dipartimento: carica direttamente il suo dipartimento
-                pnlSceltaDipartimentoCattedre.Visible = false;
 
                 //IDdipartimento = ClsUtenteBL.TrovaIDdipartimento(utenteLoggato.ID);
 
                 //LoadClassi(IDdipartimento);
                 //LoadDiscipline(IDdipartimento);
-                //LoadAssegnazioni(IDdipartimento);             
+                //LoadAssegnazioni(IDdipartimento);
+                //cbDipartimenti.Enabled = false;
             }
         }
 
@@ -342,7 +341,7 @@ namespace Cattedre
 
                         pnlDipartimento.Controls.Add(uc);
 
-                        uc.Refresh();
+                        //uc.Refresh();
                     }                
                 }
                 UcOreTotalixClasse ucOreTotalixClasse = new UcOreTotalixClasse();
@@ -387,7 +386,7 @@ namespace Cattedre
                 ucDisciplina.Location = new Point(x, y);
                 pnlDipartimento.Controls.Add(ucDisciplina);
 
-                ucDisciplina.Refresh();
+                //ucDisciplina.Refresh();
 
                 x += ucDisciplina.Width + 10;
             }
@@ -395,7 +394,7 @@ namespace Cattedre
             ucOre.Location = new Point(0, 10);
             pnlOre.Controls.Add(ucOre);
 
-            ucOre.Refresh();
+            //ucOre.Refresh();
         }
         private void LoadClassi(int IDdipartimento)
         {
@@ -436,7 +435,6 @@ namespace Cattedre
             //LoadDiscipline(IDdipartimento);
             //LoadAssegnazioni(IDdipartimento);
             //pnlSceltaDipartimentoCattedre.Visible = false;
-            pnlSceltaDipartimentoCattedre.Visible = false;
 
             try
             {
@@ -454,8 +452,6 @@ namespace Cattedre
                 LoadClassi(IDdipartimento);
                 LoadDiscipline(IDdipartimento);
                 LoadAssegnazioni(IDdipartimento);
-
-                pnlSceltaDipartimentoCattedre.Visible = false;
             }
             finally
             {

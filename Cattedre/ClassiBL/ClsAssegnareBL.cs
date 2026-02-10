@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using System.Configuration;
+using System.Data;
 
 namespace Cattedre
 {
@@ -31,26 +32,43 @@ namespace Cattedre
                          "AND af.IDdipartimento = @IDdipartimento " +
                          "AND a.IDdisciplina = @IDdisciplina ";
 
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-                cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
-                cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
+                DataSet ds = new DataSet("cattedre");
+                da.Fill(ds, "utenti");
+
+                DataTable dt = ds.Tables["utenti"];
+                for(int i = 0; i < dt.Rows.Count; i++)
                 {
-                    while (dr.Read())
-                    {
-                        ClsUtenteDL docenteDipartimento = new ClsUtenteDL();
-                        docenteDipartimento.ID = Convert.ToInt64(dr["ID"]);
-                        docenteDipartimento.Email = dr["email"].ToString();
-                        docenteDipartimento.Password = dr["password"].ToString();
-                        docenteDipartimento.Cognome = dr["cognome"].ToString();
-                        docenteDipartimento.Nome = dr["nome"].ToString();
-                        docenteDipartimento.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
+                    ClsUtenteDL docenteDipartimento = new ClsUtenteDL(
+                        dt.Rows[i]["ID"].ToString(),
+                        dt.Rows[i]["email"].ToString(),
+                        dt.Rows[i]["password"].ToString(),
+                        dt.Rows[i]["cognome"].ToString(),
+                        dt.Rows[i]["nome"].ToString(),
+                        Convert.ToChar(dt.Rows[i]["tipoDocente"]));
                         docentiDipartimento.Add(docenteDipartimento);
-                    }
                 }
                 conn.Close();
+                //MySqlCommand cmd = new MySqlCommand(sql, conn);
+                //cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                //cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                //cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                //MySqlDataReader dr = cmd.ExecuteReader();
+                //if (dr.HasRows)
+                //{
+                //    while (dr.Read())
+                //    {
+                //        ClsUtenteDL docenteDipartimento = new ClsUtenteDL();
+                //        docenteDipartimento.ID = Convert.ToInt64(dr["ID"]);
+                //        docenteDipartimento.Email = dr["email"].ToString();
+                //        docenteDipartimento.Password = dr["password"].ToString();
+                //        docenteDipartimento.Cognome = dr["cognome"].ToString();
+                //        docenteDipartimento.Nome = dr["nome"].ToString();
+                //        docenteDipartimento.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
+                //        docentiDipartimento.Add(docenteDipartimento);
+                //    }
+                //}
+                //conn.Close();
             }
             catch (Exception ex)
             {

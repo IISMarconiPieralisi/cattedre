@@ -10,9 +10,9 @@ namespace Cattedre
     public class ClsClasseDL
     {
         #region ATTRIBUTI
-        long _id;
-        string _sigla, _sezione, _classeArticolataCon, _nomeCoordinatore, _indirizzo;
-        int _anno;
+        long _id, _idutente, _idindirizzo;
+        string _sigla, _sezione,  _nomeCoordinatore, _indirizzo;
+        int _anno, _classeArticolataCon;
         #endregion
 
         #region COSTRUTTORI
@@ -21,10 +21,16 @@ namespace Cattedre
 
         }
 
-        public ClsClasseDL(string sigla)
+        public ClsClasseDL(long id, string sigla, int anno, string sezione, int classearticolatacon, long idutente, long idindirizzo)
         {
-            Sigla = sigla;
-            
+            _id = id;
+            _sigla = sigla;
+            _anno = anno;
+            _sezione = sezione;
+            _classeArticolataCon = classearticolatacon;
+            _idutente = idutente;
+            _idindirizzo = idindirizzo;
+
         }
         #endregion
 

@@ -7,4 +7,5 @@ Cattedre/obj/
 *.ide-shm
 *.exe
 *.pdb
+*.sqlite
 

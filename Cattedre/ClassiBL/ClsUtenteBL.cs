@@ -427,6 +427,76 @@ namespace Cattedre
                 throw new Exception("errore nella query" + ex);
             }
         }
+        public static List<ClsUtenteDL> FiltraUtenti(List<string> parametri,string Filtro)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+           
+            DataTable ds = new DataTable();
+            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = CreaComandoRicerca(Filtro, parametri, conn))
+                    {
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(ds);
+                        }
+                        conn.Close();
+                    }
+                }
+                foreach (DataRow row in ds.Rows)
+                {
+                    ClsUtenteDL utente = new ClsUtenteDL();
+                    utente.ID = Convert.ToInt64(row["ID"]);
+                    utente.Email = row["email"].ToString();
+                    //anche se la query non restituisce la password, la proprietà non la userà e non ha senso inizarlizzarla,  essendo un dato sensibile
+                    utente.Cognome = row["cognome"].ToString();
+                    utente.Nome = row["nome"].ToString();
+                    utente.TipoUtente = row["tipoUtente"].ToString();
+                    //utente.Colore = row["colore"].ToString();
+                    utente.TipoDocente = row["tipoDocente"] == null ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                    utenti.Add(utente);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception( ex.Message);
+            }
+            return utenti;
+        }
+        public static MySqlCommand CreaComandoRicerca(string Filtro, List<string>parametri, MySqlConnection conn)
+        {
+            string sql = "SELECT * FROM utenti ";
+            MySqlCommand cmd = new MySqlCommand("", conn);
+            switch (Filtro)
+            {
+                case "tipoDocente":
+                    sql += "WHERE tipoDocente = @tipoDocente";
+                    cmd.Parameters.AddWithValue("@TipoDocente", parametri[0]);
+                    break;
+                case "tipoUtente":
+                    List<string> orConditions = new List<string>();
+                    for (int i = 0; i < parametri.Count; i++)
+                    {
+                        orConditions.Add($"tipoUtente = @param{i}");
+                        cmd.Parameters.AddWithValue($"@param{i}", parametri[i]);
+                    }
+                    sql += "WHERE " + string.Join(" OR ", orConditions);
+                    break;
+                case "tipoContratto":
+                    // Corretto FORM in FROM e aggiunto parametro
+                    sql = "SELECT u.* FROM utenti u JOIN contratti c ON u.ID = c.IDutente WHERE c.tipoContratto = @param0";
+                    cmd.Parameters.AddWithValue("@param0", parametri[0]);
+                    break;
+            }
+            cmd.CommandText = sql;
+            return cmd;
+        }
+
         public static string CreaPasswordStandard(string Nome, string Cognome)
         {
             string Password = "";

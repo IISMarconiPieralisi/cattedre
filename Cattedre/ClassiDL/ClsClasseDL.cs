@@ -10,9 +10,9 @@ namespace Cattedre
     public class ClsClasseDL
     {
         #region ATTRIBUTI
-        long _id, _idutente, _idindirizzo;
+        long _id, _idutente, _idindirizzo, _classeArticolataCon;
         string _sigla, _sezione,  _nomeCoordinatore, _indirizzo;
-        int _anno, _classeArticolataCon;
+        int _anno;
         #endregion
 
         #region COSTRUTTORI
@@ -41,7 +41,7 @@ namespace Cattedre
 
         public string Sezione { get => _sezione; set => _sezione = value; }
 
-        public string ClasseArticolataCon { get => _classeArticolataCon; set => _classeArticolataCon = value; }
+        public long ClasseArticolataCon { get => _classeArticolataCon; set => _classeArticolataCon = value; }
 
         public int Anno { get => _anno; set => _anno = value; }
 

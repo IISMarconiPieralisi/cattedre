@@ -20,12 +20,15 @@ namespace Cattedre
 
         private void btSalvaIndirizzo_Click(object sender, EventArgs e)
         {
-            _indirizzo.Nome = tbNome.Text;
-
-            if(string.IsNullOrEmpty(_indirizzo.Nome))
+            try
             {
-                MessageBox.Show("Inserire un nome");
-                this.DialogResult = DialogResult.None;
+                if (!string.IsNullOrEmpty(tbNome.Text)&& tbNome.Text.Length>=3)
+                    _indirizzo.Nome = tbNome.Text.Trim();
+                else
+                    throw new Exception("inserire un nome valido");
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message+"\n riprovare!","errore",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
 

@@ -21,13 +21,11 @@ namespace Cattedre
             InitializeComponent();
         }
 
-        private void CaricaListView()
+        private void CaricaListView(List<ClsUtenteDL>u)
         {
-            utenti = ClsUtenteBL.CaricaUtenti();
-
             lvUtenti.Items.Clear();
 
-            foreach (ClsUtenteDL utente in utenti)
+            foreach (ClsUtenteDL utente in u)
             {
                 //prendo un metodo che cerca il contratto in base all'id utente
                 ClsContrattoDL contratto =ClsContrattoBL.cercaContratto(utente.ID);
@@ -145,15 +143,16 @@ namespace Cattedre
                 {
                     MessageBox.Show($"Errore durante il inserimento:{ex.Message}", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-                CaricaListView();
+                utenti = ClsUtenteBL.CaricaUtenti();
+                CaricaListView(utenti);
             }
         }
 
         private void FrmUtenti_Load(object sender, EventArgs e)
         {
             utenti = ClsUtenteBL.CaricaUtenti();
-            CaricaListView();
+            utenti = ClsUtenteBL.CaricaUtenti();
+            CaricaListView(utenti);
         }
 
         private  void  btModifica_Click(object sender, EventArgs e)
@@ -209,7 +208,8 @@ namespace Cattedre
                         MessageBox.Show("Errore durante il salvataggio: " + ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    CaricaListView();
+                    utenti = ClsUtenteBL.CaricaUtenti();
+                    CaricaListView(utenti);
 
                 }
             }
@@ -231,7 +231,8 @@ namespace Cattedre
                     utenti = ClsUtenteBL.CaricaUtenti();
 
                 }
-                CaricaListView();
+                utenti = ClsUtenteBL.CaricaUtenti();
+                CaricaListView(utenti);
             }
         }
         #region filtri
@@ -259,49 +260,57 @@ namespace Cattedre
                 case "Tipo Utente":
                     ConfiguraGriglia(4); // Divido in 4 colonne
                     string[] labels = { "Amministratore", "Preside", "Coordinatore Dipartimento", "Docente" };
+                    string[] value = {"A","P","C","D"};
                     for (int i = 0; i < labels.Length; i++)
-                        AggiungiControllo(new CheckBox { Text = labels[i], AutoSize = true }, i);
+                        AggiungiControllo(new CheckBox { Name=value[i],Text = labels[i], AutoSize = true }, i);
                     
                     btFiltro.Enabled = true;
                     break;
                  default:
                     utenti = ClsUtenteBL.CaricaUtenti();
-                    CaricaListView();
+                    CaricaListView(utenti);
                     break;
             }
 
         }
         private void btFiltro_Click(object sender, EventArgs e)
         {
-            if(cbFiltro.SelectedIndex!=0)//anche se non serve per sicurezza lo uso
+            if(!string.IsNullOrWhiteSpace(cbFiltro.Text))//anche se non serve per sicurezza lo uso
             {
+                btAnnullaRicerca.Enabled = true;
+                List<string> _parametri=new List<string>();
                 string cbSelezionato = cbFiltro.SelectedText;
-                string filtro = (cbSelezionato == "Tipo Utente")?"tipoUtente":
+                string _filtro = (cbSelezionato == "Tipo Utente")?"tipoUtente":
                                 (cbSelezionato=="Tipo Contratto")?"tipoContratto":
                                 (cbSelezionato=="Tipo Docente")?"tipoDocente":""; //in  questo modo me lo preparo come è scritto nel DB, per comodità
-                switch(filtro)
+                switch(_filtro)
                 {
                     case "tipoDocente":
                         var selezionato = tlpFiltri.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
-                        string parametro = (selezionato.Text == "Teorico") ? "T" : "L";
-                        //filtro
+                        if (selezionato != null)
+                            _parametri.Add((selezionato.Name == "Teorico") ? "T" : "L");
+                        else
+                            MessageBox.Show("Seleziona un parametro di ricerca,\n riprova", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         break;
                     case "tipoUtente":
-                        List<string> filtriSelezionati = new List<string>();
                         foreach(Control c in tlpFiltri.Controls)
                         {
                             if(c is CheckBox cb && cb.Checked)
-                                filtriSelezionati.Add(cb.Text);
+                                _parametri.Add(cb.Name);
                         }
-                        //filtro
                         break;
                     case "tipoContratto":
-                        var tContratto = tlpFiltri.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
-                        string par = (tContratto.Text == "Derminato") ? "D" : "I";
-                        //filtro
+                        var _tContratto = tlpFiltri.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
+                        if(_tContratto!=null)
+                            _parametri.Add((_tContratto.Name == "Derminato") ? "D" : "I");
+                        else
+                            MessageBox.Show("Seleziona un parametro di ricerca,\n riprova", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         break;
+
                 }
-                 
+                utenti = ClsUtenteBL.FiltraUtenti(_parametri, _filtro);
+                CaricaListView(utenti);
+
             }
         }
         private void ConfiguraGriglia(int numeroColonne)
@@ -321,7 +330,13 @@ namespace Cattedre
 
         #endregion
 
-
-
+        private void btAnnullaRicerca_Click_1(object sender, EventArgs e)
+        {
+            btFiltro.Enabled = false;
+            tlpFiltri.Controls.Clear();
+            cbFiltro.SelectedIndex = 0;
+            utenti = ClsUtenteBL.CaricaUtenti();
+            CaricaListView(utenti);
+        }
     }
 }

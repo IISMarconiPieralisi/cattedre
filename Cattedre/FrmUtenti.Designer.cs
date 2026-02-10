@@ -42,10 +42,11 @@
             this.btModifica = new System.Windows.Forms.Button();
             this.btElimina = new System.Windows.Forms.Button();
             this.pnFiltra = new System.Windows.Forms.Panel();
+            this.tlpFiltri = new System.Windows.Forms.TableLayoutPanel();
             this.btFiltro = new System.Windows.Forms.Button();
             this.cbFiltro = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.tlpFiltri = new System.Windows.Forms.TableLayoutPanel();
+            this.btAnnullaRicerca = new System.Windows.Forms.Button();
             this.pnFiltra.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,7 +69,7 @@
             this.lvUtenti.HideSelection = false;
             this.lvUtenti.Location = new System.Drawing.Point(45, 105);
             this.lvUtenti.Name = "lvUtenti";
-            this.lvUtenti.Size = new System.Drawing.Size(1008, 551);
+            this.lvUtenti.Size = new System.Drawing.Size(1211, 559);
             this.lvUtenti.TabIndex = 0;
             this.lvUtenti.UseCompatibleStateImageBehavior = false;
             this.lvUtenti.View = System.Windows.Forms.View.Details;
@@ -121,7 +122,7 @@
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(1059, 105);
+            this.btInserisci.Location = new System.Drawing.Point(1262, 105);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.Size = new System.Drawing.Size(118, 23);
             this.btInserisci.TabIndex = 1;
@@ -132,7 +133,7 @@
             // btModifica
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btModifica.Location = new System.Drawing.Point(1059, 134);
+            this.btModifica.Location = new System.Drawing.Point(1262, 134);
             this.btModifica.Name = "btModifica";
             this.btModifica.Size = new System.Drawing.Size(118, 23);
             this.btModifica.TabIndex = 2;
@@ -143,7 +144,7 @@
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(1059, 163);
+            this.btElimina.Location = new System.Drawing.Point(1262, 163);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(118, 23);
             this.btElimina.TabIndex = 3;
@@ -153,19 +154,37 @@
             // 
             // pnFiltra
             // 
+            this.pnFiltra.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnFiltra.Controls.Add(this.btAnnullaRicerca);
             this.pnFiltra.Controls.Add(this.tlpFiltri);
             this.pnFiltra.Controls.Add(this.btFiltro);
             this.pnFiltra.Controls.Add(this.cbFiltro);
             this.pnFiltra.Controls.Add(this.label1);
-            this.pnFiltra.Location = new System.Drawing.Point(45, 28);
+            this.pnFiltra.Location = new System.Drawing.Point(42, 28);
             this.pnFiltra.Name = "pnFiltra";
-            this.pnFiltra.Size = new System.Drawing.Size(1008, 71);
+            this.pnFiltra.Size = new System.Drawing.Size(1214, 71);
             this.pnFiltra.TabIndex = 4;
+            // 
+            // tlpFiltri
+            // 
+            this.tlpFiltri.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tlpFiltri.ColumnCount = 2;
+            this.tlpFiltri.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFiltri.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFiltri.Location = new System.Drawing.Point(217, 16);
+            this.tlpFiltri.Name = "tlpFiltri";
+            this.tlpFiltri.RowCount = 2;
+            this.tlpFiltri.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFiltri.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFiltri.Size = new System.Drawing.Size(739, 32);
+            this.tlpFiltri.TabIndex = 3;
             // 
             // btFiltro
             // 
+            this.btFiltro.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btFiltro.Enabled = false;
-            this.btFiltro.Location = new System.Drawing.Point(881, 16);
+            this.btFiltro.Location = new System.Drawing.Point(969, 18);
             this.btFiltro.Name = "btFiltro";
             this.btFiltro.Size = new System.Drawing.Size(109, 23);
             this.btFiltro.TabIndex = 2;
@@ -195,24 +214,22 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Filtra per:";
             // 
-            // tlpFiltri
+            // btAnnullaRicerca
             // 
-            this.tlpFiltri.ColumnCount = 2;
-            this.tlpFiltri.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpFiltri.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpFiltri.Location = new System.Drawing.Point(217, 16);
-            this.tlpFiltri.Name = "tlpFiltri";
-            this.tlpFiltri.RowCount = 2;
-            this.tlpFiltri.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpFiltri.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpFiltri.Size = new System.Drawing.Size(646, 32);
-            this.tlpFiltri.TabIndex = 3;
+            this.btAnnullaRicerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btAnnullaRicerca.Location = new System.Drawing.Point(1084, 18);
+            this.btAnnullaRicerca.Name = "btAnnullaRicerca";
+            this.btAnnullaRicerca.Size = new System.Drawing.Size(109, 23);
+            this.btAnnullaRicerca.TabIndex = 4;
+            this.btAnnullaRicerca.Text = "Annulla";
+            this.btAnnullaRicerca.UseVisualStyleBackColor = true;
+            this.btAnnullaRicerca.Click += new System.EventHandler(this.btAnnullaRicerca_Click_1);
             // 
             // FrmUtenti
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1203, 657);
+            this.ClientSize = new System.Drawing.Size(1406, 665);
             this.Controls.Add(this.pnFiltra);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.btModifica);
@@ -247,5 +264,6 @@
         private System.Windows.Forms.ComboBox cbFiltro;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel tlpFiltri;
+        private System.Windows.Forms.Button btAnnullaRicerca;
     }
 }

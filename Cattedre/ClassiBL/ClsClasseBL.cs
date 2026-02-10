@@ -233,7 +233,7 @@ namespace Cattedre
                     if (count == 0)
                     {
                         string sql = "";
-                        if (classe.ClasseArticolataCon == "")
+                        if (classe.ClasseArticolataCon >0)
                         {
                            sql = "INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo) VALUES (@sigla, @anno, @sezione, NULL, @IDutente, @IDindirizzo)";
                         }

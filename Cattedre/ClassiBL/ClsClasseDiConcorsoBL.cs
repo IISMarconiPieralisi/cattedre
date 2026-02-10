@@ -133,18 +133,49 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
-        public static List<ClsClasseDiConcorsoDL> FiltraCDC(string AbilitazioniRichieste)
+        public static List<ClsClasseDiConcorsoDL> RicercaPerNome(string _ricerca)
         {
-            List<ClsClasseDiConcorsoDL> cdcFiltrate = new List<ClsClasseDiConcorsoDL>();
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+            DataTable dt = new DataTable();
+            _ricerca = $"%{_ricerca}%";
             try
             {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID,livello,nome,abilitazioniRichieste
+                                 FROM indirizzi 
+                                 WHERE nome LIKE @Ricerca";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Ricerca", _ricerca);
 
-            }catch(Exception ex)
-            {
-                throw new Exception();
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
+                        cdc.ID = Convert.ToInt32(row["id"]);
+                        cdc.Livello = row["livello"].ToString();
+                        cdc.Nome = row["nome"].ToString();
+                        cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
+                        cdcs.Add(cdc);
+
+                    }
+
+                }
             }
-            return cdcFiltrate;
-
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return cdcs;
         }
+
     }
 }

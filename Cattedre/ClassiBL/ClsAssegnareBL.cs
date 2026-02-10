@@ -293,7 +293,7 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "SELECT ID FROM assegnare WHERE nome = @nome AND cognome = @cognome";
+                string sql = "SELECT ID FROM utenti WHERE nome = @nome AND cognome = @cognome";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@nome", nome);
                 cmd.Parameters.AddWithValue("@cognome", cognome);

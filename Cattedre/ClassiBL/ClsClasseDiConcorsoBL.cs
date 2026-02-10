@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using System.Configuration;
+using System.Data;
 
 namespace Cattedre
 {
@@ -12,38 +13,43 @@ namespace Cattedre
     {
         public static List<ClsClasseDiConcorsoDL> CaricaCdcs()
         {
+
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            DataTable dt = new DataTable();
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
             try
             {
+                MySqlConnection conn = new MySqlConnection(connectionString);
                 conn.Open();
                 string sql = "SELECT * FROM classidiconcorso";
 
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    while (dr.Read())
+                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                     {
-                        ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
-                        cdc.ID = Convert.ToInt32(dr["id"]);
-                        cdc.Livello = dr["livello"].ToString();
-                        cdc.Nome = dr["nome"].ToString();
-                        cdc.AbilitazioniRichieste = dr["abilitazioniRichieste"].ToString();
-                        cdcs.Add(cdc);
+                        dr.Fill(dt);
                     }
+                    conn.Close();
                 }
-                conn.Close();
+                foreach (DataRow row in dt.Rows)
+                {
+                        ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
+                        cdc.ID = Convert.ToInt32(row["id"]);
+                        cdc.Livello = row["livello"].ToString();
+                        cdc.Nome = row["nome"].ToString();
+                        cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
+                        cdcs.Add(cdc);
+      
+                }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return cdcs;
         }
 
-        public static List<ClsClasseDiConcorsoDL> InserisciCdc(ClsClasseDiConcorsoDL cdc)
+        public static void InserisciCdc(ClsClasseDiConcorsoDL cdc)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -61,23 +67,19 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@abilitazioniRichieste", cdc.AbilitazioniRichieste);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 
-                    if (righeCoinvolte > 0)
-                    {
-                        cdcs.Add(cdc);
-                    }
+                    if (righeCoinvolte < 0)
+                        throw new DataException("nessuna riga row");
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
-            return cdcs;
         }
 
-        public static List<ClsClasseDiConcorsoDL> ModificaCdc(ClsClasseDiConcorsoDL cdc, List<ClsClasseDiConcorsoDL> cdcs, int indice)
+        public static void ModificaCdc(ClsClasseDiConcorsoDL cdc, int indice)
         {
-            FrmCdC frmCdC = new FrmCdC();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
 
@@ -96,47 +98,45 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@nome", cdc.Nome);
                     cmd.Parameters.AddWithValue("@abilitazioniRichieste", cdc.AbilitazioniRichieste);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
-                    {
-                        cdcs[indice] = cdc;
-                    }
+                    if (righeCoinvolte < 0)
+                        throw new DataException("nessuna riga row");
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
-
-            return cdcs;
         }
 
-        public static List<ClsClasseDiConcorsoDL> EliminaCdc(int id)
+        public static void EliminaCdc(int id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
-
             try
             {
-                conn.Open();
-                string sql = "DELETE FROM classidiconcorso WHERE id = " + id;
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
+                    conn.Open();
+                    string sql = "DELETE FROM classidiconcorso WHERE ID =@id ";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cdcs = CaricaCdcs();
+                        cmd.Parameters.AddWithValue("@id",id);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        if (righeCoinvolte < 0)
+                            throw new DataException("nessuna riga row");
                     }
+
                 }
+
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
+        }
+        public static List<ClsClasseDiConcorsoDL> FiltraCDC(string AbilitazioniRichieste)
+        {
+            List<ClsClasseDiConcorsoDL> classeFiltrate = new List<ClsClasseDiConcorsoDL>();
 
-            return cdcs;
         }
     }
 }

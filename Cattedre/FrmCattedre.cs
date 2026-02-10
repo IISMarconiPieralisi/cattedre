@@ -45,7 +45,7 @@ namespace Cattedre
             //pnlDipartimento.VerticalScroll.Enabled = false;
 
 
-            if (utenteLoggato.TipoUtente == "P")
+            if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
             {
                 // Preside: può selezionare tutti i dipartimenti, ma non modificare le combobox
                 pnlSceltaDipartimentoCattedre.Visible = true;
@@ -66,7 +66,7 @@ namespace Cattedre
 
         private async void FrmCattedre_Shown(object sender, EventArgs e)
         {
-            if (utenteLoggato.TipoUtente == "C")
+            if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
             {
                 this.Cursor = Cursors.WaitCursor;
 
@@ -109,6 +109,11 @@ namespace Cattedre
                 dictDocenti[doc.ID] = uc;
 
                 y += uc.Height + 5;
+
+                if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
+                {
+                    uc.nudOrePot.Enabled = false;
+                }
             }
 
             y += 15;
@@ -253,6 +258,13 @@ namespace Cattedre
                         List<ClsUtenteDL> docentiPossibiliSostituti = ClsAssegnareBL.CercaDocentiPossibiliSostituti(IDdipartimento, Convert.ToInt32(classeDiConcorso.ID));
                         List<ClsUtenteDL> docenti = new List<ClsUtenteDL>();
 
+                        if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
+                        {
+                            uc.cbDocentiTeorici.Enabled = false;
+                            uc.cbDocentiItip.Enabled = false;
+                            // nudOrePot.Enabled = false; -> fatto su LoadOreDoc()
+                        }
+
                         foreach (ClsUtenteDL docente in docentiDiRiferimento)
                             docenti.Add(docente);
 
@@ -322,11 +334,7 @@ namespace Cattedre
                         uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) => AggiornaOreEffettive();
                         uc.cbDocentiItip.SelectedIndexChanged += (s, e) => AggiornaOreEffettive();
 
-                        if (utenteLoggato.TipoUtente == "P")
-                        {
-                            uc.cbDocentiTeorici.Enabled = false;
-                            uc.cbDocentiItip.Enabled = false;
-                        }
+                        
 
                         x = 10 + colonna * 225;
                         y = 72 + riga * 100;
@@ -407,7 +415,20 @@ namespace Cattedre
             }
         }
 
-        private async void btCaricaDipartimento_Click(object sender, EventArgs e)
+        private void btSalva_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Sei sicuro di voler salvare?", "SALVATAGGIO", MessageBoxButtons.YesNo);
+
+            if (dr == DialogResult.Yes)
+                this.Close();
+        }
+
+        private void btAnnulla_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private async void btCaricaDipartimento_Click_1(object sender, EventArgs e)
         {
             //IDdipartimento = cbDipartimenti.SelectedIndex + 1;
 
@@ -415,6 +436,8 @@ namespace Cattedre
             //LoadDiscipline(IDdipartimento);
             //LoadAssegnazioni(IDdipartimento);
             //pnlSceltaDipartimentoCattedre.Visible = false;
+            pnlSceltaDipartimentoCattedre.Visible = false;
+
             try
             {
                 this.UseWaitCursor = true;
@@ -438,19 +461,6 @@ namespace Cattedre
             {
                 this.UseWaitCursor = false;
             }
-        }
-
-        private void btSalva_Click(object sender, EventArgs e)
-        {
-            DialogResult dr = MessageBox.Show("Sei sicuro di voler salvare?", "SALVATAGGIO", MessageBoxButtons.YesNo);
-
-            if (dr == DialogResult.Yes)
-                this.Close();
-        }
-
-        private void btAnnulla_Click(object sender, EventArgs e)
-        {
-            
         }
     }
 }

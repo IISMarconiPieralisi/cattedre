@@ -168,7 +168,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("errore nella query" + ex.Message);
             }
             return utenti;
         }
@@ -191,7 +191,7 @@ namespace Cattedre
                     {
                         dr.Fill(ds);
                     }
-
+                    conn.Close();
                 }
                 foreach(DataRow row  in ds.Rows)
                 {
@@ -206,11 +206,11 @@ namespace Cattedre
                     utente.TipoDocente = row["tipoDocente"] == null ? Convert.ToChar(row["tipoDocente"]):'\0';
                     utenti.Add(utente);
                 }
-                conn.Close();
+
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("errore nella query" + ex.Message);
             }
             return utenti;
         }
@@ -219,27 +219,30 @@ namespace Cattedre
         {
             int risultato = 0;
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
             {
-                conn.Open();
-                string sql = "SELECT IDdipartimento FROM afferire " +
-                    "WHERE IDutente = " + IDutente;
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-
-                if (dr.Read())
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    risultato = Convert.ToInt32(dr["IDdipartimento"]);
+                    conn.Open();
+                    string sql = @"SELECT IDdipartimento FROM afferire 
+                        WHERE IDutente =@IDutente ";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                                risultato = Convert.ToInt32(dr["IDdipartimento"]);
+                            
+                        }
+                    }
+                    conn.Close();
                 }
-
-                conn.Close();
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex.Message);
             }
 
             return risultato;
@@ -272,7 +275,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex.Message);
             }
             return false;
         }
@@ -302,15 +305,7 @@ namespace Cattedre
                     utente.Cognome = dr["cognome"].ToString();
                     utente.Nome = dr["nome"].ToString();
                     utente.TipoUtente = dr["tipoUtente"].ToString();
-
-                    if (!dr.IsDBNull(dr.GetOrdinal("tipoDocente")))
-                    {
-                        utente.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
-                    }
-                    else
-                    {
-                        utente.TipoDocente = '\0';
-                    }
+                    utente.TipoDocente=!dr.IsDBNull(dr.GetOrdinal("tipoDocente"))? Convert.ToChar(dr["tipoDocente"]): '\0';
                     cmd.Parameters.AddWithValue("@colore", utente.Colore);
                 }
 
@@ -318,7 +313,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex);
             }
 
             return utente;
@@ -330,112 +325,107 @@ namespace Cattedre
             return false;
         }
 
-        public static List<ClsUtenteDL> InserisciUtente(ClsUtenteDL utente)
+        public static void InserisciUtente(ClsUtenteDL utente)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
-
             try
             {
-                conn.Open();
-                string sql = "INSERT INTO utenti (nome, cognome, email, password, tipoutente, tipodocente, colore)" +
-                             " VALUES (@nome, @cognome, @email, @password, @tipoUtente, @tipoDocente,@colore)";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@nome", utente.Nome);
-                    cmd.Parameters.AddWithValue("@cognome", utente.Cognome);
-                    cmd.Parameters.AddWithValue("@email", utente.Email);
-                    cmd.Parameters.AddWithValue("@password", utente.Password);
-                    cmd.Parameters.AddWithValue("@tipoUtente", utente.TipoUtente);
-                    cmd.Parameters.AddWithValue("@tipoDocente", utente.TipoDocente);
-                    cmd.Parameters.AddWithValue("@colore", utente.Colore);
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
+                    conn.Open();
+                    string sql = @"INSERT INTO utenti (nome, cognome, email, password, tipoutente, tipodocente, colore)
+                                 VALUES (@nome, @cognome, @email, @password, @tipoUtente, @tipoDocente,@colore)";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        utenti.Add(utente);
+                        cmd.Parameters.AddWithValue("@nome", utente.Nome);
+                        cmd.Parameters.AddWithValue("@cognome", utente.Cognome);
+                        cmd.Parameters.AddWithValue("@email", utente.Email);
+                        cmd.Parameters.AddWithValue("@password", utente.Password);
+                        cmd.Parameters.AddWithValue("@tipoUtente", utente.TipoUtente);
+                        cmd.Parameters.AddWithValue("@tipoDocente", utente.TipoDocente);
+                        cmd.Parameters.AddWithValue("@colore", utente.Colore);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+
+                        if (righeCoinvolte <= 0)
+                            throw new InvalidOperationException("errore nel inserimento dei dati");
+
                     }
+                    conn.Close();
+                
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex);
             }
 
-            return utenti;
         }
 
-        public static List<ClsUtenteDL> ModificaUtente(ClsUtenteDL utente, int indice)
+        public static void ModificaUtente(ClsUtenteDL utente, long IDutente)
         {
-            FrmUtente frmUtente = new FrmUtente();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
 
             try
             {
-                conn.Open();
-                string sql = @"UPDATE utenti 
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"UPDATE utenti 
                            SET nome = @nome, 
                                cognome = @cognome, 
                                email = @email, 
                                password = @password, 
                                tipoUtente = @tipoUtente,
-                               tipoDocente = @tipoDocente 
+                               tipoDocente = @tipoDocente,
                                colore=@colore
-                           WHERE id = " + utente.ID;
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                {
-                    cmd.Parameters.AddWithValue("@nome", utente.Nome);
-                    cmd.Parameters.AddWithValue("@cognome", utente.Cognome);
-                    cmd.Parameters.AddWithValue("@email", utente.Email);
-                    cmd.Parameters.AddWithValue("@password", utente.Password);
-                    cmd.Parameters.AddWithValue("@tipoUtente", utente.TipoUtente);
-                    cmd.Parameters.AddWithValue("@tipoDocente", utente.TipoDocente);
-                    cmd.Parameters.AddWithValue("@colore", utente.Colore);
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
+                           WHERE id = @IDutente";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        utenti[indice] = utente;
+                        cmd.Parameters.AddWithValue("@nome", utente.Nome);
+                        cmd.Parameters.AddWithValue("@cognome", utente.Cognome);
+                        cmd.Parameters.AddWithValue("@email", utente.Email);
+                        cmd.Parameters.AddWithValue("@password", utente.Password);
+                        cmd.Parameters.AddWithValue("@tipoUtente", utente.TipoUtente);
+                        cmd.Parameters.AddWithValue("@tipoDocente", utente.TipoDocente);
+                        cmd.Parameters.AddWithValue("@colore", utente.Colore);
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
+
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        if (righeCoinvolte <= 0)
+                            throw new InvalidOperationException("No rows were inserted.");
                     }
+                    conn.Close();
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex.Message);
             }
-
-            return utenti;
         }
 
-        public static List<ClsUtenteDL> EliminaUtente(long id)
+        public static void  EliminaUtente(long IDutente)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
-
             try
             {
-                conn.Open();
-                string sql = "DELETE FROM utenti WHERE id = " + id;
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
+                    conn.Open();
+                    string sql = @"DELETE FROM utenti WHERE id = @IDutente";
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
                     {
-                        utenti = CaricaUtenti();
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        if (righeCoinvolte <= 0)
+                            throw new InvalidOperationException("No rows were inserted.");
                     }
                 }
+
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("errore nella query" + ex);
             }
-
-            return utenti;
         }
         public static string CreaPasswordStandard(string Nome, string Cognome)
         {

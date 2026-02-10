@@ -23,15 +23,20 @@ namespace Cattedre
         {
             try
             {
-                _cdc.Livello = tbLivello.Text;
+                if (!string.IsNullOrWhiteSpace(tbLivello.Text) && !string.IsNullOrWhiteSpace(tbNome.Text) && !string.IsNullOrWhiteSpace(rtbAbilitazioni.Text))
+                {
+                    _cdc.Livello = tbLivello.Text;
+                    _cdc.AbilitazioniRichieste = rtbAbilitazioni.Text;
+                    _cdc.Nome = tbNome.Text;
+                }
+                else
+                    throw new Exception("Inserire tutti i valori richiesti");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message +"\n riprovare!", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 tbLivello.Focus();
             }
-            _cdc.Nome = tbNome.Text;
-            _cdc.AbilitazioniRichieste = rtbAbilitazioni.Text;
         }
 
         private void FrmCdC_Load(object sender, EventArgs e)

@@ -41,10 +41,9 @@ namespace Cattedre
             // btElimina
             // 
             this.btElimina.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btElimina.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btElimina.Location = new System.Drawing.Point(783, 114);
+            this.btElimina.Location = new System.Drawing.Point(1226, 106);
             this.btElimina.Name = "btElimina";
-            this.btElimina.Size = new System.Drawing.Size(75, 23);
+            this.btElimina.Size = new System.Drawing.Size(105, 23);
             this.btElimina.TabIndex = 10;
             this.btElimina.Text = "Elimina";
             this.btElimina.UseVisualStyleBackColor = true;
@@ -53,10 +52,9 @@ namespace Cattedre
             // brModifica
             // 
             this.brModifica.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.brModifica.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.brModifica.Location = new System.Drawing.Point(783, 69);
+            this.brModifica.Location = new System.Drawing.Point(1226, 77);
             this.brModifica.Name = "brModifica";
-            this.brModifica.Size = new System.Drawing.Size(75, 23);
+            this.brModifica.Size = new System.Drawing.Size(105, 23);
             this.brModifica.TabIndex = 9;
             this.brModifica.Text = "Modifica";
             this.brModifica.UseVisualStyleBackColor = true;
@@ -65,10 +63,9 @@ namespace Cattedre
             // btInserisci
             // 
             this.btInserisci.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btInserisci.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btInserisci.Location = new System.Drawing.Point(783, 27);
+            this.btInserisci.Location = new System.Drawing.Point(1226, 48);
             this.btInserisci.Name = "btInserisci";
-            this.btInserisci.Size = new System.Drawing.Size(75, 23);
+            this.btInserisci.Size = new System.Drawing.Size(105, 23);
             this.btInserisci.TabIndex = 8;
             this.btInserisci.Text = "Inserisci";
             this.btInserisci.UseVisualStyleBackColor = true;
@@ -76,17 +73,18 @@ namespace Cattedre
             // 
             // lvCdCs
             // 
-            this.lvCdCs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvCdCs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lvCdCs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chLivello,
             this.chNome,
             this.chAbilitazioniRichieste});
             this.lvCdCs.FullRowSelect = true;
             this.lvCdCs.HideSelection = false;
-            this.lvCdCs.Location = new System.Drawing.Point(22, 27);
-            this.lvCdCs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lvCdCs.Location = new System.Drawing.Point(28, 35);
+            this.lvCdCs.Margin = new System.Windows.Forms.Padding(2);
             this.lvCdCs.Name = "lvCdCs";
-            this.lvCdCs.Size = new System.Drawing.Size(756, 205);
+            this.lvCdCs.Size = new System.Drawing.Size(1179, 282);
             this.lvCdCs.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvCdCs.TabIndex = 11;
             this.lvCdCs.UseCompatibleStateImageBehavior = false;
@@ -110,7 +108,7 @@ namespace Cattedre
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(900, 254);
+            this.ClientSize = new System.Drawing.Size(1343, 391);
             this.Controls.Add(this.lvCdCs);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.brModifica);

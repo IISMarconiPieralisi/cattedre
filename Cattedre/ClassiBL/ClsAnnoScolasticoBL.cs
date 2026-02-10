@@ -16,55 +16,30 @@ namespace Cattedre
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsAnnoScolasticoDL> anniScolastici = new List<ClsAnnoScolasticoDL>();
-            try
-            {
-                conn.Open();
-                string sql = "SELECT * FROM anniscolastici";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    while (dr.Read())
-                    {
-                        ClsAnnoScolasticoDL annoScolastico = new ClsAnnoScolasticoDL();
-                        annoScolastico.ID = Convert.ToInt64(dr["id"]);
-                        annoScolastico.Sigla = dr["sigla"].ToString();
-                        annoScolastico.DataInizio = (DateTime)dr["datainizio"];
-                        annoScolastico.DataFine = (DateTime)dr["datafine"];
-                        anniScolastici.Add(annoScolastico);
-                    }
-                }
-                conn.Close();
-            }
-            catch (Exception ex)
-            {
-                string errore = ex.Message;
-            }
-            return anniScolastici;
 
-            //conn.Open();
-            //string sql = "SELECT * FROM anniscolastici";
+            conn.Open();
+            string sql = "SELECT * FROM anniscolastici";
             //DataAdapter, DataSet e DataTable su dispensa ADO.Net
-            //MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
+            MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
             //Cache dati in memoria, oggetto disconnesso
-            //DataSet ds = new DataSet("cattadre");
-            //da.Fill(ds, "cattedre");
+            DataSet ds = new DataSet("cattedre");
+            da.Fill(ds, "cattedre");
 
-            // Scorro i Record del DataTable per creare la lista
-            //DataTable dt = ds.Tables["anniscolastici"];
-            //for (int i = 0; i < dt.Rows.Count; i++)
-            //{
-            //    // Potrei scrivere anche su una sola riga ma così è più leggibile
-            //    ClsAnnoScolasticoDL _annoscolastico = new ClsAnnoScolasticoDL(
-            //        (int)dt.Rows[i]["id"],
-            //        dt.Rows[i]["sigla"].ToString(),
-            //        dt.Rows[i]["datainizio"].ToString(),
-            //        dt.Rows[i]["datafine"].ToString());
-            //    anniScolastici.Add(_annoscolastico);
-            //}
-            //conn.Close();
+            //Scorro i Record del DataTable per creare la lista
+            DataTable dt = ds.Tables["anniscolastici"];
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                // Potrei scrivere anche su una sola riga ma così è più leggibile
+                ClsAnnoScolasticoDL _annoscolastico = new ClsAnnoScolasticoDL(
+                    (int)dt.Rows[i]["id"],
+                    dt.Rows[i]["sigla"].ToString(),
+                    (DateTime)dt.Rows[i]["datainizio"],
+                    (DateTime)dt.Rows[i]["datafine"]);
+                anniScolastici.Add(_annoscolastico);
+            }
+            conn.Close();
 
-            // TODO: QUI VIENE RICHIAMATO IL METODO PER POPOLARE LA LISTVIEW
+            return anniScolastici;
         }
 
         public static List<ClsAnnoScolasticoDL> InserisciAnnoScolastico(ClsAnnoScolasticoDL anno)

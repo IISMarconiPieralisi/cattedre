@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using System.Configuration;
+using System.Data;
 
 namespace Cattedre
 {
@@ -86,37 +87,32 @@ namespace Cattedre
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
-            try
-            {
-                conn.Open();
-                string sql = "SELECT c.*, u.ID AS IDutente, u.nome, u.cognome " +
-                    "FROM classi c " +
-                    "JOIN utenti u ON c.IDutente = u.ID " +
-                    "JOIN afferire af ON u.ID = af.IDutente " +
-                    "WHERE af.IDdipartimento = " + IDdipartimento;
 
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    while (dr.Read())
-                    {
-                        ClsClasseDL classe = new ClsClasseDL();
-                        classe.ID = Convert.ToInt64(dr["ID"]);
-                        classe.Sigla = dr["sigla"].ToString();
-                        classe.Sezione = dr["sezione"].ToString();
-                        classe.Anno = Convert.ToInt32(dr["anno"]);
-                        classe.NomeCoordinatore = dr["nome"].ToString();
-                        classe.NomeCoordinatore += " " + dr["cognome"].ToString();
-                        classi.Add(classe);
-                    }
-                }
-                conn.Close();
-            }
-            catch (Exception ex)
+            conn.Open();
+            string sql = "SELECT * FROM classi";
+            //DataAdapter, DataSet e DataTable su dispensa ADO.Net
+            MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
+            //Cache dati in memoria, oggetto disconnesso
+            DataSet ds = new DataSet("cattedre");
+            da.Fill(ds, "cattedre");
+
+            //Scorro i Record del DataTable per creare la lista
+            DataTable dt = ds.Tables["classi"];
+            for (int i = 0; i < dt.Rows.Count; i++)
             {
-                string errore = ex.Message;
+                // Potrei scrivere anche su una sola riga ma così è più leggibile
+                ClsClasseDL _classe = new ClsClasseDL(
+                    (int)dt.Rows[i]["id"],
+                    dt.Rows[i]["sigla"].ToString(),
+                    (int)dt.Rows[i]["anno"],
+                    dt.Rows[i]["sezione"].ToString(),
+                    (int)dt.Rows[i]["classeArticolataCon"],
+                    (int)dt.Rows[i]["IDutente"],
+                    (int)dt.Rows[i]["IDindirizzo"]);
+                classi.Add(_classe);
             }
+            conn.Close();
+
             return classi;
         }
 

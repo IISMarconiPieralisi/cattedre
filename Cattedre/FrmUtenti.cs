@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Cattedre
 {
@@ -22,6 +23,8 @@ namespace Cattedre
 
         private void CaricaListView()
         {
+            utenti = ClsUtenteBL.CaricaUtenti();
+
             lvUtenti.Items.Clear();
 
             foreach (ClsUtenteDL utente in utenti)
@@ -103,40 +106,46 @@ namespace Cattedre
             DialogResult dr = frmUtente.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                ClsUtenteBL.InserisciUtente(frmUtente._utente); //l'utente che mando non ha un ID che creo quando lo inzializzo nel server
-                ClsUtenteDL utente = ClsUtenteBL.caricautente(frmUtente._utente.Email); //essendo che l'email è univoca riesco a risalire anche all'id del utente in questo modo
-                if(frmUtente._afferenze!=null && frmUtente._afferenze.Count>0)
+                try
                 {
-                    foreach (ClsAfferireDL afferire in frmUtente._afferenze)
+                    ClsUtenteBL.InserisciUtente(frmUtente._utente); //l'utente che mando non ha un ID che creo quando lo inzializzo nel server
+                    ClsUtenteDL utente = ClsUtenteBL.caricautente(frmUtente._utente.Email); //essendo che l'email è univoca riesco a risalire anche all'id del utente in questo modo
+                    if (frmUtente._afferenze != null && frmUtente._afferenze.Count > 0)
                     {
-                        afferire.IDutente = utente.ID;
-                        ClsAfferireBL.InserisciAfferire(afferire);
-                    }
-                        
-                }
-                if (frmUtente._richieste != null && frmUtente._richieste.Count > 0)
-                {
-                    foreach (ClsRichiedereDL richiedere in frmUtente._richieste)
-                    {
-                        richiedere.IDutente = utente.ID;
-                        ClsRichiedereBL.InserisciRichiedere(richiedere);
-                    }
-
-                }
-
-                if (frmUtente._utente.TipoUtente=="D" || frmUtente._utente.TipoUtente == "C")
-                {
-                    frmUtente._contratto.IDutente = utente.ID;
-                    ClsContrattoBL.InserisciContratto(frmUtente._contratto, utente.ID);
-                    if(frmUtente._utente.TipoUtente == "C")
-                    {
-                        //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
-                        ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, utente.ID);
+                        foreach (ClsAfferireDL afferire in frmUtente._afferenze)
+                        {
+                            afferire.IDutente = utente.ID;
+                            ClsAfferireBL.InserisciAfferire(afferire);
+                        }
 
                     }
+                    if (frmUtente._richieste != null && frmUtente._richieste.Count > 0)
+                    {
+                        foreach (ClsRichiedereDL richiedere in frmUtente._richieste)
+                        {
+                            richiedere.IDutente = utente.ID;
+                            ClsRichiedereBL.InserisciRichiedere(richiedere);
+                        }
+
+                    }
+
+                    if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C")
+                    {
+                        frmUtente._contratto.IDutente = utente.ID;
+                        ClsContrattoBL.InserisciContratto(frmUtente._contratto, utente.ID);
+                        if (frmUtente._utente.TipoUtente == "C")
+                        {
+                            //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
+                            ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, utente.ID);
+
+                        }
+                    }
                 }
-                    
-                utenti = ClsUtenteBL.CaricaUtenti();
+                catch(Exception ex)
+                {
+                    MessageBox.Show($"Errore durante il inserimento:{ex.Message}", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
                 CaricaListView();
             }
         }
@@ -147,7 +156,7 @@ namespace Cattedre
             CaricaListView();
         }
 
-        private void btModifica_Click(object sender, EventArgs e)
+        private  void  btModifica_Click(object sender, EventArgs e)
         {
             if (lvUtenti.SelectedIndices.Count == 1)
             {
@@ -158,40 +167,48 @@ namespace Cattedre
                 frmUtente._utente = utenti[indiceDaModificare];
                 //creo un appoggio di utente che mi servirà in futuro
                 //ClsUtenteBL u = frmUtente._utente;
-                frmUtente._utente.ID = (long)lvUtenti.SelectedItems[0].Tag;
+                frmUtente._utente.ID = utenti[indiceDaModificare].ID; //mi assicuro che l'ID rimanga lo stesso
 
-                List<ClsAfferireDL> afferire = ClsAfferireBL.CaricaClassiAfferire(utenti[indiceDaModificare].ID);
+                List <ClsAfferireDL> afferire = ClsAfferireBL.CaricaClassiAfferire(utenti[indiceDaModificare].ID);
                 if (afferire != null && afferire.Count > 0) //se non esiste restituirà null e quindi non restituirà la lista
-                {
                     frmUtente._afferenze = afferire;
-                }
+                
                 List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedere(utenti[indiceDaModificare].ID);
                 if (richiedere != null && richiedere.Count > 0)
                     frmUtente._richieste = richiedere;
                 ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(utenti[indiceDaModificare].ID); //se non esiste restituirà null
                 if (contratto != null)
-                {
                     frmUtente._contratto = contratto;
-                }
+                
 
                 DialogResult dr = frmUtente.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
-                    ClsUtenteBL.ModificaUtente(frmUtente._utente, indiceDaModificare); //l'utente che mando ha un ID già esistente
-                    if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C")
+                    try
                     {
-                        //modifica contratto, afferenze e richieste
-                        ClsAfferireBL.ModificaAfferenze(frmUtente._utente.ID, frmUtente._afferenze);
-                        ClsRichiedereBL.ModificaRichiesta(frmUtente._utente.ID, 0, frmUtente._richieste);
-                        ClsContrattoBL.ModificaContratto(frmUtente._contratto, frmUtente._utente.ID);
-                        //controllo e inserimento coordinatore di dipartimento
-                        if (frmUtente._utente.TipoUtente == "C")
-                        {
-                            //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
-                            ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, frmUtente._utente.ID);
-                        }
+                        ClsUtenteBL.ModificaUtente(frmUtente._utente,frmUtente._utente.ID);
 
+                        if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C")
+                        {
+
+                            //modifica contratto, afferenze e richieste
+                            ClsAfferireBL.ModificaAfferenze(frmUtente._utente.ID, frmUtente._afferenze);
+                            ClsRichiedereBL.ModificaRichiesta(frmUtente._utente.ID, 0, frmUtente._richieste);
+                            ClsContrattoBL.ModificaContratto(frmUtente._contratto, frmUtente._utente.ID);
+                            //controllo e inserimento coordinatore di dipartimento
+                            if (frmUtente._utente.TipoUtente == "C")
+                            {
+                                //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
+                                ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, frmUtente._utente.ID);
+                            }
+
+                        }
                     }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show("Errore durante il salvataggio: " + ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
                     CaricaListView();
 
                 }
@@ -217,6 +234,93 @@ namespace Cattedre
                 CaricaListView();
             }
         }
+        #region filtri
+        private void cbFiltro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string TipoFiltro = cbFiltro.SelectedItem.ToString();
+            tlpFiltri.Controls.Clear();
+            tlpFiltri.RowStyles.Clear();
+            tlpFiltri.RowCount = 1;
+
+            switch (TipoFiltro)
+            {
+                case "Tipo Docente":
+                    ConfiguraGriglia(2);
+                    AggiungiControllo(new RadioButton { Name="rbTeorico", Text = "Teorico", AutoSize = true }, 0);
+                    AggiungiControllo(new RadioButton { Name = "rbLaboratorio", Text = "Laboratorio", AutoSize = true  }, 1);
+                    btFiltro.Enabled = true;
+                    break;
+                case "Tipo Contratto":
+                    ConfiguraGriglia(2);
+                    AggiungiControllo(new RadioButton { Name = "rbDeterminato", Text = "Determinato", AutoSize = true }, 0);
+                    AggiungiControllo(new RadioButton { Name = "rbIndterminato", Text = "Indeterminato", AutoSize = true }, 1);
+                    btFiltro.Enabled = true;
+                    break;
+                case "Tipo Utente":
+                    ConfiguraGriglia(4); // Divido in 4 colonne
+                    string[] labels = { "Amministratore", "Preside", "Coordinatore Dipartimento", "Docente" };
+                    for (int i = 0; i < labels.Length; i++)
+                        AggiungiControllo(new CheckBox { Text = labels[i], AutoSize = true }, i);
+                    
+                    btFiltro.Enabled = true;
+                    break;
+                 default:
+                    utenti = ClsUtenteBL.CaricaUtenti();
+                    CaricaListView();
+                    break;
+            }
+
+        }
+        private void btFiltro_Click(object sender, EventArgs e)
+        {
+            if(cbFiltro.SelectedIndex!=0)//anche se non serve per sicurezza lo uso
+            {
+                string cbSelezionato = cbFiltro.SelectedText;
+                string filtro = (cbSelezionato == "Tipo Utente")?"tipoUtente":
+                                (cbSelezionato=="Tipo Contratto")?"tipoContratto":
+                                (cbSelezionato=="Tipo Docente")?"tipoDocente":""; //in  questo modo me lo preparo come è scritto nel DB, per comodità
+                switch(filtro)
+                {
+                    case "tipoDocente":
+                        var selezionato = tlpFiltri.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
+                        string parametro = (selezionato.Text == "Teorico") ? "T" : "L";
+                        //filtro
+                        break;
+                    case "tipoUtente":
+                        List<string> filtriSelezionati = new List<string>();
+                        foreach(Control c in tlpFiltri.Controls)
+                        {
+                            if(c is CheckBox cb && cb.Checked)
+                                filtriSelezionati.Add(cb.Text);
+                        }
+                        //filtro
+                        break;
+                    case "tipoContratto":
+                        var tContratto = tlpFiltri.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
+                        string par = (tContratto.Text == "Derminato") ? "D" : "I";
+                        //filtro
+                        break;
+                }
+                 
+            }
+        }
+        private void ConfiguraGriglia(int numeroColonne)
+        {
+            tlpFiltri.ColumnCount = numeroColonne;
+            float percentuale = 100f / numeroColonne;
+
+            for (int i = 0; i < numeroColonne; i++)
+                tlpFiltri.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, percentuale));
+            
+        }
+        private void AggiungiControllo(Control control, int Colonna)
+        {
+            control.Anchor = AnchorStyles.None;
+            tlpFiltri.Controls.Add(control, Colonna, 0);
+        }
+
+        #endregion
+
 
 
     }

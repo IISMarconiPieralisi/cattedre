@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using System.Configuration;
+using System.Data;
 
 namespace Cattedre
 {
@@ -40,6 +41,30 @@ namespace Cattedre
                 string errore = ex.Message;
             }
             return anniScolastici;
+
+            //conn.Open();
+            //string sql = "SELECT * FROM anniscolastici";
+            //DataAdapter, DataSet e DataTable su dispensa ADO.Net
+            //MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
+            //Cache dati in memoria, oggetto disconnesso
+            //DataSet ds = new DataSet("cattadre");
+            //da.Fill(ds, "cattedre");
+
+            // Scorro i Record del DataTable per creare la lista
+            //DataTable dt = ds.Tables["anniscolastici"];
+            //for (int i = 0; i < dt.Rows.Count; i++)
+            //{
+            //    // Potrei scrivere anche su una sola riga ma così è più leggibile
+            //    ClsAnnoScolasticoDL _annoscolastico = new ClsAnnoScolasticoDL(
+            //        (int)dt.Rows[i]["id"],
+            //        dt.Rows[i]["sigla"].ToString(),
+            //        dt.Rows[i]["datainizio"].ToString(),
+            //        dt.Rows[i]["datafine"].ToString());
+            //    anniScolastici.Add(_annoscolastico);
+            //}
+            //conn.Close();
+
+            // TODO: QUI VIENE RICHIAMATO IL METODO PER POPOLARE LA LISTVIEW
         }
 
         public static List<ClsAnnoScolasticoDL> InserisciAnnoScolastico(ClsAnnoScolasticoDL anno)

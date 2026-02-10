@@ -20,6 +20,14 @@ namespace Cattedre
         {
 
         }
+
+        public ClsAnnoScolasticoDL(long id, string sigla, DateTime datainizio, DateTime datafine)
+        {
+            _id = id;
+            _sigla = sigla;
+            _dataInizio = datainizio;
+            _dataFine = datafine;
+        }
         #endregion        
 
         string formatoSigla = @"^\d{2}-\d{2}$";

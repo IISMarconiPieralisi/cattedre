@@ -23,33 +23,31 @@ namespace Cattedre
 
         private void btSalva_Click(object sender, EventArgs e)
         {
-            if (tbDisciplinaSpeciale.Text != "potenziamento" || tbDisciplinaSpeciale.Text != "")
+            _disciplina.Nome = tbNome.Text;
+            if (ckbAnno1.Checked)
+                _disciplina.Anno = 1;
+            else if (ckbAnno2.Checked)
+                _disciplina.Anno = 2;
+            else if (ckbAnno3.Checked)
+                _disciplina.Anno = 3;
+            else if (ckbAnno4.Checked)
+                _disciplina.Anno = 4;
+            else if (ckbAnno5.Checked)
+                _disciplina.Anno = 5;
+            else if(tbDisciplinaSpeciale.Text.ToLower() != "potenziamento")
             {
-                _disciplina.Nome = tbNome.Text;
-                if (ckbAnno1.Checked)
-                    _disciplina.Anno = 1;
-                else if (ckbAnno2.Checked)
-                    _disciplina.Anno = 2;
-                else if (ckbAnno3.Checked)
-                    _disciplina.Anno = 3;
-                else if (ckbAnno4.Checked)
-                    _disciplina.Anno = 4;
-                else if (ckbAnno5.Checked)
-                    _disciplina.Anno = 5;
-                else
-                {
-                    MessageBox.Show("Anno non valido");
-                    this.DialogResult = DialogResult.None;
-                }
-                if ((ckbAnno1.Checked && ckbAnno2.Checked) || (ckbAnno1.Checked && ckbAnno3.Checked) || (ckbAnno1.Checked && ckbAnno4.Checked) ||
-                    (ckbAnno1.Checked && ckbAnno5.Checked) ||
-                    (ckbAnno2.Checked && ckbAnno3.Checked) || (ckbAnno2.Checked && ckbAnno4.Checked) || (ckbAnno2.Checked && ckbAnno5.Checked) ||
-                    (ckbAnno3.Checked && ckbAnno4.Checked) || (ckbAnno3.Checked && ckbAnno5.Checked) ||
-                    (ckbAnno4.Checked && ckbAnno5.Checked))
-                {
-                    MessageBox.Show("Anno non valido");
-                    this.DialogResult = DialogResult.None;
-                }
+                MessageBox.Show("Anno non valido");
+                this.DialogResult = DialogResult.None;
+            }
+
+            if ((ckbAnno1.Checked && ckbAnno2.Checked) || (ckbAnno1.Checked && ckbAnno3.Checked) || (ckbAnno1.Checked && ckbAnno4.Checked) ||
+                (ckbAnno1.Checked && ckbAnno5.Checked) ||
+                (ckbAnno2.Checked && ckbAnno3.Checked) || (ckbAnno2.Checked && ckbAnno4.Checked) || (ckbAnno2.Checked && ckbAnno5.Checked) ||
+                (ckbAnno3.Checked && ckbAnno4.Checked) || (ckbAnno3.Checked && ckbAnno5.Checked) ||
+                (ckbAnno4.Checked && ckbAnno5.Checked))
+            {
+                MessageBox.Show("Anno non valido");
+                this.DialogResult = DialogResult.None;
             }
 
             _disciplina.OreLaboratorio = (int)nudOreLab.Value;

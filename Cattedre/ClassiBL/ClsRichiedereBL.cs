@@ -70,7 +70,7 @@ namespace Cattedre
                     string sql = @"SELECT c.id,c.livello,c.nome
                                     FROM classidiconcorso c
                                     JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
-                                    WHERE r.ID = @IdUtente";
+                                    WHERE r.IDutente = @IdUtente";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -81,7 +81,7 @@ namespace Cattedre
                             while (dr.Read())
                             {
                                 ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
-                                cdc.ID =Convert.ToInt64(dr["ID"]);
+                                cdc.ID =Convert.ToInt64(dr["id"]);
                                 cdc.Livello =dr["livello"].ToString();
                                 cdc.Nome = dr["nome"].ToString();
                                 CDCs.Add(cdc);
@@ -92,8 +92,8 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
-                throw;
+                throw new Exception($"errore nella query: {ex.Message}", ex);
+
             }
 
             return CDCs;

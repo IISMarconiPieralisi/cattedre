@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using System.Configuration;
+using System.Data;
 
 namespace Cattedre
 {
@@ -13,6 +14,7 @@ namespace Cattedre
         public static List<ClsAfferireDL> CaricaClassiAfferire(long idUtente)
         {
             List<ClsAfferireDL> afferireDLs = new List<ClsAfferireDL>();
+            DataTable dt = new DataTable();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             try
             {
@@ -23,27 +25,32 @@ namespace Cattedre
                     string sql = @"SELECT *
                           FROM afferire 
                           WHERE IDutente = @IdUtente
-                          ORDER BY IDdipartimento"; 
+                          ORDER BY IDdipartimento";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.Add("@IdUtente", MySqlDbType.Int64).Value = idUtente;
+                        cmd.Parameters.AddWithValue("@IdUtente", idUtente);
 
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            while (dr.Read())
-                            {
-                                long idUtenteDB = Convert.ToInt64(dr["IDutente"]);
 
-                                // Controllo per valori DBNull (buona pratica)
-                                long idDipartimento = Convert.ToInt64(dr["IDdipartimento"]);
-                                ClsAfferireDL afferire = new ClsAfferireDL(idDipartimento,idUtente);
-                                afferire.ID = Convert.ToInt64(dr["ID"]);
-                                afferireDLs.Add(afferire);
-                            }
+                            da.Fill(dt);
                         }
+                        conn.Close();
                     }
                 }
+                foreach(DataRow row in dt.Rows)
+                {
+                     long idUtenteDB = Convert.ToInt64(row["IDutente"]);
+                     long idDipartimento = Convert.ToInt64(row["IDdipartimento"]);
+
+                     ClsAfferireDL afferire = new ClsAfferireDL(idDipartimento,idUtente);
+                     afferire.ID = Convert.ToInt64(row["ID"]);
+                     afferireDLs.Add(afferire);
+                }
+                        
+                    
+                
             }
             catch (Exception ex)
             {
@@ -61,8 +68,8 @@ namespace Cattedre
                 {
 
                     conn.Open();
-                    string sql = "INSERT INTO afferire (IDdipartimento, IDutente) " +
-                                 "VALUES (@IDdipartimento, @IDutente)";
+                    string sql = @"INSERT INTO afferire (IDdipartimento, IDutente) 
+                                 VALUES (@IDdipartimento, @IDutente)";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -85,32 +92,37 @@ namespace Cattedre
         public static List<ClsDipartimentoDL> dipartimentiAfferiti(long Idutente)
         {
             List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
-            string connectionString = ConfigurationManager
-                .ConnectionStrings["cattedre"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            DataTable dt = new DataTable();
 
-            string sql = @"SELECT d.ID, d.Nome
-                           FROM dipartimenti d
-                           INNER JOIN afferire a ON d.ID = a.IDdipartimento
-                           WHERE a.IDutente = @IDutente";
 
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    cmd.Parameters.Add("@IDutente", MySqlDbType.Int64).Value = Idutente;
                     conn.Open();
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    string sql = @"SELECT d.ID, d.Nome
+                           FROM dipartimenti d
+                           INNER JOIN afferire a ON d.ID = a.IDdipartimento
+                           WHERE a.IDutente = @IDutente";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        while (dr.Read())
+                        cmd.Parameters.AddWithValue("@IDutente", Idutente);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
-                            ClsDipartimentoDL dip = new ClsDipartimentoDL();
-                            dip.ID = Convert.ToInt64(dr["ID"]);
-                            dip.Nome = dr["nome"].ToString();
-                            dipartimenti.Add(dip);
+                            dr.Fill(dt);
                         }
                     }
+                    conn.Close();
                 }
+                foreach(DataRow row in dt.Rows)
+                {
+                    ClsDipartimentoDL dip = new ClsDipartimentoDL();
+                    dip.ID = Convert.ToInt64(row["ID"]);
+                    dip.Nome = row["nome"].ToString();
+                    dipartimenti.Add(dip);
+                }
+               
             }
             catch (Exception ex)
             {
@@ -130,12 +142,16 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "DELETE FROM afferire WHERE ID = " +ID;
+                string sql = @"DELETE FROM afferire WHERE ID =@ID";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
+                    cmd.Parameters.AddWithValue("@ID", ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
-
+                    if(righeCoinvolte<=0)
+                        throw new InvalidOperationException("No rows were inserted.");
                 }
+                conn.Close();
+
             }
             catch (Exception ex)
             {

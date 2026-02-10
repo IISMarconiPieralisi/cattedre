@@ -59,9 +59,9 @@ namespace Cattedre
         {
             if (lvCdCs.SelectedIndices.Count == 1)
             {
-                indiceDaModificare = lvCdCs.SelectedIndices[0];
+                int ID =Convert.ToInt32(lvCdCs.SelectedItems[0].Tag);
                 FrmCdC frmCdC = new FrmCdC();
-                frmCdC._cdc = cdcs[indiceDaModificare];
+                frmCdC._cdc = cdcs.Find(p=>p.ID== ID);
                 DialogResult dr = frmCdC.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
@@ -69,6 +69,8 @@ namespace Cattedre
                     CaricaListView();
                 }
             }
+            else
+                MessageBox.Show("Selezionare un elemento da modificare","attenzione",MessageBoxButtons.OK,MessageBoxIcon.Warning);
         }
 
         private void btElimina_Click(object sender, EventArgs e)

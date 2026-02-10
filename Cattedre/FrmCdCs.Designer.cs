@@ -40,7 +40,7 @@ namespace Cattedre
             // 
             // btElimina
             // 
-            this.btElimina.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btElimina.Location = new System.Drawing.Point(1226, 106);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(105, 23);
@@ -51,7 +51,7 @@ namespace Cattedre
             // 
             // brModifica
             // 
-            this.brModifica.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.brModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.brModifica.Location = new System.Drawing.Point(1226, 77);
             this.brModifica.Name = "brModifica";
             this.brModifica.Size = new System.Drawing.Size(105, 23);
@@ -62,7 +62,7 @@ namespace Cattedre
             // 
             // btInserisci
             // 
-            this.btInserisci.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btInserisci.Location = new System.Drawing.Point(1226, 48);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.Size = new System.Drawing.Size(105, 23);
@@ -84,7 +84,7 @@ namespace Cattedre
             this.lvCdCs.Location = new System.Drawing.Point(28, 35);
             this.lvCdCs.Margin = new System.Windows.Forms.Padding(2);
             this.lvCdCs.Name = "lvCdCs";
-            this.lvCdCs.Size = new System.Drawing.Size(1179, 282);
+            this.lvCdCs.Size = new System.Drawing.Size(1179, 471);
             this.lvCdCs.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvCdCs.TabIndex = 11;
             this.lvCdCs.UseCompatibleStateImageBehavior = false;
@@ -108,7 +108,7 @@ namespace Cattedre
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1343, 391);
+            this.ClientSize = new System.Drawing.Size(1343, 577);
             this.Controls.Add(this.lvCdCs);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.brModifica);

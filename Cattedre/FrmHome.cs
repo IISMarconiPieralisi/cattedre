@@ -12,8 +12,7 @@ namespace Cattedre
 {
     public partial class FrmHome : Form
     {
-        FrmCdCs frmCdCs;
-        FrmCdC frmCdC;
+        FrmCdCs frmCdcs;
         FrmIndirizzi frmIndirizzi;
         FrmDipartimenti frmDipartimenti;
         FrmDiscipline frmDiscipline;
@@ -92,9 +91,9 @@ namespace Cattedre
 
         private void cDCToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Application.OpenForms["FrmCdC"] == null)
-                frmCdC = new FrmCdC();
-            MostraFormMDI(frmCdC);
+            if (Application.OpenForms["frmCdcs"] == null)
+                frmCdcs = new FrmCdCs();
+            MostraFormMDI(frmCdcs);
         }
 
         private void iNDIRIZZIToolStripMenuItem_Click(object sender, EventArgs e)

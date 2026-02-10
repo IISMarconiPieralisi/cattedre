@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using System.Configuration;
+using System.Data;
 
 namespace Cattedre
 {
@@ -13,103 +14,114 @@ namespace Cattedre
         public static long RilevaIDindirizzo(string nome)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            ClsIndirizzoDL indirizzo = null;
+            long ID=0;
             try
             {
-                conn.Open();
-                string sql = "SELECT ID " +
-                             "FROM indirizzi " +
-                             "WHERE nome = '" + nome + "'";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    dr.Read();
-                    indirizzo = new ClsIndirizzoDL();
-                    indirizzo.ID = Convert.ToInt64(dr["ID"]);
-                }
-                conn.Close();
+                    conn.Open();
+                    string sql = @"SELECT ID 
+                             FROM indirizzi 
+                             WHERE nome ='@nome'";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@nome", nome);
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.HasRows)
+                            {
+                                dr.Read();
+                                ID = Convert.ToInt64(dr["ID"]);
+                            }
+                        }
+                    }
+                    conn.Close();
+                }         
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
-            }
-            if (indirizzo != null)
-                return indirizzo.ID;
-            else
-                return 0;
+                throw new Exception(ex.Message);
+           }
+            return ID;
         }
 
         public static string RilevaNomeIndirizzo(long id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            ClsIndirizzoDL indirizzo = null;
+            string nome="-";
             try
             {
-                conn.Open();
-                string sql = "SELECT nome " +
-                             "FROM indirizzi " +
-                             "WHERE ID = " + id;
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    dr.Read();
-                    indirizzo = new ClsIndirizzoDL();
-                    indirizzo.Nome = dr["nome"].ToString();
+                    conn.Open();
+                    string sql = @"SELECT nome 
+                             FROM indirizzi 
+                             WHERE ID ='@id'";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        MySqlDataReader dr = cmd.ExecuteReader();
+                        if (dr.HasRows)
+                        {
+                            dr.Read();
+                            nome = (!string.IsNullOrWhiteSpace(dr["nome"].ToString())) ? dr["nome"].ToString() : "-";
+                            nome = dr["nome"].ToString();
+                        }
+                    }
+                    
+                    conn.Close();
                 }
-                conn.Close();
+                   
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
-            if (indirizzo != null)
-                return indirizzo.Nome;
-            else
-                return "-";
+            return nome;
         }
 
         public static List<ClsIndirizzoDL> CaricaIndirizzi()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
+            DataTable dt = new DataTable();
+
             try
             {
-                conn.Open();
-                string sql = "SELECT * FROM indirizzi";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    while (dr.Read())
+                    conn.Open();
+                    string sql = "SELECT * FROM indirizzi";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                   
                         ClsIndirizzoDL indirizzo = new ClsIndirizzoDL();
-                        indirizzo.ID = Convert.ToInt64(dr["id"]);
-                        indirizzo.Nome = dr["nome"].ToString();
+                        indirizzo.ID = Convert.ToInt64(row["id"]);
+                        indirizzo.Nome = row["nome"].ToString();
                         indirizzi.Add(indirizzo);
                     }
                 }
-                conn.Close();
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return indirizzi;
         }
 
-        public static List<ClsIndirizzoDL> InserisciIndirizzo(ClsIndirizzoDL indirizzo)
+        public static void InserisciIndirizzo(ClsIndirizzoDL indirizzo)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
-
             try
             {
                 conn.Open();
@@ -119,48 +131,42 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@nome", indirizzo.Nome);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 
-                    if (righeCoinvolte > 0)
-                    {
-                        indirizzi.Add(indirizzo);
-                    }
+                    if (righeCoinvolte <= 0)
+                        throw new Exception("errore nel inserimento");
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
-            return indirizzi;
         }
 
-        public static List<ClsIndirizzoDL> ModificaIndirizzo(ClsIndirizzoDL indirizzo, int indice)
+        public static void ModificaIndirizzo(ClsIndirizzoDL indirizzo, int indice)
         {
-            FrmIndirizzo frmIndirizzo = new FrmIndirizzo();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
-
             try
             {
-                conn.Open();
-                string sql = "UPDATE indirizzi SET nome = '" + indirizzo.Nome + "' WHERE id = " + indirizzo.ID;
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@nome", indirizzo.Nome);
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
+                    conn.Open();
+                    string sql = @"UPDATE indirizzi SET nome = '@nome' WHERE id = @id ";
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
                     {
-                        indirizzi[indice] = frmIndirizzo._indirizzo;
+                        cmd.Parameters.AddWithValue("@id", indice);
+                        cmd.Parameters.AddWithValue("@nome", indirizzo.Nome);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        if (righeCoinvolte <= 0)
+                            throw new Exception("nel modifica");
                     }
                 }
+                  
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
-            return indirizzi;
         }
 
         public static List<ClsIndirizzoDL> EliminaIndirizzo(int id)
@@ -185,7 +191,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
             return indirizzi;

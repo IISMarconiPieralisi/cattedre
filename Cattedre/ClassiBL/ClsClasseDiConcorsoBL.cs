@@ -135,7 +135,15 @@ namespace Cattedre
         }
         public static List<ClsClasseDiConcorsoDL> FiltraCDC(string AbilitazioniRichieste)
         {
-            List<ClsClasseDiConcorsoDL> classeFiltrate = new List<ClsClasseDiConcorsoDL>();
+            List<ClsClasseDiConcorsoDL> cdcFiltrate = new List<ClsClasseDiConcorsoDL>();
+            try
+            {
+
+            }catch(Exception ex)
+            {
+                throw new Exception();
+            }
+            return cdcFiltrate;
 
         }
     }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using System.Configuration;
+using System.Data;
 
 namespace Cattedre
 {
@@ -18,34 +19,32 @@ namespace Cattedre
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-            try
-            {
-                conn.Open();
-                string sql = "SELECT * FROM discipline d " +
-                    "WHERE d.IDdipartimento = " + IDdipartimento;
 
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    while (dr.Read())
-                    {
-                        ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
-                        disciplina.ID = Convert.ToInt32(dr["ID"]);
-                        disciplina.Nome = dr["nome"].ToString();
-                        disciplina.Anno = Convert.ToInt32(dr["anno"]);
-                        disciplina.OreTeoria = Convert.ToInt32(dr["oreteoria"]);
-                        disciplina.OreLaboratorio = Convert.ToInt32(dr["orelaboratorio"]);
-                        disciplina.DisciplinaSpeciale = dr["disciplinaspeciale"].ToString();
-                        discipline.Add(disciplina);
-                    }
-                }
-                conn.Close();
-            }
-            catch (Exception ex)
+            conn.Open();
+            string sql = "SELECT * FROM discipline";
+            //DataAdapter, DataSet e DataTable su dispensa ADO.Net
+            MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
+            //Cache dati in memoria, oggetto disconnesso
+            DataSet ds = new DataSet("cattedre");
+            da.Fill(ds, "cattedre");
+
+            //Scorro i Record del DataTable per creare la lista
+            DataTable dt = ds.Tables["discipline"];
+            for (int i = 0; i < dt.Rows.Count; i++)
             {
-                string errore = ex.Message;
+                // Potrei scrivere anche su una sola riga ma così è più leggibile
+                ClsDisciplinaDL _disciplina = new ClsDisciplinaDL(
+                    (int)dt.Rows[i]["id"],
+                    dt.Rows[i]["nome"].ToString(),
+                    (int)dt.Rows[i]["anno"],
+                    (int)dt.Rows[i]["oreLaboratorio"],
+                    (int)dt.Rows[i]["oreTeoria"],
+                    dt.Rows[i]["disciplinaSpeciale"].ToString(),
+                    (int)dt.Rows[i]["IDdipartimento"]);
+                discipline.Add(_disciplina);
             }
+            conn.Close();
+
             return discipline;
         }
 

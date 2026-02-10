@@ -9,15 +9,21 @@ namespace Cattedre
     public class ClsDisciplinaDL
     {
         #region ATTRIBUTI
-        int _id;
+        long _id, _IDdipartimento;
         string _nome, _disciplinaSpeciale;
         int _oreTeoria, _oreLaboratorio, _anno;
         #endregion
 
         #region COSTRUTTORE
-        public ClsDisciplinaDL(string nome)
+        public ClsDisciplinaDL(long id, string nome, int anno, int orelaboratorio, int oreteoria, string disciplinaspeciale, long IDdipartimento)
         {
+            _id = id;
             _nome = nome;
+            _anno = anno;
+            _oreLaboratorio = orelaboratorio;
+            _oreTeoria = oreteoria;
+            _disciplinaSpeciale = disciplinaspeciale;
+            _IDdipartimento = IDdipartimento;
         }
 
         public ClsDisciplinaDL()

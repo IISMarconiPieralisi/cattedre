@@ -210,18 +210,6 @@
     <Compile Include="FrmClassi.Designer.cs">
       <DependentUpon>FrmClassi.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmContratti.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmContratti.Designer.cs">
-      <DependentUpon>FrmContratti.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmContratto.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmContratto.Designer.cs">
-      <DependentUpon>FrmContratto.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmCredits.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -352,12 +340,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmClassi.resx">
       <DependentUpon>FrmClassi.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmContratti.resx">
-      <DependentUpon>FrmContratti.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmContratto.resx">
-      <DependentUpon>FrmContratto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCredits.resx">
       <DependentUpon>FrmCredits.cs</DependentUpon>

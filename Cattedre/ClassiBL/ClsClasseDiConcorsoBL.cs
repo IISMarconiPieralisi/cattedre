@@ -145,7 +145,7 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT ID,livello,nome,abilitazioniRichieste
-                                 FROM indirizzi 
+                                 FROM classidiconcorso 
                                  WHERE nome LIKE @Ricerca";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {

@@ -168,7 +168,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex.Message);
+                throw new Exception(ex.Message);
             }
             return utenti;
         }
@@ -183,7 +183,7 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "SELECT * FROM utenti ";
+                string sql = "SELECT ID, nome, cognome, email, password, tipoutente, tipodocente, colore FROM utenti ";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
@@ -203,14 +203,14 @@ namespace Cattedre
                     utente.Nome = row["nome"].ToString();
                     utente.TipoUtente = row["tipoUtente"].ToString();
                     //utente.Colore = row["colore"].ToString();
-                    utente.TipoDocente = row["tipoDocente"] == null ? Convert.ToChar(row["tipoDocente"]):'\0';
+                    utente.TipoDocente = row["tipoDocente"] != DBNull.Value? Convert.ToChar(row["tipoDocente"]): '\0';
                     utenti.Add(utente);
                 }
 
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex.Message);
+                throw new Exception(ex.Message);
             }
             return utenti;
         }
@@ -242,7 +242,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex.Message);
+                throw new Exception(ex.Message);
             }
 
             return risultato;
@@ -457,7 +457,7 @@ namespace Cattedre
                     utente.Nome = row["nome"].ToString();
                     utente.TipoUtente = row["tipoUtente"].ToString();
                     //utente.Colore = row["colore"].ToString();
-                    utente.TipoDocente = row["tipoDocente"] == null ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                    utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
                     utenti.Add(utente);
                 }
 
@@ -470,7 +470,7 @@ namespace Cattedre
         }
         public static MySqlCommand CreaComandoRicerca(string Filtro, List<string>parametri, MySqlConnection conn)
         {
-            string sql = "SELECT * FROM utenti ";
+            string sql = "SELECT ID, nome, cognome, email, password, tipoutente, tipodocente, colore FROM utenti ";
             MySqlCommand cmd = new MySqlCommand("", conn);
             switch (Filtro)
             {
@@ -497,28 +497,50 @@ namespace Cattedre
             return cmd;
         }
 
-        public static string CreaPasswordStandard(string Nome, string Cognome)
+        public static List <ClsUtenteDL> RicercaPerNomeCognome(string _ricerca)
         {
-            string Password = "";
-            if(!string.IsNullOrEmpty(Nome)&& !string.IsNullOrEmpty(Cognome))
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+            DataTable dt = new DataTable();
+            _ricerca = $"%{_ricerca}%";
+            try
             {
-                //Password=
-                return Password;
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID,nome, cognome, email, password, tipoutente, tipodocente, colore
+                                 FROM utenti
+                                 WHERE CONCAT(cognome,nome) LIKE @Ricerca";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Ricerca", _ricerca);
+
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        ClsUtenteDL utente = new ClsUtenteDL();
+                        utente.ID = Convert.ToInt64(row["ID"]);
+                        utente.Email = row["email"].ToString();
+                        //anche se la query non restituisce la password, la proprietà non la userà e non ha senso inizarlizzarla,  essendo un dato sensibile
+                        utente.Cognome = row["cognome"].ToString();
+                        utente.Nome = row["nome"].ToString();
+                        utente.TipoUtente = row["tipoUtente"].ToString();
+                        utente.Colore = row["colore"].ToString();
+                        utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                        utenti.Add(utente);
+                    }
+                }
             }
-            return null;
-
-
-        }
-
-        public static string DivisioneStringaSicura(string stringa)
-        {
-            if (string.IsNullOrEmpty(stringa) || 3 >= stringa.Length)
+            catch (Exception ex)
             {
-                stringa += "aaa";
+                throw new Exception(ex.Message);
             }
-            stringa.ToLower();
-                return stringa.Substring(0, 3);
-
+            return utenti;
         }
 
     }

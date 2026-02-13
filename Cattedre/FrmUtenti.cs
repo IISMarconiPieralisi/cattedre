@@ -95,7 +95,7 @@ namespace Cattedre
                 try
                 {
                     ClsUtenteBL.InserisciUtente(frmUtente._utente); //l'utente che mando non ha un ID che creo quando lo inzializzo nel server
-                    ClsUtenteDL utente = ClsUtenteBL.caricautente(frmUtente._utente.Email); //essendo che l'email è univoca riesco a risalire anche all'id del utente in questo modo
+                    ClsUtenteDL utente = ClsUtenteBL.caricautenteByEmail(frmUtente._utente.Email); //essendo che l'email è univoca riesco a risalire anche all'id del utente in questo modo
                     if (frmUtente._afferenze != null && frmUtente._afferenze.Count > 0)
                     {
                         foreach (ClsAfferireDL afferire in frmUtente._afferenze)

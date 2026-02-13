@@ -55,7 +55,7 @@ namespace Cattedre
                 if (ClsUtenteBL.Login(email, password))
                 {
                     ClsUtenteDL utenteLoggato = null;
-                    utenteLoggato = ClsUtenteBL.caricautente(email);
+                    utenteLoggato = ClsUtenteBL.caricautenteByEmail(email);
                     FrmHome frmHome = new FrmHome(utenteLoggato);
                     frmHome.Show();
                     this.Hide();

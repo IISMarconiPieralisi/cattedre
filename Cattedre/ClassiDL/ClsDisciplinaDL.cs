@@ -33,7 +33,7 @@ namespace Cattedre
         #endregion
 
         #region PROPRIETA
-        public int ID { get => _id; set => _id = value; }
+        public long ID { get => _id; set => _id = value; }
         public string Nome { get => _nome; set => _nome = value; }
         public string DisciplinaSpeciale { get => _disciplinaSpeciale; set => _disciplinaSpeciale = value; }
         public int OreTeoria { get => _oreTeoria; set => _oreTeoria = value; }

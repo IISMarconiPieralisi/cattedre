@@ -110,9 +110,8 @@ namespace Cattedre
                     _classe.Sigla=row["sigla"].ToString();
                     _classe.Anno = Convert.ToInt32(row["anno"]);
                     _classe.Sezione = row["sezione"].ToString();
-                    var a=row["classeArticolataCon"];
-                    _classe.ClasseArticolataCon = (row["classeArticolataCon"] == null) ? 0 : Convert.ToInt32(row["classeArticolataCon"]);
-                    _classe.Idutente = (row["IDutente"] == null) ? 0 : Convert.ToInt64(row["IDutente"]);
+                    _classe.ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]);
+                    _classe.Idutente = (row["IDutente"]== DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
                     _classe.Idindirizzo=Convert.ToInt64(row["IDindirizzo"]);
                     classi.Add(_classe);
                 }

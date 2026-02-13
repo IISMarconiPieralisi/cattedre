@@ -93,7 +93,7 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "SELECT * FROM utenti u WHERE u.tipoUtente = 'C'";
+                string sql = "SELECT ID,email,cognome,nome,tipoUtente,tipoUtente, tipoDocente FROM utenti u WHERE u.tipoUtente = 'C'";
 
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 MySqlDataReader dr = cmd.ExecuteReader();
@@ -139,7 +139,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM utenti u WHERE u.tipoUtente LIKE '%D'";
+                    string sql = "SELECT ID,email,cognome,nome,tipoUtente,colore,tipoDocente FROM utenti u WHERE u.tipoUtente LIKE '%D'";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -158,7 +158,7 @@ namespace Cattedre
                         utente.Cognome = row["cognome"].ToString();
                         utente.Nome = row["nome"].ToString();
                         utente.TipoUtente = row["tipoUtente"].ToString();
-                        //utente.Colore = row["colore"].ToString();
+                        utente.Colore = row["colore"].ToString();
                         utente.TipoDocente = row["tipoDocente"] == null ? Convert.ToChar(row["tipoDocente"]) : '\0';
                         utenti.Add(utente);
                     }
@@ -247,7 +247,7 @@ namespace Cattedre
 
             return risultato;
         }
-
+        #region Login
         public static bool Login(string email, string password)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
@@ -279,7 +279,42 @@ namespace Cattedre
             }
             return false;
         }
+        public static bool loginGoogle(string email)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            int UtentiLoggati = 0;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT COUNT(ID) as num_utenti FROM utenti " +
+                                 "WHERE email =@email";
 
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@email", email);
+                        object result = cmd.ExecuteScalar();
+
+                        
+                        if (result != null)
+                            UtentiLoggati = Convert.ToInt32(result);
+
+                    }
+                }
+                if (UtentiLoggati == 1)
+                    return true;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return false;
+        }
+    
+        #endregion
         public static ClsUtenteDL caricautente(string _email)
         {
             ClsUtenteDL utente = null;
@@ -289,7 +324,7 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "SELECT * FROM utenti" +
+                string sql = "SELECT ID,email,cognome,nome,tipoUtente,tipoUtente, tipoDocente  FROM utenti" +
                     " WHERE email =@email"; 
 
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
@@ -306,7 +341,6 @@ namespace Cattedre
                     utente.Nome = dr["nome"].ToString();
                     utente.TipoUtente = dr["tipoUtente"].ToString();
                     utente.TipoDocente=!dr.IsDBNull(dr.GetOrdinal("tipoDocente"))? Convert.ToChar(dr["tipoDocente"]): '\0';
-                    cmd.Parameters.AddWithValue("@colore", utente.Colore);
                 }
 
                 conn.Close();

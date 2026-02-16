@@ -26,32 +26,34 @@ namespace Cattedre
 
         private void btLogin_Click(object sender, EventArgs e)
         {
-            lblInserisciNomeUtente.Visible = false;
-            lblInserisciPassword.Visible = false;
-            tbNomeUtente.BackColor = Color.White;
-            tbPassword.BackColor = Color.White;
-
-            if (string.IsNullOrWhiteSpace(tbNomeUtente.Text) || string.IsNullOrWhiteSpace(tbPassword.Text))
-            {
-                if (string.IsNullOrWhiteSpace(tbNomeUtente.Text))
-                {
-                    lblInserisciNomeUtente.Visible = true;
-                    tbNomeUtente.BackColor = Color.FromArgb(255, 192, 192);
-                }
-
-                if (string.IsNullOrWhiteSpace(tbPassword.Text))
-                {
-                    lblInserisciPassword.Visible = true;
-                    tbPassword.BackColor = Color.FromArgb(255, 192, 192);
-                }
-
-                return;
-            }
-
-            string email = tbNomeUtente.Text.Trim();
-            string password = tbPassword.Text.Trim();
             try
             {
+                //configurazione grafico in caso la password o utente non rispetta dei parametri
+                lblInserisciNomeUtente.Visible = false;
+                lblInserisciPassword.Visible = false;
+                tbNomeUtente.BackColor = Color.White;
+                tbPassword.BackColor = Color.White;
+
+                if (string.IsNullOrWhiteSpace(tbNomeUtente.Text) || string.IsNullOrWhiteSpace(tbPassword.Text))
+                {
+                    if (string.IsNullOrWhiteSpace(tbNomeUtente.Text))
+                    {
+                        lblInserisciNomeUtente.Visible = true;
+                        tbNomeUtente.BackColor = Color.FromArgb(255, 192, 192);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(tbPassword.Text))
+                    {
+                        lblInserisciPassword.Visible = true;
+                        tbPassword.BackColor = Color.FromArgb(255, 192, 192);
+                    }
+
+                    return;
+                }
+
+                string email = tbNomeUtente.Text.Trim();
+                string password = tbPassword.Text.Trim();
+
                 if (ClsUtenteBL.Login(email, password))
                 {
                     ClsUtenteDL utenteLoggato = null;
@@ -62,13 +64,11 @@ namespace Cattedre
 
                 }
                 else
-                {
-                    MessageBox.Show("Email o password errati!");
-                }
+                    throw new Exception("Email o Password Erratti, \nRiprovare");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Errore durante il login: " + ex.Message);
+                MessageBox.Show(ex.Message,"errore",MessageBoxButtons.RetryCancel,MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -88,30 +88,56 @@ namespace Cattedre
 
         private void btLoginGoogle_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                login();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message+"\nRiprovare!","errore",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
         private void login()
         {
-            string[] Scopes = { "email", "profile" }; // Informazioni richieste
-            UserCredential credential;
-            Oauth2Service service;
-            credential = GetUserCredential("credentials.json", "cattedre-win", Scopes);
-            service = GetService(credential); // Recupero il servizio
-            service.Userinfo.V2.Me.Get().Execute(); // Esecuzione della richiesta con apertura del browser
-
-            //UserinfoResource userinfo = service.Userinfo; // Info ricevute
-            
-            if(credential!=null)
+            try
             {
-                var oauthService = new Google.Apis.Oauth2.v2.Oauth2Service(
-                    new BaseClientService.Initializer()
+                string[] Scopes = { "email", "profile" }; // Informazioni richieste
+                UserCredential credential;
+                Oauth2Service service;
+                credential = GetUserCredential("credentials.json", "cattedre-win", Scopes);
+                service = GetService(credential); // Recupero il servizio
+                service.Userinfo.V2.Me.Get().Execute(); // Esecuzione della richiesta con apertura del browser
+
+                //UserinfoResource userinfo = service.Userinfo; // Info ricevute
+
+                if (credential != null)
+                {
+                    var oauthService = new Google.Apis.Oauth2.v2.Oauth2Service(
+                        new BaseClientService.Initializer()
+                        {
+                            HttpClientInitializer = credential,
+                            ApplicationName = "OAuth 2.0 Sample",
+                        });
+                    var userinfo = service.Userinfo.Get().Execute();
+                    if (userinfo.Email != null && ClsUtenteBL.LoginByemail(userinfo.Email))
                     {
-                        HttpClientInitializer = credential,
-                        ApplicationName = "OAuth 2.0 Sample",
-                    });
-                var userinfo = service.Userinfo.Get().Execute();
-                //login con userinfo.email e token
+                        ClsUtenteDL utenteLoggato = null;
+                        //caricamento del utente prendendo l'email essendo univoca
+                        utenteLoggato = ClsUtenteBL.caricautenteByEmail(userinfo.Email);
+                        //caricamento del token
+                        ClsUtenteBL.InserisciTokenUtenti(userinfo.Id, utenteLoggato.ID);
+                        FrmHome frmHome = new FrmHome(utenteLoggato);
+                        frmHome.Show();
+                        this.Hide();
+                    }
+                    else
+                        throw new Exception("Utente, non trovato nel database");
+                }
+            }catch (Exception ex)
+            {
+                throw new Exception("errore Nel login: "+ex.Message);
             }
+            
         }
 
         private Oauth2Service GetOauth2Service(string clientSecretJson, string userName, string[] scopes)
@@ -124,9 +150,9 @@ namespace Cattedre
                     throw new ArgumentNullException("clientSecretJson");
                 if (!File.Exists(clientSecretJson))
                     throw new Exception("clientSecretJson file non esiste.");
-                var credeziali = GetUserCredential(clientSecretJson, userName, scopes);
+                var credezial = GetUserCredential(clientSecretJson, userName, scopes);
 
-                return GetService(credeziali);
+                return GetService(credezial);
             }
             catch (Exception ex)
             {
@@ -183,5 +209,7 @@ namespace Cattedre
             else
                 MessageBox.Show("La cartella {0} non esiste", credPath);
         }
+
+
     }
 }

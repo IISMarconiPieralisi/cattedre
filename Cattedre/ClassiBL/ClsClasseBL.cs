@@ -85,8 +85,8 @@ namespace Cattedre
         public static List<ClsClasseDL> CaricaClassiDipartimento(int IDdipartimento)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
+<<<<<<< HEAD
 
             conn.Open();
             string sql = "SELECT * FROM classi " +
@@ -114,9 +114,42 @@ namespace Cattedre
                     Convert.ToInt64(dt.Rows[i]["IDutente"]),
                     Convert.ToInt64(dt.Rows[i]["IDindirizzo"]));
                 classi.Add(_classe);
+=======
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    //string sql = "SELECT id,sigla,anno,sezione,classeArticolataCon, IDutente, IDindirizzo FROM classi";
+                    string sql = "SELECT * FROM `classi`";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    conn.Close();
+                }
+                foreach(DataRow row in dt.Rows)
+                {
+                    ClsClasseDL _classe = new ClsClasseDL();
+                    _classe.ID= Convert.ToInt64(row["id"]);
+                    _classe.Sigla=row["sigla"].ToString();
+                    _classe.Anno = Convert.ToInt32(row["anno"]);
+                    _classe.Sezione = row["sezione"].ToString();
+                    _classe.ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]);
+                    _classe.Idutente = (row["IDutente"]== DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
+                    _classe.Idindirizzo=Convert.ToInt64(row["IDindirizzo"]);
+                    classi.Add(_classe);
+                }
             }
-            conn.Close();
-
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+>>>>>>> ut-cont-cdc
+            }
             return classi;
         }
 
@@ -237,7 +270,11 @@ namespace Cattedre
                     if (count == 0)
                     {
                         string sql = "";
+<<<<<<< HEAD
                         if (classe.ClasseArticolataCon.ToString() == "")
+=======
+                        if (classe.ClasseArticolataCon >0)
+>>>>>>> ut-cont-cdc
                         {
                            sql = "INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo) VALUES (@sigla, @anno, @sezione, NULL, @IDutente, @IDindirizzo)";
                         }

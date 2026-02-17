@@ -40,6 +40,8 @@
             this.btLogin = new System.Windows.Forms.Button();
             this.lblInserisciNomeUtente = new System.Windows.Forms.Label();
             this.lblInserisciPassword = new System.Windows.Forms.Label();
+            this.btLoginGoogle = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -107,30 +109,33 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(75)))), ((int)(((byte)(155)))));
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(-73, -1);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(352, 327);
+            this.pictureBox1.Size = new System.Drawing.Size(250, 431);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
+            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(239, -10);
+            this.pictureBox2.Location = new System.Drawing.Point(250, 0);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(317, 135);
+            this.pictureBox2.Size = new System.Drawing.Size(309, 116);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 15;
             this.pictureBox2.TabStop = false;
             // 
             // btLogin
             // 
-            this.btLogin.Location = new System.Drawing.Point(373, 266);
+            this.btLogin.Location = new System.Drawing.Point(364, 266);
             this.btLogin.Margin = new System.Windows.Forms.Padding(2);
             this.btLogin.Name = "btLogin";
-            this.btLogin.Size = new System.Drawing.Size(57, 22);
+            this.btLogin.Size = new System.Drawing.Size(76, 22);
             this.btLogin.TabIndex = 16;
             this.btLogin.Text = "Login";
             this.btLogin.UseVisualStyleBackColor = true;
@@ -160,12 +165,36 @@
             this.lblInserisciPassword.Text = "Inserisci password!";
             this.lblInserisciPassword.Visible = false;
             // 
+            // btLoginGoogle
+            // 
+            this.btLoginGoogle.Font = new System.Drawing.Font("Microsoft YaHei UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btLoginGoogle.Location = new System.Drawing.Point(288, 361);
+            this.btLoginGoogle.Margin = new System.Windows.Forms.Padding(2);
+            this.btLoginGoogle.Name = "btLoginGoogle";
+            this.btLoginGoogle.Size = new System.Drawing.Size(238, 37);
+            this.btLoginGoogle.TabIndex = 19;
+            this.btLoginGoogle.Text = "Login con google";
+            this.btLoginGoogle.UseVisualStyleBackColor = true;
+            this.btLoginGoogle.Click += new System.EventHandler(this.btLoginGoogle_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(360, 310);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(80, 24);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "Oppure:";
+            // 
             // FrmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(559, 311);
+            this.ClientSize = new System.Drawing.Size(559, 431);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.btLoginGoogle);
             this.Controls.Add(this.lblInserisciPassword);
             this.Controls.Add(this.lblInserisciNomeUtente);
             this.Controls.Add(this.btLogin);
@@ -202,6 +231,8 @@
         private System.Windows.Forms.Button btLogin;
         private System.Windows.Forms.Label lblInserisciNomeUtente;
         private System.Windows.Forms.Label lblInserisciPassword;
+        private System.Windows.Forms.Button btLoginGoogle;
+        private System.Windows.Forms.Label label3;
     }
 }
 

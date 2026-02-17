@@ -36,7 +36,11 @@ namespace Cattedre
             _classe.Sigla = nudAnno.Value.ToString() + tbSezione.Text;
             _classe.Anno = Convert.ToInt32(nudAnno.Value);
             _classe.Sezione = tbSezione.Text;
+<<<<<<< HEAD
             _classe.ClasseArticolataCon = Convert.ToInt32(cbClasseArticolataCon.Text);
+=======
+            _classe.ClasseArticolataCon =Convert.ToInt32( cbClasseArticolataCon.Text.Trim());
+>>>>>>> ut-cont-cdc
             _classe.NomeCoordinatore = cbCoordinatore.Text;
             _classe.Indirizzo = cbIndirizzo.Text;
 
@@ -50,7 +54,11 @@ namespace Cattedre
                 IDutente = ClsUtenteBL.RilevaIDutente(_classe.NomeCoordinatore.Substring(0, _classe.NomeCoordinatore.IndexOf(" ")),
                     _classe.NomeCoordinatore.Substring(_classe.NomeCoordinatore.IndexOf(" ") + 1));
                 IDindirizzo = ClsIndirizzoBL.RilevaIDindirizzo(_classe.Indirizzo);
+<<<<<<< HEAD
                 IDclasseArticolataCon = ClsClasseBL.RilevaIDclasse(_classe.ClasseArticolataCon.ToString());
+=======
+                IDclasseArticolataCon = ClsClasseBL.RilevaIDclasse( _classe.ClasseArticolataCon.ToString());
+>>>>>>> ut-cont-cdc
             }
         }
 

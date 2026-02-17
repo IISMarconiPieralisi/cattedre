@@ -10,9 +10,9 @@ namespace Cattedre
     public class ClsClasseDL
     {
         #region ATTRIBUTI
-        long _id, _idutente, _idindirizzo;
+        long _id, _idutente, _idindirizzo, _classeArticolataCon;
         string _sigla, _sezione,  _nomeCoordinatore, _indirizzo;
-        int _anno, _classeArticolataCon;
+        int _anno;
         #endregion
 
         #region COSTRUTTORI
@@ -28,8 +28,8 @@ namespace Cattedre
             _anno = anno;
             _sezione = sezione;
             _classeArticolataCon = classearticolatacon;
-            _idutente = idutente;
-            _idindirizzo = idindirizzo;
+            Idutente = idutente;
+            Idindirizzo = idindirizzo;
 
         }
         #endregion
@@ -41,12 +41,18 @@ namespace Cattedre
 
         public string Sezione { get => _sezione; set => _sezione = value; }
 
+<<<<<<< HEAD
         public int ClasseArticolataCon { get => _classeArticolataCon; set => _classeArticolataCon = value; }
+=======
+        public long ClasseArticolataCon { get => _classeArticolataCon; set => _classeArticolataCon = value; }
+>>>>>>> ut-cont-cdc
 
         public int Anno { get => _anno; set => _anno = value; }
 
         public string NomeCoordinatore { get => _nomeCoordinatore; set => _nomeCoordinatore = value; }
         public string Indirizzo { get => _indirizzo; set => _indirizzo = value; }
+        public long Idutente { get => _idutente; set => _idutente = value; }
+        public long Idindirizzo { get => _idindirizzo; set => _idindirizzo = value; }
 
         #endregion
     }

@@ -145,7 +145,7 @@
             // 
             this.button10.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.button10.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button10.Location = new System.Drawing.Point(805, 41);
+            this.button10.Location = new System.Drawing.Point(627, 41);
             this.button10.Margin = new System.Windows.Forms.Padding(2);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(380, 35);
@@ -157,7 +157,7 @@
             // 
             this.btVaiACattedre.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btVaiACattedre.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btVaiACattedre.Location = new System.Drawing.Point(805, 3);
+            this.btVaiACattedre.Location = new System.Drawing.Point(627, 3);
             this.btVaiACattedre.Margin = new System.Windows.Forms.Padding(2);
             this.btVaiACattedre.Name = "btVaiACattedre";
             this.btVaiACattedre.Size = new System.Drawing.Size(380, 35);
@@ -168,18 +168,17 @@
             // 
             // panel3
             // 
-            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BackColor = System.Drawing.Color.White;
             this.panel3.Controls.Add(this.pictureBox3);
             this.panel3.Controls.Add(this.btLogout);
             this.panel3.Controls.Add(this.dateTimePicker1);
             this.panel3.Controls.Add(this.btVaiACattedre);
             this.panel3.Controls.Add(this.button10);
-            this.panel3.Location = new System.Drawing.Point(-1, 770);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(312, 776);
             this.panel3.Margin = new System.Windows.Forms.Padding(2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1750, 81);
+            this.panel3.Size = new System.Drawing.Size(1394, 81);
             this.panel3.TabIndex = 4;
             // 
             // pictureBox3
@@ -197,7 +196,7 @@
             // 
             this.btLogout.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btLogout.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btLogout.Location = new System.Drawing.Point(1519, 19);
+            this.btLogout.Location = new System.Drawing.Point(1163, 19);
             this.btLogout.Margin = new System.Windows.Forms.Padding(2);
             this.btLogout.Name = "btLogout";
             this.btLogout.Size = new System.Drawing.Size(177, 43);

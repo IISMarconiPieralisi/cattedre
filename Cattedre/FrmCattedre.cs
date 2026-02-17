@@ -134,6 +134,11 @@ namespace Cattedre
                 dictDocenti[doc.ID] = uc;
 
                 y += uc.Height + 5;
+
+                if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
+                {
+                    uc.nudOrePot.Enabled = false;
+                }
             }
 
             AggiornaOreEffettive();

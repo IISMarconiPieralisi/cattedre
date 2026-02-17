@@ -37,10 +37,10 @@
             // btSalvaIndirizzo
             // 
             this.btSalvaIndirizzo.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalvaIndirizzo.Location = new System.Drawing.Point(156, 94);
+            this.btSalvaIndirizzo.Location = new System.Drawing.Point(132, 94);
             this.btSalvaIndirizzo.Margin = new System.Windows.Forms.Padding(2);
             this.btSalvaIndirizzo.Name = "btSalvaIndirizzo";
-            this.btSalvaIndirizzo.Size = new System.Drawing.Size(56, 19);
+            this.btSalvaIndirizzo.Size = new System.Drawing.Size(116, 25);
             this.btSalvaIndirizzo.TabIndex = 19;
             this.btSalvaIndirizzo.Text = "Salva";
             this.btSalvaIndirizzo.UseVisualStyleBackColor = true;
@@ -48,10 +48,10 @@
             // 
             // btAnnulla
             // 
-            this.btAnnulla.Location = new System.Drawing.Point(47, 94);
+            this.btAnnulla.Location = new System.Drawing.Point(12, 94);
             this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
             this.btAnnulla.Name = "btAnnulla";
-            this.btAnnulla.Size = new System.Drawing.Size(56, 19);
+            this.btAnnulla.Size = new System.Drawing.Size(116, 25);
             this.btAnnulla.TabIndex = 18;
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
@@ -59,16 +59,16 @@
             // 
             // tbNome
             // 
-            this.tbNome.Location = new System.Drawing.Point(99, 21);
+            this.tbNome.Location = new System.Drawing.Point(95, 21);
             this.tbNome.Margin = new System.Windows.Forms.Padding(2);
             this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(126, 20);
+            this.tbNome.Size = new System.Drawing.Size(153, 20);
             this.tbNome.TabIndex = 14;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 24);
+            this.label1.Location = new System.Drawing.Point(22, 24);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);

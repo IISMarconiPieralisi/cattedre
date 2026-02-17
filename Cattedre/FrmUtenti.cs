@@ -13,8 +13,10 @@ namespace Cattedre
 {
     public partial class FrmUtenti : Form
     {
-        public List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
-        public List<ClsContrattoDL> contratti = new List<ClsContrattoDL>();
+        public List<ClsUtenteDL> _utenti = new List<ClsUtenteDL>();
+        string _filtro = string.Empty;
+        List<string> _parametri = new List<string>();
+        string _parametroRicerca=string.Empty;
 
         public FrmUtenti()
         {
@@ -23,21 +25,17 @@ namespace Cattedre
 
         private void CaricaListView()
         {
-            utenti = ClsUtenteBL.CaricaUtenti();
-
             lvUtenti.Items.Clear();
 
-            foreach (ClsUtenteDL utente in utenti)
+            foreach (ClsUtenteDL utente in _utenti)
             {
                 //prendo un metodo che cerca il contratto in base all'id utente
                 ClsContrattoDL contratto =ClsContrattoBL.cercaContratto(utente.ID);
-                //per sicurezza lo aggiungo alla lista contratti
-                if(contratto!=null)
-                    contratti.Add(contratto);
                 ListViewItem lvi = new ListViewItem(utente.Nome);
 
                 lvi.SubItems.Add(utente.Cognome);
                 lvi.SubItems.Add(utente.Email);
+                string _tipoDocente = (utente.TipoDocente == 'T') ? " teorico" : (utente.TipoDocente == 'L') ? " partico" : string.Empty;
                 switch (utente.TipoUtente)
                 {
                     case "P":
@@ -47,22 +45,10 @@ namespace Cattedre
                         lvi.SubItems.Add("amministratore");
                         break;
                     case "D":
-                        lvi.SubItems.Add("docente");
+                        lvi.SubItems.Add($"docente{_tipoDocente}");
                         break;
                     case "C":
-                        lvi.SubItems.Add("coordinatore dipartimento");
-                        break;
-                }
-                switch(utente.TipoDocente)
-                {
-                    case 'T':
-                        lvi.SubItems.Add("teorico");
-                        break;
-                    case 'L':
-                        lvi.SubItems.Add("pratico");
-                        break;
-                    default:
-                        lvi.SubItems.Add("-");
+                        lvi.SubItems.Add($" docente{_tipoDocente} coordinatore dipartimento");
                         break;
                 }
                 if (contratto !=null)
@@ -109,7 +95,7 @@ namespace Cattedre
                 try
                 {
                     ClsUtenteBL.InserisciUtente(frmUtente._utente); //l'utente che mando non ha un ID che creo quando lo inzializzo nel server
-                    ClsUtenteDL utente = ClsUtenteBL.caricautente(frmUtente._utente.Email); //essendo che l'email è univoca riesco a risalire anche all'id del utente in questo modo
+                    ClsUtenteDL utente = ClsUtenteBL.caricautenteByEmail(frmUtente._utente.Email); //essendo che l'email è univoca riesco a risalire anche all'id del utente in questo modo
                     if (frmUtente._afferenze != null && frmUtente._afferenze.Count > 0)
                     {
                         foreach (ClsAfferireDL afferire in frmUtente._afferenze)
@@ -145,15 +131,25 @@ namespace Cattedre
                 {
                     MessageBox.Show($"Errore durante il inserimento:{ex.Message}", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-                CaricaListView();
+                gestisciListview();
             }
         }
 
         private void FrmUtenti_Load(object sender, EventArgs e)
         {
-            utenti = ClsUtenteBL.CaricaUtenti();
+            _utenti = ClsUtenteBL.CaricaUtenti();
             CaricaListView();
+        }
+        private void gestisciListview()
+        {
+            if (!string.IsNullOrWhiteSpace(_filtro))
+                _utenti = ClsUtenteBL.FiltraUtenti(_parametri, _filtro);
+            else if (!string.IsNullOrEmpty(_parametroRicerca))
+                _utenti = ClsUtenteBL.RicercaPerNomeCognome(_parametroRicerca);
+            else
+                _utenti = ClsUtenteBL.CaricaUtenti();
+            CaricaListView();
+
         }
 
         private  void  btModifica_Click(object sender, EventArgs e)
@@ -164,19 +160,19 @@ namespace Cattedre
                 int indiceDaModificare = lvUtenti.SelectedIndices[0];
                 FrmUtente frmUtente = new FrmUtente();
                 //passo la classe afferirenza e il contratto solo se l'utente è un docente
-                frmUtente._utente = utenti[indiceDaModificare];
+                frmUtente._utente = _utenti[indiceDaModificare];
                 //creo un appoggio di utente che mi servirà in futuro
                 //ClsUtenteBL u = frmUtente._utente;
-                frmUtente._utente.ID = utenti[indiceDaModificare].ID; //mi assicuro che l'ID rimanga lo stesso
+                frmUtente._utente.ID = _utenti[indiceDaModificare].ID; //mi assicuro che l'ID rimanga lo stesso
 
-                List <ClsAfferireDL> afferire = ClsAfferireBL.CaricaClassiAfferire(utenti[indiceDaModificare].ID);
+                List <ClsAfferireDL> afferire = ClsAfferireBL.CaricaClassiAfferire(_utenti[indiceDaModificare].ID);
                 if (afferire != null && afferire.Count > 0) //se non esiste restituirà null e quindi non restituirà la lista
                     frmUtente._afferenze = afferire;
                 
-                List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedere(utenti[indiceDaModificare].ID);
+                List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedere(_utenti[indiceDaModificare].ID);
                 if (richiedere != null && richiedere.Count > 0)
                     frmUtente._richieste = richiedere;
-                ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(utenti[indiceDaModificare].ID); //se non esiste restituirà null
+                ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(_utenti[indiceDaModificare].ID); //se non esiste restituirà null
                 if (contratto != null)
                     frmUtente._contratto = contratto;
                 
@@ -208,8 +204,8 @@ namespace Cattedre
                     {
                         MessageBox.Show("Errore durante il salvataggio: " + ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    gestisciListview();
 
-                    CaricaListView();
 
                 }
             }
@@ -228,10 +224,11 @@ namespace Cattedre
                 {
                     ClsDipartimentoBL.EliminaCoordinatoreDipartimento(idDaEliminare);
                     ClsUtenteBL.EliminaUtente(idDaEliminare);
-                    utenti = ClsUtenteBL.CaricaUtenti();
+                    _utenti = ClsUtenteBL.CaricaUtenti();
 
                 }
-                CaricaListView();
+                gestisciListview();
+
             }
         }
         #region filtri
@@ -259,13 +256,13 @@ namespace Cattedre
                 case "Tipo Utente":
                     ConfiguraGriglia(4); // Divido in 4 colonne
                     string[] labels = { "Amministratore", "Preside", "Coordinatore Dipartimento", "Docente" };
+                    string[] value = {"A","P","C","D"};
                     for (int i = 0; i < labels.Length; i++)
-                        AggiungiControllo(new CheckBox { Text = labels[i], AutoSize = true }, i);
-                    
+                        AggiungiControllo(new CheckBox { Name=value[i],Text = labels[i], AutoSize = true }, i);
                     btFiltro.Enabled = true;
                     break;
                  default:
-                    utenti = ClsUtenteBL.CaricaUtenti();
+                    _utenti = ClsUtenteBL.CaricaUtenti();
                     CaricaListView();
                     break;
             }
@@ -273,35 +270,54 @@ namespace Cattedre
         }
         private void btFiltro_Click(object sender, EventArgs e)
         {
-            if(cbFiltro.SelectedIndex!=0)//anche se non serve per sicurezza lo uso
+            if(!string.IsNullOrWhiteSpace(cbFiltro.Text))//anche se non serve per sicurezza lo uso
             {
-                string cbSelezionato = cbFiltro.SelectedText;
-                string filtro = (cbSelezionato == "Tipo Utente")?"tipoUtente":
+                //cancello la ricerca in modo che non mi dia problemi
+                _parametroRicerca = string.Empty;
+                btAnnullaFiltra.Enabled = true;
+                _parametri=new List<string>();
+                string cbSelezionato = cbFiltro.Text;
+                _filtro = (cbSelezionato == "Tipo Utente")?"tipoUtente":
                                 (cbSelezionato=="Tipo Contratto")?"tipoContratto":
                                 (cbSelezionato=="Tipo Docente")?"tipoDocente":""; //in  questo modo me lo preparo come è scritto nel DB, per comodità
-                switch(filtro)
+                switch(_filtro)
                 {
                     case "tipoDocente":
                         var selezionato = tlpFiltri.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
-                        string parametro = (selezionato.Text == "Teorico") ? "T" : "L";
-                        //filtro
+                        if (selezionato != null)
+                            _parametri.Add((selezionato.Name == "Teorico") ? "T" : "L");
+                        else
+                            throw new Exception("Seleziona un parametro di ricerca");
                         break;
                     case "tipoUtente":
-                        List<string> filtriSelezionati = new List<string>();
                         foreach(Control c in tlpFiltri.Controls)
                         {
                             if(c is CheckBox cb && cb.Checked)
-                                filtriSelezionati.Add(cb.Text);
+                                _parametri.Add(cb.Name);
                         }
-                        //filtro
+                        if(_parametri.Count<=0)
+                            throw new Exception("Seleziona un parametro di ricerca");
                         break;
                     case "tipoContratto":
-                        var tContratto = tlpFiltri.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
-                        string par = (tContratto.Text == "Derminato") ? "D" : "I";
-                        //filtro
+                        var _tContratto = tlpFiltri.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
+                        if (_tContratto != null)
+                            _parametri.Add((_tContratto.Name == "Derminato") ? "D" : "I");
+                        else
+                            throw new Exception("Seleziona un parametro di ricerca");
                         break;
+                    default:
+                        throw new Exception("Errore durante la selezione del filtro di ricerca");
+
                 }
-                 
+                gestisciListview();
+                try
+                {
+
+                }catch(Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message}\n riprova", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                }
             }
         }
         private void ConfiguraGriglia(int numeroColonne)
@@ -318,10 +334,77 @@ namespace Cattedre
             control.Anchor = AnchorStyles.None;
             tlpFiltri.Controls.Add(control, Colonna, 0);
         }
+        private void btAnnullaFiltra_Click(object sender, EventArgs e)
+        {
+            btFiltro.Enabled = false;
+            btAnnullaFiltra.Enabled = false;
+            tlpFiltri.Controls.Clear();
+            cbFiltro.SelectedIndex = 0;
+            _filtro = string.Empty;
+            _parametri = new List<string>();
+
+            //ricamento della listview
+            gestisciListview();
+        }
+
+
+
 
         #endregion
+        #region ricerca
 
+        private void tbRicerca_TextChanged(object sender, EventArgs e)
+        {
+            if(tbRicerca.Text!="cognome nome" && tbRicerca.Text.Length>2)
+            {
+                btRicerca.Enabled = true;
+            }else
+            {
+                btRicerca.Enabled = false;
+            }
+        }
 
+        private void tbRicerca_Enter(object sender, EventArgs e)
+        {
+            if (tbRicerca.Text == "cognome nome")
+            {
+                tbRicerca.Text = "";
+                tbRicerca.ForeColor = Color.Black;
+            }
+        }
 
+        private void tbRicerca_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tbRicerca.Text))
+            {
+                tbRicerca.Text = "cognome nome";
+                tbRicerca.ForeColor = Color.Gray;
+            }
+        }
+        #endregion
+
+        private void btRicerca_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(tbRicerca.Text) && tbRicerca.Text != "cognome nome")
+            {
+                //cancello il filtra in modo che non mi dia problemi
+                _filtro=string.Empty;
+                btAnnullaRicerca.Enabled = true;
+                _parametroRicerca = tbRicerca.Text.Replace(" ", "").ToLower();
+                _utenti = ClsUtenteBL.RicercaPerNomeCognome(_parametroRicerca);
+                CaricaListView();
+            }
+            else
+                MessageBox.Show("Inserire Input valido per la ricerca", "attenzione", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        private void btAnnullaRicerca_Click(object sender, EventArgs e)
+        {
+            btRicerca.Enabled = false;
+            btAnnullaRicerca.Enabled = false;
+            _parametroRicerca = string.Empty;
+            tbRicerca.Text = string.Empty;
+            gestisciListview();
+        }
     }
 }

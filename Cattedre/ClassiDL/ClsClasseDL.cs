@@ -28,8 +28,8 @@ namespace Cattedre
             _anno = anno;
             _sezione = sezione;
             _classeArticolataCon = classearticolatacon;
-            _idutente = idutente;
-            _idindirizzo = idindirizzo;
+            Idutente = idutente;
+            Idindirizzo = idindirizzo;
 
         }
         #endregion
@@ -47,6 +47,8 @@ namespace Cattedre
 
         public string NomeCoordinatore { get => _nomeCoordinatore; set => _nomeCoordinatore = value; }
         public string Indirizzo { get => _indirizzo; set => _indirizzo = value; }
+        public long Idutente { get => _idutente; set => _idutente = value; }
+        public long Idindirizzo { get => _idindirizzo; set => _idindirizzo = value; }
 
         #endregion
     }

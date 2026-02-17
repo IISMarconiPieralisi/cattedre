@@ -458,6 +458,10 @@ namespace Cattedre
                 LoadDiscipline(IDdipartimento);
                 LoadAssegnazioni(IDdipartimento);
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Errore:{ex.Message}. \nRiprovare!", "riprovare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             finally
             {
                 this.UseWaitCursor = false;

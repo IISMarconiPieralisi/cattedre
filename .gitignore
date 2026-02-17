@@ -8,3 +8,6 @@ Cattedre/obj/
 *.exe
 *.pdb
 *.sqlite
+*.json
+
+

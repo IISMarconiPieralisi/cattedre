@@ -92,7 +92,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM indirizzi";
+                    string sql = "SELECT ID,nome FROM indirizzi";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
@@ -125,8 +125,8 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "INSERT INTO indirizzi (nome) VALUES (@nome)";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                string sql = "INSERT INTO indirizzi (nome) VALUES ( @nome )";
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@nome", indirizzo.Nome);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
@@ -134,6 +134,8 @@ namespace Cattedre
                     if (righeCoinvolte <= 0)
                         throw new Exception("errore nel inserimento");
                 }
+                conn.Close();
+
             }
             catch (Exception ex)
             {
@@ -142,7 +144,7 @@ namespace Cattedre
 
         }
 
-        public static void ModificaIndirizzo(ClsIndirizzoDL indirizzo, int indice)
+        public static void ModificaIndirizzo(ClsIndirizzoDL indirizzo)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             try
@@ -150,17 +152,19 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"UPDATE indirizzi SET nome = '@nome' WHERE id = @id ";
-                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    string sql = @"UPDATE indirizzi SET nome = @nome WHERE id = @id ";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@id", indice);
+                        cmd.Parameters.AddWithValue("@id", indirizzo.ID);
                         cmd.Parameters.AddWithValue("@nome", indirizzo.Nome);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
                         if (righeCoinvolte <= 0)
-                            throw new Exception("nel modifica");
+                            throw new Exception("errore nel modifica");
                     }
+                    conn.Close();
+
                 }
-                  
+
             }
             catch (Exception ex)
             {
@@ -169,23 +173,61 @@ namespace Cattedre
 
         }
 
-        public static List<ClsIndirizzoDL> EliminaIndirizzo(int id)
+        public static void EliminaIndirizzo(long id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
-
             try
             {
-                conn.Open();
-                string sql = "DELETE FROM indirizzi WHERE id = " + id;
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
+                    conn.Open();
+                    string sql = @"DELETE FROM indirizzi WHERE ID = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        indirizzi = CaricaIndirizzi();
+                        cmd.Parameters.AddWithValue("@id", id);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        if (righeCoinvolte <= 0)
+                            throw new Exception("errore nel cancellamento");
+                    }
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public static List<ClsIndirizzoDL> RicercaPerNome(string _ricerca)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
+            DataTable dt = new DataTable();
+            _ricerca = $"%{_ricerca}%";
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID,nome
+                                 FROM indirizzi 
+                                 WHERE nome LIKE @Ricerca";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Ricerca", _ricerca);
+
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+
+                        ClsIndirizzoDL indirizzo = new ClsIndirizzoDL();
+                        indirizzo.ID = Convert.ToInt64(row["id"]);
+                        indirizzo.Nome = row["nome"].ToString();
+                        indirizzi.Add(indirizzo);
                     }
                 }
             }
@@ -193,7 +235,6 @@ namespace Cattedre
             {
                 throw new Exception(ex.Message);
             }
-
             return indirizzi;
         }
     }

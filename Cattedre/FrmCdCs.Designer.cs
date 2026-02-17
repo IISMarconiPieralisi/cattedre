@@ -98,11 +98,12 @@ namespace Cattedre
             // chNome
             // 
             this.chNome.Text = "Nome";
+            this.chNome.Width = 300;
             // 
             // chAbilitazioniRichieste
             // 
             this.chAbilitazioniRichieste.Text = "Abilitazioni Richieste";
-            this.chAbilitazioniRichieste.Width = 500;
+            this.chAbilitazioniRichieste.Width = 700;
             // 
             // FrmCdCs
             // 

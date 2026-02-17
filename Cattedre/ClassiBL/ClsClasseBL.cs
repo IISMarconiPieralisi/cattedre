@@ -86,35 +86,6 @@ namespace Cattedre
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
-<<<<<<< HEAD
-
-            conn.Open();
-            string sql = "SELECT * FROM classi " +
-                "JOIN utenti ON utenti.ID = classi.IDutente " +
-                "JOIN afferire ON afferire.IDutente = utenti.ID " +
-                "WHERE afferire.IDdipartimento = @IDdipartimento";
-            //DataAdapter, DataSet e DataTable su dispensa ADO.Net
-            MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
-            da.SelectCommand.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-            //Cache dati in memoria, oggetto disconnesso
-            DataSet ds = new DataSet("cattedre");
-            da.Fill(ds, "cattedre");
-
-            //Scorro i Record del DataTable per creare la lista
-            DataTable dt = ds.Tables["cattedre"];
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                // Potrei scrivere anche su una sola riga ma così è più leggibile
-                ClsClasseDL _classe = new ClsClasseDL(
-                    Convert.ToInt64(dt.Rows[i]["id"]),
-                    dt.Rows[i]["sigla"].ToString(),
-                    Convert.ToInt32(dt.Rows[i]["anno"]),
-                    dt.Rows[i]["sezione"].ToString(),
-                    dt.Rows[i]["classeArticolataCon"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["classeArticolataCon"]),
-                    Convert.ToInt64(dt.Rows[i]["IDutente"]),
-                    Convert.ToInt64(dt.Rows[i]["IDindirizzo"]));
-                classi.Add(_classe);
-=======
             DataTable dt = new DataTable();
             try
             {
@@ -122,9 +93,14 @@ namespace Cattedre
                 {
                     conn.Open();
                     //string sql = "SELECT id,sigla,anno,sezione,classeArticolataCon, IDutente, IDindirizzo FROM classi";
-                    string sql = "SELECT * FROM `classi`";
+                    string sql = "SELECT * FROM classi " +
+                                    "JOIN utenti ON utenti.ID = classi.IDutente " +
+                                    "JOIN afferire ON afferire.IDutente = utenti.ID " +
+                                    "WHERE afferire.IDdipartimento = @IDdipartimento";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
+                        cmd.Parameters.AddWithValue("@Iddipartimento", IDdipartimento);
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             da.Fill(dt);
@@ -148,7 +124,6 @@ namespace Cattedre
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
->>>>>>> ut-cont-cdc
             }
             return classi;
         }
@@ -270,11 +245,7 @@ namespace Cattedre
                     if (count == 0)
                     {
                         string sql = "";
-<<<<<<< HEAD
-                        if (classe.ClasseArticolataCon.ToString() == "")
-=======
                         if (classe.ClasseArticolataCon >0)
->>>>>>> ut-cont-cdc
                         {
                            sql = "INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo) VALUES (@sigla, @anno, @sezione, NULL, @IDutente, @IDindirizzo)";
                         }

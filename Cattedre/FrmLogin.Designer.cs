@@ -167,8 +167,9 @@
             // 
             // btLoginGoogle
             // 
+            this.btLoginGoogle.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btLoginGoogle.BackgroundImage")));
             this.btLoginGoogle.Font = new System.Drawing.Font("Microsoft YaHei UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btLoginGoogle.Location = new System.Drawing.Point(288, 361);
+            this.btLoginGoogle.Location = new System.Drawing.Point(288, 355);
             this.btLoginGoogle.Margin = new System.Windows.Forms.Padding(2);
             this.btLoginGoogle.Name = "btLoginGoogle";
             this.btLoginGoogle.Size = new System.Drawing.Size(238, 37);

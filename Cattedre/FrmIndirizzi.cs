@@ -59,12 +59,7 @@ namespace Cattedre
                 DialogResult dr = frmIndirizzo.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
-<<<<<<< HEAD
-                    ClsIndirizzoBL.ModificaIndirizzo(frmIndirizzo._indirizzo, indiceDaModificare);
-                    CaricaListView(indirizzi);
-=======
                     ClsIndirizzoBL.ModificaIndirizzo(frmIndirizzo._indirizzo);
->>>>>>> ut-cont-cdc
                 }
                 popolatabella();
             }
@@ -81,11 +76,7 @@ namespace Cattedre
                 {
                     ClsIndirizzoBL.EliminaIndirizzo(idDaEliminare);
                 }
-<<<<<<< HEAD
-                CaricaListView(indirizzi);
-=======
                 popolatabella();
->>>>>>> ut-cont-cdc
             }
         }
         

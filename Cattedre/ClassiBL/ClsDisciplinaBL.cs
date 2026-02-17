@@ -16,10 +16,10 @@ namespace Cattedre
 
         public static List<ClsDisciplinaDL> CaricaDisciplineDipartimento(int IDdipartimento)
         {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-            DataTable dt = new DataTable();
 
-<<<<<<< HEAD
             conn.Open();
             string sql = "SELECT * FROM discipline " +
                 "WHERE IDdipartimento = @IDdipartimento";
@@ -44,42 +44,8 @@ namespace Cattedre
                     dt.Rows[i]["disciplinaSpeciale"].ToString(),
                     Convert.ToInt32(dt.Rows[i]["IDdipartimento"]));
                 discipline.Add(_disciplina);
-=======
-            try
-            {
-                string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = "SELECT * FROM discipline";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                    }
-                    conn.Close();
-                }
-                foreach (DataRow row in dt.Rows)
-                {
-                    ClsDisciplinaDL _disciplina = new ClsDisciplinaDL(
-                            Convert.ToInt32(row["id"]),
-                            row["nome"].ToString(),
-                            Convert.ToInt16(row["anno"]),
-                            Convert.ToInt16(row["oreLaboratorio"]),
-                            Convert.ToInt16(row["oreTeoria"]),
-                           (row["disciplinaSpeciale"]==DBNull.Value)?string.Empty:row["disciplinaSpeciale"].ToString(),
-                            Convert.ToInt32(row["IDdipartimento"])
-                            );
-                    discipline.Add(_disciplina);
-                }
-               }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
->>>>>>> ut-cont-cdc
             }
+            conn.Close();
 
             return discipline;
         }

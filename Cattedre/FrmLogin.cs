@@ -13,6 +13,7 @@ using Google.Apis.Oauth2.v2;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using System.IO;
+using System.Threading;
 
 namespace Cattedre
 {
@@ -58,6 +59,8 @@ namespace Cattedre
                 {
                     ClsUtenteDL utenteLoggato = null;
                     utenteLoggato = ClsUtenteBL.caricautenteByEmail(email);
+                    //cancellazione token all'interno di utente
+                    ClsUtenteBL.cancellaTokenUtente(utenteLoggato.ID);
                     FrmHome frmHome = new FrmHome(utenteLoggato);
                     frmHome.Show();
                     this.Hide();
@@ -97,6 +100,26 @@ namespace Cattedre
                 MessageBox.Show(ex.Message+"\nRiprovare!","errore",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
+        private Oauth2Service GetService(UserCredential credential)
+        {
+            try
+            {
+                if (credential == null)
+                    throw new ArgumentNullException("credential");
+
+                // Create Oauth2 API service.
+                return new Oauth2Service(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = "helpdesk-win"
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Get Oauth2 service failed.", ex);
+            }
+        }
+
         private void login()
         {
             try
@@ -104,7 +127,7 @@ namespace Cattedre
                 string[] Scopes = { "email", "profile" }; // Informazioni richieste
                 UserCredential credential;
                 Oauth2Service service;
-                credential = GetUserCredential("credentials.json", "cattedre-win", Scopes);
+                credential = GetUserCredential("credentials-cattedre-win.json", "cattedre-win", Scopes);
                 service = GetService(credential); // Recupero il servizio
                 service.Userinfo.V2.Me.Get().Execute(); // Esecuzione della richiesta con apertura del browser
 
@@ -125,7 +148,7 @@ namespace Cattedre
                         //caricamento del utente prendendo l'email essendo univoca
                         utenteLoggato = ClsUtenteBL.caricautenteByEmail(userinfo.Email);
                         //caricamento del token
-                        ClsUtenteBL.InserisciTokenUtenti(userinfo.Id, utenteLoggato.ID);
+                        ClsUtenteBL.InserisciTokenUtente(userinfo.Id, utenteLoggato.ID);
                         FrmHome frmHome = new FrmHome(utenteLoggato);
                         frmHome.Show();
                         this.Hide();
@@ -135,10 +158,11 @@ namespace Cattedre
                 }
             }catch (Exception ex)
             {
-                throw new Exception("errore Nel login: "+ex.Message);
+                throw new Exception("errore Nel login:\n "+ex.Message);
             }
             
         }
+
 
         private Oauth2Service GetOauth2Service(string clientSecretJson, string userName, string[] scopes)
         {
@@ -189,7 +213,7 @@ namespace Cattedre
 
             }
         }
-        private void logout()
+        public  static void logout()
         {
             string credPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             credPath = Path.Combine(credPath, ".credentials"); // Recupero il file dalla cartella documenti dove ho memorizzato l'utente loggato //, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name);
@@ -199,7 +223,6 @@ namespace Cattedre
                 try
                 {
                     Directory.Delete(credPath, true); // Cancello il file con le info dell'utente loggato
-                    MessageBox.Show("Logout effettuato");
                 }
                 catch (Exception e)
                 {

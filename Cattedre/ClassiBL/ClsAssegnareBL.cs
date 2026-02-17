@@ -77,6 +77,74 @@ namespace Cattedre
             return docentiDipartimento;
         }
 
+
+        public static List<ClsUtenteDL> CercaDocentiCdc(int IDdipartimento)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            List<ClsUtenteDL> docentiDipartimento = new List<ClsUtenteDL>();
+            FrmDipartimenti frmDocenti = new FrmDipartimenti();
+            try
+            {
+                conn.Open();
+                string sql = "SELECT DISTINCT u.ID, u.email, u.password, u.cognome, u.nome, u.tipoDocente, a.IDclasse, a.IDdisciplina " +
+                       "FROM utenti u " +
+                       "LEFT JOIN assegnare a ON u.ID = a.IDutente " +
+                       "JOIN afferire af ON u.ID = af.IDutente " +
+                       "JOIN discipline d ON a.IDdisciplina = d.ID " +
+                       "WHERE u.tipoUtente != 'P' " +
+                       "AND af.IDdipartimento = @IDdipartimento ";
+
+                MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
+                DataSet ds = new DataSet("cattedre");
+                da.Fill(ds, "utenti");
+
+                DataTable dt = ds.Tables["utenti"];
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    ClsUtenteDL docenteDipartimento = new ClsUtenteDL(
+                        dt.Rows[i]["ID"].ToString(),
+                        dt.Rows[i]["email"].ToString(),
+                        dt.Rows[i]["password"].ToString(),
+                        dt.Rows[i]["cognome"].ToString(),
+                        dt.Rows[i]["nome"].ToString(),
+                        Convert.ToChar(dt.Rows[i]["tipoDocente"]));
+                    docentiDipartimento.Add(docenteDipartimento);
+                }
+                conn.Close();
+                //MySqlCommand cmd = new MySqlCommand(sql, conn);
+                //cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                //cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                //cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                //MySqlDataReader dr = cmd.ExecuteReader();
+                //if (dr.HasRows)
+                //{
+                //    while (dr.Read())
+                //    {
+                //        ClsUtenteDL docenteDipartimento = new ClsUtenteDL();
+                //        docenteDipartimento.ID = Convert.ToInt64(dr["ID"]);
+                //        docenteDipartimento.Email = dr["email"].ToString();
+                //        docenteDipartimento.Password = dr["password"].ToString();
+                //        docenteDipartimento.Cognome = dr["cognome"].ToString();
+                //        docenteDipartimento.Nome = dr["nome"].ToString();
+                //        docenteDipartimento.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
+                //        docentiDipartimento.Add(docenteDipartimento);
+                //    }
+                //}
+                //conn.Close();
+            }
+            catch (Exception ex)
+            {
+                string errore = ex.Message;
+            }
+            return docentiDipartimento;
+        }
+
+
+
+
+
+
         public static List<ClsUtenteDL> CercaDocentiPossibiliSostituti(int IDdipartimento, int IDclasseDiConcorso)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;

@@ -316,6 +316,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmHome";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmHome_FormClosing);
             this.Load += new System.EventHandler(this.FrmHomeUpdate_Load);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();

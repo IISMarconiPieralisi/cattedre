@@ -84,9 +84,19 @@ namespace Cattedre
 
         private void btLogout_Click(object sender, EventArgs e)
         {
-            FrmLogin frmLogin = new FrmLogin();
-            frmLogin.Show();
-            this.Close();
+            try
+            {
+                FrmLogin frmLogin = new FrmLogin();
+                if (ClsUtenteBL.TokenEsistente(utente.ID))
+                    FrmLogin.logout();
+                frmLogin.Show();
+                this.Close();
+            }catch (Exception ex)
+            {
+                MessageBox.Show("Errore Durante il logout, contattare un amministratore", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
         }
 
         private void cDCToolStripMenuItem_Click(object sender, EventArgs e)
@@ -135,6 +145,19 @@ namespace Cattedre
         {
             FrmCredits frmCredits = new FrmCredits();
             MostraFormMDI(frmCredits);
+        }
+
+        private void FrmHome_FormClosing(object sender, FormClosingEventArgs e)
+        {
+           //// Cerca tra tutte le form aperte
+           // foreach (Form form in Application.OpenForms)
+           // {
+           //     // Cerca frmLogin per nome e chiudila se esiste
+           //     var FrmLogin = Application.OpenForms.Cast<Form>().FirstOrDefault(f => f.Name == "FrmLogin");
+           //     if (FrmLogin != null && !FrmLogin.IsDisposed)
+           //         FrmLogin.Close();
+                
+           // }
         }
 
         //private void cONTRATTIToolStripMenuItem_Click(object sender, EventArgs e)

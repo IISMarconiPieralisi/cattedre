@@ -93,9 +93,14 @@ namespace Cattedre
                 {
                     conn.Open();
                     //string sql = "SELECT id,sigla,anno,sezione,classeArticolataCon, IDutente, IDindirizzo FROM classi";
-                    string sql = "SELECT * FROM `classi`";
+                    string sql = "SELECT * FROM classi " +
+                                    "JOIN utenti ON utenti.ID = classi.IDutente " +
+                                    "JOIN afferire ON afferire.IDutente = utenti.ID " +
+                                    "WHERE afferire.IDdipartimento = @IDdipartimento";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
+                        cmd.Parameters.AddWithValue("@Iddipartimento", IDdipartimento);
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             da.Fill(dt);

@@ -34,7 +34,7 @@ namespace Cattedre
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             da.Fill(dt);
-                            if(dt.Rows.Count>0)
+                            if (dt.Rows.Count > 0)
                                 IDutente = Convert.ToInt64(dt.Rows[0]["ID"]);
                         }
 
@@ -74,7 +74,7 @@ namespace Cattedre
                         }
                         conn.Close();
                     }
-                    }
+                }
 
             }
             catch (Exception ex)
@@ -115,6 +115,35 @@ namespace Cattedre
 
             return risultato;
         }
+        public static bool TokenEsistente(long IDutente)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT token FROM utenti 
+                           WHERE ID = @id";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", IDutente);
+
+
+                        var result = cmd.ExecuteScalar();
+
+                        return result != null && result != DBNull.Value;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nella query: " + ex.Message);
+            }
+            return false;
+        }
 
         #endregion
         #region caricamente by utentispecifici
@@ -148,7 +177,7 @@ namespace Cattedre
                         {
                             utente.TipoDocente = '\0'; // oppure un altro valore di default
                         }
-                        utente.Colore = dr["colore"].ToString();
+
                         utenti.Add(utente);
                     }
                 }
@@ -264,7 +293,7 @@ namespace Cattedre
                     }
                     conn.Close();
                 }
-                foreach(DataRow row  in ds.Rows)
+                foreach (DataRow row in ds.Rows)
                 {
                     ClsUtenteDL utente = new ClsUtenteDL();
                     utente.ID = Convert.ToInt64(row["ID"]);
@@ -274,7 +303,7 @@ namespace Cattedre
                     utente.Nome = row["nome"].ToString();
                     utente.TipoUtente = row["tipoUtente"].ToString();
                     //utente.Colore = row["colore"].ToString();
-                    utente.TipoDocente = row["tipoDocente"] != DBNull.Value? Convert.ToChar(row["tipoDocente"]): '\0';
+                    utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
                     utenti.Add(utente);
                 }
 
@@ -387,7 +416,7 @@ namespace Cattedre
         }
         #endregion
         #region Operazioni Crud specifiche
-        public static void InserisciTokenUtenti(string token ,long Idutente)
+        public static void InserisciTokenUtente(string token, long Idutente)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             try
@@ -405,7 +434,7 @@ namespace Cattedre
                         int righeCoinvolte = cmd.ExecuteNonQuery();
 
                         if (righeCoinvolte <= 0)
-                            throw new InvalidOperationException("errore nel inserimento del token nel utente: ID= " +Idutente.ToString());
+                            throw new InvalidOperationException("errore nel inserimento del token nel utente: ID= " + Idutente.ToString());
 
                     }
                     conn.Close();
@@ -417,6 +446,36 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
 
+        }
+        public static void cancellaTokenUtente(long Idutente)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"UPDATE utenti 
+                                SET Token=@token
+                                 WHERE ID=@id";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@token", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@id", Idutente);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+
+                        if (righeCoinvolte <= 0)
+                            throw new InvalidOperationException("errore nel inserimento del token nel utente: ID= " + Idutente.ToString());
+
+                    }
+                    conn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
         #endregion
         #region Login e logout
@@ -439,15 +498,15 @@ namespace Cattedre
                 int UtentiLoggati = 0;
                 if (result != null)
                     UtentiLoggati = Convert.ToInt32(result);
-                
+
                 conn.Close();
                 if (UtentiLoggati == 1)
-                   return true;
-                
+                    return true;
+
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex.Message);
+                throw new Exception(ex.Message);
             }
             return false;
         }
@@ -473,7 +532,7 @@ namespace Cattedre
                         cmd.Parameters.AddWithValue("@email", email);
                         object result = cmd.ExecuteScalar();
 
-                        
+
                         if (result != null)
                             UtentiLoggati = Convert.ToInt32(result);
 
@@ -497,10 +556,10 @@ namespace Cattedre
 
         #endregion
         #region filtri
-        public static List<ClsUtenteDL> FiltraUtenti(List<string> parametri,string Filtro)
+        public static List<ClsUtenteDL> FiltraUtenti(List<string> parametri, string Filtro)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-           
+
             DataTable ds = new DataTable();
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             try
@@ -534,11 +593,11 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception( ex.Message);
+                throw new Exception(ex.Message);
             }
             return utenti;
         }
-        public static MySqlCommand CreaComandoRicerca(string Filtro, List<string>parametri, MySqlConnection conn)
+        public static MySqlCommand CreaComandoRicerca(string Filtro, List<string> parametri, MySqlConnection conn)
         {
             string sql = "SELECT ID, nome, cognome, email, password, tipoutente, tipodocente, colore FROM utenti ";
             MySqlCommand cmd = new MySqlCommand("", conn);
@@ -568,7 +627,7 @@ namespace Cattedre
         }
         #endregion
         #region ricerca
-        public static List <ClsUtenteDL> RicercaPerNomeCognome(string _ricerca)
+        public static List<ClsUtenteDL> RicercaPerNomeCognome(string _ricerca)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
@@ -616,5 +675,6 @@ namespace Cattedre
         #endregion
 
     }
+}
 
   

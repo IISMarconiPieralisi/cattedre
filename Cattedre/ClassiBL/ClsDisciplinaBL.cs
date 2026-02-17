@@ -21,26 +21,28 @@ namespace Cattedre
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
 
             conn.Open();
-            string sql = "SELECT * FROM discipline";
+            string sql = "SELECT * FROM discipline " +
+                "WHERE IDdipartimento = @IDdipartimento";
             //DataAdapter, DataSet e DataTable su dispensa ADO.Net
             MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
+            da.SelectCommand.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
             //Cache dati in memoria, oggetto disconnesso
             DataSet ds = new DataSet("cattedre");
             da.Fill(ds, "cattedre");
 
             //Scorro i Record del DataTable per creare la lista
-            DataTable dt = ds.Tables["discipline"];
+            DataTable dt = ds.Tables["cattedre"];
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 // Potrei scrivere anche su una sola riga ma così è più leggibile
                 ClsDisciplinaDL _disciplina = new ClsDisciplinaDL(
-                    (int)dt.Rows[i]["id"],
+                    Convert.ToInt64(dt.Rows[i]["id"]),
                     dt.Rows[i]["nome"].ToString(),
-                    (int)dt.Rows[i]["anno"],
-                    (int)dt.Rows[i]["oreLaboratorio"],
-                    (int)dt.Rows[i]["oreTeoria"],
+                    Convert.ToInt32(dt.Rows[i]["anno"]),
+                    Convert.ToInt32(dt.Rows[i]["oreLaboratorio"]),
+                    Convert.ToInt32(dt.Rows[i]["oreTeoria"]),
                     dt.Rows[i]["disciplinaSpeciale"].ToString(),
-                    (int)dt.Rows[i]["IDdipartimento"]);
+                    Convert.ToInt32(dt.Rows[i]["IDdipartimento"]));
                 discipline.Add(_disciplina);
             }
             conn.Close();

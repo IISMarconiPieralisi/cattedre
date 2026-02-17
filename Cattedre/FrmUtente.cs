@@ -53,56 +53,35 @@ namespace Cattedre
                 _utente.Colore = _colore;
 
                 bool isDocente = _utente.TipoUtente == "D" || _utente.TipoUtente == "C";
-
+               
                 //inserimento controlli Docente
                 if (isDocente)
                 {
                     // Tipi docente (Teorico o Pratico)
                     if (ckbDocenteTeorico.Checked && ckbDocentePratico.Checked)
-                    {
-                        MessageBox.Show("Seleziona un solo tipo docente.", "Errore",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.DialogResult = DialogResult.None;
-                        return;
-                    }
+                        throw new Exception("Seleziona un solo tipo docente.");
 
                     if (!ckbDocenteTeorico.Checked && !ckbDocentePratico.Checked)
-                    {
-                        MessageBox.Show("Seleziona un tipo docente.", "Errore",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.DialogResult = DialogResult.None;
-                        return;
-                    }
-                    //controllo colore
-                    if(string.IsNullOrEmpty(_utente.Colore))
-                    {
-                        MessageBox.Show("Seleziona un colore al docente.", "Errore",
-                         MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.DialogResult = DialogResult.None;
-                        return;
-                    }
+                        throw new Exception("Seleziona un tipo docente.");
+                    else
+                        _utente.TipoDocente = ckbDocenteTeorico.Checked ? 'T' : 'L';
 
-                    _utente.TipoDocente = ckbDocenteTeorico.Checked ? 'T' : 'L';
+                    //controllo colore
+                    if (string.IsNullOrEmpty(_utente.Colore))
+                        throw new Exception("Seleziona un colore al docente.");
+                    
 
                     // controlli classe di concorso
                     if (clbCLasseDiConcorso.CheckedItems.Count == 0)
-                    {
-                        MessageBox.Show("Seleziona almeno una classe di concorso.", "Errore",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.DialogResult = DialogResult.None;
-                        return;
-                    }
+                        throw new Exception("Seleziona almeno una classe di concorso.");
+
 
                     // ---- Contratto ----
                     if (nudMonteOre.Value <= 0 || (!rbDeterminato.Checked && !rbIndeterminato.Checked))
-                    {
-                        MessageBox.Show("Inserire un monte ore valido e selezionare il tipo di contratto.", "Errore",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.DialogResult = DialogResult.None;
-                        return;
-                    }
+                        throw new Exception("Inserire un monte ore valido e selezionare il tipo di contratto.");
+                    
                     //creazione  contratto se non esiste  (caso inserimento)
-                    if(_contratto==null)
+                    if(_contratto==null) 
                         _contratto = new ClsContrattoDL();
 
                     _contratto.MonteOre = (int)nudMonteOre.Value;
@@ -144,15 +123,9 @@ namespace Cattedre
                 {
                     // Deve coordinare un dipartimento
                     if (cbDipartimentoCoordinato.SelectedItem == null)
-                    {
-                        MessageBox.Show("Seleziona un dipartimento da coordinare.", "Errore",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.DialogResult = DialogResult.None;
-                        return;
-                    }
-
-                    // passo il dipartimento  coordinato all'esterno
-                    _dipartimento = dipartimenti.Find(d => d.Nome == cbDipartimentoCoordinato.SelectedItem.ToString());
+                        throw new Exception("Seleziona un dipartimento da coordinare.");
+                    else                 // passo il dipartimento  coordinato all'esterno
+                        _dipartimento = dipartimenti.Find(d => d.Nome == cbDipartimentoCoordinato.SelectedItem.ToString());
 
                 }
 
@@ -161,8 +134,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Errore durante il salvataggio: {ex.Message}", "Errore",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
         }
@@ -232,7 +204,6 @@ namespace Cattedre
             //inserimento classe di concorso
             if (_richieste != null)
                 loadCDC();
-            //controllo se il dipartimento coordinato è valorizzato
         }
 
         private void cbTipoUtente_SelectionChangeCommitted(object sender, EventArgs e)
@@ -251,7 +222,42 @@ namespace Cattedre
                 ckbDocenteTeorico.Enabled = false;
             }
         }
+        private void rbIndeterminato_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbIndeterminato.Checked)
+            {
+                dtpDataFine.Enabled = false;
+                //dtpDataFine.Value = DateTime.Now();
+            }
+            if (rbDeterminato.Checked)
+            {
+                dtpDataFine.Enabled = true;
+            }
+        }
 
+
+
+        private void cbAutoEmail_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbAutoEmail.Checked)
+            {
+                _imputEmail = tbEmail.Text;
+                if (!string.IsNullOrWhiteSpace(tbNome.Text) && !string.IsNullOrWhiteSpace(tbCognome.Text))
+                {
+                    string _Email = $"{tbNome.Text}.{tbCognome.Text}@iismarconipieralisi.it";
+                    tbEmail.Enabled = false;
+                    tbEmail.Text = _Email;
+
+                }
+
+            }
+            else
+            {
+                tbEmail.Enabled = true;
+                tbEmail.Text = _imputEmail;
+
+            }
+        }
         private void btAnnulla_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -494,41 +500,7 @@ namespace Cattedre
             return vs[0];
         }
         #endregion
-        private void rbIndeterminato_CheckedChanged(object sender, EventArgs e)
-        {
-            if(rbIndeterminato.Checked)
-            {
-                dtpDataFine.Enabled = false;
-                //dtpDataFine.Value = DateTime.Now();
-            }
-            if(rbDeterminato.Checked)
-            {
-                dtpDataFine.Enabled = true;
-            }
-        }
-
-       
-
-        private void cbAutoEmail_CheckedChanged(object sender, EventArgs e)
-        {
-            if(cbAutoEmail.Checked)
-            {
-                _imputEmail = tbEmail.Text;
-                if (!string.IsNullOrWhiteSpace(tbNome.Text)&& !string.IsNullOrWhiteSpace(tbCognome.Text))
-                {
-                    string _Email = $"{tbNome.Text}.{tbCognome.Text}@iismarconipieralisi.it";
-                    tbEmail.Enabled = false;
-                    tbEmail.Text = _Email;
-
-                }
-
-            }else
-            {
-                tbEmail.Enabled = true;
-                tbEmail.Text = _imputEmail;
-
-            }
-        }
+      
         #region gestione colore utente
         private void btColore_Click(object sender, EventArgs e)
         {

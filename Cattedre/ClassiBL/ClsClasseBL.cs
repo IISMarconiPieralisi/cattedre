@@ -85,34 +85,46 @@ namespace Cattedre
         public static List<ClsClasseDL> CaricaClassiDipartimento(int IDdipartimento)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
-
-            conn.Open();
-            string sql = "SELECT * FROM classi";
-            //DataAdapter, DataSet e DataTable su dispensa ADO.Net
-            MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
-            //Cache dati in memoria, oggetto disconnesso
-            DataSet ds = new DataSet("cattedre");
-            da.Fill(ds, "cattedre");
-
-            //Scorro i Record del DataTable per creare la lista
-            DataTable dt = ds.Tables["classi"];
-            for (int i = 0; i < dt.Rows.Count; i++)
+            DataTable dt = new DataTable();
+            try
             {
-                // Potrei scrivere anche su una sola riga ma così è più leggibile
-                ClsClasseDL _classe = new ClsClasseDL(
-                    (int)dt.Rows[i]["id"],
-                    dt.Rows[i]["sigla"].ToString(),
-                    (int)dt.Rows[i]["anno"],
-                    dt.Rows[i]["sezione"].ToString(),
-                    (int)dt.Rows[i]["classeArticolataCon"],
-                    (int)dt.Rows[i]["IDutente"],
-                    (int)dt.Rows[i]["IDindirizzo"]);
-                classi.Add(_classe);
-            }
-            conn.Close();
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    //string sql = "SELECT id,sigla,anno,sezione,classeArticolataCon, IDutente, IDindirizzo FROM classi";
+                    string sql = "SELECT * FROM classi " +
+                                    "JOIN utenti ON utenti.ID = classi.IDutente " +
+                                    "JOIN afferire ON afferire.IDutente = utenti.ID " +
+                                    "WHERE afferire.IDdipartimento = @IDdipartimento";
 
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Iddipartimento", IDdipartimento);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    conn.Close();
+                }
+                foreach(DataRow row in dt.Rows)
+                {
+                    ClsClasseDL _classe = new ClsClasseDL();
+                    _classe.ID= Convert.ToInt64(row["id"]);
+                    _classe.Sigla=row["sigla"].ToString();
+                    _classe.Anno = Convert.ToInt32(row["anno"]);
+                    _classe.Sezione = row["sezione"].ToString();
+                    _classe.ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]);
+                    _classe.Idutente = (row["IDutente"]== DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
+                    _classe.Idindirizzo=Convert.ToInt64(row["IDindirizzo"]);
+                    classi.Add(_classe);
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
             return classi;
         }
 
@@ -233,7 +245,7 @@ namespace Cattedre
                     if (count == 0)
                     {
                         string sql = "";
-                        if (classe.ClasseArticolataCon == "")
+                        if (classe.ClasseArticolataCon >0)
                         {
                            sql = "INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo) VALUES (@sigla, @anno, @sezione, NULL, @IDutente, @IDindirizzo)";
                         }

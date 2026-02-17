@@ -89,26 +89,30 @@ namespace Cattedre
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
 
             conn.Open();
-            string sql = "SELECT * FROM classi";
+            string sql = "SELECT * FROM classi " +
+                "JOIN utenti ON utenti.ID = classi.IDutente " +
+                "JOIN afferire ON afferire.IDutente = utenti.ID " +
+                "WHERE afferire.IDdipartimento = @IDdipartimento";
             //DataAdapter, DataSet e DataTable su dispensa ADO.Net
             MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
+            da.SelectCommand.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
             //Cache dati in memoria, oggetto disconnesso
             DataSet ds = new DataSet("cattedre");
             da.Fill(ds, "cattedre");
 
             //Scorro i Record del DataTable per creare la lista
-            DataTable dt = ds.Tables["classi"];
+            DataTable dt = ds.Tables["cattedre"];
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 // Potrei scrivere anche su una sola riga ma così è più leggibile
                 ClsClasseDL _classe = new ClsClasseDL(
-                    (int)dt.Rows[i]["id"],
+                    Convert.ToInt64(dt.Rows[i]["id"]),
                     dt.Rows[i]["sigla"].ToString(),
-                    (int)dt.Rows[i]["anno"],
+                    Convert.ToInt32(dt.Rows[i]["anno"]),
                     dt.Rows[i]["sezione"].ToString(),
-                    (int)dt.Rows[i]["classeArticolataCon"],
-                    (int)dt.Rows[i]["IDutente"],
-                    (int)dt.Rows[i]["IDindirizzo"]);
+                    dt.Rows[i]["classeArticolataCon"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["classeArticolataCon"]),
+                    Convert.ToInt64(dt.Rows[i]["IDutente"]),
+                    Convert.ToInt64(dt.Rows[i]["IDindirizzo"]));
                 classi.Add(_classe);
             }
             conn.Close();
@@ -233,7 +237,7 @@ namespace Cattedre
                     if (count == 0)
                     {
                         string sql = "";
-                        if (classe.ClasseArticolataCon == "")
+                        if (classe.ClasseArticolataCon.ToString() == "")
                         {
                            sql = "INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo) VALUES (@sigla, @anno, @sezione, NULL, @IDutente, @IDindirizzo)";
                         }

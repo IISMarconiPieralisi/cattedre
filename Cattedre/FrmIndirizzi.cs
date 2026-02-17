@@ -45,7 +45,7 @@ namespace Cattedre
         private void FrmIndirizzi_Load(object sender, EventArgs e)
         {
             indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
-            CaricaListView();
+            CaricaListView(indirizzi);
         }
 
         private void brModifica_Click(object sender, EventArgs e)
@@ -59,7 +59,7 @@ namespace Cattedre
                 if (dr == DialogResult.OK)
                 {
                     ClsIndirizzoBL.ModificaIndirizzo(frmIndirizzo._indirizzo, indiceDaModificare);
-                    CaricaListView();
+                    CaricaListView(indirizzi);
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace Cattedre
                     ClsIndirizzoBL.EliminaIndirizzo(idDaEliminare);
                     indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
                 }
-                CaricaListView();
+                CaricaListView(indirizzi);
             }
         }
 

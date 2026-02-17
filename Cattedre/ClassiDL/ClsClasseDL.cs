@@ -41,7 +41,7 @@ namespace Cattedre
 
         public string Sezione { get => _sezione; set => _sezione = value; }
 
-        public string ClasseArticolataCon { get => _classeArticolataCon; set => _classeArticolataCon = value; }
+        public int ClasseArticolataCon { get => _classeArticolataCon; set => _classeArticolataCon = value; }
 
         public int Anno { get => _anno; set => _anno = value; }
 

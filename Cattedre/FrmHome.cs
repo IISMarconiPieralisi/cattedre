@@ -42,25 +42,6 @@ namespace Cattedre
         }
         private void FrmHomeUpdate_Load(object sender, EventArgs e)
         {
-            // Se l'utente non è autenticato apro login
-            if (utente == null)
-            {
-                using (FrmLogin frmLogin = new FrmLogin())
-                {
-                    var result = frmLogin.ShowDialog();
-
-                    if (result == DialogResult.OK)
-                    {
-                        utente = frmLogin.UtenteLoggato;
-                    }
-                    else
-                    {
-                        Application.Exit();
-                        return;
-                    }
-                }
-            }
-
             if (utente.TipoUtente == "A")
             {
                 menuStrip1.Enabled = true;

@@ -22,9 +22,26 @@ namespace Cattedre
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmHome(null));
 
-           
+            ClsUtenteDL utente = null;
+
+            using (FrmLogin frmLogin = new FrmLogin())
+            {
+                var result = frmLogin.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    utente = frmLogin.UtenteLoggato;
+                }
+                else
+                {
+                    return; // chiude l'app
+                }
+            }
+
+            Application.Run(new FrmHome(utente));
+
+
         }
     }
 }

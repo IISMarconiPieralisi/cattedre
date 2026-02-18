@@ -45,7 +45,7 @@ namespace Cattedre
             //pnlDipartimento.VerticalScroll.Enabled = false;
 
 
-            if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
+            if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "C")
             {
                 // Preside: può selezionare tutti i dipartimenti, ma non modificare le combobox
                 LoadDipartimenti();

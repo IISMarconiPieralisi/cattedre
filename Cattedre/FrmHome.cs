@@ -42,6 +42,25 @@ namespace Cattedre
         }
         private void FrmHomeUpdate_Load(object sender, EventArgs e)
         {
+            // Se l'utente non è autenticato apro login
+            if (utente == null)
+            {
+                using (FrmLogin frmLogin = new FrmLogin())
+                {
+                    var result = frmLogin.ShowDialog();
+
+                    if (result == DialogResult.OK)
+                    {
+                        utente = frmLogin.UtenteLoggato;
+                    }
+                    else
+                    {
+                        Application.Exit();
+                        return;
+                    }
+                }
+            }
+
             if (utente.TipoUtente == "A")
             {
                 menuStrip1.Enabled = true;
@@ -86,12 +105,17 @@ namespace Cattedre
         {
             try
             {
-                FrmLogin frmLogin = new FrmLogin();
+                //FrmLogin frmLogin = new FrmLogin();
+                //if (ClsUtenteBL.TokenEsistente(utente.ID))
+                //    FrmLogin.logout();
+                //frmLogin.Show();
+                //this.Close();
                 if (ClsUtenteBL.TokenEsistente(utente.ID))
                     FrmLogin.logout();
-                frmLogin.Show();
-                this.Close();
-            }catch (Exception ex)
+
+                Application.Restart();
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("Errore Durante il logout, contattare un amministratore", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

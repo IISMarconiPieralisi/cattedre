@@ -75,7 +75,7 @@
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(563, 152);
+            this.btElimina.Location = new System.Drawing.Point(563, 123);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(75, 23);
             this.btElimina.TabIndex = 17;
@@ -86,7 +86,7 @@
             // brModifica
             // 
             this.brModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.brModifica.Location = new System.Drawing.Point(563, 108);
+            this.brModifica.Location = new System.Drawing.Point(563, 94);
             this.brModifica.Name = "brModifica";
             this.brModifica.Size = new System.Drawing.Size(75, 23);
             this.brModifica.TabIndex = 16;

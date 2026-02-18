@@ -11,7 +11,7 @@ namespace Cattedre
     {
         #region ATTRIBUTI
         long _id, _idutente, _idindirizzo;
-        string _sigla, _sezione,  _nomeCoordinatore, _indirizzo;
+        string _sigla, _sezione;
         int _anno, _classeArticolataCon;
         #endregion
 
@@ -45,8 +45,6 @@ namespace Cattedre
 
         public int Anno { get => _anno; set => _anno = value; }
 
-        public string NomeCoordinatore { get => _nomeCoordinatore; set => _nomeCoordinatore = value; }
-        public string Indirizzo { get => _indirizzo; set => _indirizzo = value; }
         public long Idutente { get => _idutente; set => _idutente = value; }
         public long Idindirizzo { get => _idindirizzo; set => _idindirizzo = value; }
 

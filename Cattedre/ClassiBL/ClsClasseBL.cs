@@ -21,33 +21,38 @@ namespace Cattedre
         public static string RilevaSiglaClasse(long id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            ClsClasseDL classe = null;
+            string _sigla = "-";
             try
             {
-                conn.Open();
-                string sql = "SELECT sigla " +
-                             "FROM classi " +
-                             "WHERE ID = " + id;
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    dr.Read();
-                    classe = new ClsClasseDL();
-                    classe.Sigla = dr["sigla"].ToString();
+                    conn.Open();
+                    string sql = @"SELECT sigla " +
+                                 "FROM classi " +
+                                 "WHERE ID = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.HasRows)
+                            {
+                                dr.Read();
+                                _sigla = dr["sigla"].ToString();
+                            }
+                            conn.Close();
+                        }
+
+                    }
                 }
-                conn.Close();
+
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
-            }
-            if (classe != null)
-                return classe.Sigla;
-            else
-                return "-";
+                throw new Exception(ex.Message);
+                    }
+
+            return _sigla;
         }
 
         public static long RilevaIDclasse(string sigla)

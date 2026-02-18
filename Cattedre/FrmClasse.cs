@@ -37,8 +37,6 @@ namespace Cattedre
             _classe.Anno = Convert.ToInt32(nudAnno.Value);
             _classe.Sezione = tbSezione.Text;
             _classe.ClasseArticolataCon = Convert.ToInt32(cbClasseArticolataCon.Text);
-            _classe.NomeCoordinatore = cbCoordinatore.Text;
-            _classe.Indirizzo = cbIndirizzo.Text;
 
             if (string.IsNullOrEmpty(_classe.Sezione))
             {
@@ -47,9 +45,10 @@ namespace Cattedre
             }
             else
             {
-                IDutente = ClsUtenteBL.RilevaIDutente(_classe.NomeCoordinatore.Substring(0, _classe.NomeCoordinatore.IndexOf(" ")),
-                    _classe.NomeCoordinatore.Substring(_classe.NomeCoordinatore.IndexOf(" ") + 1));
-                IDindirizzo = ClsIndirizzoBL.RilevaIDindirizzo(_classe.Indirizzo);
+                string[] parts = cbCoordinatore.Text.Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+                IDutente = ClsUtenteBL.RilevaIDutente(parts[0], parts[1]);
+                IDindirizzo = ClsIndirizzoBL.RilevaIDindirizzo(cbIndirizzo.Text);
                 IDclasseArticolataCon = ClsClasseBL.RilevaIDclasse(_classe.ClasseArticolataCon.ToString());
             }
         }

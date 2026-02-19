@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Cattedre
@@ -19,46 +20,41 @@ namespace Cattedre
             IDutenti.Clear();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsContrattoDL> contratti = new List<ClsContrattoDL>();
+            DataTable ds = new DataTable();
+            List<ClsContrattoDL> Contratti = new List<ClsContrattoDL>();
             try
             {
                 conn.Open();
-                string sql = "SELECT * FROM contratti";
+                string sql = "SELECT ID, IDutente, IDclasseDiConcorso, IDdisciplina, oreSpeciali FROM richiedere ";
 
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    while (dr.Read())
+                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                     {
-                        ClsContrattoDL contratto = new ClsContrattoDL();
-                        contratto.ID = Convert.ToInt32(dr["id"]);
-                        if (!dr.IsDBNull(dr.GetOrdinal("tipoContratto")))
-                        {
-                            contratto.TipoContratto = Convert.ToChar(dr["tipoContratto"]);
-                        }
-                        else
-                        {
-                            contratto.TipoContratto = '\0';
-                        }
-                        contratto.MonteOre = Convert.ToInt32(dr["monteOre"]);
-                        contratto.DataInizioContratto = dr.GetDateTime("datainizio");
-                        contratto.DataFineContratto = dr.IsDBNull(dr.GetOrdinal("datafine"))
-                            ? DateTime.MinValue
-                            : dr.GetDateTime(dr.GetOrdinal("datafine"));
-                        _IDutente = Convert.ToInt32(dr["IDutente"]);
-
-                        contratti.Add(contratto);
-                        IDutenti.Add(_IDutente);
+                        dr.Fill(ds);
                     }
+                    conn.Close();
                 }
-                conn.Close();
+                foreach (DataRow row in ds.Rows)
+                {
+                    ClsContrattoDL Contratto = new ClsContrattoDL();
+                    Contratto.ID = Convert.ToInt64(row["ID"]);
+                    Contratto.TipoContratto = Convert.ToChar(row["tipoContratto"]);
+                    Contratto.MonteOre = Convert.ToInt32(row["monteOre"]);
+                    Contratto.IDutente = Convert.ToInt64(row["IDutente"]);
+                    Contratto.DataInizioContratto = Convert.ToDateTime(row["datainizio"]);
+                    Contratto.DataFineContratto = Convert.ToDateTime(row["datafine"]);
+                    _IDutente = Convert.ToInt32(row["IDutente"]);
+                    Contratti.Add(Contratto);
+                    IDutenti.Add(_IDutente);
+                }
+
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
-            return contratti;
+            return Contratti;
         }
 
         public static void InserisciContratto(ClsContrattoDL contratto, long IDutente)

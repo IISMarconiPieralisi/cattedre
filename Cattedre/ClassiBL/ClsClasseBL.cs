@@ -11,75 +11,76 @@ namespace Cattedre
 {
     public static class ClsClasseBL
     {
-        public static long _IDutente;
-        public static long _IDindirizzo;
-        public static long _IDclasseArticolataCon;
-        public static List<long> IDutenti = new List<long>();
-        public static List<long> IDindirizzi = new List<long>();
-        public static List<long> IDclassiArticolateCon = new List<long>();
-
         public static string RilevaSiglaClasse(long id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            ClsClasseDL classe = null;
+            string _sigla = "-";
             try
             {
-                conn.Open();
-                string sql = "SELECT sigla " +
-                             "FROM classi " +
-                             "WHERE ID = " + id;
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    dr.Read();
-                    classe = new ClsClasseDL();
-                    classe.Sigla = dr["sigla"].ToString();
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT sigla " +
+                                 "FROM classi " +
+                                 "WHERE ID = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.HasRows)
+                            {
+                                dr.Read();
+                                _sigla = dr["sigla"].ToString();
+                            }
+                            conn.Close();
+                        }
+
+                    }
                 }
-                conn.Close();
+
             }
             catch (Exception ex)
-            {
-                string errore = ex.Message;
+            {
+                throw new Exception(ex.Message);
             }
-            if (classe != null)
-                return classe.Sigla;
-            else
-                return "-";
+
+            return _sigla;
         }
 
         public static long RilevaIDclasse(string sigla)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            ClsClasseDL classe = null;
+            long _ID=0;
             try
             {
-                conn.Open();
-                string sql = "SELECT ID " +
-                             "FROM classi " +
-                             "WHERE sigla = '" + sigla + "'";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    dr.Read();
-                    classe = new ClsClasseDL();
-                    classe.ID = Convert.ToInt64(dr["ID"]);
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+
+                    conn.Open();
+                    string sql = @"SELECT ID 
+                                 FROM classi 
+                                 WHERE sigla = @sigla";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@sigla", sigla);
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.HasRows)
+                            {
+                                dr.Read();
+                                _ID = Convert.ToInt64(dr["ID"]);
+                            }
+                        }
+                        conn.Close();
+                    }
                 }
-                conn.Close();
             }
             catch (Exception ex)
-            {
-                string errore = ex.Message;
+            {
+                throw new Exception(ex.Message);
             }
-            if (classe != null)
-                return classe.ID;
-            else
-                return 0;
+            return _ID;
         }
 
         public static List<ClsClasseDL> CaricaClassiDipartimento(int IDdipartimento)
@@ -130,231 +131,194 @@ namespace Cattedre
 
         public static List<ClsClasseDL> CaricaClassi()
         {
-            IDutenti.Clear();
-            IDindirizzi.Clear();
-            IDclassiArticolateCon.Clear();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
+            DataTable ds = new DataTable();
             try
             {
-                conn.Open();
-                string sql = "SELECT * FROM classi " +
-                             "ORDER BY anno";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    while (dr.Read())
-                    {
-                        ClsClasseDL classe = new ClsClasseDL();
-                        classe.ID = Convert.ToInt64(dr["ID"]);
-                        classe.Sigla = dr["sigla"].ToString();
-                        classe.Anno = Convert.ToInt32(dr["anno"]);
-                        classe.Sezione = dr["sezione"].ToString();
-                        _IDclasseArticolataCon = dr.IsDBNull(dr.GetOrdinal("classeArticolataCon"))
-                                    ? 0
-                                    : dr.GetInt32(dr.GetOrdinal("classeArticolataCon"));
-                        _IDutente = dr.IsDBNull(dr.GetOrdinal("IDutente"))
-                                    ? 0
-                                    : dr.GetInt32(dr.GetOrdinal("IDutente"));
-                        _IDindirizzo = Convert.ToInt64(dr["IDindirizzo"]);
-
-                        classi.Add(classe);
-                        IDutenti.Add(_IDutente);
-                        IDindirizzi.Add(_IDindirizzo);
-                        IDclassiArticolateCon.Add(_IDclasseArticolataCon);
-                    }
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT * FROM classi " +
+                                 "ORDER BY anno";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(ds);
+                        }
+                        conn.Close();
+                    }
+                }
+                    foreach (DataRow row in ds.Rows)
+                    {
+                        ClsClasseDL classe = new ClsClasseDL();
+                        classe.ID = Convert.ToInt64(row["ID"]);
+                        classe.Sigla = row["sigla"].ToString();
+                        classe.Anno = Convert.ToInt32(row["anno"]);
+                        classe.Sezione = row["sezione"].ToString();
+                        classe.ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]);
+                        classe.Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
+                        classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
+                        classi.Add(classe);
                 }
-                conn.Close();
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return classi;
         }
 
         public static List<ClsClasseDL> CaricaClassiFiltrate(int anno)
-        {
-            IDutenti.Clear();
-            IDindirizzi.Clear();
-            IDclassiArticolateCon.Clear();
+        {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
+            DataTable ds = new DataTable();
             try
             {
-                conn.Open();
-                string sql = "SELECT * FROM classi " +
-                             "WHERE anno = " + anno +
-                             " ORDER BY anno";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    while (dr.Read())
-                    {
-                        ClsClasseDL classe = new ClsClasseDL();
-                        classe.ID = Convert.ToInt64(dr["ID"]);
-                        classe.Sigla = dr["sigla"].ToString();
-                        classe.Anno = Convert.ToInt32(dr["anno"]);
-                        classe.Sezione = dr["sezione"].ToString();
-                        _IDclasseArticolataCon = dr.IsDBNull(dr.GetOrdinal("classeArticolataCon"))
-                                    ? 0
-                                    : dr.GetInt32(dr.GetOrdinal("classeArticolataCon"));
-                        _IDutente = dr.IsDBNull(dr.GetOrdinal("IDutente"))
-                                    ? 0
-                                    : dr.GetInt32(dr.GetOrdinal("IDutente"));
-                        _IDindirizzo = Convert.ToInt64(dr["IDindirizzo"]);
-
-                        classi.Add(classe);
-                        IDutenti.Add(_IDutente);
-                        IDindirizzi.Add(_IDindirizzo);
-                        IDclassiArticolateCon.Add(_IDclasseArticolataCon);
-                    }
-                }
-                conn.Close();
-            }
-            catch (Exception ex)
-            {
-                string errore = ex.Message;
-            }
-            return classi;
-        }
-
-        public static List<ClsClasseDL> InserisciClasse(ClsClasseDL classe, long IDutente, long IDindirizzo, long IDclasseArticolataCon)
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsClasseDL> classi = new List<ClsClasseDL>();
-
-            try
-            {
-                conn.Open();
-                string checkSql = "SELECT COUNT(*) FROM classi WHERE IDutente = @IDutente AND IDindirizzo = @IDindirizzo AND classeArticolataCon = @classeArticolataCon";
-                using (MySqlCommand checkCmd = new MySqlCommand(checkSql, conn))
-                {
-                    checkCmd.Parameters.AddWithValue("@IDutente", IDutente);
-                    checkCmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
-                    checkCmd.Parameters.AddWithValue("@classeArticolataCon", IDclasseArticolataCon);
-                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
-
-                    if (count == 0)
-                    {
-                        string sql = "";
-                        if (classe.ClasseArticolataCon >0)
-                        {
-                           sql = "INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo) VALUES (@sigla, @anno, @sezione, NULL, @IDutente, @IDindirizzo)";
-                        }
-                        else
-                        {
-                            sql = "INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo) VALUES (@sigla, @anno, @sezione, @classeArticolataCon, @IDutente, @IDindirizzo)";
-                        }
-                        MySqlCommand cmd = new MySqlCommand(sql, conn);
-                        {
-                            cmd.Parameters.AddWithValue("@sigla", classe.Anno.ToString() + classe.Sezione);
-                            cmd.Parameters.AddWithValue("@anno", classe.Anno);
-                            cmd.Parameters.AddWithValue("@sezione", classe.Sezione);
-                            cmd.Parameters.AddWithValue("@classeArticolataCon", IDclasseArticolataCon);
-                            cmd.Parameters.AddWithValue("@IDutente", IDutente);
-                            cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
-                            int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                            if (righeCoinvolte > 0)
-                            {
-                                classi.Add(classe);
-                                IDutenti.Add(IDutente);
-                                IDindirizzi.Add(IDindirizzo);
-                                IDclassiArticolateCon.Add(IDclasseArticolataCon);
-                            }
-                        }
-                    }
-                    else
-                        throw new Exception("Questo utente è già coordinatore di un'altra classe.");
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT * FROM classi " +
+                                 "WHERE anno = @anno"+
+                                 " ORDER BY anno";
+
+                    using(MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@anno", anno);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(ds);
+                        }
+                        conn.Close();
+                    }
+                }
+                foreach (DataRow row in ds.Rows)
+                {
+                    ClsClasseDL classe = new ClsClasseDL();
+                    classe.ID = Convert.ToInt64(row["ID"]);
+                    classe.Sigla = row["sigla"].ToString();
+                    classe.Anno = Convert.ToInt32(row["anno"]);
+                    classe.Sezione = row["sezione"].ToString();
+                    classe.ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]);
+                    classe.Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
+                    classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
+                    classi.Add(classe);
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
-
             return classi;
+        
+        }
+
+        public static void InserisciClasse(ClsClasseDL classe)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo) 
+                           VALUES (@sigla, @anno, @sezione, @classeArticolataCon, @IDutente, @IDindirizzo)";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        // Parametri calcolati o passati
+                        cmd.Parameters.AddWithValue("@sigla", classe.Anno.ToString() + classe.Sezione);
+                        cmd.Parameters.AddWithValue("@anno", classe.Anno);
+                        cmd.Parameters.AddWithValue("@sezione", classe.Sezione);
+
+                        // Gestione del valore NULL per la classe articolata
+                        cmd.Parameters.AddWithValue("@classeArticolataCon", classe.ClasseArticolataCon > 0 ? (object)classe.ClasseArticolataCon : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IDutente", classe.Idutente > 0 ? (object)classe.Idutente : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IDindirizzo", classe.Idindirizzo);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        if (righeCoinvolte <= 0)
+                            throw new InvalidOperationException("Errore nell'inserimento della classe: nessuna riga interessata.");
+                    }
+
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
-
-        public static List<ClsClasseDL> ModificaClasse(ClsClasseDL classe, int indice, long IDutente, long IDindirizzo, long IDclasseArticolataCon)
-        {
-            FrmClasse frmClasse = new FrmClasse(indice, indice, indice);
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsClasseDL> classi = new List<ClsClasseDL>();
-
-            try
-            {
-                conn.Open();
-                string sql = @"UPDATE classi 
-                           SET sigla = @sigla, 
-                               anno = @anno, 
-                               sezione = @sezione, 
-                               classeArticolataCon = @classeArticolataCon,
-                               IDutente = @IDutente,
-                               IDindirizzo = @IDindirizzo 
-                           WHERE id = " + classe.ID;
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                {
-                    cmd.Parameters.AddWithValue("@sigla", classe.Anno.ToString() + classe.Sezione);
-                    cmd.Parameters.AddWithValue("@anno", classe.Anno);
-                    cmd.Parameters.AddWithValue("@sezione", classe.Sezione);
-                    cmd.Parameters.AddWithValue("@classeArticolataCon", IDclasseArticolataCon);
-                    cmd.Parameters.AddWithValue("@IDutente", IDutente);
-                    cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
-                    {
-                        classi[indice] = frmClasse._classe;
-                        IDutenti[indice] = IDutente;
-                        IDindirizzi[indice] = IDindirizzo;
-                        IDclassiArticolateCon[indice] = IDclasseArticolataCon;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                string errore = ex.Message;
-            }
-
-            return classi;
-        }
-
-        public static List<ClsClasseDL> EliminaClasse(int id)
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsClasseDL> classi = new List<ClsClasseDL>();
-
-            try
-            {
-                conn.Open();
-                string sql = "DELETE FROM classi WHERE id = " + id;
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                {
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
-                    {
-                        classi = CaricaClassi();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                string errore = ex.Message;
-            }
-
-            return classi;
-        }
+        public static void ModificaClasse(ClsClasseDL classe)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"UPDATE classi 
+                           SET sigla = @sigla, 
+                               anno = @anno, 
+                               sezione = @sezione, 
+                               classeArticolataCon = @classeArticolataCon,
+                               IDutente = @IDutente,
+                               IDindirizzo = @IDindirizzo 
+                           WHERE id = @id";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@sigla", classe.Anno.ToString() + classe.Sezione);
+                        cmd.Parameters.AddWithValue("@anno", classe.Anno);
+                        cmd.Parameters.AddWithValue("@sezione", classe.Sezione);
+                        cmd.Parameters.AddWithValue("@classeArticolataCon",classe.ClasseArticolataCon > 0 ? (object)classe.ClasseArticolataCon : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@IDutente", classe.Idutente);
+                        cmd.Parameters.AddWithValue("@IDindirizzo", classe.Idindirizzo);
+                        cmd.Parameters.AddWithValue("@id", classe.ID);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+
+                        if (righeCoinvolte <= 0)
+                            throw new InvalidOperationException("Nessuna classe trovata con l'ID specificato. Modifica fallita.");
+                    }
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static void EliminaClasse(int id)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "DELETE FROM classi WHERE id = @id";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+
+                        if (righeCoinvolte <= 0)
+                            throw new InvalidOperationException("Impossibile eliminare la classe: ID non trovato.");
+                    }
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

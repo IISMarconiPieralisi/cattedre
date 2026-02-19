@@ -21,36 +21,28 @@ namespace Cattedre
             InitializeComponent();
         }
 
-        public bool CoordinatoreGiaImpegnato(long nuovoID)
-        {
-            return ClsClasseBL.IDutenti.Contains(nuovoID);
-        }
+      
 
-        private void CaricaListView(List<ClsClasseDL> classi, List<long> IDutenti, List<long> IDindirizzi, List<long> IDclassiArticolateCon)
+        private void CaricaListView(List<ClsClasseDL> classi)
         {
             lvClassi.Items.Clear();
-
-            int i = 0;
             foreach (ClsClasseDL classe in classi)
             {
                 ListViewItem lvi = new ListViewItem(classe.Sigla);
                 lvi.SubItems.Add(classe.Anno.ToString());
                 lvi.SubItems.Add(classe.Sezione);
-                lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(IDclassiArticolateCon[i]));
-                lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(IDutenti[i]));
-                lvi.SubItems.Add(ClsIndirizzoBL.RilevaNomeIndirizzo(IDindirizzi[i]));
-
+                lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(classe.ClasseArticolataCon));
+                lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(classe.Idutente));
+                lvi.SubItems.Add(ClsIndirizzoBL.RilevaNomeIndirizzo(classe.Idindirizzo));
                 lvi.Tag = classe.ID;
                 lvClassi.Items.Add(lvi);
-
-                i++;
             }
         }
 
         private void FrmClassi_Load(object sender, EventArgs e)
         {
             classi = ClsClasseBL.CaricaClassi();
-            CaricaListView(classi, ClsClasseBL.IDutenti, ClsClasseBL.IDindirizzi, ClsClasseBL.IDclassiArticolateCon);
+            CaricaListView(classi);
 
             //popolo combobox filtraggio
             foreach (ClsClasseDL classe in classi)
@@ -62,34 +54,46 @@ namespace Cattedre
 
         private void btInserisci_Click(object sender, EventArgs e)
         {
-            FrmClasse frmClasse = new FrmClasse(0, 0, 0);
-            DialogResult dr = frmClasse.ShowDialog();
-            if (dr == DialogResult.OK)
+            try
             {
-                if (CoordinatoreGiaImpegnato(frmClasse.IDutente))
-                    MessageBox.Show("Coordinatore già impegnato in una classe");
-                ClsClasseBL.InserisciClasse(frmClasse._classe, frmClasse.IDutente, frmClasse.IDindirizzo, frmClasse.IDclasseArticolataCon);
-                classi = ClsClasseBL.CaricaClassi();
-                CaricaListView(classi, ClsClasseBL.IDutenti, ClsClasseBL.IDindirizzi, ClsClasseBL.IDclassiArticolateCon);
+                FrmClasse frmClasse = new FrmClasse();
+                DialogResult dr = frmClasse.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    ClsClasseBL.InserisciClasse(frmClasse._classe);
+                    classi = ClsClasseBL.CaricaClassi();
+                    CaricaListView(classi);
+                }
+            }catch(Exception ex)
+            {
+                 MessageBox.Show($"errore:{ex.Message}\n riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         private void brModifica_Click(object sender, EventArgs e)
         {
             if (lvClassi.SelectedIndices.Count == 1)
             {
-                int indiceDaModificare = lvClassi.SelectedIndices[0];
-                FrmClasse frmClasse = new FrmClasse(indiceDaModificare, indiceDaModificare, indiceDaModificare);
-                frmClasse._classe = classi[indiceDaModificare];
+
+                long idDaModificare = Convert.ToInt64(lvClassi.SelectedItems[0].Tag);
+                ClsClasseDL classeSelezionata = classi.Find(p => p.ID == idDaModificare);
+                FrmClasse frmClasse = new FrmClasse();
+                frmClasse._classe = classeSelezionata;
                 DialogResult dr = frmClasse.ShowDialog();
-                if (dr == DialogResult.OK)
+                try
                 {
-                    ClsClasseBL.ModificaClasse(frmClasse._classe, indiceDaModificare, frmClasse.IDutente, frmClasse.IDindirizzo, frmClasse.IDclasseArticolataCon);
-                    if (CoordinatoreGiaImpegnato(frmClasse.IDutente))
-                        MessageBox.Show("Coordinatore già impegnato in un dipartimento");
-                    classi = ClsClasseBL.CaricaClassi();
-                    CaricaListView(classi, ClsClasseBL.IDutenti, ClsClasseBL.IDindirizzi, ClsClasseBL.IDclassiArticolateCon);
+                    if (dr == DialogResult.OK)
+                    {
+                        ClsClasseBL.ModificaClasse(frmClasse._classe);
+                        classi = ClsClasseBL.CaricaClassi();
+                        CaricaListView(classi);
+                    }
+                }catch (Exception ex)
+                {
+                   MessageBox.Show($"errore:{ex.Message}\n riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+               
             }
         }
 
@@ -105,21 +109,22 @@ namespace Cattedre
                     ClsClasseBL.EliminaClasse(idDaEliminare);
                     classi = ClsClasseBL.CaricaClassi();
                 }
-                CaricaListView(classi, ClsClasseBL.IDutenti, ClsClasseBL.IDindirizzi, ClsClasseBL.IDclassiArticolateCon);
+                CaricaListView(classi);
             }
         }
 
         private void btCerca_Click(object sender, EventArgs e)
         {
+
             List<ClsClasseDL> classiFiltrate = ClsClasseBL.CaricaClassiFiltrate(Convert.ToInt32(cbAnnoClasse.Text));
             
-            CaricaListView(classiFiltrate, ClsClasseBL.IDutenti, ClsClasseBL.IDindirizzi, ClsClasseBL.IDclassiArticolateCon);
+            CaricaListView(classiFiltrate);
         }
 
         private void btRipristina_Click(object sender, EventArgs e)
         {
             classi = ClsClasseBL.CaricaClassi();
-            CaricaListView(classi, ClsClasseBL.IDutenti, ClsClasseBL.IDindirizzi, ClsClasseBL.IDclassiArticolateCon);
+            CaricaListView(classi);
             cbAnnoClasse.Text = "";
         }
     }

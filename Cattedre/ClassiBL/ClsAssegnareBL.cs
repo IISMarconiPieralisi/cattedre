@@ -14,65 +14,57 @@ namespace Cattedre
         public static List<ClsUtenteDL> CercaDocentiDiRiferimento(int IDdipartimento, int IDclasse, int IDdisciplina)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            
             List<ClsUtenteDL> docentiDipartimento = new List<ClsUtenteDL>();
             FrmDipartimenti frmDocenti = new FrmDipartimenti();
+            DataTable ds = new DataTable();
             try
             {
-                conn.Open();
-                string sql = "SELECT DISTINCT u.ID, u.email, u.password, u.cognome, u.nome, u.tipoDocente " +
-                       "FROM utenti u " +
-                        "JOIN assegnare a ON u.ID = a.IDutente " +
-                       "JOIN afferire af ON u.ID = af.IDutente " +
-                       "JOIN discipline d ON a.IDdisciplina = d.ID " +
-                       "WHERE u.tipoUtente = 'D' " +
-                       "OR u.tipoUtente = 'C' " +
-                       "OR u.tipoUtente = 'A' " +
-                         "AND a.IDclasse = @IDclasse " +
-                         "AND af.IDdipartimento = @IDdipartimento " +
-                         "AND a.IDdisciplina = @IDdisciplina ";
-
-                MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
-                DataSet ds = new DataSet("cattedre");
-                da.Fill(ds, "utenti");
-
-                DataTable dt = ds.Tables["utenti"];
-                for(int i = 0; i < dt.Rows.Count; i++)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    ClsUtenteDL docenteDipartimento = new ClsUtenteDL(
-                        dt.Rows[i]["ID"].ToString(),
-                        dt.Rows[i]["email"].ToString(),
-                        dt.Rows[i]["password"].ToString(),
-                        dt.Rows[i]["cognome"].ToString(),
-                        dt.Rows[i]["nome"].ToString(),
-                        Convert.ToChar(dt.Rows[i]["tipoDocente"]));
-                        docentiDipartimento.Add(docenteDipartimento);
+                    conn.Open();
+                    string sql = "SELECT DISTINCT u.ID, u.email, u.cognome, u.nome, u.tipoDocente " +
+                           "FROM utenti u " +
+                            "JOIN assegnare a ON u.ID = a.IDutente " +
+                           "JOIN afferire af ON u.ID = af.IDutente " +
+                           "JOIN discipline d ON a.IDdisciplina = d.ID " +
+                           "WHERE u.tipoUtente = 'D' " +
+                           "OR u.tipoUtente = 'C' " +
+                           "OR u.tipoUtente = 'A' " +
+                             "AND a.IDclasse = @IDclasse " +
+                             "AND af.IDdipartimento = @IDdipartimento " +
+                             "AND a.IDdisciplina = @IDdisciplina ";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(ds);
+                        }
+                        conn.Close();
+                    }
                 }
-                conn.Close();
-                //MySqlCommand cmd = new MySqlCommand(sql, conn);
-                //cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-                //cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
-                //cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
-                //MySqlDataReader dr = cmd.ExecuteReader();
-                //if (dr.HasRows)
-                //{
-                //    while (dr.Read())
-                //    {
-                //        ClsUtenteDL docenteDipartimento = new ClsUtenteDL();
-                //        docenteDipartimento.ID = Convert.ToInt64(dr["ID"]);
-                //        docenteDipartimento.Email = dr["email"].ToString();
-                //        docenteDipartimento.Password = dr["password"].ToString();
-                //        docenteDipartimento.Cognome = dr["cognome"].ToString();
-                //        docenteDipartimento.Nome = dr["nome"].ToString();
-                //        docenteDipartimento.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
-                //        docentiDipartimento.Add(docenteDipartimento);
-                //    }
-                //}
-                //conn.Close();
+                foreach (DataRow row in ds.Rows)
+                {
+                    ClsUtenteDL utente = new ClsUtenteDL();
+                    utente.ID = Convert.ToInt64(row["ID"]);
+                    utente.Email = row["email"].ToString();
+                    //anche se la query non restituisce la password, la proprietà non la userà e non ha senso inizarlizzarla,  essendo un dato sensibile
+                    utente.Cognome = row["cognome"].ToString();
+                    utente.Nome = row["nome"].ToString();
+                    utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                    docentiDipartimento.Add(utente);
+                }
+
+
+
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return docentiDipartimento;
         }
@@ -85,7 +77,7 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "SELECT u.ID, u.email, u.password, u.cognome, u.nome, u.tipoDocente " +
+                string sql = "SELECT u.ID, u.email,u.cognome, u.nome, u.tipoDocente " +
                        "FROM utenti u " +
                        "JOIN assegnare a ON u.ID = a.IDutente " +
                        "JOIN afferire af ON u.ID = af.IDutente " +
@@ -107,7 +99,6 @@ namespace Cattedre
                         ClsUtenteDL docenteDipartimento = new ClsUtenteDL();
                         docenteDipartimento.ID = Convert.ToInt64(dr["ID"]);
                         docenteDipartimento.Email = dr["email"].ToString();
-                        docenteDipartimento.Password = dr["password"].ToString();
                         docenteDipartimento.Cognome = dr["cognome"].ToString();
                         docenteDipartimento.Nome = dr["nome"].ToString();
                         docenteDipartimento.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
@@ -118,7 +109,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return docentiDipartimento;
         }
@@ -132,30 +123,18 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "SELECT u.ID, u.email, u.password, u.cognome, u.nome, u.tipoDocente " +
-                       "FROM utenti u " +
-                        "JOIN assegnare a ON u.ID = a.IDutente " +
-                       "JOIN afferire af ON u.ID = af.IDutente " +
-                       "JOIN discipline d ON a.IDdisciplina = d.ID " +
-                       "WHERE u.tipoUtente = 'D' " +
-                       "OR u.tipoUtente = 'C' " +
-                       "OR u.tipoUtente = 'A' " +
-                         "AND a.IDclasse = @IDclasse " +
-                         "AND af.IDdipartimento = @IDdipartimento " +
-                         "AND a.IDdisciplina = @IDdisciplina ";
+                string sql = @"SELECT u.ID, u.email,u.cognome, u.nome, u.tipoDocente, u.tipoUtente
+               FROM utenti u
+               JOIN assegnare a ON u.ID = a.IDutente
+               WHERE u.tipoDocente='T' AND (u.tipoUtente = 'D' OR u.tipoUtente = 'C' OR tipoUtente='A')
+               AND a.IDclasse = @IDclasse Limit 1";
 
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
                 cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
                 cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
                 MySqlDataReader dr = cmd.ExecuteReader();
-                //string sql = "SELECT utenti.* " +
-                //    "FROM utenti " +
-                //    "JOIN afferire ON afferire.IDutente = utenti.ID " +
-                //    "WHERE utenti.tipoUtente = 'D' AND utenti.tipoDocente = 'T' AND afferire.IDdipartimento = " + IDDipartimento;
 
-                //MySqlCommand cmd = new MySqlCommand(sql, conn);
-                //MySqlDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
                 {
                     while (dr.Read())
@@ -163,7 +142,6 @@ namespace Cattedre
                         docente = new ClsUtenteDL();
                         docente.ID = Convert.ToInt64(dr["id"]);
                         docente.Email = dr["email"].ToString();
-                        docente.Password = dr["password"].ToString();
                         docente.Nome = dr["nome"].ToString();
                         docente.Cognome = dr["cognome"].ToString();
                         docente.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
@@ -174,7 +152,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return docente;
         }
@@ -188,30 +166,19 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "SELECT u.ID, u.email, u.password, u.cognome, u.nome, u.tipoDocente " +
-                       "FROM utenti u " +
-                        "JOIN assegnare a ON u.ID = a.IDutente " +
-                       "JOIN afferire af ON u.ID = af.IDutente " +
-                       "JOIN discipline d ON a.IDdisciplina = d.ID " +
-                       "WHERE u.tipoUtente = 'D' " +
-                       "OR u.tipoUtente = 'C' " +
-                       "OR u.tipoUtente = 'A' " +
-                         "AND a.IDclasse = @IDclasse " +
-                         "AND af.IDdipartimento = @IDdipartimento " +
-                         "AND a.IDdisciplina = @IDdisciplina ";
+                string sql = @"SELECT u.ID, u.email, u.password, u.cognome, u.nome, u.tipoDocente, u.tipoUtente
+               FROM utenti u
+               JOIN assegnare a ON u.ID = a.IDutente
+               WHERE u.tipoDocente='L' AND (u.tipoUtente = 'D' OR u.tipoUtente = 'C' OR tipoUtente='A')
+               AND a.IDclasse = @IDclasse 
+               Limit 1";
 
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
                 cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
                 cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
                 MySqlDataReader dr = cmd.ExecuteReader();
-                //string sql = "SELECT utenti.* " +
-                //    "FROM utenti " +
-                //    "JOIN afferire ON afferire.IDutente = utenti.ID " +
-                //    "WHERE utenti.tipoUtente = 'D' AND utenti.tipoDocente = 'L' AND afferire.IDdipartimento = " + IDdipartimento;
 
-                //MySqlCommand cmd = new MySqlCommand(sql, conn);
-                //MySqlDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
                 {
                     while (dr.Read())
@@ -230,11 +197,10 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return docente;
         }
-
         public static int CaricaOrePotenziamentoDocente(int IDutente)
         {
             ClsAssegnareDL assegnare = null;
@@ -270,7 +236,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return assegnare.OreSpeciali;
         }
@@ -285,6 +251,7 @@ namespace Cattedre
                 conn.Open();
                 string sql = "UPDATE assegnare SET oreSpeciali = @oreSpeciali WHERE ID = @id";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@oreSpeciali", oreSpeciali);
                 cmd.Parameters.AddWithValue("@id", id);
                 MySqlDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
@@ -299,7 +266,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -328,7 +295,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return docente.ID;
         }
@@ -343,8 +310,8 @@ namespace Cattedre
                 conn.Open();
                 string sql = "SELECT ID FROM assegnare WHERE oreSpeciali = @oreSpeciali AND idUtente = @idUtente AND oreSpeciali > 0";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
-                //cmd.Parameters.AddWithValue("@nome", nome);
-                //cmd.Parameters.AddWithValue("@cognome", cognome);
+                cmd.Parameters.AddWithValue("@idUtente", idUtente);
+                cmd.Parameters.AddWithValue("@orespecili", oreSpeciali);
                 MySqlDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
                 {
@@ -358,7 +325,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return docente.ID;
         }

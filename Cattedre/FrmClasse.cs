@@ -12,47 +12,51 @@ namespace Cattedre
 {
     public partial class FrmClasse : Form
     {
-        public ClsClasseDL _classe = new ClsClasseDL();
+        public ClsClasseDL _classe {get;set; }
         public List<ClsUtenteDL> coordinatori = new List<ClsUtenteDL>();
         public List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
-        public List<ClsClasseDL> classiArticolateCon = new List<ClsClasseDL>();
-        public long IDutente;
-        public long IDindirizzo;
-        public long IDclasseArticolataCon;
-        int _indiceDaModificareCC;
-        int _indiceDaModificareInd;
-        int _indiceDaModificareClasseArticolataCon;
+        public List<ClsClasseDL> _classi = new List<ClsClasseDL>();
 
-        public FrmClasse(int indiceDaModificareCC, int indiceDaModificareInd, int indiceDaModificareClasseArticolataCon)
+        bool _modifica = false;
+        string _oldCoordinatore = "";
+        string _newcordinatore = "";
+        public FrmClasse()
         {
             InitializeComponent();
-            _indiceDaModificareCC = indiceDaModificareCC;
-            _indiceDaModificareInd = indiceDaModificareInd;
-            _indiceDaModificareClasseArticolataCon = indiceDaModificareClasseArticolataCon;
         }
 
         private void btSalva_Click(object sender, EventArgs e)
         {
-            _classe.Sigla = nudAnno.Value.ToString() + tbSezione.Text;
-            _classe.Anno = Convert.ToInt32(nudAnno.Value);
-            _classe.Sezione = tbSezione.Text;
-            _classe.ClasseArticolataCon = Convert.ToInt32(cbClasseArticolataCon.Text);
-            _classe.NomeCoordinatore = cbCoordinatore.Text;
-            _classe.Indirizzo = cbIndirizzo.Text;
-
-            if (string.IsNullOrEmpty(_classe.Sezione))
+            try
             {
-                MessageBox.Show("Sezione mancante");
+                if (!_modifica) 
+                    _classe = new ClsClasseDL();
+                //associamento dei valori all'interno di  _classe
+                _classe.Sigla = nudAnno.Value.ToString() + tbSezione.Text;
+                _classe.Anno = Convert.ToInt32(nudAnno.Value);
+                _classe.Sezione = tbSezione.Text;
+            if(!string.IsNullOrWhiteSpace( cbClasseArticolataCon.Text))
+                _classe.ClasseArticolataCon = Convert.ToInt32(ClsClasseBL.RilevaIDclasse(cbClasseArticolataCon.Text));
+
+                if (string.IsNullOrEmpty(_classe.Sezione))
+                    throw new IndexOutOfRangeException("inserire riga mancante");
+                else
+                {
+                    string[] parts = cbCoordinatore.Text.Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
+                    _classe.Idutente = ClsUtenteBL.RilevaIDutente(parts[0], parts[1]);
+                    _classe.Idindirizzo = ClsIndirizzoBL.RilevaIDindirizzo(cbIndirizzo.Text);
+
+                    //se non ci sono stati errori significa che è andato a buon fine
+                    this.DialogResult = DialogResult.OK;
+                }
+        }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"errore:{ex.Message}\n riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
-            else
-            {
-                IDutente = ClsUtenteBL.RilevaIDutente(_classe.NomeCoordinatore.Substring(0, _classe.NomeCoordinatore.IndexOf(" ")),
-                    _classe.NomeCoordinatore.Substring(_classe.NomeCoordinatore.IndexOf(" ") + 1));
-                IDindirizzo = ClsIndirizzoBL.RilevaIDindirizzo(_classe.Indirizzo);
-                IDclasseArticolataCon = ClsClasseBL.RilevaIDclasse(_classe.ClasseArticolataCon.ToString());
-            }
-        }
+
+}
 
         private void btAnnulla_Click(object sender, EventArgs e)
         {
@@ -61,54 +65,88 @@ namespace Cattedre
 
         private void FrmClasse_Load(object sender, EventArgs e)
         {
+            // 1. Caricamento dati dai Business Logic
             coordinatori = ClsUtenteBL.CaricaCoordinatoriClassi();
             indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
-            classiArticolateCon = ClsClasseBL.CaricaClassi();
+            _classi = ClsClasseBL.CaricaClassi();
 
-            cbCoordinatore.DataSource = coordinatori.Select(c => new { c.ID, NomeCompleto = c.Nome + " " + c.Cognome }).ToList();
-            cbCoordinatore.DisplayMember = "NomeCompleto";
-            cbCoordinatore.ValueMember = "ID";
+            PopolaCoordinatori();
+            PopolaIndirizzi();
 
-            cbIndirizzo.DataSource = indirizzi.Select(i => new { i.ID, Nome = i.Nome }).ToList();
-            cbIndirizzo.DisplayMember = "Nome";
-            cbIndirizzo.ValueMember = "ID";
-
-            cbClasseArticolataCon.DataSource = classiArticolateCon.Where(c => c.Anno == 1 && c.Sigla != _classe.Sigla).Select(c => new { c.ID, Sigla = c.Sigla }).ToList();
-            cbClasseArticolataCon.DisplayMember = "Sigla";
-            cbClasseArticolataCon.ValueMember = "ID";
-            cbClasseArticolataCon.SelectedIndex = -1;
-
-            if (_classe.Sigla != null)
+            if (_classe != null && _classe.ID > 0)
             {
+                _modifica = true;
                 nudAnno.Value = _classe.Anno;
                 tbSezione.Text = _classe.Sezione;
+                if (_classe.Idutente > 0)
+                    cbCoordinatore.SelectedItem = $"{coordinatori.Find(p => p.ID == _classe.Idutente).Nome} { coordinatori.Find(p => p.ID == _classe.Idutente).Cognome}"; ;
 
-                IDutente = ClsClasseBL.IDutenti[_indiceDaModificareCC];
-                IDindirizzo = ClsClasseBL.IDindirizzi[_indiceDaModificareInd];
-                IDclasseArticolataCon = ClsClasseBL.IDclassiArticolateCon[_indiceDaModificareClasseArticolataCon];
+                if (_classe.Idindirizzo > 0)
+                    cbIndirizzo.SelectedItem = indirizzi.Find(p => p.ID == _classe.Idindirizzo).Nome;
 
-                cbCoordinatore.SelectedValue = IDutente;
-                cbIndirizzo.SelectedValue = IDindirizzo;
-                // Se l'ID esiste tra le classi filtrate, lo seleziona; altrimenti lascia vuoto
-                if (classiArticolateCon.Any(c => c.ID == IDclasseArticolataCon))
-                    cbClasseArticolataCon.SelectedValue = IDclasseArticolataCon;
+                nudAnno_ValueChanged(null, null);
+                if (_classe.ClasseArticolataCon > 0)
+                    cbClasseArticolataCon.SelectedItem = _classi.Find(p => p.ID == _classe.ClasseArticolataCon).Sigla;
                 else
                     cbClasseArticolataCon.SelectedIndex = -1;
             }
             else
             {
-                cbCoordinatore.SelectedText = "";
-                cbIndirizzo.SelectedText = "";
-                cbClasseArticolataCon.Text = "";
+
+                cbCoordinatore.SelectedIndex = -1;
+                cbIndirizzo.SelectedIndex = -1;
+                cbClasseArticolataCon.SelectedIndex = -1;
+            }
+            _modifica = false;
+        }
+        private void nudAnno_ValueChanged(object sender, EventArgs e)
+        {
+            PopolaClassiArticolate((int)nudAnno.Value);
+        }
+        public bool CoordinatoreGiaImpegnato(long nuovoID)
+        {
+            if (ClsUtenteBL.RilevaNomeUtente(nuovoID) != "-")
+                return false;
+            else
+                return true;
+        }
+        private void PopolaCoordinatori()
+        {
+            cbCoordinatore.Items.Clear();
+            foreach(ClsUtenteDL coordinatore in coordinatori)
+                cbCoordinatore.Items.Add($"{coordinatore.Nome} {coordinatore.Cognome}");
+        }
+        private void PopolaIndirizzi()
+        {
+            cbIndirizzo.Items.Clear();
+            foreach (ClsIndirizzoDL indirizzo in indirizzi)
+                cbIndirizzo.Items.Add(indirizzo.Nome);
+        }
+        private  void PopolaClassiArticolate(int anno)
+        {
+            cbClasseArticolataCon.Items.Clear();
+            foreach(ClsClasseDL classe in _classi)
+            {
+                if (anno == classe.Anno && classe.ID!=_classe.ID)
+                    cbClasseArticolataCon.Items.Add(classe.Sigla);
             }
         }
 
-        private void nudAnno_ValueChanged(object sender, EventArgs e)
+
+        private void cbCoordinatore_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cbClasseArticolataCon.DataSource = classiArticolateCon.Where(c => c.Anno == nudAnno.Value && c.Sigla != _classe.Sigla).Select(c => new { c.ID, Sigla = c.Sigla }).ToList();
-            cbClasseArticolataCon.DisplayMember = "Sigla";
-            cbClasseArticolataCon.ValueMember = "ID";
-            cbClasseArticolataCon.SelectedIndex = -1;
+            if ((!_modifica || CoordinatoreGiaImpegnato(_classe.Idutente))&& _newcordinatore!=cbCoordinatore.Text)
+            {
+                MessageBox.Show("Coordinatore già impegnato in una classe");
+                cbCoordinatore.SelectedItem = _oldCoordinatore;
+            }
+            else
+                _newcordinatore = cbCoordinatore.Text;
+        }
+
+        private void cbCoordinatore_DropDown(object sender, EventArgs e)
+        {
+            _oldCoordinatore = cbCoordinatore.Text;
         }
     }
 }

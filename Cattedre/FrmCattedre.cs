@@ -45,12 +45,12 @@ namespace Cattedre
             //pnlDipartimento.VerticalScroll.Enabled = false;
 
 
-            if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
+            if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "C")
             {
                 // Preside: può selezionare tutti i dipartimenti, ma non modificare le combobox
                 LoadDipartimenti();
             }
-            else if (utenteLoggato.TipoUtente == "C")
+            if (utenteLoggato.TipoUtente == "C")
             {
                 // Coordinatore del dipartimento: carica direttamente il suo dipartimento
 
@@ -81,6 +81,11 @@ namespace Cattedre
                 LoadAssegnazioni(IDdipartimento);
 
                 this.Cursor = Cursors.Default;
+            }
+            if (utenteLoggato.TipoUtente == "C")
+            {
+                cbDipartimenti.SelectedIndex = IDdipartimento - 1;
+                cbDipartimenti.Enabled = false;
             }
         }
 
@@ -228,6 +233,11 @@ namespace Cattedre
 
         private void LoadAssegnazioni(int IDdipartimento)
         {
+            foreach (UcAssegnazioni uc in pnlDipartimento.Controls.OfType<UcAssegnazioni>().ToList())
+            {
+                pnlDipartimento.Controls.Remove(uc);
+                uc.Dispose();
+            }
             int oreDocenteTeorico = 0;
             int oreDocentePratico = 0;
             int oreTotaliXClasse = 0;
@@ -240,6 +250,13 @@ namespace Cattedre
 
             ClsClasseDiConcorsoDL classeDiConcorso = new ClsClasseDiConcorsoDL();
             classeDiConcorso.ID = 1; // DA CAMBIARE
+
+
+            //pnlOre.Controls.Clear();
+            
+            //pnlAnnullaSalva.Controls.Clear();
+            //pnlDipartimento.Controls.Clear();
+            //pnlOreDoc.Controls.Clear();
 
             for (riga = 0; riga < classi.Count; riga++)
             {
@@ -338,7 +355,9 @@ namespace Cattedre
                         uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) => AggiornaOreEffettive();
                         uc.cbDocentiItip.SelectedIndexChanged += (s, e) => AggiornaOreEffettive();
 
-                        
+                        UcOre ucOre = new UcOre();
+                        ucOre.Location = new Point(0, 10);
+                        pnlOre.Controls.Add(ucOre);
 
                         x = 10 + colonna * 225;
                         y = 72 + riga * 100;
@@ -361,13 +380,20 @@ namespace Cattedre
 
                 oreTotali += oreTotaliXClasse;
             }
-
+            
             LoadOreTotali(riga, oreTotali);
             LoadOreDoc();
         }
 
         private void LoadDiscipline(int IDdipartimento)
         {
+            foreach (UcDisciplina uc in pnlDipartimento.Controls.OfType<UcDisciplina>().ToList())
+            {
+                pnlDipartimento.Controls.Remove(uc);
+                uc.Dispose();
+            }
+            disciplineUniche.Clear();
+
             discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
 
             // Rimuovo le discipline con lo stesso nome, mantengo solo la prima
@@ -395,14 +421,20 @@ namespace Cattedre
 
                 x += ucDisciplina.Width + 10;
             }
-            UcOre ucOre = new UcOre();
-            ucOre.Location = new Point(0, 10);
-            pnlOre.Controls.Add(ucOre);
+            //UcOre ucOre = new UcOre();
+            //ucOre.Location = new Point(0, 10);
+            //pnlOre.Controls.Add(ucOre);
 
             //ucOre.Refresh();
         }
         private void LoadClassi(int IDdipartimento)
         {
+            foreach (UcClasse uc in pnlClassi.Controls.OfType<UcClasse>().ToList())
+            {
+                pnlClassi.Controls.Remove(uc);
+                uc.Dispose();
+            }
+
             classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento);
 
             int x = 10;
@@ -418,6 +450,26 @@ namespace Cattedre
                 y += ucClasse.Height + 10;
             }
         }
+
+        private void PulisciDipartimento()
+        {
+            // Svuoto pannelli
+            //pnlDipartimento.Controls.Clear();
+            //pnlClassi.Controls.Clear();
+            pnlOre.Controls.Clear();
+            pnlOreDoc.Controls.Clear();
+
+            // Svuoto liste
+            disciplineUniche.Clear();
+            docentiTeoriciUsati.Clear();
+            docentiPraticiUsati.Clear();
+            classi.Clear();
+            discipline.Clear();
+
+            // Svuoto dizionario
+            dictDocenti.Clear();
+        }
+
 
         private void btSalva_Click(object sender, EventArgs e)
         {
@@ -443,20 +495,30 @@ namespace Cattedre
 
             try
             {
-                this.UseWaitCursor = true;
-                Application.DoEvents();
-
-                IDdipartimento = cbDipartimenti.SelectedIndex + 1;
-
-                await Task.Run(() =>
+                if (cbDipartimenti.SelectedItem == null || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "P")
                 {
-                    classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento);
-                    discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
-                });
+                    this.UseWaitCursor = true;
+                    Application.DoEvents();
 
-                LoadClassi(IDdipartimento);
-                LoadDiscipline(IDdipartimento);
-                LoadAssegnazioni(IDdipartimento);
+
+                    IDdipartimento = cbDipartimenti.SelectedIndex + 1;
+
+                    PulisciDipartimento();
+
+                    await Task.Run(() =>
+                    {
+                        classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento);
+                        discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
+                    });
+
+                    LoadClassi(IDdipartimento);
+                    LoadDiscipline(IDdipartimento);
+                    LoadAssegnazioni(IDdipartimento);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Errore:{ex.Message}. \nRiprovare!", "riprovare", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {

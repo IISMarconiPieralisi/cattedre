@@ -22,7 +22,7 @@ namespace Cattedre
                     conn.Open();
                     string sql = @"SELECT ID 
                              FROM indirizzi 
-                             WHERE nome ='@nome'";
+                             WHERE nome =@nome";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", nome);
@@ -56,7 +56,7 @@ namespace Cattedre
                     conn.Open();
                     string sql = @"SELECT nome 
                              FROM indirizzi 
-                             WHERE ID ='@id'";
+                             WHERE ID =@id";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {

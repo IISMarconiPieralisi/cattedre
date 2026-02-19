@@ -167,6 +167,7 @@
   <ItemGroup>
     <Compile Include="ClassiBL\ClsAfferireBL.cs" />
     <Compile Include="ClassiBL\ClsAnnoScolasticoBL.cs" />
+    <Compile Include="ClassiBL\ClsAppartenereBL.cs" />
     <Compile Include="ClassiBL\ClsAssegnareBL.cs" />
     <Compile Include="ClassiBL\ClsClasseBL.cs" />
     <Compile Include="ClassiBL\ClsClasseDiConcorsoBL.cs" />
@@ -177,17 +178,19 @@
     <Compile Include="ClassiBL\ClsUtenteBL.cs" />
     <Compile Include="ClassiDL\ClsAfferireDL.cs" />
     <Compile Include="ClassiDL\ClsAnnoScolasticoDL.cs" />
+    <Compile Include="ClassiDL\ClsAppartenereDL.cs" />
     <Compile Include="ClassiDL\ClsAssegnareDL.cs" />
     <Compile Include="ClassiDL\ClsClasseDiConcorsoDL.cs" />
     <Compile Include="ClassiDL\ClsClasseDL.cs" />
     <Compile Include="ClassiDL\ClsContrattoDL.cs" />
     <Compile Include="ClassiDL\ClsDipartimentoDL.cs" />
     <Compile Include="ClassiDL\ClsDisciplinaDL.cs" />
+    <Compile Include="ClassiDL\ClsDotareDL.cs" />
     <Compile Include="ClassiDL\ClsIndirizzoDL.cs" />
+    <Compile Include="ClassiDL\ClsPersona.cs" />
     <Compile Include="ClassiDL\ClsUtenteDL.cs" />
     <Compile Include="ClassiBL\ClsRichiedereBL.cs" />
     <Compile Include="ClassiDL\ClsRichiedereDL.cs" />
-    <Compile Include="Persona.cs" />
     <Compile Include="FrmAnniScolastici.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -425,6 +428,9 @@
     <EmbeddedResource Include="UserControls\ucOre.resx">
       <DependentUpon>ucOre.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="credentials-cattedre-win.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

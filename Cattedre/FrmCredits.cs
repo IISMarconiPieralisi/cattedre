@@ -19,7 +19,7 @@ namespace Cattedre
 
 
 
-        private void PopolaListViewConX(List<Persona> persone)
+        private void PopolaListViewConX(List<ClsPersona> persone)
         {
             listView1.BeginUpdate();
             listView1.Items.Clear();
@@ -64,15 +64,15 @@ namespace Cattedre
             listView1.FullRowSelect = true;
             listView1.GridLines = true;
 
-            var persone = new List<Persona>
+            var persone = new List<ClsPersona>
             {
                 // todo aggiungere nomi reali 
-            new Persona("Brutti", "Luca", new[] { "Home", "Login", "Grafica","DataBase","Form Dipartimento","Credits","Form Cattedre"}),
-            new Persona("Scotichini", "Matteo", new[] { "DataBase", "Form CDC", "Form Indirizzo", "Form Disciplina "}),
-            new Persona("Pierigè", "Samuel", new[] { "DataBase","Form Cattedre", "Form Utenti",}),
-            new Persona("Vagnini", "Natan", new[] { "Form Cattedre", "Form Disciplina ","DataBase" }),
-            new Persona("Tornari", "Lorenzo", new[] { "Form Disciplina ", "Form A.s", "F orm Classe" }),
-            new Persona("Ercoli", "Mattia", new[] { "Form Dipartimento", "Form Utenti", "Form Contratto" }),
+            new ClsPersona("Brutti", "Luca", new[] { "Home", "Login", "Grafica","DataBase","Form Dipartimento","Credits","Form Cattedre"}),
+            new ClsPersona("Scotichini", "Matteo", new[] { "DataBase", "Form CDC", "Form Indirizzo", "Form Disciplina "}),
+            new ClsPersona("Pierigè", "Samuel", new[] { "DataBase","Form Cattedre", "Form Utenti",}),
+            new ClsPersona("Vagnini", "Natan", new[] { "Form Cattedre", "Form Disciplina ","DataBase" }),
+            new ClsPersona("Tornari", "Lorenzo", new[] { "Form Disciplina ", "Form A.s", "F orm Classe" }),
+            new ClsPersona("Ercoli", "Mattia", new[] { "Form Dipartimento", "Form Utenti", "Form Contratto" }),
 
             };
 

@@ -17,7 +17,7 @@ namespace Cattedre
             
             InitializeComponent();
             lblClasse.Text = clsClasseDL.Sigla;
-            lblcoordinatore.Text = clsClasseDL.NomeCoordinatore;
+            lblcoordinatore.Text = ClsUtenteBL.RilevaNomeUtente(clsClasseDL.Idutente);
         }
     }
 }

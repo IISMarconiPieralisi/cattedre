@@ -18,35 +18,36 @@ namespace Cattedre
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             long IDutente = 0;
+
             try
             {
-                DataTable dt = new DataTable();
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT ID  FROM utenti 
-                                    WHERE nome= @nome AND cognome = @cognome";
+                    string sql = "SELECT ID FROM utenti WHERE nome = @nome AND cognome = @cognome LIMIT 1";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", nome);
                         cmd.Parameters.AddWithValue("@cognome", cognome);
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                            if (dt.Rows.Count > 0)
-                                IDutente = Convert.ToInt64(dt.Rows[0]["ID"]);
-                        }
 
+                        // ExecuteScalar restituisce la prima colonna della prima riga
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            IDutente = Convert.ToInt64(result);
+                        }
                     }
                     conn.Close();
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("Errore nel recupero ID utente: " + ex.Message);
             }
-            return IDutente == null ? IDutente : 0;
+
+            return IDutente;
         }
         public static string RilevaNomeUtente(long id)
         {

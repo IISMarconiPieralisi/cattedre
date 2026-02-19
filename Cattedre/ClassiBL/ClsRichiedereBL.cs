@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using System.Configuration;
+using System.Data;
 
 namespace Cattedre
 {
@@ -171,43 +172,40 @@ namespace Cattedre
         }
         public static List<ClsRichiedereDL> CaricaClassiRichiedere(long IDutente)
         {
-            List<ClsRichiedereDL> Richiederes = new List<ClsRichiedereDL>();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            DataTable ds = new DataTable();
+            List<ClsRichiedereDL> richiederes = new List<ClsRichiedereDL>();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                conn.Open();
+                string sql = "SELECT ID, IDutente, IDclasseDiConcorso, IDdisciplina, oreSpeciali FROM richiedere ";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    conn.Open();
-                    string sql = @"SELECT IDutente, IDclasseDiConcorso, IDdisciplina 
-                                FROM richiedere
-                                WHERE IDutente=@IDutente";
-
-                    using(MySqlCommand cmd= new MySqlCommand(sql,conn))
+                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                     {
-                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
-                        using(MySqlDataReader dr= cmd.ExecuteReader())
-                        {
-                           while(dr.Read())
-                           {
-                                ClsRichiedereDL richiedere = new ClsRichiedereDL();
-
-                                richiedere.IDutente = Convert.ToInt64(dr["IDutente"]);
-                                richiedere.IDclassediconcorso = Convert.ToInt64(dr["IDclasseDiConcorso"]);
-                                if (dr["IDdisciplina"] != DBNull.Value)
-                                    richiedere.IDdisciplina = Convert.ToInt64(dr["IDdisciplina"]);
-
-                                Richiederes.Add(richiedere);
-                           }
-                        }
+                        dr.Fill(ds);
                     }
+                    conn.Close();
                 }
-            }catch(Exception ex)
-            {
-                throw new Exception("errore nella richiesta della query "+ ex);
+                foreach (DataRow row in ds.Rows)
+                {
+                    ClsRichiedereDL richiedere = new ClsRichiedereDL();
+                    richiedere.ID = Convert.ToInt64(row["ID"]);
+                    richiedere.IDutente = Convert.ToInt64(row["IDutente"]);
+                    richiedere.IDclassediconcorso = Convert.ToInt64(row["IDclasseDiConcorso"]);
+                    richiedere.IDdisciplina = Convert.ToInt64(row["IDdisciplina"]);
+                    richiedere.OreSpeciali = Convert.ToInt32(row["OreSpeciali"]);
+                    richiederes.Add(richiedere);
+                }
 
             }
-            return Richiederes;
-
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return richiederes;
 
         }
         public static List<ClsRichiedereDL> CaricaClassiRichiedereConDisciplina(long IDdisciplina)
@@ -249,8 +247,6 @@ namespace Cattedre
 
             }
             return Richiederes;
-
-
         }
 
         public static void ModificaRichiesta(long idUtente,long idDisciplina, List<ClsRichiedereDL> RichModifica) //se idutente è 0 allora uso iddisciplina e viceversa

@@ -355,6 +355,8 @@ namespace Cattedre
                         uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) => AggiornaOreEffettive();
                         uc.cbDocentiItip.SelectedIndexChanged += (s, e) => AggiornaOreEffettive();
 
+                        uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) => SalvaSuDB(classe.ID, 7, disciplinaGiusta.ID, utenteLoggato.ID);
+
                         UcOre ucOre = new UcOre();
                         ucOre.Location = new Point(0, 10);
                         pnlOre.Controls.Add(ucOre);
@@ -383,6 +385,11 @@ namespace Cattedre
             
             LoadOreTotali(riga, oreTotali);
             LoadOreDoc();
+        }
+
+        private void SalvaSuDB(long IDclasse, long IDannoscolastico, long IDdisciplina, long IDutente)
+        {
+            ClsAssegnareBL.UpdateCattedra(IDclasse, IDannoscolastico, IDdisciplina, IDutente);
         }
 
         private void LoadDiscipline(int IDdipartimento)

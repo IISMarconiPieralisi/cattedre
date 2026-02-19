@@ -11,6 +11,36 @@ namespace Cattedre
 {
     public static class ClsAssegnareBL
     {
+        public static void UpdateCattedra(long IDclasse, long IDannoscolastico, long IDdisciplina, long IDutente)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            DataTable ds = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "UPDATE assegnare SET IDutente = @IDutente WHERE IDclasse = @IDclasse AND IDdisciplina = @IDdisciplina AND IDannoscolastico = @IDannoscolastico";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(ds);
+                        }
+                        conn.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public static List<ClsUtenteDL> CercaDocentiDiRiferimento(int IDdipartimento, int IDclasse, int IDdisciplina)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;

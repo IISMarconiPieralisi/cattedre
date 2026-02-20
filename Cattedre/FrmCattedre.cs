@@ -355,7 +355,14 @@ namespace Cattedre
                         uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) => AggiornaOreEffettive();
                         uc.cbDocentiItip.SelectedIndexChanged += (s, e) => AggiornaOreEffettive();
 
-                        uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) => SalvaSuDB(classe.ID, 7, disciplinaGiusta.ID, utenteLoggato.ID);
+                        uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) =>
+                        {
+                            if (uc.cbDocentiTeorici.SelectedValue != null)
+                            {
+                                long idDocente = Convert.ToInt64(uc.cbDocentiTeorici.SelectedValue);
+                                ClsAssegnareBL.UpdateCattedra(classe.ID, 1, disciplinaGiusta.ID, idDocente);
+                            }
+                        };
 
                         UcOre ucOre = new UcOre();
                         ucOre.Location = new Point(0, 10);
@@ -387,7 +394,7 @@ namespace Cattedre
             LoadOreDoc();
         }
 
-        private void SalvaSuDB(long IDclasse, long IDannoscolastico, long IDdisciplina, long IDutente)
+        private void SalvaCattedraSuDB(long IDclasse, long IDannoscolastico, long IDdisciplina, long IDutente)
         {
             ClsAssegnareBL.UpdateCattedra(IDclasse, IDannoscolastico, IDdisciplina, IDutente);
         }

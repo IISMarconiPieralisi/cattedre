@@ -22,7 +22,8 @@ namespace Cattedre
 
             conn.Open();
             string sql = "SELECT * FROM discipline " +
-                "WHERE IDdipartimento = @IDdipartimento";
+                "WHERE IDdipartimento = @IDdipartimento " +
+                "AND discipline.nome NOT LIKE '%Potenziamento%'";
             //DataAdapter, DataSet e DataTable su dispensa ADO.Net
             MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
             da.SelectCommand.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);

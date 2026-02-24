@@ -195,7 +195,7 @@ namespace Cattedre
                     richiedere.ID = Convert.ToInt64(row["ID"]);
                     richiedere.IDutente = Convert.ToInt64(row["IDutente"]);
                     richiedere.IDclassediconcorso = Convert.ToInt64(row["IDclasseDiConcorso"]);
-                    richiedere.IDdisciplina = Convert.ToInt64(row["IDdisciplina"]);
+                    richiedere.IDdisciplina = (row["IDdisciplina"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdisciplina"]);
                     richiedere.OreSpeciali = Convert.ToInt32(row["OreSpeciali"]);
                     richiederes.Add(richiedere);
                 }

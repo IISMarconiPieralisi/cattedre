@@ -50,9 +50,22 @@ namespace Cattedre
                 dr = DialogResult.No;
             if (dr == DialogResult.OK)
             {
-                ClsDisciplinaBL.InserisciDisciplina(frmDisciplina._disciplina, frmDisciplina.IDdipartimento);
+                try
+                {
+                    ClsDisciplinaBL.InserisciDisciplina(frmDisciplina._disciplina, frmDisciplina.IDdipartimento);
+                    int ID=ClsDisciplinaBL.CercaIdDisciplina(frmDisciplina._disciplina, frmDisciplina.IDdipartimento);
+                    foreach (var appartenere in frmDisciplina._Apparteneres)
+                    {
+                        appartenere.IDdisicplina = ID;
+                        ClsAppartenereBL.InserireAppartenere(appartenere);
+                    }
+                }catch(Exception ex)
+                {
+                    MessageBox.Show($"Errore: {ex.Message} in riga {ex.Source} /n riprovare", "Errore");
+                }
                 discipline = ClsDisciplinaBL.CaricaDiscipline();
                 CaricaListView(discipline, ClsDisciplinaBL.IDdipartimenti);
+
             }
         }
 
@@ -95,7 +108,14 @@ namespace Cattedre
                 DialogResult dr = frmDisciplina.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
-                    ClsDisciplinaBL.ModificaDisciplina(frmDisciplina._disciplina, discipline, indiceDaModificare, frmDisciplina.IDdipartimento);
+                    try
+                    {
+                        ClsDisciplinaBL.ModificaDisciplina(frmDisciplina._disciplina, discipline, indiceDaModificare, frmDisciplina.IDdipartimento);
+                    }
+                    catch(Exception ex)
+                    {
+
+                    }
                     CaricaListView(discipline, ClsDisciplinaBL.IDdipartimenti);
                 }
             }

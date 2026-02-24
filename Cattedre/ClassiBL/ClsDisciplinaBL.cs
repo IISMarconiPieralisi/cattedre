@@ -49,6 +49,11 @@ namespace Cattedre
 
             return discipline;
         }
+        /// <summary>
+        /// funzione al fine di prendere l'id di quella funzione, non avendo parametri univochi apparte l'id, controllo tutti i valori inseriti
+        /// </summary>
+        /// <returns></returns>
+
 
         public static List<ClsDisciplinaDL> CaricaDiscipline(long iddipartimento=0, int anno=0, string nome="") // parametri facoltativi: long dipartimento, int anno, string nome
         {
@@ -90,7 +95,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return discipline;
         }
@@ -129,7 +134,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return _oreDocenteTeorico;     
         }
@@ -167,7 +172,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return _oreDocentePratico;
         }
@@ -202,12 +207,54 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
             return discipline;
         }
 
+        public static int CercaIdDisciplina(ClsDisciplinaDL disciplina, int IDdipartimento)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT ID
+                           FROM discipline 
+                           WHERE nome = @nome 
+                           AND anno = @anno 
+                           AND oreLaboratorio = @oreLaboratorio 
+                           AND oreTeoria = @oreTeoria 
+                           AND disciplinaSpeciale = @disciplinaSpeciale 
+                           AND IDdipartimento = @IDdipartimento";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@nome", disciplina.Nome);
+                        cmd.Parameters.AddWithValue("@anno", disciplina.Anno);
+                        cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
+                        cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
+                        cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null)
+                            return Convert.ToInt32(result);
+                        else
+                            return 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+        }
         public static string RilevaNomeDipartimento(int id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
@@ -232,7 +279,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return dipartimento.Nome;
         }
@@ -259,7 +306,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
             return discipline;
@@ -301,7 +348,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
             return discipline;

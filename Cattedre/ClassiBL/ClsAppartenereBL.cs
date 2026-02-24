@@ -55,6 +55,49 @@ namespace Cattedre
             }
             return apparteneres;
         }
+        public static List<ClsAppartenereDL> CaricaClassiAppartenereByDisciplina(long IDdisciplina)
+        {
+            List<ClsAppartenereDL> apparteneres = new List<ClsAppartenereDL>();
+            DataTable dt = new DataTable();
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT *
+                           FROM appartenere 
+                           WHERE IDdisciplina = @IDdisciplina
+                           ORDER BY IDindirizzo";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsAppartenereDL app = new ClsAppartenereDL();
+                    app.IDdisicplina = Convert.ToInt32(row["IDdisciplina"]);
+                    app.IDindirizzo = Convert.ToInt32(row["IDindirizzo"]);
+                    apparteneres.Add(app);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return apparteneres;
+        }
 
         public static void InserireAppartenere(ClsAppartenereDL appartenere)
         {
@@ -99,7 +142,7 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.Nome, d.oreTeoria, d.oreLaboratorio
-                           FROM disciplina d
+                           FROM discipline d
                            INNER JOIN appartenere a ON d.ID = a.IDdisciplina
                            WHERE a.IDindirizzo = @IDindirizzo";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -130,6 +173,51 @@ namespace Cattedre
 
             return disc;
 
+        }
+        public static List<ClsIndirizzoDL> indirizziDellaDisciplina(long IDdisciplina)
+        {
+            List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT i.ID, i.Nome
+                           FROM indirizzi i
+                           INNER JOIN appartenere a ON i.ID = a.IDindirizzo
+                           WHERE a.IDdisciplina = @IDdisciplina";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                    }
+                }
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsIndirizzoDL indirizzo = new ClsIndirizzoDL();
+                    indirizzo.ID = Convert.ToInt32(row["ID"]);
+                    indirizzo.Nome = row["Nome"].ToString();
+
+
+                    indirizzi.Add(indirizzo);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return indirizzi;
         }
 
         public static void EliminaAppartenenza(ClsAppartenereDL app)

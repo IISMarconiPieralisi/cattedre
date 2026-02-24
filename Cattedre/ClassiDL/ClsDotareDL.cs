@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cattedre.ClassiDL
+namespace Cattedre
 {
     class ClsDotareDL
     {
@@ -17,21 +17,26 @@ namespace Cattedre.ClassiDL
         #region costruttore
         public ClsDotareDL(long idDipartimento)
         {
-            IdDipartimento = idDipartimento;
+            IDdipartimento = idDipartimento;
         }
         public ClsDotareDL(long idDipartimento, long idAnnoscolastico)
         {
-            IdDipartimento = idDipartimento;
-            IdAnnoscolastico = idAnnoscolastico;
+            IDdipartimento = idDipartimento;
+            IDannoscolastico = idAnnoscolastico;
+        }
+
+        public ClsDotareDL()
+        {
+
         }
 
 
         #endregion
         #region proprietà
-        public long IdAnnoscolastico { get => _idAnnoscolastico; set => _idAnnoscolastico = value; }
-        public long IdDipartimento { get => _idDipartimento; set => _idDipartimento = value; }
-        public long Numcattedrefatto { get => _Numcattedrefatto; set => _Numcattedrefatto = value; }
-        public long NumcattedreDiritto { get => _NumcattedreDiritto; set => _NumcattedreDiritto = value; }
+        public long IDannoscolastico { get => _idAnnoscolastico; set => _idAnnoscolastico = value; }
+        public long IDdipartimento { get => _idDipartimento; set => _idDipartimento = value; }
+        public long NumCattedreFatto { get => _Numcattedrefatto; set => _Numcattedrefatto = value; }
+        public long NumCattedreDiritto { get => _NumcattedreDiritto; set => _NumcattedreDiritto = value; }
         #endregion
     }
 }

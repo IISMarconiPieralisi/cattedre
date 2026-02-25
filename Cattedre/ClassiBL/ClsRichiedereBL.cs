@@ -194,8 +194,8 @@ namespace Cattedre
                     ClsRichiedereDL richiedere = new ClsRichiedereDL();
                     richiedere.ID = Convert.ToInt64(row["ID"]);
                     richiedere.IDutente = Convert.ToInt64(row["IDutente"]);
-                    richiedere.IDclassediconcorso = Convert.ToInt64(row["IDclasseDiConcorso"]);
-                    richiedere.IDdisciplina = Convert.ToInt64(row["IDdisciplina"]);
+                    richiedere.IDclassediconcorso =(row["IDclasseDiConcorso"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDclasseDiConcorso"]);
+                    richiedere.IDdisciplina =(row["IDdisciplina"]==DBNull.Value) ?0: Convert.ToInt64(row["IDdisciplina"]);
                     richiedere.OreSpeciali = Convert.ToInt32(row["OreSpeciali"]);
                     richiederes.Add(richiedere);
                 }
@@ -249,39 +249,43 @@ namespace Cattedre
             return Richiederes;
         }
 
-        public static void ModificaRichiesta(long idUtente,long idDisciplina, List<ClsRichiedereDL> RichModifica) //se idutente è 0 allora uso iddisciplina e viceversa
+        public static void ModificaRichiesta(long idUtente,List<ClsRichiedereDL> RichModifica,long idDisciplina=0)
         {
-            //questo metodo prendo e cancello tutte le form  che trovo in cui è presente quello specifico utente
-            //poi le andro a ricreare dopo
-            //prendo tutte le afferenze del utente
-            //metodo poco elegante ma il migliore per la  logica in cui è stata concepita la form
-            List<ClsRichiedereDL> RichiesteUtente= new List<ClsRichiedereDL>();
-            if(idUtente > 0 && idDisciplina>0)
-                throw new Exception("Errore nei parametri passati al metodo ModificaRichiesta");
-            else if (idUtente>0)
-                RichiesteUtente = CaricaClassiRichiedere(idUtente);
-            else if(idDisciplina>0)
-                RichiesteUtente = CaricaClassiRichiedere(idUtente);
-            //cancello le afferenze eliminate
-            foreach (ClsRichiedereDL ric in RichiesteUtente)
-                {
-                    //controllo se l'afferenza è presente  nella lista delle afferenze modificate
-                    bool esiste = RichModifica.Any(r => r.IDutente == ric.IDutente &&
-                                                    r.IDclassediconcorso == ric.IDclassediconcorso &&
-                                                    r.IDdisciplina == ric.IDdisciplina);
-                    if (!esiste)
-                        EliminaRichiesta(ric);
+            List<ClsRichiedereDL> RichiesteAttuali = new List<ClsRichiedereDL>();
 
-                    //se non esiste, non cancello nulla e  mi limito successivamente a caricarla
-                }
-            //carico le afferenze create
+            if (idUtente > 0 && idDisciplina > 0)
+                throw new Exception("Errore: passare solo idUtente o solo idDisciplina, non entrambi.");
+
+            if (idUtente > 0)
+                RichiesteAttuali = CaricaClassiRichiedere(idUtente); // Supponendo che il metodo accetti idUtente
+            else if (idDisciplina > 0)
+                RichiesteAttuali = CaricaClassiRichiedereConDisciplina(idDisciplina); // Qui serve il metodo corretto per disciplina!
+            else
+                return; // Nessun filtro fornito
+
+            // Eliminiamo ciò che è nel DB ma NON è nella nuova lista
+            foreach (ClsRichiedereDL ric in RichiesteAttuali)
+            {
+                bool ancoraPresente = RichModifica.Any(r =>r.IDclassediconcorso == ric.IDclassediconcorso &&r.IDdisciplina == ric.IDdisciplina &&
+                    (idUtente > 0 ? r.IDutente == ric.IDutente : true)
+                );
+                if (!ancoraPresente)
+                    EliminaRichiesta(ric);
+            }
+
+            // Inseriamo ciò che è nella nuova lista ma NON era nel DB
             foreach (ClsRichiedereDL ric in RichModifica)
             {
-                ric.IDutente = idUtente;
-                bool giaPresente = RichiesteUtente.Any(r =>r.IDutente == ric.IDutente &&
-                                                       r.IDclassediconcorso == ric.IDclassediconcorso &&
-                                                       r.IDdisciplina == ric.IDdisciplina);
-                if(!giaPresente)
+                // Assicuriamo che l'ID del filtro sia applicato all'oggetto
+                if (idUtente > 0) ric.IDutente = idUtente;
+                if (idDisciplina > 0) ric.IDdisciplina = idDisciplina;
+
+                bool giaEsistente = RichiesteAttuali.Any(r =>
+                    r.IDclassediconcorso == ric.IDclassediconcorso &&
+                    r.IDdisciplina == ric.IDdisciplina &&
+                    r.IDutente == ric.IDutente);
+
+                if (!giaEsistente)
                     InserisciRichiedere(ric);
             }
         }

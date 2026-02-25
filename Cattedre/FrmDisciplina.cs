@@ -15,9 +15,8 @@ namespace Cattedre
         List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
         List<ClsIndirizzoDL> indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
 
-        public List<ClsAppartenereDL> _Apparteneres;
+        public List<ClsAppartenereDL> _Apparteneres = new List<ClsAppartenereDL>();
         public ClsDisciplinaDL _disciplina;
-        public int IDdipartimento;
 
         public FrmDisciplina()
         {
@@ -27,8 +26,8 @@ namespace Cattedre
         private void btSalva_Click(object sender, EventArgs e)
         {
             
-            try
-            {
+            //try
+            //{
                 if (_disciplina.ID <= 0)
                     _disciplina = new ClsDisciplinaDL();
                 _disciplina.Nome = (tbNome.Text.Length >= 3) ? tbNome.Text.Trim() : throw new Exception("inserire Nome con almeno 3 caratteri");
@@ -42,7 +41,7 @@ namespace Cattedre
                 if (tbDisciplinaSpeciale.Text != string.Empty && _disciplina.Anno == 0)
                     _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text.Trim();
                 else
-                    IDdipartimento = Convert.ToInt32(cbDipartimentoAppartenente.SelectedValue);
+                    _disciplina.IDdipartimento = Convert.ToInt32(cbDipartimentoAppartenente.SelectedValue);
 
 
                 //gestione ClsAppartenere
@@ -52,14 +51,14 @@ namespace Cattedre
                     if (indirizzo != null)
                         _Apparteneres.Add(new ClsAppartenereDL(indirizzo.ID));
                 }
-            }
-            catch (Exception ex)
-            {
+            //}
+            //catch (Exception ex)
+            //{
 
-                MessageBox.Show($"Errore durante il compilamento:\n{ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.DialogResult = DialogResult.None;
+            //    this.DialogResult = DialogResult.None;
+            //    MessageBox.Show($"Errore durante il compilamento:\n{ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            }
+            //}
         }
 
 
@@ -79,8 +78,8 @@ namespace Cattedre
                 nudOreLab.Value = _disciplina.OreLaboratorio;
                 nudOreTeoria.Value = _disciplina.OreTeoria;
                 CheckComboBoxs();
-                IDdipartimento = ClsDisciplinaBL.IDdipartimenti[frmDiscipline.indiceDaModificare];
-                cbDipartimentoAppartenente.SelectedValue = IDdipartimento;                
+                _disciplina.IDdipartimento = ClsDisciplinaBL.IDdipartimenti[frmDiscipline.indiceDaModificare];
+                cbDipartimentoAppartenente.SelectedValue = _disciplina.IDdipartimento;                
                 //carico le informazioni del collegamento con indirizzi
                 _Apparteneres = ClsAppartenereBL.CaricaClassiAppartenereByDisciplina(_disciplina.ID);
                 LoadclbIndirizzi();

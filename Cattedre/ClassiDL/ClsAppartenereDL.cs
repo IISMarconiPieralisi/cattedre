@@ -26,6 +26,7 @@ namespace Cattedre
         public ClsAppartenereDL(long idindirizzo)
         {
             _idindirizzo = idindirizzo;
+            _iddisciplina = 0;
         }
 
 

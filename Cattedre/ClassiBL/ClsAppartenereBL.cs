@@ -249,13 +249,13 @@ namespace Cattedre
 
         }
 
-        public static void ModificaAppartenenza(long idIndirizzo, List<ClsAppartenereDL> appartenenzaModifica)
+        public static void ModificaAppartenenza(long iddisciplina, List<ClsAppartenereDL> appartenenzaModifica)
         {
             //questo metodo prendo e cancello tutte le form  che trovo in cui è presente quello specifico utente
             //poi le andro a ricreare dopo
             //prendo tutte le afferenze del utente
             //metodo poco elegante ma il migliore per la  logica in cui è stata concepita la form
-            List<ClsAppartenereDL> appartenenenzeUtente = CaricaClassiAppartenere(idIndirizzo);
+            List<ClsAppartenereDL> appartenenenzeUtente = CaricaClassiAppartenereByDisciplina(iddisciplina);
             foreach (ClsAppartenereDL  app in appartenenenzeUtente)
             {
                 //controllo se l'afferenza è presente  nella lista delle afferenze modificate
@@ -266,7 +266,7 @@ namespace Cattedre
             //carico le afferenze create
             foreach (ClsAppartenereDL app in appartenenzaModifica)
             {
-                app.IDindirizzo = idIndirizzo;
+                app.IDindirizzo = iddisciplina;
                 if (!appartenenenzeUtente.Any(a => a.IDindirizzo == app.IDindirizzo))
                     InserireAppartenere(app);
             }

@@ -177,7 +177,7 @@ namespace Cattedre
             return _oreDocentePratico;
         }
 
-        public static List<ClsDisciplinaDL> InserisciDisciplina(ClsDisciplinaDL disciplina, int IDdipartimento)
+        public static void InserisciDisciplina(ClsDisciplinaDL disciplina)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -195,13 +195,12 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
                     cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                     cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
-                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                    cmd.Parameters.AddWithValue("@IDdipartimento", disciplina.IDdipartimento);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 
-                    if (righeCoinvolte > 0)
+                    if (righeCoinvolte < 0)
                     {
-                        discipline.Add(disciplina);
-                        IDdipartimenti.Add(IDdipartimento);
+                        throw new Exception("non è stato inserito il record");
                     }
                 }
             }
@@ -209,11 +208,9 @@ namespace Cattedre
             {
                 throw new Exception(ex.Message);
             }
-
-            return discipline;
         }
 
-        public static int CercaIdDisciplina(ClsDisciplinaDL disciplina, int IDdipartimento)
+        public static int CercaIdDisciplina(ClsDisciplinaDL disciplina)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
@@ -227,26 +224,20 @@ namespace Cattedre
                            FROM discipline 
                            WHERE nome = @nome 
                            AND anno = @anno 
-                           AND oreLaboratorio = @oreLaboratorio 
-                           AND oreTeoria = @oreTeoria 
-                           AND disciplinaSpeciale = @disciplinaSpeciale 
                            AND IDdipartimento = @IDdipartimento";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", disciplina.Nome);
                         cmd.Parameters.AddWithValue("@anno", disciplina.Anno);
-                        cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
-                        cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
-                        cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
-                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDdipartimento",disciplina.IDdipartimento);
 
                         object result = cmd.ExecuteScalar();
 
                         if (result != null)
                             return Convert.ToInt32(result);
                         else
-                            return 0;
+                            throw new Exception("non è stato trovato Disciplina con i derminati parametri inseriti");
                     }
                 }
                 catch (Exception ex)
@@ -284,7 +275,7 @@ namespace Cattedre
             return dipartimento.Nome;
         }
 
-        public static List<ClsDisciplinaDL> EliminaDisciplina(int id)
+        public static void EliminaDisciplina(int id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -298,9 +289,9 @@ namespace Cattedre
                 {
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 
-                    if (righeCoinvolte > 0)
+                    if (righeCoinvolte < 0)
                     {
-                        discipline = CaricaDiscipline();
+                        throw new Exception("non è stato inserito il record");
                     }
                 }
             }
@@ -308,11 +299,9 @@ namespace Cattedre
             {
                 throw new Exception(ex.Message);
             }
-
-            return discipline;
         }
 
-        public static List<ClsDisciplinaDL> ModificaDisciplina(ClsDisciplinaDL disciplina, List<ClsDisciplinaDL> discipline, int indice, int IDdipartimento)
+        public static void ModificaDisciplina(ClsDisciplinaDL disciplina)
         {
             FrmDisciplina frmDisciplina = new FrmDisciplina();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
@@ -336,13 +325,14 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
                     cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                     cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
-                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                    cmd.Parameters.AddWithValue("@IDdipartimento", disciplina.IDdipartimento);
                     cmd.Parameters.AddWithValue("@id", disciplina.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 
-                    if (righeCoinvolte > 0)
+
+                    if (righeCoinvolte < 0)
                     {
-                        IDdipartimenti[indice] = IDdipartimento;
+                        throw new Exception("non è stato inserito il record");
                     }
                 }
             }
@@ -351,7 +341,6 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
 
-            return discipline;
         }
     }
 }

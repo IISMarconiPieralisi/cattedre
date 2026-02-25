@@ -52,8 +52,8 @@ namespace Cattedre
             {
                 try
                 {
-                    ClsDisciplinaBL.InserisciDisciplina(frmDisciplina._disciplina, frmDisciplina.IDdipartimento);
-                    int ID=ClsDisciplinaBL.CercaIdDisciplina(frmDisciplina._disciplina, frmDisciplina.IDdipartimento);
+                    ClsDisciplinaBL.InserisciDisciplina(frmDisciplina._disciplina);
+                    int ID=ClsDisciplinaBL.CercaIdDisciplina(frmDisciplina._disciplina);
                     foreach (var appartenere in frmDisciplina._Apparteneres)
                     {
                         appartenere.IDdisicplina = ID;
@@ -92,8 +92,9 @@ namespace Cattedre
                 DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
                 if (dr == DialogResult.Yes)
                 {
-                    discipline = ClsDisciplinaBL.EliminaDisciplina(idDaEliminare);
+                   ClsDisciplinaBL.EliminaDisciplina(idDaEliminare);
                 }
+                discipline = ClsDisciplinaBL.CaricaDiscipline();
                 CaricaListView(discipline, ClsDisciplinaBL.IDdipartimenti);
             }
         }
@@ -110,13 +111,14 @@ namespace Cattedre
                 {
                     try
                     {
-                        ClsDisciplinaBL.ModificaDisciplina(frmDisciplina._disciplina, discipline, indiceDaModificare, frmDisciplina.IDdipartimento);
+                        ClsDisciplinaBL.ModificaDisciplina(frmDisciplina._disciplina);
                     }
                     catch(Exception ex)
                     {
 
                     }
                     CaricaListView(discipline, ClsDisciplinaBL.IDdipartimenti);
+
                 }
             }
         }

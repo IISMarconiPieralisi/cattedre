@@ -329,7 +329,6 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@id", disciplina.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 
-
                     if (righeCoinvolte < 0)
                     {
                         throw new Exception("non è stato inserito il record");

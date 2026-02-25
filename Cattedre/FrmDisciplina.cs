@@ -25,9 +25,9 @@ namespace Cattedre
 
         private void btSalva_Click(object sender, EventArgs e)
         {
-            
-            //try
-            //{
+
+            try
+            {
                 if (_disciplina.ID <= 0)
                     _disciplina = new ClsDisciplinaDL();
                 _disciplina.Nome = (tbNome.Text.Length >= 3) ? tbNome.Text.Trim() : throw new Exception("inserire Nome con almeno 3 caratteri");
@@ -51,14 +51,12 @@ namespace Cattedre
                     if (indirizzo != null)
                         _Apparteneres.Add(new ClsAppartenereDL(indirizzo.ID));
                 }
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    this.DialogResult = DialogResult.None;
-            //    MessageBox.Show($"Errore durante il compilamento:\n{ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Errore durante il compilamento:\n{ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.DialogResult = DialogResult.None;
+            }
         }
 
 

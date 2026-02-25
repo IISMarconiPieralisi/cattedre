@@ -112,11 +112,13 @@ namespace Cattedre
                     try
                     {
                         ClsDisciplinaBL.ModificaDisciplina(frmDisciplina._disciplina);
+                        ClsAppartenereBL.ModificaAppartenenze(frmDisciplina._disciplina.ID, frmDisciplina._Apparteneres);
                     }
                     catch(Exception ex)
                     {
-
+                        MessageBox.Show($"Errore nella modifica {ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    discipline = ClsDisciplinaBL.CaricaDiscipline();
                     CaricaListView(discipline, ClsDisciplinaBL.IDdipartimenti);
 
                 }

@@ -249,7 +249,7 @@ namespace Cattedre
 
         }
 
-        public static void ModificaAppartenenza(long iddisciplina, List<ClsAppartenereDL> appartenenzaModifica)
+        public static void ModificaAppartenenze(long iddisciplina, List<ClsAppartenereDL> appartenenzaModifica)
         {
             //questo metodo prendo e cancello tutte le form  che trovo in cui è presente quello specifico utente
             //poi le andro a ricreare dopo

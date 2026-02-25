@@ -255,23 +255,63 @@ namespace Cattedre
             //poi le andro a ricreare dopo
             //prendo tutte le afferenze del utente
             //metodo poco elegante ma il migliore per la  logica in cui è stata concepita la form
-            List<ClsAppartenereDL> appartenenenzeUtente = CaricaClassiAppartenereByDisciplina(iddisciplina);
-            foreach (ClsAppartenereDL  app in appartenenenzeUtente)
+            List<ClsAppartenereDL> appartenenenzeDisciplina = CaricaClassiAppartenereByDisciplina(iddisciplina);
+            foreach (ClsAppartenereDL  app in appartenenenzeDisciplina)
             {
-                //controllo se l'afferenza è presente  nella lista delle afferenze modificate
-                if (!appartenenzaModifica.Any(a => a.IDdisicplina == app.IDdisicplina))
+                app.IDdisicplina = iddisciplina;
+                //controllo se l'appartenenza è presente  nella lista delle afferenze modificate
+                if (!appartenenzaModifica.Any(a => a.IDindirizzo == app.IDindirizzo))
                     EliminaAppartenenza(app);
                 //se non esiste, non cancello nulla e  mi limito successivamente a caricarla
             }
-            //carico le afferenze create
+            //carico le appartenenze create, cioè quelle aggiunte
             foreach (ClsAppartenereDL app in appartenenzaModifica)
             {
-                app.IDindirizzo = iddisciplina;
-                if (!appartenenenzeUtente.Any(a => a.IDindirizzo == app.IDindirizzo))
+                app.IDdisicplina = iddisciplina;
+                if (!appartenenenzeDisciplina.Any(a => a.IDindirizzo == app.IDindirizzo))
                     InserireAppartenere(app);
             }
 
         }
+        public static List<ClsIndirizzoDL> caricaIndirizziDisciplina(long IDdisciplina)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            List<ClsIndirizzoDL> Indirizzi = new List<ClsIndirizzoDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT i.ID, i.nome FROM indirizzi i 
+                               JOIN appartenere a ON a.IDindirizzo = i.ID
+                                WHERE a.IDdisciplina = @IDdisciplina
+                                ORDER BY i.nome";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                }
+                foreach(DataRow row in  dt.Rows)
+                {
+                    ClsIndirizzoDL indirizzo = new ClsIndirizzoDL();
+                    indirizzo.ID = Convert.ToInt64(row["ID"]);
+                    indirizzo.Nome = row["nome"].ToString();
+                    Indirizzi.Add(indirizzo);
+                }
+
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return Indirizzi;
+        }
+
 
     }
 }

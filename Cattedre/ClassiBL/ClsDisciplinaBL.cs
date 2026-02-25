@@ -86,9 +86,8 @@ namespace Cattedre
                         disciplina.OreTeoria = Convert.ToInt32(dr["oreteoria"]);
                         disciplina.OreLaboratorio = Convert.ToInt32(dr["orelaboratorio"]);
                         disciplina.DisciplinaSpeciale = dr["disciplinaspeciale"].ToString();
-                        _IDdipartimento = Convert.ToInt32(dr["IDdipartimento"]);
+                        disciplina.IDdipartimento = Convert.ToInt32(dr["IDdipartimento"]);
                         discipline.Add(disciplina);
-                        IDdipartimenti.Add(_IDdipartimento);
                     }
                 }
                 conn.Close();
@@ -246,8 +245,10 @@ namespace Cattedre
                 }
             }
         }
-        public static string RilevaNomeDipartimento(int id)
+        public static string RilevaNomeDipartimento(long id)
         {
+            if (id == 0)
+                return "-";
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
             ClsDipartimentoDL dipartimento = null;

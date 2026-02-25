@@ -76,7 +76,6 @@ namespace Cattedre
                 nudOreLab.Value = _disciplina.OreLaboratorio;
                 nudOreTeoria.Value = _disciplina.OreTeoria;
                 CheckComboBoxs();
-                _disciplina.IDdipartimento = ClsDisciplinaBL.IDdipartimenti[frmDiscipline.indiceDaModificare];
                 cbDipartimentoAppartenente.SelectedValue = _disciplina.IDdipartimento;                
                 //carico le informazioni del collegamento con indirizzi
                 _Apparteneres = ClsAppartenereBL.CaricaClassiAppartenereByDisciplina(_disciplina.ID);
@@ -135,6 +134,8 @@ namespace Cattedre
 
                     clbIndirizzi.SetItemChecked(i, afferente); 
                 }
+                //quando ha fatto l'inserimento pulisce la lista per sicurezza
+                _Apparteneres.Clear();
             }
         }
 

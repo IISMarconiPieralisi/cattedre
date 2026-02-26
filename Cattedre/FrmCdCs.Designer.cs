@@ -33,15 +33,17 @@ namespace Cattedre
             this.brModifica = new System.Windows.Forms.Button();
             this.btInserisci = new System.Windows.Forms.Button();
             this.lvCdCs = new System.Windows.Forms.ListView();
-            this.chLivello = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chCodice = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chNome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chAbilitazioniRichieste = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chNumCattedreDiritto = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chNumCattedreDiFatto = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(1226, 106);
+            this.btElimina.Location = new System.Drawing.Point(1330, 106);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(105, 23);
             this.btElimina.TabIndex = 10;
@@ -52,7 +54,7 @@ namespace Cattedre
             // brModifica
             // 
             this.brModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.brModifica.Location = new System.Drawing.Point(1226, 77);
+            this.brModifica.Location = new System.Drawing.Point(1330, 77);
             this.brModifica.Name = "brModifica";
             this.brModifica.Size = new System.Drawing.Size(105, 23);
             this.brModifica.TabIndex = 9;
@@ -63,7 +65,7 @@ namespace Cattedre
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(1226, 48);
+            this.btInserisci.Location = new System.Drawing.Point(1330, 48);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.Size = new System.Drawing.Size(105, 23);
             this.btInserisci.TabIndex = 8;
@@ -76,24 +78,26 @@ namespace Cattedre
             this.lvCdCs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvCdCs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chLivello,
+            this.chCodice,
             this.chNome,
-            this.chAbilitazioniRichieste});
+            this.chAbilitazioniRichieste,
+            this.chNumCattedreDiritto,
+            this.chNumCattedreDiFatto});
             this.lvCdCs.FullRowSelect = true;
             this.lvCdCs.HideSelection = false;
             this.lvCdCs.Location = new System.Drawing.Point(28, 35);
             this.lvCdCs.Margin = new System.Windows.Forms.Padding(2);
             this.lvCdCs.Name = "lvCdCs";
-            this.lvCdCs.Size = new System.Drawing.Size(1179, 471);
+            this.lvCdCs.Size = new System.Drawing.Size(1285, 471);
             this.lvCdCs.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvCdCs.TabIndex = 11;
             this.lvCdCs.UseCompatibleStateImageBehavior = false;
             this.lvCdCs.View = System.Windows.Forms.View.Details;
             // 
-            // chLivello
+            // chCodice
             // 
-            this.chLivello.Text = "Codice";
-            this.chLivello.Width = 191;
+            this.chCodice.Text = "Codice";
+            this.chCodice.Width = 90;
             // 
             // chNome
             // 
@@ -103,13 +107,23 @@ namespace Cattedre
             // chAbilitazioniRichieste
             // 
             this.chAbilitazioniRichieste.Text = "Abilitazioni Richieste";
-            this.chAbilitazioniRichieste.Width = 700;
+            this.chAbilitazioniRichieste.Width = 650;
+            // 
+            // chNumCattedreDiritto
+            // 
+            this.chNumCattedreDiritto.Text = "Cattedre Di Diritto";
+            this.chNumCattedreDiritto.Width = 120;
+            // 
+            // chNumCattedreDiFatto
+            // 
+            this.chNumCattedreDiFatto.Text = "Cattedre Di Fatto";
+            this.chNumCattedreDiFatto.Width = 120;
             // 
             // FrmCdCs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1343, 577);
+            this.ClientSize = new System.Drawing.Size(1444, 577);
             this.Controls.Add(this.lvCdCs);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.brModifica);
@@ -128,8 +142,10 @@ namespace Cattedre
         private System.Windows.Forms.Button brModifica;
         private System.Windows.Forms.Button btInserisci;
         private System.Windows.Forms.ListView lvCdCs;
-        private System.Windows.Forms.ColumnHeader chLivello;
+        private System.Windows.Forms.ColumnHeader chCodice;
         private System.Windows.Forms.ColumnHeader chNome;
         private System.Windows.Forms.ColumnHeader chAbilitazioniRichieste;
+        private System.Windows.Forms.ColumnHeader chNumCattedreDiritto;
+        private System.Windows.Forms.ColumnHeader chNumCattedreDiFatto;
     }
 }

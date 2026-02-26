@@ -30,11 +30,13 @@ namespace Cattedre
 
         private void nudOrePot_ValueChanged(object sender, EventArgs e)
         {
+            if (this.Tag == null)
+                return;
+
+            int idUtente = Convert.ToInt32(this.Tag);
             int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
-            string nome = lblDocente.Text.Split(' ')[0];
-            string cognome = lblDocente.Text.Split(' ')[1];
-            long idUtente = ClsAssegnareBL.RicavaIDutente(nome, cognome); 
-            ClsAssegnareBL.SalvaOrePot(oreSpeciali, Convert.ToInt32(idUtente));
+
+            ClsAssegnareBL.SalvaOrePot(oreSpeciali, idUtente);
         }
     }
 }

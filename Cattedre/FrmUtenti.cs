@@ -115,7 +115,7 @@ namespace Cattedre
 
                     }
 
-                    if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C")
+                    if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C" || frmUtente._utente.TipoUtente == "A")
                     {
                         frmUtente._contratto.IDutente = utente.ID;
                         ClsContrattoBL.InserisciContratto(frmUtente._contratto, utente.ID);
@@ -184,12 +184,12 @@ namespace Cattedre
                     {
                         ClsUtenteBL.ModificaUtente(frmUtente._utente,frmUtente._utente.ID);
 
-                        if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C")
+                        if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C"|| frmUtente._utente.TipoUtente == "A")
                         {
 
                             //modifica contratto, afferenze e richieste
                             ClsAfferireBL.ModificaAfferenze(frmUtente._utente.ID, frmUtente._afferenze);
-                            ClsRichiedereBL.ModificaRichiesta(frmUtente._utente.ID, 0, frmUtente._richieste);
+                            ClsRichiedereBL.ModificaRichiesta(frmUtente._utente.ID, frmUtente._richieste);
                             ClsContrattoBL.ModificaContratto(frmUtente._contratto, frmUtente._utente.ID);
                             //controllo e inserimento coordinatore di dipartimento
                             if (frmUtente._utente.TipoUtente == "C")

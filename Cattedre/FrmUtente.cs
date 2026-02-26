@@ -52,7 +52,7 @@ namespace Cattedre
                 _utente.TipoUtente = GetTipoUtente();
                 _utente.Colore = _colore;
 
-                bool isDocente = _utente.TipoUtente == "D" || _utente.TipoUtente == "C";
+                bool isDocente = _utente.TipoUtente == "D" || _utente.TipoUtente == "C" || _utente.TipoUtente == "A";
                
                 //inserimento controlli Docente
                 if (isDocente)
@@ -209,14 +209,15 @@ namespace Cattedre
         private void cbTipoUtente_SelectionChangeCommitted(object sender, EventArgs e)
         {
             if (cbTipoUtente.SelectedItem.ToString() == "D"  ||
-                cbTipoUtente.SelectedItem.ToString() == "C")
+                cbTipoUtente.SelectedItem.ToString() == "C" ||
+                cbTipoUtente.SelectedItem.ToString() == "A")
             {
                 ckbDocenteTeorico.Enabled = true;
                 ckbDocentePratico.Enabled = true;
             }
             //se l'utente selezionato è amministratore o preside non gli è possibile selezionare il tipo di docente
 
-            if (cbTipoUtente.SelectedItem.ToString() == "A" || cbTipoUtente.SelectedItem.ToString() == "P")
+            if (cbTipoUtente.SelectedItem.ToString() == "P")
             {
                 ckbDocentePratico.Enabled = false;
                 ckbDocenteTeorico.Enabled = false;
@@ -362,31 +363,29 @@ namespace Cattedre
 
         private void cbDipartimentoCoordinato_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Se non c'è nulla di selezionato, usciamo
             if (cbDipartimentoCoordinato.SelectedItem == null)
                 return;
 
-            string selezionato = cbDipartimentoCoordinato.SelectedItem.ToString();
+            string dipartimentoScelto = cbDipartimentoCoordinato.SelectedItem.ToString();
 
-            // Controlla se nella CheckedListBox c'è già lo stesso elemento selezionato
-            foreach (var item in clbDipartimento.CheckedItems)
+            // Cerchiamo l'indice di questo dipartimento nella CheckedListBox
+            int index = clbDipartimento.Items.IndexOf(dipartimentoScelto);
+
+            if (index >= 0)
             {
-                if (item.ToString() == selezionato)
-                {
-                       //non invio un messaggio in modo tale da non essere fastidioso
-                    // Resetto la scelta della list checkbox
-                    int index = clbDipartimento.Items.IndexOf(item);
-                    if (index >= 0) // in  caso di errori
-                        clbDipartimento.SetItemChecked(index, false);
-                    return;
-                }
+                // Se l'elemento esiste, forziamo la spunta (Checked = true)
+                // Se è già spuntato non succede nulla, se non lo è viene attivato
+                clbDipartimento.SetItemChecked(index, true);
             }
+
             //se viene selezionato  un  dipartimento faccio vedere, se è già coordinato chi lo coordina e una conferma di cambiarlo
             if (_bloccoEvdipCoord)
                 return;
-            ClsUtenteDL coord = ClsDipartimentoBL.utenteCoordinaDiparimento(selezionato);
+            ClsUtenteDL coord = ClsDipartimentoBL.utenteCoordinaDiparimento(dipartimentoScelto);
             if (coord != null && coord.ID != _utente.ID)
             {
-                DialogResult dr = MessageBox.Show($"Attualmente il dipartimento {selezionato} viene coordinato da {coord.Cognome} {coord.Nome}; \nVuoi sostituirlo?",
+                DialogResult dr = MessageBox.Show($"Attualmente il dipartimento {dipartimentoScelto} viene coordinato da {coord.Cognome} {coord.Nome}; \nVuoi sostituirlo?",
                            "Cambio Coordinatore", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == DialogResult.No)
                 {
@@ -402,26 +401,27 @@ namespace Cattedre
                 _oldValuedipCoord = cbDipartimentoCoordinato.SelectedIndex;
         }
 
-        private void clbDipartimento_SelectedIndexChanged(object sender, EventArgs e)
+        private void clbDipartimento_ItemCheck(object sender, ItemCheckEventArgs e)
         {
+            // 1. Verifichiamo se c'è un dipartimento coordinato selezionato nella ComboBox
             if (cbDipartimentoCoordinato.SelectedItem == null)
                 return;
-            string selezionato = cbDipartimentoCoordinato.SelectedItem.ToString();
-            foreach (var item in clbDipartimento.CheckedItems)
-            {
-                if (item.ToString() == selezionato)
-                {
-                    //controllo se sia uguale a quello selezionato nella combobox e in caso lo rimuovo
-                    MessageBox.Show($"L'utente è già coordinatore del dipartimento {selezionato};\nRiprovare! ", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    // Resetto la scelta della list checkbox
-                    int index = clbDipartimento.Items.IndexOf(item);
-                    if (index >= 0) // in  caso di errori
-                        clbDipartimento.SetItemChecked(index, false);
-                    return;
-                }
+            string coordinato = cbDipartimentoCoordinato.SelectedItem.ToString();
+            string itemCorrente = clbDipartimento.Items[e.Index].ToString();
+
+            // 2. Controlliamo se l'utente sta cercando di DESELEZIONARE (NewValue == Unchecked)
+            // proprio il dipartimento che coordina
+            if (itemCorrente == coordinato && e.NewValue == CheckState.Unchecked)
+            {
+                MessageBox.Show($"L'utente è coordinatore del dipartimento {coordinato}, non può essere rimosso dai suoi dipartimenti!",
+                                "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // 3. ANNULLIAMO il cambiamento forzando il valore corrente
+                e.NewValue = e.CurrentValue;
             }
         }
+
         //controllo se modifica  inserisco i dipartimenti che l'utente afferisce
         private void loadDipartimenti()
         {

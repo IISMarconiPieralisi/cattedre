@@ -13,6 +13,7 @@ namespace Cattedre
     public partial class FrmCdCs : Form
     {
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+        List<ClsDotareDL> dots = new List<ClsDotareDL>();
         public int indiceDaModificare = 0;
 
         public FrmCdCs()
@@ -23,12 +24,14 @@ namespace Cattedre
         private void CaricaListView()
         {
             cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+            //dots = ClsDotareBL.CaricaDotare(1, ...);
             lvCdCs.Items.Clear();
             foreach (ClsClasseDiConcorsoDL cdc in cdcs)
             {
                 ListViewItem lvi = new ListViewItem(cdc.Livello);
                 lvi.SubItems.Add(cdc.Nome);
                 lvi.SubItems.Add(cdc.AbilitazioniRichieste);
+                //lvi.SubItems.Add(dots)
                 lvi.Tag = cdc.ID;
                 lvCdCs.Items.Add(lvi);
             }

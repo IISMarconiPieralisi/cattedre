@@ -25,6 +25,8 @@ namespace Cattedre
             this.AcceptButton = btLogin;
         }
 
+        public ClsUtenteDL UtenteLoggato { get; private set; }
+
         private void btLogin_Click(object sender, EventArgs e)
         {
             try
@@ -61,9 +63,12 @@ namespace Cattedre
                     utenteLoggato = ClsUtenteBL.caricautenteByEmail(email);
                     //cancellazione token all'interno di utente
                     ClsUtenteBL.cancellaTokenUtente(utenteLoggato.ID);
-                    FrmHome frmHome = new FrmHome(utenteLoggato);
-                    frmHome.Show();
-                    this.Hide();
+                    //FrmHome frmHome = new FrmHome(utenteLoggato);
+                    //frmHome.Show();
+                    //this.Hide();
+                    UtenteLoggato = utenteLoggato;
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
 
                 }
                 else
@@ -149,9 +154,13 @@ namespace Cattedre
                         utenteLoggato = ClsUtenteBL.caricautenteByEmail(userinfo.Email);
                         //caricamento del token
                         ClsUtenteBL.InserisciTokenUtente(userinfo.Id, utenteLoggato.ID);
-                        FrmHome frmHome = new FrmHome(utenteLoggato);
-                        frmHome.Show();
-                        this.Hide();
+                        //FrmHome frmHome = new FrmHome(utenteLoggato);
+                        //frmHome.Show();
+                        //this.Hide();
+                        UtenteLoggato = utenteLoggato;
+                        this.DialogResult = DialogResult.OK;
+                        this.Close();
+
                     }
                     else
                         throw new Exception("Utente, non trovato nel database");

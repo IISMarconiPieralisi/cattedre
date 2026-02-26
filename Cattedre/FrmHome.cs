@@ -86,12 +86,17 @@ namespace Cattedre
         {
             try
             {
-                FrmLogin frmLogin = new FrmLogin();
+                //FrmLogin frmLogin = new FrmLogin();
+                //if (ClsUtenteBL.TokenEsistente(utente.ID))
+                //    FrmLogin.logout();
+                //frmLogin.Show();
+                //this.Close();
                 if (ClsUtenteBL.TokenEsistente(utente.ID))
                     FrmLogin.logout();
-                frmLogin.Show();
-                this.Close();
-            }catch (Exception ex)
+
+                Application.Restart();
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("Errore Durante il logout, contattare un amministratore", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

@@ -185,6 +185,7 @@
     <Compile Include="ClassiDL\ClsContrattoDL.cs" />
     <Compile Include="ClassiDL\ClsDipartimentoDL.cs" />
     <Compile Include="ClassiDL\ClsDisciplinaDL.cs" />
+    <Compile Include="ClassiDL\ClsDotareDL.cs" />
     <Compile Include="ClassiDL\ClsIndirizzoDL.cs" />
     <Compile Include="ClassiDL\ClsPersona.cs" />
     <Compile Include="ClassiDL\ClsUtenteDL.cs" />

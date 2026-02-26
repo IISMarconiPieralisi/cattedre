@@ -58,13 +58,12 @@ namespace Cattedre
         public static List<ClsDisciplinaDL> CaricaDiscipline(long iddipartimento=0, int anno=0, string nome="") // parametri facoltativi: long dipartimento, int anno, string nome
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            DataTable dt = new DataTable();
             IDdipartimenti.Clear();
             try
             {
-                conn.Open();
-                string sql = "SELECT * FROM discipline WHERE 1=1  ";
+                string sql = $"SELECT * FROM discipline WHERE 1=1 ";
                 if (iddipartimento > 0)
                     sql += "AND IDdipartimento = "+ iddipartimento + "  ";
                 if (anno > 0)
@@ -72,25 +71,31 @@ namespace Cattedre
                 if (nome!="")
                     sql += "AND nome LIKE '%" + nome + "%' ";
                 sql += "ORDER BY anno, nome ASC";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    while (dr.Read())
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
                     {
                         ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
-                        disciplina.ID = Convert.ToInt32(dr["id"]);
-                        disciplina.Nome = dr["nome"].ToString();
-                        disciplina.Anno = Convert.ToInt32(dr["anno"]);
-                        disciplina.OreTeoria = Convert.ToInt32(dr["oreteoria"]);
-                        disciplina.OreLaboratorio = Convert.ToInt32(dr["orelaboratorio"]);
-                        disciplina.DisciplinaSpeciale = dr["disciplinaspeciale"].ToString();
-                        disciplina.IDdipartimento = Convert.ToInt32(dr["IDdipartimento"]);
+                        disciplina.ID = Convert.ToInt32(row["id"]);
+                        disciplina.Nome = row["nome"].ToString();
+                        disciplina.Anno = Convert.ToInt32(row["anno"]);
+                        disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
+                        disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
+                        disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
+                        disciplina.IDdipartimento = Convert.ToInt32(row["IDdipartimento"]);
                         discipline.Add(disciplina);
                     }
+                    conn.Close();
                 }
-                conn.Close();
+
             }
             catch (Exception ex)
             {

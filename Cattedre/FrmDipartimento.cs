@@ -13,57 +13,54 @@ namespace Cattedre
     public partial class FrmDipartimento : Form
     {
         public List<ClsUtenteDL> coordinatori = new List<ClsUtenteDL>();
-        public ClsDipartimentoDL _dipartimento = new ClsDipartimentoDL();
-        public int IDutente;
-        int _indiceDaModificare;
+        public ClsDipartimentoDL _dipartimento;
 
-        public FrmDipartimento(int indiceDaModificare)
+        public FrmDipartimento()
         {
             InitializeComponent();
-            _indiceDaModificare = indiceDaModificare;
         }
 
         private void btSalvaDipartimento_Click(object sender, EventArgs e)
         {
-            _dipartimento.Nome = tbNomeDipartimento.Text;
-            _dipartimento.NomeCoordinatore = cbCoordinatore.Text;
-
-            if (string.IsNullOrEmpty(_dipartimento.Nome))
+            try
             {
-                MessageBox.Show("Nome mancante");
-                this.DialogResult = DialogResult.None;
+                if (_dipartimento == null)
+                    _dipartimento = new ClsDipartimentoDL();
+
+                _dipartimento.Nome = tbNomeDipartimento.Text;
+                if(cbCoordinatore.SelectedIndex!=-1)
+                {
+                    string[] parts = cbCoordinatore.Text.Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
+                    _dipartimento.IDutente = ClsUtenteBL.RilevaIDutente(parts[0], parts[1]);
+                }
+                this.DialogResult = DialogResult.OK;
+
             }
-            else
-                IDutente = Convert.ToInt32(ClsUtenteBL.RilevaIDutente(_dipartimento.NomeCoordinatore.Substring(0, _dipartimento.NomeCoordinatore.IndexOf(" ")),
-                    _dipartimento.NomeCoordinatore.Substring(_dipartimento.NomeCoordinatore.IndexOf(" ") + 1)));
+            catch (Exception ex)
+            {
+                this.DialogResult = DialogResult.None;
+                throw new Exception(ex.Message);
+            }
+
         }
 
         private void FrmDipartimento_Load(object sender, EventArgs e)
         {
             coordinatori = ClsUtenteBL.CaricaCoordinatoriDipartimenti();
-            FrmDipartimenti frmDipartimenti = new FrmDipartimenti();
-
             cbCoordinatore.DataSource = coordinatori.Select(c => new { c.ID, NomeCompleto = c.Nome + " " + c.Cognome }).ToList();
             cbCoordinatore.DisplayMember = "NomeCompleto";
             cbCoordinatore.ValueMember = "ID";
 
-            if (_dipartimento.Nome != null)
+            if (_dipartimento!= null)
             {
                 tbNomeDipartimento.Text = _dipartimento.Nome;
-
-                IDutente = ClsDipartimentoBL.IDutenti[_indiceDaModificare];
-
-                if (coordinatori.Any(c => c.ID == IDutente))
-                    cbCoordinatore.Text = ClsUtenteBL.RilevaNomeUtente(IDutente);
+                if (coordinatori.Any(c => c.ID == _dipartimento.IDutente))
+                    cbCoordinatore.Text = ClsUtenteBL.RilevaNomeUtente(_dipartimento.IDutente);
                 else
-                {
                     cbCoordinatore.SelectedIndex = -1;
-                }
             }
             else
-            {
-                cbCoordinatore.SelectedText = "";
-            }
+                cbCoordinatore.SelectedIndex = -1;
         }
 
         private void btAnnulla_Click(object sender, EventArgs e)

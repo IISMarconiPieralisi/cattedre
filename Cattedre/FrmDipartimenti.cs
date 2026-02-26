@@ -44,8 +44,6 @@ namespace Cattedre
             {
                 try
                 {
-                    if (dipartimenti.Exists(p => p.IDutente == frmDipartimento._dipartimento.IDutente))
-                        throw new Exception("Coordinatore già impegnato in un dipartimento");
                     ClsDipartimentoBL.InserisciDipartimento(frmDipartimento._dipartimento);
                 }catch(Exception ex)
                 {
@@ -87,9 +85,8 @@ namespace Cattedre
                     try
                     {
                         ClsDipartimentoBL.ModificaDipartimento(frmDipartimento._dipartimento);
-                        if (dipartimenti.Exists(p => p.IDutente == frmDipartimento._dipartimento.IDutente))
-                            throw new Exception("Coordinatore già impegnato in un dipartimento");
-                    }catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         MessageBox.Show($"Errore:\n{ex.Message}; \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }

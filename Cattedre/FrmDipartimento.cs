@@ -14,7 +14,7 @@ namespace Cattedre
     {
         public List<ClsUtenteDL> coordinatori = new List<ClsUtenteDL>();
         public ClsDipartimentoDL _dipartimento;
-
+        List<ClsDipartimentoDL> _dip = ClsDipartimentoBL.CaricaDipartimenti();
         public FrmDipartimento()
         {
             InitializeComponent();
@@ -32,6 +32,7 @@ namespace Cattedre
                 {
                     string[] parts = cbCoordinatore.Text.Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
                     _dipartimento.IDutente = ClsUtenteBL.RilevaIDutente(parts[0], parts[1]);
+
                 }
                 this.DialogResult = DialogResult.OK;
 
@@ -39,33 +40,44 @@ namespace Cattedre
             catch (Exception ex)
             {
                 this.DialogResult = DialogResult.None;
-                throw new Exception(ex.Message);
+                MessageBox.Show($"Errore: \n{ex.Message}\nRiprovare.", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
 
         private void FrmDipartimento_Load(object sender, EventArgs e)
         {
-            coordinatori = ClsUtenteBL.CaricaCoordinatoriDipartimenti();
-            cbCoordinatore.DataSource = coordinatori.Select(c => new { c.ID, NomeCompleto = c.Nome + " " + c.Cognome }).ToList();
-            cbCoordinatore.DisplayMember = "NomeCompleto";
-            cbCoordinatore.ValueMember = "ID";
+            CaricaCoordinatoriDisponibili(_dip);
 
             if (_dipartimento!= null)
             {
                 tbNomeDipartimento.Text = _dipartimento.Nome;
                 if (coordinatori.Any(c => c.ID == _dipartimento.IDutente))
                     cbCoordinatore.Text = ClsUtenteBL.RilevaNomeUtente(_dipartimento.IDutente);
-                else
-                    cbCoordinatore.SelectedIndex = -1;
+
             }
-            else
-                cbCoordinatore.SelectedIndex = -1;
+
         }
 
         private void btAnnulla_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void CaricaCoordinatoriDisponibili(List<ClsDipartimentoDL> listaDipartimenti)
+        {
+            var tuttiCoordinatori = ClsUtenteBL.CaricaCoordinatoriDipartimenti();
+
+            var idOccupati = listaDipartimenti.Select(d => d.IDutente).ToList();
+            var sorgenteDati = tuttiCoordinatori.Where(u => !idOccupati.Contains(u.ID)).Select(u => new{u.ID,NomeCompleto = u.Nome + " "+ u.Cognome}).ToList();
+
+            cbCoordinatore.DataSource = sorgenteDati;
+            cbCoordinatore.DisplayMember = "NomeCompleto";
+            cbCoordinatore.ValueMember = "ID";
+            if (sorgenteDati.Count <= 0)
+                cbCoordinatore.Enabled = false;
+
+            cbCoordinatore.SelectedIndex = -1;
         }
     }
 }

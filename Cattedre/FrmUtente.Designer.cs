@@ -78,7 +78,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 59);
+            this.label1.Location = new System.Drawing.Point(18, 43);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 0;
@@ -87,7 +87,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 102);
+            this.label2.Location = new System.Drawing.Point(18, 91);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(55, 13);
             this.label2.TabIndex = 1;
@@ -96,7 +96,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(18, 161);
+            this.label3.Location = new System.Drawing.Point(18, 139);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 2;
@@ -105,7 +105,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(18, 201);
+            this.label4.Location = new System.Drawing.Point(18, 187);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(56, 13);
             this.label4.TabIndex = 3;
@@ -114,7 +114,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(18, 251);
+            this.label5.Location = new System.Drawing.Point(18, 235);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(66, 13);
             this.label5.TabIndex = 4;
@@ -123,7 +123,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(18, 300);
+            this.label6.Location = new System.Drawing.Point(18, 296);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(75, 13);
             this.label6.TabIndex = 5;
@@ -131,28 +131,36 @@
             // 
             // tbNome
             // 
-            this.tbNome.Location = new System.Drawing.Point(109, 59);
+            this.tbNome.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbNome.Location = new System.Drawing.Point(109, 40);
             this.tbNome.Name = "tbNome";
             this.tbNome.Size = new System.Drawing.Size(219, 20);
             this.tbNome.TabIndex = 6;
             // 
             // tbCognome
             // 
-            this.tbCognome.Location = new System.Drawing.Point(109, 83);
+            this.tbCognome.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbCognome.Location = new System.Drawing.Point(108, 88);
             this.tbCognome.Name = "tbCognome";
             this.tbCognome.Size = new System.Drawing.Size(219, 20);
             this.tbCognome.TabIndex = 7;
             // 
             // tbEmail
             // 
-            this.tbEmail.Location = new System.Drawing.Point(109, 144);
+            this.tbEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbEmail.Location = new System.Drawing.Point(109, 136);
             this.tbEmail.Name = "tbEmail";
             this.tbEmail.Size = new System.Drawing.Size(219, 20);
             this.tbEmail.TabIndex = 8;
             // 
             // tbPassword
             // 
-            this.tbPassword.Location = new System.Drawing.Point(109, 198);
+            this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbPassword.Location = new System.Drawing.Point(109, 184);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tbPassword.Size = new System.Drawing.Size(219, 20);
@@ -161,6 +169,8 @@
             // 
             // cbTipoUtente
             // 
+            this.cbTipoUtente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbTipoUtente.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbTipoUtente.FormattingEnabled = true;
             this.cbTipoUtente.Items.AddRange(new object[] {
@@ -168,7 +178,7 @@
             "Amministratore",
             "Docente",
             "Coordinatore di dipartimento"});
-            this.cbTipoUtente.Location = new System.Drawing.Point(109, 248);
+            this.cbTipoUtente.Location = new System.Drawing.Point(109, 232);
             this.cbTipoUtente.Name = "cbTipoUtente";
             this.cbTipoUtente.Size = new System.Drawing.Size(219, 21);
             this.cbTipoUtente.TabIndex = 10;
@@ -176,7 +186,8 @@
             // 
             // btAnnulla
             // 
-            this.btAnnulla.Location = new System.Drawing.Point(21, 398);
+            this.btAnnulla.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btAnnulla.Location = new System.Drawing.Point(21, 420);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.Size = new System.Drawing.Size(307, 33);
             this.btAnnulla.TabIndex = 13;
@@ -186,8 +197,9 @@
             // 
             // btSalva
             // 
+            this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btSalva.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalva.Location = new System.Drawing.Point(21, 358);
+            this.btSalva.Location = new System.Drawing.Point(21, 380);
             this.btSalva.Name = "btSalva";
             this.btSalva.Size = new System.Drawing.Size(307, 34);
             this.btSalva.TabIndex = 14;
@@ -208,7 +220,7 @@
             // ckbDocentePratico
             // 
             this.ckbDocentePratico.AutoSize = true;
-            this.ckbDocentePratico.Location = new System.Drawing.Point(270, 296);
+            this.ckbDocentePratico.Location = new System.Drawing.Point(269, 295);
             this.ckbDocentePratico.Name = "ckbDocentePratico";
             this.ckbDocentePratico.Size = new System.Drawing.Size(58, 17);
             this.ckbDocentePratico.TabIndex = 16;
@@ -220,8 +232,8 @@
             this.PnUtente.AutoSize = true;
             this.PnUtente.Controls.Add(this.pnColore);
             this.PnUtente.Controls.Add(this.label9);
-            this.PnUtente.Controls.Add(this.btColore);
             this.PnUtente.Controls.Add(this.cbAutoEmail);
+            this.PnUtente.Controls.Add(this.btColore);
             this.PnUtente.Controls.Add(this.btSalva);
             this.PnUtente.Controls.Add(this.label1);
             this.PnUtente.Controls.Add(this.ckbDocentePratico);
@@ -242,12 +254,12 @@
             this.PnUtente.Location = new System.Drawing.Point(0, 0);
             this.PnUtente.Name = "PnUtente";
             this.PnUtente.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.PnUtente.Size = new System.Drawing.Size(346, 451);
+            this.PnUtente.Size = new System.Drawing.Size(346, 466);
             this.PnUtente.TabIndex = 18;
             // 
             // pnColore
             // 
-            this.pnColore.Location = new System.Drawing.Point(192, 313);
+            this.pnColore.Location = new System.Drawing.Point(192, 326);
             this.pnColore.Name = "pnColore";
             this.pnColore.Size = new System.Drawing.Size(24, 23);
             this.pnColore.TabIndex = 24;
@@ -255,7 +267,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(18, 318);
+            this.label9.Location = new System.Drawing.Point(18, 331);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(88, 13);
             this.label9.TabIndex = 23;
@@ -263,7 +275,7 @@
             // 
             // btColore
             // 
-            this.btColore.Location = new System.Drawing.Point(112, 313);
+            this.btColore.Location = new System.Drawing.Point(112, 326);
             this.btColore.Name = "btColore";
             this.btColore.Size = new System.Drawing.Size(66, 23);
             this.btColore.TabIndex = 22;
@@ -274,7 +286,7 @@
             // cbAutoEmail
             // 
             this.cbAutoEmail.AutoSize = true;
-            this.cbAutoEmail.Location = new System.Drawing.Point(109, 170);
+            this.cbAutoEmail.Location = new System.Drawing.Point(109, 259);
             this.cbAutoEmail.Name = "cbAutoEmail";
             this.cbAutoEmail.Size = new System.Drawing.Size(107, 17);
             this.cbAutoEmail.TabIndex = 18;
@@ -290,7 +302,7 @@
             this.pnCDC.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnCDC.Location = new System.Drawing.Point(346, 0);
             this.pnCDC.Name = "pnCDC";
-            this.pnCDC.Size = new System.Drawing.Size(163, 451);
+            this.pnCDC.Size = new System.Drawing.Size(163, 466);
             this.pnCDC.TabIndex = 19;
             this.pnCDC.Visible = false;
             // 
@@ -319,13 +331,10 @@
             this.pnDipartimento.Controls.Add(this.lbDcoordinato);
             this.pnDipartimento.Controls.Add(this.label8);
             this.pnDipartimento.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnDipartimento.Location = new System.Drawing.Point(544, 0);
+            this.pnDipartimento.Location = new System.Drawing.Point(509, 0);
             this.pnDipartimento.Margin = new System.Windows.Forms.Padding(3, 5, 5, 5);
             this.pnDipartimento.Name = "pnDipartimento";
-            this.pnDipartimento.Size = new System.Drawing.Size(171, 451);
-            this.pnDipartimento.Location = new System.Drawing.Point(509, 0);
-            this.pnDipartimento.Name = "pnDipartimento";
-            this.pnDipartimento.Size = new System.Drawing.Size(183, 451);
+            this.pnDipartimento.Size = new System.Drawing.Size(171, 466);
             this.pnDipartimento.TabIndex = 20;
             this.pnDipartimento.Visible = false;
             // 
@@ -336,7 +345,7 @@
             this.clbDipartimento.Name = "clbDipartimento";
             this.clbDipartimento.Size = new System.Drawing.Size(157, 139);
             this.clbDipartimento.TabIndex = 19;
-            this.clbDipartimento.SelectedIndexChanged += new System.EventHandler(this.clbDipartimento_SelectedIndexChanged);
+            this.clbDipartimento.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbDipartimento_ItemCheck);
             // 
             // cbDipartimentoCoordinato
             // 
@@ -379,25 +388,29 @@
             this.PnContratto.Controls.Add(this.rbIndeterminato);
             this.PnContratto.Controls.Add(this.rbDeterminato);
             this.PnContratto.Controls.Add(this.label13);
-            this.PnContratto.Dock = System.Windows.Forms.DockStyle.Left;
+            this.PnContratto.Dock = System.Windows.Forms.DockStyle.Right;
             this.PnContratto.Enabled = false;
-            this.PnContratto.Location = new System.Drawing.Point(692, 0);
+            this.PnContratto.Location = new System.Drawing.Point(688, 0);
             this.PnContratto.Name = "PnContratto";
-            this.PnContratto.Size = new System.Drawing.Size(319, 451);
+            this.PnContratto.Size = new System.Drawing.Size(296, 466);
             this.PnContratto.TabIndex = 21;
             // 
             // dtpDataFine
             // 
+            this.dtpDataFine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpDataFine.Location = new System.Drawing.Point(89, 232);
             this.dtpDataFine.Name = "dtpDataFine";
-            this.dtpDataFine.Size = new System.Drawing.Size(200, 20);
+            this.dtpDataFine.Size = new System.Drawing.Size(195, 20);
             this.dtpDataFine.TabIndex = 21;
             // 
             // dtpDataInizio
             // 
+            this.dtpDataInizio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpDataInizio.Location = new System.Drawing.Point(89, 185);
             this.dtpDataInizio.Name = "dtpDataInizio";
-            this.dtpDataInizio.Size = new System.Drawing.Size(200, 20);
+            this.dtpDataInizio.Size = new System.Drawing.Size(195, 20);
             this.dtpDataInizio.TabIndex = 20;
             // 
             // label10
@@ -420,9 +433,11 @@
             // 
             // nudMonteOre
             // 
+            this.nudMonteOre.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.nudMonteOre.Location = new System.Drawing.Point(88, 138);
             this.nudMonteOre.Name = "nudMonteOre";
-            this.nudMonteOre.Size = new System.Drawing.Size(45, 20);
+            this.nudMonteOre.Size = new System.Drawing.Size(196, 20);
             this.nudMonteOre.TabIndex = 17;
             // 
             // label12
@@ -474,7 +489,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 451);
+            this.ClientSize = new System.Drawing.Size(984, 466);
             this.Controls.Add(this.PnContratto);
             this.Controls.Add(this.pnDipartimento);
             this.Controls.Add(this.pnCDC);

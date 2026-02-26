@@ -9,12 +9,12 @@ using System.Data;
 
 namespace Cattedre
 {
-    class ClsDotareBL
+    public class ClsDotareBL
     {
 
        public static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
-        public static List<ClsDotareDL> CaricaDotare(long idDipartimento)
+        public static List<ClsDotareDL> CaricaDotare(long idAnnoScolastico, long idCdc)
         {
             List<ClsDotareDL> lista = new List<ClsDotareDL>();
             DataTable dt = new DataTable();
@@ -27,12 +27,14 @@ namespace Cattedre
 
                     string sql = @"SELECT *
                                FROM dotare
-                               WHERE IDdipartimento = @dip
+                               WHERE IDannoscolastico = @idAnnoScolastico
+                               AND IDclassedicondorso = @idCdc
                                ORDER BY IDannoScolastico";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@dip", idDipartimento);
+                        cmd.Parameters.AddWithValue("@idAnnoScolastico", idAnnoScolastico);
+                        cmd.Parameters.AddWithValue("@idCdc", idCdc);
 
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
@@ -43,14 +45,13 @@ namespace Cattedre
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    lista.Add(new ClsDotareDL
-                    {
-                        ID = Convert.ToInt64(row["ID"]),
-                        IDannoScolastico = Convert.ToInt64(row["IDannoScolastico"]),
-                        IDdipartimento = Convert.ToInt64(row["IDdipartimento"]),
-                        NumCattedreFatto = Convert.ToInt64(row["NumCattedreFatto"]),
-                        NumCattedreDiritto = Convert.ToInt64(row["NumCattedreDiritto"])
-                    });
+                    ClsDotareDL dot = new ClsDotareDL();
+                    dot.Id = Convert.ToInt64(row["ID"]);
+                    dot.NumcattedreDiritto = Convert.ToInt32(row["numcattedrediritto"]);
+                    dot.Numcattedrefatto = Convert.ToInt32(row["numcattedrefatto"]);
+                    dot.IdAnnoscolastico = Convert.ToInt64(row["IDannoscolastico"]);
+                    dot.IdClasseDiConcorso = Convert.ToInt64(row["IDclassediconcorso"]);
+                    lista.Add(dot);
                 }
             }
             catch (Exception ex)

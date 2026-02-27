@@ -5,126 +5,112 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using System.Configuration;
+using System.Data;
 
 namespace Cattedre
 {
    public static class ClsDipartimentoBL
    {
-        public static int _IDutente;
-        public static List<int> IDutenti = new List<int>();
 
         public static List<ClsDipartimentoDL> CaricaDipartimenti()
          {
-            IDutenti.Clear();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            DataTable ds = new DataTable();
             List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
             try
             {
-                conn.Open();
-                string sql = "SELECT * FROM dipartimenti";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    while (dr.Read())
+                    conn.Open();
+                    string sql = "SELECT ID, nome, IDutente FROM dipartimenti";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        ClsDipartimentoDL dipartimento = new ClsDipartimentoDL();
-                        dipartimento.ID = Convert.ToInt64(dr["id"]);
-                        dipartimento.Nome = dr["nome"].ToString();
-                        _IDutente = dr.IsDBNull(dr.GetOrdinal("IDutente"))
-                                    ? 0
-                                    : dr.GetInt32(dr.GetOrdinal("IDutente"));
-                        dipartimenti.Add(dipartimento);
-                        IDutenti.Add(_IDutente);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(ds);
+                        }
+                        conn.Close();
                     }
                 }
-                conn.Close();
+                    foreach (DataRow row in ds.Rows)
+                    {
+                        ClsDipartimentoDL dipartimento = new ClsDipartimentoDL();
+                        dipartimento.ID = Convert.ToInt64(row["id"]);
+                        dipartimento.Nome = row["nome"].ToString();
+                        dipartimento.IDutente = (row["IDutente"]==DBNull.Value)? 0: Convert.ToInt64(row["IDutente"]);
+                        dipartimenti.Add(dipartimento);
+                    }
+
             }
             catch(Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return dipartimenti;
          }
 
-        public static List<ClsDipartimentoDL> InserisciDipartimento(ClsDipartimentoDL dip, int IDutente)
+        public static void InserisciDipartimento(ClsDipartimentoDL dip)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
 
             try
             {
-                conn.Open();
-                string checkSql = "SELECT COUNT(*) FROM dipartimenti WHERE IDutente = @IDutente";
-                using (MySqlCommand checkCmd = new MySqlCommand(checkSql, conn))
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    checkCmd.Parameters.AddWithValue("@IDutente", IDutente);
-                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
-
-                    if (count == 0)
+                    conn.Open();
+                    string sql = "INSERT INTO dipartimenti (nome, IDutente) VALUES (@nome, @IDutente)";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        string sql = "INSERT INTO dipartimenti (nome, IDutente) VALUES (@nome, @IDutente)";
-                        MySqlCommand cmd = new MySqlCommand(sql, conn);
-                        {
-                            cmd.Parameters.AddWithValue("@nome", dip.Nome);
-                            cmd.Parameters.AddWithValue("@IDutente", IDutente);
-                            int righeCoinvolte = cmd.ExecuteNonQuery();
+                        cmd.Parameters.AddWithValue("@nome", dip.Nome);
+                        if (dip.IDutente > 0)
+                            cmd.Parameters.AddWithValue("@IDutente", dip.IDutente);
+                        else
+                            cmd.Parameters.AddWithValue("@IDutente", DBNull.Value);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
 
-                            if (righeCoinvolte > 0)
-                            {
-                                dipartimenti.Add(dip);
-                                IDutenti.Add(IDutente);
-                            }
-                        }
-                    }
-                    else
-                        throw new Exception("Questo utente è già coordinatore di un altro dipartimento.");
-                }
-            }
-            catch (Exception ex)
-            {
-                string errore = ex.Message;
-            }
-
-            return dipartimenti;
-        }
-
-        public static List<ClsDipartimentoDL> EliminaDipartimento(int id)
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
-
-            try
-            {
-                conn.Open();
-                string sql = "DELETE FROM dipartimenti WHERE id = " + id;
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                {
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
-                    {
-                        dipartimenti = CaricaDipartimenti();
+                        if (righeCoinvolte == 0)
+                            throw new Exception("Inserimento non riuscito.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
-            return dipartimenti;
         }
 
-        public static List<ClsDipartimentoDL> ModificaDipartimento(ClsDipartimentoDL dipartimento, int indice, long IDutente)
+        public static void EliminaDipartimento(int id)
         {
-            FrmDipartimento frmDipartimento = new FrmDipartimento(indice);
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "DELETE FROM dipartimenti WHERE id =@id ";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+
+                        if (righeCoinvolte < 0)
+                            throw new Exception("non è stato eliminato nessun record");
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static void ModificaDipartimento(ClsDipartimentoDL dipartimento)
+        {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
 
             try
             {
@@ -136,23 +122,17 @@ namespace Cattedre
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
                     cmd.Parameters.AddWithValue("@nome", dipartimento.Nome);
-                    cmd.Parameters.AddWithValue("@IDutente", IDutente);
+                    cmd.Parameters.AddWithValue("@IDutente", dipartimento.IDutente);
                     cmd.Parameters.AddWithValue("id", dipartimento.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
-                    {
-                        dipartimenti[indice] = frmDipartimento._dipartimento;
-                        IDutenti[indice] = (int)IDutente;
-                    }
+                    if (righeCoinvolte < 0)
+                        throw new Exception("non è stato modificato nessun record");
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
-
-            return dipartimenti;
         }
         public static bool ModificaCoordinatoreDipartimento(ClsDipartimentoDL dipartimento, long IDutente)
         {
@@ -184,8 +164,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -208,7 +187,7 @@ namespace Cattedre
                         dipartimento = new ClsDipartimentoDL();
                         dipartimento.ID = Convert.ToInt64(dr["id"]);
                         dipartimento.Nome = dr["nome"].ToString();
-                        _IDutente = dr.IsDBNull(dr.GetOrdinal("IDutente"))
+                        dipartimento.IDutente = dr.IsDBNull(dr.GetOrdinal("IDutente"))
                                     ? 0
                                     : dr.GetInt32(dr.GetOrdinal("IDutente"));
                     }
@@ -217,43 +196,46 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return dipartimento;
         }
         public static ClsUtenteDL utenteCoordinaDiparimento(string NomeDipartimento)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
             ClsUtenteDL utente = null;
             try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                conn.Open();
-                string sql = @"SELECT u.* 
+
+                    conn.Open();
+                    string sql = @"SELECT u.* 
                                FROM utenti u
                                JOIN dipartimenti d ON u.id = d.IDutente
                                WHERE d.nome = @NomeDipartimento";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@NomeDipartimento", NomeDipartimento);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    if (dr.Read())
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@NomeDipartimento", NomeDipartimento);
+                    MySqlDataReader dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
                     {
-                        utente = new ClsUtenteDL();
-                        utente.ID = Convert.ToInt64(dr["id"]);
-                        utente.Cognome = dr["cognome"].ToString();
-                        utente.Nome = dr["nome"].ToString();
-                        utente.Email = dr["email"].ToString();
-                        utente.TipoUtente = dr["tipoUtente"].ToString();
-                        utente.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
+                        if (dr.Read())
+                        {
+                            utente = new ClsUtenteDL();
+                            utente.ID = Convert.ToInt64(dr["id"]);
+                            utente.Cognome = dr["cognome"].ToString();
+                            utente.Nome = dr["nome"].ToString();
+                            utente.Email = dr["email"].ToString();
+                            utente.TipoUtente = dr["tipoUtente"].ToString();
+                            utente.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
+                        }
                     }
+                    conn.Close();
                 }
-                conn.Close();
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return utente;
 
@@ -283,7 +265,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception("errore:" + ex);
+                throw new Exception(ex.Message);
             }
 
         }

@@ -13,6 +13,7 @@ namespace Cattedre
     public partial class FrmCdC : Form
     {
         public ClsClasseDiConcorsoDL _cdc = new ClsClasseDiConcorsoDL();
+        public ClsDotareDL _dot = new ClsDotareDL();
 
         public FrmCdC()
         {
@@ -28,6 +29,8 @@ namespace Cattedre
                     _cdc.Livello = tbLivello.Text;
                     _cdc.AbilitazioniRichieste = rtbAbilitazioni.Text;
                     _cdc.Nome = tbNome.Text;
+                    _dot.NumcattedreDiritto = Convert.ToInt32(nudNumCattedreDiritto.Value);
+                    _dot.NumcattedreFatto = Convert.ToInt32(nudNumCattedreFatto.Value);
                 }
                 else
                     throw new Exception("Inserire tutti i valori richiesti");
@@ -48,6 +51,8 @@ namespace Cattedre
                 tbNome.Text = _cdc.Nome;
                 tbLivello.Text = _cdc.Livello;
                 rtbAbilitazioni.Text = _cdc.AbilitazioniRichieste;
+                nudNumCattedreDiritto.Value = _dot.NumcattedreDiritto;
+                nudNumCattedreFatto.Value = _dot.NumcattedreFatto;
             }
         }
 

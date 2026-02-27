@@ -278,6 +278,18 @@ namespace Cattedre
                     if (disciplina == null)
                         continue;
 
+                    // ricavo indirizzo della classe
+                    long IDindirizzoClasse = ClsClasseBL.TrovaIndirizzoClasse(classe.ID);
+
+                    // controllo appartenenza tra disciplina e indirizzo
+                    bool appartiene = ClsAppartenereBL
+                        .caricaIndirizziDisciplina(disciplina.ID)
+                        .Any(i => i.ID == IDindirizzoClasse);
+
+                    // se non appartiene non creo la UC
+                    if (!appartiene)
+                        continue;
+
                     UcAssegnazioni uc = new UcAssegnazioni();
 
                     // docenti teorici

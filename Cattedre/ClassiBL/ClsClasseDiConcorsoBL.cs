@@ -95,7 +95,7 @@ namespace Cattedre
                            SET livello = @livello,
                                nome = @nome, 
                                abilitazioniRichieste = @abilitazioniRichieste 
-                           WHERE id = @id";
+                           WHERE ID = @id";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
                     cmd.Parameters.AddWithValue("@id", cdc.ID);
@@ -121,7 +121,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "DELETE FROM classidiconcorso WHERE ID =@id ";
+                    string sql = "DELETE FROM classidiconcorso WHERE ID = @id ";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@id",id);

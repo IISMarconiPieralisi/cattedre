@@ -161,6 +161,16 @@ namespace Cattedre
            // }
         }
 
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnCarUtente_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
         //private void cONTRATTIToolStripMenuItem_Click(object sender, EventArgs e)
         //{
         //    FrmContratti frmContratti = new FrmContratti();

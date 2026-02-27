@@ -66,7 +66,7 @@ namespace Cattedre
 
         private async void FrmCattedre_Shown(object sender, EventArgs e)
         {
-            if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
+            if (utenteLoggato.TipoUtente == "C") //|| utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
             {
                 this.Cursor = Cursors.WaitCursor;
 
@@ -373,6 +373,14 @@ namespace Cattedre
                     uc.Location = new Point(x, y);
 
                     pnlDipartimento.Controls.Add(uc);
+
+                    //cambio dei diritti di modifica
+                    if(utenteLoggato.TipoUtente=="A" || utenteLoggato.TipoUtente=="P")
+                    {
+                        uc.cbDocentiItip.Enabled = false;
+                        uc.cbDocentiTeorici.Enabled = false;
+                    }
+
                 }
 
                 oreTotaliGenerali += oreTotaliClasse;

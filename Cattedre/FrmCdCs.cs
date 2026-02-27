@@ -47,8 +47,8 @@ namespace Cattedre
                 dr = DialogResult.No;
             if (dr == DialogResult.OK)
             {
-                ClsClasseDiConcorsoBL.InserisciCdc(frmCdC._cdc);
-                ClsDotareBL.InserisciDotare(frmCdC._dot, frmCdC._cdc.ID);
+                long idCdc = ClsClasseDiConcorsoBL.InserisciCdc(frmCdC._cdc);
+                ClsDotareBL.InserisciDotare(frmCdC._dot, idCdc);
                 //cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
                 CaricaListView();
             }

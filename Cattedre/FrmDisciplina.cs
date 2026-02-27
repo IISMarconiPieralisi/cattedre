@@ -13,8 +13,10 @@ namespace Cattedre
     public partial class FrmDisciplina : Form
     {
         List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
-        public ClsDisciplinaDL _disciplina = new ClsDisciplinaDL();
-        public int IDdipartimento;
+        List<ClsIndirizzoDL> indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
+
+        public List<ClsAppartenereDL> _Apparteneres = new List<ClsAppartenereDL>();
+        public ClsDisciplinaDL _disciplina;
 
         public FrmDisciplina()
         {
@@ -23,90 +25,129 @@ namespace Cattedre
 
         private void btSalva_Click(object sender, EventArgs e)
         {
-            _disciplina.Nome = tbNome.Text;
-            if (ckbAnno1.Checked)
-                _disciplina.Anno = 1;
-            else if (ckbAnno2.Checked)
-                _disciplina.Anno = 2;
-            else if (ckbAnno3.Checked)
-                _disciplina.Anno = 3;
-            else if (ckbAnno4.Checked)
-                _disciplina.Anno = 4;
-            else if (ckbAnno5.Checked)
-                _disciplina.Anno = 5;
-            else if(tbDisciplinaSpeciale.Text.ToLower() != "potenziamento")
+
+            try
             {
-                MessageBox.Show("Anno non valido");
+                if (_disciplina.ID <= 0)
+                    _disciplina = new ClsDisciplinaDL();
+                _disciplina.Nome = (tbNome.Text.Length >= 3) ? tbNome.Text.Trim() : throw new Exception("inserire Nome con almeno 3 caratteri");
+                _disciplina.Anno = (rbPrimo.Checked) ? 1 : (rbSecondo.Checked) ? 2 : (rbTerzo.Checked) ? 3 : (rbQuarto.Checked) ? 4 : (rbQuinto.Checked) ? 5 : 0;
+                if (_disciplina.Anno == 0 && tbDisciplinaSpeciale.Text.Trim() == string.Empty)
+                {
+                    throw new Exception("inserire un anno valido");
+                }
+                _disciplina.OreLaboratorio = (int)nudOreLab.Value;
+                _disciplina.OreTeoria = (int)nudOreTeoria.Value;
+                if (tbDisciplinaSpeciale.Text != string.Empty && _disciplina.Anno == 0)
+                    _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text.Trim();
+                else
+                    _disciplina.IDdipartimento = Convert.ToInt32(cbDipartimentoAppartenente.SelectedValue);
+
+
+                //gestione ClsAppartenere
+                foreach (var item in clbIndirizzi.CheckedItems)
+                {
+                    ClsIndirizzoDL indirizzo = indirizzi.Find(d => d.Nome == item.ToString());
+                    if (indirizzo != null)
+                        _Apparteneres.Add(new ClsAppartenereDL(indirizzo.ID));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Errore durante il compilamento:\n{ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
-
-            if ((ckbAnno1.Checked && ckbAnno2.Checked) || (ckbAnno1.Checked && ckbAnno3.Checked) || (ckbAnno1.Checked && ckbAnno4.Checked) ||
-                (ckbAnno1.Checked && ckbAnno5.Checked) ||
-                (ckbAnno2.Checked && ckbAnno3.Checked) || (ckbAnno2.Checked && ckbAnno4.Checked) || (ckbAnno2.Checked && ckbAnno5.Checked) ||
-                (ckbAnno3.Checked && ckbAnno4.Checked) || (ckbAnno3.Checked && ckbAnno5.Checked) ||
-                (ckbAnno4.Checked && ckbAnno5.Checked))
-            {
-                MessageBox.Show("Anno non valido");
-                this.DialogResult = DialogResult.None;
-            }
-
-            _disciplina.OreLaboratorio = (int)nudOreLab.Value;
-            _disciplina.OreTeoria = (int)nudOreTeoria.Value;
-            _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text;
-
-
-            if (string.IsNullOrEmpty(_disciplina.Nome))
-            {
-                MessageBox.Show("Nome mancante");
-                this.DialogResult = DialogResult.None;
-            }
-            else
-                IDdipartimento = Convert.ToInt32(cbDipartimentoAppartenente.SelectedValue);
         }
+
 
         private void FrmDisciplina_Load(object sender, EventArgs e)
         {
             FrmDiscipline frmDiscipline = new FrmDiscipline();
             dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
-
+            PopolaclbIndirizzi();
             cbDipartimentoAppartenente.DataSource = dipartimenti;
             cbDipartimentoAppartenente.DisplayMember = "Nome";
             cbDipartimentoAppartenente.ValueMember = "ID";
 
-            if (_disciplina.Nome != null)
+            if (_disciplina != null)
             {
+                //carico le informazioni della disciplina
                 tbNome.Text = _disciplina.Nome;
                 nudOreLab.Value = _disciplina.OreLaboratorio;
                 nudOreTeoria.Value = _disciplina.OreTeoria;
-                switch(_disciplina.Anno)
-                {
-                    case 1:
-                        ckbAnno1.Checked = true;
-                        break;
-                    case 2:
-                        ckbAnno2.Checked = true;
-                        break;
-                    case 3:
-                        ckbAnno3.Checked = true;
-                        break;
-                    case 4:
-                        ckbAnno4.Checked = true;
-                        break;
-                    case 5:
-                        ckbAnno5.Checked = true;
-                        break;
-                }
-                tbDisciplinaSpeciale.Text = _disciplina.DisciplinaSpeciale;
+                CheckComboBoxs();
+                cbDipartimentoAppartenente.SelectedValue = _disciplina.IDdipartimento;                
+                //carico le informazioni del collegamento con indirizzi
+                _Apparteneres = ClsAppartenereBL.CaricaClassiAppartenereByDisciplina(_disciplina.ID);
+                LoadclbIndirizzi();
+            }
+            else
+            {
+                _disciplina = new ClsDisciplinaDL();
+                cbDipartimentoAppartenente.SelectedIndex = -1;
+            }
 
-                IDdipartimento = ClsDisciplinaBL.IDdipartimenti[frmDiscipline.indiceDaModificare];
-
-                cbDipartimentoAppartenente.SelectedIndex = IDdipartimento - 1;
+        }
+        private void CheckComboBoxs()
+        {
+            switch (_disciplina.Anno)
+            {
+                case 1:
+                    rbPrimo.Checked = true;
+                    break;
+                case 2:
+                    rbSecondo.Checked = true;
+                    break;
+                case 3:
+                    rbTerzo.Checked = true;
+                    break;
+                case 4:
+                    rbQuarto.Checked = true;
+                    break;
+                case 5:
+                    rbQuinto.Checked = true;
+                    break;
+                default:
+                    tbDisciplinaSpeciale.Text = _disciplina.DisciplinaSpeciale;
+                    break;
             }
         }
-
         private void btAnnulla_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+        #region gestione CLsAppartenere
+
+        #endregion
+        #region Indirizzi
+        private void LoadclbIndirizzi()
+        {
+            List<ClsIndirizzoDL> indirizziAppartenuti =ClsAppartenereBL.indirizziDellaDisciplina(_disciplina.ID);
+
+            if (indirizziAppartenuti.Count > 0)
+            {
+                for (int i = 0; i < clbIndirizzi.Items.Count; i++)
+                {
+                    string nomeItem = clbIndirizzi.Items[i].ToString();
+
+                    bool afferente = indirizziAppartenuti.Any(d => string.Equals(d.Nome, nomeItem, StringComparison.OrdinalIgnoreCase));
+
+                    clbIndirizzi.SetItemChecked(i, afferente); 
+                }
+                //quando ha fatto l'inserimento pulisce la lista per sicurezza
+                _Apparteneres.Clear();
+            }
+        }
+
+    
+        private void PopolaclbIndirizzi()
+        {
+            clbIndirizzi.Items.Clear();
+            foreach(var indirizzo in indirizzi)
+            {
+                clbIndirizzi.Items.Add(indirizzo.Nome);
+            }
+        }
+        #endregion
     }
 }

@@ -50,11 +50,14 @@
             this.rbAnno2 = new System.Windows.Forms.RadioButton();
             this.rbAnno1 = new System.Windows.Forms.RadioButton();
             this.tbDisciplina = new System.Windows.Forms.TextBox();
+            this.chIndirizzi = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbAnni.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbDipartimenti
             // 
+            this.cbDipartimenti.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDipartimenti.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDipartimenti.FormattingEnabled = true;
             this.cbDipartimenti.Location = new System.Drawing.Point(87, 31);
@@ -86,7 +89,7 @@
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(761, 192);
+            this.btElimina.Location = new System.Drawing.Point(761, 130);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(75, 23);
             this.btElimina.TabIndex = 24;
@@ -97,7 +100,7 @@
             // btModifica
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btModifica.Location = new System.Drawing.Point(761, 140);
+            this.btModifica.Location = new System.Drawing.Point(761, 101);
             this.btModifica.Name = "btModifica";
             this.btModifica.Size = new System.Drawing.Size(75, 23);
             this.btModifica.TabIndex = 23;
@@ -108,7 +111,7 @@
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(761, 95);
+            this.btInserisci.Location = new System.Drawing.Point(761, 72);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.Size = new System.Drawing.Size(75, 23);
             this.btInserisci.TabIndex = 22;
@@ -127,7 +130,8 @@
             this.chOreLab,
             this.chOreTeoria,
             this.chDisciplinaSpeciale,
-            this.chDipartimento});
+            this.chDipartimento,
+            this.chIndirizzi});
             this.lvDiscipline.FullRowSelect = true;
             this.lvDiscipline.HideSelection = false;
             this.lvDiscipline.Location = new System.Drawing.Point(12, 72);
@@ -163,6 +167,7 @@
             // chDisciplinaSpeciale
             // 
             this.chDisciplinaSpeciale.Text = "Speciale";
+            this.chDisciplinaSpeciale.Width = 150;
             // 
             // chDipartimento
             // 
@@ -171,6 +176,7 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(330, 34);
             this.label2.Name = "label2";
@@ -180,6 +186,8 @@
             // 
             // btPulisciCb
             // 
+            this.btPulisciCb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btPulisciCb.Enabled = false;
             this.btPulisciCb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btPulisciCb.ForeColor = System.Drawing.Color.DarkRed;
             this.btPulisciCb.Location = new System.Drawing.Point(729, 32);
@@ -192,6 +200,7 @@
             // 
             // gbAnni
             // 
+            this.gbAnni.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gbAnni.Controls.Add(this.rbAnno5);
             this.gbAnni.Controls.Add(this.rbAnno4);
             this.gbAnni.Controls.Add(this.rbAnno3);
@@ -261,10 +270,16 @@
             // 
             // tbDisciplina
             // 
+            this.tbDisciplina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tbDisciplina.Location = new System.Drawing.Point(391, 32);
             this.tbDisciplina.Name = "tbDisciplina";
             this.tbDisciplina.Size = new System.Drawing.Size(124, 20);
             this.tbDisciplina.TabIndex = 30;
+            // 
+            // chIndirizzi
+            // 
+            this.chIndirizzi.Text = "Indirizzi";
+            this.chIndirizzi.Width = 200;
             // 
             // FrmDiscipline
             // 
@@ -317,5 +332,6 @@
         private System.Windows.Forms.RadioButton rbAnno2;
         private System.Windows.Forms.RadioButton rbAnno1;
         private System.Windows.Forms.TextBox tbDisciplina;
+        private System.Windows.Forms.ColumnHeader chIndirizzi;
     }
 }

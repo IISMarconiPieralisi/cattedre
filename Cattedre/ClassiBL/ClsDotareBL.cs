@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -76,7 +76,7 @@ namespace Cattedre
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@anno", d.IDannoScolastico);
+                        cmd.Parameters.AddWithValue("@anno", d.IDannoscolastico);
                         cmd.Parameters.AddWithValue("@dip", d.IDdipartimento);
                         cmd.Parameters.AddWithValue("@fatto", d.NumCattedreFatto);
                         cmd.Parameters.AddWithValue("@diritto", d.NumCattedreDiritto);
@@ -92,7 +92,7 @@ namespace Cattedre
         }
 
 
-        public static void EliminaDotare(long idDotare)
+        public static void EliminaDotare(long idAnnoScolatisco,long idDipartimento)
         {
             try
             {
@@ -100,12 +100,12 @@ namespace Cattedre
                 {
                     conn.Open();
 
-                    string sql = "DELETE FROM dotare WHERE ID = @ID";
+                    string sql = "DELETE FROM dotare WHERE IDannoScolatisco = @idAnnoScolatisco AND IDdipartimento =@idDipartimento";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ID", idDotare);
-
+                        cmd.Parameters.AddWithValue("@idAnnoScolatisco", idAnnoScolatisco);
+                        cmd.Parameters.AddWithValue("@idDipartimento", idDipartimento);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -149,13 +149,13 @@ namespace Cattedre
                     anni.Add(new ClsAnnoScolasticoDL
                     {
                         ID = Convert.ToInt64(row["ID"]),
-                        DataInizio = Convert.ToDateTime(row["DataInizio"]) // ⬅ CAMPO AGGIORNATO
+                        DataInizio = Convert.ToDateTime(row["DataInizio"])
                     });
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore caricamento anni scolastici associati.", ex);
+                throw new Exception(ex.Message);
             }
 
             return anni;
@@ -165,21 +165,28 @@ namespace Cattedre
 
         public static void ModificaDotazioni(long idDipartimento, List<ClsDotareDL> nuove)
         {
-            List<ClsDotareDL> vecchie = CaricaDotare(idDipartimento);
-
-            // Elimina quelle rimosse
-            foreach (var old in vecchie)
+            try
             {
-                if (!nuove.Any(n => n.IDannoScolastico == old.IDannoScolastico))
-                    EliminaDotare(old.ID);
-            }
+                List<ClsDotareDL> vecchie = CaricaDotare(idDipartimento);
 
-            // Aggiunge quelle nuove
-            foreach (var n in nuove)
+                // Elimina quelle rimosse
+                foreach (ClsDotareDL old in vecchie)
+                {
+                    if (!nuove.Any(n => n.IDannoscolastico == old.IDannoscolastico))
+                        EliminaDotare(old.IDannoscolastico, old.IDdipartimento);
+                }
+
+                // Aggiunge quelle nuove
+                foreach (ClsDotareDL n in nuove)
+                {
+                    if (!vecchie.Any(v => v.IDannoscolastico == n.IDannoscolastico))
+                        InserisciDotare(n);
+                }
+            }catch(Exception  ex)
             {
-                if (!vecchie.Any(v => v.IDannoScolastico == n.IDannoScolastico))
-                    InserisciDotare(n);
+                throw new Exception(ex.Message);
             }
+            
         }
 
 

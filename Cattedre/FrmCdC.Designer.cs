@@ -37,13 +37,19 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.rtbAbilitazioni = new System.Windows.Forms.RichTextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.nudNumCattedreDiritto = new System.Windows.Forms.NumericUpDown();
+            this.nudNumCattedreFatto = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNumCattedreDiritto)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNumCattedreFatto)).BeginInit();
             this.SuspendLayout();
             // 
             // btSava
             // 
             this.btSava.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btSava.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.btSava.Location = new System.Drawing.Point(196, 259);
+            this.btSava.Location = new System.Drawing.Point(196, 342);
             this.btSava.Margin = new System.Windows.Forms.Padding(2);
             this.btSava.Name = "btSava";
             this.btSava.Size = new System.Drawing.Size(174, 37);
@@ -55,7 +61,7 @@
             // btAnnulla
             // 
             this.btAnnulla.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.btAnnulla.Location = new System.Drawing.Point(14, 259);
+            this.btAnnulla.Location = new System.Drawing.Point(14, 342);
             this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.Size = new System.Drawing.Size(178, 37);
@@ -125,11 +131,47 @@
             this.rtbAbilitazioni.TabIndex = 20;
             this.rtbAbilitazioni.Text = "";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(14, 253);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(113, 13);
+            this.label4.TabIndex = 21;
+            this.label4.Text = "Num cattedre di diritto:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(14, 296);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(109, 13);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Num cattedre di fatto:";
+            // 
+            // nudNumCattedreDiritto
+            // 
+            this.nudNumCattedreDiritto.Location = new System.Drawing.Point(138, 251);
+            this.nudNumCattedreDiritto.Name = "nudNumCattedreDiritto";
+            this.nudNumCattedreDiritto.Size = new System.Drawing.Size(43, 20);
+            this.nudNumCattedreDiritto.TabIndex = 23;
+            // 
+            // nudNumCattedreFatto
+            // 
+            this.nudNumCattedreFatto.Location = new System.Drawing.Point(138, 294);
+            this.nudNumCattedreFatto.Name = "nudNumCattedreFatto";
+            this.nudNumCattedreFatto.Size = new System.Drawing.Size(43, 20);
+            this.nudNumCattedreFatto.TabIndex = 24;
+            // 
             // FrmCdC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 343);
+            this.ClientSize = new System.Drawing.Size(383, 419);
+            this.Controls.Add(this.nudNumCattedreFatto);
+            this.Controls.Add(this.nudNumCattedreDiritto);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.rtbAbilitazioni);
             this.Controls.Add(this.btSava);
             this.Controls.Add(this.btAnnulla);
@@ -143,6 +185,8 @@
             this.Name = "FrmCdC";
             this.Text = "Classe di concorso";
             this.Load += new System.EventHandler(this.FrmCdC_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.nudNumCattedreDiritto)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNumCattedreFatto)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -158,5 +202,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox rtbAbilitazioni;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.NumericUpDown nudNumCattedreDiritto;
+        private System.Windows.Forms.NumericUpDown nudNumCattedreFatto;
     }
 }

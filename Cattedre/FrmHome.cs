@@ -54,16 +54,12 @@ namespace Cattedre
                 btUtenti.Visible = true;
                 btClassi.Visible = true;
                 btVaiACattedre.Visible = true;
-                pbmp.Visible = false;
-
             }
             else
             {
                 menuStrip1.Visible = false;
-                btDiscipline.Visible = false;
                 btUtenti.Visible = false;
-                btClassi.Visible = false;
-                pbmp.Visible = false;
+                btVaiACattedre.Visible = false;
             }
             lblNominativo.Text = utente.Nome.ToUpper() + " " + utente.Cognome.ToUpper();
             // AggiornaLabel(lblNominativo.Text, lblNominativo);
@@ -128,14 +124,14 @@ namespace Cattedre
         private void dISCIPLINEToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Application.OpenForms["FrmDiscipline"] == null)
-                frmDiscipline = new FrmDiscipline();
+                frmDiscipline = new FrmDiscipline(utente);
             MostraFormMDI(frmDiscipline);
         }
 
         private void cLASSIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Application.OpenForms["FrmClassi"] == null)
-                frmClassi = new FrmClassi();
+                frmClassi = new FrmClassi(utente);
             MostraFormMDI(frmClassi);
         }
 

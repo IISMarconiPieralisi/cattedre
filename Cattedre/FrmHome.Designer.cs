@@ -42,7 +42,6 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.btLogout = new System.Windows.Forms.Button();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.pbmp = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.cDCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iNDIRIZZIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +54,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbmp)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,15 +70,17 @@
             this.panel2.Location = new System.Drawing.Point(0, 33);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(312, 824);
+            this.panel2.Size = new System.Drawing.Size(338, 824);
             this.panel2.TabIndex = 3;
             // 
             // btClassi
             // 
+            this.btClassi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btClassi.Font = new System.Drawing.Font("Century Gothic", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btClassi.Location = new System.Drawing.Point(16, 220);
+            this.btClassi.Location = new System.Drawing.Point(16, 224);
             this.btClassi.Name = "btClassi";
-            this.btClassi.Size = new System.Drawing.Size(265, 43);
+            this.btClassi.Size = new System.Drawing.Size(306, 43);
             this.btClassi.TabIndex = 28;
             this.btClassi.Text = "CLASSI";
             this.btClassi.UseVisualStyleBackColor = true;
@@ -88,10 +88,12 @@
             // 
             // btUtenti
             // 
+            this.btUtenti.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btUtenti.Font = new System.Drawing.Font("Century Gothic", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btUtenti.Location = new System.Drawing.Point(16, 281);
+            this.btUtenti.Location = new System.Drawing.Point(16, 291);
             this.btUtenti.Name = "btUtenti";
-            this.btUtenti.Size = new System.Drawing.Size(265, 43);
+            this.btUtenti.Size = new System.Drawing.Size(306, 43);
             this.btUtenti.TabIndex = 27;
             this.btUtenti.Text = "UTENTI";
             this.btUtenti.UseVisualStyleBackColor = true;
@@ -99,10 +101,12 @@
             // 
             // btDiscipline
             // 
+            this.btDiscipline.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btDiscipline.Font = new System.Drawing.Font("Century Gothic", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btDiscipline.Location = new System.Drawing.Point(16, 157);
             this.btDiscipline.Name = "btDiscipline";
-            this.btDiscipline.Size = new System.Drawing.Size(265, 43);
+            this.btDiscipline.Size = new System.Drawing.Size(306, 43);
             this.btDiscipline.TabIndex = 26;
             this.btDiscipline.Text = "DISCIPLINE";
             this.btDiscipline.UseVisualStyleBackColor = true;
@@ -143,9 +147,9 @@
             // 
             // button10
             // 
-            this.button10.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.button10.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.button10.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button10.Location = new System.Drawing.Point(627, 41);
+            this.button10.Location = new System.Drawing.Point(614, 41);
             this.button10.Margin = new System.Windows.Forms.Padding(2);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(380, 35);
@@ -157,7 +161,7 @@
             // 
             this.btVaiACattedre.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btVaiACattedre.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btVaiACattedre.Location = new System.Drawing.Point(627, 3);
+            this.btVaiACattedre.Location = new System.Drawing.Point(614, 3);
             this.btVaiACattedre.Margin = new System.Windows.Forms.Padding(2);
             this.btVaiACattedre.Name = "btVaiACattedre";
             this.btVaiACattedre.Size = new System.Drawing.Size(380, 35);
@@ -175,10 +179,10 @@
             this.panel3.Controls.Add(this.btVaiACattedre);
             this.panel3.Controls.Add(this.button10);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(312, 776);
+            this.panel3.Location = new System.Drawing.Point(338, 776);
             this.panel3.Margin = new System.Windows.Forms.Padding(2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1394, 81);
+            this.panel3.Size = new System.Drawing.Size(1368, 81);
             this.panel3.TabIndex = 4;
             // 
             // pictureBox3
@@ -196,7 +200,7 @@
             // 
             this.btLogout.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btLogout.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btLogout.Location = new System.Drawing.Point(1163, 19);
+            this.btLogout.Location = new System.Drawing.Point(1137, 19);
             this.btLogout.Margin = new System.Windows.Forms.Padding(2);
             this.btLogout.Name = "btLogout";
             this.btLogout.Size = new System.Drawing.Size(177, 43);
@@ -216,16 +220,6 @@
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(394, 37);
             this.dateTimePicker1.TabIndex = 0;
-            // 
-            // pbmp
-            // 
-            this.pbmp.Image = ((System.Drawing.Image)(resources.GetObject("pbmp.Image")));
-            this.pbmp.Location = new System.Drawing.Point(826, 7);
-            this.pbmp.Name = "pbmp";
-            this.pbmp.Size = new System.Drawing.Size(31, 26);
-            this.pbmp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbmp.TabIndex = 5;
-            this.pbmp.TabStop = false;
             // 
             // menuStrip1
             // 
@@ -306,7 +300,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(1706, 857);
-            this.Controls.Add(this.pbmp);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.menuStrip1);
@@ -315,6 +308,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmHome";
+            this.Text = "Cattedre";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmHome_FormClosing);
             this.Load += new System.EventHandler(this.FrmHomeUpdate_Load);
@@ -323,7 +317,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbmp)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -352,7 +345,6 @@
         private System.Windows.Forms.Button btDiscipline;
         private System.Windows.Forms.Button btClassi;
         private System.Windows.Forms.Button btUtenti;
-        private System.Windows.Forms.PictureBox pbmp;
         private System.Windows.Forms.ToolStripMenuItem cREDITSToolStripMenuItem;
     }
 }

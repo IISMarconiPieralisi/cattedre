@@ -62,7 +62,6 @@ namespace Cattedre
 
         private void FrmDisciplina_Load(object sender, EventArgs e)
         {
-            FrmDiscipline frmDiscipline = new FrmDiscipline();
             dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
             PopolaclbIndirizzi();
             cbDipartimentoAppartenente.DataSource = dipartimenti;

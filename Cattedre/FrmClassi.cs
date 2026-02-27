@@ -15,10 +15,12 @@ namespace Cattedre
         public List<ClsClasseDL> classi = new List<ClsClasseDL>();
         List<ClsUtenteDL> _coordinatori = new List<ClsUtenteDL>();
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
-
-        public FrmClassi()
+        //inserisco il utenteLoggato a in questapagina;
+        ClsUtenteDL UtenteLoggato;
+        public FrmClassi(ClsUtenteDL utenteLog)
         {
             InitializeComponent();
+            UtenteLoggato = utenteLog;
         }
 
       
@@ -43,7 +45,7 @@ namespace Cattedre
         {
             classi = ClsClasseBL.CaricaClassi();
             CaricaListView(classi);
-
+            GestionePermessi();
             //popolo combobox filtraggio
             foreach (ClsClasseDL classe in classi)
             {
@@ -55,7 +57,25 @@ namespace Cattedre
                 cbIndirizzi.Items.Add(ind.Nome);
 
         }
+        private void GestionePermessi()
+        {
+            if (UtenteLoggato != null && !(UtenteLoggato.TipoUtente == "A" || UtenteLoggato.TipoUtente == "C"))
+            {
+                btElimina.Visible = false;
+                btInserisci.Visible = false;
+                brModifica.Visible = false;
+                btElimina.Anchor = AnchorStyles.None;
+                btInserisci.Anchor = AnchorStyles.None;
+                brModifica.Anchor = AnchorStyles.None;
 
+                lvClassi.Width = this.ClientSize.Width - (lvClassi.Left * 2);
+
+                lvClassi.Height = this.ClientSize.Height - lvClassi.Top - 50;
+                lvClassi.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+
+
+            }     
+        }
         private void btInserisci_Click(object sender, EventArgs e)
         {
             try

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +12,8 @@ namespace Cattedre
         long _id;
         long _idAnnoscolastico;
         long _idClasseDiConcorso;
-        long _Numcattedrefatto;
-        long _NumcattedreDiritto;
+        int _NumcattedreFatto;
+        int _NumcattedreDiritto;
         #endregion
         #region costruttore
         public ClsDotareDL(long idClasseDiConcorso)
@@ -34,10 +34,10 @@ namespace Cattedre
         #endregion
         #region proprietà
         public long IdAnnoscolastico { get => _idAnnoscolastico; set => _idAnnoscolastico = value; }
-        public long Numcattedrefatto { get => _Numcattedrefatto; set => _Numcattedrefatto = value; }
-        public long NumcattedreDiritto { get => _NumcattedreDiritto; set => _NumcattedreDiritto = value; }
+        public int NumcattedreDiritto { get => _NumcattedreDiritto; set => _NumcattedreDiritto = value; }
         public long IdClasseDiConcorso { get => _idClasseDiConcorso; set => _idClasseDiConcorso = value; }
         public long Id { get => _id; set => _id = value; }
+        public int NumcattedreFatto { get => _NumcattedreFatto; set => _NumcattedreFatto = value; }
         #endregion
     }
 }

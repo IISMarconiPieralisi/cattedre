@@ -33,13 +33,80 @@ namespace Cattedre
         #endregion
 
         #region PROPRIETA
-        public long ID { get => _id; set => _id = value; }
-        public string Nome { get => _nome; set => _nome = value; }
-        public string DisciplinaSpeciale { get => _disciplinaSpeciale; set => _disciplinaSpeciale = value; }
-        public int OreTeoria { get => _oreTeoria; set => _oreTeoria = value; }
-        public int OreLaboratorio { get => _oreLaboratorio; set => _oreLaboratorio = value; }
-        public int Anno { get => _anno; set => _anno = value; }
-        public long IDdipartimento { get => _IDdipartimento; set => _IDdipartimento = value; }
+        public long ID
+        {
+            get => _id;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException("ID deve essere maggiore di zero.");
+                _id = value;
+            }
+        }
+
+        public string Nome
+        {
+            get => _nome;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Nome non può essere vuoto.");
+                _nome = value;
+            }
+        }
+
+        public string DisciplinaSpeciale
+        {
+            get => _disciplinaSpeciale;
+            set
+            {
+                _disciplinaSpeciale = value;
+            }
+        }
+
+        public int OreTeoria
+        {
+            get => _oreTeoria;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Ore Teoria non possono essere negative.");
+                _oreTeoria = value;
+            }
+        }
+
+        public int OreLaboratorio
+        {
+            get => _oreLaboratorio;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Ore Laboratorio non possono essere negative.");
+                _oreLaboratorio = value;
+            }
+        }
+
+        public int Anno
+        {
+            get => _anno;
+            set
+            {
+                if (value > 5)
+                    throw new ArgumentException("Anno deve essere maggiore di zero.");
+                _anno = value;
+            }
+        }
+
+        public long IDdipartimento
+        {
+            get => _IDdipartimento;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException("ID Dipartimento deve essere maggiore di zero.");
+                _IDdipartimento = value;
+            }
+        }
         #endregion
     }
 }

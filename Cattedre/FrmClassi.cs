@@ -14,7 +14,7 @@ namespace Cattedre
     {
         public List<ClsClasseDL> classi = new List<ClsClasseDL>();
         List<ClsUtenteDL> _coordinatori = new List<ClsUtenteDL>();
-        List<ClsIndirizzoDL> _indirizzi = new List<ClsIndirizzoDL>();
+        List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
 
         public FrmClassi()
         {
@@ -50,6 +50,10 @@ namespace Cattedre
                 if (!cbAnnoClasse.Items.Contains(classe.Anno))
                     cbAnnoClasse.Items.Add(classe.Anno);
             }
+            //popol combobox filtraggio Indirizzi
+            foreach( var ind in _indirizzi)
+                cbIndirizzi.Items.Add(ind.Nome);
+
         }
 
         private void btInserisci_Click(object sender, EventArgs e)
@@ -115,10 +119,19 @@ namespace Cattedre
 
         private void btCerca_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (cbIndirizzi.SelectedIndex == -1 && cbAnnoClasse.SelectedIndex == -1)
+                    throw new Exception("Selezionare un campo da filtrare");
+                List<ClsClasseDL> classiFiltrate = ClsClasseBL.CaricaClassiFiltrate(Convert.ToInt32(cbAnnoClasse.Text));
 
-            List<ClsClasseDL> classiFiltrate = ClsClasseBL.CaricaClassiFiltrate(Convert.ToInt32(cbAnnoClasse.Text));
-            
-            CaricaListView(classiFiltrate);
+                CaricaListView(classiFiltrate);
+            }catch(Exception ex)
+            {
+                MessageBox.Show($"errore:{ex.Message}\n riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
         }
 
         private void btRipristina_Click(object sender, EventArgs e)

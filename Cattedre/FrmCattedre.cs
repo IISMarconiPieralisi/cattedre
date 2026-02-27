@@ -66,7 +66,7 @@ namespace Cattedre
 
         private async void FrmCattedre_Shown(object sender, EventArgs e)
         {
-            if (utenteLoggato.TipoUtente == "C") //|| utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
+            if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "D") //|| utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
             {
                 this.Cursor = Cursors.WaitCursor;
 
@@ -83,7 +83,7 @@ namespace Cattedre
 
                 this.Cursor = Cursors.Default;
             }
-            if (utenteLoggato.TipoUtente == "C")
+            if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "D")
             {
                 cbDipartimenti.SelectedIndex = IDdipartimento - 1;
                 cbDipartimenti.Enabled = false;
@@ -387,7 +387,7 @@ namespace Cattedre
                     pnlDipartimento.Controls.Add(uc);
 
                     //cambio dei diritti di modifica
-                    if(utenteLoggato.TipoUtente=="A" || utenteLoggato.TipoUtente=="P")
+                    if(utenteLoggato.TipoUtente=="A" || utenteLoggato.TipoUtente=="P" || utenteLoggato.TipoUtente == "D")
                     {
                         uc.cbDocentiItip.Enabled = false;
                         uc.cbDocentiTeorici.Enabled = false;

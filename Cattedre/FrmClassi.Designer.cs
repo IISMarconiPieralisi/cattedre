@@ -52,13 +52,13 @@
             this.cbAnnoClasse.FormattingEnabled = true;
             this.cbAnnoClasse.Location = new System.Drawing.Point(97, 17);
             this.cbAnnoClasse.Name = "cbAnnoClasse";
-            this.cbAnnoClasse.Size = new System.Drawing.Size(38, 21);
+            this.cbAnnoClasse.Size = new System.Drawing.Size(83, 21);
             this.cbAnnoClasse.TabIndex = 20;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 20);
+            this.label1.Location = new System.Drawing.Point(14, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 13);
             this.label1.TabIndex = 19;
@@ -66,7 +66,8 @@
             // 
             // btCerca
             // 
-            this.btCerca.Location = new System.Drawing.Point(401, 20);
+            this.btCerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btCerca.Location = new System.Drawing.Point(401, 16);
             this.btCerca.Name = "btCerca";
             this.btCerca.Size = new System.Drawing.Size(75, 23);
             this.btCerca.TabIndex = 18;
@@ -156,7 +157,9 @@
             // 
             // btRipristina
             // 
-            this.btRipristina.Location = new System.Drawing.Point(482, 20);
+            this.btRipristina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btRipristina.Enabled = false;
+            this.btRipristina.Location = new System.Drawing.Point(482, 16);
             this.btRipristina.Name = "btRipristina";
             this.btRipristina.Size = new System.Drawing.Size(75, 23);
             this.btRipristina.TabIndex = 21;
@@ -166,17 +169,19 @@
             // 
             // cbIndirizzi
             // 
+            this.cbIndirizzi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbIndirizzi.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbIndirizzi.FormattingEnabled = true;
-            this.cbIndirizzi.Location = new System.Drawing.Point(244, 17);
+            this.cbIndirizzi.Location = new System.Drawing.Point(316, 17);
             this.cbIndirizzi.Name = "cbIndirizzi";
-            this.cbIndirizzi.Size = new System.Drawing.Size(122, 21);
+            this.cbIndirizzi.Size = new System.Drawing.Size(50, 21);
             this.cbIndirizzi.TabIndex = 23;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(151, 20);
+            this.label2.Location = new System.Drawing.Point(207, 20);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(87, 13);
             this.label2.TabIndex = 22;

@@ -171,22 +171,18 @@ namespace Cattedre
             DataTable ds = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = "SELECT * FROM classi " +
-                                 "WHERE anno = @anno" +
-                                 " ORDER BY anno";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    using (MySqlConnection conn = new MySqlConnection(connectionString))
                     {
-                        cmd.Parameters.AddWithValue("@anno", anno);
-                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        conn.Open();
+                        using (MySqlCommand cmd = CreaQueryFiltri(conn,anno,IDindirizzo))
                         {
-                            dr.Fill(ds);
+                            using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                            {
+                                dr.Fill(ds);
+                            }
+                            conn.Close();
                         }
-                        conn.Close();
                     }
-                }
                 foreach (DataRow row in ds.Rows)
                 {
                     ClsClasseDL classe = new ClsClasseDL();
@@ -206,25 +202,35 @@ namespace Cattedre
             }
             return classi;
         }
-        private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, long  anno = 0, long IDindirizzo = 0)
+        private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, int  anno = 0, long IDindirizzo = 0)
         {
-            string sql = "SELECT * FROM classi WHERE";
-            MySqlCommand cmd = new MySqlCommand("", conn);
-            if(anno>0)
+            try
             {
-                sql += "anno=@anno";
-                cmd.Parameters.AddWithValue("@anno", anno);
-            }
-            if(IDindirizzo>0)
-            {
+                if (anno <= 0 && IDindirizzo <= 0)
+                    throw new Exception("non è stato inserito nessun parametro in cui filtrare,riprovare");
+                string sql = "SELECT * FROM classi WHERE ";
+                MySqlCommand cmd = new MySqlCommand("", conn);
                 if (anno > 0)
-                    sql += " AND ";
-                sql += "anno=@IDindrizzo";
-                cmd.Parameters.AddWithValue("@IDindrizzo", IDindirizzo);
+                {
+                    sql += "anno=@anno ";
+                    cmd.Parameters.AddWithValue("@anno", anno);
+                }
+                if (IDindirizzo > 0)
+                {
+                    if (anno > 0)
+                        sql += "AND ";
+                    sql += "IDindirizzo=@IDindirizzo";
+                    cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
+                }
+                sql += ";";
+                cmd.CommandText = sql;
+                return cmd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
 
-            cmd.CommandText = sql;
-            return cmd;
         }
         public static void InserisciClasse(ClsClasseDL classe)
         {

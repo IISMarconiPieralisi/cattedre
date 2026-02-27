@@ -95,7 +95,7 @@ namespace Cattedre
                     }
                 }catch (Exception ex)
                 {
-                   MessageBox.Show($"errore:{ex.Message}\n riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                   MessageBox.Show($"errore:\n{ex.Message}\nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                
             }
@@ -122,23 +122,25 @@ namespace Cattedre
             try
             {
                 if (cbIndirizzi.SelectedIndex == -1 && cbAnnoClasse.SelectedIndex == -1)
-                    throw new Exception("Selezionare un campo da filtrare");
-                List<ClsClasseDL> classiFiltrate = ClsClasseBL.CaricaClassiFiltrate(Convert.ToInt32(cbAnnoClasse.Text));
+                    throw new Exception("Inserire almeno un criterio di ricerca");
 
+                List <ClsClasseDL> classiFiltrate = ClsClasseBL.CaricaClassiFiltrate(Convert.ToInt32(cbAnnoClasse.Text), ClsIndirizzoBL.RilevaIDindirizzo(cbIndirizzi.Text));
                 CaricaListView(classiFiltrate);
+                btRipristina.Enabled = true;
             }catch(Exception ex)
             {
-                MessageBox.Show($"errore:{ex.Message}\n riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                MessageBox.Show($"{ex.Message}\nRiprovare!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }
 
         private void btRipristina_Click(object sender, EventArgs e)
         {
+            btRipristina.Enabled = false;
             classi = ClsClasseBL.CaricaClassi();
             CaricaListView(classi);
-            cbAnnoClasse.Text = "";
+            cbAnnoClasse.SelectedIndex=-1;
+            cbIndirizzi.SelectedIndex = -1;
         }
     }
 }

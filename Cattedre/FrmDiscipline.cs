@@ -21,11 +21,9 @@ namespace Cattedre
             InitializeComponent();
         }
 
-        private void CaricaListView(List<ClsDisciplinaDL> discipline, List<int> IDdipartimenti)
+        private void CaricaListView(List<ClsDisciplinaDL> discipline)
         {
             lvDiscipline.Items.Clear();
-
-            int i = 0;
             foreach (ClsDisciplinaDL disciplina in discipline)
             {
                 ListViewItem lvi = new ListViewItem(Convert.ToString(disciplina.Anno));
@@ -33,11 +31,10 @@ namespace Cattedre
                 lvi.SubItems.Add(Convert.ToString(disciplina.OreLaboratorio));
                 lvi.SubItems.Add(Convert.ToString(disciplina.OreTeoria));
                 lvi.SubItems.Add(Convert.ToString(disciplina.DisciplinaSpeciale));
-                lvi.SubItems.Add(ClsDisciplinaBL.RilevaNomeDipartimento(IDdipartimenti[i]));
+                lvi.SubItems.Add(ClsDisciplinaBL.RilevaNomeDipartimento(disciplina.IDdipartimento));
+                lvi.SubItems.Add(CaricaGraficamenteIndirizzi(disciplina));
                 lvi.Tag = disciplina.ID;
                 lvDiscipline.Items.Add(lvi);
-
-                i++;
             }
         }
 
@@ -50,9 +47,22 @@ namespace Cattedre
                 dr = DialogResult.No;
             if (dr == DialogResult.OK)
             {
-                ClsDisciplinaBL.InserisciDisciplina(frmDisciplina._disciplina, frmDisciplina.IDdipartimento);
+                try
+                {
+                    ClsDisciplinaBL.InserisciDisciplina(frmDisciplina._disciplina);
+                    int ID=ClsDisciplinaBL.CercaIdDisciplina(frmDisciplina._disciplina);
+                    foreach (var appartenere in frmDisciplina._Apparteneres)
+                    {
+                        appartenere.IDdisicplina = ID;
+                        ClsAppartenereBL.InserireAppartenere(appartenere);
+                    }
+                }catch(Exception ex)
+                {
+                    MessageBox.Show($"Errore: {ex.Message} in riga {ex.Source} /n riprovare", "Errore");
+                }
                 discipline = ClsDisciplinaBL.CaricaDiscipline();
-                CaricaListView(discipline, ClsDisciplinaBL.IDdipartimenti);
+                CaricaListView(discipline);
+
             }
         }
 
@@ -60,10 +70,10 @@ namespace Cattedre
         {
             discipline = ClsDisciplinaBL.CaricaDiscipline();
             dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
-            CaricaListView(discipline, ClsDisciplinaBL.IDdipartimenti);
+            CaricaListView(discipline);
 
             //popolo combobox filtraggio per dipartimenti
-            foreach(ClsDipartimentoDL dipartimento in dipartimenti)
+            foreach (ClsDipartimentoDL dipartimento in dipartimenti)
             {
                 if(!cbDipartimenti.Items.Contains(dipartimento.Nome))
                 cbDipartimenti.Items.Add(dipartimento.Nome);
@@ -79,10 +89,13 @@ namespace Cattedre
                 DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
                 if (dr == DialogResult.Yes)
                 {
-                    discipline = ClsDisciplinaBL.EliminaDisciplina(idDaEliminare);
+                    ClsDisciplinaBL.EliminaDisciplina(idDaEliminare);
                 }
-                CaricaListView(discipline, ClsDisciplinaBL.IDdipartimenti);
+                discipline = ClsDisciplinaBL.CaricaDiscipline();
+                CaricaListView(discipline);
             }
+            else
+                MessageBox.Show("Seleziona una disciplina da cancellare", "domanda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void btModifica_Click(object sender, EventArgs e)
@@ -95,32 +108,54 @@ namespace Cattedre
                 DialogResult dr = frmDisciplina.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
-                    ClsDisciplinaBL.ModificaDisciplina(frmDisciplina._disciplina, discipline, indiceDaModificare, frmDisciplina.IDdipartimento);
-                    CaricaListView(discipline, ClsDisciplinaBL.IDdipartimenti);
+                    try
+                    {
+                        ClsDisciplinaBL.ModificaDisciplina(frmDisciplina._disciplina);
+                        ClsAppartenereBL.ModificaAppartenenze(frmDisciplina._disciplina.ID, frmDisciplina._Apparteneres);
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show($"Errore nella modifica {ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    discipline = ClsDisciplinaBL.CaricaDiscipline();
+                    CaricaListView(discipline);
+
                 }
             }
         }
 
         private void btCerca_Click(object sender, EventArgs e)
         {
-            List<ClsDisciplinaDL> disciplineFiltrate = new List<ClsDisciplinaDL>();
-            int anno=0;
-            long iddipartimento = (cbDipartimenti.SelectedIndex >= 0) ? dipartimenti[cbDipartimenti.SelectedIndex].ID : 0;
-            string nome = tbDisciplina.Text;
+            long iddipartimento = 0;
+            int anno = 0;
+            string nome = tbDisciplina.Text.Trim();
+            try
+            {
+                if (cbDipartimenti.SelectedIndex >= 0)
+                    iddipartimento = dipartimenti[cbDipartimenti.SelectedIndex].ID;
 
-            if (rbAnno1.Checked)
-                anno = 1;
-            else if (rbAnno2.Checked)
-                anno = 2;
-            else if (rbAnno3.Checked)
-                anno = 3;
-            else if (rbAnno4.Checked)
-                anno = 4;
-            else if (rbAnno5.Checked)
-                anno = 5;
+                if (rbAnno1.Checked) anno = 1;
+                else if (rbAnno2.Checked) anno = 2;
+                else if (rbAnno3.Checked) anno = 3;
+                else if (rbAnno4.Checked) anno = 4;
+                else if (rbAnno5.Checked) anno = 5;
 
-            disciplineFiltrate = ClsDisciplinaBL.CaricaDiscipline(iddipartimento, anno, nome);
-            CaricaListView(disciplineFiltrate, ClsDisciplinaBL.IDdipartimenti);
+                if (iddipartimento == 0 && anno == 0 && string.IsNullOrWhiteSpace(nome))
+                    throw new Exception("Inserisci almeno un criterio di ricerca.");
+
+                List<ClsDisciplinaDL> disciplineFiltrate =
+                    ClsDisciplinaBL.CaricaDiscipline(iddipartimento, anno, nome);
+
+                if (disciplineFiltrate == null || disciplineFiltrate.Count == 0)
+                    throw new Exception("Nessuna disciplina trovata.");
+
+                CaricaListView(disciplineFiltrate);
+                btPulisciCb.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message,"Errore",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
 
         private void btPulisciCb_Click(object sender, EventArgs e)
@@ -134,13 +169,20 @@ namespace Cattedre
             rbAnno3.Checked = false;
             rbAnno4.Checked = false;
             rbAnno5.Checked = false;
-            lvDiscipline.Items.Clear();
+            discipline = ClsDisciplinaBL.CaricaDiscipline();
+            CaricaListView(discipline);
+            btPulisciCb.Enabled = false;
 
         }
 
         private void cbDipartimenti_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+        private string CaricaGraficamenteIndirizzi(ClsDisciplinaDL disc)
+        {
+            var listaIndirizzi = ClsAppartenereBL.caricaIndirizziDisciplina(disc.ID).Select(i => i.Nome);
+            return string.Join(", ", listaIndirizzi);
         }
     }
 }

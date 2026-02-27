@@ -22,7 +22,8 @@ namespace Cattedre
 
             conn.Open();
             string sql = "SELECT * FROM discipline " +
-                "WHERE IDdipartimento = @IDdipartimento";
+                "WHERE IDdipartimento = @IDdipartimento " +
+                "AND discipline.nome NOT LIKE '%Potenziamento%'";
             //DataAdapter, DataSet e DataTable su dispensa ADO.Net
             MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
             da.SelectCommand.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
@@ -49,17 +50,21 @@ namespace Cattedre
 
             return discipline;
         }
+        /// <summary>
+        /// funzione al fine di prendere l'id di quella funzione, non avendo parametri univochi apparte l'id, controllo tutti i valori inseriti
+        /// </summary>
+        /// <returns></returns>
+
 
         public static List<ClsDisciplinaDL> CaricaDiscipline(long iddipartimento=0, int anno=0, string nome="") // parametri facoltativi: long dipartimento, int anno, string nome
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            DataTable dt = new DataTable();
             IDdipartimenti.Clear();
             try
             {
-                conn.Open();
-                string sql = "SELECT * FROM discipline WHERE 1=1  ";
+                string sql = $"SELECT * FROM discipline WHERE 1=1 ";
                 if (iddipartimento > 0)
                     sql += "AND IDdipartimento = "+ iddipartimento + "  ";
                 if (anno > 0)
@@ -67,30 +72,35 @@ namespace Cattedre
                 if (nome!="")
                     sql += "AND nome LIKE '%" + nome + "%' ";
                 sql += "ORDER BY anno, nome ASC";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    while (dr.Read())
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
                     {
                         ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
-                        disciplina.ID = Convert.ToInt32(dr["id"]);
-                        disciplina.Nome = dr["nome"].ToString();
-                        disciplina.Anno = Convert.ToInt32(dr["anno"]);
-                        disciplina.OreTeoria = Convert.ToInt32(dr["oreteoria"]);
-                        disciplina.OreLaboratorio = Convert.ToInt32(dr["orelaboratorio"]);
-                        disciplina.DisciplinaSpeciale = dr["disciplinaspeciale"].ToString();
-                        _IDdipartimento = Convert.ToInt32(dr["IDdipartimento"]);
+                        disciplina.ID = Convert.ToInt32(row["id"]);
+                        disciplina.Nome = row["nome"].ToString();
+                        disciplina.Anno = Convert.ToInt32(row["anno"]);
+                        disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
+                        disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
+                        disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
+                        disciplina.IDdipartimento = Convert.ToInt32(row["IDdipartimento"]);
                         discipline.Add(disciplina);
-                        IDdipartimenti.Add(_IDdipartimento);
                     }
+                    conn.Close();
                 }
-                conn.Close();
+
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return discipline;
         }
@@ -129,7 +139,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return _oreDocenteTeorico;     
         }
@@ -167,12 +177,12 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return _oreDocentePratico;
         }
 
-        public static List<ClsDisciplinaDL> InserisciDisciplina(ClsDisciplinaDL disciplina, int IDdipartimento)
+        public static void InserisciDisciplina(ClsDisciplinaDL disciplina)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -190,26 +200,61 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
                     cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                     cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
-                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                    cmd.Parameters.AddWithValue("@IDdipartimento", disciplina.IDdipartimento);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 
-                    if (righeCoinvolte > 0)
+                    if (righeCoinvolte < 0)
                     {
-                        discipline.Add(disciplina);
-                        IDdipartimenti.Add(IDdipartimento);
+                        throw new Exception("non è stato inserito il record");
                     }
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
-
-            return discipline;
         }
 
-        public static string RilevaNomeDipartimento(int id)
+        public static int CercaIdDisciplina(ClsDisciplinaDL disciplina)
         {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT ID
+                           FROM discipline 
+                           WHERE nome = @nome 
+                           AND anno = @anno 
+                           AND IDdipartimento = @IDdipartimento";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@nome", disciplina.Nome);
+                        cmd.Parameters.AddWithValue("@anno", disciplina.Anno);
+                        cmd.Parameters.AddWithValue("@IDdipartimento",disciplina.IDdipartimento);
+
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null)
+                            return Convert.ToInt32(result);
+                        else
+                            throw new Exception("non è stato trovato Disciplina con i derminati parametri inseriti");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+        }
+        public static string RilevaNomeDipartimento(long id)
+        {
+            if (id == 0)
+                return "-";
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
             ClsDipartimentoDL dipartimento = null;
@@ -232,12 +277,12 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
             return dipartimento.Nome;
         }
 
-        public static List<ClsDisciplinaDL> EliminaDisciplina(int id)
+        public static void EliminaDisciplina(int id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -251,21 +296,19 @@ namespace Cattedre
                 {
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 
-                    if (righeCoinvolte > 0)
+                    if (righeCoinvolte < 0)
                     {
-                        discipline = CaricaDiscipline();
+                        throw new Exception("non è stato inserito il record");
                     }
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
-
-            return discipline;
         }
 
-        public static List<ClsDisciplinaDL> ModificaDisciplina(ClsDisciplinaDL disciplina, List<ClsDisciplinaDL> discipline, int indice, int IDdipartimento)
+        public static void ModificaDisciplina(ClsDisciplinaDL disciplina)
         {
             FrmDisciplina frmDisciplina = new FrmDisciplina();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
@@ -289,22 +332,21 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
                     cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                     cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
-                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                    cmd.Parameters.AddWithValue("@IDdipartimento", disciplina.IDdipartimento);
                     cmd.Parameters.AddWithValue("@id", disciplina.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 
-                    if (righeCoinvolte > 0)
+                    if (righeCoinvolte < 0)
                     {
-                        IDdipartimenti[indice] = IDdipartimento;
+                        throw new Exception("non è stato inserito il record");
                     }
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
-            return discipline;
         }
     }
 }

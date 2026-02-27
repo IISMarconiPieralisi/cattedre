@@ -13,6 +13,7 @@ namespace Cattedre
     public partial class FrmCdCs : Form
     {
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+        List<ClsDotareDL> dots = new List<ClsDotareDL>();
         public int indiceDaModificare = 0;
 
         public FrmCdCs()
@@ -23,13 +24,16 @@ namespace Cattedre
         private void CaricaListView()
         {
             cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+            dots = ClsDotareBL.CaricaDotare(1);
             lvCdCs.Items.Clear();
-            foreach (ClsClasseDiConcorsoDL cdc in cdcs)
+            for(int i = 0; i < cdcs.Count; i++)
             {
-                ListViewItem lvi = new ListViewItem(cdc.Livello);
-                lvi.SubItems.Add(cdc.Nome);
-                lvi.SubItems.Add(cdc.AbilitazioniRichieste);
-                lvi.Tag = cdc.ID;
+                ListViewItem lvi = new ListViewItem(cdcs[i].Livello);
+                lvi.SubItems.Add(cdcs[i].Nome);
+                lvi.SubItems.Add(cdcs[i].AbilitazioniRichieste);
+                lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiDiritto(cdcs[i].ID).ToString());
+                lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiFatto(cdcs[i].ID).ToString());
+                lvi.Tag = cdcs[i].ID;
                 lvCdCs.Items.Add(lvi);
             }
         }
@@ -44,14 +48,15 @@ namespace Cattedre
             if (dr == DialogResult.OK)
             {
                 ClsClasseDiConcorsoBL.InserisciCdc(frmCdC._cdc);
-                cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+                ClsDotareBL.InserisciDotare(frmCdC._dot, frmCdC._cdc.ID);
+                //cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
                 CaricaListView();
             }
         }
 
         private void FrmCdCs_Load(object sender, EventArgs e)
         {
-            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+            //cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
             CaricaListView();
         }
 
@@ -59,7 +64,7 @@ namespace Cattedre
         {
             if (lvCdCs.SelectedIndices.Count == 1)
             {
-                int ID =Convert.ToInt32(lvCdCs.SelectedItems[0].Tag);
+                int ID = Convert.ToInt32(lvCdCs.SelectedItems[0].Tag);
                 FrmCdC frmCdC = new FrmCdC();
                 frmCdC._cdc = cdcs.Find(p=>p.ID== ID);
                 DialogResult dr = frmCdC.ShowDialog();

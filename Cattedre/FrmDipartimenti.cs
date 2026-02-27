@@ -15,51 +15,43 @@ namespace Cattedre
         public List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
         List<ClsUtenteDL> docentiDipartimento = new List<ClsUtenteDL>();
         List<ClsUtenteDL> _coordinatori = new List<ClsUtenteDL>();
-
-        public int IDscelta;
         public FrmDipartimenti()
         {
             InitializeComponent();
         }
 
-        public bool CoordinatoreGiaImpegnato(int nuovoID)
-        {
-            return ClsDipartimentoBL.IDutenti.Contains(nuovoID);
-        }
 
-        private void FrmDocenti_Load(object sender, EventArgs e)
-        {
-            dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
-            CaricaListView(ClsDipartimentoBL.IDutenti);
-        }
 
-        private void CaricaListView(List<int> IDutenti)
+        private void CaricaListView()
         {
             lvDipartimenti.Items.Clear();
 
-            int i = 0;
             foreach (ClsDipartimentoDL dipartimento in dipartimenti)
             {
                 ListViewItem lvi = new ListViewItem(dipartimento.Nome);
-                lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(IDutenti[i]));
+                lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(dipartimento.IDutente));
                 lvi.Tag = dipartimento.ID;
                 lvDipartimenti.Items.Add(lvi);
 
-                i++;
             }
         }
 
         private void btInserisci_Click(object sender, EventArgs e)
         {
-            FrmDipartimento frmDipartimento = new FrmDipartimento(0);
+            FrmDipartimento frmDipartimento = new FrmDipartimento();
             DialogResult dr = frmDipartimento.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                if (CoordinatoreGiaImpegnato(frmDipartimento.IDutente))
-                    MessageBox.Show("Coordinatore già impegnato in un dipartimento");
-                ClsDipartimentoBL.InserisciDipartimento(frmDipartimento._dipartimento, frmDipartimento.IDutente);
+                try
+                {
+                    ClsDipartimentoBL.InserisciDipartimento(frmDipartimento._dipartimento);
+                }catch(Exception ex)
+                {
+                    MessageBox.Show($"Errore:\n{ex.Message}; \nRiprovare!","errore",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                }
                 dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
-                CaricaListView(ClsDipartimentoBL.IDutenti);
+                CaricaListView();
+
             }
         }
 
@@ -69,14 +61,14 @@ namespace Cattedre
             {
                 int indiceDaEliminare = lvDipartimenti.SelectedIndices[0];
                 int idDaEliminare = Convert.ToInt32(lvDipartimenti.Items[indiceDaEliminare].Tag);
-                DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
+                DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo,MessageBoxIcon.Question);
                 if (dr == DialogResult.Yes)
                 {
                     ClsDipartimentoBL.EliminaDipartimento(idDaEliminare);
                     dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
                 }
                 dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
-                CaricaListView(ClsDipartimentoBL.IDutenti);
+                CaricaListView();
             }
         }
 
@@ -85,18 +77,31 @@ namespace Cattedre
             if (lvDipartimenti.SelectedIndices.Count == 1)
             {
                 int indiceDaModificare = lvDipartimenti.SelectedIndices[0];
-                FrmDipartimento frmDipartimento = new FrmDipartimento(indiceDaModificare);
+                FrmDipartimento frmDipartimento = new FrmDipartimento();
                 frmDipartimento._dipartimento = dipartimenti[indiceDaModificare];
                 DialogResult dr = frmDipartimento.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
-                    ClsDipartimentoBL.ModificaDipartimento(frmDipartimento._dipartimento, indiceDaModificare, frmDipartimento.IDutente);
-                    if (CoordinatoreGiaImpegnato(frmDipartimento.IDutente))
-                        MessageBox.Show("Coordinatore già impegnato in un dipartimento");
+                    try
+                    {
+                        ClsDipartimentoBL.ModificaDipartimento(frmDipartimento._dipartimento);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Errore:\n{ex.Message}; \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
                     dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
-                    CaricaListView(ClsDipartimentoBL.IDutenti);
+                    CaricaListView();
                 }
             }
+        }
+
+        private void FrmDipartimenti_Load(object sender, EventArgs e)
+        {
+            dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
+            CaricaListView();
+            _coordinatori = ClsUtenteBL.CaricaCoordinatoriDipartimenti();
         }
     }
 }

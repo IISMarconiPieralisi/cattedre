@@ -23,11 +23,17 @@ namespace Cattedre
             _idindirizzo = idindirizzo;
             _iddisciplina = iddisciplina;
         }
+        public ClsAppartenereDL(long idindirizzo)
+        {
+            _idindirizzo = idindirizzo;
+            _iddisciplina = 0;
+        }
+
 
         #endregion
         #region proprietà
 
-        
+
         public long IDindirizzo
         {
             get => _idindirizzo;

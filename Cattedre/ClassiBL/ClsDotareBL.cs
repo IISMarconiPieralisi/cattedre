@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +9,88 @@ using System.Data;
 
 namespace Cattedre
 {
-    class ClsDotareBL
+    public class ClsDotareBL
     {
 
        public static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
-        public static List<ClsDotareDL> CaricaDotare(long idDipartimento)
+        public static int TrovaNumCattedreDiDiritto(long idCdc)
+        {
+            int cattedre = 0;
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT numcattedrediritto
+                               FROM dotare
+                               WHERE IDclassediconcorso = @IDclassediconcorso";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDclassediconcorso", idCdc);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+
+                            if (dt.Rows.Count > 0 && dt.Rows[0]["numcattedrediritto"] != DBNull.Value)
+                            {
+                                cattedre = Convert.ToInt32(dt.Rows[0]["numcattedrediritto"]);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore. ", ex);
+            }
+            return cattedre;
+        }
+
+        public static int TrovaNumCattedreDiFatto(long idCdc)
+        {
+            int cattedre = 0;
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT numcattedrefatto
+                               FROM dotare
+                               WHERE IDclassediconcorso = @IDclassediconcorso";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDclassediconcorso", idCdc);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+
+                            if (dt.Rows.Count > 0 && dt.Rows[0]["numcattedrefatto"] != DBNull.Value)
+                            {
+                                cattedre = Convert.ToInt32(dt.Rows[0]["numcattedrefatto"]);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore. ", ex);
+            }
+            return cattedre;
+        }
+
+        public static List<ClsDotareDL> CaricaDotare(long idAnnoScolastico)
         {
             List<ClsDotareDL> lista = new List<ClsDotareDL>();
             DataTable dt = new DataTable();
@@ -27,12 +103,12 @@ namespace Cattedre
 
                     string sql = @"SELECT *
                                FROM dotare
-                               WHERE IDdipartimento = @dip
+                               WHERE IDannoscolastico = @idAnnoScolastico
                                ORDER BY IDannoScolastico";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@dip", idDipartimento);
+                        cmd.Parameters.AddWithValue("@idAnnoScolastico", idAnnoScolastico);
 
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
@@ -43,14 +119,13 @@ namespace Cattedre
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    lista.Add(new ClsDotareDL
-                    {
-                        ID = Convert.ToInt64(row["ID"]),
-                        IDannoScolastico = Convert.ToInt64(row["IDannoScolastico"]),
-                        IDdipartimento = Convert.ToInt64(row["IDdipartimento"]),
-                        NumCattedreFatto = Convert.ToInt64(row["NumCattedreFatto"]),
-                        NumCattedreDiritto = Convert.ToInt64(row["NumCattedreDiritto"])
-                    });
+                    ClsDotareDL dot = new ClsDotareDL();
+                    dot.Id = Convert.ToInt64(row["ID"]);
+                    dot.NumcattedreDiritto = Convert.ToInt32(row["numcattedrediritto"]);
+                    dot.NumcattedreFatto = Convert.ToInt32(row["numcattedrefatto"]);
+                    dot.IdAnnoscolastico = Convert.ToInt64(row["IDannoscolastico"]);
+                    dot.IdClasseDiConcorso = Convert.ToInt64(row["IDclassediconcorso"]);
+                    lista.Add(dot);
                 }
             }
             catch (Exception ex)
@@ -61,7 +136,7 @@ namespace Cattedre
             return lista;
         }
 
-        public static void InserisciDotare(ClsDotareDL d)
+        public static void InserisciDotare(ClsDotareDL d, long idCdc)
         {
             try
             {
@@ -70,15 +145,15 @@ namespace Cattedre
                     conn.Open();
 
                     string sql = @"INSERT INTO dotare
-                               (IDannoScolastico, IDdipartimento, NumCattedreFatto, NumCattedreDiritto)
-                               VALUES (@anno, @dip, @fatto, @diritto)";
+                               (IDannoscolastico, IDclassediconcorso, numcattedrefatto, numcattedrediritto)
+                               VALUES (@anno, @cdc, @fatto, @diritto)";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@anno", d.IDannoScolastico);
-                        cmd.Parameters.AddWithValue("@dip", d.IDdipartimento);
-                        cmd.Parameters.AddWithValue("@fatto", d.NumCattedreFatto);
-                        cmd.Parameters.AddWithValue("@diritto", d.NumCattedreDiritto);
+                        cmd.Parameters.AddWithValue("@anno", 1);
+                        cmd.Parameters.AddWithValue("@cdc", idCdc);
+                        cmd.Parameters.AddWithValue("@fatto", d.NumcattedreFatto);
+                        cmd.Parameters.AddWithValue("@diritto", d.NumcattedreDiritto);
 
                         cmd.ExecuteNonQuery();
                     }
@@ -91,7 +166,7 @@ namespace Cattedre
         }
 
 
-        public static void EliminaDotare(long idDotare)
+        public static void EliminaDotare(long idAnnoScolatisco,long idDipartimento)
         {
             try
             {
@@ -99,12 +174,12 @@ namespace Cattedre
                 {
                     conn.Open();
 
-                    string sql = "DELETE FROM dotare WHERE ID = @ID";
+                    string sql = "DELETE FROM dotare WHERE IDannoScolatisco = @idAnnoScolatisco AND IDdipartimento =@idDipartimento";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ID", idDotare);
-
+                        cmd.Parameters.AddWithValue("@idAnnoScolatisco", idAnnoScolatisco);
+                        cmd.Parameters.AddWithValue("@idDipartimento", idDipartimento);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -148,13 +223,13 @@ namespace Cattedre
                     anni.Add(new ClsAnnoScolasticoDL
                     {
                         ID = Convert.ToInt64(row["ID"]),
-                        DataInizio = Convert.ToDateTime(row["DataInizio"]) // ⬅ CAMPO AGGIORNATO
+                        DataInizio = Convert.ToDateTime(row["DataInizio"])
                     });
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore caricamento anni scolastici associati.", ex);
+                throw new Exception(ex.Message);
             }
 
             return anni;
@@ -162,24 +237,24 @@ namespace Cattedre
 
 
 
-        public static void ModificaDotazioni(long idDipartimento, List<ClsDotareDL> nuove)
-        {
-            List<ClsDotareDL> vecchie = CaricaDotare(idDipartimento);
+        //public static void ModificaDotazioni(long idDipartimento, List<ClsDotareDL> nuove)
+        //{
+        //    List<ClsDotareDL> vecchie = CaricaDotare(idDipartimento);
 
-            // Elimina quelle rimosse
-            foreach (var old in vecchie)
-            {
-                if (!nuove.Any(n => n.IDannoScolastico == old.IDannoScolastico))
-                    EliminaDotare(old.ID);
-            }
+        //    // Elimina quelle rimosse
+        //    foreach (var old in vecchie)
+        //    {
+        //        if (!nuove.Any(n => n.IDannoScolastico == old.IDannoScolastico))
+        //            EliminaDotare(old.ID);
+        //    }
 
-            // Aggiunge quelle nuove
-            foreach (var n in nuove)
-            {
-                if (!vecchie.Any(v => v.IDannoScolastico == n.IDannoScolastico))
-                    InserisciDotare(n);
-            }
-        }
+        //    // Aggiunge quelle nuove
+        //    foreach (var n in nuove)
+        //    {
+        //        if (!vecchie.Any(v => v.IDannoScolastico == n.IDannoScolastico))
+        //            InserisciDotare(n);
+        //    }
+        //}
 
 
     }

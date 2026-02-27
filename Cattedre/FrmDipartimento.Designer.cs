@@ -40,7 +40,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 24);
+            this.label1.Location = new System.Drawing.Point(12, 24);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
@@ -49,18 +49,18 @@
             // 
             // tbNomeDipartimento
             // 
-            this.tbNomeDipartimento.Location = new System.Drawing.Point(91, 21);
+            this.tbNomeDipartimento.Location = new System.Drawing.Point(91, 17);
             this.tbNomeDipartimento.Margin = new System.Windows.Forms.Padding(2);
             this.tbNomeDipartimento.Name = "tbNomeDipartimento";
-            this.tbNomeDipartimento.Size = new System.Drawing.Size(146, 20);
+            this.tbNomeDipartimento.Size = new System.Drawing.Size(191, 20);
             this.tbNomeDipartimento.TabIndex = 4;
             // 
             // btAnnulla
             // 
-            this.btAnnulla.Location = new System.Drawing.Point(47, 138);
+            this.btAnnulla.Location = new System.Drawing.Point(5, 138);
             this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
             this.btAnnulla.Name = "btAnnulla";
-            this.btAnnulla.Size = new System.Drawing.Size(56, 19);
+            this.btAnnulla.Size = new System.Drawing.Size(134, 28);
             this.btAnnulla.TabIndex = 8;
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
@@ -69,10 +69,10 @@
             // btSalvaDipartimento
             // 
             this.btSalvaDipartimento.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalvaDipartimento.Location = new System.Drawing.Point(155, 138);
+            this.btSalvaDipartimento.Location = new System.Drawing.Point(148, 138);
             this.btSalvaDipartimento.Margin = new System.Windows.Forms.Padding(2);
             this.btSalvaDipartimento.Name = "btSalvaDipartimento";
-            this.btSalvaDipartimento.Size = new System.Drawing.Size(56, 19);
+            this.btSalvaDipartimento.Size = new System.Drawing.Size(134, 28);
             this.btSalvaDipartimento.TabIndex = 9;
             this.btSalvaDipartimento.Text = "Salva";
             this.btSalvaDipartimento.UseVisualStyleBackColor = true;
@@ -81,7 +81,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 83);
+            this.label2.Location = new System.Drawing.Point(12, 83);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 13);
             this.label2.TabIndex = 10;
@@ -93,14 +93,14 @@
             this.cbCoordinatore.FormattingEnabled = true;
             this.cbCoordinatore.Location = new System.Drawing.Point(91, 80);
             this.cbCoordinatore.Name = "cbCoordinatore";
-            this.cbCoordinatore.Size = new System.Drawing.Size(146, 21);
+            this.cbCoordinatore.Size = new System.Drawing.Size(191, 21);
             this.cbCoordinatore.TabIndex = 11;
             // 
             // FrmDipartimento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(269, 177);
+            this.ClientSize = new System.Drawing.Size(299, 177);
             this.Controls.Add(this.cbCoordinatore);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btSalvaDipartimento);

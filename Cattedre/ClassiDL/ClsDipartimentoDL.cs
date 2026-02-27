@@ -10,7 +10,7 @@ namespace Cattedre
     {
         #region ATTRIBUTI
         long _id;
-        string _nome, _nomeCoordinatore;
+        string _nome;
         long _idUtente;
         #endregion
 
@@ -33,10 +33,39 @@ namespace Cattedre
         #endregion
 
         #region PROPRIETA
-        public long ID { get => _id; set => _id = value; }
-        public string Nome { get => _nome; set => _nome = value; }
-        public long IDutente { get => _idUtente; set => _idUtente = value; }
-        public string NomeCoordinatore { get => _nomeCoordinatore; set => _nomeCoordinatore = value; }
+        public long ID
+        {
+            get => _id;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException("ID deve essere maggiore di 0.");
+                _id = value;
+            }
+        }
+
+        public string Nome
+        {
+            get => _nome;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Nome non può essere nullo o vuoto.");
+                _nome = value.Trim();
+            }
+        }
+
+        public long IDutente
+        {
+            get => _idUtente;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("IDutente non può essere negativo.");
+                // può essere 0
+                _idUtente = value;
+            }
+        }
         #endregion
     }
 }

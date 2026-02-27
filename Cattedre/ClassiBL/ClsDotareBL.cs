@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -166,7 +166,7 @@ namespace Cattedre
         }
 
 
-        public static void EliminaDotare(long idDotare)
+        public static void EliminaDotare(long idAnnoScolatisco,long idDipartimento)
         {
             try
             {
@@ -174,12 +174,12 @@ namespace Cattedre
                 {
                     conn.Open();
 
-                    string sql = "DELETE FROM dotare WHERE ID = @ID";
+                    string sql = "DELETE FROM dotare WHERE IDannoScolatisco = @idAnnoScolatisco AND IDdipartimento =@idDipartimento";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ID", idDotare);
-
+                        cmd.Parameters.AddWithValue("@idAnnoScolatisco", idAnnoScolatisco);
+                        cmd.Parameters.AddWithValue("@idDipartimento", idDipartimento);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -223,13 +223,13 @@ namespace Cattedre
                     anni.Add(new ClsAnnoScolasticoDL
                     {
                         ID = Convert.ToInt64(row["ID"]),
-                        DataInizio = Convert.ToDateTime(row["DataInizio"]) // ⬅ CAMPO AGGIORNATO
+                        DataInizio = Convert.ToDateTime(row["DataInizio"])
                     });
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore caricamento anni scolastici associati.", ex);
+                throw new Exception(ex.Message);
             }
 
             return anni;

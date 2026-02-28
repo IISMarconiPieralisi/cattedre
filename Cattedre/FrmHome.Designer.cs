@@ -30,24 +30,25 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmHome));
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btDiscipline = new System.Windows.Forms.Button();
+            this.btClassi = new System.Windows.Forms.Button();
+            this.btUtenti = new System.Windows.Forms.Button();
+            this.btLogout = new System.Windows.Forms.Button();
+            this.btVaiACattedre = new System.Windows.Forms.Button();
             this.pnCarUtente = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.lblEmail = new System.Windows.Forms.Label();
             this.lblNominativo = new System.Windows.Forms.Label();
-            this.btLogout = new System.Windows.Forms.Button();
-            this.btVaiACattedre = new System.Windows.Forms.Button();
-            this.btClassi = new System.Windows.Forms.Button();
-            this.btUtenti = new System.Windows.Forms.Button();
-            this.btDiscipline = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.opzioniToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.impostazioniToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.creditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cDCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iNDIRIZZIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dIPARTIMENTIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dISCIPLINEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cLASSIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uTENTIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cREDITSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2.SuspendLayout();
             this.pnCarUtente.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -70,61 +71,57 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(333, 828);
             this.panel2.TabIndex = 3;
-            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
-            // pnCarUtente
+            // btDiscipline
             // 
-            this.pnCarUtente.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(241)))), ((int)(((byte)(250)))));
-            this.pnCarUtente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pnCarUtente.Controls.Add(this.pictureBox2);
-            this.pnCarUtente.Controls.Add(this.lblEmail);
-            this.pnCarUtente.Controls.Add(this.lblNominativo);
-            this.pnCarUtente.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnCarUtente.Font = new System.Drawing.Font("Segoe Fluent Icons", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pnCarUtente.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
-            this.pnCarUtente.Location = new System.Drawing.Point(0, 0);
-            this.pnCarUtente.Name = "pnCarUtente";
-            this.pnCarUtente.Size = new System.Drawing.Size(333, 171);
-            this.pnCarUtente.TabIndex = 29;
-            this.pnCarUtente.Paint += new System.Windows.Forms.PaintEventHandler(this.pnCarUtente_Paint);
+            this.btDiscipline.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btDiscipline.FlatAppearance.BorderSize = 0;
+            this.btDiscipline.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
+            this.btDiscipline.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(185)))));
+            this.btDiscipline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btDiscipline.Font = new System.Drawing.Font("Segoe UI Symbol", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btDiscipline.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btDiscipline.Location = new System.Drawing.Point(0, 389);
+            this.btDiscipline.Name = "btDiscipline";
+            this.btDiscipline.Size = new System.Drawing.Size(333, 63);
+            this.btDiscipline.TabIndex = 26;
+            this.btDiscipline.Text = "Discipline";
+            this.btDiscipline.UseVisualStyleBackColor = true;
+            this.btDiscipline.Click += new System.EventHandler(this.dISCIPLINEToolStripMenuItem_Click);
             // 
-            // pictureBox2
+            // btClassi
             // 
-            this.pictureBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pictureBox2.Image = global::Cattedre.Properties.Resources.user_account_management_logo_user_icon_11562867145a56rus2zwu;
-            this.pictureBox2.Location = new System.Drawing.Point(23, 7);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(72, 71);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 24;
-            this.pictureBox2.TabStop = false;
+            this.btClassi.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btClassi.FlatAppearance.BorderSize = 0;
+            this.btClassi.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
+            this.btClassi.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(185)))));
+            this.btClassi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btClassi.Font = new System.Drawing.Font("Segoe UI Symbol", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btClassi.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btClassi.Location = new System.Drawing.Point(0, 326);
+            this.btClassi.Name = "btClassi";
+            this.btClassi.Size = new System.Drawing.Size(333, 63);
+            this.btClassi.TabIndex = 28;
+            this.btClassi.Text = "Classi";
+            this.btClassi.UseVisualStyleBackColor = true;
+            this.btClassi.Click += new System.EventHandler(this.cLASSIToolStripMenuItem_Click);
             // 
-            // lblEmail
+            // btUtenti
             // 
-            this.lblEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblEmail.Font = new System.Drawing.Font("Segoe Fluent Icons", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(71)))), ((int)(((byte)(112)))));
-            this.lblEmail.Location = new System.Drawing.Point(19, 113);
-            this.lblEmail.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblEmail.Name = "lblEmail";
-            this.lblEmail.Size = new System.Drawing.Size(293, 27);
-            this.lblEmail.TabIndex = 0;
-            this.lblEmail.Text = "nomecognome@iismarconipieralisi.it";
-            // 
-            // lblNominativo
-            // 
-            this.lblNominativo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblNominativo.AutoSize = true;
-            this.lblNominativo.Font = new System.Drawing.Font("Segoe Fluent Icons", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNominativo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(71)))), ((int)(((byte)(112)))));
-            this.lblNominativo.Location = new System.Drawing.Point(19, 68);
-            this.lblNominativo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblNominativo.Name = "lblNominativo";
-            this.lblNominativo.Size = new System.Drawing.Size(278, 35);
-            this.lblNominativo.TabIndex = 20;
-            this.lblNominativo.Text = "NOME e COGNOME";
+            this.btUtenti.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btUtenti.FlatAppearance.BorderSize = 0;
+            this.btUtenti.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
+            this.btUtenti.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(185)))));
+            this.btUtenti.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btUtenti.Font = new System.Drawing.Font("Segoe UI Symbol", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btUtenti.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btUtenti.Location = new System.Drawing.Point(0, 263);
+            this.btUtenti.Name = "btUtenti";
+            this.btUtenti.Size = new System.Drawing.Size(333, 63);
+            this.btUtenti.TabIndex = 27;
+            this.btUtenti.Text = "Utenti";
+            this.btUtenti.UseVisualStyleBackColor = true;
+            this.btUtenti.Click += new System.EventHandler(this.uTENTIToolStripMenuItem_Click);
             // 
             // btLogout
             // 
@@ -156,65 +153,67 @@
             this.btVaiACattedre.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btVaiACattedre.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btVaiACattedre.ForeColor = System.Drawing.Color.White;
-            this.btVaiACattedre.Location = new System.Drawing.Point(0, 171);
+            this.btVaiACattedre.Location = new System.Drawing.Point(0, 207);
             this.btVaiACattedre.Margin = new System.Windows.Forms.Padding(2);
             this.btVaiACattedre.Name = "btVaiACattedre";
-            this.btVaiACattedre.Size = new System.Drawing.Size(333, 57);
+            this.btVaiACattedre.Size = new System.Drawing.Size(333, 56);
             this.btVaiACattedre.TabIndex = 0;
             this.btVaiACattedre.Text = "Cattedre";
             this.btVaiACattedre.UseVisualStyleBackColor = false;
             this.btVaiACattedre.Click += new System.EventHandler(this.btVaiACattedre_Click);
             // 
-            // btClassi
+            // pnCarUtente
             // 
-            this.btClassi.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btClassi.FlatAppearance.BorderSize = 0;
-            this.btClassi.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
-            this.btClassi.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(185)))));
-            this.btClassi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btClassi.Font = new System.Drawing.Font("Segoe UI Symbol", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btClassi.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btClassi.Location = new System.Drawing.Point(0, 278);
-            this.btClassi.Name = "btClassi";
-            this.btClassi.Size = new System.Drawing.Size(333, 50);
-            this.btClassi.TabIndex = 28;
-            this.btClassi.Text = "Classi";
-            this.btClassi.UseVisualStyleBackColor = true;
-            this.btClassi.Click += new System.EventHandler(this.cLASSIToolStripMenuItem_Click);
+            this.pnCarUtente.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(241)))), ((int)(((byte)(250)))));
+            this.pnCarUtente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pnCarUtente.Controls.Add(this.pictureBox2);
+            this.pnCarUtente.Controls.Add(this.lblEmail);
+            this.pnCarUtente.Controls.Add(this.lblNominativo);
+            this.pnCarUtente.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnCarUtente.Font = new System.Drawing.Font("Segoe Fluent Icons", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pnCarUtente.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
+            this.pnCarUtente.Location = new System.Drawing.Point(0, 0);
+            this.pnCarUtente.Name = "pnCarUtente";
+            this.pnCarUtente.Size = new System.Drawing.Size(333, 207);
+            this.pnCarUtente.TabIndex = 29;
             // 
-            // btUtenti
+            // pictureBox2
             // 
-            this.btUtenti.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btUtenti.FlatAppearance.BorderSize = 0;
-            this.btUtenti.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
-            this.btUtenti.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(185)))));
-            this.btUtenti.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btUtenti.Font = new System.Drawing.Font("Segoe UI Symbol", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btUtenti.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btUtenti.Location = new System.Drawing.Point(0, 228);
-            this.btUtenti.Name = "btUtenti";
-            this.btUtenti.Size = new System.Drawing.Size(333, 50);
-            this.btUtenti.TabIndex = 27;
-            this.btUtenti.Text = "Utenti";
-            this.btUtenti.UseVisualStyleBackColor = true;
-            this.btUtenti.Click += new System.EventHandler(this.uTENTIToolStripMenuItem_Click);
+            this.pictureBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pictureBox2.Image = global::Cattedre.Properties.Resources.user_account_management_logo_user_icon_11562867145a56rus2zwu;
+            this.pictureBox2.Location = new System.Drawing.Point(23, 26);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(79, 76);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 24;
+            this.pictureBox2.TabStop = false;
             // 
-            // btDiscipline
+            // lblEmail
             // 
-            this.btDiscipline.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btDiscipline.FlatAppearance.BorderSize = 0;
-            this.btDiscipline.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
-            this.btDiscipline.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(185)))));
-            this.btDiscipline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btDiscipline.Font = new System.Drawing.Font("Segoe UI Symbol", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btDiscipline.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btDiscipline.Location = new System.Drawing.Point(0, 328);
-            this.btDiscipline.Name = "btDiscipline";
-            this.btDiscipline.Size = new System.Drawing.Size(333, 50);
-            this.btDiscipline.TabIndex = 26;
-            this.btDiscipline.Text = "Discipline";
-            this.btDiscipline.UseVisualStyleBackColor = true;
-            this.btDiscipline.Click += new System.EventHandler(this.dISCIPLINEToolStripMenuItem_Click);
+            this.lblEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblEmail.Font = new System.Drawing.Font("Segoe Fluent Icons", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(71)))), ((int)(((byte)(112)))));
+            this.lblEmail.Location = new System.Drawing.Point(19, 149);
+            this.lblEmail.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblEmail.Name = "lblEmail";
+            this.lblEmail.Size = new System.Drawing.Size(293, 27);
+            this.lblEmail.TabIndex = 0;
+            this.lblEmail.Text = "nomecognome@iismarconipieralisi.it";
+            // 
+            // lblNominativo
+            // 
+            this.lblNominativo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblNominativo.AutoSize = true;
+            this.lblNominativo.Font = new System.Drawing.Font("Segoe Fluent Icons", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNominativo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(71)))), ((int)(((byte)(112)))));
+            this.lblNominativo.Location = new System.Drawing.Point(14, 104);
+            this.lblNominativo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblNominativo.Name = "lblNominativo";
+            this.lblNominativo.Size = new System.Drawing.Size(278, 35);
+            this.lblNominativo.TabIndex = 20;
+            this.lblNominativo.Text = "NOME e COGNOME";
             // 
             // menuStrip1
             // 
@@ -227,8 +226,7 @@
             this.dIPARTIMENTIToolStripMenuItem,
             this.dISCIPLINEToolStripMenuItem,
             this.cLASSIToolStripMenuItem,
-            this.uTENTIToolStripMenuItem,
-            this.cREDITSToolStripMenuItem});
+            this.uTENTIToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1706, 29);
@@ -237,10 +235,26 @@
             // 
             // opzioniToolStripMenuItem
             // 
+            this.opzioniToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.impostazioniToolStripMenuItem,
+            this.creditToolStripMenuItem});
             this.opzioniToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.opzioniToolStripMenuItem.Name = "opzioniToolStripMenuItem";
             this.opzioniToolStripMenuItem.Size = new System.Drawing.Size(76, 25);
             this.opzioniToolStripMenuItem.Text = "Opzioni";
+            // 
+            // impostazioniToolStripMenuItem
+            // 
+            this.impostazioniToolStripMenuItem.Name = "impostazioniToolStripMenuItem";
+            this.impostazioniToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.impostazioniToolStripMenuItem.Text = "Impostazioni";
+            // 
+            // creditToolStripMenuItem
+            // 
+            this.creditToolStripMenuItem.Name = "creditToolStripMenuItem";
+            this.creditToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.creditToolStripMenuItem.Text = "Credit";
+            this.creditToolStripMenuItem.Click += new System.EventHandler(this.creditToolStripMenuItem_Click);
             // 
             // cDCToolStripMenuItem
             // 
@@ -290,14 +304,6 @@
             this.uTENTIToolStripMenuItem.Text = "Utenti";
             this.uTENTIToolStripMenuItem.Click += new System.EventHandler(this.uTENTIToolStripMenuItem_Click);
             // 
-            // cREDITSToolStripMenuItem
-            // 
-            this.cREDITSToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cREDITSToolStripMenuItem.Name = "cREDITSToolStripMenuItem";
-            this.cREDITSToolStripMenuItem.Size = new System.Drawing.Size(61, 25);
-            this.cREDITSToolStripMenuItem.Text = "Credit";
-            this.cREDITSToolStripMenuItem.Click += new System.EventHandler(this.cREDITSToolStripMenuItem_Click);
-            // 
             // FrmHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -310,10 +316,12 @@
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximumSize = new System.Drawing.Size(3840, 2160);
+            this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "FrmHome";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cattedre";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmHome_FormClosing);
             this.Load += new System.EventHandler(this.FrmHomeUpdate_Load);
             this.panel2.ResumeLayout(false);
             this.pnCarUtente.ResumeLayout(false);
@@ -343,8 +351,9 @@
         private System.Windows.Forms.Button btDiscipline;
         private System.Windows.Forms.Button btClassi;
         private System.Windows.Forms.Button btUtenti;
-        private System.Windows.Forms.ToolStripMenuItem cREDITSToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem opzioniToolStripMenuItem;
         private System.Windows.Forms.Panel pnCarUtente;
+        private System.Windows.Forms.ToolStripMenuItem impostazioniToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem creditToolStripMenuItem;
     }
 }

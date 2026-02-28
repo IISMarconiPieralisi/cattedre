@@ -138,36 +138,24 @@ namespace Cattedre
         private void uTENTIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Application.OpenForms["FrmUtenti"] == null)
+            {
                 frmUtenti = new FrmUtenti();
-            MostraFormMDI(frmUtenti);
-        }
-
-        private void cREDITSToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FrmCredits frmCredits = new FrmCredits();
-            MostraFormMDI(frmCredits);
-        }
-
-        private void FrmHome_FormClosing(object sender, FormClosingEventArgs e)
-        {
-           //// Cerca tra tutte le form aperte
-           // foreach (Form form in Application.OpenForms)
-           // {
-           //     // Cerca frmLogin per nome e chiudila se esiste
-           //     var FrmLogin = Application.OpenForms.Cast<Form>().FirstOrDefault(f => f.Name == "FrmLogin");
-           //     if (FrmLogin != null && !FrmLogin.IsDisposed)
-           //         FrmLogin.Close();
-                
-           // }
-        }
-
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
+                MostraFormMDI(frmUtenti);
+            }
 
         }
 
-        private void pnCarUtente_Paint(object sender, PaintEventArgs e)
+       
+
+
+
+        private void creditToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (Application.OpenForms["FrmCredits"] == null)
+            {
+                FrmCredits frmCredits = new FrmCredits();
+                MostraFormMDI(frmCredits);
+            }
 
         }
 

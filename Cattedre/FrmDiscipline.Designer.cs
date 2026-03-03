@@ -31,9 +31,6 @@
             this.cbDipartimenti = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btCerca = new System.Windows.Forms.Button();
-            this.btElimina = new System.Windows.Forms.Button();
-            this.btModifica = new System.Windows.Forms.Button();
-            this.btInserisci = new System.Windows.Forms.Button();
             this.lvDiscipline = new System.Windows.Forms.ListView();
             this.chAnno = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chNome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -41,6 +38,7 @@
             this.chOreTeoria = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDisciplinaSpeciale = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDipartimento = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chIndirizzi = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
             this.btPulisciCb = new System.Windows.Forms.Button();
             this.gbAnni = new System.Windows.Forms.GroupBox();
@@ -50,7 +48,9 @@
             this.rbAnno2 = new System.Windows.Forms.RadioButton();
             this.rbAnno1 = new System.Windows.Forms.RadioButton();
             this.tbDisciplina = new System.Windows.Forms.TextBox();
-            this.chIndirizzi = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btElimina = new System.Windows.Forms.Button();
+            this.btModifica = new System.Windows.Forms.Button();
+            this.btInserisci = new System.Windows.Forms.Button();
             this.gbAnni.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,39 +85,6 @@
             this.btCerca.Text = "Cerca";
             this.btCerca.UseVisualStyleBackColor = true;
             this.btCerca.Click += new System.EventHandler(this.btCerca_Click);
-            // 
-            // btElimina
-            // 
-            this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(761, 130);
-            this.btElimina.Name = "btElimina";
-            this.btElimina.Size = new System.Drawing.Size(75, 23);
-            this.btElimina.TabIndex = 24;
-            this.btElimina.Text = "Elimina";
-            this.btElimina.UseVisualStyleBackColor = true;
-            this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
-            // 
-            // btModifica
-            // 
-            this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btModifica.Location = new System.Drawing.Point(761, 101);
-            this.btModifica.Name = "btModifica";
-            this.btModifica.Size = new System.Drawing.Size(75, 23);
-            this.btModifica.TabIndex = 23;
-            this.btModifica.Text = "Modifica";
-            this.btModifica.UseVisualStyleBackColor = true;
-            this.btModifica.Click += new System.EventHandler(this.btModifica_Click);
-            // 
-            // btInserisci
-            // 
-            this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(761, 72);
-            this.btInserisci.Name = "btInserisci";
-            this.btInserisci.Size = new System.Drawing.Size(75, 23);
-            this.btInserisci.TabIndex = 22;
-            this.btInserisci.Text = "Inserisci";
-            this.btInserisci.UseVisualStyleBackColor = true;
-            this.btInserisci.Click += new System.EventHandler(this.btInserisci_Click);
             // 
             // lvDiscipline
             // 
@@ -173,6 +140,11 @@
             // 
             this.chDipartimento.Text = "Dipartimento";
             this.chDipartimento.Width = 159;
+            // 
+            // chIndirizzi
+            // 
+            this.chIndirizzi.Text = "Indirizzi";
+            this.chIndirizzi.Width = 200;
             // 
             // label2
             // 
@@ -276,10 +248,38 @@
             this.tbDisciplina.Size = new System.Drawing.Size(124, 20);
             this.tbDisciplina.TabIndex = 30;
             // 
-            // chIndirizzi
+            // btElimina
             // 
-            this.chIndirizzi.Text = "Indirizzi";
-            this.chIndirizzi.Width = 200;
+            this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btElimina.Location = new System.Drawing.Point(761, 130);
+            this.btElimina.Name = "btElimina";
+            this.btElimina.Size = new System.Drawing.Size(75, 23);
+            this.btElimina.TabIndex = 24;
+            this.btElimina.Text = "Elimina";
+            this.btElimina.UseVisualStyleBackColor = true;
+            this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
+            // 
+            // btModifica
+            // 
+            this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btModifica.Location = new System.Drawing.Point(761, 101);
+            this.btModifica.Name = "btModifica";
+            this.btModifica.Size = new System.Drawing.Size(75, 23);
+            this.btModifica.TabIndex = 23;
+            this.btModifica.Text = "Modifica";
+            this.btModifica.UseVisualStyleBackColor = true;
+            this.btModifica.Click += new System.EventHandler(this.btModifica_Click);
+            // 
+            // btInserisci
+            // 
+            this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btInserisci.Location = new System.Drawing.Point(761, 72);
+            this.btInserisci.Name = "btInserisci";
+            this.btInserisci.Size = new System.Drawing.Size(75, 23);
+            this.btInserisci.TabIndex = 22;
+            this.btInserisci.Text = "Inserisci";
+            this.btInserisci.UseVisualStyleBackColor = true;
+            this.btInserisci.Click += new System.EventHandler(this.btInserisci_Click);
             // 
             // FrmDiscipline
             // 
@@ -313,9 +313,6 @@
         private System.Windows.Forms.ComboBox cbDipartimenti;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btCerca;
-        private System.Windows.Forms.Button btElimina;
-        private System.Windows.Forms.Button btModifica;
-        private System.Windows.Forms.Button btInserisci;
         private System.Windows.Forms.ListView lvDiscipline;
         private System.Windows.Forms.ColumnHeader chAnno;
         private System.Windows.Forms.ColumnHeader chNome;
@@ -333,5 +330,8 @@
         private System.Windows.Forms.RadioButton rbAnno1;
         private System.Windows.Forms.TextBox tbDisciplina;
         private System.Windows.Forms.ColumnHeader chIndirizzi;
+        private System.Windows.Forms.Button btElimina;
+        private System.Windows.Forms.Button btModifica;
+        private System.Windows.Forms.Button btInserisci;
     }
 }

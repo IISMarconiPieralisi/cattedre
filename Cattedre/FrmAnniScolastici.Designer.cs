@@ -40,6 +40,9 @@
             // 
             // lvAnniScolastici
             // 
+            this.lvAnniScolastici.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lvAnniScolastici.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chSigla,
             this.chDataInizio,
@@ -48,7 +51,7 @@
             this.lvAnniScolastici.HideSelection = false;
             this.lvAnniScolastici.Location = new System.Drawing.Point(28, 42);
             this.lvAnniScolastici.Name = "lvAnniScolastici";
-            this.lvAnniScolastici.Size = new System.Drawing.Size(247, 169);
+            this.lvAnniScolastici.Size = new System.Drawing.Size(367, 169);
             this.lvAnniScolastici.TabIndex = 0;
             this.lvAnniScolastici.UseCompatibleStateImageBehavior = false;
             this.lvAnniScolastici.View = System.Windows.Forms.View.Details;
@@ -60,16 +63,17 @@
             // chDataInizio
             // 
             this.chDataInizio.Text = "Data Inizio";
-            this.chDataInizio.Width = 100;
+            this.chDataInizio.Width = 120;
             // 
             // chDataFine
             // 
             this.chDataFine.Text = "Data Fine";
-            this.chDataFine.Width = 100;
+            this.chDataFine.Width = 120;
             // 
             // btInserisci
             // 
-            this.btInserisci.Location = new System.Drawing.Point(328, 60);
+            this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btInserisci.Location = new System.Drawing.Point(419, 42);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.Size = new System.Drawing.Size(75, 23);
             this.btInserisci.TabIndex = 1;
@@ -79,7 +83,8 @@
             // 
             // btModifica
             // 
-            this.btModifica.Location = new System.Drawing.Point(328, 101);
+            this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btModifica.Location = new System.Drawing.Point(419, 83);
             this.btModifica.Name = "btModifica";
             this.btModifica.Size = new System.Drawing.Size(75, 23);
             this.btModifica.TabIndex = 2;
@@ -89,7 +94,8 @@
             // 
             // btElimina
             // 
-            this.btElimina.Location = new System.Drawing.Point(328, 144);
+            this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btElimina.Location = new System.Drawing.Point(419, 126);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(75, 23);
             this.btElimina.TabIndex = 3;
@@ -101,7 +107,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 258);
+            this.ClientSize = new System.Drawing.Size(506, 241);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.btModifica);
             this.Controls.Add(this.btInserisci);

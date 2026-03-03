@@ -14,11 +14,13 @@ namespace Cattedre
     {
         public List<ClsClasseDL> classi = new List<ClsClasseDL>();
         List<ClsUtenteDL> _coordinatori = new List<ClsUtenteDL>();
-        List<ClsIndirizzoDL> _indirizzi = new List<ClsIndirizzoDL>();
-
-        public FrmClassi()
+        List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
+        //inserisco il utenteLoggato a in questapagina;
+        ClsUtenteDL UtenteLoggato;
+        public FrmClassi(ClsUtenteDL utenteLog)
         {
             InitializeComponent();
+            UtenteLoggato = utenteLog;
         }
 
       
@@ -43,15 +45,37 @@ namespace Cattedre
         {
             classi = ClsClasseBL.CaricaClassi();
             CaricaListView(classi);
-
+            GestionePermessi();
             //popolo combobox filtraggio
             foreach (ClsClasseDL classe in classi)
             {
                 if (!cbAnnoClasse.Items.Contains(classe.Anno))
                     cbAnnoClasse.Items.Add(classe.Anno);
             }
-        }
+            //popol combobox filtraggio Indirizzi
+            foreach( var ind in _indirizzi)
+                cbIndirizzi.Items.Add(ind.Nome);
 
+        }
+        private void GestionePermessi()
+        {
+            if (UtenteLoggato != null && !(UtenteLoggato.TipoUtente == "A" || UtenteLoggato.TipoUtente == "C"))
+            {
+                btElimina.Visible = false;
+                btInserisci.Visible = false;
+                brModifica.Visible = false;
+                btElimina.Anchor = AnchorStyles.None;
+                btInserisci.Anchor = AnchorStyles.None;
+                brModifica.Anchor = AnchorStyles.None;
+
+                lvClassi.Width = this.ClientSize.Width - (lvClassi.Left * 2);
+
+                lvClassi.Height = this.ClientSize.Height - lvClassi.Top - 50;
+                lvClassi.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+
+
+            }     
+        }
         private void btInserisci_Click(object sender, EventArgs e)
         {
             try
@@ -91,7 +115,7 @@ namespace Cattedre
                     }
                 }catch (Exception ex)
                 {
-                   MessageBox.Show($"errore:{ex.Message}\n riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                   MessageBox.Show($"errore:\n{ex.Message}\nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                
             }
@@ -115,17 +139,28 @@ namespace Cattedre
 
         private void btCerca_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (cbIndirizzi.SelectedIndex == -1 && cbAnnoClasse.SelectedIndex == -1)
+                    throw new Exception("Inserire almeno un criterio di ricerca");
 
-            List<ClsClasseDL> classiFiltrate = ClsClasseBL.CaricaClassiFiltrate(Convert.ToInt32(cbAnnoClasse.Text));
-            
-            CaricaListView(classiFiltrate);
+                List <ClsClasseDL> classiFiltrate = ClsClasseBL.CaricaClassiFiltrate(Convert.ToInt32(cbAnnoClasse.Text), ClsIndirizzoBL.RilevaIDindirizzo(cbIndirizzi.Text));
+                CaricaListView(classiFiltrate);
+                btRipristina.Enabled = true;
+            }catch(Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}\nRiprovare!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
         }
 
         private void btRipristina_Click(object sender, EventArgs e)
         {
+            btRipristina.Enabled = false;
             classi = ClsClasseBL.CaricaClassi();
             CaricaListView(classi);
-            cbAnnoClasse.Text = "";
+            cbAnnoClasse.SelectedIndex=-1;
+            cbIndirizzi.SelectedIndex = -1;
         }
     }
 }

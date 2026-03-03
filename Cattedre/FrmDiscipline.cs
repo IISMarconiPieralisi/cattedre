@@ -15,10 +15,12 @@ namespace Cattedre
         public List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
         public List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
         public int indiceDaModificare = 0;
-        
-        public FrmDiscipline()
+
+        private ClsUtenteDL UtenteLoggato;
+        public FrmDiscipline(ClsUtenteDL utenteLog)
         {
             InitializeComponent();
+            UtenteLoggato = utenteLog;
         }
 
         private void CaricaListView(List<ClsDisciplinaDL> discipline)
@@ -71,6 +73,7 @@ namespace Cattedre
             discipline = ClsDisciplinaBL.CaricaDiscipline();
             dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
             CaricaListView(discipline);
+            GestionePermessi();
 
             //popolo combobox filtraggio per dipartimenti
             foreach (ClsDipartimentoDL dipartimento in dipartimenti)
@@ -79,7 +82,19 @@ namespace Cattedre
                 cbDipartimenti.Items.Add(dipartimento.Nome);
             }
         }
+        private void GestionePermessi()
+        {
+            if (UtenteLoggato != null && !(UtenteLoggato.TipoUtente == "A" || UtenteLoggato.TipoUtente == "C"))
+            {
+                btElimina.Visible = false;
+                btInserisci.Visible = false;
+                btModifica.Visible = false;
+                lvDiscipline.Width = this.ClientSize.Width - (lvDiscipline.Left * 2);
 
+                lvDiscipline.Height = this.ClientSize.Height - lvDiscipline.Top - 50;
+                lvDiscipline.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            }
+        }
         private void btElimina_Click(object sender, EventArgs e)
         {
             if (lvDiscipline.SelectedIndices.Count == 1)

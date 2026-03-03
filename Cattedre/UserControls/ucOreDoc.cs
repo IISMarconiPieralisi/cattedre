@@ -28,6 +28,13 @@ namespace Cattedre
             InitializeComponent();
         }
 
+        private void ucOreDoc_Load(object sender, EventArgs e)
+        {
+            long idUtente = Convert.ToInt64(this.Tag);
+            ClsRichiedereBL.RilevaCDCDocente(idUtente);
+
+        }
+
         private void nudOrePot_ValueChanged(object sender, EventArgs e)
         {
             if (this.Tag == null)

@@ -42,7 +42,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(37, 44);
+            this.label1.Location = new System.Drawing.Point(37, 40);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 0;
@@ -89,7 +89,7 @@
             // 
             // mtbSigla
             // 
-            this.mtbSigla.Location = new System.Drawing.Point(76, 41);
+            this.mtbSigla.Location = new System.Drawing.Point(102, 37);
             this.mtbSigla.Mask = "00-00";
             this.mtbSigla.Name = "mtbSigla";
             this.mtbSigla.Size = new System.Drawing.Size(33, 20);
@@ -113,7 +113,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(327, 235);
+            this.ClientSize = new System.Drawing.Size(679, 235);
             this.Controls.Add(this.dtpDataFine);
             this.Controls.Add(this.dtpDataInizio);
             this.Controls.Add(this.mtbSigla);

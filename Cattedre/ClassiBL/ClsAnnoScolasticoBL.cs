@@ -13,32 +13,39 @@ namespace Cattedre
     {
         public static List<ClsAnnoScolasticoDL> CaricaAnniScolastici()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsAnnoScolasticoDL> anniScolastici = new List<ClsAnnoScolasticoDL>();
-
-            conn.Open();
-            string sql = "SELECT * FROM anniscolastici";
-            //DataAdapter, DataSet e DataTable su dispensa ADO.Net
-            MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
-            //Cache dati in memoria, oggetto disconnesso
-            DataSet ds = new DataSet("cattedre");
-            da.Fill(ds, "cattedre");
-
-            //Scorro i Record del DataTable per creare la lista
-            DataTable dt = ds.Tables["anniscolastici"];
-            for (int i = 0; i < dt.Rows.Count; i++)
+            DataTable dt = new DataTable();
+            try
             {
-                // Potrei scrivere anche su una sola riga ma così è più leggibile
-                ClsAnnoScolasticoDL _annoscolastico = new ClsAnnoScolasticoDL(
-                    (int)dt.Rows[i]["id"],
-                    dt.Rows[i]["sigla"].ToString(),
-                    (DateTime)dt.Rows[i]["datainizio"],
-                    (DateTime)dt.Rows[i]["datafine"]);
-                anniScolastici.Add(_annoscolastico);
-            }
-            conn.Close();
+                string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT * FROM anniscolastici";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                }
 
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsAnnoScolasticoDL _annoscolastico = new ClsAnnoScolasticoDL();
+                    _annoscolastico.ID = Convert.ToInt64(row["id"]);
+                    _annoscolastico.Sigla = row["sigla"].ToString();
+                    _annoscolastico.DataInizio = Convert.ToDateTime(row["datainizio"]);
+                    _annoscolastico.DataFine = Convert.ToDateTime(row["datafine"]);
+                    anniScolastici.Add(_annoscolastico);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
             return anniScolastici;
         }
 
@@ -67,7 +74,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
             return anniScolastici;

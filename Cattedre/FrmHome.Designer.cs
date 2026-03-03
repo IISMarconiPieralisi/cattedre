@@ -49,6 +49,7 @@
             this.dISCIPLINEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cLASSIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uTENTIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.annoScolasticoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2.SuspendLayout();
             this.pnCarUtente.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -218,11 +219,12 @@
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.Color.White;
-            this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.opzioniToolStripMenuItem,
             this.cDCToolStripMenuItem,
             this.iNDIRIZZIToolStripMenuItem,
+            this.annoScolasticoToolStripMenuItem,
             this.dIPARTIMENTIToolStripMenuItem,
             this.dISCIPLINEToolStripMenuItem,
             this.cLASSIToolStripMenuItem,
@@ -246,13 +248,13 @@
             // impostazioniToolStripMenuItem
             // 
             this.impostazioniToolStripMenuItem.Name = "impostazioniToolStripMenuItem";
-            this.impostazioniToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.impostazioniToolStripMenuItem.Size = new System.Drawing.Size(169, 26);
             this.impostazioniToolStripMenuItem.Text = "Impostazioni";
             // 
             // creditToolStripMenuItem
             // 
             this.creditToolStripMenuItem.Name = "creditToolStripMenuItem";
-            this.creditToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.creditToolStripMenuItem.Size = new System.Drawing.Size(169, 26);
             this.creditToolStripMenuItem.Text = "Credit";
             this.creditToolStripMenuItem.Click += new System.EventHandler(this.creditToolStripMenuItem_Click);
             // 
@@ -303,6 +305,13 @@
             this.uTENTIToolStripMenuItem.Size = new System.Drawing.Size(64, 25);
             this.uTENTIToolStripMenuItem.Text = "Utenti";
             this.uTENTIToolStripMenuItem.Click += new System.EventHandler(this.uTENTIToolStripMenuItem_Click);
+            // 
+            // annoScolasticoToolStripMenuItem
+            // 
+            this.annoScolasticoToolStripMenuItem.Name = "annoScolasticoToolStripMenuItem";
+            this.annoScolasticoToolStripMenuItem.Size = new System.Drawing.Size(132, 25);
+            this.annoScolasticoToolStripMenuItem.Text = "Anno Scolastico";
+            this.annoScolasticoToolStripMenuItem.Click += new System.EventHandler(this.annoScolasticoToolStripMenuItem_Click);
             // 
             // FrmHome
             // 
@@ -355,5 +364,6 @@
         private System.Windows.Forms.Panel pnCarUtente;
         private System.Windows.Forms.ToolStripMenuItem impostazioniToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem creditToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem annoScolasticoToolStripMenuItem;
     }
 }

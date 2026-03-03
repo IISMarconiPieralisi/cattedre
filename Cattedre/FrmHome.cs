@@ -18,6 +18,7 @@ namespace Cattedre
         FrmDiscipline frmDiscipline;
         FrmClassi frmClassi;
         FrmUtenti frmUtenti;
+        FrmAnniScolastici FrmAnniScolastici;
 
 
         private ClsUtenteDL utente;
@@ -140,8 +141,8 @@ namespace Cattedre
             if (Application.OpenForms["FrmUtenti"] == null)
             {
                 frmUtenti = new FrmUtenti();
-                MostraFormMDI(frmUtenti);
             }
+            MostraFormMDI(frmUtenti);
 
         }
 
@@ -155,8 +156,17 @@ namespace Cattedre
             {
                 FrmCredits frmCredits = new FrmCredits();
                 MostraFormMDI(frmCredits);
+
             }
 
+
+        }
+
+        private void annoScolasticoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Application.OpenForms["FrmAnniScolastici"] == null)
+                FrmAnniScolastici = new FrmAnniScolastici();
+                MostraFormMDI(FrmAnniScolastici);
         }
 
         //private void cONTRATTIToolStripMenuItem_Click(object sender, EventArgs e)

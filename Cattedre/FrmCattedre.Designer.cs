@@ -30,6 +30,7 @@ namespace Cattedre
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCattedre));
             this.pnlClassi = new System.Windows.Forms.Panel();
+            this.cbDipartimenti = new System.Windows.Forms.ComboBox();
             this.pnlDipartimento = new System.Windows.Forms.Panel();
             this.pnlOre = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
@@ -37,7 +38,8 @@ namespace Cattedre
             this.pnlAnnullaSalva = new System.Windows.Forms.Panel();
             this.btSalva = new System.Windows.Forms.Button();
             this.btAnnulla = new System.Windows.Forms.Button();
-            this.cbDipartimenti = new System.Windows.Forms.ComboBox();
+            this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
+            this.btGeneraASsucc = new System.Windows.Forms.Button();
             this.pnlClassi.SuspendLayout();
             this.pnlDipartimento.SuspendLayout();
             this.pnlAnnullaSalva.SuspendLayout();
@@ -45,12 +47,25 @@ namespace Cattedre
             // 
             // pnlClassi
             // 
+            this.pnlClassi.Controls.Add(this.btGeneraASsucc);
+            this.pnlClassi.Controls.Add(this.cbAnniScolastici);
             this.pnlClassi.Controls.Add(this.cbDipartimenti);
             this.pnlClassi.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlClassi.Location = new System.Drawing.Point(0, 0);
             this.pnlClassi.Name = "pnlClassi";
             this.pnlClassi.Size = new System.Drawing.Size(169, 739);
             this.pnlClassi.TabIndex = 0;
+            // 
+            // cbDipartimenti
+            // 
+            this.cbDipartimenti.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDipartimenti.FormattingEnabled = true;
+            this.cbDipartimenti.Location = new System.Drawing.Point(11, 11);
+            this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2);
+            this.cbDipartimenti.Name = "cbDipartimenti";
+            this.cbDipartimenti.Size = new System.Drawing.Size(145, 21);
+            this.cbDipartimenti.TabIndex = 1;
+            this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.btCaricaDipartimento_Click_1);
             // 
             // pnlDipartimento
             // 
@@ -124,16 +139,23 @@ namespace Cattedre
             this.btAnnulla.UseVisualStyleBackColor = true;
             this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
             // 
-            // cbDipartimenti
+            // cbAnniScolastici
             // 
-            this.cbDipartimenti.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDipartimenti.FormattingEnabled = true;
-            this.cbDipartimenti.Location = new System.Drawing.Point(11, 11);
-            this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2);
-            this.cbDipartimenti.Name = "cbDipartimenti";
-            this.cbDipartimenti.Size = new System.Drawing.Size(145, 21);
-            this.cbDipartimenti.TabIndex = 1;
-            this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.btCaricaDipartimento_Click_1);
+            this.cbAnniScolastici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAnniScolastici.FormattingEnabled = true;
+            this.cbAnniScolastici.Location = new System.Drawing.Point(11, 37);
+            this.cbAnniScolastici.Name = "cbAnniScolastici";
+            this.cbAnniScolastici.Size = new System.Drawing.Size(59, 21);
+            this.cbAnniScolastici.TabIndex = 6;
+            // 
+            // btGeneraASsucc
+            // 
+            this.btGeneraASsucc.Location = new System.Drawing.Point(76, 35);
+            this.btGeneraASsucc.Name = "btGeneraASsucc";
+            this.btGeneraASsucc.Size = new System.Drawing.Size(80, 23);
+            this.btGeneraASsucc.TabIndex = 6;
+            this.btGeneraASsucc.Text = "Genera";
+            this.btGeneraASsucc.UseVisualStyleBackColor = true;
             // 
             // FrmCattedre
             // 
@@ -166,5 +188,7 @@ namespace Cattedre
         private System.Windows.Forms.ComboBox cbDipartimenti;
         private System.Windows.Forms.Panel pnlOreDoc;
         private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.ComboBox cbAnniScolastici;
+        private System.Windows.Forms.Button btGeneraASsucc;
     }
 }

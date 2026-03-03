@@ -16,6 +16,7 @@ namespace Cattedre
     {
         List<ClsClasseDL> classi = new List<ClsClasseDL>();
         List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
+        List<ClsAnnoScolasticoDL> anniscolastici = new List<ClsAnnoScolasticoDL>();
         List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
         List<ClsUtenteDL> docentiDipartimento = new List<ClsUtenteDL>();
         List<ClsDisciplinaDL> disciplinerilevate = new List<ClsDisciplinaDL>();
@@ -62,6 +63,8 @@ namespace Cattedre
                 //LoadAssegnazioni(IDdipartimento);
                 //cbDipartimenti.Enabled = false;
             }
+
+            LoadAnniScolastici();
         }
 
         private async void FrmCattedre_Shown(object sender, EventArgs e)
@@ -205,7 +208,7 @@ namespace Cattedre
             foreach (var uc in dictDocenti.Values)
             {
                 int eff = int.Parse(uc.lblOreEffettive.Text);
-                int pot = int.Parse(uc.nudOrePot.Text);
+                int pot = (int)uc.nudOrePot.Value;
                 int cattedra = int.Parse(uc.lblOreDiCattedra.Text);
 
                 int totale = eff + pot;
@@ -243,6 +246,14 @@ namespace Cattedre
             {
                 cbDipartimenti.Items.Add(dipartimenti[i].Nome);
             }
+        }
+
+        private void LoadAnniScolastici()
+        {
+            anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
+
+            for (int i = 0; i < anniscolastici.Count; i++)
+                cbAnniScolastici.Items.Add(anniscolastici[i].Sigla);
         }
 
         private void LoadAssegnazioni(int IDdipartimento)

@@ -12,7 +12,7 @@ namespace Cattedre
 {
     public partial class FrmAnniScolastici : Form
     {
-        public List<ClsAnnoScolasticoDL> anniScolastici = new List<ClsAnnoScolasticoDL>();
+        public List<ClsAnnoScolasticoDL> anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
 
         public FrmAnniScolastici()
         {
@@ -36,12 +36,7 @@ namespace Cattedre
 
         private void btInserisci_Click(object sender, EventArgs e)
         {
-            int indiceDaModificare = lvAnniScolastici.SelectedIndices[0];
             FrmAnnoScolastico frmAnnoScolastico = new FrmAnnoScolastico();
-            frmAnnoScolastico._annoScolastico = anniScolastici[indiceDaModificare];
-
-            frmAnnoScolastico._annoScolastico.ID = anniScolastici[indiceDaModificare].ID; //mi assicuro che l'ID rimanga lo stesso
-
             DialogResult dr = frmAnnoScolastico.ShowDialog();
             if (dr == DialogResult.OK)
             {
@@ -67,8 +62,9 @@ namespace Cattedre
             if (lvAnniScolastici.SelectedIndices.Count == 1)
             {
                 int indiceDaModificare = lvAnniScolastici.SelectedIndices[0];
+                long id = Convert.ToInt32(lvAnniScolastici.Items[indiceDaModificare].Tag);
                 FrmAnnoScolastico frmAnnoScolastico = new FrmAnnoScolastico();
-                frmAnnoScolastico._annoScolastico = anniScolastici[indiceDaModificare];
+                frmAnnoScolastico._annoScolastico = anniScolastici.FirstOrDefault(p=>p.ID==id);
                 DialogResult dr = frmAnnoScolastico.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
@@ -89,12 +85,11 @@ namespace Cattedre
             if (lvAnniScolastici.SelectedIndices.Count == 1)
             {
                 int indiceDaEliminare = lvAnniScolastici.SelectedIndices[0];
-                int idDaEliminare = Convert.ToInt32(lvAnniScolastici.Items[indiceDaEliminare].Tag);
+                long idDaEliminare = Convert.ToInt32(lvAnniScolastici.Items[indiceDaEliminare].Tag);
                 DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
                 if (dr == DialogResult.Yes)
                 {
                     ClsAnnoScolasticoBL.EliminaAnnoScolastico(idDaEliminare);
-                    anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
                 }
                 CaricaListView();
             }

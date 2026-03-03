@@ -51,7 +51,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 26);
+            this.label2.Location = new System.Drawing.Point(21, 24);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 13);
             this.label2.TabIndex = 1;
@@ -60,7 +60,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 74);
+            this.label3.Location = new System.Drawing.Point(21, 72);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(53, 13);
             this.label3.TabIndex = 2;
@@ -70,7 +70,7 @@
             // 
             this.btAnnulla.Location = new System.Drawing.Point(24, 168);
             this.btAnnulla.Name = "btAnnulla";
-            this.btAnnulla.Size = new System.Drawing.Size(102, 38);
+            this.btAnnulla.Size = new System.Drawing.Size(125, 38);
             this.btAnnulla.TabIndex = 3;
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
@@ -79,9 +79,9 @@
             // btSalva
             // 
             this.btSalva.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalva.Location = new System.Drawing.Point(184, 168);
+            this.btSalva.Location = new System.Drawing.Point(161, 168);
             this.btSalva.Name = "btSalva";
-            this.btSalva.Size = new System.Drawing.Size(102, 38);
+            this.btSalva.Size = new System.Drawing.Size(125, 38);
             this.btSalva.TabIndex = 4;
             this.btSalva.Text = "Salva";
             this.btSalva.UseVisualStyleBackColor = true;
@@ -98,7 +98,7 @@
             // 
             // dtpDataInizio
             // 
-            this.dtpDataInizio.Location = new System.Drawing.Point(86, 22);
+            this.dtpDataInizio.Location = new System.Drawing.Point(86, 20);
             this.dtpDataInizio.Name = "dtpDataInizio";
             this.dtpDataInizio.Size = new System.Drawing.Size(200, 20);
             this.dtpDataInizio.TabIndex = 6;
@@ -106,7 +106,7 @@
             // 
             // dtpDataFine
             // 
-            this.dtpDataFine.Location = new System.Drawing.Point(86, 70);
+            this.dtpDataFine.Location = new System.Drawing.Point(86, 68);
             this.dtpDataFine.Name = "dtpDataFine";
             this.dtpDataFine.Size = new System.Drawing.Size(200, 20);
             this.dtpDataFine.TabIndex = 7;

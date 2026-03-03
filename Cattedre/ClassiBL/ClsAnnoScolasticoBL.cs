@@ -21,7 +21,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM anniscolastici";
+                    string sql = "SELECT id,sigla,datainizio,datafine FROM anniscolastici ORDER BY sigla DESC";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
@@ -109,7 +109,7 @@ namespace Cattedre
             }
         }
 
-        public static void EliminaAnnoScolastico(int id)
+        public static void EliminaAnnoScolastico(long id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
@@ -125,8 +125,7 @@ namespace Cattedre
                         if (righeCoinvolte <= 0)
                             throw new EvaluateException("errore durante la modifica");
                     }
-                }
-                   
+                }  
             }
             catch (Exception ex)
             {

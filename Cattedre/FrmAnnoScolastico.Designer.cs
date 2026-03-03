@@ -42,7 +42,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(37, 40);
+            this.label1.Location = new System.Drawing.Point(21, 118);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 0;
@@ -51,7 +51,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(37, 88);
+            this.label2.Location = new System.Drawing.Point(21, 26);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 13);
             this.label2.TabIndex = 1;
@@ -60,7 +60,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(37, 136);
+            this.label3.Location = new System.Drawing.Point(21, 74);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(53, 13);
             this.label3.TabIndex = 2;
@@ -68,9 +68,9 @@
             // 
             // btAnnulla
             // 
-            this.btAnnulla.Location = new System.Drawing.Point(71, 200);
+            this.btAnnulla.Location = new System.Drawing.Point(24, 168);
             this.btAnnulla.Name = "btAnnulla";
-            this.btAnnulla.Size = new System.Drawing.Size(75, 23);
+            this.btAnnulla.Size = new System.Drawing.Size(102, 38);
             this.btAnnulla.TabIndex = 3;
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
@@ -79,9 +79,9 @@
             // btSalva
             // 
             this.btSalva.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalva.Location = new System.Drawing.Point(172, 200);
+            this.btSalva.Location = new System.Drawing.Point(184, 168);
             this.btSalva.Name = "btSalva";
-            this.btSalva.Size = new System.Drawing.Size(75, 23);
+            this.btSalva.Size = new System.Drawing.Size(102, 38);
             this.btSalva.TabIndex = 4;
             this.btSalva.Text = "Salva";
             this.btSalva.UseVisualStyleBackColor = true;
@@ -89,31 +89,34 @@
             // 
             // mtbSigla
             // 
-            this.mtbSigla.Location = new System.Drawing.Point(102, 37);
+            this.mtbSigla.Enabled = false;
+            this.mtbSigla.Location = new System.Drawing.Point(86, 115);
             this.mtbSigla.Mask = "00-00";
             this.mtbSigla.Name = "mtbSigla";
-            this.mtbSigla.Size = new System.Drawing.Size(33, 20);
+            this.mtbSigla.Size = new System.Drawing.Size(40, 20);
             this.mtbSigla.TabIndex = 5;
             // 
             // dtpDataInizio
             // 
-            this.dtpDataInizio.Location = new System.Drawing.Point(102, 82);
+            this.dtpDataInizio.Location = new System.Drawing.Point(86, 22);
             this.dtpDataInizio.Name = "dtpDataInizio";
             this.dtpDataInizio.Size = new System.Drawing.Size(200, 20);
             this.dtpDataInizio.TabIndex = 6;
+            this.dtpDataInizio.ValueChanged += new System.EventHandler(this.dtpDataInizio_ValueChanged);
             // 
             // dtpDataFine
             // 
-            this.dtpDataFine.Location = new System.Drawing.Point(102, 130);
+            this.dtpDataFine.Location = new System.Drawing.Point(86, 70);
             this.dtpDataFine.Name = "dtpDataFine";
             this.dtpDataFine.Size = new System.Drawing.Size(200, 20);
             this.dtpDataFine.TabIndex = 7;
+            this.dtpDataFine.ValueChanged += new System.EventHandler(this.dtpDataFine_ValueChanged);
             // 
             // FrmAnnoScolastico
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(679, 235);
+            this.ClientSize = new System.Drawing.Size(301, 235);
             this.Controls.Add(this.dtpDataFine);
             this.Controls.Add(this.dtpDataInizio);
             this.Controls.Add(this.mtbSigla);

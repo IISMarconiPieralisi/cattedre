@@ -49,26 +49,25 @@ namespace Cattedre
             return anniScolastici;
         }
 
-        public static List<ClsAnnoScolasticoDL> InserisciAnnoScolastico(ClsAnnoScolasticoDL anno)
+        public static void InserisciAnnoScolastico(ClsAnnoScolasticoDL anno)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsAnnoScolasticoDL> anniScolastici = new List<ClsAnnoScolasticoDL>();
 
             try
             {
-                conn.Open();
-                string sql = "INSERT INTO anniscolastici (sigla, datainizio, datafine) VALUES (@sigla, @datainizio, @datafine)";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@sigla", anno.Sigla);
-                    cmd.Parameters.AddWithValue("@datainizio", anno.DataInizio);
-                    cmd.Parameters.AddWithValue("@datafine", anno.DataFine);
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
+                    conn.Open();
+                    string sql = "INSERT INTO anniscolastici (sigla, datainizio, datafine) VALUES (@sigla, @datainizio, @datafine)";
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
                     {
-                        anniScolastici.Add(anno);
+                        cmd.Parameters.AddWithValue("@sigla", anno.Sigla);
+                        cmd.Parameters.AddWithValue("@datainizio", anno.DataInizio);
+                        cmd.Parameters.AddWithValue("@datafine", anno.DataFine);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        if (righeCoinvolte <= 0)
+                            throw new EvaluateException("errore durante l'inserimento");
                     }
                 }
             }
@@ -77,15 +76,13 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
 
-            return anniScolastici;
         }
 
-        public static List<ClsAnnoScolasticoDL> ModificaAnnoScolastico(ClsAnnoScolasticoDL anno, int indice)
+        public static void ModificaAnnoScolastico(ClsAnnoScolasticoDL anno)
         {
             FrmAnnoScolastico frmAnnoScolastico = new FrmAnnoScolastico();
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsAnnoScolasticoDL> anni = new List<ClsAnnoScolasticoDL>();
 
             try
             {
@@ -94,54 +91,47 @@ namespace Cattedre
                            SET sigla = @sigla, 
                                datainizio = @datainizio, 
                                datafine = @datafine 
-                           WHERE id = " + anno.ID;
+                           WHERE id = @ID";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
                     cmd.Parameters.AddWithValue("@sigla", anno.Sigla);
                     cmd.Parameters.AddWithValue("@datainizio", anno.DataInizio);
                     cmd.Parameters.AddWithValue("@datafine", anno.DataFine);
+                    cmd.Parameters.AddWithValue("@ID", anno.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
-                    {
-                        anni[indice] = anno;
-                    }
+                    if (righeCoinvolte <= 0)
+                        throw new EvaluateException("errore durante la modifica");
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
-
-            return anni;
         }
 
-        public static List<ClsAnnoScolasticoDL> EliminaAnnoScolastico(int id)
+        public static void EliminaAnnoScolastico(int id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsAnnoScolasticoDL> anni = new List<ClsAnnoScolasticoDL>();
 
             try
             {
-                conn.Open();
-                string sql = "DELETE FROM anniscolastici WHERE id = " + id;
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte > 0)
+                    conn.Open();
+                    string sql = "DELETE FROM anniscolastici WHERE id =@ID";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        anni = CaricaAnniScolastici();
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        if (righeCoinvolte <= 0)
+                            throw new EvaluateException("errore durante la modifica");
                     }
                 }
+                   
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
-
-            return anni;
         }
     }
 }

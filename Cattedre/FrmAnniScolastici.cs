@@ -21,6 +21,7 @@ namespace Cattedre
 
         private void CaricaListView()
         {
+            anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
             lvAnniScolastici.Items.Clear();
 
             foreach (ClsAnnoScolasticoDL annoScolastico in anniScolastici)
@@ -35,11 +36,22 @@ namespace Cattedre
 
         private void btInserisci_Click(object sender, EventArgs e)
         {
+            int indiceDaModificare = lvAnniScolastici.SelectedIndices[0];
             FrmAnnoScolastico frmAnnoScolastico = new FrmAnnoScolastico();
+            frmAnnoScolastico._annoScolastico = anniScolastici[indiceDaModificare];
+
+            frmAnnoScolastico._annoScolastico.ID = anniScolastici[indiceDaModificare].ID; //mi assicuro che l'ID rimanga lo stesso
+
             DialogResult dr = frmAnnoScolastico.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                ClsAnnoScolasticoBL.InserisciAnnoScolastico(frmAnnoScolastico._annoScolastico);
+                try
+                {
+                    ClsAnnoScolasticoBL.InserisciAnnoScolastico(frmAnnoScolastico._annoScolastico);
+                }catch(Exception ex)
+                {
+                    MessageBox.Show($"Errore:\n{ex.Message}\nRiprovare!", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
                 CaricaListView();
             }
@@ -47,7 +59,6 @@ namespace Cattedre
 
         private void FrmAnniScolastici_Load(object sender, EventArgs e)
         {
-            anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
             CaricaListView();
         }
 
@@ -61,7 +72,13 @@ namespace Cattedre
                 DialogResult dr = frmAnnoScolastico.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
-                    ClsAnnoScolasticoBL.ModificaAnnoScolastico(frmAnnoScolastico._annoScolastico, indiceDaModificare);
+                    try
+                    {
+                        ClsAnnoScolasticoBL.ModificaAnnoScolastico(frmAnnoScolastico._annoScolastico); 
+                    }catch (Exception ex)
+                    {
+                        MessageBox.Show($"Errore:\n{ex.Message}\nRiprovare!", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                     CaricaListView();
                 }
             }

@@ -66,7 +66,7 @@ namespace Cattedre
 
         private async void FrmCattedre_Shown(object sender, EventArgs e)
         {
-            if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
+            if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "D") //|| utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
             {
                 this.Cursor = Cursors.WaitCursor;
 
@@ -83,7 +83,7 @@ namespace Cattedre
 
                 this.Cursor = Cursors.Default;
             }
-            if (utenteLoggato.TipoUtente == "C")
+            if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "D")
             {
                 cbDipartimenti.SelectedIndex = IDdipartimento - 1;
                 cbDipartimenti.Enabled = false;
@@ -278,6 +278,18 @@ namespace Cattedre
                     if (disciplina == null)
                         continue;
 
+                    // ricavo indirizzo della classe
+                    long IDindirizzoClasse = ClsClasseBL.TrovaIndirizzoClasse(classe.ID);
+
+                    // controllo appartenenza tra disciplina e indirizzo
+                    bool appartiene = ClsAppartenereBL
+                        .caricaIndirizziDisciplina(disciplina.ID)
+                        .Any(i => i.ID == IDindirizzoClasse);
+
+                    // se non appartiene non creo la UC
+                    if (!appartiene)
+                        continue;
+
                     UcAssegnazioni uc = new UcAssegnazioni();
 
                     // docenti teorici
@@ -373,6 +385,14 @@ namespace Cattedre
                     uc.Location = new Point(x, y);
 
                     pnlDipartimento.Controls.Add(uc);
+
+                    //cambio dei diritti di modifica
+                    if(utenteLoggato.TipoUtente=="A" || utenteLoggato.TipoUtente=="P" || utenteLoggato.TipoUtente == "D")
+                    {
+                        uc.cbDocentiItip.Enabled = false;
+                        uc.cbDocentiTeorici.Enabled = false;
+                    }
+
                 }
 
                 oreTotaliGenerali += oreTotaliClasse;

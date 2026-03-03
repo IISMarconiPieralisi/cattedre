@@ -18,6 +18,7 @@ namespace Cattedre
         FrmDiscipline frmDiscipline;
         FrmClassi frmClassi;
         FrmUtenti frmUtenti;
+        FrmAnniScolastici FrmAnniScolastici;
 
 
         private ClsUtenteDL utente;
@@ -54,16 +55,12 @@ namespace Cattedre
                 btUtenti.Visible = true;
                 btClassi.Visible = true;
                 btVaiACattedre.Visible = true;
-                pbmp.Visible = false;
-
             }
             else
             {
                 menuStrip1.Visible = false;
-                btDiscipline.Visible = false;
                 btUtenti.Visible = false;
-                btClassi.Visible = false;
-                pbmp.Visible = false;
+                btVaiACattedre.Visible = false;
             }
             lblNominativo.Text = utente.Nome.ToUpper() + " " + utente.Cognome.ToUpper();
             // AggiornaLabel(lblNominativo.Text, lblNominativo);
@@ -128,41 +125,48 @@ namespace Cattedre
         private void dISCIPLINEToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Application.OpenForms["FrmDiscipline"] == null)
-                frmDiscipline = new FrmDiscipline();
+                frmDiscipline = new FrmDiscipline(utente);
             MostraFormMDI(frmDiscipline);
         }
 
         private void cLASSIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Application.OpenForms["FrmClassi"] == null)
-                frmClassi = new FrmClassi();
+                frmClassi = new FrmClassi(utente);
             MostraFormMDI(frmClassi);
         }
 
         private void uTENTIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Application.OpenForms["FrmUtenti"] == null)
+            {
                 frmUtenti = new FrmUtenti();
+            }
             MostraFormMDI(frmUtenti);
+
         }
 
-        private void cREDITSToolStripMenuItem_Click(object sender, EventArgs e)
+       
+
+
+
+        private void creditToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmCredits frmCredits = new FrmCredits();
-            MostraFormMDI(frmCredits);
+            if (Application.OpenForms["FrmCredits"] == null)
+            {
+                FrmCredits frmCredits = new FrmCredits();
+                MostraFormMDI(frmCredits);
+
+            }
+
+
         }
 
-        private void FrmHome_FormClosing(object sender, FormClosingEventArgs e)
+        private void annoScolasticoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           //// Cerca tra tutte le form aperte
-           // foreach (Form form in Application.OpenForms)
-           // {
-           //     // Cerca frmLogin per nome e chiudila se esiste
-           //     var FrmLogin = Application.OpenForms.Cast<Form>().FirstOrDefault(f => f.Name == "FrmLogin");
-           //     if (FrmLogin != null && !FrmLogin.IsDisposed)
-           //         FrmLogin.Close();
-                
-           // }
+            if (Application.OpenForms["FrmAnniScolastici"] == null)
+                FrmAnniScolastici = new FrmAnniScolastici();
+                MostraFormMDI(FrmAnniScolastici);
         }
 
         //private void cONTRATTIToolStripMenuItem_Click(object sender, EventArgs e)

@@ -11,6 +11,26 @@ namespace Cattedre
 {
     public static class ClsClasseBL
     {
+        public static long TrovaIndirizzoClasse(long IDclasse)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = @"SELECT IDindirizzo 
+                       FROM classi
+                       WHERE ID = @IDclasse
+                       LIMIT 1";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                    object res = cmd.ExecuteScalar();
+                    return Convert.ToInt64(res);
+                }
+            }
+        }
+
         public static string RilevaSiglaClasse(long id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
@@ -195,6 +215,30 @@ namespace Cattedre
                     classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
                     classi.Add(classe);
                 }
+
+                foreach (DataRow row in ds.Rows)
+
+                {
+
+                    ClsClasseDL classe = new ClsClasseDL();
+
+                    classe.ID = Convert.ToInt64(row["ID"]);
+
+                    classe.Sigla = row["sigla"].ToString();
+
+                    classe.Anno = Convert.ToInt32(row["anno"]);
+
+                    classe.Sezione = row["sezione"].ToString();
+
+                    classe.ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]);
+
+                    classe.Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
+
+                    classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
+
+                    classi.Add(classe);
+
+                }
             }
             catch (Exception ex)
             {
@@ -207,7 +251,7 @@ namespace Cattedre
             try
             {
                 if (anno <= 0 && IDindirizzo <= 0)
-                    throw new Exception("non è stato inserito nessun parametro in cui filtrare,riprovare");
+                    throw new Exception("non ï¿½ stato inserito nessun parametro in cui filtrare,riprovare");
                 string sql = "SELECT * FROM classi WHERE ";
                 MySqlCommand cmd = new MySqlCommand("", conn);
                 if (anno > 0)

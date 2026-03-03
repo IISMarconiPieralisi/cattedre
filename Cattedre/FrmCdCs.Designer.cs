@@ -30,7 +30,7 @@ namespace Cattedre
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCdCs));
             this.btElimina = new System.Windows.Forms.Button();
-            this.brModifica = new System.Windows.Forms.Button();
+            this.btModifica = new System.Windows.Forms.Button();
             this.btInserisci = new System.Windows.Forms.Button();
             this.lvCdCs = new System.Windows.Forms.ListView();
             this.chCodice = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -51,16 +51,16 @@ namespace Cattedre
             this.btElimina.UseVisualStyleBackColor = true;
             this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
             // 
-            // brModifica
+            // btModifica
             // 
-            this.brModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.brModifica.Location = new System.Drawing.Point(1330, 77);
-            this.brModifica.Name = "brModifica";
-            this.brModifica.Size = new System.Drawing.Size(105, 23);
-            this.brModifica.TabIndex = 9;
-            this.brModifica.Text = "Modifica";
-            this.brModifica.UseVisualStyleBackColor = true;
-            this.brModifica.Click += new System.EventHandler(this.brModifica_Click);
+            this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btModifica.Location = new System.Drawing.Point(1330, 77);
+            this.btModifica.Name = "btModifica";
+            this.btModifica.Size = new System.Drawing.Size(105, 23);
+            this.btModifica.TabIndex = 9;
+            this.btModifica.Text = "Modifica";
+            this.btModifica.UseVisualStyleBackColor = true;
+            this.btModifica.Click += new System.EventHandler(this.btModifica_Click);
             // 
             // btInserisci
             // 
@@ -126,7 +126,7 @@ namespace Cattedre
             this.ClientSize = new System.Drawing.Size(1444, 577);
             this.Controls.Add(this.lvCdCs);
             this.Controls.Add(this.btElimina);
-            this.Controls.Add(this.brModifica);
+            this.Controls.Add(this.btModifica);
             this.Controls.Add(this.btInserisci);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(1);
@@ -139,7 +139,7 @@ namespace Cattedre
 
         #endregion
         private System.Windows.Forms.Button btElimina;
-        private System.Windows.Forms.Button brModifica;
+        private System.Windows.Forms.Button btModifica;
         private System.Windows.Forms.Button btInserisci;
         private System.Windows.Forms.ListView lvCdCs;
         private System.Windows.Forms.ColumnHeader chCodice;

@@ -59,15 +59,5 @@ namespace Cattedre.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap user_account_management_logo_user_icon_11562867145a56rus2zwu {
-            get {
-                object obj = ResourceManager.GetObject("user-account-management-logo-user-icon-11562867145a56rus2zwu", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

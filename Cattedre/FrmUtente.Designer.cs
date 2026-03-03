@@ -47,8 +47,8 @@
             this.PnUtente = new System.Windows.Forms.Panel();
             this.pnColore = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
-            this.btColore = new System.Windows.Forms.Button();
             this.cbAutoEmail = new System.Windows.Forms.CheckBox();
+            this.btColore = new System.Windows.Forms.Button();
             this.pnCDC = new System.Windows.Forms.Panel();
             this.clbCLasseDiConcorso = new System.Windows.Forms.CheckedListBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -273,16 +273,6 @@
             this.label9.TabIndex = 23;
             this.label9.Text = "Seleziona colore:";
             // 
-            // btColore
-            // 
-            this.btColore.Location = new System.Drawing.Point(112, 326);
-            this.btColore.Name = "btColore";
-            this.btColore.Size = new System.Drawing.Size(66, 23);
-            this.btColore.TabIndex = 22;
-            this.btColore.Text = "seleziona";
-            this.btColore.UseVisualStyleBackColor = true;
-            this.btColore.Click += new System.EventHandler(this.btColore_Click);
-            // 
             // cbAutoEmail
             // 
             this.cbAutoEmail.AutoSize = true;
@@ -293,6 +283,16 @@
             this.cbAutoEmail.Text = "Email Automatica";
             this.cbAutoEmail.UseVisualStyleBackColor = true;
             this.cbAutoEmail.CheckedChanged += new System.EventHandler(this.cbAutoEmail_CheckedChanged);
+            // 
+            // btColore
+            // 
+            this.btColore.Location = new System.Drawing.Point(112, 326);
+            this.btColore.Name = "btColore";
+            this.btColore.Size = new System.Drawing.Size(66, 23);
+            this.btColore.TabIndex = 22;
+            this.btColore.Text = "seleziona";
+            this.btColore.UseVisualStyleBackColor = true;
+            this.btColore.Click += new System.EventHandler(this.btColore_Click);
             // 
             // pnCDC
             // 

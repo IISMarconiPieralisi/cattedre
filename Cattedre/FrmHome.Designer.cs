@@ -45,11 +45,11 @@
             this.creditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cDCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iNDIRIZZIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.annoScolasticoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dIPARTIMENTIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dISCIPLINEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cLASSIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uTENTIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.annoScolasticoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2.SuspendLayout();
             this.pnCarUtente.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -182,7 +182,6 @@
             // 
             this.pictureBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pictureBox2.Image = global::Cattedre.Properties.Resources.user_account_management_logo_user_icon_11562867145a56rus2zwu;
             this.pictureBox2.Location = new System.Drawing.Point(23, 26);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox2.Name = "pictureBox2";
@@ -248,13 +247,13 @@
             // impostazioniToolStripMenuItem
             // 
             this.impostazioniToolStripMenuItem.Name = "impostazioniToolStripMenuItem";
-            this.impostazioniToolStripMenuItem.Size = new System.Drawing.Size(169, 26);
+            this.impostazioniToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
             this.impostazioniToolStripMenuItem.Text = "Impostazioni";
             // 
             // creditToolStripMenuItem
             // 
             this.creditToolStripMenuItem.Name = "creditToolStripMenuItem";
-            this.creditToolStripMenuItem.Size = new System.Drawing.Size(169, 26);
+            this.creditToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
             this.creditToolStripMenuItem.Text = "Credit";
             this.creditToolStripMenuItem.Click += new System.EventHandler(this.creditToolStripMenuItem_Click);
             // 
@@ -273,6 +272,13 @@
             this.iNDIRIZZIToolStripMenuItem.Size = new System.Drawing.Size(76, 25);
             this.iNDIRIZZIToolStripMenuItem.Text = "Indirizzi";
             this.iNDIRIZZIToolStripMenuItem.Click += new System.EventHandler(this.iNDIRIZZIToolStripMenuItem_Click);
+            // 
+            // annoScolasticoToolStripMenuItem
+            // 
+            this.annoScolasticoToolStripMenuItem.Name = "annoScolasticoToolStripMenuItem";
+            this.annoScolasticoToolStripMenuItem.Size = new System.Drawing.Size(132, 25);
+            this.annoScolasticoToolStripMenuItem.Text = "Anno Scolastico";
+            this.annoScolasticoToolStripMenuItem.Click += new System.EventHandler(this.annoScolasticoToolStripMenuItem_Click);
             // 
             // dIPARTIMENTIToolStripMenuItem
             // 
@@ -305,13 +311,6 @@
             this.uTENTIToolStripMenuItem.Size = new System.Drawing.Size(64, 25);
             this.uTENTIToolStripMenuItem.Text = "Utenti";
             this.uTENTIToolStripMenuItem.Click += new System.EventHandler(this.uTENTIToolStripMenuItem_Click);
-            // 
-            // annoScolasticoToolStripMenuItem
-            // 
-            this.annoScolasticoToolStripMenuItem.Name = "annoScolasticoToolStripMenuItem";
-            this.annoScolasticoToolStripMenuItem.Size = new System.Drawing.Size(132, 25);
-            this.annoScolasticoToolStripMenuItem.Text = "Anno Scolastico";
-            this.annoScolasticoToolStripMenuItem.Click += new System.EventHandler(this.annoScolasticoToolStripMenuItem_Click);
             // 
             // FrmHome
             // 

@@ -445,7 +445,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1-47b4fe04.ico" />
-    <None Include="Resources\user-account-management-logo-user-icon-11562867145a56rus2zwu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

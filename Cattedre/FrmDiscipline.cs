@@ -35,6 +35,14 @@ namespace Cattedre
                 lvi.SubItems.Add(Convert.ToString(disciplina.DisciplinaSpeciale));
                 lvi.SubItems.Add(ClsDisciplinaBL.RilevaNomeDipartimento(disciplina.IDdipartimento));
                 lvi.SubItems.Add(CaricaGraficamenteIndirizzi(disciplina));
+                if (disciplina.IDdisciplinaSuccessiva != 0)
+                {
+                    ClsDisciplinaDL discAssociata = ClsDisciplinaBL.RilevaDisciplina(disciplina.IDdisciplinaSuccessiva);
+                    lvi.SubItems.Add($"{discAssociata.Nome } {discAssociata.Anno}°");
+                }
+                else
+                    lvi.SubItems.Add("-");
+
                 lvi.Tag = disciplina.ID;
                 lvDiscipline.Items.Add(lvi);
             }

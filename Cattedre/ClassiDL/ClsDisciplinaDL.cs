@@ -12,6 +12,7 @@ namespace Cattedre
         long _id, _IDdipartimento;
         string _nome, _disciplinaSpeciale;
         int _oreTeoria, _oreLaboratorio, _anno;
+        long _iddisciplinaSuccessiva;
         #endregion
 
         #region COSTRUTTORE
@@ -107,6 +108,9 @@ namespace Cattedre
                 _IDdipartimento = value;
             }
         }
+
+        public long IDdisciplinaSuccessiva
+        { get => _iddisciplinaSuccessiva; set => _iddisciplinaSuccessiva = value; }
         #endregion
     }
 }

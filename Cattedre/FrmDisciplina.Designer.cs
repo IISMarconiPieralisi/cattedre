@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDisciplina));
             this.btSalva = new System.Windows.Forms.Button();
             this.btAnnulla = new System.Windows.Forms.Button();
@@ -50,15 +51,20 @@
             this.rbPrimo = new System.Windows.Forms.RadioButton();
             this.clbIndirizzi = new System.Windows.Forms.CheckedListBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.cbDisciplinaSucessiva = new System.Windows.Forms.ComboBox();
+            this.frmDisciplinaBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.nudOreTeoria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudOreLab)).BeginInit();
             this.pnRB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // btSalva
             // 
+            this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btSalva.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalva.Location = new System.Drawing.Point(202, 384);
+            this.btSalva.Location = new System.Drawing.Point(191, 459);
             this.btSalva.Margin = new System.Windows.Forms.Padding(2);
             this.btSalva.Name = "btSalva";
             this.btSalva.Size = new System.Drawing.Size(146, 31);
@@ -69,7 +75,8 @@
             // 
             // btAnnulla
             // 
-            this.btAnnulla.Location = new System.Drawing.Point(20, 384);
+            this.btAnnulla.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btAnnulla.Location = new System.Drawing.Point(20, 459);
             this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.Size = new System.Drawing.Size(146, 31);
@@ -85,7 +92,7 @@
             this.tbNome.Location = new System.Drawing.Point(186, 27);
             this.tbNome.Margin = new System.Windows.Forms.Padding(2);
             this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(162, 20);
+            this.tbNome.Size = new System.Drawing.Size(151, 20);
             this.tbNome.TabIndex = 14;
             // 
             // label4
@@ -131,7 +138,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(31, 331);
+            this.label5.Location = new System.Drawing.Point(31, 373);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(97, 13);
@@ -144,7 +151,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.nudOreTeoria.Location = new System.Drawing.Point(186, 60);
             this.nudOreTeoria.Name = "nudOreTeoria";
-            this.nudOreTeoria.Size = new System.Drawing.Size(162, 20);
+            this.nudOreTeoria.Size = new System.Drawing.Size(151, 20);
             this.nudOreTeoria.TabIndex = 22;
             // 
             // nudOreLab
@@ -153,7 +160,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.nudOreLab.Location = new System.Drawing.Point(186, 97);
             this.nudOreLab.Name = "nudOreLab";
-            this.nudOreLab.Size = new System.Drawing.Size(162, 20);
+            this.nudOreLab.Size = new System.Drawing.Size(151, 20);
             this.nudOreLab.TabIndex = 23;
             // 
             // label6
@@ -172,17 +179,18 @@
             this.cbDipartimentoAppartenente.FormattingEnabled = true;
             this.cbDipartimentoAppartenente.Location = new System.Drawing.Point(179, 177);
             this.cbDipartimentoAppartenente.Name = "cbDipartimentoAppartenente";
-            this.cbDipartimentoAppartenente.Size = new System.Drawing.Size(169, 21);
+            this.cbDipartimentoAppartenente.Size = new System.Drawing.Size(158, 21);
             this.cbDipartimentoAppartenente.TabIndex = 31;
+            this.cbDipartimentoAppartenente.SelectedIndexChanged += new System.EventHandler(this.cbDipartimentoAppartenente_SelectedIndexChanged);
             // 
             // tbDisciplinaSpeciale
             // 
             this.tbDisciplinaSpeciale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(179, 328);
+            this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(179, 370);
             this.tbDisciplinaSpeciale.Margin = new System.Windows.Forms.Padding(2);
             this.tbDisciplinaSpeciale.Name = "tbDisciplinaSpeciale";
-            this.tbDisciplinaSpeciale.Size = new System.Drawing.Size(169, 20);
+            this.tbDisciplinaSpeciale.Size = new System.Drawing.Size(158, 20);
             this.tbDisciplinaSpeciale.TabIndex = 32;
             // 
             // pnRB
@@ -196,13 +204,14 @@
             this.pnRB.Controls.Add(this.rbPrimo);
             this.pnRB.Location = new System.Drawing.Point(82, 128);
             this.pnRB.Name = "pnRB";
-            this.pnRB.Size = new System.Drawing.Size(266, 34);
+            this.pnRB.Size = new System.Drawing.Size(255, 34);
             this.pnRB.TabIndex = 33;
             // 
             // rbQuinto
             // 
+            this.rbQuinto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbQuinto.AutoSize = true;
-            this.rbQuinto.Location = new System.Drawing.Point(220, 10);
+            this.rbQuinto.Location = new System.Drawing.Point(209, 10);
             this.rbQuinto.Name = "rbQuinto";
             this.rbQuinto.Size = new System.Drawing.Size(35, 17);
             this.rbQuinto.TabIndex = 4;
@@ -212,8 +221,9 @@
             // 
             // rbQuarto
             // 
+            this.rbQuarto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbQuarto.AutoSize = true;
-            this.rbQuarto.Location = new System.Drawing.Point(167, 10);
+            this.rbQuarto.Location = new System.Drawing.Point(156, 10);
             this.rbQuarto.Name = "rbQuarto";
             this.rbQuarto.Size = new System.Drawing.Size(35, 17);
             this.rbQuarto.TabIndex = 3;
@@ -223,8 +233,9 @@
             // 
             // rbTerzo
             // 
+            this.rbTerzo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.rbTerzo.AutoSize = true;
-            this.rbTerzo.Location = new System.Drawing.Point(114, 10);
+            this.rbTerzo.Location = new System.Drawing.Point(108, 10);
             this.rbTerzo.Name = "rbTerzo";
             this.rbTerzo.Size = new System.Drawing.Size(35, 17);
             this.rbTerzo.TabIndex = 2;
@@ -259,25 +270,51 @@
             this.clbIndirizzi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbIndirizzi.FormattingEnabled = true;
-            this.clbIndirizzi.Location = new System.Drawing.Point(179, 217);
+            this.clbIndirizzi.Location = new System.Drawing.Point(179, 259);
             this.clbIndirizzi.Name = "clbIndirizzi";
-            this.clbIndirizzi.Size = new System.Drawing.Size(169, 94);
+            this.clbIndirizzi.Size = new System.Drawing.Size(158, 94);
             this.clbIndirizzi.TabIndex = 34;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(31, 217);
+            this.label7.Location = new System.Drawing.Point(31, 259);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(48, 13);
+            this.label7.Size = new System.Drawing.Size(44, 13);
             this.label7.TabIndex = 35;
-            this.label7.Text = "Indirizzo:";
+            this.label7.Text = "Indirizzi:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(31, 216);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(114, 13);
+            this.label8.TabIndex = 36;
+            this.label8.Text = "Disciplina successiva: ";
+            // 
+            // cbDisciplinaSucessiva
+            // 
+            this.cbDisciplinaSucessiva.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbDisciplinaSucessiva.Enabled = false;
+            this.cbDisciplinaSucessiva.FormattingEnabled = true;
+            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(179, 213);
+            this.cbDisciplinaSucessiva.Name = "cbDisciplinaSucessiva";
+            this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(158, 21);
+            this.cbDisciplinaSucessiva.TabIndex = 37;
+            // 
+            // frmDisciplinaBindingSource
+            // 
+            this.frmDisciplinaBindingSource.DataSource = typeof(Cattedre.FrmDisciplina);
             // 
             // FrmDisciplina
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(396, 436);
+            this.ClientSize = new System.Drawing.Size(385, 511);
+            this.Controls.Add(this.cbDisciplinaSucessiva);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.clbIndirizzi);
             this.Controls.Add(this.pnRB);
@@ -303,6 +340,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudOreLab)).EndInit();
             this.pnRB.ResumeLayout(false);
             this.pnRB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -331,5 +369,8 @@
         private System.Windows.Forms.RadioButton rbPrimo;
         private System.Windows.Forms.CheckedListBox clbIndirizzi;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox cbDisciplinaSucessiva;
+        private System.Windows.Forms.BindingSource frmDisciplinaBindingSource;
     }
 }

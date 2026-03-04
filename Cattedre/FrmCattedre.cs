@@ -119,6 +119,7 @@ namespace Cattedre
             lblNumProfEstratti.AutoSize = true;
             lblNumProfEstratti.Location = new Point(10, y);
             lblNumProfEstratti.Text = "Num Docenti Assegnati: " + numDocentiEstratti;
+            lblNumProfEstratti.Font = new Font(lblNumProfEstratti.Font.FontFamily, 10f, lblNumProfEstratti.Font.Style);
 
             pnlInfoNumCattedre.Controls.Add(lblNumProfEstratti);
 
@@ -152,16 +153,37 @@ namespace Cattedre
 
                 pnlInfoNumCattedre.Controls.Add(lbl);
 
+                Label lblInfo = new Label();
+                lblInfo.AutoSize = true;
+                lblInfo.Location = new Point(lbl.Right, y);
+                lblInfo.Font = new Font(lblInfo.Font, FontStyle.Bold);
+
                 if (numDocentiEstratti == numCattedreFatto)
                 {
-                    Label lblInfo = new Label();
-                    lblInfo.AutoSize = true;
-                    lblInfo.Location = new Point(lbl.Right, y);
                     lblInfo.Text += "COPERTE";
                     lblInfo.ForeColor = Color.Green;
-                    lblInfo.Font = new Font(lblInfo.Font, FontStyle.Bold);
-                    pnlInfoNumCattedre.Controls.Add(lblInfo);
                 }
+                else if (numDocentiEstratti < numCattedreFatto)
+                {
+                    lblInfo.Text += "VACANTI";
+                    lblInfo.ForeColor = Color.Red;
+                }
+                else if (numDocentiEstratti > numCattedreFatto)
+                {
+                    lblInfo.Text += "ESUBERO";
+                    lblInfo.ForeColor = Color.Red;
+                }
+
+                pnlInfoNumCattedre.Controls.Add(lblInfo);
+
+                y += 15;
+
+                Label lblNumCattedreDiritto = new Label();
+                lblNumCattedreDiritto.AutoSize = true;
+                lblNumCattedreDiritto.Location = new Point(lbl.Location.X, y);
+                lblNumCattedreDiritto.Text = $"Num Cattedre di Diritto: {numCattedreDiritto}";
+
+                pnlInfoNumCattedre.Controls.Add(lblNumCattedreDiritto);
 
                 y += 25;
             }

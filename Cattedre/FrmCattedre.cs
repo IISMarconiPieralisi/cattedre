@@ -82,7 +82,8 @@ namespace Cattedre
 
                 LoadClassi(IDdipartimento);
                 LoadDiscipline(IDdipartimento);
-                LoadAssegnazioni(IDdipartimento);
+                LoadAssegnazioni(IDdipartimento, out dtDocentiAssegnazioni);
+                LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
 
                 this.Cursor = Cursors.Default;
             }
@@ -90,6 +91,79 @@ namespace Cattedre
             {
                 cbDipartimenti.SelectedIndex = IDdipartimento - 1;
                 cbDipartimenti.Enabled = false;
+            }
+        }
+
+        private void LoadInfoNumCattedre(long idDip, DataTable docenti)
+        {
+            pnlInfoNumCattedre.Controls.Clear();
+
+            int y = 10;
+
+            Label lblPrinc = new Label();
+            lblPrinc.AutoSize = true;
+            lblPrinc.Location = new Point(10, y);
+            lblPrinc.Text = "INFO NUM CATTEDRE X CDC";
+            lblPrinc.Font = new Font(lblPrinc.Font, FontStyle.Bold);
+
+            pnlInfoNumCattedre.Controls.Add(lblPrinc);
+
+            y = 40;
+
+            int numDocentiEstratti = docenti.AsEnumerable()
+          .Select(r => Convert.ToInt64(r["IDutente"]))
+          .Distinct()
+          .Count();
+
+            Label lblNumProfEstratti = new Label();
+            lblNumProfEstratti.AutoSize = true;
+            lblNumProfEstratti.Location = new Point(10, y);
+            lblNumProfEstratti.Text = "Num Docenti Assegnati: " + numDocentiEstratti;
+
+            pnlInfoNumCattedre.Controls.Add(lblNumProfEstratti);
+
+            y = 80;
+
+            List<ClsDisciplinaDL> discipline = ClsDisciplinaBL
+                .CaricaDisciplineDipartimento(Convert.ToInt32(idDip));
+
+            // 1️ Recupero tutte le CDC di tutte le discipline
+            List<ClsClasseDiConcorsoDL> cdcUniche = discipline
+                .SelectMany(d => ClsRichiedereBL.RilevaCDCDiscipina(d.ID))
+                .GroupBy(c => c.ID)          // raggruppo per ID CDC
+                .Select(g => g.First())      // prendo una sola CDC per gruppo
+                .OrderBy(c => c.Livello)     // ordinamento
+                .ToList();
+
+            // 2️ Creo le label
+            foreach (ClsClasseDiConcorsoDL cdc in cdcUniche)
+            {
+                int numCattedreDiritto =
+                    ClsDotareBL.TrovaNumCattedreDiDiritto(cdc.ID);
+
+                int numCattedreFatto =
+                    ClsDotareBL.TrovaNumCattedreDiFatto(cdc.ID);
+
+                Label lbl = new Label();
+                lbl.AutoSize = true;
+                lbl.Location = new Point(10, y);
+                lbl.Text =
+                    $"{cdc.Livello} → Num Cattedre di Fatto: {numCattedreFatto}";
+
+                pnlInfoNumCattedre.Controls.Add(lbl);
+
+                if (numDocentiEstratti == numCattedreFatto)
+                {
+                    Label lblInfo = new Label();
+                    lblInfo.AutoSize = true;
+                    lblInfo.Location = new Point(lbl.Right, y);
+                    lblInfo.Text += "COPERTE";
+                    lblInfo.ForeColor = Color.Green;
+                    lblInfo.Font = new Font(lblInfo.Font, FontStyle.Bold);
+                    pnlInfoNumCattedre.Controls.Add(lblInfo);
+                }
+
+                y += 25;
             }
         }
 
@@ -233,7 +307,7 @@ namespace Cattedre
             y = 72 + riga * 100;
            
             ucOreTotali.Location = new Point(x, y);
-            pnlOre.Controls.Add(ucOreTotali);
+            pnlInfoNumCattedre.Controls.Add(ucOreTotali);
 
             ucOreTotali.Refresh();
         }
@@ -256,19 +330,19 @@ namespace Cattedre
                 cbAnniScolastici.Items.Add(anniscolastici[i].Sigla);
         }
 
-        private void LoadAssegnazioni(int IDdipartimento)
+        private void LoadAssegnazioni(int IDdipartimento, out DataTable docenti)
         {
             pnlDipartimento.Controls
                 .OfType<UcAssegnazioni>()
                 .ToList()
                 .ForEach(c => { pnlDipartimento.Controls.Remove(c); c.Dispose(); });
 
-            pnlOre.Controls.Clear();
+            //pnlInfoNumCattedre.Controls.Clear();
             docentiTeoriciUsati.Clear();
             docentiPraticiUsati.Clear();
 
             // QUERY UNICA x recuperare tutti i docenti del dipartimento
-            dtDocentiAssegnazioni = ClsAssegnareBL
+            docenti = ClsAssegnareBL
                 .CaricaDocentiConAssegnazioni(IDdipartimento, 1);
 
             int oreTotaliGenerali = 0;
@@ -304,7 +378,7 @@ namespace Cattedre
                     UcAssegnazioni uc = new UcAssegnazioni();
 
                     // docenti teorici
-                    List<ClsUtenteDL> teorici = dtDocentiAssegnazioni.AsEnumerable()
+                    List<ClsUtenteDL> teorici = docenti.AsEnumerable()
                         .Where(r => r["tipoDocente"].ToString() == "T")
                         .Select(r => new ClsUtenteDL
                         {
@@ -318,7 +392,7 @@ namespace Cattedre
                         .ToList();
 
                     // docenti pratici
-                    List<ClsUtenteDL> pratici = dtDocentiAssegnazioni.AsEnumerable()
+                    List<ClsUtenteDL> pratici = docenti.AsEnumerable()
                         .Where(r => r["tipoDocente"].ToString() == "L")
                         .Select(r => new ClsUtenteDL
                         {
@@ -340,7 +414,7 @@ namespace Cattedre
                     uc.cbDocentiItip.ValueMember = "ID";
 
                     // docente già assegnato (in memoria)
-                    var assegnazione = dtDocentiAssegnazioni.AsEnumerable()
+                    var assegnazione = docenti.AsEnumerable()
                         .FirstOrDefault(r =>
                             r["IDclasse"] != DBNull.Value &&
                             r["IDdisciplina"] != DBNull.Value &&
@@ -484,7 +558,7 @@ namespace Cattedre
             // Svuoto pannelli
             //pnlDipartimento.Controls.Clear();
             //pnlClassi.Controls.Clear();
-            pnlOre.Controls.Clear();
+            pnlInfoNumCattedre.Controls.Clear();
             pnlOreDoc.Controls.Clear();
 
             // Svuoto liste
@@ -541,7 +615,8 @@ namespace Cattedre
 
                     LoadClassi(IDdipartimento);
                     LoadDiscipline(IDdipartimento);
-                    LoadAssegnazioni(IDdipartimento);
+                    LoadAssegnazioni(IDdipartimento, out dtDocentiAssegnazioni);
+                    LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
                 }
             }
             catch(Exception ex)

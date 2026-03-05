@@ -92,6 +92,36 @@ namespace Cattedre
             }
         }
 
+        public static void CopiaDocentiAnnoSuccessivo(long nuovoAnno, long vecchioAnno)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"INSERT INTO assegnare (IDannoscolastico, IDclasse, IDutente)
+                           SELECT @nuovoAnno, IDclasse, IDutente
+                           FROM assegnare
+                           WHERE IDannoscolastico = @vecchioAnno";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.Add("@nuovoAnno", MySqlDbType.Int64).Value = nuovoAnno;
+                        cmd.Parameters.Add("@vecchioAnno", MySqlDbType.Int64).Value = vecchioAnno;
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante CopiaDocentiAnnoSuccessivo: " + ex.Message);
+            }
+        }
+
         //public static List<ClsUtenteDL> CercaDocentiDiRiferimento(int IDdipartimento, int IDclasse, int IDdisciplina)
         //{
         //    string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;

@@ -64,6 +64,7 @@ namespace Cattedre
             this.btGeneraASsucc.TabIndex = 6;
             this.btGeneraASsucc.Text = "Genera";
             this.btGeneraASsucc.UseVisualStyleBackColor = true;
+            this.btGeneraASsucc.Click += new System.EventHandler(this.btGeneraASsucc_Click);
             // 
             // cbAnniScolastici
             // 

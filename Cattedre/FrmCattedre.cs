@@ -650,5 +650,46 @@ namespace Cattedre
                 this.UseWaitCursor = false;
             }
         }
+
+        private void btGeneraASsucc_Click(object sender, EventArgs e)
+        {
+            if (utenteLoggato.TipoUtente == "C")
+            {
+                DialogResult dr = MessageBox.Show(
+                    "Vuoi generare le cattedre per l'anno successivo?",
+                    "Generazione",
+                    MessageBoxButtons.YesNo);
+
+                if (dr != DialogResult.Yes)
+                    return;
+
+                string siglaAnno = cbAnniScolastici.SelectedItem.ToString();
+
+                ClsAnnoScolasticoDL annoCorrente =
+                    ClsAnnoScolasticoBL.CercaAnnoScolastico(siglaAnno);
+
+                ClsAnnoScolasticoDL annoSuccessivo =
+                    ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(annoCorrente.ID);
+
+                if (annoSuccessivo == null)
+                {
+                    MessageBox.Show("Anno successivo non trovato");
+                    return;
+                }
+
+                if (annoCorrente.ID == annoSuccessivo.ID)
+                {
+                    MessageBox.Show("Anno non valido");
+                    return;
+                }
+
+                ClsAssegnareBL.GeneraCattedreAnnoSuccessivo(
+                    IDdipartimento,
+                    (int)annoCorrente.ID,
+                    (int)annoSuccessivo.ID);
+
+                MessageBox.Show("Cattedre generate con successo");
+            }
+        }
     }
 }

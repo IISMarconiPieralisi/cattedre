@@ -11,6 +11,54 @@ namespace Cattedre
 {
     public static class ClsAnnoScolasticoBL
     {
+        public static ClsAnnoScolasticoDL TrovaAnnoSuccessivo(long IDanno)
+        {
+            List<ClsAnnoScolasticoDL> anni = CaricaAnniScolastici();
+
+            return anni
+                .Where(a => a.ID > IDanno)
+                .OrderBy(a => a.ID)
+                .FirstOrDefault();
+        }
+
+        public static ClsAnnoScolasticoDL CercaAnnoScolastico(string sigla)
+        {
+            ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
+            DataTable dt = new DataTable();
+
+            try
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT * FROM anniscolastici
+                                   WHERE sigla = @sigla";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@sigla", sigla);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        anno.ID = Convert.ToInt64(row["ID"]);
+                        anno.Sigla = row["sigla"].ToString();
+                        anno.DataInizio = Convert.ToDateTime(row["datainizio"]);
+                        anno.DataFine = Convert.ToDateTime(row["datafine"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return anno;
+        }
         public static List<ClsAnnoScolasticoDL> CaricaAnniScolastici()
         {
             List<ClsAnnoScolasticoDL> anniScolastici = new List<ClsAnnoScolasticoDL>();

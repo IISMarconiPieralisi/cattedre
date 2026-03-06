@@ -11,6 +11,76 @@ namespace Cattedre
 {
     public static class ClsClasseBL
     {
+        public static ClsClasseDL CaricaClasse(long id)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT * 
+                       FROM classi
+                       WHERE ID = @id";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        return new ClsClasseDL
+                        {
+                            ID = Convert.ToInt64(dr["ID"]),
+                            Sezione = dr["sezione"].ToString(),
+                            Anno = Convert.ToInt32(dr["anno"]),
+                            Idindirizzo = Convert.ToInt64(dr["IDindirizzo"])
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static ClsClasseDL TrovaClasse(string sezione, int anno, long IDindirizzo)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT * 
+                       FROM classi
+                       WHERE sezione = @sezione
+                       AND anno = @anno
+                       AND IDindirizzo = @IDindirizzo";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@sezione", sezione);
+                cmd.Parameters.AddWithValue("@anno", anno);
+                cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        return new ClsClasseDL
+                        {
+                            ID = Convert.ToInt64(dr["ID"]),
+                            Sezione = dr["sezione"].ToString(),
+                            Anno = Convert.ToInt32(dr["anno"]),
+                            Idindirizzo = Convert.ToInt64(dr["IDindirizzo"])
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public static long TrovaIndirizzoClasse(long IDclasse)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;

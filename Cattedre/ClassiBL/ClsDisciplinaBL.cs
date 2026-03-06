@@ -14,6 +14,76 @@ namespace Cattedre
         public static int _IDdipartimento;
         public static List<int> IDdipartimenti = new List<int>();
 
+        public static ClsDisciplinaDL CaricaDisciplina(long id)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT *
+                       FROM discipline
+                       WHERE ID = @id";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        return new ClsDisciplinaDL
+                        {
+                            ID = Convert.ToInt64(dr["ID"]),
+                            Nome = dr["nome"].ToString(),
+                            Anno = Convert.ToInt32(dr["anno"]),
+                            OreTeoria = Convert.ToInt32(dr["oreTeoria"]),
+                            OreLaboratorio = Convert.ToInt32(dr["oreLaboratorio"])
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static ClsDisciplinaDL TrovaDisciplinaNomeAnno(string nome, int anno)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT *
+                       FROM discipline
+                       WHERE nome = @nome
+                       AND anno = @anno";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@nome", nome);
+                cmd.Parameters.AddWithValue("@anno", anno);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        return new ClsDisciplinaDL
+                        {
+                            ID = Convert.ToInt64(dr["ID"]),
+                            Nome = dr["nome"].ToString(),
+                            Anno = Convert.ToInt32(dr["anno"]),
+                            OreTeoria = Convert.ToInt32(dr["oreTeoria"]),
+                            OreLaboratorio = Convert.ToInt32(dr["oreLaboratorio"])
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public static List<ClsDisciplinaDL> CaricaDisciplineDipartimento(int IDdipartimento)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;

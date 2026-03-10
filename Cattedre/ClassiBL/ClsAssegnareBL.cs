@@ -132,7 +132,7 @@ namespace Cattedre
             }
         }
 
-        public static DataTable CaricaDocentiConAssegnazioni(int IDdipartimento, int IDannoScolastico)
+        public static DataTable CaricaDocentiConAssegnazioni(int IDdipartimento, long IDannoScolastico)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             DataTable dt = new DataTable();
@@ -141,29 +141,33 @@ namespace Cattedre
             {
                 conn.Open();
 
-                string sql = @"
-                SELECT 
-                    u.ID AS IDutente,
-                    u.nome,
-                    u.cognome,
-                    u.tipoDocente,
+                string sql = @"SELECT
+                                u.ID AS IDutente,
+                                u.nome,
+                                u.cognome,
+                                u.tipoDocente,
+                                a.IDclasse,
+                                a.IDdisciplina,
+                                a.oreSpeciali,
+                                a.IDannoscolastico
 
-                    a.IDclasse,
-                    a.IDdisciplina,
-                    a.oreSpeciali
+                            FROM utenti u
 
-                FROM utenti u
+                            JOIN afferire af
+                                ON af.IDutente = u.ID
 
-                JOIN afferire af 
-                    ON af.IDutente = u.ID
+                            LEFT JOIN assegnare a
+                                ON a.IDutente = u.ID
+                                AND a.IDannoscolastico = @IDannoScolastico
 
-                LEFT JOIN assegnare a 
-                    ON a.IDutente = u.ID
-                    AND a.IDannoscolastico = @IDannoScolastico
+                            LEFT JOIN anniscolastici ans
+                                ON a.IDannoscolastico = ans.ID
+                                AND CURDATE() BETWEEN ans.datainizio AND ans.datafine
 
-                WHERE af.IDdipartimento = @IDdipartimento
-                AND u.tipoUtente IN ('D','C','A')
-                ORDER BY u.cognome, u.nome";
+                            WHERE af.IDdipartimento = @IDdipartimento
+                                AND u.tipoUtente IN('D','C','A')
+
+                            ORDER BY u.cognome, u.nome";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
@@ -481,7 +485,11 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "UPDATE assegnare SET oreSpeciali = @oreSpeciali WHERE ID = @id";
+                string sql = @"UPDATE assegnare a
+                                JOIN anniscolastici ans ON a.IDannoscolastico = ans.ID
+                                SET a.oreSpeciali = @oreSpeciali
+                                WHERE a.ID = @id
+                                  AND CURDATE() BETWEEN ans.datainizio AND ans.datafine";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@oreSpeciali", oreSpeciali);
                 cmd.Parameters.AddWithValue("@id", id);

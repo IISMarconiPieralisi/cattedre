@@ -11,6 +11,41 @@ namespace Cattedre
 {
     public static class ClsAnnoScolasticoBL
     {
+        public static long TrovaIDannoscolastico()
+        {
+            ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
+            DataTable dt = new DataTable();
+
+            try
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID FROM anniscolastici 
+                           WHERE CURDATE() BETWEEN datainizio AND datafine 
+                           LIMIT 1";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        anno.ID = Convert.ToInt64(row["ID"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return anno.ID;
+        }
+
         public static ClsAnnoScolasticoDL TrovaAnnoSuccessivo(long IDanno)
         {
             List<ClsAnnoScolasticoDL> anni = CaricaAnniScolastici();

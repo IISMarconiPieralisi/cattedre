@@ -74,6 +74,7 @@ namespace Cattedre
             this.cbAnniScolastici.Name = "cbAnniScolastici";
             this.cbAnniScolastici.Size = new System.Drawing.Size(59, 21);
             this.cbAnniScolastici.TabIndex = 6;
+            this.cbAnniScolastici.SelectedIndexChanged += new System.EventHandler(this.cbAnniScolastici_SelectedIndexChanged);
             // 
             // cbDipartimenti
             // 

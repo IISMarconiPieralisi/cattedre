@@ -237,41 +237,92 @@ namespace Cattedre
         {
             try
             {
-                //cancello la ricerca in modo che non mi dia problemi
-                _parametroRicerca = new List<string>();
                 btAnnullaFiltra.Enabled = true;
-                _parametri = new List<string>();
-                bool ParametroSelezionato = false;
 
-                if (gbTipiUtenti.Controls.OfType<CheckBox>().Any(r => r.Checked))
+                bool parametroSelezionato = false;
+                Dictionary<string, List<string>> filtri = new Dictionary<string, List<string>>();
+                Dictionary<string, string> mappaUtenti = new Dictionary<string, string>()
                 {
+                    { "Preside", "P" },
+                    { "Amministratore", "A" },
+                    { "Docente", "D" },
+                    { "Coordinatore", "C" }
+                };
 
-                    ParametroSelezionato = true;
-                }
-                if (gbContratto.Controls.OfType<RadioButton>().Any(r => r.Checked))
+                Dictionary<string, string> mappaContratto = new Dictionary<string, string>()
                 {
-                    ParametroSelezionato = true;
-                }
-                if (gBtipoDocente.Controls.OfType<RadioButton>().Any(r => r.Checked))
+                    { "Determinato", "D" },
+                    { "Indeterminato", "I" }
+                };
+
+                Dictionary<string, string> mappaTipoDocente = new Dictionary<string, string>()
                 {
-                    ParametroSelezionato = true;
+                    { "Laboratorio", "L" },
+                    { "Teorico", "T" }
+                };
+
+
+                var tipiUtente = CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox));
+
+                if (tipiUtente.Any())
+                {
+                    List<string> valori = new List<string>();
+
+                    foreach (string item in tipiUtente)
+                    {
+                        if (mappaUtenti.ContainsKey(item))
+                            valori.Add(mappaUtenti[item]);
+                    }
+
+                    if (valori.Any())
+                    {
+                        filtri.Add("tipoUtente", valori);
+                        parametroSelezionato = true;
+                    }
+                }
+                var contratto = CaricaElementiSelezionati(gbContratto, typeof(RadioButton));
+                if (contratto.Any())
+                {
+                    List<string> valori = new List<string>();
+                    foreach (string item in contratto)
+                    {
+                        if (mappaContratto.ContainsKey(item))
+                            valori.Add(mappaContratto[item]);
+                    }
+                    if (valori.Any())
+                    {
+                        filtri.Add("tipoContratto", valori);
+                        parametroSelezionato = true;
+                    }
+                }
+                var tipoDocente = CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton));
+                if (tipoDocente.Any())
+                {
+                    List<string> valori = new List<string>();
+
+                    foreach (string item in tipoDocente)
+                    {
+                        if (mappaTipoDocente.ContainsKey(item))
+                            valori.Add(mappaTipoDocente[item]);
+                    }
+
+                    if (valori.Any())
+                    {
+                        filtri.Add("categoriaDocente", valori);
+                        parametroSelezionato = true;
+                    }
                 }
 
-                if (ParametroSelezionato)
-                {
-                    //filtro
-                    gestisciListview();
-                }
-                else
+                if (!parametroSelezionato)
                     throw new Exception("non è stato selezionato nessun parametro di ricerca");
 
-
-
-            } catch (Exception ex)
+                // passo i filtri al metodo che costruisce la query
+                gestisciListview(filtri);
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}\n riprova", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
         }
         private List<string> CaricaElementiSelezionati(GroupBox gb, Type tipoControllo)
         {

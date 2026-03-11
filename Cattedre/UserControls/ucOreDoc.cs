@@ -33,10 +33,11 @@ namespace Cattedre
             if (this.Tag == null)
                 return;
 
-            int idUtente = Convert.ToInt32(this.Tag);
-            int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
+            //int IDutente = Convert.ToInt32(this.Tag);
+            //int IDannoscolastico = 
+            //int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
 
-            ClsAssegnareBL.SalvaOrePot(oreSpeciali, idUtente);
+            //ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, );
         }
     }
 }

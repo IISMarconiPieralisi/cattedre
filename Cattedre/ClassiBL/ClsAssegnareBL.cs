@@ -477,7 +477,7 @@ namespace Cattedre
         //    return assegnare.OreSpeciali;
         //}
 
-        public static void SalvaOrePot(int oreSpeciali, int id)
+        public static void SalvaOrePot(int oreSpeciali, int IDutente, int IDannoscolastico)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -487,12 +487,13 @@ namespace Cattedre
                 conn.Open();
                 string sql = @"UPDATE assegnare a
                                 JOIN anniscolastici ans ON a.IDannoscolastico = ans.ID
+                                JOIN utenti u ON a.IDutente = u.ID
                                 SET a.oreSpeciali = @oreSpeciali
                                 WHERE a.ID = @id
-                                  AND CURDATE() BETWEEN ans.datainizio AND ans.datafine";
+                                AND CURDATE() BETWEEN ans.datainizio AND ans.datafine";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@oreSpeciali", oreSpeciali);
-                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@id", IDutente);
                 MySqlDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
                 {

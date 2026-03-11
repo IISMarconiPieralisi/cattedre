@@ -14,10 +14,8 @@ namespace Cattedre
     public partial class FrmUtenti : Form
     {
         public List<ClsUtenteDL> _utenti = new List<ClsUtenteDL>();
-        string _filtro = string.Empty;
-        List<string> _parametri = new List<string>();
-        List<string> _parametroRicerca = new List<string>();
-
+        Dictionary<string, List<string>> filtri = new Dictionary<string, List<string>>();
+        string _parametroRicerca = string.Empty;
         public FrmUtenti()
         {
             InitializeComponent();
@@ -142,8 +140,8 @@ namespace Cattedre
         }
         private void gestisciListview()
         {
-            if (!string.IsNullOrWhiteSpace(_filtro))
-                _utenti = ClsUtenteBL.FiltraUtenti(_parametri, _filtro);
+            if (filtri.Count!=0)
+                _utenti = ClsUtenteBL.FiltraUtenti(filtri);
             else if (!string.IsNullOrEmpty(_parametroRicerca))
                 _utenti = ClsUtenteBL.RicercaPerNomeCognome(_parametroRicerca);
             else
@@ -237,10 +235,10 @@ namespace Cattedre
         {
             try
             {
+                filtri = new Dictionary<string, List<string>>();
                 btAnnullaFiltra.Enabled = true;
 
                 bool parametroSelezionato = false;
-                Dictionary<string, List<string>> filtri = new Dictionary<string, List<string>>();
                 Dictionary<string, string> mappaUtenti = new Dictionary<string, string>()
                 {
                     { "Preside", "P" },
@@ -308,7 +306,7 @@ namespace Cattedre
 
                     if (valori.Any())
                     {
-                        filtri.Add("categoriaDocente", valori);
+                        filtri.Add("tipoDocente", valori);
                         parametroSelezionato = true;
                     }
                 }
@@ -316,8 +314,9 @@ namespace Cattedre
                 if (!parametroSelezionato)
                     throw new Exception("non è stato selezionato nessun parametro di ricerca");
 
-                // passo i filtri al metodo che costruisce la query
-                gestisciListview(filtri);
+                _parametroRicerca = string.Empty;
+                _utenti = ClsUtenteBL.FiltraUtenti(filtri);
+                gestisciListview();
             }
             catch (Exception ex)
             {
@@ -347,19 +346,31 @@ namespace Cattedre
 
         private void btAnnullaFiltra_Click(object sender, EventArgs e)
         {
-            btFiltro.Enabled = false;
-            btAnnullaFiltra.Enabled = false;
-            tlpFiltri.Controls.Clear();
-            cbFiltro.SelectedIndex = 0;
-            _filtro = string.Empty;
-            _parametri = new List<string>();
+            PulisciGroubBox(gbContratto);
+            PulisciGroubBox(gbTipiUtenti);
+            PulisciGroubBox(gBtipoDocente);
+            _parametroRicerca = string.Empty;
+            filtri = new Dictionary<string, List<string>>();
 
             //ricamento della listview
             gestisciListview();
         }
 
 
-
+        private void PulisciGroubBox(GroupBox gb)
+        {
+            foreach (Control ctrl in gb.Controls)
+            {
+                if (ctrl is CheckBox cb)
+                {
+                    cb.Checked = false;  // deseleziona checkbox
+                }
+                else if (ctrl is RadioButton rb)
+                {
+                    rb.Checked = false;  // deseleziona radiobutton
+                }
+            }
+        }
 
         #endregion
         #region ricerca
@@ -397,7 +408,7 @@ namespace Cattedre
             if (!string.IsNullOrWhiteSpace(tbRicerca.Text) && tbRicerca.Text != "cognome nome")
             {
                 //cancello il filtra in modo che non mi dia problemi
-                _filtro = string.Empty;
+                filtri = new Dictionary<string, List<string>>();
                 btAnnullaRicerca.Enabled = true;
                 _parametroRicerca = tbRicerca.Text.Replace(" ", "").ToLower();
                 _utenti = ClsUtenteBL.RicercaPerNomeCognome(_parametroRicerca);
@@ -416,5 +427,16 @@ namespace Cattedre
             gestisciListview();
         }
         #endregion
+
+        private void cbDocente_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbDocente.Checked)
+                gBtipoDocente.Enabled = true;
+            else
+            {
+                gBtipoDocente.Enabled = false;
+                PulisciGroubBox(gBtipoDocente);
+            }
+        }
     }
 }

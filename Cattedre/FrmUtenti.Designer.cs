@@ -41,6 +41,17 @@
             this.btModifica = new System.Windows.Forms.Button();
             this.btElimina = new System.Windows.Forms.Button();
             this.pnFiltra = new System.Windows.Forms.Panel();
+            this.gbContratto = new System.Windows.Forms.GroupBox();
+            this.rbIndireterminato = new System.Windows.Forms.RadioButton();
+            this.rbDeterminato = new System.Windows.Forms.RadioButton();
+            this.gBtipoDocente = new System.Windows.Forms.GroupBox();
+            this.rbPratico = new System.Windows.Forms.RadioButton();
+            this.rdTeorico = new System.Windows.Forms.RadioButton();
+            this.gbTipiUtenti = new System.Windows.Forms.GroupBox();
+            this.cbDocente = new System.Windows.Forms.CheckBox();
+            this.cbCoordinatore = new System.Windows.Forms.CheckBox();
+            this.cbAmminstratore = new System.Windows.Forms.CheckBox();
+            this.cbPreside = new System.Windows.Forms.CheckBox();
             this.btAnnullaFiltra = new System.Windows.Forms.Button();
             this.btFiltro = new System.Windows.Forms.Button();
             this.pnRicerca = new System.Windows.Forms.Panel();
@@ -48,22 +59,11 @@
             this.btAnnullaRicerca = new System.Windows.Forms.Button();
             this.btRicerca = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.gbTipiUtenti = new System.Windows.Forms.GroupBox();
-            this.cbDocente = new System.Windows.Forms.CheckBox();
-            this.cbCoordinatore = new System.Windows.Forms.CheckBox();
-            this.cbAmminstratore = new System.Windows.Forms.CheckBox();
-            this.cbPreside = new System.Windows.Forms.CheckBox();
-            this.gBtipoDocente = new System.Windows.Forms.GroupBox();
-            this.rdTeorico = new System.Windows.Forms.RadioButton();
-            this.rbPratico = new System.Windows.Forms.RadioButton();
-            this.gbContratto = new System.Windows.Forms.GroupBox();
-            this.rbIndireterminato = new System.Windows.Forms.RadioButton();
-            this.rbDeterminato = new System.Windows.Forms.RadioButton();
             this.pnFiltra.SuspendLayout();
-            this.pnRicerca.SuspendLayout();
-            this.gbTipiUtenti.SuspendLayout();
-            this.gBtipoDocente.SuspendLayout();
             this.gbContratto.SuspendLayout();
+            this.gBtipoDocente.SuspendLayout();
+            this.gbTipiUtenti.SuspendLayout();
+            this.pnRicerca.SuspendLayout();
             this.SuspendLayout();
             // 
             // lvUtenti
@@ -176,10 +176,131 @@
             this.pnFiltra.Size = new System.Drawing.Size(1289, 71);
             this.pnFiltra.TabIndex = 4;
             // 
+            // gbContratto
+            // 
+            this.gbContratto.Controls.Add(this.rbIndireterminato);
+            this.gbContratto.Controls.Add(this.rbDeterminato);
+            this.gbContratto.Location = new System.Drawing.Point(822, 6);
+            this.gbContratto.Name = "gbContratto";
+            this.gbContratto.Size = new System.Drawing.Size(267, 47);
+            this.gbContratto.TabIndex = 9;
+            this.gbContratto.TabStop = false;
+            this.gbContratto.Text = "tipo Contratto:";
+            // 
+            // rbIndireterminato
+            // 
+            this.rbIndireterminato.AutoSize = true;
+            this.rbIndireterminato.Location = new System.Drawing.Point(156, 18);
+            this.rbIndireterminato.Name = "rbIndireterminato";
+            this.rbIndireterminato.Size = new System.Drawing.Size(89, 17);
+            this.rbIndireterminato.TabIndex = 1;
+            this.rbIndireterminato.TabStop = true;
+            this.rbIndireterminato.Text = "Indeterminato";
+            this.rbIndireterminato.UseVisualStyleBackColor = true;
+            // 
+            // rbDeterminato
+            // 
+            this.rbDeterminato.AutoSize = true;
+            this.rbDeterminato.Location = new System.Drawing.Point(7, 18);
+            this.rbDeterminato.Name = "rbDeterminato";
+            this.rbDeterminato.Size = new System.Drawing.Size(73, 17);
+            this.rbDeterminato.TabIndex = 0;
+            this.rbDeterminato.TabStop = true;
+            this.rbDeterminato.Text = "Derminato";
+            this.rbDeterminato.UseVisualStyleBackColor = true;
+            // 
+            // gBtipoDocente
+            // 
+            this.gBtipoDocente.Controls.Add(this.rbPratico);
+            this.gBtipoDocente.Controls.Add(this.rdTeorico);
+            this.gBtipoDocente.Enabled = false;
+            this.gBtipoDocente.Location = new System.Drawing.Point(527, 6);
+            this.gBtipoDocente.Name = "gBtipoDocente";
+            this.gBtipoDocente.Size = new System.Drawing.Size(248, 47);
+            this.gBtipoDocente.TabIndex = 8;
+            this.gBtipoDocente.TabStop = false;
+            this.gBtipoDocente.Text = "TipoDocente";
+            // 
+            // rbPratico
+            // 
+            this.rbPratico.AutoSize = true;
+            this.rbPratico.Location = new System.Drawing.Point(162, 20);
+            this.rbPratico.Name = "rbPratico";
+            this.rbPratico.Size = new System.Drawing.Size(78, 17);
+            this.rbPratico.TabIndex = 1;
+            this.rbPratico.TabStop = true;
+            this.rbPratico.Text = "Laboratorio";
+            this.rbPratico.UseVisualStyleBackColor = true;
+            // 
+            // rdTeorico
+            // 
+            this.rdTeorico.AutoSize = true;
+            this.rdTeorico.Location = new System.Drawing.Point(7, 20);
+            this.rdTeorico.Name = "rdTeorico";
+            this.rdTeorico.Size = new System.Drawing.Size(61, 17);
+            this.rdTeorico.TabIndex = 0;
+            this.rdTeorico.TabStop = true;
+            this.rdTeorico.Text = "Teorico";
+            this.rdTeorico.UseVisualStyleBackColor = true;
+            // 
+            // gbTipiUtenti
+            // 
+            this.gbTipiUtenti.Controls.Add(this.cbDocente);
+            this.gbTipiUtenti.Controls.Add(this.cbCoordinatore);
+            this.gbTipiUtenti.Controls.Add(this.cbAmminstratore);
+            this.gbTipiUtenti.Controls.Add(this.cbPreside);
+            this.gbTipiUtenti.Location = new System.Drawing.Point(18, 6);
+            this.gbTipiUtenti.Name = "gbTipiUtenti";
+            this.gbTipiUtenti.Size = new System.Drawing.Size(472, 47);
+            this.gbTipiUtenti.TabIndex = 7;
+            this.gbTipiUtenti.TabStop = false;
+            this.gbTipiUtenti.Text = "tipo Utenti:";
+            // 
+            // cbDocente
+            // 
+            this.cbDocente.AutoSize = true;
+            this.cbDocente.Location = new System.Drawing.Point(388, 20);
+            this.cbDocente.Name = "cbDocente";
+            this.cbDocente.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cbDocente.Size = new System.Drawing.Size(67, 17);
+            this.cbDocente.TabIndex = 7;
+            this.cbDocente.Text = "Docente";
+            this.cbDocente.UseVisualStyleBackColor = true;
+            this.cbDocente.CheckedChanged += new System.EventHandler(this.cbDocente_CheckedChanged);
+            // 
+            // cbCoordinatore
+            // 
+            this.cbCoordinatore.AutoSize = true;
+            this.cbCoordinatore.Location = new System.Drawing.Point(257, 20);
+            this.cbCoordinatore.Name = "cbCoordinatore";
+            this.cbCoordinatore.Size = new System.Drawing.Size(86, 17);
+            this.cbCoordinatore.TabIndex = 6;
+            this.cbCoordinatore.Text = "Coordinatore";
+            this.cbCoordinatore.UseVisualStyleBackColor = true;
+            // 
+            // cbAmminstratore
+            // 
+            this.cbAmminstratore.AutoSize = true;
+            this.cbAmminstratore.Location = new System.Drawing.Point(121, 20);
+            this.cbAmminstratore.Name = "cbAmminstratore";
+            this.cbAmminstratore.Size = new System.Drawing.Size(94, 17);
+            this.cbAmminstratore.TabIndex = 5;
+            this.cbAmminstratore.Text = "Amministratore";
+            this.cbAmminstratore.UseVisualStyleBackColor = true;
+            // 
+            // cbPreside
+            // 
+            this.cbPreside.AutoSize = true;
+            this.cbPreside.Location = new System.Drawing.Point(18, 20);
+            this.cbPreside.Name = "cbPreside";
+            this.cbPreside.Size = new System.Drawing.Size(61, 17);
+            this.cbPreside.TabIndex = 4;
+            this.cbPreside.Text = "Preside";
+            this.cbPreside.UseVisualStyleBackColor = true;
+            // 
             // btAnnullaFiltra
             // 
             this.btAnnullaFiltra.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btAnnullaFiltra.Enabled = false;
             this.btAnnullaFiltra.Location = new System.Drawing.Point(1185, 16);
             this.btAnnullaFiltra.Name = "btAnnullaFiltra";
             this.btAnnullaFiltra.Size = new System.Drawing.Size(87, 23);
@@ -191,7 +312,6 @@
             // btFiltro
             // 
             this.btFiltro.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btFiltro.Enabled = false;
             this.btFiltro.Location = new System.Drawing.Point(1096, 16);
             this.btFiltro.Name = "btFiltro";
             this.btFiltro.Size = new System.Drawing.Size(83, 23);
@@ -260,126 +380,6 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Ricerca per:";
             // 
-            // gbTipiUtenti
-            // 
-            this.gbTipiUtenti.Controls.Add(this.cbDocente);
-            this.gbTipiUtenti.Controls.Add(this.cbCoordinatore);
-            this.gbTipiUtenti.Controls.Add(this.cbAmminstratore);
-            this.gbTipiUtenti.Controls.Add(this.cbPreside);
-            this.gbTipiUtenti.Location = new System.Drawing.Point(18, 6);
-            this.gbTipiUtenti.Name = "gbTipiUtenti";
-            this.gbTipiUtenti.Size = new System.Drawing.Size(472, 47);
-            this.gbTipiUtenti.TabIndex = 7;
-            this.gbTipiUtenti.TabStop = false;
-            this.gbTipiUtenti.Text = "tipo Utenti:";
-            // 
-            // cbDocente
-            // 
-            this.cbDocente.AutoSize = true;
-            this.cbDocente.Location = new System.Drawing.Point(388, 20);
-            this.cbDocente.Name = "cbDocente";
-            this.cbDocente.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.cbDocente.Size = new System.Drawing.Size(67, 17);
-            this.cbDocente.TabIndex = 7;
-            this.cbDocente.Text = "Docente";
-            this.cbDocente.UseVisualStyleBackColor = true;
-            // 
-            // cbCoordinatore
-            // 
-            this.cbCoordinatore.AutoSize = true;
-            this.cbCoordinatore.Location = new System.Drawing.Point(257, 20);
-            this.cbCoordinatore.Name = "cbCoordinatore";
-            this.cbCoordinatore.Size = new System.Drawing.Size(89, 17);
-            this.cbCoordinatore.TabIndex = 6;
-            this.cbCoordinatore.Text = "Coordinatore ";
-            this.cbCoordinatore.UseVisualStyleBackColor = true;
-            // 
-            // cbAmminstratore
-            // 
-            this.cbAmminstratore.AutoSize = true;
-            this.cbAmminstratore.Location = new System.Drawing.Point(121, 20);
-            this.cbAmminstratore.Name = "cbAmminstratore";
-            this.cbAmminstratore.Size = new System.Drawing.Size(94, 17);
-            this.cbAmminstratore.TabIndex = 5;
-            this.cbAmminstratore.Text = "Amministratore";
-            this.cbAmminstratore.UseVisualStyleBackColor = true;
-            // 
-            // cbPreside
-            // 
-            this.cbPreside.AutoSize = true;
-            this.cbPreside.Location = new System.Drawing.Point(18, 20);
-            this.cbPreside.Name = "cbPreside";
-            this.cbPreside.Size = new System.Drawing.Size(61, 17);
-            this.cbPreside.TabIndex = 4;
-            this.cbPreside.Text = "Preside";
-            this.cbPreside.UseVisualStyleBackColor = true;
-            // 
-            // gBtipoDocente
-            // 
-            this.gBtipoDocente.Controls.Add(this.rbPratico);
-            this.gBtipoDocente.Controls.Add(this.rdTeorico);
-            this.gBtipoDocente.Location = new System.Drawing.Point(527, 6);
-            this.gBtipoDocente.Name = "gBtipoDocente";
-            this.gBtipoDocente.Size = new System.Drawing.Size(248, 47);
-            this.gBtipoDocente.TabIndex = 8;
-            this.gBtipoDocente.TabStop = false;
-            this.gBtipoDocente.Text = "TipoDocente";
-            // 
-            // rdTeorico
-            // 
-            this.rdTeorico.AutoSize = true;
-            this.rdTeorico.Location = new System.Drawing.Point(7, 20);
-            this.rdTeorico.Name = "rdTeorico";
-            this.rdTeorico.Size = new System.Drawing.Size(61, 17);
-            this.rdTeorico.TabIndex = 0;
-            this.rdTeorico.TabStop = true;
-            this.rdTeorico.Text = "Teorico";
-            this.rdTeorico.UseVisualStyleBackColor = true;
-            // 
-            // rbPratico
-            // 
-            this.rbPratico.AutoSize = true;
-            this.rbPratico.Location = new System.Drawing.Point(162, 20);
-            this.rbPratico.Name = "rbPratico";
-            this.rbPratico.Size = new System.Drawing.Size(58, 17);
-            this.rbPratico.TabIndex = 1;
-            this.rbPratico.TabStop = true;
-            this.rbPratico.Text = "Pratico";
-            this.rbPratico.UseVisualStyleBackColor = true;
-            // 
-            // gbContratto
-            // 
-            this.gbContratto.Controls.Add(this.rbIndireterminato);
-            this.gbContratto.Controls.Add(this.rbDeterminato);
-            this.gbContratto.Location = new System.Drawing.Point(822, 6);
-            this.gbContratto.Name = "gbContratto";
-            this.gbContratto.Size = new System.Drawing.Size(267, 47);
-            this.gbContratto.TabIndex = 9;
-            this.gbContratto.TabStop = false;
-            this.gbContratto.Text = "tipo Contratto:";
-            // 
-            // rbIndireterminato
-            // 
-            this.rbIndireterminato.AutoSize = true;
-            this.rbIndireterminato.Location = new System.Drawing.Point(156, 18);
-            this.rbIndireterminato.Name = "rbIndireterminato";
-            this.rbIndireterminato.Size = new System.Drawing.Size(89, 17);
-            this.rbIndireterminato.TabIndex = 1;
-            this.rbIndireterminato.TabStop = true;
-            this.rbIndireterminato.Text = "Indeterminato";
-            this.rbIndireterminato.UseVisualStyleBackColor = true;
-            // 
-            // rbDeterminato
-            // 
-            this.rbDeterminato.AutoSize = true;
-            this.rbDeterminato.Location = new System.Drawing.Point(7, 18);
-            this.rbDeterminato.Name = "rbDeterminato";
-            this.rbDeterminato.Size = new System.Drawing.Size(73, 17);
-            this.rbDeterminato.TabIndex = 0;
-            this.rbDeterminato.TabStop = true;
-            this.rbDeterminato.Text = "Derminato";
-            this.rbDeterminato.UseVisualStyleBackColor = true;
-            // 
             // FrmUtenti
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -395,14 +395,14 @@
             this.Text = "Utenti";
             this.Load += new System.EventHandler(this.FrmUtenti_Load);
             this.pnFiltra.ResumeLayout(false);
-            this.pnRicerca.ResumeLayout(false);
-            this.pnRicerca.PerformLayout();
-            this.gbTipiUtenti.ResumeLayout(false);
-            this.gbTipiUtenti.PerformLayout();
-            this.gBtipoDocente.ResumeLayout(false);
-            this.gBtipoDocente.PerformLayout();
             this.gbContratto.ResumeLayout(false);
             this.gbContratto.PerformLayout();
+            this.gBtipoDocente.ResumeLayout(false);
+            this.gBtipoDocente.PerformLayout();
+            this.gbTipiUtenti.ResumeLayout(false);
+            this.gbTipiUtenti.PerformLayout();
+            this.pnRicerca.ResumeLayout(false);
+            this.pnRicerca.PerformLayout();
             this.ResumeLayout(false);
 
         }

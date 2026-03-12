@@ -33,11 +33,13 @@ namespace Cattedre
             if (this.Tag == null)
                 return;
 
-            //int IDutente = Convert.ToInt32(this.Tag);
-            //int IDannoscolastico = 
-            //int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
+            int IDutente = Convert.ToInt32(this.Tag);
+            FrmCattedre frmCattedre = (FrmCattedre)this.ParentForm;
+            string siglaannoscolastico = frmCattedre.Annoscolasticoselezionato;
+            ClsAnnoScolasticoDL annoCorrente = ClsAnnoScolasticoBL.CercaAnnoScolastico(siglaannoscolastico);
+            int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
 
-            //ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, );
+            ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, annoCorrente.ID);
         }
     }
 }

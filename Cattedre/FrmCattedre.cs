@@ -32,8 +32,10 @@ namespace Cattedre
         int riga = 0;
         int IDdipartimento = 0;
         long IDannoscolastico = 0;
-
+        string annoscolasticoselezionato = "";
         DataTable dtDocentiAssegnazioni;
+
+        public string Annoscolasticoselezionato { get => annoscolasticoselezionato; set => annoscolasticoselezionato = value; }
 
         public FrmCattedre(ClsUtenteDL utente)
         {
@@ -716,6 +718,9 @@ namespace Cattedre
         {
             IDdipartimento = cbDipartimenti.SelectedIndex + 1;
             IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
+
+            Annoscolasticoselezionato = cbAnniScolastici.SelectedItem.ToString();
+
             LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
             LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
         }

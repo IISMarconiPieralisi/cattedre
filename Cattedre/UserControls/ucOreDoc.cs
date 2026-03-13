@@ -38,8 +38,8 @@ namespace Cattedre
             string siglaannoscolastico = frmCattedre.Annoscolasticoselezionato;
             ClsAnnoScolasticoDL annoCorrente = ClsAnnoScolasticoBL.CercaAnnoScolastico(siglaannoscolastico);
             int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
-
-            ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, annoCorrente.ID);
+            int IDdisciplina = ClsDisciplinaBL.TrovaIDPotenziamento();
+            ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, annoCorrente.ID, IDdisciplina);
         }
     }
 }

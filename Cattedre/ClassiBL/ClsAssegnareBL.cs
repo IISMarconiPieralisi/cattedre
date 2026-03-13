@@ -477,7 +477,7 @@ namespace Cattedre
         //    return assegnare.OreSpeciali;
         //}
 
-        public static void SalvaOrePot(int oreSpeciali, int IDutente, long IDannoscolastico)
+        public static void SalvaOrePot(int oreSpeciali, int IDutente, long IDannoscolastico, int IDdisciplina)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -485,14 +485,13 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = @"UPDATE assegnare a                             
-                                SET a.oreSpeciali = @oreSpeciali
-                                WHERE a.IDutente = @idutente
-                                AND a.IDannoscolastico = @idannoscolastico";
+                string sql = @"REPLACE INTO assegnare (IDutente, IDannoscolastico, IDclasse, IDdisciplina, oreSpeciali)
+                                VALUES (@idutente, @idannoscolastico, NULL, @iddisciplina, @oreSpeciali)";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@oreSpeciali", oreSpeciali);
                 cmd.Parameters.AddWithValue("@idutente", IDutente);
                 cmd.Parameters.AddWithValue("@idannoscolastico", IDannoscolastico);
+                cmd.Parameters.AddWithValue("@iddisciplina", IDdisciplina);
                 MySqlDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
                 {

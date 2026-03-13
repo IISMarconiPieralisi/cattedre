@@ -252,6 +252,33 @@ namespace Cattedre
             return _oreDocentePratico;
         }
 
+        public static int TrovaIDPotenziamento()
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT ID 
+                       FROM discipline 
+                       WHERE nome LIKE '%otenziamento%' 
+                       LIMIT 1";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null && result != DBNull.Value)
+                    {
+                        return Convert.ToInt32(result);
+                    }
+                }
+            }
+
+            return 0;
+        }
+
         public static void InserisciDisciplina(ClsDisciplinaDL disciplina)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;

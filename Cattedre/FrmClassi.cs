@@ -162,5 +162,10 @@ namespace Cattedre
             cbAnnoClasse.SelectedIndex=-1;
             cbIndirizzi.SelectedIndex = -1;
         }
+
+        private void btClasseSuccessiva_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -13,10 +13,11 @@ namespace Cattedre
     public partial class FrmClasse : Form
     {
         public ClsClasseDL _classe {get;set; }
-        public List<ClsUtenteDL> coordinatori = new List<ClsUtenteDL>();
-        public List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
-        public List<ClsClasseDL> _classi = new List<ClsClasseDL>();
-
+         List<ClsUtenteDL>coordinatori = ClsUtenteBL.CaricaCoordinatoriClassi();
+        List<ClsIndirizzoDL> indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
+        List<ClsClasseDL> _classi = ClsClasseBL.CaricaClassi();
+        List<ClsDipartimentoDL> _dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
+        List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
         bool _modifica = false;
         string _oldCoordinatore = "";
         string _newcordinatore = "";
@@ -65,13 +66,19 @@ namespace Cattedre
 
         private void FrmClasse_Load(object sender, EventArgs e)
         {
-            // 1. Caricamento dati dai Business Logic
-            coordinatori = ClsUtenteBL.CaricaCoordinatoriClassi();
-            indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
-            _classi = ClsClasseBL.CaricaClassi();
-
             PopolaCoordinatori();
             PopolaIndirizzi();
+
+            //gestione fonte dati delle combobox per il popolamento
+            cbAnnoScolastico.DataSource = _anniScolastici;
+            cbAnnoScolastico.DisplayMember = "Sigla";
+            cbAnnoScolastico.ValueMember = "ID";
+            cbAnnoScolastico.SelectedIndex = -1;
+
+            cbDipartimento.DataSource = _dipartimenti;
+            cbDipartimento.DisplayMember = "Nome";
+            cbDipartimento.ValueMember = "ID";
+            cbDipartimento.SelectedIndex = -1;
 
             if (_classe != null && _classe.ID > 0)
             {
@@ -148,5 +155,7 @@ namespace Cattedre
         {
             _oldCoordinatore = cbCoordinatore.Text;
         }
+
+      
     }
 }

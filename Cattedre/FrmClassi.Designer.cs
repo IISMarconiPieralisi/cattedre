@@ -44,6 +44,7 @@
             this.btRipristina = new System.Windows.Forms.Button();
             this.cbIndirizzi = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.btClasseSuccessiva = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cbAnnoClasse
@@ -67,7 +68,7 @@
             // btCerca
             // 
             this.btCerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btCerca.Location = new System.Drawing.Point(401, 16);
+            this.btCerca.Location = new System.Drawing.Point(488, 16);
             this.btCerca.Name = "btCerca";
             this.btCerca.Size = new System.Drawing.Size(75, 23);
             this.btCerca.TabIndex = 18;
@@ -78,9 +79,9 @@
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(563, 123);
+            this.btElimina.Location = new System.Drawing.Point(611, 182);
             this.btElimina.Name = "btElimina";
-            this.btElimina.Size = new System.Drawing.Size(75, 23);
+            this.btElimina.Size = new System.Drawing.Size(115, 28);
             this.btElimina.TabIndex = 17;
             this.btElimina.Text = "Elimina";
             this.btElimina.UseVisualStyleBackColor = true;
@@ -89,9 +90,9 @@
             // brModifica
             // 
             this.brModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.brModifica.Location = new System.Drawing.Point(563, 94);
+            this.brModifica.Location = new System.Drawing.Point(611, 143);
             this.brModifica.Name = "brModifica";
-            this.brModifica.Size = new System.Drawing.Size(75, 23);
+            this.brModifica.Size = new System.Drawing.Size(115, 28);
             this.brModifica.TabIndex = 16;
             this.brModifica.Text = "Modifica";
             this.brModifica.UseVisualStyleBackColor = true;
@@ -100,9 +101,9 @@
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(563, 65);
+            this.btInserisci.Location = new System.Drawing.Point(610, 65);
             this.btInserisci.Name = "btInserisci";
-            this.btInserisci.Size = new System.Drawing.Size(75, 23);
+            this.btInserisci.Size = new System.Drawing.Size(115, 28);
             this.btInserisci.TabIndex = 15;
             this.btInserisci.Text = "Inserisci";
             this.btInserisci.UseVisualStyleBackColor = true;
@@ -123,7 +124,7 @@
             this.lvClassi.HideSelection = false;
             this.lvClassi.Location = new System.Drawing.Point(17, 67);
             this.lvClassi.Name = "lvClassi";
-            this.lvClassi.Size = new System.Drawing.Size(540, 314);
+            this.lvClassi.Size = new System.Drawing.Size(587, 314);
             this.lvClassi.TabIndex = 14;
             this.lvClassi.UseCompatibleStateImageBehavior = false;
             this.lvClassi.View = System.Windows.Forms.View.Details;
@@ -159,7 +160,7 @@
             // 
             this.btRipristina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btRipristina.Enabled = false;
-            this.btRipristina.Location = new System.Drawing.Point(482, 16);
+            this.btRipristina.Location = new System.Drawing.Point(569, 16);
             this.btRipristina.Name = "btRipristina";
             this.btRipristina.Size = new System.Drawing.Size(75, 23);
             this.btRipristina.TabIndex = 21;
@@ -175,7 +176,7 @@
             this.cbIndirizzi.FormattingEnabled = true;
             this.cbIndirizzi.Location = new System.Drawing.Point(316, 17);
             this.cbIndirizzi.Name = "cbIndirizzi";
-            this.cbIndirizzi.Size = new System.Drawing.Size(50, 21);
+            this.cbIndirizzi.Size = new System.Drawing.Size(137, 21);
             this.cbIndirizzi.TabIndex = 23;
             // 
             // label2
@@ -187,11 +188,23 @@
             this.label2.TabIndex = 22;
             this.label2.Text = "Filtra per Indirizzi:";
             // 
+            // btClasseSuccessiva
+            // 
+            this.btClasseSuccessiva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btClasseSuccessiva.Location = new System.Drawing.Point(610, 104);
+            this.btClasseSuccessiva.Name = "btClasseSuccessiva";
+            this.btClasseSuccessiva.Size = new System.Drawing.Size(115, 28);
+            this.btClasseSuccessiva.TabIndex = 24;
+            this.btClasseSuccessiva.Text = "Classe successiva";
+            this.btClasseSuccessiva.UseVisualStyleBackColor = true;
+            this.btClasseSuccessiva.Click += new System.EventHandler(this.btClasseSuccessiva_Click);
+            // 
             // FrmClassi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(651, 396);
+            this.ClientSize = new System.Drawing.Size(738, 396);
+            this.Controls.Add(this.btClasseSuccessiva);
             this.Controls.Add(this.cbIndirizzi);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btRipristina);
@@ -229,5 +242,6 @@
         private System.Windows.Forms.ColumnHeader chIndirizzo;
         private System.Windows.Forms.ComboBox cbIndirizzi;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btClasseSuccessiva;
     }
 }

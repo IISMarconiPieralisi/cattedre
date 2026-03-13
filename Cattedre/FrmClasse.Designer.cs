@@ -41,16 +41,21 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cbIndirizzo = new System.Windows.Forms.ComboBox();
             this.cbClasseArticolataCon = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.cbAnnoScolastico = new System.Windows.Forms.ComboBox();
+            this.cbDipartimento = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudAnno)).BeginInit();
             this.SuspendLayout();
             // 
             // btSalva
             // 
+            this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btSalva.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalva.Location = new System.Drawing.Point(155, 202);
+            this.btSalva.Location = new System.Drawing.Point(180, 330);
             this.btSalva.Margin = new System.Windows.Forms.Padding(2);
             this.btSalva.Name = "btSalva";
-            this.btSalva.Size = new System.Drawing.Size(103, 22);
+            this.btSalva.Size = new System.Drawing.Size(142, 27);
             this.btSalva.TabIndex = 31;
             this.btSalva.Text = "Salva";
             this.btSalva.UseVisualStyleBackColor = true;
@@ -58,10 +63,11 @@
             // 
             // btAnnulla
             // 
-            this.btAnnulla.Location = new System.Drawing.Point(26, 202);
+            this.btAnnulla.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btAnnulla.Location = new System.Drawing.Point(26, 330);
             this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
             this.btAnnulla.Name = "btAnnulla";
-            this.btAnnulla.Size = new System.Drawing.Size(103, 22);
+            this.btAnnulla.Size = new System.Drawing.Size(142, 27);
             this.btAnnulla.TabIndex = 30;
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
@@ -69,17 +75,19 @@
             // 
             // tbSezione
             // 
-            this.tbSezione.Location = new System.Drawing.Point(132, 49);
+            this.tbSezione.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSezione.Location = new System.Drawing.Point(132, 59);
             this.tbSezione.Margin = new System.Windows.Forms.Padding(2);
             this.tbSezione.MaxLength = 3;
             this.tbSezione.Name = "tbSezione";
-            this.tbSezione.Size = new System.Drawing.Size(126, 20);
+            this.tbSezione.Size = new System.Drawing.Size(190, 20);
             this.tbSezione.TabIndex = 29;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(21, 87);
+            this.label4.Location = new System.Drawing.Point(23, 108);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(108, 13);
@@ -89,7 +97,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 53);
+            this.label3.Location = new System.Drawing.Point(23, 61);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(48, 13);
@@ -99,7 +107,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 16);
+            this.label2.Location = new System.Drawing.Point(23, 14);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
@@ -108,7 +116,9 @@
             // 
             // nudAnno
             // 
-            this.nudAnno.Location = new System.Drawing.Point(132, 12);
+            this.nudAnno.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nudAnno.Location = new System.Drawing.Point(132, 14);
             this.nudAnno.Maximum = new decimal(new int[] {
             5,
             0,
@@ -121,7 +131,7 @@
             0});
             this.nudAnno.Name = "nudAnno";
             this.nudAnno.ReadOnly = true;
-            this.nudAnno.Size = new System.Drawing.Size(126, 20);
+            this.nudAnno.Size = new System.Drawing.Size(190, 20);
             this.nudAnno.TabIndex = 33;
             this.nudAnno.Value = new decimal(new int[] {
             1,
@@ -133,7 +143,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(21, 125);
+            this.label5.Location = new System.Drawing.Point(23, 155);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(70, 13);
             this.label5.TabIndex = 34;
@@ -141,11 +151,13 @@
             // 
             // cbCoordinatore
             // 
+            this.cbCoordinatore.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbCoordinatore.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCoordinatore.FormattingEnabled = true;
-            this.cbCoordinatore.Location = new System.Drawing.Point(132, 121);
+            this.cbCoordinatore.Location = new System.Drawing.Point(132, 150);
             this.cbCoordinatore.Name = "cbCoordinatore";
-            this.cbCoordinatore.Size = new System.Drawing.Size(126, 21);
+            this.cbCoordinatore.Size = new System.Drawing.Size(190, 21);
             this.cbCoordinatore.TabIndex = 35;
             this.cbCoordinatore.DropDown += new System.EventHandler(this.cbCoordinatore_DropDown);
             this.cbCoordinatore.SelectedIndexChanged += new System.EventHandler(this.cbCoordinatore_SelectedIndexChanged);
@@ -153,7 +165,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 160);
+            this.label1.Location = new System.Drawing.Point(23, 202);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 13);
             this.label1.TabIndex = 36;
@@ -161,27 +173,75 @@
             // 
             // cbIndirizzo
             // 
+            this.cbIndirizzo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbIndirizzo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbIndirizzo.FormattingEnabled = true;
-            this.cbIndirizzo.Location = new System.Drawing.Point(132, 156);
+            this.cbIndirizzo.Location = new System.Drawing.Point(132, 196);
             this.cbIndirizzo.Name = "cbIndirizzo";
-            this.cbIndirizzo.Size = new System.Drawing.Size(126, 21);
+            this.cbIndirizzo.Size = new System.Drawing.Size(190, 21);
             this.cbIndirizzo.TabIndex = 37;
             // 
             // cbClasseArticolataCon
             // 
+            this.cbClasseArticolataCon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbClasseArticolataCon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbClasseArticolataCon.FormattingEnabled = true;
-            this.cbClasseArticolataCon.Location = new System.Drawing.Point(132, 83);
+            this.cbClasseArticolataCon.Location = new System.Drawing.Point(132, 104);
             this.cbClasseArticolataCon.Name = "cbClasseArticolataCon";
-            this.cbClasseArticolataCon.Size = new System.Drawing.Size(126, 21);
+            this.cbClasseArticolataCon.Size = new System.Drawing.Size(190, 21);
             this.cbClasseArticolataCon.TabIndex = 38;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(23, 249);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(84, 13);
+            this.label6.TabIndex = 39;
+            this.label6.Text = "AnnoScolastico:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(27, 296);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(66, 13);
+            this.label7.TabIndex = 40;
+            this.label7.Text = "Dipartimento";
+            // 
+            // cbAnnoScolastico
+            // 
+            this.cbAnnoScolastico.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbAnnoScolastico.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAnnoScolastico.FormattingEnabled = true;
+            this.cbAnnoScolastico.Location = new System.Drawing.Point(132, 242);
+            this.cbAnnoScolastico.Name = "cbAnnoScolastico";
+            this.cbAnnoScolastico.Size = new System.Drawing.Size(190, 21);
+            this.cbAnnoScolastico.TabIndex = 41;
+            // 
+            // cbDipartimento
+            // 
+            this.cbDipartimento.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbDipartimento.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDipartimento.FormattingEnabled = true;
+            this.cbDipartimento.Location = new System.Drawing.Point(132, 288);
+            this.cbDipartimento.Name = "cbDipartimento";
+            this.cbDipartimento.Size = new System.Drawing.Size(190, 21);
+            this.cbDipartimento.TabIndex = 42;
             // 
             // FrmClasse
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(295, 245);
+            this.ClientSize = new System.Drawing.Size(342, 378);
+            this.Controls.Add(this.cbDipartimento);
+            this.Controls.Add(this.cbAnnoScolastico);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.cbClasseArticolataCon);
             this.Controls.Add(this.cbIndirizzo);
             this.Controls.Add(this.label1);
@@ -218,5 +278,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbIndirizzo;
         private System.Windows.Forms.ComboBox cbClasseArticolataCon;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox cbAnnoScolastico;
+        private System.Windows.Forms.ComboBox cbDipartimento;
     }
 }

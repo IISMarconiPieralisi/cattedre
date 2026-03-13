@@ -36,6 +36,8 @@ namespace Cattedre
                 lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(classe.ClasseArticolataCon));
                 lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(classe.Idutente));
                 lvi.SubItems.Add(ClsIndirizzoBL.RilevaNomeIndirizzo(classe.Idindirizzo));
+                lvi.SubItems.Add(ClsDipartimentoBL.RilevaNomeDipartimento(classe.IDdipartimento));
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(classe.IDannoscolastico));
                 lvi.Tag = classe.ID;
                 lvClassi.Items.Add(lvi);
             }

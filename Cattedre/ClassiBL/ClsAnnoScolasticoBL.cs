@@ -48,6 +48,33 @@ namespace Cattedre
             }
             return anniScolastici;
         }
+        public static string RilevaSiglaAnnoScolastico(long ID)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            string Sigla = "-";
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    string sql = @"SELECT sigla FROM anniscolastici WHERE id=@ID";
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ID);
+                        MySqlDataReader dr = cmd.ExecuteReader();
+                        if (dr.HasRows)
+                            if (dr.Read())
+                                Sigla = dr["sigla"].ToString();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return Sigla;
+        }
 
         public static void InserisciAnnoScolastico(ClsAnnoScolasticoDL anno)
         {

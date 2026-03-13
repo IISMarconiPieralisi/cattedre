@@ -13,14 +13,16 @@ namespace Cattedre
     public partial class FrmClasse : Form
     {
         public ClsClasseDL _classe {get;set; }
-         List<ClsUtenteDL>coordinatori = ClsUtenteBL.CaricaCoordinatoriClassi();
-        List<ClsIndirizzoDL> indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
+        #region dichiarazione ListeElementi
+        List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
         List<ClsClasseDL> _classi = ClsClasseBL.CaricaClassi();
+        List<ClsUtenteDL> _coordinatori = ClsUtenteBL.CaricaCoordinatoriClassi();
         List<ClsDipartimentoDL> _dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
         List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
+        #endregion
         bool _modifica = false;
-        string _oldCoordinatore = "";
-        string _newcordinatore = "";
+        long _oldCoordinatore = -1;
+        long _newcordinatore = -1;
         public FrmClasse()
         {
             InitializeComponent();
@@ -30,34 +32,66 @@ namespace Cattedre
         {
             try
             {
-                if (!_modifica) 
-                    _classe = new ClsClasseDL();
-                //associamento dei valori all'interno di  _classe
-                _classe.Sigla = nudAnno.Value.ToString() + tbSezione.Text;
-                _classe.Anno = Convert.ToInt32(nudAnno.Value);
-                _classe.Sezione = tbSezione.Text;
-            if(!string.IsNullOrWhiteSpace( cbClasseArticolataCon.Text))
-                _classe.ClasseArticolataCon = Convert.ToInt32(ClsClasseBL.RilevaIDclasse(cbClasseArticolataCon.Text));
+                // 1. VALIDAZIONE INPUT IMMEDIATA
+                // Controlliamo i campi obbligatori prima di creare oggetti o fare query
+                if (string.IsNullOrWhiteSpace(tbSezione.Text))
+                    throw new Exception("Inserire la sezione della classe.");
 
-                if (string.IsNullOrEmpty(_classe.Sezione))
-                    throw new IndexOutOfRangeException("inserire riga mancante");
-                else
+                if (cbDipartimento.SelectedIndex == -1)
+                    throw new Exception("Seleziona un dipartimento valido.");
+
+                if (cbAnnoScolastico.SelectedIndex == -1)
+                    throw new Exception("Anno scolastico non selezionato.");
+
+                if (cbIndirizzo.SelectedIndex == -1)
+                    throw new Exception("Indirizzo non selezionato.");
+
+                //inizializzo l'oggetto se non è modifica
+                if (!_modifica)
+                    _classe = new ClsClasseDL();
+
+                // ASSEGNAZIONE VALORI BASE
+                _classe.Anno = Convert.ToInt32(nudAnno.Value);
+                _classe.Sezione = tbSezione.Text.Trim().ToUpper(); 
+                _classe.Sigla = _classe.Anno.ToString() + _classe.Sezione;
+
+
+                _classe.IDdipartimento = Convert.ToInt64(cbDipartimento.SelectedValue);
+                _classe.IDannoscolastico = Convert.ToInt64(cbAnnoScolastico.SelectedValue);
+                _classe.Idindirizzo = Convert.ToInt64(cbIndirizzo.SelectedValue);
+
+                //  GESTIONE COORDINATORE 
+                if (!string.IsNullOrWhiteSpace(cbCoordinatore.Text))
                 {
                     string[] parts = cbCoordinatore.Text.Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
-                    _classe.Idutente = ClsUtenteBL.RilevaIDutente(parts[0], parts[1]);
-                    _classe.Idindirizzo = ClsIndirizzoBL.RilevaIDindirizzo(cbIndirizzo.Text);
-
-                    //se non ci sono stati errori significa che è andato a buon fine
-                    this.DialogResult = DialogResult.OK;
+                    if (parts.Length == 2)
+                    {
+                        _classe.Idutente = ClsUtenteBL.RilevaIDutente(parts[0], parts[1]);
+                    }
                 }
-        }
+                //gestione classe articolata
+                if(cbClasseArticolataCon.SelectedIndex>-1)
+                {
+                    _classe.ClasseArticolataCon = ClsClasseBL.RilevaIDclasse(cbClasseArticolataCon.Text);
+                }
+                //  gestisco i duplicati
+                // Se stiamo modificando, l'ID esiste già quindi il controllo va saltato o gestito diversamente
+                if (!_modifica)
+                {
+                    if (ClsClasseBL.RilevaIDclasse(_classe) >0)
+                    {
+                        throw new Exception("Attenzione: una classe con questi parametri è già presente nel database.");
+                    }
+                }
+                this.DialogResult = DialogResult.OK;
+
+            }
             catch (Exception ex)
             {
-                MessageBox.Show($"errore:{ex.Message}\n riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Si è verificato un problema:\n{ex.Message}","Errore di validazione",MessageBoxButtons.OK,MessageBoxIcon.Warning);
                 this.DialogResult = DialogResult.None;
             }
-
-}
+        }
 
         private void btAnnulla_Click(object sender, EventArgs e)
         {
@@ -66,10 +100,18 @@ namespace Cattedre
 
         private void FrmClasse_Load(object sender, EventArgs e)
         {
-            PopolaCoordinatori();
-            PopolaIndirizzi();
-
             //gestione fonte dati delle combobox per il popolamento
+            cbCoordinatore.SelectedIndexChanged -= cbCoordinatore_SelectedIndexChanged;
+            cbCoordinatore.DataSource = _coordinatori;
+            cbCoordinatore.DisplayMember = "Email";
+            cbCoordinatore.ValueMember = "ID";
+            cbCoordinatore.SelectedIndex = -1;
+            cbCoordinatore.SelectedIndexChanged += cbCoordinatore_SelectedIndexChanged;
+
+            cbIndirizzo.DataSource = _indirizzi;
+            cbIndirizzo.DisplayMember = "Nome";
+            cbIndirizzo.ValueMember = "ID";
+            cbIndirizzo.SelectedIndex = -1;
             cbAnnoScolastico.DataSource = _anniScolastici;
             cbAnnoScolastico.DisplayMember = "Sigla";
             cbAnnoScolastico.ValueMember = "ID";
@@ -85,77 +127,105 @@ namespace Cattedre
                 _modifica = true;
                 nudAnno.Value = _classe.Anno;
                 tbSezione.Text = _classe.Sezione;
-                if (_classe.Idutente > 0)
-                    cbCoordinatore.SelectedItem = $"{coordinatori.Find(p => p.ID == _classe.Idutente).Nome} { coordinatori.Find(p => p.ID == _classe.Idutente).Cognome}"; ;
-
-                if (_classe.Idindirizzo > 0)
-                    cbIndirizzo.SelectedItem = indirizzi.Find(p => p.ID == _classe.Idindirizzo).Nome;
-
                 nudAnno_ValueChanged(null, null);
+
                 if (_classe.ClasseArticolataCon > 0)
                     cbClasseArticolataCon.SelectedItem = _classi.Find(p => p.ID == _classe.ClasseArticolataCon).Sigla;
                 else
                     cbClasseArticolataCon.SelectedIndex = -1;
+
+                //popolamento FK
+                cbIndirizzo.SelectedValue = (_classe.Idindirizzo > 0) ? _classe.Idindirizzo : -1;
+                //tolgo e rimuovo il selectedIndexChanged per non dare errori durante il popolamento
+                cbCoordinatore.SelectedIndexChanged -= cbCoordinatore_SelectedIndexChanged;
+                cbCoordinatore.SelectedValue = (_classe.Idutente > 0) ? _classe.Idutente : -1;
+                cbCoordinatore.SelectedIndexChanged += cbCoordinatore_SelectedIndexChanged;
+                _oldCoordinatore = _classe.Idutente;
+
+                cbDipartimento.SelectedValue = (_classe.IDdipartimento > 0) ? _classe.IDdipartimento : -1;
+                cbAnnoScolastico.SelectedValue = (_classe.IDannoscolastico>0) ? _classe.IDannoscolastico: -1;
             }
             else
             {
-
                 cbCoordinatore.SelectedIndex = -1;
                 cbIndirizzo.SelectedIndex = -1;
                 cbClasseArticolataCon.SelectedIndex = -1;
             }
-            _modifica = false;
         }
         private void nudAnno_ValueChanged(object sender, EventArgs e)
         {
-            PopolaClassiArticolate((int)nudAnno.Value);
-        }
-        public bool CoordinatoreGiaImpegnato(long nuovoID)
-        {
-            if (ClsUtenteBL.RilevaNomeUtente(nuovoID) != "-")
-                return false;
+            PopolaClassiArticolate();
+            if (nudAnno.Value != 0 && cbAnnoScolastico.SelectedIndex != -1)
+                cbClasseArticolataCon.Enabled = true;
             else
-                return true;
+                cbClasseArticolataCon.Enabled = false;
         }
-        private void PopolaCoordinatori()
-        {
-            cbCoordinatore.Items.Clear();
-            foreach(ClsUtenteDL coordinatore in coordinatori)
-                cbCoordinatore.Items.Add($"{coordinatore.Nome} {coordinatore.Cognome}");
-        }
-        private void PopolaIndirizzi()
-        {
-            cbIndirizzo.Items.Clear();
-            foreach (ClsIndirizzoDL indirizzo in indirizzi)
-                cbIndirizzo.Items.Add(indirizzo.Nome);
-        }
-        private  void PopolaClassiArticolate(int anno)
+
+        private void PopolaClassiArticolate()
         {
             cbClasseArticolataCon.Items.Clear();
-            foreach(ClsClasseDL classe in _classi)
+            if (cbAnnoScolastico.SelectedIndex == -1) return;
+            var annoScolastico = cbAnnoScolastico.SelectedItem as ClsAnnoScolasticoDL;
+            long idAnnoSelezionato = annoScolastico.ID;
+            int anno =(int) nudAnno.Value;
+            foreach (ClsClasseDL classe in _classi)
             {
-                if (anno == classe.Anno && classe.ID!=_classe.ID)
-                    cbClasseArticolataCon.Items.Add(classe.Sigla);
+                if (classe.Anno == anno && classe.IDannoscolastico == idAnnoSelezionato)
+                {
+                    if (_classe == null)
+                        cbClasseArticolataCon.Items.Add(classe.Sigla);
+                    else if (_classe.ID != classe.ID)
+                        cbClasseArticolataCon.Items.Add(classe.Sigla);
+                }
             }
         }
 
 
         private void cbCoordinatore_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((!_modifica || CoordinatoreGiaImpegnato(_classe.Idutente))&& _newcordinatore!=cbCoordinatore.Text)
+            var docente = cbCoordinatore.SelectedItem as ClsUtenteDL;
+            // Usiamo SelectedValue e facciamo il cast a long
+            if (cbCoordinatore.SelectedValue != null)
             {
-                MessageBox.Show("Coordinatore già impegnato in una classe");
-                cbCoordinatore.SelectedItem = _oldCoordinatore;
+                long selectedId = docente.ID; // Ora hai l'ID come long in modo sicuro
+                // Se non siamo in modifica e l'ID selezionato non è quello precedente
+                if (!_modifica && _classi.Any(c => c.Idutente == selectedId && selectedId != 0))
+                {
+                    MessageBox.Show("Coordinatore già impegnato in una classe", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    // Disabilitiamo temporaneamente l'evento per evitare loop infiniti
+                    cbCoordinatore.SelectedIndexChanged -= cbCoordinatore_SelectedIndexChanged;
+                    cbCoordinatore.SelectedValue = _oldCoordinatore;
+                    cbCoordinatore.SelectedIndexChanged += cbCoordinatore_SelectedIndexChanged;
+                }
+                else
+                {
+                    _newcordinatore = selectedId;
+                }
             }
-            else
-                _newcordinatore = cbCoordinatore.Text;
         }
 
         private void cbCoordinatore_DropDown(object sender, EventArgs e)
         {
-            _oldCoordinatore = cbCoordinatore.Text;
+            if (cbCoordinatore.SelectedValue != null)
+            {
+                _oldCoordinatore = Convert.ToInt64(cbCoordinatore.SelectedValue);
+            }
         }
 
-      
+        private void cbCoordinatore_Format(object sender, ListControlConvertEventArgs e)
+        {
+            var coordinatore = (ClsUtenteDL)e.ListItem;
+            e.Value = $"{coordinatore.Nome} {coordinatore.Cognome}";
+        }
+
+        private void cbAnnoScolastico_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopolaClassiArticolate();
+            if (nudAnno.Value != 0 && cbAnnoScolastico.SelectedIndex != -1)
+                cbClasseArticolataCon.Enabled = true;
+            else
+                cbClasseArticolataCon.Enabled = false;
+        }
     }
 }

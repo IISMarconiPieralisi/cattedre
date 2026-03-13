@@ -130,7 +130,6 @@
             0,
             0});
             this.nudAnno.Name = "nudAnno";
-            this.nudAnno.ReadOnly = true;
             this.nudAnno.Size = new System.Drawing.Size(190, 20);
             this.nudAnno.TabIndex = 33;
             this.nudAnno.Value = new decimal(new int[] {
@@ -161,6 +160,7 @@
             this.cbCoordinatore.TabIndex = 35;
             this.cbCoordinatore.DropDown += new System.EventHandler(this.cbCoordinatore_DropDown);
             this.cbCoordinatore.SelectedIndexChanged += new System.EventHandler(this.cbCoordinatore_SelectedIndexChanged);
+            this.cbCoordinatore.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.cbCoordinatore_Format);
             // 
             // label1
             // 
@@ -187,6 +187,7 @@
             this.cbClasseArticolataCon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbClasseArticolataCon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbClasseArticolataCon.Enabled = false;
             this.cbClasseArticolataCon.FormattingEnabled = true;
             this.cbClasseArticolataCon.Location = new System.Drawing.Point(132, 104);
             this.cbClasseArticolataCon.Name = "cbClasseArticolataCon";
@@ -221,6 +222,7 @@
             this.cbAnnoScolastico.Name = "cbAnnoScolastico";
             this.cbAnnoScolastico.Size = new System.Drawing.Size(190, 21);
             this.cbAnnoScolastico.TabIndex = 41;
+            this.cbAnnoScolastico.SelectedIndexChanged += new System.EventHandler(this.cbAnnoScolastico_SelectedIndexChanged);
             // 
             // cbDipartimento
             // 

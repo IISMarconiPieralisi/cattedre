@@ -11,13 +11,14 @@ namespace Cattedre
 {
     public static class ClsAnnoScolasticoBL
     {
+       private static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
         public static List<ClsAnnoScolasticoDL> CaricaAnniScolastici()
         {
             List<ClsAnnoScolasticoDL> anniScolastici = new List<ClsAnnoScolasticoDL>();
             DataTable dt = new DataTable();
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
@@ -48,9 +49,39 @@ namespace Cattedre
             }
             return anniScolastici;
         }
+        public static long RilevaIDAnnoSuccessivo(long IDannoScolastico)
+        {
+            if (IDannoScolastico <= 0) return 0;
+
+            long IDanno = 0;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID FROM anniscolastici 
+                                  WHERE TIMESTAMPDIFF(YEAR,(
+                                        SELECT datainizio FROM anniscolastici 
+                                        WHERE ID=@ID),datainizio
+                                  )=1 LIMIT 1";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", IDannoScolastico);
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                                IDanno = Convert.ToInt32(dr["ID"]);
+                        }
+                    }
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento di annoscolastico successivo:"+ex.Message);
+            }
+            return IDanno;
+        }
         public static string RilevaSiglaAnnoScolastico(long ID)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             string Sigla = "-";
             try
             {
@@ -78,7 +109,6 @@ namespace Cattedre
 
         public static void InserisciAnnoScolastico(ClsAnnoScolasticoDL anno)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             List<ClsAnnoScolasticoDL> anniScolastici = new List<ClsAnnoScolasticoDL>();
 
             try
@@ -108,7 +138,6 @@ namespace Cattedre
         public static void ModificaAnnoScolastico(ClsAnnoScolasticoDL anno)
         {
             FrmAnnoScolastico frmAnnoScolastico = new FrmAnnoScolastico();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
@@ -138,8 +167,6 @@ namespace Cattedre
 
         public static void EliminaAnnoScolastico(long id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))

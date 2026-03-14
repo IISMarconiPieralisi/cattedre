@@ -41,12 +41,12 @@
             this.chClasseArticolataCon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chNomeCoordinatore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chIndirizzo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.clDipartimento = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chAnnoScolastico = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btRipristina = new System.Windows.Forms.Button();
             this.cbIndirizzi = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btClasseSuccessiva = new System.Windows.Forms.Button();
-            this.clDipartimento = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chAnnoScolastico = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // cbAnnoClasse
@@ -136,30 +136,48 @@
             // 
             // chSigla
             // 
+            this.chSigla.DisplayIndex = 1;
             this.chSigla.Text = "Sigla";
             // 
             // chAnno
             // 
+            this.chAnno.DisplayIndex = 2;
             this.chAnno.Text = "Anno";
             // 
             // chSezione
             // 
+            this.chSezione.DisplayIndex = 3;
             this.chSezione.Text = "Sezione";
             // 
             // chClasseArticolataCon
             // 
+            this.chClasseArticolataCon.DisplayIndex = 4;
             this.chClasseArticolataCon.Text = "Articolata Con";
             this.chClasseArticolataCon.Width = 83;
             // 
             // chNomeCoordinatore
             // 
+            this.chNomeCoordinatore.DisplayIndex = 5;
             this.chNomeCoordinatore.Text = "Nome Coordinatore";
             this.chNomeCoordinatore.Width = 171;
             // 
             // chIndirizzo
             // 
+            this.chIndirizzo.DisplayIndex = 6;
             this.chIndirizzo.Text = "Indirizzo";
             this.chIndirizzo.Width = 102;
+            // 
+            // clDipartimento
+            // 
+            this.clDipartimento.DisplayIndex = 7;
+            this.clDipartimento.Text = "Dipartimento";
+            this.clDipartimento.Width = 150;
+            // 
+            // chAnnoScolastico
+            // 
+            this.chAnnoScolastico.DisplayIndex = 0;
+            this.chAnnoScolastico.Text = "Anno scolastico";
+            this.chAnnoScolastico.Width = 90;
             // 
             // btRipristina
             // 
@@ -203,16 +221,6 @@
             this.btClasseSuccessiva.Text = "Classe successiva";
             this.btClasseSuccessiva.UseVisualStyleBackColor = true;
             this.btClasseSuccessiva.Click += new System.EventHandler(this.btClasseSuccessiva_Click);
-            // 
-            // clDipartimento
-            // 
-            this.clDipartimento.Text = "Dipartimento";
-            this.clDipartimento.Width = 120;
-            // 
-            // chAnnoScolastico
-            // 
-            this.chAnnoScolastico.Text = "Anno scolastico";
-            this.chAnnoScolastico.Width = 120;
             // 
             // FrmClassi
             // 

@@ -164,10 +164,51 @@ namespace Cattedre
             cbAnnoClasse.SelectedIndex=-1;
             cbIndirizzi.SelectedIndex = -1;
         }
-
+        #region  gestione classe successivo
         private void btClasseSuccessiva_Click(object sender, EventArgs e)
         {
-
+           if(lvClassi.SelectedItems.Count>=1)
+           {
+                int NumeroClassiAggiunte = 0;
+                //carico tutti le classi che sono stati selezionati all'interno di una lista
+                foreach(ListViewItem sel in lvClassi.SelectedItems)
+                {
+                    try
+                    {
+                        ClsClasseDL _classeSelezionata = classi.Where(p => p.ID == Convert.ToInt32(sel.Tag)).FirstOrDefault();
+                        if (_classeSelezionata.Anno >= 5)
+                            throw new Exception($" non è possibile ottenere la classe successiva rispetto {_classeSelezionata.Sigla} " +
+                                                $"del Anno scolastico {ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(_classeSelezionata.IDannoscolastico)} poichè è un quinto.");
+                        if(ClsAnnoScolasticoBL.RilevaIDAnnoSuccessivo(_classeSelezionata.IDannoscolastico) <= 0)
+                            throw new Exception($" non è possibile ottenere la classe successiva rispetto {_classeSelezionata.Sigla} " +
+                                                $"del Anno scolastico {ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(_classeSelezionata.IDannoscolastico)} poichè non è stato ancora censito l'anno scolastico succesivo.");
+                        ClsClasseDL nuovaClasse = classeSuccessiva(_classeSelezionata);
+                        if(ClsClasseBL.RilevaIDclasse(nuovaClasse)>0) //se esiste significa che una classe estremamente simile esiste
+                            throw new Exception($"La classe {nuovaClasse.Sigla} per l'anno {ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(nuovaClasse.IDannoscolastico)} è già esistente.");
+                        //carico la nuova classe
+                        ClsClasseBL.InserisciClasse(nuovaClasse);
+                        NumeroClassiAggiunte++;
+                    }
+                    catch (Exception Ex)
+                    {
+                        MessageBox.Show(Ex.Message + "\nRiprovare.", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                if(NumeroClassiAggiunte>1)
+                    MessageBox.Show($"Sono state aggiunte {NumeroClassiAggiunte} classi.", "Informazione", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                classi = ClsClasseBL.CaricaClassi();
+                CaricaListView(classi);
+           }
         }
+        private ClsClasseDL classeSuccessiva(ClsClasseDL classe)
+        {
+            classe.IDannoscolastico = ClsAnnoScolasticoBL.RilevaIDAnnoSuccessivo(classe.IDannoscolastico);
+            classe.Anno += 1;
+            classe.Sigla =$"{classe.Anno}{classe.Sezione}";
+            //metto classe articolata a 0, per sicurezza e per non dovere gestire questa cosa così complessa
+            classe.ClasseArticolataCon = 0;
+            return classe;
+        }
+        #endregion
     }
 }

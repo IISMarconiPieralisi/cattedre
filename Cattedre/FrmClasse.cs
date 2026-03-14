@@ -188,8 +188,10 @@ namespace Cattedre
             if (cbCoordinatore.SelectedValue != null)
             {
                 long selectedId = docente.ID; // Ora hai l'ID come long in modo sicuro
+                if (cbAnnoScolastico.SelectedValue == null) return;
+                long idAnnoAttuale = Convert.ToInt64(cbAnnoScolastico.SelectedValue);
                 // Se non siamo in modifica e l'ID selezionato non è quello precedente
-                if (!_modifica && _classi.Any(c => c.Idutente == selectedId && selectedId != 0))
+                if (!_modifica && _classi.Any(c => c.Idutente == selectedId && c.IDannoscolastico==Convert.ToInt32(cbAnnoScolastico.SelectedValue) &&  selectedId != 0))
                 {
                     MessageBox.Show("Coordinatore già impegnato in una classe", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 

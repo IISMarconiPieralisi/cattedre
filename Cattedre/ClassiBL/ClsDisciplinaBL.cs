@@ -50,7 +50,6 @@ namespace Cattedre
                         disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
                         disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
                         disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
-                        disciplina.IDdipartimento = Convert.ToInt32(row["IDdipartimento"]);
                         disciplina.IDdisciplinaSuccessiva = (row["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplinaSuccessiva"]);
                         discipline.Add(disciplina);
                     }
@@ -74,8 +73,8 @@ namespace Cattedre
             {
 
                 conn.Open();
-                string sql = "INSERT INTO discipline (nome, anno, oreLaboratorio, oreTeoria, disciplinaSpeciale, IDdipartimento,IDdisciplinaSuccessiva) " +
-                    "VALUES (@nome, @anno, @oreLaboratorio, @oreTeoria, @disciplinaSpeciale, @IDdipartimento,@IDdisciplinaSuccessiva)";
+                string sql = "INSERT INTO discipline (nome, anno, oreLaboratorio, oreTeoria, disciplinaSpeciale,IDdisciplinaSuccessiva) " +
+                    "VALUES (@nome, @anno, @oreLaboratorio, @oreTeoria, @disciplinaSpeciale,@IDdisciplinaSuccessiva)";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
                     cmd.Parameters.AddWithValue("@nome", disciplina.Nome);
@@ -83,7 +82,6 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
                     cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                     cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
-                    cmd.Parameters.AddWithValue("@IDdipartimento", disciplina.IDdipartimento);
                     if (disciplina.IDdisciplinaSuccessiva != 0)
                         cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", disciplina.IDdisciplinaSuccessiva);
                     else
@@ -143,7 +141,6 @@ namespace Cattedre
                                oreLaboratorio = @oreLaboratorio, 
                                oreTeoria = @oreTeoria, 
                                disciplinaSpeciale = @disciplinaSpeciale, 
-                               IDdipartimento = @IDdipartimento,
                                IDdisciplinaSuccessiva=@IDdisciplinaSuccessiva
                            WHERE id = @id";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
@@ -153,7 +150,6 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
                     cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                     cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
-                    cmd.Parameters.AddWithValue("@IDdipartimento", disciplina.IDdipartimento);
                     if (disciplina.IDdisciplinaSuccessiva != 0)
                         cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", disciplina.IDdisciplinaSuccessiva);
                     else
@@ -204,8 +200,7 @@ namespace Cattedre
                     Convert.ToInt32(dt.Rows[i]["anno"]),
                     Convert.ToInt32(dt.Rows[i]["oreLaboratorio"]),
                     Convert.ToInt32(dt.Rows[i]["oreTeoria"]),
-                    dt.Rows[i]["disciplinaSpeciale"].ToString(),
-                    Convert.ToInt32(dt.Rows[i]["IDdipartimento"]));
+                    dt.Rows[i]["disciplinaSpeciale"].ToString());
                 _disciplina.IDdisciplinaSuccessiva = Convert.ToInt32(dt.Rows[i]["IDdisciplinaSuccessiva"]);
                 discipline.Add(_disciplina);
             }
@@ -312,8 +307,7 @@ namespace Cattedre
                                  Convert.ToInt32(dr["anno"]),
                                  Convert.ToInt32(dr["oreLaboratorio"]),
                                  Convert.ToInt32(dr["oreTeoria"]),
-                                 dr["disciplinaSpeciale"].ToString(),
-                                 Convert.ToInt32(dr["IDdipartimento"])
+                                 dr["disciplinaSpeciale"].ToString()
                                  );
 
                             }
@@ -340,14 +334,11 @@ namespace Cattedre
                     string sql = @"SELECT ID
                            FROM discipline 
                            WHERE nome = @nome 
-                           AND anno = @anno 
-                           AND IDdipartimento = @IDdipartimento";
-
+                           AND anno = @anno; ";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", disciplina.Nome);
                         cmd.Parameters.AddWithValue("@anno", disciplina.Anno);
-                        cmd.Parameters.AddWithValue("@IDdipartimento", disciplina.IDdipartimento);
 
                         object result = cmd.ExecuteScalar();
 
@@ -363,39 +354,7 @@ namespace Cattedre
                     throw new Exception(ex.Message);
             }
         }
-        public static string RilevaNomeDipartimento(long id)
-        {
-            if (id == 0)
-                return "-";
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            string NomeDipartimento = "-";
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = @"SELECT d.nome FROM dipartimenti d 
-                                 WHERE d.ID = @ID";
-
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@ID", id);
-                        MySqlDataReader dr = cmd.ExecuteReader();
-                        if (dr.HasRows)
-                        {
-                            dr.Read();
-                            NomeDipartimento = dr["nome"].ToString();
-                        }
-                    }
-                }
-                    
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return NomeDipartimento;
-        }
+      
 
 
     }

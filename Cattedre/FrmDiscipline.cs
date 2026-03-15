@@ -32,8 +32,8 @@ namespace Cattedre
                 lvi.SubItems.Add(disciplina.Nome);
                 lvi.SubItems.Add(Convert.ToString(disciplina.OreLaboratorio));
                 lvi.SubItems.Add(Convert.ToString(disciplina.OreTeoria));
-                lvi.SubItems.Add(Convert.ToString(disciplina.DisciplinaSpeciale));
-                lvi.SubItems.Add(ClsDisciplinaBL.RilevaNomeDipartimento(disciplina.IDdipartimento));
+                lvi.SubItems.Add((disciplina.DisciplinaSpeciale==string.Empty)?"-":disciplina.DisciplinaSpeciale);
+                lvi.SubItems.Add(caricaGraficamenteDipartimenti(disciplina));
                 lvi.SubItems.Add(CaricaGraficamenteIndirizzi(disciplina));
                 if (disciplina.IDdisciplinaSuccessiva != 0)
                 {
@@ -61,12 +61,19 @@ namespace Cattedre
                 {
                     ClsDisciplinaBL.InserisciDisciplina(frmDisciplina._disciplina);
                     int ID=ClsDisciplinaBL.CercaIdDisciplina(frmDisciplina._disciplina);
-                    foreach (var appartenere in frmDisciplina._Apparteneres)
+                    foreach (var appartenere in frmDisciplina._apparteneres)
                     {
                         appartenere.IDdisicplina = ID;
                         ClsAppartenereBL.InserireAppartenere(appartenere);
                     }
-                }catch(Exception ex)
+                    foreach (var gestire in frmDisciplina._gestires)
+                    {
+                        gestire.IDdisciplina = ID;
+                        ClsGestireBL.InserireGestione(gestire);
+                    }
+
+                }
+                catch(Exception ex)
                 {
                     MessageBox.Show($"Errore: {ex.Message} in riga {ex.Source} /n riprovare", "Errore");
                 }
@@ -134,7 +141,8 @@ namespace Cattedre
                     try
                     {
                         ClsDisciplinaBL.ModificaDisciplina(frmDisciplina._disciplina);
-                        ClsAppartenereBL.ModificaAppartenenze(frmDisciplina._disciplina.ID, frmDisciplina._Apparteneres);
+                        ClsAppartenereBL.ModificaAppartenenze(frmDisciplina._disciplina.ID, frmDisciplina._apparteneres);
+                        ClsGestireBL.ModificaGestioni(frmDisciplina._disciplina.ID, frmDisciplina._gestires);
                     }
                     catch(Exception ex)
                     {
@@ -205,6 +213,12 @@ namespace Cattedre
         private string CaricaGraficamenteIndirizzi(ClsDisciplinaDL disc)
         {
             var listaIndirizzi = ClsAppartenereBL.caricaIndirizziDisciplina(disc.ID).Select(i => i.Nome);
+            return string.Join(", ", listaIndirizzi);
+        }
+        string caricaGraficamenteDipartimenti (ClsDisciplinaDL disc)
+        {
+            List<string> listaIndirizzi = ClsGestireBL.DipartimentiDellaDisciplina(disc.ID).Select(i => i.Nome).ToList();
+            if (listaIndirizzi.Count == 0) return "-";
             return string.Join(", ", listaIndirizzi);
         }
     }

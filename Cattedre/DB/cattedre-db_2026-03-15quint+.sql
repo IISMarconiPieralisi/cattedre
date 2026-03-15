@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Creato il: Mar 13, 2026 alle 22:30
+-- Creato il: Mar 15, 2026 alle 19:50
 -- Versione del server: 8.2.0
 -- Versione PHP: 8.3.0
 
@@ -100,18 +100,22 @@ INSERT INTO `appartenere` (`IDindirizzo`, `IDdisciplina`) VALUES
 (1, 25),
 (1, 26),
 (1, 36),
+(1, 37),
 (2, 1),
 (2, 9),
 (2, 14),
 (2, 15),
 (2, 16),
 (2, 17),
+(2, 37),
 (3, 1),
 (3, 14),
 (3, 15),
 (3, 16),
 (3, 18),
+(3, 37),
 (4, 1),
+(4, 37),
 (5, 1),
 (6, 1);
 
@@ -171,12 +175,14 @@ CREATE TABLE `classi` (
 
 INSERT INTO `classi` (`ID`, `sigla`, `anno`, `sezione`, `classeArticolataCon`, `IDutente`, `IDindirizzo`, `IDdipartimento`, `IDannoscolastico`) VALUES
 (1, '4BM', 4, 'BM', NULL, 4, 1, 1, 1),
-(2, '2MP', 2, 'MP', NULL, 6, 5, NULL, NULL),
+(2, '2MP', 2, 'MP', NULL, 6, 5, 3, 2),
 (4, '3BM', 3, 'BM', NULL, 2, 1, 1, 2),
 (5, '4FM', 4, 'FM', 10, 7, 2, 3, 1),
 (7, '5BM', 5, 'BM', NULL, 1, 1, 1, 2),
 (9, '4HM', 4, 'HM', NULL, 8, 3, 3, 1),
-(10, '4AM', 4, 'AM', 5, 5, 2, 1, 1);
+(10, '4AM', 4, 'AM', 5, 5, 2, 1, 1),
+(12, '5FM', 5, 'FM', NULL, 7, 2, 3, 2),
+(13, '5HM', 5, 'HM', NULL, 8, 3, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -257,7 +263,6 @@ CREATE TABLE `discipline` (
   `oreLaboratorio` tinyint UNSIGNED NOT NULL,
   `oreTeoria` tinyint UNSIGNED NOT NULL,
   `disciplinaSpeciale` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `IDdipartimento` int UNSIGNED DEFAULT '0',
   `IDdisciplinaSuccessiva` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -265,28 +270,29 @@ CREATE TABLE `discipline` (
 -- Dump dei dati per la tabella `discipline`
 --
 
-INSERT INTO `discipline` (`ID`, `nome`, `anno`, `oreLaboratorio`, `oreTeoria`, `disciplinaSpeciale`, `IDdipartimento`, `IDdisciplinaSuccessiva`) VALUES
-(1, 'Matematica', 3, 0, 4, '', 2, NULL),
-(2, 'Informatica', 4, 3, 3, '', 1, NULL),
-(9, 'Sistemi', 4, 2, 2, '', 1, NULL),
-(10, 'TPSIT', 4, 1, 1, '', 1, NULL),
-(11, 'AI', 4, 1, 0, NULL, 1, NULL),
-(12, 'GPOI', 5, 0, 3, '', 1, NULL),
-(13, 'Telecomunicazioni', 4, 2, 1, '', 1, NULL),
-(14, 'TPSEE', 4, 3, 1, '', 3, NULL),
-(15, 'Elettr/Elettrot', 4, 2, 3, '', 3, NULL),
-(16, 'Sistemi automatici', 4, 2, 3, '', 3, NULL),
-(17, 'Energie rinnovabili', 4, 2, 0, '', 3, NULL),
-(18, 'Robotica industriale', 4, 2, 0, '', 3, NULL),
-(19, 'Informatica', 3, 3, 3, '', 1, NULL),
-(20, 'Sistemi', 3, 2, 2, '', 1, NULL),
-(21, 'TPSIT', 3, 1, 2, '', 1, NULL),
-(22, 'Telecomunicazioni', 3, 2, 1, '', 1, NULL),
-(23, 'Informatica', 5, 4, 2, '', 1, NULL),
-(24, 'Sistemi', 5, 3, 1, '', 1, NULL),
-(25, 'TPSIT', 5, 2, 1, '', 1, NULL),
-(26, 'AI', 5, 1, 0, NULL, 1, NULL),
-(36, 'Potenziamento B16', 0, 18, 0, 'potenziamento', 1, NULL);
+INSERT INTO `discipline` (`ID`, `nome`, `anno`, `oreLaboratorio`, `oreTeoria`, `disciplinaSpeciale`, `IDdisciplinaSuccessiva`) VALUES
+(1, 'Matematica', 3, 0, 4, '', NULL),
+(2, 'Informatica', 4, 3, 3, '', 23),
+(9, 'Sistemi', 4, 2, 2, '', NULL),
+(10, 'TPSIT', 4, 1, 1, '', NULL),
+(11, 'AI', 4, 1, 0, '', 26),
+(12, 'GPOI', 5, 0, 3, '', NULL),
+(13, 'Telecomunicazioni', 4, 2, 1, '', NULL),
+(14, 'TPSEE', 4, 3, 1, '', NULL),
+(15, 'Elettr/Elettrot', 4, 2, 3, '', NULL),
+(16, 'Sistemi automatici', 4, 2, 3, '', NULL),
+(17, 'Energie rinnovabili', 4, 2, 0, '', NULL),
+(18, 'Robotica industriale', 4, 2, 0, '', NULL),
+(19, 'Informatica', 3, 3, 3, '', 2),
+(20, 'Sistemi', 3, 2, 2, '', 9),
+(21, 'TPSIT', 3, 1, 2, '', 10),
+(22, 'Telecomunicazioni', 3, 2, 1, '', 13),
+(23, 'Informatica', 5, 4, 2, '', NULL),
+(24, 'Sistemi', 5, 3, 1, '', NULL),
+(25, 'TPSIT', 5, 2, 1, '', NULL),
+(26, 'AI', 5, 1, 0, '', NULL),
+(36, 'Potenziamento B16', 0, 18, 0, 'potenziamento', NULL),
+(37, 'Matematica', 2, 3, 3, '', NULL);
 
 -- --------------------------------------------------------
 
@@ -321,6 +327,33 @@ CREATE TABLE `gestire` (
   `IDdipartimento` int UNSIGNED NOT NULL,
   `IDdisciplina` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dump dei dati per la tabella `gestire`
+--
+
+INSERT INTO `gestire` (`IDdipartimento`, `IDdisciplina`) VALUES
+(1, 37),
+(1, 19),
+(2, 1),
+(1, 20),
+(1, 22),
+(1, 21),
+(1, 11),
+(1, 15),
+(3, 17),
+(1, 2),
+(3, 18),
+(1, 9),
+(3, 16),
+(1, 13),
+(3, 14),
+(1, 10),
+(1, 26),
+(1, 12),
+(1, 23),
+(1, 24),
+(1, 25);
 
 -- --------------------------------------------------------
 
@@ -476,8 +509,7 @@ ALTER TABLE `dipartimenti`
 -- Indici per le tabelle `discipline`
 --
 ALTER TABLE `discipline`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `IDdipartimento` (`IDdipartimento`) USING BTREE;
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indici per le tabelle `dotare`
@@ -542,7 +574,7 @@ ALTER TABLE `assegnare`
 -- AUTO_INCREMENT per la tabella `classi`
 --
 ALTER TABLE `classi`
-  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT per la tabella `classidiconcorso`
@@ -566,7 +598,7 @@ ALTER TABLE `dipartimenti`
 -- AUTO_INCREMENT per la tabella `discipline`
 --
 ALTER TABLE `discipline`
-  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT per la tabella `dotare`
@@ -640,12 +672,6 @@ ALTER TABLE `contratti`
 --
 ALTER TABLE `dipartimenti`
   ADD CONSTRAINT `IDutenteDipartimenti` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Limiti per la tabella `discipline`
---
-ALTER TABLE `discipline`
-  ADD CONSTRAINT `IDdipartimentoDiscipline` FOREIGN KEY (`IDdipartimento`) REFERENCES `dipartimenti` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `dotare`

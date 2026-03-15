@@ -302,5 +302,38 @@ namespace Cattedre
             }
             return ID;
         }
+        public static string RilevaNomeDipartimento(long id)
+        {
+            if (id == 0)
+                return "-";
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            string NomeDipartimento = "-";
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT d.nome FROM dipartimenti d 
+                                 WHERE d.ID = @ID";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", id);
+                        MySqlDataReader dr = cmd.ExecuteReader();
+                        if (dr.HasRows)
+                        {
+                            dr.Read();
+                            NomeDipartimento = dr["nome"].ToString();
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return NomeDipartimento;
+        }
     }
 }

@@ -175,6 +175,7 @@
     <Compile Include="ClassiBL\ClsDipartimentoBL.cs" />
     <Compile Include="ClassiBL\ClsDisciplinaBL.cs" />
     <Compile Include="ClassiBL\ClsDotareBL.cs" />
+    <Compile Include="ClassiBL\ClsGestireBL.cs" />
     <Compile Include="ClassiBL\ClsIndirizzoBL.cs" />
     <Compile Include="ClassiBL\ClsUtenteBL.cs" />
     <Compile Include="ClassiDL\ClsAfferireDL.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="ClassiDL\ClsDipartimentoDL.cs" />
     <Compile Include="ClassiDL\ClsDisciplinaDL.cs" />
     <Compile Include="ClassiDL\ClsDotareDL.cs" />
+    <Compile Include="ClassiDL\ClsGestireDL.cs" />
     <Compile Include="ClassiDL\ClsIndirizzoDL.cs" />
     <Compile Include="ClassiDL\ClsPersona.cs" />
     <Compile Include="ClassiDL\ClsUtenteDL.cs" />

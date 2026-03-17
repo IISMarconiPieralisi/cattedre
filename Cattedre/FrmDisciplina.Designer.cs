@@ -49,11 +49,12 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.cbDisciplinaSucessiva = new System.Windows.Forms.ComboBox();
-            this.frmDisciplinaBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label9 = new System.Windows.Forms.Label();
             this.clbDipartimenti = new System.Windows.Forms.CheckedListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.tbDisciplinaSpeciale = new System.Windows.Forms.TextBox();
+            this.lblAnnoSuc = new System.Windows.Forms.Label();
+            this.frmDisciplinaBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.nudOreTeoria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudOreLab)).BeginInit();
             this.pnRB.SuspendLayout();
@@ -264,14 +265,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDisciplinaSucessiva.Enabled = false;
             this.cbDisciplinaSucessiva.FormattingEnabled = true;
-            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(179, 184);
+            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(198, 184);
             this.cbDisciplinaSucessiva.Name = "cbDisciplinaSucessiva";
-            this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(189, 21);
+            this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(170, 21);
             this.cbDisciplinaSucessiva.TabIndex = 37;
-            // 
-            // frmDisciplinaBindingSource
-            // 
-            this.frmDisciplinaBindingSource.DataSource = typeof(Cattedre.FrmDisciplina);
             // 
             // label9
             // 
@@ -313,11 +310,26 @@
             this.tbDisciplinaSpeciale.Size = new System.Drawing.Size(189, 20);
             this.tbDisciplinaSpeciale.TabIndex = 32;
             // 
+            // lblAnnoSuc
+            // 
+            this.lblAnnoSuc.AutoSize = true;
+            this.lblAnnoSuc.Location = new System.Drawing.Point(176, 187);
+            this.lblAnnoSuc.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblAnnoSuc.Name = "lblAnnoSuc";
+            this.lblAnnoSuc.Size = new System.Drawing.Size(17, 13);
+            this.lblAnnoSuc.TabIndex = 40;
+            this.lblAnnoSuc.Text = "5°";
+            // 
+            // frmDisciplinaBindingSource
+            // 
+            this.frmDisciplinaBindingSource.DataSource = typeof(Cattedre.FrmDisciplina);
+            // 
             // FrmDisciplina
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(416, 564);
+            this.Controls.Add(this.lblAnnoSuc);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.clbDipartimenti);
             this.Controls.Add(this.cbDisciplinaSucessiva);
@@ -377,5 +389,6 @@
         private System.Windows.Forms.CheckedListBox clbDipartimenti;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbDisciplinaSpeciale;
+        private System.Windows.Forms.Label lblAnnoSuc;
     }
 }

@@ -80,11 +80,11 @@ namespace Cattedre
                 {
                     IDdipartimento = ClsUtenteBL.TrovaIDdipartimento(utenteLoggato.ID);
                     IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
-                    classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento);
+                    classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
                     discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
                 });
 
-                LoadClassi(IDdipartimento);
+                LoadClassi(IDdipartimento, IDannoscolastico);
                 LoadDiscipline(IDdipartimento);
                 LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
                 LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
@@ -99,7 +99,8 @@ namespace Cattedre
             if (utenteLoggato.TipoUtente == "A")
                 btGeneraASsucc.Enabled = false;
 
-            cbAnniScolastici.SelectedIndex = Convert.ToInt32(IDannoscolastico - 1);
+            string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
+            cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
         }
 
         private void LoadInfoNumCattedre(long idDip, DataTable docenti)
@@ -572,7 +573,7 @@ namespace Cattedre
 
             //ucOre.Refresh();
         }
-        private void LoadClassi(int IDdipartimento)
+        private void LoadClassi(int IDdipartimento, long Idannoscolastico)
         {
             foreach (UcClasse uc in pnlClassi.Controls.OfType<UcClasse>().ToList())
             {
@@ -580,7 +581,7 @@ namespace Cattedre
                 uc.Dispose();
             }
 
-            classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento);
+            classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, Idannoscolastico);
 
             int x = 10;
             int y = 72;
@@ -653,11 +654,11 @@ namespace Cattedre
 
                     await Task.Run(() =>
                     {
-                        classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento);
+                        classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
                         discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
                     });
 
-                    LoadClassi(IDdipartimento);
+                    LoadClassi(IDdipartimento, IDannoscolastico);
                     LoadDiscipline(IDdipartimento);
                     LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
                     LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);

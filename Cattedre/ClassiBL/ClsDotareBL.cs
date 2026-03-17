@@ -11,8 +11,8 @@ namespace Cattedre
 {
     public class ClsDotareBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
-       public static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
         public static int TrovaNumCattedreDiDiritto(long idCdc)
         {

@@ -11,6 +11,9 @@ namespace Cattedre
 {
     public static class ClsAssegnareBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+
         public static void GeneraCattedreAnnoSuccessivo(int IDdipartimento, int IDannoCorrente, int IDannoSuccessivo)
         {
             DataTable assegnazioni = CaricaDocentiConAssegnazioni(IDdipartimento, IDannoCorrente);
@@ -108,8 +111,6 @@ namespace Cattedre
 
         public static bool EsisteAssegnazione(long IDclasse, long IDanno, long IDdisciplina)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
@@ -134,7 +135,7 @@ namespace Cattedre
 
         public static DataTable CaricaDocentiConAssegnazioni(int IDdipartimento, long IDannoScolastico)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             DataTable dt = new DataTable();
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -186,7 +187,7 @@ namespace Cattedre
 
         public static void UpdateCattedra(long IDclasse, long IDannoscolastico, long IDdisciplina, long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             try
             {
@@ -219,7 +220,7 @@ namespace Cattedre
 
         //public static void CopiaDocentiAnnoSuccessivo(long nuovoAnno, long vecchioAnno)
         //{
-        //    string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        //    
 
         //    try
         //    {
@@ -249,7 +250,7 @@ namespace Cattedre
 
         //public static List<ClsUtenteDL> CercaDocentiDiRiferimento(int IDdipartimento, int IDclasse, int IDdisciplina)
         //{
-        //    string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        //    
 
         //    List<ClsUtenteDL> docentiDipartimento = new List<ClsUtenteDL>();
         //    FrmDipartimenti frmDocenti = new FrmDipartimenti();
@@ -307,7 +308,7 @@ namespace Cattedre
 
         //public static List<ClsUtenteDL> CercaDocentiPossibiliSostituti(int IDdipartimento, int IDclasseDiConcorso)
         //{
-        //    string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        //    
         //    MySqlConnection conn = new MySqlConnection(connectionString);
         //    List<ClsUtenteDL> docentiDipartimento = new List<ClsUtenteDL>();
         //    try
@@ -353,7 +354,7 @@ namespace Cattedre
         //public static ClsUtenteDL MostraDocenteTeorico(int IDdipartimento, int IDclasse, int IDdisciplina)
         //{
         //    ClsUtenteDL docente = null;
-        //    string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        //    
         //    MySqlConnection conn = new MySqlConnection(connectionString);
         //    List<ClsClasseDL> classirilevate = new List<ClsClasseDL>();
         //    try
@@ -396,7 +397,7 @@ namespace Cattedre
         //public static ClsUtenteDL MostraDocentePratico(int IDdipartimento, int IDclasse, int IDdisciplina)
         //{
         //    ClsUtenteDL docente = null;
-        //    string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        //    
         //    MySqlConnection conn = new MySqlConnection(connectionString);
         //    List<ClsClasseDL> classirilevate = new List<ClsClasseDL>();
         //    try
@@ -440,7 +441,7 @@ namespace Cattedre
         //public static int CaricaOrePotenziamentoDocente(int IDutente)
         //{
         //    ClsAssegnareDL assegnare = null;
-        //    string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        //    
         //    MySqlConnection conn = new MySqlConnection(connectionString);
         //    try
         //    {
@@ -479,7 +480,7 @@ namespace Cattedre
 
         public static void SalvaOrePot(int oreSpeciali, int IDutente, long IDannoscolastico, int IDdisciplina)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             ClsAssegnareDL assegnare = null;
             try
@@ -511,7 +512,7 @@ namespace Cattedre
 
         //public static long RicavaIDutente(string nome, string cognome)
         //{
-        //    string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        //    
         //    MySqlConnection conn = new MySqlConnection(connectionString);
         //    ClsUtenteDL docente = null;
         //    try
@@ -541,7 +542,7 @@ namespace Cattedre
 
         //public static long RicavaIDassegnare(int oreSpeciali, long idUtente)
         //{
-        //    string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        //    
         //    MySqlConnection conn = new MySqlConnection(connectionString);
         //    ClsUtenteDL docente = null;
         //    try

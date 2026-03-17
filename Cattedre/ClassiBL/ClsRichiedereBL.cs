@@ -11,10 +11,12 @@ namespace Cattedre
 {
     public static class ClsRichiedereBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
         public static List<ClsClasseDiConcorsoDL> RilevaCDCDiscipina(long IDdisciplina)
         {
             List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             try
             {
@@ -25,7 +27,7 @@ namespace Cattedre
                     string sql = @"SELECT c.id,c.livello,c.nome,c.abilitazioniRichieste
                                     FROM classidiconcorso c
                                     INNER JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
-                                    WHERE r.ID = @IDdisciplina";
+                                    WHERE r.IDdisciplina = @IDdisciplina";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -60,7 +62,7 @@ namespace Cattedre
         public static List<ClsClasseDiConcorsoDL> RilevaCDCDocente(long IDutente)
         {
             List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             try
             {
@@ -101,7 +103,7 @@ namespace Cattedre
         }
         public static void InserisciRichiedere(ClsRichiedereDL Richiedere)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -140,7 +142,7 @@ namespace Cattedre
         }
         public static void EliminaRichiesta(ClsRichiedereDL ric)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
@@ -172,7 +174,7 @@ namespace Cattedre
         }
         public static List<ClsRichiedereDL> CaricaClassiRichiedere(long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             DataTable ds = new DataTable();
             List<ClsRichiedereDL> richiederes = new List<ClsRichiedereDL>();
@@ -211,7 +213,7 @@ namespace Cattedre
         public static List<ClsRichiedereDL> CaricaClassiRichiedereConDisciplina(long IDdisciplina)
         {
             List<ClsRichiedereDL> Richiederes = new List<ClsRichiedereDL>();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))

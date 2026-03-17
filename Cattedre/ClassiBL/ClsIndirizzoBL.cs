@@ -11,9 +11,11 @@ namespace Cattedre
 {
     public static class ClsIndirizzoBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
         public static long RilevaIDindirizzo(string nome)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             long ID=0;
             try
             {
@@ -47,7 +49,7 @@ namespace Cattedre
 
         public static string RilevaNomeIndirizzo(long id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             string nome="-";
             try
             {
@@ -83,7 +85,7 @@ namespace Cattedre
 
         public static List<ClsIndirizzoDL> CaricaIndirizzi()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
             DataTable dt = new DataTable();
 
@@ -120,7 +122,7 @@ namespace Cattedre
 
         public static void InserisciIndirizzo(ClsIndirizzoDL indirizzo)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             try
             {
@@ -146,7 +148,7 @@ namespace Cattedre
 
         public static void ModificaIndirizzo(ClsIndirizzoDL indirizzo)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -175,7 +177,7 @@ namespace Cattedre
 
         public static void EliminaIndirizzo(long id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -199,7 +201,7 @@ namespace Cattedre
         }
         public static List<ClsIndirizzoDL> RicercaPerNome(string _ricerca)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
             DataTable dt = new DataTable();
             _ricerca = $"%{_ricerca}%";

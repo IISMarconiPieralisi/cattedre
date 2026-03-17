@@ -296,5 +296,71 @@ namespace Cattedre
             }
 
         }
+        public static long RilevaIDdipartimento (string nome)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            long ID = 0;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID 
+                             FROM dipartimenti 
+                             WHERE nome=@nome";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@nome", nome);
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.HasRows)
+                            {
+                                dr.Read();
+                                ID = Convert.ToInt64(dr["ID"]);
+                            }
+                        }
+                    }
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return ID;
+        }
+        public static string RilevaNomeDipartimento(long id)
+        {
+            if (id == 0)
+                return "-";
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            string NomeDipartimento = "-";
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT d.nome FROM dipartimenti d 
+                                 WHERE d.ID = @ID";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", id);
+                        MySqlDataReader dr = cmd.ExecuteReader();
+                        if (dr.HasRows)
+                        {
+                            dr.Read();
+                            NomeDipartimento = dr["nome"].ToString();
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return NomeDipartimento;
+        }
     }
 }

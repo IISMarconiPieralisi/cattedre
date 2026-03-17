@@ -14,7 +14,8 @@ namespace Cattedre
     {
         List<ClsDipartimentoDL> _dipartimenti= ClsDipartimentoBL.CaricaDipartimenti();
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
-        List<ClsDisciplinaDL> _discipline = ClsDisciplinaBL.CaricaDiscipline();
+        List<ClsDisciplinaDL> _discipline = ClsDisciplinaBL.CaricaDiscipline(0, 0, "");
+
         //variabili pubbliche
         public List<ClsAppartenereDL> _apparteneres = new List<ClsAppartenereDL>();
         public List<ClsGestireDL> _gestires = new List<ClsGestireDL>();

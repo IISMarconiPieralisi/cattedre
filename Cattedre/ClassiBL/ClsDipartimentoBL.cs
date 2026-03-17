@@ -11,10 +11,11 @@ namespace Cattedre
 {
    public static class ClsDipartimentoBL
    {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
         public static List<ClsDipartimentoDL> CaricaDipartimenti()
          {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             DataTable ds = new DataTable();
             List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
             try
@@ -52,7 +53,7 @@ namespace Cattedre
 
         public static void InserisciDipartimento(ClsDipartimentoDL dip)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             try
             {
@@ -83,7 +84,7 @@ namespace Cattedre
 
         public static void EliminaDipartimento(int id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -109,7 +110,7 @@ namespace Cattedre
 
         public static void ModificaDipartimento(ClsDipartimentoDL dipartimento)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
@@ -167,10 +168,11 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
+        
 
         public static ClsDipartimentoDL UtenteCoordinaDipartimento(long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             ClsDipartimentoDL dipartimento = null;
             try
@@ -202,7 +204,7 @@ namespace Cattedre
         }
         public static ClsUtenteDL utenteCoordinaDiparimento(string NomeDipartimento)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             ClsUtenteDL utente = null;
             try
             {
@@ -245,7 +247,7 @@ namespace Cattedre
             ClsDipartimentoDL dipartimentoCoordinato = UtenteCoordinaDipartimento(IDutente);
             if (dipartimentoCoordinato == null)
                 return;
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -271,7 +273,7 @@ namespace Cattedre
         }
         public static long RilevaIDdipartimento (string nome)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             long ID = 0;
             try
             {
@@ -302,11 +304,13 @@ namespace Cattedre
             }
             return ID;
         }
+
+
         public static string RilevaNomeDipartimento(long id)
         {
             if (id == 0)
                 return "-";
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             string NomeDipartimento = "-";
             try
             {

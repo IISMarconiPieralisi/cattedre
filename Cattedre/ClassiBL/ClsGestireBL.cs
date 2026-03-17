@@ -11,7 +11,8 @@ namespace Cattedre
 {
     public static class ClsGestireBL
     {
-        private static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
 
         public static List<ClsDipartimentoDL> DipartimentiDellaDisciplina(long IDdisciplina)
         {

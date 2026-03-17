@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmIndirizzi));
             this.btElimina = new System.Windows.Forms.Button();
             this.brModifica = new System.Windows.Forms.Button();
             this.btInserisci = new System.Windows.Forms.Button();
@@ -148,6 +149,7 @@
             this.Controls.Add(this.brModifica);
             this.Controls.Add(this.btInserisci);
             this.Controls.Add(this.lvIndirizzi);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmIndirizzi";
             this.Text = "Indirizzi";

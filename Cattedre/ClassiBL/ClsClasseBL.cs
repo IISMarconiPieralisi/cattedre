@@ -170,7 +170,7 @@ namespace Cattedre
 
 
         #region popolamenti Specifici
-        public static List<ClsClasseDL> CaricaClassiDipartimento(int IDdipartimento)
+        public static List<ClsClasseDL> CaricaClassiDipartimento(int IDdipartimento, long IDannoscolastico)
         {
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
             DataTable dt = new DataTable();
@@ -182,10 +182,12 @@ namespace Cattedre
                     string sql = "SELECT * FROM classi " +
                                     "JOIN utenti ON utenti.ID = classi.IDutente " +
                                     "JOIN afferire ON afferire.IDutente = utenti.ID " +
-                                    "WHERE afferire.IDdipartimento = @IDdipartimento";
+                                    "WHERE afferire.IDdipartimento = @IDdipartimento " +
+                                    "AND classi.IDannoscolastico = @IDannoscolastico";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@Iddipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             da.Fill(dt);
@@ -205,6 +207,7 @@ namespace Cattedre
                     _classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
                     _classe.IDannoscolastico= (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]);
                     _classe.IDdipartimento = (row["IDdipartimento"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdipartimento"]);
+                    _classe.IDannoscolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]);
                     classi.Add(_classe);
                 }
             }

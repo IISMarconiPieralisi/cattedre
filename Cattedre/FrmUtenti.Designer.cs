@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmUtenti));
             this.lvUtenti = new System.Windows.Forms.ListView();
             this.chNome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chCognome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -297,6 +298,7 @@
             this.Controls.Add(this.btModifica);
             this.Controls.Add(this.btInserisci);
             this.Controls.Add(this.lvUtenti);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmUtenti";
             this.Text = "Utenti";
             this.Load += new System.EventHandler(this.FrmUtenti_Load);

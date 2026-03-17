@@ -25,7 +25,7 @@ namespace Cattedre
                     string sql = @"SELECT c.id,c.livello,c.nome,c.abilitazioniRichieste
                                     FROM classidiconcorso c
                                     INNER JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
-                                    WHERE r.ID = @IDdisciplina";
+                                    WHERE r.IDdisciplina = @IDdisciplina";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {

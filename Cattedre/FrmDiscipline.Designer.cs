@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDiscipline));
             this.cbDipartimenti = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btCerca = new System.Windows.Forms.Button();
@@ -297,6 +298,7 @@
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.btModifica);
             this.Controls.Add(this.btInserisci);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmDiscipline";
             this.Text = "Discipline";

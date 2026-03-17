@@ -42,9 +42,12 @@
             this.chClasseArticolataCon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chNomeCoordinatore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chIndirizzo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.clDipartimento = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chAnnoScolastico = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btRipristina = new System.Windows.Forms.Button();
             this.cbIndirizzi = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.btClasseSuccessiva = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cbAnnoClasse
@@ -68,7 +71,7 @@
             // btCerca
             // 
             this.btCerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btCerca.Location = new System.Drawing.Point(401, 16);
+            this.btCerca.Location = new System.Drawing.Point(744, 16);
             this.btCerca.Name = "btCerca";
             this.btCerca.Size = new System.Drawing.Size(75, 23);
             this.btCerca.TabIndex = 18;
@@ -79,9 +82,9 @@
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(563, 123);
+            this.btElimina.Location = new System.Drawing.Point(867, 182);
             this.btElimina.Name = "btElimina";
-            this.btElimina.Size = new System.Drawing.Size(75, 23);
+            this.btElimina.Size = new System.Drawing.Size(115, 28);
             this.btElimina.TabIndex = 17;
             this.btElimina.Text = "Elimina";
             this.btElimina.UseVisualStyleBackColor = true;
@@ -90,9 +93,9 @@
             // brModifica
             // 
             this.brModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.brModifica.Location = new System.Drawing.Point(563, 94);
+            this.brModifica.Location = new System.Drawing.Point(867, 143);
             this.brModifica.Name = "brModifica";
-            this.brModifica.Size = new System.Drawing.Size(75, 23);
+            this.brModifica.Size = new System.Drawing.Size(115, 28);
             this.brModifica.TabIndex = 16;
             this.brModifica.Text = "Modifica";
             this.brModifica.UseVisualStyleBackColor = true;
@@ -101,9 +104,9 @@
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(563, 65);
+            this.btInserisci.Location = new System.Drawing.Point(866, 65);
             this.btInserisci.Name = "btInserisci";
-            this.btInserisci.Size = new System.Drawing.Size(75, 23);
+            this.btInserisci.Size = new System.Drawing.Size(115, 28);
             this.btInserisci.TabIndex = 15;
             this.btInserisci.Text = "Inserisci";
             this.btInserisci.UseVisualStyleBackColor = true;
@@ -111,7 +114,8 @@
             // 
             // lvClassi
             // 
-            this.lvClassi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvClassi.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvClassi.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chSigla,
@@ -119,48 +123,68 @@
             this.chSezione,
             this.chClasseArticolataCon,
             this.chNomeCoordinatore,
-            this.chIndirizzo});
+            this.chIndirizzo,
+            this.clDipartimento,
+            this.chAnnoScolastico});
             this.lvClassi.FullRowSelect = true;
             this.lvClassi.HideSelection = false;
             this.lvClassi.Location = new System.Drawing.Point(17, 67);
             this.lvClassi.Name = "lvClassi";
-            this.lvClassi.Size = new System.Drawing.Size(540, 314);
+            this.lvClassi.Size = new System.Drawing.Size(843, 314);
             this.lvClassi.TabIndex = 14;
             this.lvClassi.UseCompatibleStateImageBehavior = false;
             this.lvClassi.View = System.Windows.Forms.View.Details;
             // 
             // chSigla
             // 
+            this.chSigla.DisplayIndex = 1;
             this.chSigla.Text = "Sigla";
             // 
             // chAnno
             // 
+            this.chAnno.DisplayIndex = 2;
             this.chAnno.Text = "Anno";
             // 
             // chSezione
             // 
+            this.chSezione.DisplayIndex = 3;
             this.chSezione.Text = "Sezione";
             // 
             // chClasseArticolataCon
             // 
+            this.chClasseArticolataCon.DisplayIndex = 4;
             this.chClasseArticolataCon.Text = "Articolata Con";
             this.chClasseArticolataCon.Width = 83;
             // 
             // chNomeCoordinatore
             // 
+            this.chNomeCoordinatore.DisplayIndex = 5;
             this.chNomeCoordinatore.Text = "Nome Coordinatore";
             this.chNomeCoordinatore.Width = 171;
             // 
             // chIndirizzo
             // 
+            this.chIndirizzo.DisplayIndex = 6;
             this.chIndirizzo.Text = "Indirizzo";
             this.chIndirizzo.Width = 102;
+            // 
+            // clDipartimento
+            // 
+            this.clDipartimento.DisplayIndex = 7;
+            this.clDipartimento.Text = "Dipartimento";
+            this.clDipartimento.Width = 150;
+            // 
+            // chAnnoScolastico
+            // 
+            this.chAnnoScolastico.DisplayIndex = 0;
+            this.chAnnoScolastico.Text = "Anno scolastico";
+            this.chAnnoScolastico.Width = 90;
             // 
             // btRipristina
             // 
             this.btRipristina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btRipristina.Enabled = false;
-            this.btRipristina.Location = new System.Drawing.Point(482, 16);
+            this.btRipristina.Location = new System.Drawing.Point(825, 16);
             this.btRipristina.Name = "btRipristina";
             this.btRipristina.Size = new System.Drawing.Size(75, 23);
             this.btRipristina.TabIndex = 21;
@@ -176,7 +200,7 @@
             this.cbIndirizzi.FormattingEnabled = true;
             this.cbIndirizzi.Location = new System.Drawing.Point(316, 17);
             this.cbIndirizzi.Name = "cbIndirizzi";
-            this.cbIndirizzi.Size = new System.Drawing.Size(50, 21);
+            this.cbIndirizzi.Size = new System.Drawing.Size(393, 21);
             this.cbIndirizzi.TabIndex = 23;
             // 
             // label2
@@ -188,11 +212,23 @@
             this.label2.TabIndex = 22;
             this.label2.Text = "Filtra per Indirizzi:";
             // 
+            // btClasseSuccessiva
+            // 
+            this.btClasseSuccessiva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btClasseSuccessiva.Location = new System.Drawing.Point(866, 104);
+            this.btClasseSuccessiva.Name = "btClasseSuccessiva";
+            this.btClasseSuccessiva.Size = new System.Drawing.Size(115, 28);
+            this.btClasseSuccessiva.TabIndex = 24;
+            this.btClasseSuccessiva.Text = "Classe successiva";
+            this.btClasseSuccessiva.UseVisualStyleBackColor = true;
+            this.btClasseSuccessiva.Click += new System.EventHandler(this.btClasseSuccessiva_Click);
+            // 
             // FrmClassi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(651, 396);
+            this.ClientSize = new System.Drawing.Size(994, 396);
+            this.Controls.Add(this.btClasseSuccessiva);
             this.Controls.Add(this.cbIndirizzi);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btRipristina);
@@ -231,5 +267,8 @@
         private System.Windows.Forms.ColumnHeader chIndirizzo;
         private System.Windows.Forms.ComboBox cbIndirizzi;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btClasseSuccessiva;
+        private System.Windows.Forms.ColumnHeader clDipartimento;
+        private System.Windows.Forms.ColumnHeader chAnnoScolastico;
     }
 }

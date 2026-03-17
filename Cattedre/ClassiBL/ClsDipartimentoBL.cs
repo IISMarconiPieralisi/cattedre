@@ -167,6 +167,33 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
+        public static string RilevaNomeDipartimento(long IDdipartimento)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            string NomeDipartimento = "-";
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    string sql = @"SELECT nome FROM dipartimenti WHERE ID=@ID";
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", IDdipartimento);
+                        MySqlDataReader dr = cmd.ExecuteReader();
+                        if (dr.HasRows)
+                            if (dr.Read())
+                                NomeDipartimento = dr["nome"].ToString();
+                        
+                    }
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return NomeDipartimento;
+
+        }
 
         public static ClsDipartimentoDL UtenteCoordinaDipartimento(long IDutente)
         {

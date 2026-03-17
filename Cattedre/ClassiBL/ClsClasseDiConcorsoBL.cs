@@ -11,10 +11,12 @@ namespace Cattedre
 {
     public static class ClsClasseDiConcorsoBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
         public static List<ClsClasseDiConcorsoDL> CaricaCdcs()
         {
 
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             DataTable dt = new DataTable();
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
             try
@@ -49,38 +51,43 @@ namespace Cattedre
             return cdcs;
         }
 
-        public static void InserisciCdc(ClsClasseDiConcorsoDL cdc)
+        public static long InserisciCdc(ClsClasseDiConcorsoDL cdc)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+            
 
-            try
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
-                string sql = "INSERT INTO classidiconcorso (livello, nome, abilitazioniRichieste) " +
-                    "VALUES (@livello, @nome, @abilitazioniRichieste)";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+                // 1) INSERT
+                string insertSql = @"
+            INSERT INTO classidiconcorso (nome, livello, abilitazioniRichieste)
+            VALUES (@nome, @livello, @abilitazioniRichieste);";
+
+                using (MySqlCommand cmd = new MySqlCommand(insertSql, conn))
                 {
                     cmd.Parameters.AddWithValue("@livello", cdc.Livello);
                     cmd.Parameters.AddWithValue("@nome", cdc.Nome);
                     cmd.Parameters.AddWithValue("@abilitazioniRichieste", cdc.AbilitazioniRichieste);
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
 
-                    if (righeCoinvolte < 0)
-                        throw new DataException("nessuna riga row");
+                    int righe = cmd.ExecuteNonQuery();
+                    if (righe <= 0)
+                        throw new DataException("Inserimento CDC fallito");
+                }
+
+                // 2) Recupero ID
+                using (MySqlCommand idCmd = new MySqlCommand("SELECT LAST_INSERT_ID();", conn))
+                {
+                    long newId = Convert.ToInt64(idCmd.ExecuteScalar());
+                    cdc.ID = newId;
+                    return newId;
                 }
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-
         }
 
         public static void ModificaCdc(ClsClasseDiConcorsoDL cdc, int indice)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
@@ -90,7 +97,7 @@ namespace Cattedre
                            SET livello = @livello,
                                nome = @nome, 
                                abilitazioniRichieste = @abilitazioniRichieste 
-                           WHERE id = @id";
+                           WHERE ID = @id";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
                     cmd.Parameters.AddWithValue("@id", cdc.ID);
@@ -110,13 +117,13 @@ namespace Cattedre
 
         public static void EliminaCdc(int id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "DELETE FROM classidiconcorso WHERE ID =@id ";
+                    string sql = "DELETE FROM classidiconcorso WHERE ID = @id ";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@id",id);
@@ -135,7 +142,7 @@ namespace Cattedre
         }
         public static List<ClsClasseDiConcorsoDL> RicercaPerNome(string _ricerca)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
             DataTable dt = new DataTable();
             _ricerca = $"%{_ricerca}%";

@@ -13,10 +13,12 @@ namespace Cattedre
 {
     public static class ClsUtenteBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
         #region rilevamento by Parametes
         public static long RilevaIDutente(string nome, string cognome)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             long IDutente = 0;
 
             try
@@ -51,7 +53,7 @@ namespace Cattedre
         }
         public static string RilevaNomeUtente(long id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             string risultato = null;
             try
             {
@@ -87,7 +89,7 @@ namespace Cattedre
         public static int TrovaIDdipartimento(long IDutente)
         {
             int risultato = 0;
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             try
             {
@@ -118,7 +120,7 @@ namespace Cattedre
         }
         public static bool TokenEsistente(long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             try
             {
@@ -150,7 +152,7 @@ namespace Cattedre
         #region caricamente by utentispecifici
         public static List<ClsUtenteDL> CaricaCoordinatoriDipartimenti()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             try
@@ -193,7 +195,7 @@ namespace Cattedre
 
         public static List<ClsUtenteDL> CaricaCoordinatoriClassi()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             DataTable dt = new DataTable();
@@ -202,7 +204,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT ID,email,cognome,nome,tipoUtente,colore,tipoDocente FROM utenti u WHERE u.tipoUtente LIKE '%D'";
+                    string sql = "SELECT ID,email,cognome,nome,tipoUtente,colore,tipoDocente FROM utenti  WHERE tipoUtente ='D' OR tipoUtente='C'";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -238,7 +240,7 @@ namespace Cattedre
         public static ClsUtenteDL caricautenteByEmail(string _email)
         {
             ClsUtenteDL utente = null;
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
@@ -277,7 +279,7 @@ namespace Cattedre
 
         public static List<ClsUtenteDL> CaricaUtenti()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             DataTable ds = new DataTable();
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
@@ -317,7 +319,7 @@ namespace Cattedre
         }
         public static void InserisciUtente(ClsUtenteDL utente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -351,7 +353,7 @@ namespace Cattedre
         }
         public static void ModificaUtente(ClsUtenteDL utente, long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             try
             {
@@ -393,7 +395,7 @@ namespace Cattedre
 
         public static void EliminaUtente(long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -419,7 +421,7 @@ namespace Cattedre
         #region Operazioni Crud specifiche
         public static void InserisciTokenUtente(string token, long Idutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -450,7 +452,7 @@ namespace Cattedre
         }
         public static void cancellaTokenUtente(long Idutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -482,7 +484,7 @@ namespace Cattedre
         #region Login e logout
         public static bool Login(string email, string password)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
@@ -518,7 +520,7 @@ namespace Cattedre
         /// <returns></returns>
         public static bool LoginByemail(string email)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             int UtentiLoggati = 0;
             try
             {
@@ -557,9 +559,9 @@ namespace Cattedre
 
         #endregion
         #region filtri
-        public static List<ClsUtenteDL> FiltraUtenti(List<string> parametri, string Filtro)
+        public static List<ClsUtenteDL> FiltraUtenti(Dictionary<string, List<string>> Filtri)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             DataTable ds = new DataTable();
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
@@ -568,7 +570,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = CreaComandoRicerca(Filtro, parametri, conn))
+                    using (MySqlCommand cmd = CreaComandoRicerca(Filtri, conn))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
@@ -598,31 +600,40 @@ namespace Cattedre
             }
             return utenti;
         }
-        public static MySqlCommand CreaComandoRicerca(string Filtro, List<string> parametri, MySqlConnection conn)
+        public static MySqlCommand CreaComandoRicerca(Dictionary<string, List<string>> filtri, MySqlConnection conn)
         {
-            string sql = "SELECT ID, nome, cognome, email, password, tipoutente, tipodocente, colore FROM utenti ";
-            MySqlCommand cmd = new MySqlCommand("", conn);
-            switch (Filtro)
+            string sql = "SELECT u.ID, u.nome, u.cognome, email, password, tipoutente, tipodocente, colore FROM utenti u JOIN contratti c ON u.ID=c.IDutente";
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conn;
+            List<string> condizioni = new List<string>();
+            int paramIndex = 0;
+            foreach (var filtro in filtri)
             {
-                case "tipoDocente":
-                    sql += "WHERE tipoDocente = @tipoDocente";
-                    cmd.Parameters.AddWithValue("@TipoDocente", parametri[0]);
-                    break;
-                case "tipoUtente":
-                    List<string> orConditions = new List<string>();
-                    for (int i = 0; i < parametri.Count; i++)
-                    {
-                        orConditions.Add($"tipoUtente = @param{i}");
-                        cmd.Parameters.AddWithValue($"@param{i}", parametri[i]);
-                    }
-                    sql += "WHERE " + string.Join(" OR ", orConditions);
-                    break;
-                case "tipoContratto":
-                    // Corretto FORM in FROM e aggiunto parametro
-                    sql = "SELECT u.* FROM utenti u JOIN contratti c ON u.ID = c.IDutente WHERE c.tipoContratto = @param0";
-                    cmd.Parameters.AddWithValue("@param0", parametri[0]);
-                    break;
+                string colonna = filtro.Key;
+                List<string> valori = filtro.Value;
+
+                if (valori == null || valori.Count == 0)
+                    continue;
+
+                List<string> orConditions = new List<string>();
+
+                foreach (var valore in valori)
+                {
+                    string paramName = "@p" + paramIndex;
+                    orConditions.Add($"{colonna} = {paramName}");
+                    cmd.Parameters.AddWithValue(paramName, valore);
+                    paramIndex++;
+                }
+
+                // Combina valori dello stesso filtro con OR
+                condizioni.Add("(" + string.Join(" OR ", orConditions) + ")");
             }
+
+            if (condizioni.Count > 0)
+            {
+                sql += " WHERE " + string.Join(" AND ", condizioni);
+            }
+
             cmd.CommandText = sql;
             return cmd;
         }
@@ -630,7 +641,7 @@ namespace Cattedre
         #region ricerca
         public static List<ClsUtenteDL> RicercaPerNomeCognome(string _ricerca)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             DataTable dt = new DataTable();
             _ricerca = $"%{_ricerca}%";

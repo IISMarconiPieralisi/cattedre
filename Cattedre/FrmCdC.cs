@@ -31,6 +31,9 @@ namespace Cattedre
                     _cdc.Nome = tbNome.Text;
                     _dot.NumcattedreDiritto = Convert.ToInt32(nudNumCattedreDiritto.Value);
                     _dot.NumcattedreFatto = Convert.ToInt32(nudNumCattedreFatto.Value);
+
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
                 else
                     throw new Exception("Inserire tutti i valori richiesti");

@@ -87,9 +87,10 @@ namespace Cattedre
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
 
             conn.Open();
-            string sql = "SELECT * FROM discipline " +
-                "WHERE IDdipartimento = @IDdipartimento " +
-                "AND discipline.nome NOT LIKE '%Potenziamento%'";
+            string sql = "SELECT * FROM discipline d " +
+                "JOIN gestire g ON g.IDdisciplina = d.ID " +
+                "WHERE g.IDdipartimento = @IDdipartimento " +
+                "AND d.nome NOT LIKE '%Potenziamento%'";
             //DataAdapter, DataSet e DataTable su dispensa ADO.Net
             MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
             da.SelectCommand.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
@@ -109,7 +110,7 @@ namespace Cattedre
                     Convert.ToInt32(dt.Rows[i]["oreLaboratorio"]),
                     Convert.ToInt32(dt.Rows[i]["oreTeoria"]),
                     dt.Rows[i]["disciplinaSpeciale"].ToString());
-                _disciplina.IDdisciplinaSuccessiva = Convert.ToInt32(dt.Rows[i]["IDdisciplinaSuccessiva"]);
+                _disciplina.IDdisciplinaSuccessiva = (dt.Rows[i]["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(dt.Rows[i]["IDdisciplinaSuccessiva"]);
                 discipline.Add(_disciplina);
             }
             conn.Close();

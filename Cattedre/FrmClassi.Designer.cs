@@ -219,7 +219,7 @@
             this.btClasseSuccessiva.Name = "btClasseSuccessiva";
             this.btClasseSuccessiva.Size = new System.Drawing.Size(115, 28);
             this.btClasseSuccessiva.TabIndex = 24;
-            this.btClasseSuccessiva.Text = "Classe successiva";
+            this.btClasseSuccessiva.Text = "Crea classi succ";
             this.btClasseSuccessiva.UseVisualStyleBackColor = true;
             this.btClasseSuccessiva.Click += new System.EventHandler(this.btClasseSuccessiva_Click);
             // 

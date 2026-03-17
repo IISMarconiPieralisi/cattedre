@@ -77,7 +77,7 @@ namespace Cattedre
                 {
                     MessageBox.Show($"Errore: {ex.Message} in riga {ex.Source} /n riprovare", "Errore");
                 }
-                discipline = ClsDisciplinaBL.CaricaDiscipline();
+                discipline = ClsDisciplinaBL.CaricaDiscipline(0, 0, "");
                 CaricaListView(discipline);
 
             }
@@ -85,7 +85,7 @@ namespace Cattedre
 
         private void FrmDiscipline_Load(object sender, EventArgs e)
         {
-            discipline = ClsDisciplinaBL.CaricaDiscipline();
+            discipline = ClsDisciplinaBL.CaricaDiscipline(0, 0, "");
             dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
             CaricaListView(discipline);
             GestionePermessi();
@@ -121,7 +121,7 @@ namespace Cattedre
                 {
                     ClsDisciplinaBL.EliminaDisciplina(idDaEliminare);
                 }
-                discipline = ClsDisciplinaBL.CaricaDiscipline();
+                discipline = ClsDisciplinaBL.CaricaDiscipline(0, 0, "");
                 CaricaListView(discipline);
             }
             else
@@ -148,7 +148,7 @@ namespace Cattedre
                     {
                         MessageBox.Show($"Errore nella modifica {ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    discipline = ClsDisciplinaBL.CaricaDiscipline();
+                    discipline = ClsDisciplinaBL.CaricaDiscipline(0, 0, "");
                     CaricaListView(discipline);
 
                 }
@@ -200,7 +200,7 @@ namespace Cattedre
             rbAnno3.Checked = false;
             rbAnno4.Checked = false;
             rbAnno5.Checked = false;
-            discipline = ClsDisciplinaBL.CaricaDiscipline();
+            discipline = ClsDisciplinaBL.CaricaDiscipline(0, 0, "");
             CaricaListView(discipline);
             btPulisciCb.Enabled = false;
 

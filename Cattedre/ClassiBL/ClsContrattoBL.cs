@@ -14,11 +14,13 @@ namespace Cattedre
     {
         public static int _IDutente;
         public static List<long> IDutenti = new List<long>();
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
 
         public static List<ClsContrattoDL> CaricaContratti()
         {
             IDutenti.Clear();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             DataTable ds = new DataTable();
             List<ClsContrattoDL> Contratti = new List<ClsContrattoDL>();
@@ -59,7 +61,7 @@ namespace Cattedre
 
         public static void InserisciContratto(ClsContrattoDL contratto, long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             
             IDutenti.Clear();
@@ -91,7 +93,7 @@ namespace Cattedre
 
         public static void ModificaContratto(ClsContrattoDL contratto, long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             //se il contratto non esiste lo inserisco al posto di modificarlo
             if (cercaContratto(IDutente)==null)
@@ -132,7 +134,7 @@ namespace Cattedre
 
         public static List<ClsContrattoDL> EliminaContratto(int id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsContrattoDL> contratti = new List<ClsContrattoDL>();
 
@@ -160,7 +162,7 @@ namespace Cattedre
         public static ClsContrattoDL cercaContratto(long idUtente)
         {
             ClsContrattoDL contrattoTrovato = null;
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             string sql = @"SELECT * 
                    FROM contratti 
@@ -206,7 +208,7 @@ namespace Cattedre
 
         public static int RilevaOreContrattoDoc(long id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             ClsContrattoDL contratto = new ClsContrattoDL();
             try

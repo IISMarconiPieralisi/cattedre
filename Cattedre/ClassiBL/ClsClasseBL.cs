@@ -11,9 +11,11 @@ namespace Cattedre
 {
     public static class ClsClasseBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
         public static ClsClasseDL CaricaClasse(long id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -46,7 +48,7 @@ namespace Cattedre
 
         public static ClsClasseDL TrovaClasse(string sezione, int anno, long IDindirizzo)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -166,7 +168,7 @@ namespace Cattedre
             return _ID;
         }
 
-        #endregion
+
         #region popolamenti Specifici
         public static List<ClsClasseDL> CaricaClassiDipartimento(int IDdipartimento)
         {

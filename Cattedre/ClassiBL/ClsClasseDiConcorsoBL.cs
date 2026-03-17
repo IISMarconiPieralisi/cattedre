@@ -11,10 +11,12 @@ namespace Cattedre
 {
     public static class ClsClasseDiConcorsoBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
         public static List<ClsClasseDiConcorsoDL> CaricaCdcs()
         {
 
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             DataTable dt = new DataTable();
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
             try
@@ -51,7 +53,7 @@ namespace Cattedre
 
         public static long InserisciCdc(ClsClasseDiConcorsoDL cdc)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -85,7 +87,7 @@ namespace Cattedre
 
         public static void ModificaCdc(ClsClasseDiConcorsoDL cdc, int indice)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
@@ -115,7 +117,7 @@ namespace Cattedre
 
         public static void EliminaCdc(int id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -140,7 +142,7 @@ namespace Cattedre
         }
         public static List<ClsClasseDiConcorsoDL> RicercaPerNome(string _ricerca)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
             DataTable dt = new DataTable();
             _ricerca = $"%{_ricerca}%";

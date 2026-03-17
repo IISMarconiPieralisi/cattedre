@@ -11,6 +11,9 @@ namespace Cattedre
 {
     public static class ClsAnnoScolasticoBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+
         public static long TrovaIDannoscolastico()
         {
             ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
@@ -18,7 +21,6 @@ namespace Cattedre
 
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
@@ -63,7 +65,6 @@ namespace Cattedre
 
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();

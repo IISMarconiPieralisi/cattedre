@@ -648,12 +648,13 @@ namespace Cattedre
 
 
                     IDdipartimento = cbDipartimenti.SelectedIndex + 1;
-                    IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
+                    //IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
 
                     PulisciDipartimento();
 
                     await Task.Run(() =>
                     {
+                        IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
                         classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
                         discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
                     });
@@ -662,6 +663,9 @@ namespace Cattedre
                     LoadDiscipline(IDdipartimento);
                     LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
                     LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+
+                    string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
+                    cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
                 }
             }
             catch(Exception ex)
@@ -717,11 +721,13 @@ namespace Cattedre
 
         private void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
         {
-            IDdipartimento = cbDipartimenti.SelectedIndex + 1;
-            IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
+            //IDdipartimento = cbDipartimenti.SelectedIndex + 1;
+            //IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
 
             Annoscolasticoselezionato = cbAnniScolastici.SelectedItem.ToString();
-
+            ClsAnnoScolasticoDL annoscolastico = new ClsAnnoScolasticoDL();
+            annoscolastico = ClsAnnoScolasticoBL.CercaAnnoScolastico(Annoscolasticoselezionato);
+            LoadClassi(IDdipartimento, annoscolastico.ID);
             LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
             LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
         }

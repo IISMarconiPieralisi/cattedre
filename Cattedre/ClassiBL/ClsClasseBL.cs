@@ -11,56 +11,78 @@ namespace Cattedre
 {
     public static class ClsClasseBL
     {
-        internal  static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-        #region ricerce specifiche
-        public static ClsClasseDL CaricaClasseDaID(long idClasse)
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+        public static ClsClasseDL CaricaClasse(long id)
         {
-            ClsClasseDL classe = null;
-            DataTable ds = new DataTable();
+            
 
-            try
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                conn.Open();
+
+                string sql = @"SELECT * 
+                       FROM classi
+                       WHERE ID = @id";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
-                    conn.Open();
-                    // Query filtrata per ID
-                    string sql = "SELECT * FROM classi WHERE id = @id";
-
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    if (dr.Read())
                     {
-                        cmd.Parameters.AddWithValue("@id", idClasse);
-
-                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        return new ClsClasseDL
                         {
-                            dr.Fill(ds);
-                        }
+                            ID = Convert.ToInt64(dr["ID"]),
+                            Sezione = dr["sezione"].ToString(),
+                            Anno = Convert.ToInt32(dr["anno"]),
+                            Idindirizzo = Convert.ToInt64(dr["IDindirizzo"])
+                        };
                     }
                 }
+            }
 
-                // Se abbiamo trovato una riga, mappiamo l'oggetto
-                if (ds.Rows.Count > 0)
+            return null;
+        }
+
+        public static ClsClasseDL TrovaClasse(string sezione, int anno, long IDindirizzo)
+        {
+            
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT * 
+                       FROM classi
+                       WHERE sezione = @sezione
+                       AND anno = @anno
+                       AND IDindirizzo = @IDindirizzo";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@sezione", sezione);
+                cmd.Parameters.AddWithValue("@anno", anno);
+                cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
-                    DataRow row = ds.Rows[0];
-                    classe = new ClsClasseDL
+                    if (dr.Read())
                     {
-                        ID = Convert.ToInt64(row["ID"]),
-                        Sigla = row["sigla"].ToString(),
-                        Anno = Convert.ToInt32(row["anno"]),
-                        Sezione = row["sezione"].ToString(),
-                        // Gestione null per i campi opzionali
-                        ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]),
-                        Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]),
-                        Idindirizzo = Convert.ToInt64(row["IDindirizzo"])
-                    };
+                        return new ClsClasseDL
+                        {
+                            ID = Convert.ToInt64(dr["ID"]),
+                            Sezione = dr["sezione"].ToString(),
+                            Anno = Convert.ToInt32(dr["anno"]),
+                            Idindirizzo = Convert.ToInt64(dr["IDindirizzo"])
+                        };
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
 
-            return classe;
+            return null;
         }
+
         public static long TrovaIndirizzoClasse(long IDclasse)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -146,7 +168,7 @@ namespace Cattedre
             return _ID;
         }
 
-        #endregion
+
         #region popolamenti Specifici
         public static List<ClsClasseDL> CaricaClassiDipartimento(int IDdipartimento)
         {

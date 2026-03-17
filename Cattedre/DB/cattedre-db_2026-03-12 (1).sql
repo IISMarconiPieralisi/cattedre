@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Creato il: Feb 13, 2026 alle 20:22
+-- Creato il: Mar 12, 2026 alle 09:01
 -- Versione del server: 8.2.0
 -- Versione PHP: 8.3.0
 
@@ -43,7 +43,9 @@ INSERT INTO `afferire` (`ID`, `IDdipartimento`, `IDutente`) VALUES
 (6, 1, 4),
 (7, 1, 1),
 (8, 3, 6),
-(9, 3, 5);
+(9, 1, 5),
+(10, 1, 9),
+(11, 3, 7);
 
 -- --------------------------------------------------------
 
@@ -63,8 +65,8 @@ CREATE TABLE `anniscolastici` (
 --
 
 INSERT INTO `anniscolastici` (`ID`, `sigla`, `datainizio`, `datafine`) VALUES
-(1, '24-25', '2024-09-11', '2025-06-07'),
-(7, '25-26', '2025-09-15', '2026-06-06');
+(1, '24-25', '2024-09-11', '2025-06-05'),
+(2, '25-26', '2025-09-15', '2026-06-06');
 
 -- --------------------------------------------------------
 
@@ -76,6 +78,42 @@ CREATE TABLE `appartenere` (
   `IDindirizzo` int UNSIGNED DEFAULT NULL,
   `IDdisciplina` int UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `appartenere`
+--
+
+INSERT INTO `appartenere` (`IDindirizzo`, `IDdisciplina`) VALUES
+(1, 1),
+(1, 2),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13),
+(1, 19),
+(1, 20),
+(1, 21),
+(1, 22),
+(1, 23),
+(1, 24),
+(1, 25),
+(1, 26),
+(1, 36),
+(2, 1),
+(2, 9),
+(2, 14),
+(2, 15),
+(2, 16),
+(2, 17),
+(3, 1),
+(3, 14),
+(3, 15),
+(3, 16),
+(3, 18),
+(4, 1),
+(5, 1),
+(6, 1);
 
 -- --------------------------------------------------------
 
@@ -102,9 +140,12 @@ INSERT INTO `assegnare` (`ID`, `dal`, `al`, `oreSpeciali`, `IDannoscolastico`, `
 (1, '2024-09-11', '2025-06-07', 0, 1, 1, 1, 1),
 (3, '2024-09-11', '2025-06-07', 0, 1, 5, 2, 1),
 (4, '2024-09-11', '2025-06-07', 0, 1, 2, 19, 4),
-(5, '2024-09-11', '2025-06-07', 0, 1, 1, 23, 7),
-(6, NULL, NULL, 8, 7, 9, 36, NULL),
-(7, NULL, NULL, 2, 7, 5, 36, NULL);
+(5, '2024-09-11', '2025-06-07', 0, 1, 5, 23, 7),
+(6, '2024-09-11', '2025-06-07', 2, 1, 9, 36, NULL),
+(7, NULL, NULL, 2, 2, 5, 36, NULL),
+(8, '2025-09-15', '2026-06-06', 0, 2, 2, 2, 1),
+(9, '2025-09-15', '2026-06-06', 0, 2, 5, 23, 7),
+(10, '2025-09-15', '2026-06-06', 0, 2, 5, 19, 4);
 
 -- --------------------------------------------------------
 
@@ -128,10 +169,11 @@ CREATE TABLE `classi` (
 
 INSERT INTO `classi` (`ID`, `sigla`, `anno`, `sezione`, `classeArticolataCon`, `IDutente`, `IDindirizzo`) VALUES
 (1, '4BM', 4, 'BM', NULL, 4, 1),
-(2, '2MP', 2, 'MP', NULL, 6, 4),
+(2, '2MP', 2, 'MP', NULL, 6, 5),
 (4, '3BM', 3, 'BM', NULL, 2, 1),
 (5, '4FM', 4, 'FM', NULL, 7, 2),
-(7, '5BM', 5, 'BM', NULL, 1, 1);
+(7, '5BM', 5, 'BM', NULL, 1, 1),
+(8, '4HM', 4, 'HM', NULL, 8, 3);
 
 -- --------------------------------------------------------
 
@@ -187,7 +229,7 @@ INSERT INTO `contratti` (`ID`, `tipoContratto`, `monteOre`, `datainizio`, `dataf
 CREATE TABLE `dipartimenti` (
   `ID` int UNSIGNED NOT NULL,
   `nome` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `IDutente` int UNSIGNED DEFAULT NULL
+  `IDutente` int UNSIGNED DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -212,35 +254,59 @@ CREATE TABLE `discipline` (
   `oreLaboratorio` tinyint UNSIGNED NOT NULL,
   `oreTeoria` tinyint UNSIGNED NOT NULL,
   `disciplinaSpeciale` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `IDdipartimento` int UNSIGNED NOT NULL
+  `IDdipartimento` int UNSIGNED DEFAULT '0',
+  `IDdisciplinaSuccessiva` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dump dei dati per la tabella `discipline`
 --
 
-INSERT INTO `discipline` (`ID`, `nome`, `anno`, `oreLaboratorio`, `oreTeoria`, `disciplinaSpeciale`, `IDdipartimento`) VALUES
-(1, 'Matematica', 3, 0, 4, '', 2),
-(2, 'Informatica', 4, 3, 3, NULL, 1),
-(9, 'Sistemi', 4, 2, 2, NULL, 1),
-(10, 'TPSIT', 4, 1, 1, NULL, 1),
-(11, 'AI', 4, 1, 0, NULL, 1),
-(12, 'GPOI', 5, 0, 3, NULL, 1),
-(13, 'Telecomunicazioni', 4, 2, 1, NULL, 1),
-(14, 'TPSEE', 4, 3, 1, NULL, 3),
-(15, 'Elettr/Elettrot', 4, 2, 3, NULL, 3),
-(16, 'Sistemi automatici', 4, 2, 3, NULL, 3),
-(17, 'Energie rinnovabili', 4, 2, 0, NULL, 3),
-(18, 'Robotica industriale', 4, 2, 0, NULL, 3),
-(19, 'Informatica', 3, 3, 3, '', 1),
-(20, 'Sistemi', 3, 2, 2, NULL, 1),
-(21, 'TPSIT', 3, 1, 2, NULL, 1),
-(22, 'Telecomunicazioni', 3, 2, 1, NULL, 1),
-(23, 'Informatica', 5, 4, 2, NULL, 1),
-(24, 'Sistemi', 5, 3, 1, NULL, 1),
-(25, 'TPSIT', 5, 2, 1, NULL, 1),
-(26, 'AI', 5, 1, 0, NULL, 1),
-(36, 'Potenziamento B16', 0, 18, 0, 'potenziamento', 1);
+INSERT INTO `discipline` (`ID`, `nome`, `anno`, `oreLaboratorio`, `oreTeoria`, `disciplinaSpeciale`, `IDdipartimento`, `IDdisciplinaSuccessiva`) VALUES
+(1, 'Matematica', 3, 0, 4, '', 2, NULL),
+(2, 'Informatica', 4, 3, 3, '', 1, NULL),
+(9, 'Sistemi', 4, 2, 2, '', 1, NULL),
+(10, 'TPSIT', 4, 1, 1, '', 1, NULL),
+(11, 'AI', 4, 1, 0, NULL, 1, NULL),
+(12, 'GPOI', 5, 0, 3, '', 1, NULL),
+(13, 'Telecomunicazioni', 4, 2, 1, '', 1, NULL),
+(14, 'TPSEE', 4, 3, 1, '', 3, NULL),
+(15, 'Elettr/Elettrot', 4, 2, 3, '', 3, NULL),
+(16, 'Sistemi automatici', 4, 2, 3, '', 3, NULL),
+(17, 'Energie rinnovabili', 4, 2, 0, '', 3, NULL),
+(18, 'Robotica industriale', 4, 2, 0, '', 3, NULL),
+(19, 'Informatica', 3, 3, 3, '', 1, NULL),
+(20, 'Sistemi', 3, 2, 2, '', 1, NULL),
+(21, 'TPSIT', 3, 1, 2, '', 1, NULL),
+(22, 'Telecomunicazioni', 3, 2, 1, '', 1, NULL),
+(23, 'Informatica', 5, 4, 2, '', 1, NULL),
+(24, 'Sistemi', 5, 3, 1, '', 1, NULL),
+(25, 'TPSIT', 5, 2, 1, '', 1, NULL),
+(26, 'AI', 5, 1, 0, NULL, 1, NULL),
+(36, 'Potenziamento B16', 0, 18, 0, 'potenziamento', 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `dotare`
+--
+
+CREATE TABLE `dotare` (
+  `ID` int UNSIGNED NOT NULL,
+  `IDannoscolastico` int UNSIGNED NOT NULL,
+  `IDclassediconcorso` int UNSIGNED NOT NULL,
+  `numcattedrediritto` int NOT NULL,
+  `numcattedrefatto` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dump dei dati per la tabella `dotare`
+--
+
+INSERT INTO `dotare` (`ID`, `IDannoscolastico`, `IDclassediconcorso`, `numcattedrediritto`, `numcattedrefatto`) VALUES
+(1, 1, 1, 10, 8),
+(2, 1, 2, 6, 4),
+(3, 1, 7, 5, 5);
 
 -- --------------------------------------------------------
 
@@ -260,9 +326,10 @@ CREATE TABLE `indirizzi` (
 INSERT INTO `indirizzi` (`ID`, `nome`) VALUES
 (1, 'Informatica'),
 (2, 'Elettronica'),
-(3, 'Meccatronica'),
-(4, 'Moda'),
-(5, 'MAT');
+(3, 'Automazione'),
+(4, 'Meccatronica'),
+(5, 'Moda'),
+(6, 'MAT');
 
 -- --------------------------------------------------------
 
@@ -274,22 +341,23 @@ CREATE TABLE `richiedere` (
   `ID` int NOT NULL,
   `IDutente` int UNSIGNED DEFAULT NULL,
   `IDclasseDiConcorso` int UNSIGNED DEFAULT NULL,
-  `IDdisciplina` int UNSIGNED DEFAULT NULL
+  `IDdisciplina` int UNSIGNED DEFAULT NULL,
+  `oreSpeciali` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dump dei dati per la tabella `richiedere`
 --
 
-INSERT INTO `richiedere` (`ID`, `IDutente`, `IDclasseDiConcorso`, `IDdisciplina`) VALUES
-(1, 1, 2, 1),
-(2, 2, 1, 2),
-(3, 5, 1, 2),
-(4, 9, 7, 36),
-(5, 9, 7, 2),
-(6, 6, 1, NULL),
-(7, 6, 7, NULL),
-(8, 5, 1, NULL);
+INSERT INTO `richiedere` (`ID`, `IDutente`, `IDclasseDiConcorso`, `IDdisciplina`, `oreSpeciali`) VALUES
+(1, 1, 2, 1, 0),
+(2, 2, 1, 2, 0),
+(3, 5, 1, 2, 0),
+(4, 9, 7, 36, 0),
+(5, 9, 7, 2, 0),
+(6, 6, 1, NULL, 0),
+(7, 6, 7, NULL, 0),
+(8, 5, 1, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -306,7 +374,7 @@ CREATE TABLE `utenti` (
   `tipoUtente` char(1) CHARACTER SET armscii8 COLLATE armscii8_general_ci NOT NULL COMMENT 'P=Preside, A=Amministratore, D=Docente, C=Coordinatore del dipartimento ',
   `tipoDocente` char(1) CHARACTER SET armscii8 COLLATE armscii8_general_ci DEFAULT NULL,
   `colore` char(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `token` char(248) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `token` char(248) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -314,15 +382,15 @@ CREATE TABLE `utenti` (
 --
 
 INSERT INTO `utenti` (`ID`, `email`, `password`, `cognome`, `nome`, `tipoUtente`, `tipoDocente`, `colore`, `token`) VALUES
-(1, 'mario.rossi@iismarconipieralisi.it', 'marros00!', 'Rossi', 'Mario', 'D', 'T', '', NULL),
-(2, 'luigi.bianchi@iismarconipieralisi.it\r\n', 'luibia00!', 'Bianchi', 'Luigi', 'D', 'L', '', NULL),
+(1, 'mario.rossi@iismarconipieralisi.it', 'marros00!', 'Rossi', 'Mario', 'D', 'T', '#E53935', NULL),
+(2, 'luigi.bianchi@iismarconipieralisi.it\r\n', 'luibia00!', 'Bianchi', 'Luigi', 'D', 'L', '#1E88E5', NULL),
 (3, 'mariarita.fiordelmondo@iismarconipieralisi.it', 'marfio00!', 'Fiordelmondo', 'Maria Rita', 'P', NULL, '', NULL),
-(4, 'marco.aquilanti@iismarconipieralisi.it', 'maraqu00!', 'Aquilanti', 'Marco', 'D', 'L', '', NULL),
-(5, 'Marcello.Pigini@iismarconipieralisi.it', 'Pigini', 'Pigini', 'Marcello', 'C', 'L', '000000064', NULL),
-(6, 'carmelo.grigi@iismarconipieralisi.it', 'cargri00!', 'Grigi', 'Carmelo', 'D', 'T', '', NULL),
-(7, 'simone.neri@iismarconipieralisi.it', 'simner00!', 'Neri', 'Simone', 'D', 'T', '', NULL),
-(8, 'alessandro.savore@iismarconipieralisi.it', 'alesav00!', 'Savore', 'Alessandro', 'C', 'T', '', NULL),
-(9, 'vittorio.alfieri@iismarconipieralisi.it', 'vitalf00!', 'Alfieri', 'Vittorio', 'A', 'L', '', NULL);
+(4, 'marco.aquilanti@iismarconipieralisi.it', 'maraqu00!', 'Aquilanti', 'Marco', 'D', 'L', '#43A047', NULL),
+(5, 'Marcello.Pigini@iismarconipieralisi.it', 'Pigini', 'Pigini', 'Marcello', 'C', 'T', '#8E24AA', NULL),
+(6, 'carmelo.grigi@iismarconipieralisi.it', 'cargri00!', 'Grigi', 'Carmelo', 'D', 'T', '#F4511E', NULL),
+(7, 'simone.neri@iismarconipieralisi.it', 'simner00!', 'Neri', 'Simone', 'D', 'T', '#00ACC1', NULL),
+(8, 'alessandro.savore@iismarconipieralisi.it', 'alesav00!', 'Savore', 'Alessandro', 'C', 'T', '#6D4C41', NULL),
+(9, 'vittorio.alfieri@iismarconipieralisi.it', 'vitalf00!', 'Alfieri', 'Vittorio', 'A', 'L', '#FFB300', NULL);
 
 --
 -- Indici per le tabelle scaricate
@@ -396,6 +464,14 @@ ALTER TABLE `discipline`
   ADD KEY `IDdipartimento` (`IDdipartimento`) USING BTREE;
 
 --
+-- Indici per le tabelle `dotare`
+--
+ALTER TABLE `dotare`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `IDannoscolastico` (`IDannoscolastico`),
+  ADD KEY `IDclassediconcorso` (`IDclassediconcorso`);
+
+--
 -- Indici per le tabelle `indirizzi`
 --
 ALTER TABLE `indirizzi`
@@ -425,25 +501,25 @@ ALTER TABLE `utenti`
 -- AUTO_INCREMENT per la tabella `afferire`
 --
 ALTER TABLE `afferire`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT per la tabella `anniscolastici`
 --
 ALTER TABLE `anniscolastici`
-  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT per la tabella `assegnare`
 --
 ALTER TABLE `assegnare`
-  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT per la tabella `classi`
 --
 ALTER TABLE `classi`
-  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT per la tabella `classidiconcorso`
@@ -470,10 +546,16 @@ ALTER TABLE `discipline`
   MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
+-- AUTO_INCREMENT per la tabella `dotare`
+--
+ALTER TABLE `dotare`
+  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT per la tabella `indirizzi`
 --
 ALTER TABLE `indirizzi`
-  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=203;
 
 --
 -- AUTO_INCREMENT per la tabella `richiedere`
@@ -520,7 +602,7 @@ ALTER TABLE `assegnare`
 ALTER TABLE `classi`
   ADD CONSTRAINT `classeArticolata` FOREIGN KEY (`classeArticolataCon`) REFERENCES `classi` (`ID`) ON UPDATE CASCADE,
   ADD CONSTRAINT `IDindirizzoClasse` FOREIGN KEY (`IDindirizzo`) REFERENCES `indirizzi` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `IDutenteClassi` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `IDutenteClassi` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `contratti`
@@ -538,15 +620,22 @@ ALTER TABLE `dipartimenti`
 -- Limiti per la tabella `discipline`
 --
 ALTER TABLE `discipline`
-  ADD CONSTRAINT `IDdipartimentoDiscipline` FOREIGN KEY (`IDdipartimento`) REFERENCES `dipartimenti` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `IDdipartimentoDiscipline` FOREIGN KEY (`IDdipartimento`) REFERENCES `dipartimenti` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `dotare`
+--
+ALTER TABLE `dotare`
+  ADD CONSTRAINT `fkAS` FOREIGN KEY (`IDannoscolastico`) REFERENCES `anniscolastici` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fkCdc` FOREIGN KEY (`IDclassediconcorso`) REFERENCES `classidiconcorso` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Limiti per la tabella `richiedere`
 --
 ALTER TABLE `richiedere`
-  ADD CONSTRAINT `IDclasseDiConcorsoRichiedere` FOREIGN KEY (`IDclasseDiConcorso`) REFERENCES `classidiconcorso` (`ID`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ADD CONSTRAINT `IDdisciplinaRichiedere` FOREIGN KEY (`IDdisciplina`) REFERENCES `discipline` (`ID`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ADD CONSTRAINT `IDutenteRichiedere` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `IDclasseDiConcorsoRichiedere` FOREIGN KEY (`IDclasseDiConcorso`) REFERENCES `classidiconcorso` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDdisciplinaRichiedere` FOREIGN KEY (`IDdisciplina`) REFERENCES `discipline` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDutenteRichiedere` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

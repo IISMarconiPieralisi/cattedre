@@ -9,13 +9,14 @@ namespace Cattedre
     public class ClsDisciplinaDL
     {
         #region ATTRIBUTI
-        long _id, _IDdipartimento;
+        long _id;
         string _nome, _disciplinaSpeciale;
         int _oreTeoria, _oreLaboratorio, _anno;
+        long _iddisciplinaSuccessiva;
         #endregion
 
         #region COSTRUTTORE
-        public ClsDisciplinaDL(long id, string nome, int anno, int orelaboratorio, int oreteoria, string disciplinaspeciale, long IDdipartimento)
+        public ClsDisciplinaDL(long id, string nome, int anno, int orelaboratorio, int oreteoria, string disciplinaspeciale)
         {
             _id = id;
             _nome = nome;
@@ -23,7 +24,6 @@ namespace Cattedre
             _oreLaboratorio = orelaboratorio;
             _oreTeoria = oreteoria;
             _disciplinaSpeciale = disciplinaspeciale;
-            _IDdipartimento = IDdipartimento;
         }
 
         public ClsDisciplinaDL()
@@ -97,16 +97,8 @@ namespace Cattedre
             }
         }
 
-        public long IDdipartimento
-        {
-            get => _IDdipartimento;
-            set
-            {
-                if (value <= 0)
-                    throw new ArgumentException("ID Dipartimento deve essere maggiore di zero.");
-                _IDdipartimento = value;
-            }
-        }
+        public long IDdisciplinaSuccessiva
+        { get => _iddisciplinaSuccessiva; set => _iddisciplinaSuccessiva = value; }
         #endregion
     }
 }

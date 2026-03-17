@@ -11,10 +11,11 @@ namespace Cattedre
 {
    public static class ClsDipartimentoBL
    {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
         public static List<ClsDipartimentoDL> CaricaDipartimenti()
          {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             DataTable ds = new DataTable();
             List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
             try
@@ -52,7 +53,7 @@ namespace Cattedre
 
         public static void InserisciDipartimento(ClsDipartimentoDL dip)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             try
             {
@@ -83,7 +84,7 @@ namespace Cattedre
 
         public static void EliminaDipartimento(int id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -109,7 +110,7 @@ namespace Cattedre
 
         public static void ModificaDipartimento(ClsDipartimentoDL dipartimento)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
@@ -167,37 +168,11 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
-        public static string RilevaNomeDipartimento(long IDdipartimento)
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            string NomeDipartimento = "-";
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    string sql = @"SELECT nome FROM dipartimenti WHERE ID=@ID";
-                    conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@ID", IDdipartimento);
-                        MySqlDataReader dr = cmd.ExecuteReader();
-                        if (dr.HasRows)
-                            if (dr.Read())
-                                NomeDipartimento = dr["nome"].ToString();
-                        
-                    }
-                }
-            }catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return NomeDipartimento;
-
-        }
+        
 
         public static ClsDipartimentoDL UtenteCoordinaDipartimento(long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             ClsDipartimentoDL dipartimento = null;
             try
@@ -229,7 +204,7 @@ namespace Cattedre
         }
         public static ClsUtenteDL utenteCoordinaDiparimento(string NomeDipartimento)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             ClsUtenteDL utente = null;
             try
             {
@@ -272,7 +247,7 @@ namespace Cattedre
             ClsDipartimentoDL dipartimentoCoordinato = UtenteCoordinaDipartimento(IDutente);
             if (dipartimentoCoordinato == null)
                 return;
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -295,6 +270,74 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
 
+        }
+        public static long RilevaIDdipartimento (string nome)
+        {
+            
+            long ID = 0;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID 
+                             FROM dipartimenti 
+                             WHERE nome=@nome";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@nome", nome);
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.HasRows)
+                            {
+                                dr.Read();
+                                ID = Convert.ToInt64(dr["ID"]);
+                            }
+                        }
+                    }
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return ID;
+        }
+
+
+        public static string RilevaNomeDipartimento(long id)
+        {
+            if (id == 0)
+                return "-";
+            
+            string NomeDipartimento = "-";
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT d.nome FROM dipartimenti d 
+                                 WHERE d.ID = @ID";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", id);
+                        MySqlDataReader dr = cmd.ExecuteReader();
+                        if (dr.HasRows)
+                        {
+                            dr.Read();
+                            NomeDipartimento = dr["nome"].ToString();
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return NomeDipartimento;
         }
     }
 }

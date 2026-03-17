@@ -11,11 +11,14 @@ namespace Cattedre
 {
     public static class ClsAppartenereBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+
         public static List<ClsAppartenereDL> CaricaClassiAppartenere(long IDindirizzo)
         {
             List<ClsAppartenereDL> apparteneres = new List<ClsAppartenereDL>();
             DataTable dt = new DataTable();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -59,8 +62,7 @@ namespace Cattedre
         {
             List<ClsAppartenereDL> apparteneres = new List<ClsAppartenereDL>();
             DataTable dt = new DataTable();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -101,7 +103,6 @@ namespace Cattedre
 
         public static void InserireAppartenere(ClsAppartenereDL appartenere)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -132,9 +133,7 @@ namespace Cattedre
         public static List<ClsDisciplinaDL> disciplinaAppartenuta(long IDindirizzo)
         {
             List<ClsDisciplinaDL> disc = new List<ClsDisciplinaDL>();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             DataTable dt = new DataTable();
-
 
             try
             {
@@ -177,7 +176,6 @@ namespace Cattedre
         public static List<ClsIndirizzoDL> indirizziDellaDisciplina(long IDdisciplina)
         {
             List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             DataTable dt = new DataTable();
 
             try
@@ -222,7 +220,6 @@ namespace Cattedre
 
         public static void EliminaAppartenenza(ClsAppartenereDL app)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
@@ -275,7 +272,6 @@ namespace Cattedre
         }
         public static List<ClsIndirizzoDL> caricaIndirizziDisciplina(long IDdisciplina)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             List<ClsIndirizzoDL> Indirizzi = new List<ClsIndirizzoDL>();
             DataTable dt = new DataTable();
             try

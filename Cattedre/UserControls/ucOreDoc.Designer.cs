@@ -38,7 +38,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.nudOrePot = new System.Windows.Forms.NumericUpDown();
-            this.lblInfoNumCattedre = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudOrePot)).BeginInit();
             this.SuspendLayout();
             // 
@@ -141,20 +140,10 @@
             this.nudOrePot.TabIndex = 10;
             this.nudOrePot.ValueChanged += new System.EventHandler(this.nudOrePot_ValueChanged);
             // 
-            // lblInfoNumCattedre
-            // 
-            this.lblInfoNumCattedre.AutoSize = true;
-            this.lblInfoNumCattedre.Location = new System.Drawing.Point(4, 100);
-            this.lblInfoNumCattedre.Name = "lblInfoNumCattedre";
-            this.lblInfoNumCattedre.Size = new System.Drawing.Size(16, 13);
-            this.lblInfoNumCattedre.TabIndex = 11;
-            this.lblInfoNumCattedre.Text = "...";
-            // 
             // ucOreDoc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.lblInfoNumCattedre);
             this.Controls.Add(this.nudOrePot);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -167,7 +156,6 @@
             this.Controls.Add(this.lblOreDiCattedra);
             this.Name = "ucOreDoc";
             this.Size = new System.Drawing.Size(414, 150);
-            this.Load += new System.EventHandler(this.ucOreDoc_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nudOrePot)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -186,6 +174,5 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         public System.Windows.Forms.NumericUpDown nudOrePot;
-        private System.Windows.Forms.Label lblInfoNumCattedre;
     }
 }

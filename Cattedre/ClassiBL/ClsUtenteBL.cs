@@ -557,7 +557,7 @@ namespace Cattedre
 
         #endregion
         #region filtri
-        public static List<ClsUtenteDL> FiltraUtenti(List<string> parametri, string Filtro)
+        public static List<ClsUtenteDL> FiltraUtenti(Dictionary<string, List<string>> Filtri)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
@@ -568,7 +568,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = CreaComandoRicerca(Filtro, parametri, conn))
+                    using (MySqlCommand cmd = CreaComandoRicerca(Filtri, conn))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
@@ -598,31 +598,40 @@ namespace Cattedre
             }
             return utenti;
         }
-        public static MySqlCommand CreaComandoRicerca(string Filtro, List<string> parametri, MySqlConnection conn)
+        public static MySqlCommand CreaComandoRicerca(Dictionary<string, List<string>> filtri, MySqlConnection conn)
         {
-            string sql = "SELECT ID, nome, cognome, email, password, tipoutente, tipodocente, colore FROM utenti ";
-            MySqlCommand cmd = new MySqlCommand("", conn);
-            switch (Filtro)
+            string sql = "SELECT u.ID, u.nome, u.cognome, email, password, tipoutente, tipodocente, colore FROM utenti u JOIN contratti c ON u.ID=c.IDutente";
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conn;
+            List<string> condizioni = new List<string>();
+            int paramIndex = 0;
+            foreach (var filtro in filtri)
             {
-                case "tipoDocente":
-                    sql += "WHERE tipoDocente = @tipoDocente";
-                    cmd.Parameters.AddWithValue("@TipoDocente", parametri[0]);
-                    break;
-                case "tipoUtente":
-                    List<string> orConditions = new List<string>();
-                    for (int i = 0; i < parametri.Count; i++)
-                    {
-                        orConditions.Add($"tipoUtente = @param{i}");
-                        cmd.Parameters.AddWithValue($"@param{i}", parametri[i]);
-                    }
-                    sql += "WHERE " + string.Join(" OR ", orConditions);
-                    break;
-                case "tipoContratto":
-                    // Corretto FORM in FROM e aggiunto parametro
-                    sql = "SELECT u.* FROM utenti u JOIN contratti c ON u.ID = c.IDutente WHERE c.tipoContratto = @param0";
-                    cmd.Parameters.AddWithValue("@param0", parametri[0]);
-                    break;
+                string colonna = filtro.Key;
+                List<string> valori = filtro.Value;
+
+                if (valori == null || valori.Count == 0)
+                    continue;
+
+                List<string> orConditions = new List<string>();
+
+                foreach (var valore in valori)
+                {
+                    string paramName = "@p" + paramIndex;
+                    orConditions.Add($"{colonna} = {paramName}");
+                    cmd.Parameters.AddWithValue(paramName, valore);
+                    paramIndex++;
+                }
+
+                // Combina valori dello stesso filtro con OR
+                condizioni.Add("(" + string.Join(" OR ", orConditions) + ")");
             }
+
+            if (condizioni.Count > 0)
+            {
+                sql += " WHERE " + string.Join(" AND ", condizioni);
+            }
+
             cmd.CommandText = sql;
             return cmd;
         }

@@ -95,6 +95,7 @@ namespace Cattedre
             if (_disciplina != null)
             {
                 //carico le informazioni della disciplina
+                lblAnnoSuc.Text = (_disciplina.Anno + 1).ToString() + "°";
                 tbNome.Text = _disciplina.Nome;
                 nudOreLab.Value = _disciplina.OreLaboratorio;
                 nudOreTeoria.Value = _disciplina.OreTeoria;

@@ -186,7 +186,7 @@
             this.gbContratto.Size = new System.Drawing.Size(267, 47);
             this.gbContratto.TabIndex = 9;
             this.gbContratto.TabStop = false;
-            this.gbContratto.Text = "tipo Contratto:";
+            this.gbContratto.Text = "Contratto";
             // 
             // rbIndireterminato
             // 
@@ -220,7 +220,7 @@
             this.gBtipoDocente.Size = new System.Drawing.Size(248, 47);
             this.gBtipoDocente.TabIndex = 8;
             this.gBtipoDocente.TabStop = false;
-            this.gBtipoDocente.Text = "TipoDocente";
+            this.gBtipoDocente.Text = "Docente";
             // 
             // rbPratico
             // 
@@ -255,7 +255,7 @@
             this.gbTipiUtenti.Size = new System.Drawing.Size(472, 47);
             this.gbTipiUtenti.TabIndex = 7;
             this.gbTipiUtenti.TabStop = false;
-            this.gbTipiUtenti.Text = "tipo Utenti:";
+            this.gbTipiUtenti.Text = "Utente";
             // 
             // cbDocente
             // 

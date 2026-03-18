@@ -105,7 +105,7 @@ namespace Cattedre
             // 
             this.pnlInfoNumCattedre.BackColor = System.Drawing.SystemColors.Control;
             this.pnlInfoNumCattedre.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlInfoNumCattedre.Location = new System.Drawing.Point(869, 0);
+            this.pnlInfoNumCattedre.Location = new System.Drawing.Point(619, 0);
             this.pnlInfoNumCattedre.Margin = new System.Windows.Forms.Padding(2);
             this.pnlInfoNumCattedre.Name = "pnlInfoNumCattedre";
             this.pnlInfoNumCattedre.Size = new System.Drawing.Size(235, 739);
@@ -115,7 +115,7 @@ namespace Cattedre
             // 
             this.splitter1.BackColor = System.Drawing.Color.Black;
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(1104, 0);
+            this.splitter1.Location = new System.Drawing.Point(854, 0);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(3, 739);
             this.splitter1.TabIndex = 5;
@@ -124,9 +124,9 @@ namespace Cattedre
             // pnlOreDoc
             // 
             this.pnlOreDoc.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlOreDoc.Location = new System.Drawing.Point(1107, 0);
+            this.pnlOreDoc.Location = new System.Drawing.Point(857, 0);
             this.pnlOreDoc.Name = "pnlOreDoc";
-            this.pnlOreDoc.Size = new System.Drawing.Size(200, 739);
+            this.pnlOreDoc.Size = new System.Drawing.Size(450, 739);
             this.pnlOreDoc.TabIndex = 4;
             // 
             // pnlAnnullaSalva

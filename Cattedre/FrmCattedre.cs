@@ -332,7 +332,7 @@ namespace Cattedre
                 int totale = eff + pot;
                 uc.lblOreTotali.Text = totale.ToString();
 
-                if (totale > cattedra)
+                if (totale > cattedra || totale < cattedra)
                 {
                     uc.lblOreEffettive.ForeColor = Color.Red;
                     uc.lblOreTotali.ForeColor = Color.Red;

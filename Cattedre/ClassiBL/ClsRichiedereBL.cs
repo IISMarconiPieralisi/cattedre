@@ -16,89 +16,78 @@ namespace Cattedre
         public static List<ClsClasseDiConcorsoDL> RilevaCDCDiscipina(long IDdisciplina)
         {
             List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
-            
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-
-                    string sql = @"SELECT c.id,c.livello,c.nome,c.abilitazioniRichieste
-                                    FROM classidiconcorso c
-                                    INNER JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
-                                    WHERE r.IDdisciplina = @IDdisciplina";
-
+                    string sql = @"SELECT c.id, c.livello, c.nome, c.abilitazioniRichieste
+                           FROM classidiconcorso c
+                           INNER JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
+                           WHERE r.IDdisciplina = @IDdisciplina";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.Add("@IDdisciplina", MySqlDbType.Int64).Value = IDdisciplina;
-
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            while (dr.Read())
+                            da.Fill(dt);
+                        }
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            CDCs.Add(new ClsClasseDiConcorsoDL
                             {
-                                ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL
-                                {
-                                    ID = dr.GetInt32("id"),
-                                    Livello = dr.GetString("livello"),
-                                    Nome = dr.GetString("nome"),
-                                    AbilitazioniRichieste = dr.GetString("abilitazioniRichieste")
-                                };
-
-                                CDCs.Add(cdc);
-                            }
+                                ID = Convert.ToInt64(row["id"]),
+                                Livello = row["livello"].ToString(),
+                                Nome = row["nome"].ToString(),
+                                AbilitazioniRichieste = row["abilitazioniRichieste"].ToString()
+                            });
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
-                throw;
+                throw new Exception("Errore durante il rilevamento delle CDC per disciplina: " + ex.Message);
             }
-
             return CDCs;
         }
         public static List<ClsClasseDiConcorsoDL> RilevaCDCDocente(long IDutente)
         {
             List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
-            
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-
-                    string sql = @"SELECT c.id,c.livello,c.nome
-                                    FROM classidiconcorso c
-                                    JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
-                                    WHERE r.IDutente = @IdUtente";
-
+                    string sql = @"SELECT c.id, c.livello, c.nome
+                           FROM classidiconcorso c
+                           JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
+                           WHERE r.IDutente = @IdUtente";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.Add("@IdUtente", MySqlDbType.Int64).Value = IDutente;
-
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            while (dr.Read())
+                            da.Fill(dt);
+                        }
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            CDCs.Add(new ClsClasseDiConcorsoDL
                             {
-                                ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
-                                cdc.ID =Convert.ToInt64(dr["id"]);
-                                cdc.Livello =dr["livello"].ToString();
-                                cdc.Nome = dr["nome"].ToString();
-                                CDCs.Add(cdc);
-                            }
+                                ID = Convert.ToInt64(row["id"]),
+                                Livello = row["livello"].ToString(),
+                                Nome = row["nome"].ToString()
+                            });
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception($"errore nella query: {ex.Message}", ex);
-
+                throw new Exception("Errore durante il rilevamento delle CDC del docente: " + ex.Message);
             }
-
             return CDCs;
         }
         public static void InserisciRichiedere(ClsRichiedereDL Richiedere)
@@ -213,40 +202,37 @@ namespace Cattedre
         public static List<ClsRichiedereDL> CaricaClassiRichiedereConDisciplina(long IDdisciplina)
         {
             List<ClsRichiedereDL> Richiederes = new List<ClsRichiedereDL>();
-            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT IDutente, IDclasseDiConcorso, IDdisciplina 
-                                FROM richiedere
-                                WHERE IDdisciplina=@IDdisciplina";
-
+                           FROM richiedere
+                           WHERE IDdisciplina = @IDdisciplina";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            while (dr.Read())
-                            {
-                                ClsRichiedereDL richiedere = new ClsRichiedereDL();
-
-                                richiedere.IDutente = Convert.ToInt64(dr["IDutente"]);
-                                richiedere.IDclassediconcorso = Convert.ToInt64(dr["IDclasseDiConcorso"]);
-                                if (dr["IDdisciplina"] != DBNull.Value)
-                                    richiedere.IDdisciplina = Convert.ToInt64(dr["IDdisciplina"]);
-
-                                Richiederes.Add(richiedere);
-                            }
+                            da.Fill(dt);
+                        }
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            ClsRichiedereDL richiedere = new ClsRichiedereDL();
+                            richiedere.IDutente = Convert.ToInt64(row["IDutente"]);
+                            richiedere.IDclassediconcorso = Convert.ToInt64(row["IDclasseDiConcorso"]);
+                            if (row["IDdisciplina"] != DBNull.Value)
+                                richiedere.IDdisciplina = Convert.ToInt64(row["IDdisciplina"]);
+                            Richiederes.Add(richiedere);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella richiesta della query " + ex);
-
+                throw new Exception("Errore durante il caricamento delle classi richiedere: " + ex.Message);
             }
             return Richiederes;
         }

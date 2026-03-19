@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -290,7 +290,7 @@ namespace Cattedre
         //            ClsUtenteDL utente = new ClsUtenteDL();
         //            utente.ID = Convert.ToInt64(row["ID"]);
         //            utente.Email = row["email"].ToString();
-        //            //anche se la query non restituisce la password, la proprietà non la userà e non ha senso inizarlizzarla,  essendo un dato sensibile
+        //            //anche se la query non restituisce la password, la proprietÃ  non la userÃ  e non ha senso inizarlizzarla,  essendo un dato sensibile
         //            utente.Cognome = row["cognome"].ToString();
         //            utente.Nome = row["nome"].ToString();
         //            utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
@@ -481,28 +481,78 @@ namespace Cattedre
 
         public static void SalvaOrePot(int oreSpeciali, int IDutente, long IDannoscolastico, int IDdisciplina)
         {
-            
+            string sigla = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
+            ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(sigla);
+            DateTime dal = anno.DataInizio;
+            DateTime al = anno.DataFine;
+
             MySqlConnection conn = new MySqlConnection(connectionString);
-            ClsAssegnareDL assegnare = null;
             try
             {
                 conn.Open();
-                string sql = @"REPLACE INTO assegnare (IDutente, IDannoscolastico, IDclasse, IDdisciplina, oreSpeciali)
-                                VALUES (@idutente, @idannoscolastico, NULL, @iddisciplina, @oreSpeciali)";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@oreSpeciali", oreSpeciali);
-                cmd.Parameters.AddWithValue("@idutente", IDutente);
-                cmd.Parameters.AddWithValue("@idannoscolastico", IDannoscolastico);
-                cmd.Parameters.AddWithValue("@iddisciplina", IDdisciplina);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+
+                string sqlSelect = @"SELECT COUNT(*) FROM assegnare 
+                             WHERE IDutente = @idutente 
+                               AND IDannoscolastico = @idannoscolastico 
+                               AND IDdisciplina = @iddisciplina
+                               AND IDclasse IS NULL";
+
+                MySqlCommand cmdSelect = new MySqlCommand(sqlSelect, conn);
+                cmdSelect.Parameters.AddWithValue("@idutente", IDutente);
+                cmdSelect.Parameters.AddWithValue("@idannoscolastico", IDannoscolastico);
+                cmdSelect.Parameters.AddWithValue("@iddisciplina", IDdisciplina);
+
+                int count = Convert.ToInt32(cmdSelect.ExecuteScalar());
+
+                string sqlSave;
+                if (count > 0)
                 {
-                    while (dr.Read())
+                    if (oreSpeciali == 0) // se le ore di potenziamento di un prof diventano 0, tolgo la riga su assegnare (non interessa sapere quali prof hanno 0 ore)
                     {
-                        assegnare = new ClsAssegnareDL();
-                        assegnare.OreSpeciali = Convert.ToInt32(dr["oreSpeciali"]);
+                        sqlSave = @"DELETE FROM assegnare 
+                            WHERE IDutente = @idutente 
+                              AND IDannoscolastico = @idannoscolastico 
+                              AND IDdisciplina = @iddisciplina
+                              AND IDclasse IS NULL";
+                    }
+                    else
+                    {
+                        // Esiste e ore > 0 -> UPDATE
+                        sqlSave = @"UPDATE assegnare 
+                            SET oreSpeciali = @oreSpeciali,
+                                dal = @dal,
+                                al  = @al
+                            WHERE IDutente = @idutente 
+                              AND IDannoscolastico = @idannoscolastico 
+                              AND IDdisciplina = @iddisciplina
+                              AND IDclasse IS NULL";
                     }
                 }
+                else
+                {
+                    // Non esiste e ore = 0 -> non fa nulla
+                    if (oreSpeciali == 0)
+                    {
+                        conn.Close();
+                        return;
+                    }
+
+                    // Non esiste e ore > 0 -> INSERT
+                    sqlSave = @"INSERT INTO assegnare 
+                            (IDutente, IDannoscolastico, IDclasse, IDdisciplina, oreSpeciali, dal, al)
+                        VALUES 
+                            (@idutente, @idannoscolastico, NULL, @iddisciplina, @oreSpeciali, @dal, @al)";
+                }
+
+                MySqlCommand cmdSave = new MySqlCommand(sqlSave, conn);
+                cmdSave.Parameters.AddWithValue("@oreSpeciali", oreSpeciali);
+                cmdSave.Parameters.AddWithValue("@idutente", IDutente);
+                cmdSave.Parameters.AddWithValue("@idannoscolastico", IDannoscolastico);
+                cmdSave.Parameters.AddWithValue("@iddisciplina", IDdisciplina);
+                cmdSave.Parameters.AddWithValue("@dal", dal);
+                cmdSave.Parameters.AddWithValue("@al", al);
+                cmdSave.ExecuteNonQuery();
+
                 conn.Close();
             }
             catch (Exception ex)

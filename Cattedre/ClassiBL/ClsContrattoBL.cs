@@ -20,7 +20,7 @@ namespace Cattedre
         public static List<ClsContrattoDL> CaricaContratti()
         {
             IDutenti.Clear();
-            
+
             MySqlConnection conn = new MySqlConnection(connectionString);
             DataTable ds = new DataTable();
             List<ClsContrattoDL> Contratti = new List<ClsContrattoDL>();
@@ -61,9 +61,9 @@ namespace Cattedre
 
         public static void InserisciContratto(ClsContrattoDL contratto, long IDutente)
         {
-            
+
             MySqlConnection conn = new MySqlConnection(connectionString);
-            
+
             IDutenti.Clear();
 
             try
@@ -76,7 +76,7 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@tipoContratto", contratto.TipoContratto);
                     cmd.Parameters.AddWithValue("@monteOre", contratto.MonteOre);
                     cmd.Parameters.AddWithValue("@datainizio", contratto.DataInizioContratto);
-                    if(contratto.TipoContratto=='D')
+                    if (contratto.TipoContratto == 'D')
                         cmd.Parameters.AddWithValue("@datafine", contratto.DataFineContratto);
                     else
                         cmd.Parameters.AddWithValue("@datafine", null);
@@ -93,10 +93,10 @@ namespace Cattedre
 
         public static void ModificaContratto(ClsContrattoDL contratto, long IDutente)
         {
-            
+
             MySqlConnection conn = new MySqlConnection(connectionString);
             //se il contratto non esiste lo inserisco al posto di modificarlo
-            if (cercaContratto(IDutente)==null)
+            if (cercaContratto(IDutente) == null)
             {
                 InserisciContratto(contratto, IDutente);
                 return;
@@ -116,10 +116,10 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@tipoContratto", contratto.TipoContratto);
                     cmd.Parameters.AddWithValue("@monteOre", contratto.MonteOre);
                     cmd.Parameters.AddWithValue("@datainizio", contratto.DataInizioContratto);
-                     if (contratto.TipoContratto == 'D')
-                            cmd.Parameters.AddWithValue("@datafine", contratto.DataFineContratto);
-                     else
-                        cmd.Parameters.AddWithValue("@datafine", DBNull.Value); 
+                    if (contratto.TipoContratto == 'D')
+                        cmd.Parameters.AddWithValue("@datafine", contratto.DataFineContratto);
+                    else
+                        cmd.Parameters.AddWithValue("@datafine", DBNull.Value);
                     cmd.Parameters.AddWithValue("@IDutente", IDutente);
                     cmd.Parameters.AddWithValue("@id", contratto.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
@@ -134,7 +134,7 @@ namespace Cattedre
 
         public static List<ClsContrattoDL> EliminaContratto(int id)
         {
-            
+
             MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsContrattoDL> contratti = new List<ClsContrattoDL>();
 
@@ -227,3 +227,4 @@ namespace Cattedre
             return monteOre;
         }
     }
+}

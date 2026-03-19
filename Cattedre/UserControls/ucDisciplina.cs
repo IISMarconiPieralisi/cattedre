@@ -16,6 +16,8 @@ namespace Cattedre
         {
             InitializeComponent();
             lbldisciplina.Text = clsDisciplinaDL.Nome;
+            lbldisciplina.TextAlign = ContentAlignment.MiddleCenter;
+
         }
     }
 }

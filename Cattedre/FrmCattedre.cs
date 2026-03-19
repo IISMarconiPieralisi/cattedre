@@ -389,6 +389,8 @@ namespace Cattedre
             docenti = ClsAssegnareBL
                 .CaricaDocentiConAssegnazioni(IDdipartimento, IDannoscolastico);
 
+            
+
             int oreTotaliGenerali = 0;
 
             for (int riga = 0; riga < classi.Count; riga++)
@@ -422,41 +424,43 @@ namespace Cattedre
                     UcAssegnazioni uc = new UcAssegnazioni();
 
                     // docenti teorici
-                    List<ClsUtenteDL> teorici = docenti.AsEnumerable()
-                        .Where(r => r["tipoDocente"].ToString() == "T")
-                        .Select(r => new ClsUtenteDL
-                        {
-                            ID = Convert.ToInt64(r["IDutente"]),
-                            Nome = r.Field<string>("nome"),
-                            Cognome = r.Field<string>("cognome"),
-                            TipoDocente = 'T'
-                        })
-                        .GroupBy(_x => _x.ID)
-                        .Select(g => g.First())
-                        .ToList();
+                    //List<ClsUtenteDL> teorici = docenti.AsEnumerable()
+                    //    .Where(r => r["tipoDocente"].ToString() == "T")
+                    //    .Select(r => new ClsUtenteDL
+                    //    {
+                    //        ID = Convert.ToInt64(r["IDutente"]),
+                    //        Nome = r.Field<string>("nome"),
+                    //        Cognome = r.Field<string>("cognome"),
+                    //        TipoDocente = 'T'
+                    //    })
+                    //    .GroupBy(_x => _x.ID)
+                    //    .Select(g => g.First())
+                    //    .ToList();
 
-                    // docenti pratici
-                    List<ClsUtenteDL> pratici = docenti.AsEnumerable()
-                        .Where(r => r["tipoDocente"].ToString() == "L")
-                        .Select(r => new ClsUtenteDL
-                        {
-                            ID = Convert.ToInt64(r["IDutente"]),
-                            Nome = r.Field<string>("nome"),
-                            Cognome = r.Field<string>("cognome"),
-                            TipoDocente = 'L'
-                        })
-                        .GroupBy(_x => _x.ID)
-                        .Select(g => g.First())
-                        .ToList();
+                    //// docenti pratici
+                    //List<ClsUtenteDL> pratici = docenti.AsEnumerable()
+                    //    .Where(r => r["tipoDocente"].ToString() == "L")
+                    //    .Select(r => new ClsUtenteDL
+                    //    {
+                    //        ID = Convert.ToInt64(r["IDutente"]),
+                    //        Nome = r.Field<string>("nome"),
+                    //        Cognome = r.Field<string>("cognome"),
+                    //        TipoDocente = 'L'
+                    //    })
+                    //    .GroupBy(_x => _x.ID)
+                    //    .Select(g => g.First())
+                    //    .ToList();
 
-                    uc.cbDocentiTeorici.DataSource = teorici;
-                    uc.cbDocentiTeorici.DisplayMember = "Cognome";
-                    uc.cbDocentiTeorici.ValueMember = "ID";
 
-                    uc.cbDocentiItip.DataSource = pratici;
-                    uc.cbDocentiItip.DisplayMember = "Cognome";
-                    uc.cbDocentiItip.ValueMember = "ID";
+                    //uc.cbDocentiTeorici.DataSource = teorici;
+                    //uc.cbDocentiTeorici.DisplayMember = "Cognome";
+                    //uc.cbDocentiTeorici.ValueMember = "ID";
 
+                    //uc.cbDocentiItip.DataSource = pratici;
+                    //uc.cbDocentiItip.DisplayMember = "Cognome";
+                    //uc.cbDocentiItip.ValueMember = "ID";
+
+                    uc.CaricaDocentiColorati(docenti);
                     // docente già assegnato (in memoria)
                     var assegnazione = docenti.AsEnumerable()
                         .FirstOrDefault(r =>
@@ -473,10 +477,13 @@ namespace Cattedre
                         char tipo = string.IsNullOrEmpty(tipoString) ? ' ' : tipoString[0];
 
                         if (tipo == 'T')
-                            uc.cbDocentiTeorici.SelectedValue = idDoc;
+                            //uc.cbDocentiTeorici.SelectedValue = idDoc;
+                            uc.ImpostaDocentiSelezionati(idDoc, 0);
                         else if (tipo == 'L')
-                            uc.cbDocentiItip.SelectedValue = idDoc;
+                            //uc.cbDocentiItip.SelectedValue = idDoc;
+                            uc.ImpostaDocentiSelezionati(0, idDoc);
                     }
+
 
                     // ore
                     uc.lblOreTeoria.Text = disciplina.OreTeoria.ToString();
@@ -484,29 +491,27 @@ namespace Cattedre
 
                     oreTotaliClasse += disciplina.OreTeoria + disciplina.OreLaboratorio;
 
-                    // eventi
+                    // ✅ eventi con IDdocTh / IDdocLab
                     uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) =>
                     {
                         AggiornaOreEffettive();
-
-                        if (uc.cbDocentiTeorici.SelectedValue != null)
+                        if (uc.IDdocTh > 0)
                             ClsAssegnareBL.UpdateCattedra(
                                 classe.ID,
                                 IDannoscolastico,
                                 disciplina.ID,
-                                Convert.ToInt64(uc.cbDocentiTeorici.SelectedValue));
+                                uc.IDdocTh);
                     };
 
                     uc.cbDocentiItip.SelectedIndexChanged += (s, e) =>
                     {
                         AggiornaOreEffettive();
-
-                        if (uc.cbDocentiItip.SelectedValue != null)
+                        if (uc.IDdocLab > 0)
                             ClsAssegnareBL.UpdateCattedra(
                                 classe.ID,
                                 IDannoscolastico,
                                 disciplina.ID,
-                                Convert.ToInt64(uc.cbDocentiItip.SelectedValue));
+                                uc.IDdocLab);
                     };
 
                     int x = 10 + colonna * 225;
@@ -515,13 +520,11 @@ namespace Cattedre
 
                     pnlDipartimento.Controls.Add(uc);
 
-                    //cambio dei diritti di modifica
-                    if(utenteLoggato.TipoUtente=="A" || utenteLoggato.TipoUtente=="P" || utenteLoggato.TipoUtente == "D")
+                    if (utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "D")
                     {
                         uc.cbDocentiItip.Enabled = false;
                         uc.cbDocentiTeorici.Enabled = false;
                     }
-
                 }
 
                 oreTotaliGenerali += oreTotaliClasse;

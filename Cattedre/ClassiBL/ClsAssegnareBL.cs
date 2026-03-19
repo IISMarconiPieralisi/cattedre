@@ -147,6 +147,7 @@ namespace Cattedre
                                 u.nome,
                                 u.cognome,
                                 u.tipoDocente,
+                                u.colore,
                                 a.IDclasse,
                                 a.IDdisciplina,
                                 a.oreSpeciali,
@@ -509,6 +510,32 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
+
+        public static List<UcAssegnazioni.ProfessoreItem> FiltraDocentiPerComboBox(
+            DataTable docenti, string tipoDocente)
+        {
+            var lista = new List<UcAssegnazioni.ProfessoreItem>();
+
+            foreach (DataRow row in docenti.Rows)
+            {
+                if (row["tipoDocente"] == DBNull.Value) continue;
+                if (row["tipoDocente"].ToString().Trim() != tipoDocente) continue;
+
+                // evita duplicati
+                int id = Convert.ToInt32(row["IDutente"]);
+                if (lista.Any(p => p.ID == id)) continue;
+
+                lista.Add(new UcAssegnazioni.ProfessoreItem
+                {
+                    ID = id,
+                    NomeCompleto = row["cognome"] + " " + row["nome"],
+                    Colore = UcAssegnazioni.ParseColoreDB(row["colore"] == DBNull.Value ? "" : row["colore"].ToString())
+                });
+            }
+
+            return lista;
+        }
+
 
         //public static long RicavaIDutente(string nome, string cognome)
         //{

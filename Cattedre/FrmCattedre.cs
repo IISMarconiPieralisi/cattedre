@@ -231,7 +231,7 @@ namespace Cattedre
 
                 uc.lblDocente.Text = $"{doc.Nome} {doc.Cognome}";
                 uc.lblOreDiCattedra.Text =
-                    ClsContrattoBL.RilevaOreContrattoDoc(doc.ID).ToString();
+                ClsContrattoBL.RilevaOreContrattoDoc(doc.ID).ToString();
 
                 // ore potenziamento dalla QUERY UNICA
                 //int orePot = dtDocentiAssegnazioni.AsEnumerable()
@@ -423,44 +423,51 @@ namespace Cattedre
 
                     UcAssegnazioni uc = new UcAssegnazioni();
 
-                    // docenti teorici
-                    //List<ClsUtenteDL> teorici = docenti.AsEnumerable()
-                    //    .Where(r => r["tipoDocente"].ToString() == "T")
-                    //    .Select(r => new ClsUtenteDL
-                    //    {
-                    //        ID = Convert.ToInt64(r["IDutente"]),
-                    //        Nome = r.Field<string>("nome"),
-                    //        Cognome = r.Field<string>("cognome"),
-                    //        TipoDocente = 'T'
-                    //    })
-                    //    .GroupBy(_x => _x.ID)
-                    //    .Select(g => g.First())
-                    //    .ToList();
+                    List<ClsUtenteDL> teorici = new List<ClsUtenteDL>();
+                    teorici.Add(new ClsUtenteDL { ID = 0, Cognome = "", Nome = "", Colore = "" });
+                    teorici.AddRange(docenti.AsEnumerable()
+                        .Where(r => r["tipoDocente"].ToString() == "T")
+                        .Select(r => new ClsUtenteDL
+                        {
+                            ID = Convert.ToInt64(r["IDutente"]),
+                            Nome = r.Field<string>("nome"),
+                            Cognome = r.Field<string>("cognome"),
+                            TipoDocente = 'T',
+                            Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
+                        })
+                        .GroupBy(_x => _x.ID)
+                        .Select(g => g.First())
+                        .ToList());
 
-                    //// docenti pratici
-                    //List<ClsUtenteDL> pratici = docenti.AsEnumerable()
-                    //    .Where(r => r["tipoDocente"].ToString() == "L")
-                    //    .Select(r => new ClsUtenteDL
-                    //    {
-                    //        ID = Convert.ToInt64(r["IDutente"]),
-                    //        Nome = r.Field<string>("nome"),
-                    //        Cognome = r.Field<string>("cognome"),
-                    //        TipoDocente = 'L'
-                    //    })
-                    //    .GroupBy(_x => _x.ID)
-                    //    .Select(g => g.First())
-                    //    .ToList();
+                    // docenti pratici
+                    List<ClsUtenteDL> pratici = new List<ClsUtenteDL>();
+                    pratici.Add(new ClsUtenteDL { ID = 0, Cognome = "", Nome = "", Colore = "" }); // item vuoto
+                    pratici.AddRange(docenti.AsEnumerable()
+                        .Where(r => r["tipoDocente"].ToString() == "L")
+                        .Select(r => new ClsUtenteDL
+                        {
+                            ID = Convert.ToInt64(r["IDutente"]),
+                            Nome = r.Field<string>("nome"),
+                            Cognome = r.Field<string>("cognome"),
+                            TipoDocente = 'L',
+                            Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
+                        })
+                        .GroupBy(_x => _x.ID)
+                        .Select(g => g.First())
+                        .ToList());
 
 
-                    //uc.cbDocentiTeorici.DataSource = teorici;
-                    //uc.cbDocentiTeorici.DisplayMember = "Cognome";
-                    //uc.cbDocentiTeorici.ValueMember = "ID";
+                    uc.cbDocentiTeorici.DataSource = teorici;
+                    uc.cbDocentiTeorici.DisplayMember = "Cognome";
+                    uc.cbDocentiTeorici.ValueMember = "ID";
 
-                    //uc.cbDocentiItip.DataSource = pratici;
-                    //uc.cbDocentiItip.DisplayMember = "Cognome";
-                    //uc.cbDocentiItip.ValueMember = "ID";
+                    uc.cbDocentiItip.DataSource = pratici;
+                    uc.cbDocentiItip.DisplayMember = "Cognome";
+                    uc.cbDocentiItip.ValueMember = "ID";
 
-                    uc.CaricaDocentiColorati(docenti);
+                    uc.ImpostaColoriCombo(uc.cbDocentiTeorici);
+                    uc.ImpostaColoriCombo(uc.cbDocentiItip);
+
                     // docente già assegnato (in memoria)
                     var assegnazione = docenti.AsEnumerable()
                         .FirstOrDefault(r =>
@@ -477,13 +484,15 @@ namespace Cattedre
                         char tipo = string.IsNullOrEmpty(tipoString) ? ' ' : tipoString[0];
 
                         if (tipo == 'T')
-                            //uc.cbDocentiTeorici.SelectedValue = idDoc;
-                            uc.ImpostaDocentiSelezionati(idDoc, 0);
+                            uc.cbDocentiTeorici.SelectedValue = idDoc;
                         else if (tipo == 'L')
-                            //uc.cbDocentiItip.SelectedValue = idDoc;
-                            uc.ImpostaDocentiSelezionati(0, idDoc);
+                            uc.cbDocentiItip.SelectedValue = idDoc;
                     }
-
+                    else
+                    {
+                        uc.cbDocentiTeorici.SelectedIndex = 0;
+                        uc.cbDocentiItip.SelectedIndex = 0;
+                    }
 
                     // ore
                     uc.lblOreTeoria.Text = disciplina.OreTeoria.ToString();
@@ -491,7 +500,7 @@ namespace Cattedre
 
                     oreTotaliClasse += disciplina.OreTeoria + disciplina.OreLaboratorio;
 
-                    // ✅ eventi con IDdocTh / IDdocLab
+                    // eventi
                     uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) =>
                     {
                         AggiornaOreEffettive();

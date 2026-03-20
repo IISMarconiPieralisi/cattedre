@@ -45,47 +45,46 @@ namespace Cattedre
 
         #region Colori Professori
 
-        private void ImpostaComboBox(ComboBox cb)
+        public void ImpostaColoriCombo(ComboBox cb)
         {
             cb.DrawMode = DrawMode.OwnerDrawFixed;
             cb.ItemHeight = 24;
             cb.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            cb.DrawItem -= DisegnaItem; // ✅ evita duplicati se chiamato più volte
-            cb.DrawItem += DisegnaItem;
+            cb.DrawItem -= DisegnaItemUtente; // evita duplicati se chiamato più volte
+            cb.DrawItem += DisegnaItemUtente;
             cb.SelectedIndexChanged += (sender, e) => cb.Invalidate();
         }
 
-        private void DisegnaItem(object sender, DrawItemEventArgs e)
+        private void DisegnaItemUtente(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return;
 
             ComboBox cb = (ComboBox)sender;
-            ProfessoreItem prof = (ProfessoreItem)cb.Items[e.Index];
+            ClsUtenteDL utente = (ClsUtenteDL)cb.Items[e.Index];
+
+            if (utente.ID == 0)
+            {
+                e.DrawBackground();
+                return;
+            }
+
+            Color colore = ParseColoreDB(utente.Colore);
 
             bool isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
-
             Color sfondo = (isSelected && cb.DroppedDown)
-                ? ControlPaint.Dark(prof.Colore, 0.1f)
-                : prof.Colore;
+                ? ControlPaint.Dark(colore, 0.1f)
+                : colore;
 
             using (SolidBrush brushSfondo = new SolidBrush(sfondo))
                 e.Graphics.FillRectangle(brushSfondo, e.Bounds);
 
-            Color coloreTesto = IsColoreChiaro(prof.Colore) ? Color.Black : Color.White;
+            Color coloreTesto = IsColoreChiaro(colore) ? Color.Black : Color.White;
 
             using (SolidBrush brushTesto = new SolidBrush(coloreTesto))
             {
                 StringFormat sf = new StringFormat { LineAlignment = StringAlignment.Center };
-                e.Graphics.DrawString(prof.NomeCompleto, e.Font, brushTesto, e.Bounds, sf);
-            }
-
-            if (isSelected && cb.DroppedDown)
-            {
-                using (Pen pen = new Pen(Color.White, 1))
-                    e.Graphics.DrawRectangle(pen,
-                        e.Bounds.X, e.Bounds.Y,
-                        e.Bounds.Width - 1, e.Bounds.Height - 1);
+                e.Graphics.DrawString(utente.Cognome, e.Font, brushTesto, e.Bounds, sf);
             }
         }
 
@@ -155,8 +154,8 @@ namespace Cattedre
             cbDocentiTeorici.Items.Clear();
             cbDocentiItip.Items.Clear();
 
-            ImpostaComboBox(cbDocentiTeorici);
-            ImpostaComboBox(cbDocentiItip);
+            ImpostaColoriCombo(cbDocentiTeorici);
+            ImpostaColoriCombo(cbDocentiItip);
 
             cbDocentiTeorici.Items.AddRange(
                 ClsAssegnareBL.FiltraDocentiPerComboBox(docenti, "T").ToArray());

@@ -25,19 +25,15 @@ namespace Cattedre
             public int ID { get; set; }
             public string NomeCompleto { get; set; }
             public Color Colore { get; set; }
-
             public override string ToString() => NomeCompleto;
         }
 
         static ClsUtenteDL docente = new ClsUtenteDL();
         public FrmCattedre frmCattedre = new FrmCattedre(docente);
 
-
-
         public UcAssegnazioni(ClsDisciplinaDL clsDisciplinaDL, ClsClasseDL clsClasseDL, ClsUtenteDL docente)
         {
             InitializeComponent();
-           
 
         }
 

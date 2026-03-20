@@ -65,7 +65,8 @@ namespace Cattedre
 
             if (utente.ID == 0)
             {
-                e.DrawBackground();
+                using (SolidBrush brush = new SolidBrush(Color.White))
+                    e.Graphics.FillRectangle(brush, e.Bounds);
                 return;
             }
 

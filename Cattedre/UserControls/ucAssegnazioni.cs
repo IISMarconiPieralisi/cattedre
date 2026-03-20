@@ -187,7 +187,19 @@ namespace Cattedre
 
         private void tsmiTaglia_Click(object sender, EventArgs e)
         {
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            ContextMenuStrip cm = (ContextMenuStrip)tsmi.GetCurrentParent();
+            Control cb = cm.SourceControl;
 
+            if (cb is ComboBox)
+            {
+                if (cb.Name == cbDocentiTeorici.Name)
+                    MessageBox.Show("Taglia" + _iddocth);
+                else if (cb.Name == cbDocentiItip.Name)
+                    MessageBox.Show("Taglia" + _iddoclab);
+            }
+
+            
         }
 
         private void tsmiCopia_Click(object sender, EventArgs e)

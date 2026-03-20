@@ -115,12 +115,13 @@
             this.tsmiCopia,
             this.tsmiIncolla});
             this.cmDocente.Name = "cmDocente";
-            this.cmDocente.Size = new System.Drawing.Size(110, 70);
+            this.cmDocente.Size = new System.Drawing.Size(181, 92);
             // 
             // tsmiTaglia
             // 
             this.tsmiTaglia.Image = global::Cattedre.Properties.Resources.taglia;
             this.tsmiTaglia.Name = "tsmiTaglia";
+            this.tsmiTaglia.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.tsmiTaglia.Size = new System.Drawing.Size(180, 22);
             this.tsmiTaglia.Text = "Taglia";
             this.tsmiTaglia.Click += new System.EventHandler(this.tsmiTaglia_Click);
@@ -129,6 +130,7 @@
             // 
             this.tsmiCopia.Image = global::Cattedre.Properties.Resources.copia;
             this.tsmiCopia.Name = "tsmiCopia";
+            this.tsmiCopia.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
             this.tsmiCopia.Size = new System.Drawing.Size(180, 22);
             this.tsmiCopia.Text = "Copia";
             this.tsmiCopia.Click += new System.EventHandler(this.tsmiCopia_Click);
@@ -137,6 +139,7 @@
             // 
             this.tsmiIncolla.Image = global::Cattedre.Properties.Resources.incolla;
             this.tsmiIncolla.Name = "tsmiIncolla";
+            this.tsmiIncolla.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             this.tsmiIncolla.Size = new System.Drawing.Size(180, 22);
             this.tsmiIncolla.Text = "Incolla";
             this.tsmiIncolla.Click += new System.EventHandler(this.tsmiIncolla_Click);

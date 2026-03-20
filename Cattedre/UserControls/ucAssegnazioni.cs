@@ -25,19 +25,15 @@ namespace Cattedre
             public int ID { get; set; }
             public string NomeCompleto { get; set; }
             public Color Colore { get; set; }
-
             public override string ToString() => NomeCompleto;
         }
 
         static ClsUtenteDL docente = new ClsUtenteDL();
         public FrmCattedre frmCattedre = new FrmCattedre(docente);
 
-
-
         public UcAssegnazioni(ClsDisciplinaDL clsDisciplinaDL, ClsClasseDL clsClasseDL, ClsUtenteDL docente)
         {
             InitializeComponent();
-           
 
         }
 
@@ -189,7 +185,32 @@ namespace Cattedre
             }
         }
 
-       
+        private void tsmiTaglia_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            ContextMenuStrip cm = (ContextMenuStrip)tsmi.GetCurrentParent();
+            Control cb = cm.SourceControl;
+
+            if (cb is ComboBox)
+            {
+                if (cb.Name == cbDocentiTeorici.Name)
+                    MessageBox.Show("Taglia" + _iddocth);
+                else if (cb.Name == cbDocentiItip.Name)
+                    MessageBox.Show("Taglia" + _iddoclab);
+            }
+
+            
+        }
+
+        private void tsmiCopia_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tsmiIncolla_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 

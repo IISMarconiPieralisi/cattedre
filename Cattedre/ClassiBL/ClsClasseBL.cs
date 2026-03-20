@@ -50,7 +50,7 @@ namespace Cattedre
             return null;
         }
 
-        public static ClsClasseDL TrovaClasse(string sezione, int anno, long IDindirizzo)
+        public static ClsClasseDL TrovaClasse(string sezione, int anno, long IDindirizzo, long IDannoscolastico)
         {
             try
             {
@@ -58,14 +58,16 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT * FROM classi
-                           WHERE sezione = @sezione
-                           AND anno = @anno
-                           AND IDindirizzo = @IDindirizzo";
+                   WHERE sezione = @sezione
+                   AND anno = @anno
+                   AND IDindirizzo = @IDindirizzo
+                   AND IDannoscolastico = @IDannoscolastico";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@sezione", sezione);
                         cmd.Parameters.AddWithValue("@anno", anno);
                         cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
@@ -79,7 +81,8 @@ namespace Cattedre
                                 ID = Convert.ToInt64(row["ID"]),
                                 Sezione = row["sezione"].ToString(),
                                 Anno = Convert.ToInt32(row["anno"]),
-                                Idindirizzo = Convert.ToInt64(row["IDindirizzo"])
+                                Idindirizzo = Convert.ToInt64(row["IDindirizzo"]),
+                                IDannoscolastico = Convert.ToInt64(row["IDannoscolastico"])
                             };
                         }
                     }
@@ -190,10 +193,8 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = "SELECT * FROM classi " +
-                                    "JOIN utenti ON utenti.ID = classi.IDutente " +
-                                    "JOIN afferire ON afferire.IDutente = utenti.ID " +
-                                    "WHERE afferire.IDdipartimento = @IDdipartimento " +
-                                    "AND classi.IDannoscolastico = @IDannoscolastico";
+                                 "WHERE classi.IDdipartimento = @IDdipartimento " +
+                                 "AND classi.IDannoscolastico = @IDannoscolastico";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
@@ -215,9 +216,8 @@ namespace Cattedre
                     _classe.ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]);
                     _classe.Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
                     _classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
-                    _classe.IDannoscolastico= (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]);
-                    _classe.IDdipartimento = (row["IDdipartimento"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdipartimento"]);
                     _classe.IDannoscolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]);
+                    _classe.IDdipartimento = (row["IDdipartimento"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdipartimento"]);
                     classi.Add(_classe);
                 }
             }

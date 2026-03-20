@@ -40,7 +40,7 @@ namespace Cattedre
                 else annoSuccessivoClasse = 3;
 
                 ClsClasseDL nuovaClasse =
-                    ClsClasseBL.TrovaClasse(classe.Sezione, annoSuccessivoClasse, classe.Idindirizzo);
+                    ClsClasseBL.TrovaClasse(classe.Sezione, annoSuccessivoClasse, classe.Idindirizzo, IDannoSuccessivo);
 
                 if (nuovaClasse == null)
                     continue;

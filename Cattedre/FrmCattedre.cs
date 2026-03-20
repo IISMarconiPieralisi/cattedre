@@ -206,7 +206,7 @@ namespace Cattedre
             if (dtDocentiAssegnazioni == null || dtDocentiAssegnazioni.Rows.Count == 0)
                 return;
 
-            int y = 10;
+            int y = 15;
 
             // prendo docenti distinti dal DataTable
             List<ClsUtenteDL> docenti = dtDocentiAssegnazioni.AsEnumerable()

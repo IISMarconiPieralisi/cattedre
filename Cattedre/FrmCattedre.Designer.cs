@@ -37,14 +37,14 @@ namespace Cattedre
             this.pnlInfoNumCattedre = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.pnlOreDoc = new System.Windows.Forms.Panel();
+            this.lblOreTot = new System.Windows.Forms.Label();
+            this.lblOrePot = new System.Windows.Forms.Label();
+            this.lblOreEff = new System.Windows.Forms.Label();
+            this.lblOreCattedra = new System.Windows.Forms.Label();
+            this.lblDocente = new System.Windows.Forms.Label();
             this.pnlAnnullaSalva = new System.Windows.Forms.Panel();
             this.btSalva = new System.Windows.Forms.Button();
             this.btAnnulla = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.pnlClassi.SuspendLayout();
             this.pnlDipartimento.SuspendLayout();
             this.pnlOreDoc.SuspendLayout();
@@ -129,16 +129,76 @@ namespace Cattedre
             // 
             // pnlOreDoc
             // 
-            this.pnlOreDoc.Controls.Add(this.label5);
-            this.pnlOreDoc.Controls.Add(this.label4);
-            this.pnlOreDoc.Controls.Add(this.label3);
-            this.pnlOreDoc.Controls.Add(this.label2);
-            this.pnlOreDoc.Controls.Add(this.label1);
+            this.pnlOreDoc.Controls.Add(this.lblOreTot);
+            this.pnlOreDoc.Controls.Add(this.lblOrePot);
+            this.pnlOreDoc.Controls.Add(this.lblOreEff);
+            this.pnlOreDoc.Controls.Add(this.lblOreCattedra);
+            this.pnlOreDoc.Controls.Add(this.lblDocente);
             this.pnlOreDoc.Dock = System.Windows.Forms.DockStyle.Right;
             this.pnlOreDoc.Location = new System.Drawing.Point(857, 0);
             this.pnlOreDoc.Name = "pnlOreDoc";
             this.pnlOreDoc.Size = new System.Drawing.Size(450, 739);
             this.pnlOreDoc.TabIndex = 4;
+            // 
+            // lblOreTot
+            // 
+            this.lblOreTot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblOreTot.AutoSize = true;
+            this.lblOreTot.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOreTot.Location = new System.Drawing.Point(381, 9);
+            this.lblOreTot.Name = "lblOreTot";
+            this.lblOreTot.Size = new System.Drawing.Size(26, 16);
+            this.lblOreTot.TabIndex = 14;
+            this.lblOreTot.Text = "Tot";
+            // 
+            // lblOrePot
+            // 
+            this.lblOrePot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblOrePot.AutoSize = true;
+            this.lblOrePot.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOrePot.Location = new System.Drawing.Point(303, 9);
+            this.lblOrePot.Name = "lblOrePot";
+            this.lblOrePot.Size = new System.Drawing.Size(55, 16);
+            this.lblOrePot.TabIndex = 13;
+            this.lblOrePot.Text = "Ore Pot";
+            // 
+            // lblOreEff
+            // 
+            this.lblOreEff.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblOreEff.AutoSize = true;
+            this.lblOreEff.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOreEff.Location = new System.Drawing.Point(232, 9);
+            this.lblOreEff.Name = "lblOreEff";
+            this.lblOreEff.Size = new System.Drawing.Size(51, 16);
+            this.lblOreEff.TabIndex = 12;
+            this.lblOreEff.Text = "Ore Eff";
+            // 
+            // lblOreCattedra
+            // 
+            this.lblOreCattedra.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblOreCattedra.AutoSize = true;
+            this.lblOreCattedra.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOreCattedra.Location = new System.Drawing.Point(119, 9);
+            this.lblOreCattedra.Name = "lblOreCattedra";
+            this.lblOreCattedra.Size = new System.Drawing.Size(94, 16);
+            this.lblOreCattedra.TabIndex = 11;
+            this.lblOreCattedra.Text = "Ore Cattedra";
+            // 
+            // lblDocente
+            // 
+            this.lblDocente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDocente.AutoSize = true;
+            this.lblDocente.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDocente.Location = new System.Drawing.Point(19, 9);
+            this.lblDocente.Name = "lblDocente";
+            this.lblDocente.Size = new System.Drawing.Size(61, 16);
+            this.lblDocente.TabIndex = 10;
+            this.lblDocente.Text = "Docente";
             // 
             // pnlAnnullaSalva
             // 
@@ -169,66 +229,6 @@ namespace Cattedre
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
             this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
-            // 
-            // label5
-            // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(381, 9);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(26, 16);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "Tot";
-            // 
-            // label4
-            // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(303, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(55, 16);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "Ore Pot";
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(232, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(51, 16);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Ore Eff";
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(119, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(94, 16);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Ore Cattedra";
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(19, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 16);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Docente";
             // 
             // FrmCattedre
             // 
@@ -265,10 +265,10 @@ namespace Cattedre
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ComboBox cbAnniScolastici;
         private System.Windows.Forms.Button btGeneraASsucc;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblOreTot;
+        private System.Windows.Forms.Label lblOrePot;
+        private System.Windows.Forms.Label lblOreEff;
+        private System.Windows.Forms.Label lblOreCattedra;
+        private System.Windows.Forms.Label lblDocente;
     }
 }

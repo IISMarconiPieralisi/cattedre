@@ -35,8 +35,8 @@
             // 
             this.lbldisciplina.AutoSize = true;
             this.lbldisciplina.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbldisciplina.Location = new System.Drawing.Point(83, 24);
-            this.lbldisciplina.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbldisciplina.Location = new System.Drawing.Point(95, 18);
+            this.lbldisciplina.Margin = new System.Windows.Forms.Padding(0);
             this.lbldisciplina.Name = "lbldisciplina";
             this.lbldisciplina.Size = new System.Drawing.Size(21, 19);
             this.lbldisciplina.TabIndex = 1;

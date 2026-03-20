@@ -30,15 +30,15 @@
         {
             this.components = new System.ComponentModel.Container();
             this.cbDocentiTeorici = new System.Windows.Forms.ComboBox();
+            this.cmDocente = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiTaglia = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiCopia = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiIncolla = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.cbDocentiItip = new System.Windows.Forms.ComboBox();
             this.lblOreTeoria = new System.Windows.Forms.Label();
             this.lblOreLaboratorio = new System.Windows.Forms.Label();
-            this.cmDocente = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tsmiTaglia = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiCopia = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiIncolla = new System.Windows.Forms.ToolStripMenuItem();
             this.cmDocente.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,25 +54,61 @@
             this.cbDocentiTeorici.TabIndex = 0;
             this.cbDocentiTeorici.SelectedIndexChanged += new System.EventHandler(this.cbDocentiTeorici_SelectedIndexChanged);
             // 
+            // cmDocente
+            // 
+            this.cmDocente.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiTaglia,
+            this.tsmiCopia,
+            this.tsmiIncolla});
+            this.cmDocente.Name = "cmDocente";
+            this.cmDocente.Size = new System.Drawing.Size(160, 70);
+            // 
+            // tsmiTaglia
+            // 
+            this.tsmiTaglia.Image = global::Cattedre.Properties.Resources.taglia;
+            this.tsmiTaglia.Name = "tsmiTaglia";
+            this.tsmiTaglia.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.tsmiTaglia.Size = new System.Drawing.Size(159, 22);
+            this.tsmiTaglia.Text = "Taglia";
+            this.tsmiTaglia.Click += new System.EventHandler(this.tsmiTaglia_Click);
+            // 
+            // tsmiCopia
+            // 
+            this.tsmiCopia.Image = global::Cattedre.Properties.Resources.copia;
+            this.tsmiCopia.Name = "tsmiCopia";
+            this.tsmiCopia.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.tsmiCopia.Size = new System.Drawing.Size(159, 22);
+            this.tsmiCopia.Text = "Copia";
+            this.tsmiCopia.Click += new System.EventHandler(this.tsmiCopia_Click);
+            // 
+            // tsmiIncolla
+            // 
+            this.tsmiIncolla.Image = global::Cattedre.Properties.Resources.incolla;
+            this.tsmiIncolla.Name = "tsmiIncolla";
+            this.tsmiIncolla.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.tsmiIncolla.Size = new System.Drawing.Size(159, 22);
+            this.tsmiIncolla.Text = "Incolla";
+            this.tsmiIncolla.Click += new System.EventHandler(this.tsmiIncolla_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(2, 0);
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(2, 3);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 16);
+            this.label1.Size = new System.Drawing.Size(46, 15);
             this.label1.TabIndex = 2;
             this.label1.Text = "Teorici:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(2, 45);
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 49);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 16);
+            this.label2.Size = new System.Drawing.Size(24, 15);
             this.label2.TabIndex = 13;
             this.label2.Text = "ITP:";
             // 
@@ -107,42 +143,6 @@
             this.lblOreLaboratorio.Size = new System.Drawing.Size(17, 16);
             this.lblOreLaboratorio.TabIndex = 17;
             this.lblOreLaboratorio.Text = "...";
-            // 
-            // cmDocente
-            // 
-            this.cmDocente.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiTaglia,
-            this.tsmiCopia,
-            this.tsmiIncolla});
-            this.cmDocente.Name = "cmDocente";
-            this.cmDocente.Size = new System.Drawing.Size(181, 92);
-            // 
-            // tsmiTaglia
-            // 
-            this.tsmiTaglia.Image = global::Cattedre.Properties.Resources.taglia;
-            this.tsmiTaglia.Name = "tsmiTaglia";
-            this.tsmiTaglia.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.tsmiTaglia.Size = new System.Drawing.Size(180, 22);
-            this.tsmiTaglia.Text = "Taglia";
-            this.tsmiTaglia.Click += new System.EventHandler(this.tsmiTaglia_Click);
-            // 
-            // tsmiCopia
-            // 
-            this.tsmiCopia.Image = global::Cattedre.Properties.Resources.copia;
-            this.tsmiCopia.Name = "tsmiCopia";
-            this.tsmiCopia.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.tsmiCopia.Size = new System.Drawing.Size(180, 22);
-            this.tsmiCopia.Text = "Copia";
-            this.tsmiCopia.Click += new System.EventHandler(this.tsmiCopia_Click);
-            // 
-            // tsmiIncolla
-            // 
-            this.tsmiIncolla.Image = global::Cattedre.Properties.Resources.incolla;
-            this.tsmiIncolla.Name = "tsmiIncolla";
-            this.tsmiIncolla.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.tsmiIncolla.Size = new System.Drawing.Size(180, 22);
-            this.tsmiIncolla.Text = "Incolla";
-            this.tsmiIncolla.Click += new System.EventHandler(this.tsmiIncolla_Click);
             // 
             // UcAssegnazioni
             // 

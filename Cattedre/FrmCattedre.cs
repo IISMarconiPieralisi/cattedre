@@ -735,5 +735,10 @@ namespace Cattedre
             LoadAssegnazioni(IDdipartimento, annoscolastico.ID, out dtDocentiAssegnazioni);
             LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
         }
+
+        private void pnlOreDoc_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

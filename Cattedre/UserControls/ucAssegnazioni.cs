@@ -185,7 +185,20 @@ namespace Cattedre
             }
         }
 
-       
+        private void tsmiTaglia_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tsmiCopia_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tsmiIncolla_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 

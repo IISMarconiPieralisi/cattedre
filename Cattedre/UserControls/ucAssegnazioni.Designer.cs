@@ -28,16 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.cbDocentiTeorici = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.cbDocentiItip = new System.Windows.Forms.ComboBox();
             this.lblOreTeoria = new System.Windows.Forms.Label();
             this.lblOreLaboratorio = new System.Windows.Forms.Label();
+            this.cmDocente = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiTaglia = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiCopia = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiIncolla = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmDocente.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbDocentiTeorici
             // 
+            this.cbDocentiTeorici.ContextMenuStrip = this.cmDocente;
             this.cbDocentiTeorici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDocentiTeorici.FormattingEnabled = true;
             this.cbDocentiTeorici.Location = new System.Drawing.Point(5, 20);
@@ -71,6 +78,7 @@
             // 
             // cbDocentiItip
             // 
+            this.cbDocentiItip.ContextMenuStrip = this.cmDocente;
             this.cbDocentiItip.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDocentiItip.FormattingEnabled = true;
             this.cbDocentiItip.Location = new System.Drawing.Point(5, 64);
@@ -100,6 +108,39 @@
             this.lblOreLaboratorio.TabIndex = 17;
             this.lblOreLaboratorio.Text = "...";
             // 
+            // cmDocente
+            // 
+            this.cmDocente.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiTaglia,
+            this.tsmiCopia,
+            this.tsmiIncolla});
+            this.cmDocente.Name = "cmDocente";
+            this.cmDocente.Size = new System.Drawing.Size(110, 70);
+            // 
+            // tsmiTaglia
+            // 
+            this.tsmiTaglia.Image = global::Cattedre.Properties.Resources.taglia;
+            this.tsmiTaglia.Name = "tsmiTaglia";
+            this.tsmiTaglia.Size = new System.Drawing.Size(180, 22);
+            this.tsmiTaglia.Text = "Taglia";
+            this.tsmiTaglia.Click += new System.EventHandler(this.tsmiTaglia_Click);
+            // 
+            // tsmiCopia
+            // 
+            this.tsmiCopia.Image = global::Cattedre.Properties.Resources.copia;
+            this.tsmiCopia.Name = "tsmiCopia";
+            this.tsmiCopia.Size = new System.Drawing.Size(180, 22);
+            this.tsmiCopia.Text = "Copia";
+            this.tsmiCopia.Click += new System.EventHandler(this.tsmiCopia_Click);
+            // 
+            // tsmiIncolla
+            // 
+            this.tsmiIncolla.Image = global::Cattedre.Properties.Resources.incolla;
+            this.tsmiIncolla.Name = "tsmiIncolla";
+            this.tsmiIncolla.Size = new System.Drawing.Size(180, 22);
+            this.tsmiIncolla.Text = "Incolla";
+            this.tsmiIncolla.Click += new System.EventHandler(this.tsmiIncolla_Click);
+            // 
             // UcAssegnazioni
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -114,6 +155,7 @@
             this.Name = "UcAssegnazioni";
             this.Size = new System.Drawing.Size(163, 94);
             this.Load += new System.EventHandler(this.UcAssegnazioni_Load);
+            this.cmDocente.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -127,5 +169,9 @@
         public System.Windows.Forms.ComboBox cbDocentiItip;
         public System.Windows.Forms.Label lblOreTeoria;
         public System.Windows.Forms.Label lblOreLaboratorio;
+        private System.Windows.Forms.ContextMenuStrip cmDocente;
+        private System.Windows.Forms.ToolStripMenuItem tsmiTaglia;
+        private System.Windows.Forms.ToolStripMenuItem tsmiCopia;
+        private System.Windows.Forms.ToolStripMenuItem tsmiIncolla;
     }
 }

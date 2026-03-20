@@ -447,9 +447,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1-47b4fe04.ico" />
+    <None Include="Resources\incolla.png" />
+    <None Include="Resources\copia.png" />
+    <None Include="Resources\taglia.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

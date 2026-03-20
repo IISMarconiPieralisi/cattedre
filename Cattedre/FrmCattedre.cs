@@ -504,23 +504,15 @@ namespace Cattedre
                     uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) =>
                     {
                         AggiornaOreEffettive();
-                        if (uc.IDdocTh > 0)
-                            ClsAssegnareBL.UpdateCattedra(
-                                classe.ID,
-                                IDannoscolastico,
-                                disciplina.ID,
-                                uc.IDdocTh);
+                        if (uc.cbDocentiTeorici.SelectedItem is ClsUtenteDL u)
+                            ClsAssegnareBL.UpdateCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID);
                     };
 
                     uc.cbDocentiItip.SelectedIndexChanged += (s, e) =>
                     {
                         AggiornaOreEffettive();
-                        if (uc.IDdocLab > 0)
-                            ClsAssegnareBL.UpdateCattedra(
-                                classe.ID,
-                                IDannoscolastico,
-                                disciplina.ID,
-                                uc.IDdocLab);
+                        if (uc.cbDocentiItip.SelectedItem is ClsUtenteDL u)
+                            ClsAssegnareBL.UpdateCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID);
                     };
 
                     int x = 10 + colonna * 225;
@@ -740,7 +732,7 @@ namespace Cattedre
             ClsAnnoScolasticoDL annoscolastico = new ClsAnnoScolasticoDL();
             annoscolastico = ClsAnnoScolasticoBL.CercaAnnoScolastico(Annoscolasticoselezionato);
             LoadClassi(IDdipartimento, annoscolastico.ID);
-            LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
+            LoadAssegnazioni(IDdipartimento, annoscolastico.ID, out dtDocentiAssegnazioni);
             LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
         }
     }

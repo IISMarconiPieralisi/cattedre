@@ -128,16 +128,16 @@ namespace Cattedre
         // FIX: ora salva l'ID reale del professore, non l'indice
         private void cbDocentiTeorici_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbDocentiTeorici.SelectedItem is ProfessoreItem prof)
-                _iddocth = prof.ID;
+            if (cbDocentiTeorici.SelectedItem is ClsUtenteDL utente)
+                _iddocth = utente.ID;
             else
                 _iddocth = 0;
         }
 
         private void cbDocentiItip_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbDocentiItip.SelectedItem is ProfessoreItem prof)
-                _iddoclab = prof.ID;
+            if (cbDocentiItip.SelectedItem is ClsUtenteDL utente)
+                _iddoclab = utente.ID;
             else
                 _iddoclab = 0;
         }

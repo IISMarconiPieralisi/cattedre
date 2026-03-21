@@ -451,6 +451,8 @@
     <None Include="Resources\copia.png" />
     <None Include="Resources\taglia.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="MigliorieGrafiche\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

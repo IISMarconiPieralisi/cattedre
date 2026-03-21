@@ -229,12 +229,6 @@ namespace Cattedre
             {
                 ucOreDoc uc = new ucOreDoc();
 
-                //lblDocente.Text = "Docente";
-                //lblOreCattedra.Text = "Ore Cattedra";
-                //lblOreEff.Text = "Ore Eff";
-                //lblOrePot.Text = "Ore Pot";
-                //lblOreTot.Text = "Tot";
-
                 uc.lblDocente.Text = $"{doc.Nome} {doc.Cognome}";
                 uc.lblOreDiCattedra.Text =
                 ClsContrattoBL.RilevaOreContrattoDoc(doc.ID).ToString();
@@ -306,8 +300,13 @@ namespace Cattedre
             {
                 uc.lblOreEffettive.Text = "0";
                 uc.lblOreTotali.Text = "0";
+                uc.lblDocente.ForeColor = Color.Black;
                 uc.lblOreEffettive.ForeColor = Color.Black;
                 uc.lblOreTotali.ForeColor = Color.Black;
+
+                uc.lblDocente.Font = new Font(uc.lblDocente.Font, FontStyle.Regular);
+                uc.lblOreEffettive.Font = new Font(uc.lblOreEffettive.Font, FontStyle.Regular);
+                uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Regular);
             }
 
             // calcolo ore effettive
@@ -346,8 +345,11 @@ namespace Cattedre
 
                 if (totale > cattedra || totale < cattedra)
                 {
+                    uc.lblDocente.ForeColor = Color.Red;
                     uc.lblOreEffettive.ForeColor = Color.Red;
                     uc.lblOreTotali.ForeColor = Color.Red;
+
+                    uc.lblDocente.Font = new Font(uc.lblDocente.Font, FontStyle.Bold);
                     uc.lblOreEffettive.Font = new Font(uc.lblOreEffettive.Font, FontStyle.Bold);
                     uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Bold);
                 }

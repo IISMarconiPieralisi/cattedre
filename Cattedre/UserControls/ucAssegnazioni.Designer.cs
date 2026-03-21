@@ -39,6 +39,8 @@
             this.cbDocentiItip = new System.Windows.Forms.ComboBox();
             this.lblOreTeoria = new System.Windows.Forms.Label();
             this.lblOreLaboratorio = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.cmDocente.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -144,10 +146,32 @@
             this.lblOreLaboratorio.TabIndex = 17;
             this.lblOreLaboratorio.Text = "...";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.label3.Location = new System.Drawing.Point(134, 24);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(15, 16);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "h";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.label4.Location = new System.Drawing.Point(134, 69);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(15, 16);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "h";
+            // 
             // UcAssegnazioni
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.lblOreLaboratorio);
             this.Controls.Add(this.lblOreTeoria);
             this.Controls.Add(this.label2);
@@ -176,5 +200,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiTaglia;
         private System.Windows.Forms.ToolStripMenuItem tsmiCopia;
         private System.Windows.Forms.ToolStripMenuItem tsmiIncolla;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }

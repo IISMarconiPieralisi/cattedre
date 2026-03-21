@@ -13,6 +13,25 @@ namespace Cattedre
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
+        public static bool EsistonoAssegnazioniAnnoSuccessivo(long IDannosuccessivo)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT COUNT(*)
+                       FROM assegnare
+                       WHERE IDannoscolastico = @IDannoscolastico";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+                cmd.Parameters.AddWithValue("@IDannoscolastico", IDannosuccessivo);
+
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                return count > 0;
+            }
+        }
 
         public static void GeneraCattedreAnnoSuccessivo(int IDdipartimento, int IDannoCorrente, int IDannoSuccessivo)
         {

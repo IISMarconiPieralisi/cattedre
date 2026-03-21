@@ -206,7 +206,7 @@ namespace Cattedre
             if (dtDocentiAssegnazioni == null || dtDocentiAssegnazioni.Rows.Count == 0)
                 return;
 
-            int y = 15;
+            int y = 25;
 
             // prendo docenti distinti dal DataTable
             List<ClsUtenteDL> docenti = dtDocentiAssegnazioni.AsEnumerable()
@@ -228,6 +228,12 @@ namespace Cattedre
             foreach (var doc in docenti)
             {
                 ucOreDoc uc = new ucOreDoc();
+
+                //lblDocente.Text = "Docente";
+                //lblOreCattedra.Text = "Ore Cattedra";
+                //lblOreEff.Text = "Ore Eff";
+                //lblOrePot.Text = "Ore Pot";
+                //lblOreTot.Text = "Tot";
 
                 uc.lblDocente.Text = $"{doc.Nome} {doc.Cognome}";
                 uc.lblOreDiCattedra.Text =
@@ -266,10 +272,16 @@ namespace Cattedre
                 uc.Tag = doc.ID;
                 uc.Location = new Point(0, y);
 
+                pnlOreDoc.Controls.Add(lblDocente);
+                pnlOreDoc.Controls.Add(lblOreCattedra);
+                pnlOreDoc.Controls.Add(lblOreEff);
+                pnlOreDoc.Controls.Add(lblOrePot);
+                pnlOreDoc.Controls.Add(lblOreTot);
                 pnlOreDoc.Controls.Add(uc);
+                
                 dictDocenti[doc.ID] = uc;
 
-                y += uc.Height + 5;
+                y += uc.Height;
 
                 // disabilita modifica per Preside o Admin
                 if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
@@ -734,11 +746,6 @@ namespace Cattedre
             LoadClassi(IDdipartimento, annoscolastico.ID);
             LoadAssegnazioni(IDdipartimento, annoscolastico.ID, out dtDocentiAssegnazioni);
             LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
-        }
-
-        private void pnlOreDoc_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

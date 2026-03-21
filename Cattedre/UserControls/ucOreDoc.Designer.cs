@@ -95,7 +95,7 @@
             this.Controls.Add(this.lblOreEffettive);
             this.Controls.Add(this.lblOreDiCattedra);
             this.Name = "ucOreDoc";
-            this.Size = new System.Drawing.Size(414, 68);
+            this.Size = new System.Drawing.Size(414, 49);
             ((System.ComponentModel.ISupportInitialize)(this.nudOrePot)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

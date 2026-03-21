@@ -35,7 +35,7 @@
             // 
             this.lbldisciplina.AutoSize = true;
             this.lbldisciplina.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbldisciplina.Location = new System.Drawing.Point(95, 18);
+            this.lbldisciplina.Location = new System.Drawing.Point(24, 18);
             this.lbldisciplina.Margin = new System.Windows.Forms.Padding(0);
             this.lbldisciplina.Name = "lbldisciplina";
             this.lbldisciplina.Size = new System.Drawing.Size(21, 19);
@@ -51,7 +51,7 @@
             this.Controls.Add(this.lbldisciplina);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "UcDisciplina";
-            this.Size = new System.Drawing.Size(213, 53);
+            this.Size = new System.Drawing.Size(162, 53);
             this.ResumeLayout(false);
             this.PerformLayout();
 

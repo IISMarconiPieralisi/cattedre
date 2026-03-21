@@ -527,7 +527,7 @@ namespace Cattedre
                             ClsAssegnareBL.UpdateCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID);
                     };
 
-                    int x = 10 + colonna * 225;
+                    int x = 20 + colonna * 170;
                     int y = 72 + riga * 100;
                     uc.Location = new Point(x, y);
 

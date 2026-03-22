@@ -68,7 +68,7 @@ namespace Cattedre
 
                     //controllo colore
                     if (string.IsNullOrEmpty(_utente.Colore))
-                        throw new Exception("Seleziona un colore al docente.");
+                        _utente.Colore = "000000000";
                     
 
                     // controlli classe di concorso
@@ -296,6 +296,7 @@ namespace Cattedre
                     PnContratto.Visible = true;
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
+                    cbDipartimentoCoordinato.Text = string.Empty;
                     break;
 
                 case "Coordinatore di dipartimento":
@@ -313,6 +314,7 @@ namespace Cattedre
                     PnContratto.Enabled = false;
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
+                    cbDipartimentoCoordinato.Text = string.Empty;
                     break;
             }
         } 
@@ -383,10 +385,9 @@ namespace Cattedre
             if (_bloccoEvdipCoord)
                 return;
             ClsUtenteDL coord = ClsDipartimentoBL.utenteCoordinaDiparimento(dipartimentoScelto);
-            if (coord != null && coord.ID != _utente.ID)
+            if (coord != null && (_utente==null ||coord.ID != _utente.ID))
             {
-                DialogResult dr = MessageBox.Show($"Attualmente il dipartimento {dipartimentoScelto} viene coordinato da {coord.Cognome} {coord.Nome}; \nVuoi sostituirlo?",
-                           "Cambio Coordinatore", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult dr = MessageBox.Show($"Attualmente il dipartimento {dipartimentoScelto} viene coordinato da {coord.Cognome} {coord.Nome}; \nVuoi sostituirlo?","Cambio Coordinatore", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == DialogResult.No)
                 {
                     _bloccoEvdipCoord = true;
@@ -517,10 +518,15 @@ namespace Cattedre
 
         public Color OttieniColore(string rgb)
         {
-            int r = int.Parse(rgb.Substring(0, 3));
-            int g = int.Parse(rgb.Substring(3, 3));
-            int b = int.Parse(rgb.Substring(6, 3));
-            return Color.FromArgb(r, g, b);
+            if (rgb.Length >= 9)
+            {
+                int r = int.Parse(rgb.Substring(0, 3));
+                int g = int.Parse(rgb.Substring(3, 3));
+                int b = int.Parse(rgb.Substring(6, 3));
+                return Color.FromArgb(r, g, b);
+            }
+            else
+                return Color.Black;
         }
 
         public static string ScriviColore(Color colore)

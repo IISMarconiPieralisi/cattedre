@@ -96,7 +96,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(18, 139);
+            this.label3.Location = new System.Drawing.Point(18, 130);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 2;
@@ -151,7 +151,7 @@
             // 
             this.tbEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbEmail.Location = new System.Drawing.Point(109, 136);
+            this.tbEmail.Location = new System.Drawing.Point(108, 123);
             this.tbEmail.Name = "tbEmail";
             this.tbEmail.Size = new System.Drawing.Size(219, 20);
             this.tbEmail.TabIndex = 8;
@@ -165,6 +165,8 @@
             this.tbPassword.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tbPassword.Size = new System.Drawing.Size(219, 20);
             this.tbPassword.TabIndex = 9;
+            this.tbPassword.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbPassword.UseSystemPasswordChar = true;
             this.tbPassword.UseWaitCursor = true;
             // 
             // cbTipoUtente
@@ -259,6 +261,7 @@
             // 
             // pnColore
             // 
+            this.pnColore.BackColor = System.Drawing.Color.Black;
             this.pnColore.Location = new System.Drawing.Point(192, 326);
             this.pnColore.Name = "pnColore";
             this.pnColore.Size = new System.Drawing.Size(24, 23);
@@ -276,7 +279,7 @@
             // cbAutoEmail
             // 
             this.cbAutoEmail.AutoSize = true;
-            this.cbAutoEmail.Location = new System.Drawing.Point(109, 259);
+            this.cbAutoEmail.Location = new System.Drawing.Point(109, 149);
             this.cbAutoEmail.Name = "cbAutoEmail";
             this.cbAutoEmail.Size = new System.Drawing.Size(107, 17);
             this.cbAutoEmail.TabIndex = 18;

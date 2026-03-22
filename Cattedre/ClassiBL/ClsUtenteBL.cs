@@ -305,7 +305,7 @@ namespace Cattedre
                     utente.Cognome = row["cognome"].ToString();
                     utente.Nome = row["nome"].ToString();
                     utente.TipoUtente = row["tipoUtente"].ToString();
-                    //utente.Colore = row["colore"].ToString();
+                    utente.Colore = row["colore"].ToString();
                     utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
                     utenti.Add(utente);
                 }
@@ -588,7 +588,7 @@ namespace Cattedre
                     utente.Cognome = row["cognome"].ToString();
                     utente.Nome = row["nome"].ToString();
                     utente.TipoUtente = row["tipoUtente"].ToString();
-                    //utente.Colore = row["colore"].ToString();
+                    utente.Colore = row["colore"].ToString();
                     utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
                     utenti.Add(utente);
                 }
@@ -602,11 +602,10 @@ namespace Cattedre
         }
         public static MySqlCommand CreaComandoRicerca(Dictionary<string, List<string>> filtri, MySqlConnection conn)
         {
-            string sql = "SELECT u.ID, u.nome, u.cognome, email, password, tipoutente, tipodocente, colore FROM utenti u JOIN contratti c ON u.ID=c.IDutente";
+            string sql = "SELECT u.ID, u.nome, u.cognome, email, password, tipoutente, tipodocente, colore FROM utenti u LEFT JOIN contratti c ON u.ID=c.IDutente";
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = conn;
             List<string> condizioni = new List<string>();
-            int paramIndex = 0;
             foreach (var filtro in filtri)
             {
                 string colonna = filtro.Key;
@@ -619,10 +618,7 @@ namespace Cattedre
 
                 foreach (var valore in valori)
                 {
-                    string paramName = "@p" + paramIndex;
-                    orConditions.Add($"{colonna} = {paramName}");
-                    cmd.Parameters.AddWithValue(paramName, valore);
-                    paramIndex++;
+                    orConditions.Add($"{colonna} = {valore}");
                 }
 
                 // Combina valori dello stesso filtro con OR
@@ -631,6 +627,8 @@ namespace Cattedre
 
             if (condizioni.Count > 0)
             {
+                if (condizioni.Any(c => c.Contains("tipoContratto")))
+                    sql = sql.Replace("LEFT JOIN", "JOIN");
                 sql += " WHERE " + string.Join(" AND ", condizioni);
             }
 

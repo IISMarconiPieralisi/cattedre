@@ -284,10 +284,28 @@ namespace Cattedre
                 }
 
                 // evento aggiornamento automatico
-                uc.nudOrePot.ValueChanged += (s, e) => AggiornaOreEffettive();
+                uc.nudOrePot.ValueChanged += (s, e) =>
+                {
+                    AggiornaOreEffettive();
+                    ControllaOrePotenzamentoTotali();
+                };
             }
 
             AggiornaOreEffettive();
+            ControllaOrePotenzamentoTotali();
+        }
+
+        private void ControllaOrePotenzamentoTotali()
+        {
+            int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimento(IDdipartimento);
+
+            int orePotTotaliInserite = dictDocenti.Values
+                .Sum(uc => (int)uc.nudOrePot.Value);
+
+            if (orePotTotaliInserite > oreMax)
+            {
+                MessageBox.Show("Superato il limite di ore di potenziamento consentite - " + oreMax, "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void AggiornaOreEffettive()

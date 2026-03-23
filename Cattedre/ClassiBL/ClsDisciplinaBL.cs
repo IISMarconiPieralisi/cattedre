@@ -491,6 +491,47 @@ namespace Cattedre
 
         }
 
-
+        public static int RilevaOrePotenziamentoDipartimento(int IDdipartimento)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT d.* 
+                           FROM discipline d
+                           JOIN gestire g ON g.IDdisciplina = d.ID
+                           WHERE g.IDdipartimento = @IDdipartimento
+                           AND d.nome LIKE '%otenziamento%'
+                           LIMIT 1";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                        {
+                            ClsDisciplinaDL disciplina = new ClsDisciplinaDL(
+                                Convert.ToInt64(dt.Rows[0]["ID"]),
+                                dt.Rows[0]["nome"].ToString(),
+                                Convert.ToInt32(dt.Rows[0]["anno"]),
+                                Convert.ToInt32(dt.Rows[0]["oreLaboratorio"]),
+                                Convert.ToInt32(dt.Rows[0]["oreTeoria"]),
+                                dt.Rows[0]["disciplinaSpeciale"].ToString()
+                            );
+                            return disciplina.OreLaboratorio;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nel recupero ore potenziamento: " + ex.Message);
+            }
+            return 0;
+        }
     }
 }

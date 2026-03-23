@@ -353,8 +353,6 @@ namespace Cattedre
         }
         public static void ModificaUtente(ClsUtenteDL utente, long IDutente)
         {
-            
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))

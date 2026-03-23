@@ -106,7 +106,6 @@ namespace Cattedre
         private void LoadInfoNumCattedre(long idDip, DataTable docenti)
         {
             pnlInfoNumCattedre.Controls.Clear();
-
             int y = 10;
 
             Label lblPrinc = new Label();
@@ -114,87 +113,74 @@ namespace Cattedre
             lblPrinc.Location = new Point(10, y);
             lblPrinc.Text = "INFO NUM CATTEDRE X CDC";
             lblPrinc.Font = new Font(lblPrinc.Font, FontStyle.Bold);
-
             pnlInfoNumCattedre.Controls.Add(lblPrinc);
 
-            y = 40;
-
+            y = 50;
             int numDocentiEstratti = docenti.AsEnumerable()
-          .Select(r => Convert.ToInt64(r["IDutente"]))
-          .Distinct()
-          .Count();
+                .Select(r => Convert.ToInt64(r["IDutente"]))
+                .Distinct()
+                .Count();
 
             Label lblNumProfEstratti = new Label();
             lblNumProfEstratti.AutoSize = true;
             lblNumProfEstratti.Location = new Point(10, y);
             lblNumProfEstratti.Text = "Num Docenti Assegnati: " + numDocentiEstratti;
             lblNumProfEstratti.Font = new Font(lblNumProfEstratti.Font.FontFamily, 10f, lblNumProfEstratti.Font.Style);
-
             pnlInfoNumCattedre.Controls.Add(lblNumProfEstratti);
 
-            y = 80;
-
+            y = 100;
             List<ClsDisciplinaDL> discipline = ClsDisciplinaBL
                 .CaricaDisciplineDipartimento(Convert.ToInt32(idDip));
 
-            // 1️ Recupero tutte le CDC di tutte le discipline
             List<ClsClasseDiConcorsoDL> cdcUniche = discipline
                 .SelectMany(d => ClsRichiedereBL.RilevaCDCDiscipina(d.ID))
-                .GroupBy(c => c.ID)          // raggruppo per ID CDC
-                .Select(g => g.First())      // prendo una sola CDC per gruppo
-                .OrderBy(c => c.Livello)     // ordinamento
+                .GroupBy(c => c.ID)
+                .Select(g => g.First())
+                .OrderBy(c => c.Livello)
                 .ToList();
 
-            // 2️ Creo le label
             foreach (ClsClasseDiConcorsoDL cdc in cdcUniche)
             {
-                int numCattedreDiritto =
-                    ClsDotareBL.TrovaNumCattedreDiDiritto(cdc.ID);
+                int numCattedreDiritto = ClsDotareBL.TrovaNumCattedreDiDiritto(cdc.ID);
+                int numCattedreFatto = ClsDotareBL.TrovaNumCattedreDiFatto(cdc.ID);
 
-                int numCattedreFatto =
-                    ClsDotareBL.TrovaNumCattedreDiFatto(cdc.ID);
-
+                // Riga 1: "Livello → Num Cattedre di Fatto: X"
                 Label lbl = new Label();
                 lbl.AutoSize = true;
                 lbl.Location = new Point(10, y);
-                lbl.Text =
-                    $"{cdc.Livello} → Num Cattedre di Fatto: {numCattedreFatto}";
-
+                lbl.Text = $"{cdc.Livello} → Num Cattedre di Fatto: {numCattedreFatto}";
                 pnlInfoNumCattedre.Controls.Add(lbl);
+                y += 20;
 
+                // Riga 2
                 Label lblInfo = new Label();
                 lblInfo.AutoSize = true;
-                lblInfo.Location = new Point(lbl.Right, y);
-                lblInfo.Font = new Font(lblInfo.Font, FontStyle.Bold);
-
+                lblInfo.Location = new Point(10, y);
                 if (numDocentiEstratti == numCattedreFatto)
                 {
-                    lblInfo.Text += "COPERTE";
+                    lblInfo.Text = "CATTEDRE COPERTE";
                     lblInfo.ForeColor = Color.Green;
                 }
                 else if (numDocentiEstratti < numCattedreFatto)
                 {
-                    lblInfo.Text += "VACANTI";
+                    lblInfo.Text = "CATTEDRE SCOPERTE";
                     lblInfo.ForeColor = Color.Red;
                 }
-                else if (numDocentiEstratti > numCattedreFatto)
+                else
                 {
-                    lblInfo.Text += "ESUBERO";
+                    lblInfo.Text = "CATTEDRE SOVRAFFOLLATE";
                     lblInfo.ForeColor = Color.Red;
                 }
-
                 pnlInfoNumCattedre.Controls.Add(lblInfo);
+                y += 25;
 
-                y += 15;
-
+                // Riga 3: "Num Cattedre di Diritto: X"
                 Label lblNumCattedreDiritto = new Label();
                 lblNumCattedreDiritto.AutoSize = true;
-                lblNumCattedreDiritto.Location = new Point(lbl.Location.X, y);
+                lblNumCattedreDiritto.Location = new Point(10, y);
                 lblNumCattedreDiritto.Text = $"Num Cattedre di Diritto: {numCattedreDiritto}";
-
                 pnlInfoNumCattedre.Controls.Add(lblNumCattedreDiritto);
-
-                y += 25;
+                y += 40;  // ampio spazio prima del blocco CDC successivo
             }
         }
 

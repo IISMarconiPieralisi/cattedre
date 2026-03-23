@@ -111,10 +111,10 @@ namespace Cattedre
             // 
             this.pnlInfoNumCattedre.BackColor = System.Drawing.SystemColors.Control;
             this.pnlInfoNumCattedre.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlInfoNumCattedre.Location = new System.Drawing.Point(298, 0);
+            this.pnlInfoNumCattedre.Location = new System.Drawing.Point(303, 0);
             this.pnlInfoNumCattedre.Margin = new System.Windows.Forms.Padding(2);
             this.pnlInfoNumCattedre.Name = "pnlInfoNumCattedre";
-            this.pnlInfoNumCattedre.Size = new System.Drawing.Size(235, 687);
+            this.pnlInfoNumCattedre.Size = new System.Drawing.Size(230, 687);
             this.pnlInfoNumCattedre.TabIndex = 1;
             // 
             // splitter1

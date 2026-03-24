@@ -454,6 +454,7 @@ namespace Cattedre
                         continue;
 
                     UcAssegnazioni uc = new UcAssegnazioni();
+                    uc.DocentiData = docenti;
 
                     List<ClsUtenteDL> teorici = new List<ClsUtenteDL>();
                     teorici.Add(new ClsUtenteDL { ID = 0, Cognome = "", Nome = "", Colore = "" });

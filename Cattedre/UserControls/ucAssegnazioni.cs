@@ -20,6 +20,8 @@ namespace Cattedre
         public long IDdocTh => _iddocth;
         public long IDdocLab => _iddoclab;
 
+        public DataTable DocentiData { get; set; }
+
         public class ProfessoreItem
         {
             public int ID { get; set; }
@@ -130,17 +132,46 @@ namespace Cattedre
         private void cbDocentiTeorici_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDocentiTeorici.SelectedItem is ClsUtenteDL utente)
+            {
                 _iddocth = utente.ID;
+
+                // Cerca tipoContratto nel DataTable
+                var riga = DocentiData?.AsEnumerable()
+                    .FirstOrDefault(r => r["IDutente"] != DBNull.Value &&
+                                         Convert.ToInt64(r["IDutente"]) == utente.ID);
+
+                string tipoContratto = (riga == null || riga["tipoContratto"] == DBNull.Value) ? ""
+                       : riga["tipoContratto"].ToString();
+
+                lblDocentiNonDiRuoloTEORICI.Visible = tipoContratto == "D";
+            }
             else
+            {
                 _iddocth = 0;
+                lblDocentiNonDiRuoloTEORICI.Visible = false;
+            }
         }
 
         private void cbDocentiItip_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDocentiItip.SelectedItem is ClsUtenteDL utente)
+            {
                 _iddoclab = utente.ID;
+
+                var riga = DocentiData?.AsEnumerable()
+                    .FirstOrDefault(r => r["IDutente"] != DBNull.Value &&
+                                         Convert.ToInt64(r["IDutente"]) == utente.ID);
+
+                string tipoContratto = (riga == null || riga["tipoContratto"] == DBNull.Value) ? ""
+                       : riga["tipoContratto"].ToString();
+
+                lblDocentiNonDiRuoloITP.Visible = tipoContratto == "D";
+            }
             else
+            {
                 _iddoclab = 0;
+                lblDocentiNonDiRuoloITP.Visible = false;
+            }
         }
 
         // CaricaProfessori chiamata UNA SOLA VOLTA, nel Load

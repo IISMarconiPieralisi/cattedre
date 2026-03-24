@@ -51,28 +51,29 @@
             this.cbDocentiTeorici.ContextMenuStrip = this.cmDocente;
             this.cbDocentiTeorici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDocentiTeorici.FormattingEnabled = true;
-            this.cbDocentiTeorici.Location = new System.Drawing.Point(5, 19);
-            this.cbDocentiTeorici.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.cbDocentiTeorici.Location = new System.Drawing.Point(7, 23);
+            this.cbDocentiTeorici.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.cbDocentiTeorici.Name = "cbDocentiTeorici";
-            this.cbDocentiTeorici.Size = new System.Drawing.Size(111, 21);
+            this.cbDocentiTeorici.Size = new System.Drawing.Size(147, 24);
             this.cbDocentiTeorici.TabIndex = 0;
             this.cbDocentiTeorici.SelectedIndexChanged += new System.EventHandler(this.cbDocentiTeorici_SelectedIndexChanged);
             // 
             // cmDocente
             // 
+            this.cmDocente.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmDocente.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiTaglia,
             this.tsmiCopia,
             this.tsmiIncolla});
             this.cmDocente.Name = "cmDocente";
-            this.cmDocente.Size = new System.Drawing.Size(160, 70);
+            this.cmDocente.Size = new System.Drawing.Size(188, 82);
             // 
             // tsmiTaglia
             // 
             this.tsmiTaglia.Image = global::Cattedre.Properties.Resources.taglia;
             this.tsmiTaglia.Name = "tsmiTaglia";
             this.tsmiTaglia.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.tsmiTaglia.Size = new System.Drawing.Size(159, 22);
+            this.tsmiTaglia.Size = new System.Drawing.Size(187, 26);
             this.tsmiTaglia.Text = "Taglia";
             this.tsmiTaglia.Click += new System.EventHandler(this.tsmiTaglia_Click);
             // 
@@ -81,7 +82,7 @@
             this.tsmiCopia.Image = global::Cattedre.Properties.Resources.copia;
             this.tsmiCopia.Name = "tsmiCopia";
             this.tsmiCopia.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.tsmiCopia.Size = new System.Drawing.Size(159, 22);
+            this.tsmiCopia.Size = new System.Drawing.Size(187, 26);
             this.tsmiCopia.Text = "Copia";
             this.tsmiCopia.Click += new System.EventHandler(this.tsmiCopia_Click);
             // 
@@ -90,7 +91,7 @@
             this.tsmiIncolla.Image = global::Cattedre.Properties.Resources.incolla;
             this.tsmiIncolla.Name = "tsmiIncolla";
             this.tsmiIncolla.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.tsmiIncolla.Size = new System.Drawing.Size(159, 22);
+            this.tsmiIncolla.Size = new System.Drawing.Size(187, 26);
             this.tsmiIncolla.Text = "Incolla";
             this.tsmiIncolla.Click += new System.EventHandler(this.tsmiIncolla_Click);
             // 
@@ -98,10 +99,9 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 7F, System.Drawing.FontStyle.Bold);
-            this.label1.Location = new System.Drawing.Point(2, 3);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(3, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 14);
+            this.label1.Size = new System.Drawing.Size(51, 16);
             this.label1.TabIndex = 2;
             this.label1.Text = "Teorici:";
             // 
@@ -109,10 +109,9 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 7F, System.Drawing.FontStyle.Bold);
-            this.label2.Location = new System.Drawing.Point(3, 49);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(4, 60);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(23, 14);
+            this.label2.Size = new System.Drawing.Size(28, 16);
             this.label2.TabIndex = 13;
             this.label2.Text = "ITP:";
             // 
@@ -121,10 +120,10 @@
             this.cbDocentiItip.ContextMenuStrip = this.cmDocente;
             this.cbDocentiItip.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDocentiItip.FormattingEnabled = true;
-            this.cbDocentiItip.Location = new System.Drawing.Point(5, 64);
-            this.cbDocentiItip.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.cbDocentiItip.Location = new System.Drawing.Point(7, 79);
+            this.cbDocentiItip.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.cbDocentiItip.Name = "cbDocentiItip";
-            this.cbDocentiItip.Size = new System.Drawing.Size(111, 21);
+            this.cbDocentiItip.Size = new System.Drawing.Size(147, 24);
             this.cbDocentiItip.TabIndex = 12;
             this.cbDocentiItip.SelectedIndexChanged += new System.EventHandler(this.cbDocentiItip_SelectedIndexChanged);
             // 
@@ -132,9 +131,10 @@
             // 
             this.lblOreTeoria.AutoSize = true;
             this.lblOreTeoria.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOreTeoria.Location = new System.Drawing.Point(124, 24);
+            this.lblOreTeoria.Location = new System.Drawing.Point(165, 30);
+            this.lblOreTeoria.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblOreTeoria.Name = "lblOreTeoria";
-            this.lblOreTeoria.Size = new System.Drawing.Size(17, 16);
+            this.lblOreTeoria.Size = new System.Drawing.Size(21, 20);
             this.lblOreTeoria.TabIndex = 16;
             this.lblOreTeoria.Text = "...";
             // 
@@ -142,9 +142,10 @@
             // 
             this.lblOreLaboratorio.AutoSize = true;
             this.lblOreLaboratorio.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOreLaboratorio.Location = new System.Drawing.Point(124, 69);
+            this.lblOreLaboratorio.Location = new System.Drawing.Point(165, 85);
+            this.lblOreLaboratorio.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblOreLaboratorio.Name = "lblOreLaboratorio";
-            this.lblOreLaboratorio.Size = new System.Drawing.Size(17, 16);
+            this.lblOreLaboratorio.Size = new System.Drawing.Size(21, 20);
             this.lblOreLaboratorio.TabIndex = 17;
             this.lblOreLaboratorio.Text = "...";
             // 
@@ -152,9 +153,10 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.label3.Location = new System.Drawing.Point(134, 24);
+            this.label3.Location = new System.Drawing.Point(179, 30);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(15, 16);
+            this.label3.Size = new System.Drawing.Size(18, 20);
             this.label3.TabIndex = 18;
             this.label3.Text = "h";
             // 
@@ -162,18 +164,21 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.label4.Location = new System.Drawing.Point(134, 69);
+            this.label4.Location = new System.Drawing.Point(179, 85);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(15, 16);
+            this.label4.Size = new System.Drawing.Size(18, 20);
             this.label4.TabIndex = 19;
             this.label4.Text = "h";
             // 
             // lblDocentiNonDiRuoloTEORICI
             // 
             this.lblDocentiNonDiRuoloTEORICI.AutoSize = true;
-            this.lblDocentiNonDiRuoloTEORICI.Location = new System.Drawing.Point(117, 11);
+            this.lblDocentiNonDiRuoloTEORICI.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDocentiNonDiRuoloTEORICI.Location = new System.Drawing.Point(150, 12);
+            this.lblDocentiNonDiRuoloTEORICI.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDocentiNonDiRuoloTEORICI.Name = "lblDocentiNonDiRuoloTEORICI";
-            this.lblDocentiNonDiRuoloTEORICI.Size = new System.Drawing.Size(11, 13);
+            this.lblDocentiNonDiRuoloTEORICI.Size = new System.Drawing.Size(31, 39);
             this.lblDocentiNonDiRuoloTEORICI.TabIndex = 20;
             this.lblDocentiNonDiRuoloTEORICI.Text = "*";
             this.lblDocentiNonDiRuoloTEORICI.Visible = false;
@@ -181,19 +186,19 @@
             // lblDocentiNonDiRuoloITP
             // 
             this.lblDocentiNonDiRuoloITP.AutoSize = true;
-            this.lblDocentiNonDiRuoloITP.Location = new System.Drawing.Point(117, 56);
+            this.lblDocentiNonDiRuoloITP.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDocentiNonDiRuoloITP.Location = new System.Drawing.Point(150, 68);
+            this.lblDocentiNonDiRuoloITP.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDocentiNonDiRuoloITP.Name = "lblDocentiNonDiRuoloITP";
-            this.lblDocentiNonDiRuoloITP.Size = new System.Drawing.Size(11, 13);
+            this.lblDocentiNonDiRuoloITP.Size = new System.Drawing.Size(31, 39);
             this.lblDocentiNonDiRuoloITP.TabIndex = 21;
             this.lblDocentiNonDiRuoloITP.Text = "*";
             this.lblDocentiNonDiRuoloITP.Visible = false;
             // 
             // UcAssegnazioni
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.lblDocentiNonDiRuoloITP);
-            this.Controls.Add(this.lblDocentiNonDiRuoloTEORICI);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lblOreLaboratorio);
@@ -202,9 +207,11 @@
             this.Controls.Add(this.cbDocentiItip);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbDocentiTeorici);
-            this.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.Controls.Add(this.lblDocentiNonDiRuoloITP);
+            this.Controls.Add(this.lblDocentiNonDiRuoloTEORICI);
+            this.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.Name = "UcAssegnazioni";
-            this.Size = new System.Drawing.Size(163, 94);
+            this.Size = new System.Drawing.Size(217, 116);
             this.Load += new System.EventHandler(this.UcAssegnazioni_Load);
             this.cmDocente.ResumeLayout(false);
             this.ResumeLayout(false);

@@ -227,7 +227,7 @@ namespace Cattedre
             }
             return classi;
         }
-        public static List<ClsClasseDL> CaricaClassiFiltrate(int anno = 0, long IDindirizzo = 0)
+        public static List<ClsClasseDL> CaricaClassiFiltrate(Dictionary <string,List<string>> Filtri)
         {
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
             DataTable ds = new DataTable();
@@ -236,7 +236,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = CreaQueryFiltri(conn, anno, IDindirizzo))
+                    using (MySqlCommand cmd = CreaQueryFiltri(conn, Filtri))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
@@ -266,29 +266,36 @@ namespace Cattedre
             }
             return classi;
         }
-        private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, int anno = 0, long IDindirizzo = 0)
+        private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, Dictionary<string, List<string>> Filtri)
         {
             try
             {
-                if (anno <= 0 && IDindirizzo <= 0)
+                if (Filtri.Count <= 0)
                     throw new Exception("non è stato inserito nessun parametro in cui filtrare,riprovare");
                 string sql = "SELECT * FROM classi WHERE ";
                 MySqlCommand cmd = new MySqlCommand("", conn);
-                if (anno > 0)
+                List<string> condizioni = new List<string>();
+                foreach (var filtro in Filtri)
                 {
-                    sql += "anno=@anno ";
-                    cmd.Parameters.AddWithValue("@anno", anno);
+                    string Parametro = filtro.Key;
+                    List<string> valori = filtro.Value;
+                    if (valori == null || valori.Count == 0)
+                        continue;
+                    List<string> valoriRicerca = new List<string>();
+                    foreach(string valore in valori)
+                        valoriRicerca.Add($"{Parametro} = {valore}");
+
+                    // Combina valori dello stesso filtro con OR
+                    condizioni.Add("(" + string.Join(" OR ", valoriRicerca) + ")");
                 }
-                if (IDindirizzo > 0)
+                if (condizioni.Count > 0)
                 {
-                    if (anno > 0)
-                        sql += "AND ";
-                    sql += "IDindirizzo=@IDindirizzo";
-                    cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
+                    sql += string.Join(" AND ", condizioni);
                 }
-                sql += ";";
+
                 cmd.CommandText = sql;
                 return cmd;
+
             }
             catch (Exception ex)
             {

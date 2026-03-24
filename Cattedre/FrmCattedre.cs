@@ -274,8 +274,6 @@ namespace Cattedre
 
                 uc.nudOrePot.ValueChanged += (s, e) =>
                 {
-                    AggiornaOreEffettive();
-
                     int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimento(IDdipartimento);
                     int orePotTotaliInserite = dictDocenti.Values.Sum(u => (int)u.nudOrePot.Value);
 
@@ -288,9 +286,8 @@ namespace Cattedre
                     else
                     {
                         valorePrec = (int)uc.nudOrePot.Value; // aggiorno il valore precedente
+                        AggiornaOreEffettive();
                     }
-
-                    AggiornaOreEffettive();
                 };
             }
 

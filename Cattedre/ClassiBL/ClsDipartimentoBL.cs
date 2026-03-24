@@ -140,9 +140,6 @@ namespace Cattedre
             if (dipartimento == null || dipartimento.ID <= 0)
                 return false;
 
-            string connectionString = ConfigurationManager
-                .ConnectionStrings["cattedre"].ConnectionString;
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -168,79 +165,81 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
-        
+
 
         public static ClsDipartimentoDL UtenteCoordinaDipartimento(long IDutente)
         {
-            
-            MySqlConnection conn = new MySqlConnection(connectionString);
             ClsDipartimentoDL dipartimento = null;
             try
             {
-                conn.Open();
-                string sql = "SELECT * FROM dipartimenti WHERE IDutente = @IDutente";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@IDutente", IDutente);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    if (dr.Read())
+                    conn.Open();
+                    string sql = "SELECT * FROM dipartimenti WHERE IDutente = @IDutente";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        dipartimento = new ClsDipartimentoDL();
-                        dipartimento.ID = Convert.ToInt64(dr["id"]);
-                        dipartimento.Nome = dr["nome"].ToString();
-                        dipartimento.IDutente = dr.IsDBNull(dr.GetOrdinal("IDutente"))
-                                    ? 0
-                                    : dr.GetInt32(dr.GetOrdinal("IDutente"));
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                        {
+                            DataRow row = dt.Rows[0];
+                            dipartimento = new ClsDipartimentoDL();
+                            dipartimento.ID = Convert.ToInt64(row["id"]);
+                            dipartimento.Nome = row["nome"].ToString();
+                            dipartimento.IDutente = row["IDutente"] != DBNull.Value ? Convert.ToInt64(row["IDutente"]) : 0;
+                        }
                     }
                 }
-                conn.Close();
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante il rilevamento del dipartimento coordinato: " + ex.Message);
             }
             return dipartimento;
         }
         public static ClsUtenteDL utenteCoordinaDiparimento(string NomeDipartimento)
         {
-            
             ClsUtenteDL utente = null;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-
                     conn.Open();
                     string sql = @"SELECT u.* 
-                               FROM utenti u
-                               JOIN dipartimenti d ON u.id = d.IDutente
-                               WHERE d.nome = @NomeDipartimento";
-                    MySqlCommand cmd = new MySqlCommand(sql, conn);
-                    cmd.Parameters.AddWithValue("@NomeDipartimento", NomeDipartimento);
-                    MySqlDataReader dr = cmd.ExecuteReader();
-                    if (dr.HasRows)
+                           FROM utenti u
+                           JOIN dipartimenti d ON u.id = d.IDutente
+                           WHERE d.nome = @NomeDipartimento";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        if (dr.Read())
+                        cmd.Parameters.AddWithValue("@NomeDipartimento", NomeDipartimento);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                        {
+                            DataRow row = dt.Rows[0];
                             utente = new ClsUtenteDL();
-                            utente.ID = Convert.ToInt64(dr["id"]);
-                            utente.Cognome = dr["cognome"].ToString();
-                            utente.Nome = dr["nome"].ToString();
-                            utente.Email = dr["email"].ToString();
-                            utente.TipoUtente = dr["tipoUtente"].ToString();
-                            utente.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
+                            utente.ID = Convert.ToInt64(row["id"]);
+                            utente.Cognome = row["cognome"].ToString();
+                            utente.Nome = row["nome"].ToString();
+                            utente.Email = row["email"].ToString();
+                            utente.TipoUtente = row["tipoUtente"].ToString();
+                            utente.TipoDocente = Convert.ToChar(row["tipoDocente"]);
                         }
                     }
-                    conn.Close();
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante il rilevamento dell'utente coordinatore: " + ex.Message);
             }
             return utente;
-
         }
         public static void EliminaCoordinatoreDipartimento (long IDutente)
         {
@@ -271,71 +270,69 @@ namespace Cattedre
             }
 
         }
-        public static long RilevaIDdipartimento (string nome)
-        {
-            
-            long ID = 0;
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = @"SELECT ID 
-                             FROM dipartimenti 
-                             WHERE nome=@nome";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@nome", nome);
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
-                        {
-                            if (dr.HasRows)
-                            {
-                                dr.Read();
-                                ID = Convert.ToInt64(dr["ID"]);
-                            }
-                        }
-                    }
-                    conn.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return ID;
-        }
+        //public static long RilevaIDdipartimento (string nome)
+        //{
+
+        //    long ID = 0;
+        //    try
+        //    {
+        //        using (MySqlConnection conn = new MySqlConnection(connectionString))
+        //        {
+        //            conn.Open();
+        //            string sql = @"SELECT ID 
+        //                     FROM dipartimenti 
+        //                     WHERE nome=@nome";
+        //            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+        //            {
+        //                cmd.Parameters.AddWithValue("@nome", nome);
+        //                using (MySqlDataReader dr = cmd.ExecuteReader())
+        //                {
+        //                    if (dr.HasRows)
+        //                    {
+        //                        dr.Read();
+        //                        ID = Convert.ToInt64(dr["ID"]);
+        //                    }
+        //                }
+        //            }
+        //            conn.Close();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //    return ID;
+        //}
 
 
         public static string RilevaNomeDipartimento(long id)
         {
             if (id == 0)
                 return "-";
-            
+
             string NomeDipartimento = "-";
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT d.nome FROM dipartimenti d 
-                                 WHERE d.ID = @ID";
-
+                    string sql = "SELECT d.nome FROM dipartimenti d WHERE d.ID = @ID";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", id);
-                        MySqlDataReader dr = cmd.ExecuteReader();
-                        if (dr.HasRows)
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            dr.Read();
-                            NomeDipartimento = dr["nome"].ToString();
+                            da.Fill(dt);
                         }
+                        if (dt.Rows.Count > 0)
+                            NomeDipartimento = dt.Rows[0]["nome"].ToString();
                     }
                 }
-
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante il rilevamento del nome del dipartimento: " + ex.Message);
             }
             return NomeDipartimento;
         }

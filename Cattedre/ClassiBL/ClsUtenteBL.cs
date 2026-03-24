@@ -18,126 +18,114 @@ namespace Cattedre
         #region rilevamento by Parametes
         public static long RilevaIDutente(string nome, string cognome)
         {
-            
             long IDutente = 0;
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID FROM utenti WHERE nome = @nome AND cognome = @cognome LIMIT 1";
-
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", nome);
                         cmd.Parameters.AddWithValue("@cognome", cognome);
-
-                        // ExecuteScalar restituisce la prima colonna della prima riga
-                        object result = cmd.ExecuteScalar();
-
-                        if (result != null && result != DBNull.Value)
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            IDutente = Convert.ToInt64(result);
+                            da.Fill(dt);
                         }
+                        if (dt.Rows.Count > 0)
+                            IDutente = Convert.ToInt64(dt.Rows[0]["ID"]);
                     }
-                    conn.Close();
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception("Errore nel recupero ID utente: " + ex.Message);
             }
-
             return IDutente;
         }
+
         public static string RilevaNomeUtente(long id)
         {
-            
             string risultato = null;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT u.nome, u.cognome 
-                                 FROM utenti u  
-                                 WHERE u.ID = @ID";
+                    string sql = "SELECT u.nome, u.cognome FROM utenti u WHERE u.ID = @ID";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", id);
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            if (dr.Read())
-                            {
-                                string nome = dr.IsDBNull(0) ? "" : dr.GetString(0);
-                                string cognome = dr.IsDBNull(1) ? "" : dr.GetString(1);
-                                risultato = $"{nome} {cognome}".Trim();
-                            }
+                            da.Fill(dt);
                         }
-                        conn.Close();
+                        if (dt.Rows.Count > 0)
+                        {
+                            DataRow row = dt.Rows[0];
+                            string nome = row["nome"] != DBNull.Value ? row["nome"].ToString() : "";
+                            string cognome = row["cognome"] != DBNull.Value ? row["cognome"].ToString() : "";
+                            risultato = $"{nome} {cognome}".Trim();
+                        }
                     }
                 }
-
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("Errore nella query: " + ex.Message);
             }
             return !string.IsNullOrEmpty(risultato) ? risultato : "-";
         }
+
         public static int TrovaIDdipartimento(long IDutente)
         {
             int risultato = 0;
-            
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT IDdipartimento FROM afferire 
-                        WHERE IDutente =@IDutente ";
+                    string sql = "SELECT IDdipartimento FROM afferire WHERE IDutente = @IDutente";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDutente", IDutente);
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            if (dr.Read())
-                                risultato = Convert.ToInt32(dr["IDdipartimento"]);
-
+                            da.Fill(dt);
                         }
+                        if (dt.Rows.Count > 0)
+                            risultato = Convert.ToInt32(dt.Rows[0]["IDdipartimento"]);
                     }
-                    conn.Close();
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante il rilevamento del dipartimento: " + ex.Message);
             }
-
             return risultato;
         }
+
         public static bool TokenEsistente(long IDutente)
         {
-            
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT token FROM utenti 
-                           WHERE ID = @id";
-
+                    string sql = "SELECT token FROM utenti WHERE ID = @id";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", IDutente);
-
-
-                        var result = cmd.ExecuteScalar();
-
-                        return result != null && result != DBNull.Value;
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        return dt.Rows.Count > 0 && dt.Rows[0]["token"] != DBNull.Value;
                     }
                 }
             }
@@ -152,43 +140,37 @@ namespace Cattedre
         #region caricamente by utentispecifici
         public static List<ClsUtenteDL> CaricaCoordinatoriDipartimenti()
         {
-            
-            MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             try
             {
-                conn.Open();
-                string sql = "SELECT ID,email,cognome,nome,tipoUtente,tipoUtente, tipoDocente FROM utenti u WHERE u.tipoUtente = 'C'";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    while (dr.Read())
+                    conn.Open();
+                    string sql = "SELECT ID, email, cognome, nome, tipoUtente, tipoDocente FROM utenti u WHERE u.tipoUtente = 'C'";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        ClsUtenteDL utente = new ClsUtenteDL();
-                        utente.ID = Convert.ToInt64(dr["ID"]);
-                        utente.Email = dr["email"].ToString();
-                        utente.Cognome = dr["cognome"].ToString();
-                        utente.Nome = dr["nome"].ToString();
-                        utente.TipoUtente = dr["tipoUtente"].ToString();
-                        if (!dr.IsDBNull(dr.GetOrdinal("tipoDocente")))
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            utente.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
+                            da.Fill(dt);
                         }
-                        else
+                        foreach (DataRow row in dt.Rows)
                         {
-                            utente.TipoDocente = '\0'; // oppure un altro valore di default
+                            ClsUtenteDL utente = new ClsUtenteDL();
+                            utente.ID = Convert.ToInt64(row["ID"]);
+                            utente.Email = row["email"].ToString();
+                            utente.Cognome = row["cognome"].ToString();
+                            utente.Nome = row["nome"].ToString();
+                            utente.TipoUtente = row["tipoUtente"].ToString();
+                            utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                            utenti.Add(utente);
                         }
-
-                        utenti.Add(utente);
                     }
                 }
-                conn.Close();
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("Errore durante il caricamento dei coordinatori: " + ex.Message);
             }
             return utenti;
         }
@@ -240,38 +222,38 @@ namespace Cattedre
         public static ClsUtenteDL caricautenteByEmail(string _email)
         {
             ClsUtenteDL utente = null;
-            
-            MySqlConnection conn = new MySqlConnection(connectionString);
-
             try
             {
-                conn.Open();
-                string sql = "SELECT ID,email,cognome,nome,tipoUtente,tipoUtente, tipoDocente  FROM utenti" +
-                    " WHERE email=@email";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@email", _email);
-                MySqlDataReader dr = cmd.ExecuteReader();
-
-                if (dr.Read())
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    utente = new ClsUtenteDL();
-
-                    utente.ID = Convert.ToInt64(dr["ID"]);
-                    utente.Email = dr["email"].ToString();
-                    utente.Cognome = dr["cognome"].ToString();
-                    utente.Nome = dr["nome"].ToString();
-                    utente.TipoUtente = dr["tipoUtente"].ToString();
-                    utente.TipoDocente = !dr.IsDBNull(dr.GetOrdinal("tipoDocente")) ? Convert.ToChar(dr["tipoDocente"]) : '\0';
+                    conn.Open();
+                    string sql = "SELECT ID, email, cognome, nome, tipoUtente, tipoDocente FROM utenti WHERE email = @email";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@email", _email);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                        {
+                            DataRow row = dt.Rows[0];
+                            utente = new ClsUtenteDL();
+                            utente.ID = Convert.ToInt64(row["ID"]);
+                            utente.Email = row["email"].ToString();
+                            utente.Cognome = row["cognome"].ToString();
+                            utente.Nome = row["nome"].ToString();
+                            utente.TipoUtente = row["tipoUtente"].ToString();
+                            utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                        }
+                    }
                 }
-
-                conn.Close();
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("Errore durante il caricamento dell'utente: " + ex.Message);
             }
-
             return utente;
         }
         #endregion
@@ -482,32 +464,29 @@ namespace Cattedre
         #region Login e logout
         public static bool Login(string email, string password)
         {
-            
-            MySqlConnection conn = new MySqlConnection(connectionString);
-
             try
             {
-                conn.Open();
-                string sql = "SELECT COUNT(ID) as num_utenti FROM utenti " +
-                             "WHERE email =@email AND password = @password";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@email", email);
-                cmd.Parameters.AddWithValue("@password", password);
-                object result = cmd.ExecuteScalar();
-
-                int UtentiLoggati = 0;
-                if (result != null)
-                    UtentiLoggati = Convert.ToInt32(result);
-
-                conn.Close();
-                if (UtentiLoggati == 1)
-                    return true;
-
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT COUNT(ID) as num_utenti FROM utenti WHERE email = @email AND password = @password";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@email", email);
+                        cmd.Parameters.AddWithValue("@password", password);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                            return Convert.ToInt32(dt.Rows[0]["num_utenti"]) == 1;
+                    }
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante il login: " + ex.Message);
             }
             return false;
         }
@@ -518,35 +497,28 @@ namespace Cattedre
         /// <returns></returns>
         public static bool LoginByemail(string email)
         {
-            
-            int UtentiLoggati = 0;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT COUNT(ID) as num_utenti FROM utenti " +
-                                 "WHERE email =@email";
-
+                    string sql = "SELECT COUNT(ID) as num_utenti FROM utenti WHERE email = @email";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@email", email);
-                        object result = cmd.ExecuteScalar();
-
-
-                        if (result != null)
-                            UtentiLoggati = Convert.ToInt32(result);
-
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                            return Convert.ToInt32(dt.Rows[0]["num_utenti"]) == 1;
                     }
                 }
-                if (UtentiLoggati == 1)
-                    return true;
-
-
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante il login per email: " + ex.Message);
             }
             return false;
         }

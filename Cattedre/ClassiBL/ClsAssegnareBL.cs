@@ -151,10 +151,10 @@ namespace Cattedre
                 return count > 0;
             }
         }
-
+        // Query unica
         public static DataTable CaricaDocentiConAssegnazioni(int IDdipartimento, long IDannoScolastico)
         {
-            
+
             DataTable dt = new DataTable();
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -170,8 +170,7 @@ namespace Cattedre
                                 a.IDclasse,
                                 a.IDdisciplina,
                                 a.oreSpeciali,
-                                a.IDannoscolastico,
-                                c.tipoContratto  
+                                a.IDannoscolastico
 
                             FROM utenti u
 
@@ -182,15 +181,12 @@ namespace Cattedre
                                 ON a.IDutente = u.ID
                                 AND a.IDannoscolastico = @IDannoScolastico
 
-                            LEFT JOIN contratti c 
-                                ON c.IDutente= u.ID
-
                             LEFT JOIN anniscolastici ans
                                 ON a.IDannoscolastico = ans.ID
                                 AND CURDATE() BETWEEN ans.datainizio AND ans.datafine
 
                             WHERE af.IDdipartimento = @IDdipartimento
-                                AND u.tipoUtente IN('D','C','A')                          
+                                AND u.tipoUtente IN('D','C','A')
 
                             ORDER BY u.cognome, u.nome";
 

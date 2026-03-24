@@ -258,7 +258,7 @@ namespace Cattedre
                 pnlOreDoc.Controls.Add(lblOrePot);
                 pnlOreDoc.Controls.Add(lblOreTot);
                 pnlOreDoc.Controls.Add(uc);
-                
+
                 dictDocenti[doc.ID] = uc;
 
                 y += uc.Height;
@@ -381,7 +381,7 @@ namespace Cattedre
             int x = 0;
             int y;
             y = 72 + riga * 100;
-           
+
             ucOreTotali.Location = new Point(x, y);
             pnlInfoNumCattedre.Controls.Add(ucOreTotali);
 
@@ -421,13 +421,7 @@ namespace Cattedre
             docenti = ClsAssegnareBL
                 .CaricaDocentiConAssegnazioni(IDdipartimento, IDannoscolastico);
 
-            Dictionary<long, string> contrattiDocenti = docenti.AsEnumerable()
-            .Where(r => r["IDutente"] != DBNull.Value && r["tipoContratto"] != DBNull.Value)
-            .GroupBy(r => Convert.ToInt64(r["IDutente"]))
-            .ToDictionary(
-                g => g.Key,
-                g => g.First()["tipoContratto"].ToString()
-            );
+
 
             int oreTotaliGenerali = 0;
 
@@ -514,7 +508,7 @@ namespace Cattedre
                             Convert.ToInt64(r["IDclasse"]) == classe.ID &&
                             Convert.ToInt64(r["IDdisciplina"]) == disciplina.ID
                         );
-                        
+
                     if (assegnazione != null)
                     {
                         long idDoc = Convert.ToInt64(assegnazione["IDutente"]);
@@ -536,14 +530,11 @@ namespace Cattedre
                     uc.lblOreTeoria.Text = disciplina.OreTeoria.ToString();
                     uc.lblOreLaboratorio.Text = disciplina.OreLaboratorio.ToString();
 
-                    AggiornaNonDiRuolo(contrattiDocenti, uc);
-
                     oreTotaliClasse += disciplina.OreTeoria + disciplina.OreLaboratorio;
 
                     // eventi
                     uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) =>
                     {
-                        AggiornaNonDiRuolo(contrattiDocenti, uc);
                         AggiornaOreEffettive();
                         if (uc.cbDocentiTeorici.SelectedItem is ClsUtenteDL u)
                             ClsAssegnareBL.UpdateCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID);
@@ -551,7 +542,6 @@ namespace Cattedre
 
                     uc.cbDocentiItip.SelectedIndexChanged += (s, e) =>
                     {
-                        AggiornaNonDiRuolo(contrattiDocenti, uc);
                         AggiornaOreEffettive();
                         if (uc.cbDocentiItip.SelectedItem is ClsUtenteDL u)
                             ClsAssegnareBL.UpdateCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID);
@@ -577,25 +567,6 @@ namespace Cattedre
             AggiornaOreEffettive();
         }
 
-        public void AggiornaNonDiRuolo(Dictionary<long, string> contrattiDocenti, UcAssegnazioni uc)
-        {
-            if (uc.cbDocentiTeorici.SelectedItem is ClsUtenteDL dt && dt.ID != 0)
-            {
-                if (contrattiDocenti.TryGetValue(dt.ID, out string contrT))
-                    uc.lblDocentiNonDiRuoloTEORICI.Visible = contrT == "D";
-            }
-            else
-                uc.lblDocentiNonDiRuoloTEORICI.Visible = false;
-
-            if (uc.cbDocentiItip.SelectedItem is ClsUtenteDL dp && dp.ID != 0)
-            {
-                if (contrattiDocenti.TryGetValue(dp.ID, out string contrL))
-                    uc.lblDocentiNonDiRuoloITP.Visible = contrL == "D";
-            }
-            else
-                uc.lblDocentiNonDiRuoloITP.Visible = false;
-        }
-
         private void LoadDiscipline(int IDdipartimento)
         {
             foreach (UcDisciplina uc in pnlDipartimento.Controls.OfType<UcDisciplina>().ToList())
@@ -608,7 +579,7 @@ namespace Cattedre
             discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
 
             // Rimuovo le discipline con lo stesso nome, mantengo solo la prima
-            List<string> nomiUsati = new List<string>();            
+            List<string> nomiUsati = new List<string>();
 
             foreach (ClsDisciplinaDL d in discipline)
             {
@@ -653,7 +624,7 @@ namespace Cattedre
             for (int i = 0; i < classi.Count; i++)
             {
                 UcClasse ucClasse = new UcClasse(classi[i]);
-                ucClasse.Location = new Point(x,y);
+                ucClasse.Location = new Point(x, y);
                 pnlClassi.Controls.Add(ucClasse);
 
                 ucClasse.Refresh();
@@ -692,7 +663,7 @@ namespace Cattedre
 
         private void btAnnulla_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private async void btCaricaDipartimento_Click_1(object sender, EventArgs e) //evento SelectedIndexChanged di cbDipartimenti
@@ -733,7 +704,7 @@ namespace Cattedre
                     cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Errore:{ex.Message}. \nRiprovare!", "riprovare", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

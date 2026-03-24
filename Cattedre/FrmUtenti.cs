@@ -36,7 +36,6 @@ namespace Cattedre
         #endregion
         public List<ClsUtenteDL> _utenti = new List<ClsUtenteDL>();
         Dictionary<string, List<string>> filtri = new Dictionary<string, List<string>>();
-        string _parametroRicerca = string.Empty;
         public FrmUtenti()
         {
             InitializeComponent();
@@ -163,8 +162,6 @@ namespace Cattedre
         {
             if (filtri.Count!=0)
                 _utenti = ClsUtenteBL.FiltraUtenti(filtri);
-            else if (!string.IsNullOrEmpty(_parametroRicerca))
-                _utenti = ClsUtenteBL.RicercaPerNomeCognome(_parametroRicerca);
             else
                 _utenti = ClsUtenteBL.CaricaUtenti();
             CaricaListView();
@@ -265,10 +262,18 @@ namespace Cattedre
                 parametroSelezionato |= AggiungiFiltro(filtri,"tipoContratto",CaricaElementiSelezionati(gbContratto, typeof(RadioButton)),mappaContratto);
                 parametroSelezionato |= AggiungiFiltro(filtri,"tipoDocente",CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)),mappaTipoDocente);
 
+                string NomeCognome = (tbRicerca.Text != "nome cognome" && !string.IsNullOrWhiteSpace(tbRicerca.Text)) ? tbRicerca.Text.Trim() : string.Empty;
+                if (NomeCognome != string.Empty)
+                {
+                    string NomeCognomeFiltrati = NomeCognome.Replace(" ", "").ToLower();
+                    filtri.Add("CONCAT(cognome,nome)", new List<string> { NomeCognomeFiltrati });
+                }
                 if (!parametroSelezionato)
-                    throw new Exception("non è stato selezionato nessun parametro di ricerca");
+                {
+                    _utenti = ClsUtenteBL.CaricaUtenti();
+                    CaricaListView();
+                }
 
-                _parametroRicerca = string.Empty;
                 gestisciListview();
             }
             catch (Exception ex)
@@ -312,9 +317,8 @@ namespace Cattedre
             PulisciGroubBox(gbContratto);
             PulisciGroubBox(gbTipiUtenti);
             PulisciGroubBox(gBtipoDocente);
-            _parametroRicerca = string.Empty;
             filtri = new Dictionary<string, List<string>>();
-
+            tbRicerca.Text = "cognome nome";
             //ricamento della listview
             gestisciListview();
         }
@@ -335,9 +339,6 @@ namespace Cattedre
             }
         }
 
-        #endregion
-        #region ricerca
-
         private void tbRicerca_Enter(object sender, EventArgs e)
         {
             if (tbRicerca.Text == "cognome nome")
@@ -355,28 +356,21 @@ namespace Cattedre
                 tbRicerca.ForeColor = Color.Gray;
             }
         }
-        private void btRicerca_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(tbRicerca.Text) && tbRicerca.Text != "cognome nome")
-            {
-                //cancello il filtra in modo che non mi dia problemi
-                filtri = new Dictionary<string, List<string>>();
-                _parametroRicerca = tbRicerca.Text.Replace(" ", "").ToLower();
-                _utenti = ClsUtenteBL.RicercaPerNomeCognome(_parametroRicerca);
-                CaricaListView();
-            }
-            else
-                MessageBox.Show("Inserire Input valido per la ricerca", "attenzione", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
+        //private void btRicerca_Click(object sender, EventArgs e)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(tbRicerca.Text) && tbRicerca.Text != "cognome nome")
+        //    {
+        //        //cancello il filtra in modo che non mi dia problemi
+        //        filtri = new Dictionary<string, List<string>>();
+        //        _parametroRicerca = tbRicerca.Text.Replace(" ", "").ToLower();
+        //        _utenti = ClsUtenteBL.RicercaPerNomeCognome(_parametroRicerca);
+        //        CaricaListView();
+        //    }
+        //    else
+        //        MessageBox.Show("Inserire Input valido per la ricerca", "attenzione", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        //}
 
-        private void btAnnullaRicerca_Click(object sender, EventArgs e)
-        {
-            _parametroRicerca = string.Empty;
-            tbRicerca.Text = string.Empty;
-            gestisciListview();
-        }
-        #endregion
-
+      
         private void cbDocente_CheckedChanged(object sender, EventArgs e)
         {
             if (cbDocente.Checked)
@@ -388,6 +382,8 @@ namespace Cattedre
             }
         }
 
+        #endregion
 
+       
     }
 }

@@ -608,19 +608,24 @@ namespace Cattedre
             {
                 string colonna = filtro.Key;
                 List<string> valori = filtro.Value;
-
                 if (valori == null || valori.Count == 0)
                     continue;
-
-                List<string> orConditions = new List<string>();
-
-                foreach (var valore in valori)
+                if (colonna == "CONCAT(cognome,nome)") //se questo valore ricerca per nome e cognome aggiungo una parte di query specifica
                 {
-                    orConditions.Add($"{colonna} = {valore}");
-                }
+                    string ricercaspecifica = $"CONCAT(u.cognome,u.nome) LIKE '%{filtro.Value[0]}%' ";
+                    condizioni.Add(ricercaspecifica);
 
-                // Combina valori dello stesso filtro con OR
-                condizioni.Add("(" + string.Join(" OR ", orConditions) + ")");
+                }else
+                {
+                    List<string> orConditions = new List<string>();
+
+                    foreach (var valore in valori)
+                    {
+                        orConditions.Add($"{colonna} = {valore}");
+                    }
+                    // Combina valori dello stesso filtro con OR
+                    condizioni.Add("(" + string.Join(" OR ", orConditions) + ")");
+                }
             }
 
             if (condizioni.Count > 0)

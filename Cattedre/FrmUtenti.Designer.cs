@@ -164,6 +164,8 @@
             this.tbRicerca.Size = new System.Drawing.Size(182, 20);
             this.tbRicerca.TabIndex = 6;
             this.tbRicerca.Text = "cognome nome";
+            this.tbRicerca.Enter += new System.EventHandler(this.tbRicerca_Enter);
+            this.tbRicerca.Leave += new System.EventHandler(this.tbRicerca_Leave);
             // 
             // gbContratto
             // 

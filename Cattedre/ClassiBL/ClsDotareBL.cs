@@ -13,6 +13,45 @@ namespace Cattedre
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
+        //public static int OrdinaDocentiPerCdc(long idCdc)
+        //{
+        //    DataTable dt = new DataTable();
+
+        //    try
+        //    {
+        //        using (MySqlConnection conn = new MySqlConnection(connectionString))
+        //        {
+        //            conn.Open();
+
+        //            string sql = @"SELECT c.livello, u.nome, u.cognome
+        //                       FROM classidiconcorso c
+        //                       JOIN dotare d ON d.IDclassediconcorso = c.ID
+        //                       JOIN richiedere r ON r.IDclassediconcorso = c.ID
+        //                       JOIN utenti u ON u.ID = r.IDutente
+        //                       WHERE IDclassediconcorso = @IDclassediconcorso";
+
+        //            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+        //            {
+        //                cmd.Parameters.AddWithValue("@IDclassediconcorso", idCdc);
+
+        //                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+        //                {
+        //                    da.Fill(dt);
+
+        //                    if (dt.Rows.Count > 0 && dt.Rows[0]["numcattedrediritto"] != DBNull.Value)
+        //                    {
+        //                        cattedre = Convert.ToInt32(dt.Rows[0]["numcattedrediritto"]);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Errore. ", ex);
+        //    }
+        //    return cattedre;
+        //}
 
         public static int TrovaNumCattedreDiDiritto(long idCdc, long idAS)
         {

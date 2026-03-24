@@ -15,7 +15,8 @@ namespace Cattedre
         public List<ClsClasseDL> classi = new List<ClsClasseDL>();
         List<ClsUtenteDL> _coordinatori = new List<ClsUtenteDL>();
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
-        //inserisco il utenteLoggato a in questapagina;
+        List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
+        //inserisco il utenteLoggato a in questa pagina;
         ClsUtenteDL UtenteLoggato;
         public FrmClassi(ClsUtenteDL utenteLog)
         {
@@ -55,9 +56,12 @@ namespace Cattedre
                     cbAnnoClasse.Items.Add(classe.Anno);
             }
             //popol combobox filtraggio Indirizzi
-            foreach( var ind in _indirizzi)
-                cbIndirizzi.Items.Add(ind.Nome);
-
+            cbIndirizzi.DataSource = _indirizzi;
+            cbIndirizzi.DisplayMember = "Nome";
+            cbIndirizzi.ValueMember = "ID";
+            cbIndirizzi.SelectedIndex = -1;            
+            //popolamento filtri
+            GeneraFiltriAnnoScolastico();
         }
         private void GestionePermessi()
         {
@@ -66,16 +70,13 @@ namespace Cattedre
                 btElimina.Visible = false;
                 btInserisci.Visible = false;
                 brModifica.Visible = false;
+                btClasseSuccessiva.Visible = false;
                 btElimina.Anchor = AnchorStyles.None;
                 btInserisci.Anchor = AnchorStyles.None;
                 brModifica.Anchor = AnchorStyles.None;
-
                 lvClassi.Width = this.ClientSize.Width - (lvClassi.Left * 2);
-
                 lvClassi.Height = this.ClientSize.Height - lvClassi.Top - 50;
                 lvClassi.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-
-
             }     
         }
         private void btInserisci_Click(object sender, EventArgs e)
@@ -138,32 +139,6 @@ namespace Cattedre
                 CaricaListView(classi);
             }
         }
-
-        private void btCerca_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (cbIndirizzi.SelectedIndex == -1 && cbAnnoClasse.SelectedIndex == -1)
-                    throw new Exception("Inserire almeno un criterio di ricerca");
-
-                List <ClsClasseDL> classiFiltrate = ClsClasseBL.CaricaClassiFiltrate(Convert.ToInt32(cbAnnoClasse.Text), ClsIndirizzoBL.RilevaIDindirizzo(cbIndirizzi.Text));
-                CaricaListView(classiFiltrate);
-                btRipristina.Enabled = true;
-            }catch(Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}\nRiprovare!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
-        }
-
-        private void btRipristina_Click(object sender, EventArgs e)
-        {
-            btRipristina.Enabled = false;
-            classi = ClsClasseBL.CaricaClassi();
-            CaricaListView(classi);
-            cbAnnoClasse.SelectedIndex=-1;
-            cbIndirizzi.SelectedIndex = -1;
-        }
         #region  gestione classe successivo
         private void btClasseSuccessiva_Click(object sender, EventArgs e)
         {
@@ -175,6 +150,7 @@ namespace Cattedre
                 {
                     try
                     {
+                        Cursor.Current = Cursors.WaitCursor;
                         ClsClasseDL _classeSelezionata = classi.Where(p => p.ID == Convert.ToInt32(sel.Tag)).FirstOrDefault();
                         if (_classeSelezionata.Anno >= 5)
                             throw new Exception($" non è possibile ottenere la classe successiva rispetto {_classeSelezionata.Sigla} " +
@@ -191,13 +167,16 @@ namespace Cattedre
                     }
                     catch (Exception Ex)
                     {
+                        Cursor.Current = Cursors.Default;
                         MessageBox.Show(Ex.Message + "\nRiprovare.", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
-                if(NumeroClassiAggiunte>1)
+                Cursor.Current = Cursors.Default;
+                if (NumeroClassiAggiunte>1)
                     MessageBox.Show($"Sono state aggiunte {NumeroClassiAggiunte} classi.", "Informazione", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 classi = ClsClasseBL.CaricaClassi();
                 CaricaListView(classi);
+
            }
         }
         private ClsClasseDL classeSuccessiva(ClsClasseDL classe)
@@ -208,6 +187,79 @@ namespace Cattedre
             //metto classe articolata a 0, per sicurezza e per non dovere gestire questa cosa così complessa
             classe.ClasseArticolataCon = 0;
             return classe;
+        }
+        #endregion
+        #region filtri
+        private void btCerca_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Dictionary<string, List<string>> Filtri = new Dictionary<string, List<string>>();
+                if(cbAnnoClasse.SelectedIndex!=-1)
+                {
+                    Filtri.Add("anno",new List<string> { $"'{cbAnnoClasse.Text}'" });
+                }
+                if(cbIndirizzi.SelectedIndex!=-1)
+                {
+                    Filtri.Add("IDindirizzo", new List<string> { $"'{cbIndirizzi.SelectedValue}'" });
+                }
+                ControlloSelezionatiAnniScolastici(Filtri);
+
+                if (Filtri.Count<=0)
+                    throw new Exception("Inserire almeno un criterio di ricerca");
+
+                classi = ClsClasseBL.CaricaClassiFiltrate(Filtri);
+                CaricaListView(classi);
+                btRipristina.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}\nRiprovare!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        }
+        private void btRipristina_Click(object sender, EventArgs e)
+        {
+            btRipristina.Enabled = false;
+            classi = ClsClasseBL.CaricaClassi();
+            CaricaListView(classi);
+            cbAnnoClasse.SelectedIndex = -1;
+            cbIndirizzi.SelectedIndex = -1;
+            DeselezionaCheckBox(tplAnniScolastici);
+
+        }
+        private void GeneraFiltriAnnoScolastico()
+        {
+            tplAnniScolastici.ColumnCount = _anniScolastici.Count;
+            int Sezioni = 0;
+            foreach( var anno in _anniScolastici )
+            {
+                CheckBox cb = new CheckBox();
+                cb.Name = $"{anno.ID}";
+                cb.Text = anno.Sigla;
+                cb.Dock = DockStyle.Fill;
+                tplAnniScolastici.Controls.Add(cb, Sezioni, 0);
+                Sezioni++;
+            }
+        }
+        private void ControlloSelezionatiAnniScolastici(Dictionary<string, List<string>> filtri)
+        {
+            if(tplAnniScolastici.Controls.OfType<CheckBox>().Any(cb=>cb.Checked))
+            {
+                var selezionati = tplAnniScolastici.Controls.OfType<CheckBox>().Where(cb => cb.Checked).Select(cb => cb.Name).ToList();
+
+                if (!selezionati.Any()) return;
+
+                filtri.Add ( "IDannoScolastico", selezionati);
+            }
+        }
+        private void DeselezionaCheckBox(Control parent)
+        {
+            foreach (Control c in parent.Controls)
+            {
+                if (c is CheckBox cb)
+                    cb.Checked = false;
+            }
         }
         #endregion
     }

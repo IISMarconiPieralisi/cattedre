@@ -33,6 +33,7 @@ namespace Cattedre
             this.btModifica = new System.Windows.Forms.Button();
             this.btInserisci = new System.Windows.Forms.Button();
             this.lvCdCs = new System.Windows.Forms.ListView();
+            this.chAnnoScolastico = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chCodice = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chNome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chAbilitazioniRichieste = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -43,7 +44,7 @@ namespace Cattedre
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(1330, 106);
+            this.btElimina.Location = new System.Drawing.Point(1387, 93);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(105, 23);
             this.btElimina.TabIndex = 10;
@@ -54,7 +55,7 @@ namespace Cattedre
             // btModifica
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btModifica.Location = new System.Drawing.Point(1330, 77);
+            this.btModifica.Location = new System.Drawing.Point(1387, 64);
             this.btModifica.Name = "btModifica";
             this.btModifica.Size = new System.Drawing.Size(105, 23);
             this.btModifica.TabIndex = 9;
@@ -65,7 +66,7 @@ namespace Cattedre
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(1330, 48);
+            this.btInserisci.Location = new System.Drawing.Point(1387, 35);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.Size = new System.Drawing.Size(105, 23);
             this.btInserisci.TabIndex = 8;
@@ -78,6 +79,7 @@ namespace Cattedre
             this.lvCdCs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvCdCs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chAnnoScolastico,
             this.chCodice,
             this.chNome,
             this.chAbilitazioniRichieste,
@@ -85,14 +87,18 @@ namespace Cattedre
             this.chNumCattedreDiFatto});
             this.lvCdCs.FullRowSelect = true;
             this.lvCdCs.HideSelection = false;
-            this.lvCdCs.Location = new System.Drawing.Point(28, 35);
+            this.lvCdCs.Location = new System.Drawing.Point(22, 34);
             this.lvCdCs.Margin = new System.Windows.Forms.Padding(2);
             this.lvCdCs.Name = "lvCdCs";
-            this.lvCdCs.Size = new System.Drawing.Size(1285, 471);
+            this.lvCdCs.Size = new System.Drawing.Size(1345, 471);
             this.lvCdCs.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvCdCs.TabIndex = 11;
             this.lvCdCs.UseCompatibleStateImageBehavior = false;
             this.lvCdCs.View = System.Windows.Forms.View.Details;
+            // 
+            // chAnnoScolastico
+            // 
+            this.chAnnoScolastico.Text = "A.S.";
             // 
             // chCodice
             // 
@@ -123,7 +129,7 @@ namespace Cattedre
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1444, 577);
+            this.ClientSize = new System.Drawing.Size(1504, 577);
             this.Controls.Add(this.lvCdCs);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.btModifica);
@@ -147,5 +153,6 @@ namespace Cattedre
         private System.Windows.Forms.ColumnHeader chAbilitazioniRichieste;
         private System.Windows.Forms.ColumnHeader chNumCattedreDiritto;
         private System.Windows.Forms.ColumnHeader chNumCattedreDiFatto;
+        private System.Windows.Forms.ColumnHeader chAnnoScolastico;
     }
 }

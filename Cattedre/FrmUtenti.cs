@@ -185,7 +185,7 @@ namespace Cattedre
                 if (afferire != null && afferire.Count > 0) //se non esiste restituirà null e quindi non restituirà la lista
                     frmUtente._afferenze = afferire;
 
-                List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedere(_utenti[indiceDaModificare].ID);
+                List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedereUtente(_utenti[indiceDaModificare].ID);
                 if (richiedere != null && richiedere.Count > 0)
                     frmUtente._richieste = richiedere;
                 ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(_utenti[indiceDaModificare].ID); //se non esiste restituirà null
@@ -205,7 +205,7 @@ namespace Cattedre
 
                             //modifica contratto, afferenze e richieste
                             ClsAfferireBL.ModificaAfferenze(frmUtente._utente.ID, frmUtente._afferenze);
-                            ClsRichiedereBL.ModificaRichiesta(frmUtente._utente.ID, frmUtente._richieste);
+                            ClsRichiedereBL.ModificaRichiestaUtente(frmUtente._utente.ID, frmUtente._richieste);
                             ClsContrattoBL.ModificaContratto(frmUtente._contratto, frmUtente._utente.ID);
                             //controllo e inserimento coordinatore di dipartimento
                             if (frmUtente._utente.TipoUtente == "C")
@@ -262,11 +262,12 @@ namespace Cattedre
                 parametroSelezionato |= AggiungiFiltro(filtri,"tipoContratto",CaricaElementiSelezionati(gbContratto, typeof(RadioButton)),mappaContratto);
                 parametroSelezionato |= AggiungiFiltro(filtri,"tipoDocente",CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)),mappaTipoDocente);
 
-                string NomeCognome = (tbRicerca.Text != "nome cognome" && !string.IsNullOrWhiteSpace(tbRicerca.Text)) ? tbRicerca.Text.Trim() : string.Empty;
+                string NomeCognome = (tbRicerca.Text != "cognome nome" && !string.IsNullOrWhiteSpace(tbRicerca.Text)) ? tbRicerca.Text.Trim() : string.Empty;
                 if (NomeCognome != string.Empty)
                 {
                     string NomeCognomeFiltrati = NomeCognome.Replace(" ", "").ToLower();
                     filtri.Add("CONCAT(cognome,nome)", new List<string> { NomeCognomeFiltrati });
+                    parametroSelezionato = true;
                 }
                 if (!parametroSelezionato)
                 {
@@ -318,7 +319,10 @@ namespace Cattedre
             PulisciGroubBox(gbTipiUtenti);
             PulisciGroubBox(gBtipoDocente);
             filtri = new Dictionary<string, List<string>>();
-            tbRicerca.Text = "cognome nome";
+            //gestione tbricerca
+            tbRicerca.Text =string.Empty;
+            tbRicerca_Leave(null, null);
+            btAnnullaFiltra.Enabled = false;
             //ricamento della listview
             gestisciListview();
         }
@@ -371,9 +375,9 @@ namespace Cattedre
         //}
 
       
-        private void cbDocente_CheckedChanged(object sender, EventArgs e)
+        private void cbDocenteCordinatore_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbDocente.Checked)
+            if (cbDocente.Checked || cbCoordinatore.Checked)
                 gBtipoDocente.Enabled = true;
             else
             {
@@ -382,8 +386,20 @@ namespace Cattedre
             }
         }
 
+
         #endregion
 
-       
+        private void tbRicerca_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) //se si preme enter simula il click del pulsante
+            {
+                btFiltro_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                btAnnullaFiltra_Click(null, null);
+                tbRicerca_Enter(null, null);
+            }
+        }
     }
 }

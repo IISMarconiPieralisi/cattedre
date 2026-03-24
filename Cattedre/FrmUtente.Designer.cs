@@ -42,8 +42,6 @@
             this.cbTipoUtente = new System.Windows.Forms.ComboBox();
             this.btAnnulla = new System.Windows.Forms.Button();
             this.btSalva = new System.Windows.Forms.Button();
-            this.ckbDocenteTeorico = new System.Windows.Forms.CheckBox();
-            this.ckbDocentePratico = new System.Windows.Forms.CheckBox();
             this.PnUtente = new System.Windows.Forms.Panel();
             this.pnColore = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
@@ -70,11 +68,15 @@
             this.rbDeterminato = new System.Windows.Forms.RadioButton();
             this.label13 = new System.Windows.Forms.Label();
             this.cldColori = new System.Windows.Forms.ColorDialog();
+            this.pnTipoDocente = new System.Windows.Forms.Panel();
+            this.rbTeorico = new System.Windows.Forms.RadioButton();
+            this.rbLaboratorio = new System.Windows.Forms.RadioButton();
             this.PnUtente.SuspendLayout();
             this.pnCDC.SuspendLayout();
             this.pnDipartimento.SuspendLayout();
             this.PnContratto.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).BeginInit();
+            this.pnTipoDocente.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -211,38 +213,17 @@
             this.btSalva.UseVisualStyleBackColor = true;
             this.btSalva.Click += new System.EventHandler(this.btSalva_Click);
             // 
-            // ckbDocenteTeorico
-            // 
-            this.ckbDocenteTeorico.AutoSize = true;
-            this.ckbDocenteTeorico.Location = new System.Drawing.Point(109, 279);
-            this.ckbDocenteTeorico.Name = "ckbDocenteTeorico";
-            this.ckbDocenteTeorico.Size = new System.Drawing.Size(58, 17);
-            this.ckbDocenteTeorico.TabIndex = 15;
-            this.ckbDocenteTeorico.Text = "teorico";
-            this.ckbDocenteTeorico.UseVisualStyleBackColor = true;
-            // 
-            // ckbDocentePratico
-            // 
-            this.ckbDocentePratico.AutoSize = true;
-            this.ckbDocentePratico.Location = new System.Drawing.Point(269, 278);
-            this.ckbDocentePratico.Name = "ckbDocentePratico";
-            this.ckbDocentePratico.Size = new System.Drawing.Size(58, 17);
-            this.ckbDocentePratico.TabIndex = 16;
-            this.ckbDocentePratico.Text = "pratico";
-            this.ckbDocentePratico.UseVisualStyleBackColor = true;
-            // 
             // PnUtente
             // 
             this.PnUtente.AutoSize = true;
+            this.PnUtente.Controls.Add(this.pnTipoDocente);
             this.PnUtente.Controls.Add(this.pnColore);
             this.PnUtente.Controls.Add(this.label9);
             this.PnUtente.Controls.Add(this.cbAutoEmail);
             this.PnUtente.Controls.Add(this.btColore);
             this.PnUtente.Controls.Add(this.btSalva);
             this.PnUtente.Controls.Add(this.label1);
-            this.PnUtente.Controls.Add(this.ckbDocentePratico);
             this.PnUtente.Controls.Add(this.label2);
-            this.PnUtente.Controls.Add(this.ckbDocenteTeorico);
             this.PnUtente.Controls.Add(this.label3);
             this.PnUtente.Controls.Add(this.label4);
             this.PnUtente.Controls.Add(this.btAnnulla);
@@ -309,7 +290,7 @@
             this.pnCDC.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnCDC.Location = new System.Drawing.Point(346, 0);
             this.pnCDC.Name = "pnCDC";
-            this.pnCDC.Size = new System.Drawing.Size(193, 466);
+            this.pnCDC.Size = new System.Drawing.Size(235, 466);
             this.pnCDC.TabIndex = 19;
             this.pnCDC.Visible = false;
             // 
@@ -319,7 +300,7 @@
             this.clbDisciplina.FormattingEnabled = true;
             this.clbDisciplina.Location = new System.Drawing.Point(3, 248);
             this.clbDisciplina.Name = "clbDisciplina";
-            this.clbDisciplina.Size = new System.Drawing.Size(184, 139);
+            this.clbDisciplina.Size = new System.Drawing.Size(226, 139);
             this.clbDisciplina.TabIndex = 20;
             // 
             // label14
@@ -336,7 +317,7 @@
             this.clbCLasseDiConcorso.FormattingEnabled = true;
             this.clbCLasseDiConcorso.Location = new System.Drawing.Point(3, 59);
             this.clbCLasseDiConcorso.Name = "clbCLasseDiConcorso";
-            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(187, 139);
+            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(229, 139);
             this.clbCLasseDiConcorso.TabIndex = 18;
             this.clbCLasseDiConcorso.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCLasseDiConcorso_ItemCheck);
             // 
@@ -357,10 +338,10 @@
             this.pnDipartimento.Controls.Add(this.lbDcoordinato);
             this.pnDipartimento.Controls.Add(this.label8);
             this.pnDipartimento.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnDipartimento.Location = new System.Drawing.Point(539, 0);
+            this.pnDipartimento.Location = new System.Drawing.Point(581, 0);
             this.pnDipartimento.Margin = new System.Windows.Forms.Padding(3, 5, 5, 5);
             this.pnDipartimento.Name = "pnDipartimento";
-            this.pnDipartimento.Size = new System.Drawing.Size(171, 466);
+            this.pnDipartimento.Size = new System.Drawing.Size(166, 466);
             this.pnDipartimento.TabIndex = 20;
             this.pnDipartimento.Visible = false;
             // 
@@ -376,9 +357,9 @@
             // cbDipartimentoCoordinato
             // 
             this.cbDipartimentoCoordinato.FormattingEnabled = true;
-            this.cbDipartimentoCoordinato.Location = new System.Drawing.Point(10, 248);
+            this.cbDipartimentoCoordinato.Location = new System.Drawing.Point(6, 248);
             this.cbDipartimentoCoordinato.Name = "cbDipartimentoCoordinato";
-            this.cbDipartimentoCoordinato.Size = new System.Drawing.Size(158, 21);
+            this.cbDipartimentoCoordinato.Size = new System.Drawing.Size(157, 21);
             this.cbDipartimentoCoordinato.TabIndex = 19;
             this.cbDipartimentoCoordinato.Visible = false;
             this.cbDipartimentoCoordinato.DropDown += new System.EventHandler(this.cbDipartimentoCoordinato_DropDown);
@@ -416,7 +397,7 @@
             this.PnContratto.Controls.Add(this.label13);
             this.PnContratto.Dock = System.Windows.Forms.DockStyle.Right;
             this.PnContratto.Enabled = false;
-            this.PnContratto.Location = new System.Drawing.Point(741, 0);
+            this.PnContratto.Location = new System.Drawing.Point(763, 0);
             this.PnContratto.Name = "PnContratto";
             this.PnContratto.Size = new System.Drawing.Size(300, 466);
             this.PnContratto.TabIndex = 21;
@@ -511,11 +492,42 @@
             // 
             this.cldColori.FullOpen = true;
             // 
+            // pnTipoDocente
+            // 
+            this.pnTipoDocente.Controls.Add(this.rbLaboratorio);
+            this.pnTipoDocente.Controls.Add(this.rbTeorico);
+            this.pnTipoDocente.Location = new System.Drawing.Point(108, 270);
+            this.pnTipoDocente.Name = "pnTipoDocente";
+            this.pnTipoDocente.Size = new System.Drawing.Size(219, 31);
+            this.pnTipoDocente.TabIndex = 25;
+            // 
+            // rbTeorico
+            // 
+            this.rbTeorico.AutoSize = true;
+            this.rbTeorico.Location = new System.Drawing.Point(4, 7);
+            this.rbTeorico.Name = "rbTeorico";
+            this.rbTeorico.Size = new System.Drawing.Size(61, 17);
+            this.rbTeorico.TabIndex = 0;
+            this.rbTeorico.TabStop = true;
+            this.rbTeorico.Text = "Teorico";
+            this.rbTeorico.UseVisualStyleBackColor = true;
+            // 
+            // rbLaboratorio
+            // 
+            this.rbLaboratorio.AutoSize = true;
+            this.rbLaboratorio.Location = new System.Drawing.Point(131, 7);
+            this.rbLaboratorio.Name = "rbLaboratorio";
+            this.rbLaboratorio.Size = new System.Drawing.Size(78, 17);
+            this.rbLaboratorio.TabIndex = 1;
+            this.rbLaboratorio.TabStop = true;
+            this.rbLaboratorio.Text = "Laboratorio";
+            this.rbLaboratorio.UseVisualStyleBackColor = true;
+            // 
             // FrmUtente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1041, 466);
+            this.ClientSize = new System.Drawing.Size(1063, 466);
             this.Controls.Add(this.PnContratto);
             this.Controls.Add(this.pnDipartimento);
             this.Controls.Add(this.pnCDC);
@@ -533,6 +545,8 @@
             this.PnContratto.ResumeLayout(false);
             this.PnContratto.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).EndInit();
+            this.pnTipoDocente.ResumeLayout(false);
+            this.pnTipoDocente.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -553,8 +567,6 @@
         private System.Windows.Forms.ComboBox cbTipoUtente;
         private System.Windows.Forms.Button btAnnulla;
         private System.Windows.Forms.Button btSalva;
-        private System.Windows.Forms.CheckBox ckbDocenteTeorico;
-        private System.Windows.Forms.CheckBox ckbDocentePratico;
         private System.Windows.Forms.Panel PnUtente;
         private System.Windows.Forms.Panel pnCDC;
         private System.Windows.Forms.Panel pnDipartimento;
@@ -581,5 +593,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckedListBox clbDisciplina;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Panel pnTipoDocente;
+        private System.Windows.Forms.RadioButton rbLaboratorio;
+        private System.Windows.Forms.RadioButton rbTeorico;
     }
 }

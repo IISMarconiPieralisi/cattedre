@@ -20,7 +20,6 @@ namespace Cattedre
         #region COSTRUTTORE
         public ClsUtenteDL( string email, string password, string cognome,  string nome, string tipoUtente, char tipoDocente)
         {
-            ID = GeneraID();
             Email = email;
             Password = password;
             Cognome = cognome;
@@ -144,15 +143,20 @@ namespace Cattedre
             else
                 return false;
         }
-         private int GeneraID()
+        public static string CreateMD5(string input)
         {
-            string guid = Guid.NewGuid().ToString("N");
-            string IdString = new string(guid.Where(c => c >= '0' && c <= '9').ToArray());
-            if (IdString.Length < 8) //se l'id risulta minore di 8 faccio ricorsivamente il codice finche non ottengo un codice valido
-                return GeneraID();
-            else
-                return int.Parse(IdString.Substring(0, 8));
+            // Use input string to calculate MD5 hash
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                //return Convert.ToHexString(hashBytes); // .NET 5 +
+                return BitConverter.ToString(hashBytes).Replace("-", ""); // "010203"
+
+            }
         }
+
         #endregion
 
     }

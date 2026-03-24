@@ -25,6 +25,7 @@ namespace Cattedre
         //creazione degli array che verranno popolati con le query
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
         List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
+        List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDiscipline();
         int _oldValuedipCoord=0;
         bool _bloccoEvdipCoord = false;
         string _imputEmail;
@@ -57,27 +58,21 @@ namespace Cattedre
                 //inserimento controlli Docente
                 if (isDocente)
                 {
-                    // Tipi docente (Teorico o Pratico)
-                    if (ckbDocenteTeorico.Checked && ckbDocentePratico.Checked)
-                        throw new Exception("Seleziona un solo tipo docente.");
-
-                    if (!ckbDocenteTeorico.Checked && !ckbDocentePratico.Checked)
-                        throw new Exception("Seleziona un tipo docente.");
-                    else
-                        _utente.TipoDocente = ckbDocenteTeorico.Checked ? 'T' : 'L';
-
+                        _utente.TipoDocente = rbTeorico.Checked ? 'T' :(rbLaboratorio.Checked)? 'L': throw new Exception("seleziona un tipo di docente");
                     //controllo colore
                     if (string.IsNullOrEmpty(_utente.Colore))
                         _utente.Colore = "255255255";
                     
 
-                    // controlli classe di concorso
+                    // controlli classe di concorso e disciplina
                     if (clbCLasseDiConcorso.CheckedItems.Count == 0)
                         throw new Exception("Seleziona almeno una classe di concorso.");
+                    if (clbDisciplina.CheckedItems.Count == 0)
+                        throw new Exception("seleziona almeno una disciplina");
 
 
-                    // ---- Contratto ----
-                    if (nudMonteOre.Value <= 0 || (!rbDeterminato.Checked && !rbIndeterminato.Checked))
+                        // ---- Contratto ----
+                        if (nudMonteOre.Value <= 0 || (!rbDeterminato.Checked && !rbIndeterminato.Checked))
                         throw new Exception("Inserire un monte ore valido e selezionare il tipo di contratto.");
                     
                     //creazione  contratto se non esiste  (caso inserimento)
@@ -104,9 +99,11 @@ namespace Cattedre
                         if (dip != null)
                             _afferenze.Add(new ClsAfferireDL(dip.ID));
                     }
-                    if(_richieste==null)
-                        _richieste = new List<ClsRichiedereDL>();
                     //controlli richiedere e inserimento
+
+                    // gestione Classi di concorso
+                        _richieste = new List<ClsRichiedereDL>();
+
                     foreach (var item in clbCLasseDiConcorso.CheckedItems)
                     {
                         string Livello = DividiClasseConcorso(item.ToString()).Trim();
@@ -115,6 +112,22 @@ namespace Cattedre
 
                         if (cdc != null)
                             _richieste.Add(new ClsRichiedereDL(cdc.ID));
+                    }
+                    //gestione Disciplina insegnata
+                    foreach(var item in clbDisciplina.CheckedItems)
+                    {
+                        string Nome = string.Empty;
+                        int Anno =0;
+                        DividiDisciplina( item.ToString() ,out Nome, out Anno);
+                        ClsDisciplinaDL disc = discipline
+                            .Find(d => d.Nome == Nome && d.Anno==Anno);
+
+                        if (disc != null)
+                        {
+                            ClsRichiedereDL richiedere = new ClsRichiedereDL();
+                            richiedere.IDdisciplina = disc.ID;
+                            _richieste.Add(richiedere);
+                        }
                     }
                 }
                 
@@ -131,13 +144,15 @@ namespace Cattedre
 
                 // Se arrivi qui, tutto è valido
                 this.DialogResult = DialogResult.OK;
-            }
+        }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
-        }
+}
+
+        
 
         private void FrmUtente_Load(object sender, EventArgs e)
         {
@@ -148,7 +163,6 @@ namespace Cattedre
             //ancora non li filtro in base alla cdc selezionata funzione da fare
             popolaDipartimenti(dipartimenti);
 
-
             //controllo se l'utente passato ha dei dati da mostrare
             if (_utente!= null)
             {
@@ -158,10 +172,9 @@ namespace Cattedre
                 if(tbPassword!=null && _utente.ID==0)
                     tbPassword.Text = _utente.Password;
                 cbTipoUtente.SelectedItem = GetNomeTipoUtente(_utente.TipoUtente);
-                if (_utente.TipoDocente == 'T')
-                    ckbDocenteTeorico.Checked = true;
-                else if (_utente.TipoDocente == 'L')
-                    ckbDocentePratico.Checked = true;
+                if (_utente.TipoDocente == 'T') rbTeorico.Checked = true;
+                else if (_utente.TipoDocente == 'L')    rbLaboratorio.Checked = true;
+
                 if (_utente.TipoUtente == "C")
                 {
                     ClsDipartimentoDL dipCoordinato = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utente.ID);
@@ -199,9 +212,15 @@ namespace Cattedre
             //controllo afferanza
             if(_afferenze!=null && _afferenze.Count>0)
                 loadDipartimenti();
-            //inserimento classe di concorso
+            //inserimento classe di concorso e discipline
             if (_richieste != null)
+            {
+                clbCLasseDiConcorso.ItemCheck -= clbCLasseDiConcorso_ItemCheck;
                 loadCDC();
+                PopolaDisciplinePerCDC();
+                clbCLasseDiConcorso.ItemCheck += clbCLasseDiConcorso_ItemCheck;
+                LoadDiscipline();
+            }
         }
 
         private void cbTipoUtente_SelectionChangeCommitted(object sender, EventArgs e)
@@ -210,15 +229,14 @@ namespace Cattedre
                 cbTipoUtente.SelectedItem.ToString() == "C" ||
                 cbTipoUtente.SelectedItem.ToString() == "A")
             {
-                ckbDocenteTeorico.Enabled = true;
-                ckbDocentePratico.Enabled = true;
+                pnTipoDocente.Enabled = true;
             }
             //se l'utente selezionato è amministratore o preside non gli è possibile selezionare il tipo di docente
 
             if (cbTipoUtente.SelectedItem.ToString() == "P")
             {
-                ckbDocentePratico.Enabled = false;
-                ckbDocenteTeorico.Enabled = false;
+                pnTipoDocente.Enabled = false;
+
             }
         }
         private void rbIndeterminato_CheckedChanged(object sender, EventArgs e)
@@ -233,9 +251,6 @@ namespace Cattedre
                 dtpDataFine.Enabled = true;
             }
         }
-
-
-
         private void cbAutoEmail_CheckedChanged(object sender, EventArgs e)
         {
             if (cbAutoEmail.Checked)
@@ -246,33 +261,15 @@ namespace Cattedre
                     string _Email = $"{tbNome.Text}.{tbCognome.Text}@iismarconipieralisi.it";
                     tbEmail.Enabled = false;
                     tbEmail.Text = _Email;
-
                 }
 
             }
             else
             {
                 tbEmail.Enabled = true;
-                tbEmail.Text = _imputEmail;
-
+                tbEmail.Text = _imputEmail;    
             }
         }
-
-        public static string CreateMD5(string input)
-        {
-            // Use input string to calculate MD5 hash
-            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-            {
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-                //return Convert.ToHexString(hashBytes); // .NET 5 +
-                return BitConverter.ToString(hashBytes).Replace("-", ""); // "010203"
-
-            }
-        }
-
-
         private void btAnnulla_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -311,6 +308,7 @@ namespace Cattedre
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
                     cbDipartimentoCoordinato.Text = string.Empty;
+                    pnTipoDocente.Enabled = true;
                     break;
 
                 case "Coordinatore di dipartimento":
@@ -320,7 +318,16 @@ namespace Cattedre
                     PnContratto.Visible = true;
                     lbDcoordinato.Visible = true;
                     cbDipartimentoCoordinato.Visible = true;
-
+                    pnTipoDocente.Enabled = true;
+                    break;
+                case "Amministratore":
+                    pnCDC.Visible = true;
+                    pnDipartimento.Visible = true;
+                    PnContratto.Enabled = true;
+                    PnContratto.Visible = true;
+                    lbDcoordinato.Visible = true;
+                    cbDipartimentoCoordinato.Visible = true;
+                    pnTipoDocente.Enabled = true;
                     break;
                 default:
                     pnCDC.Visible = false;
@@ -329,6 +336,9 @@ namespace Cattedre
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
                     cbDipartimentoCoordinato.Text = string.Empty;
+                    pnTipoDocente.Enabled = false;
+                    rbLaboratorio.Checked = false;
+                    rbTeorico.Checked = false;
                     break;
             }
         } 
@@ -519,8 +529,6 @@ namespace Cattedre
             clbDisciplina.Enabled = true;
             //creo una lista di disciplina di appoggio
             List<ClsDisciplinaDL> disc = new List<ClsDisciplinaDL>();
-            if (clbCLasseDiConcorso.Items.Count <= 0)
-                return;
             foreach (var item in clbCLasseDiConcorso.CheckedItems)
             {
                 string Livello = DividiClasseConcorso(item.ToString()).Trim();
@@ -543,7 +551,8 @@ namespace Cattedre
                 return;
             foreach(var d in disc.OrderBy(d => d.Nome).ThenBy(d => d.Anno)) // le ordino per  anno e per sezione per comodità
                 clbDisciplina.Items.Add($"{d.Nome} {d.Anno}°");
-            
+
+
         }
         private void LoadDiscipline()
         {
@@ -570,6 +579,12 @@ namespace Cattedre
         {
             string[] vs = item.Split('|');
             return vs[0];
+        }
+        private void DividiDisciplina( string item,out string nome, out int anno)
+        {
+            anno = Convert.ToInt16(item.Substring(item.Length - 2, 1));
+            nome = item.Substring(0, item.Length - 3);
+
         }
         #endregion
         #region gestione colore utente

@@ -165,6 +165,7 @@
             this.tbRicerca.TabIndex = 6;
             this.tbRicerca.Text = "cognome nome";
             this.tbRicerca.Enter += new System.EventHandler(this.tbRicerca_Enter);
+            this.tbRicerca.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbRicerca_KeyDown);
             this.tbRicerca.Leave += new System.EventHandler(this.tbRicerca_Leave);
             // 
             // gbContratto
@@ -257,7 +258,7 @@
             this.cbDocente.TabIndex = 7;
             this.cbDocente.Text = "Docente";
             this.cbDocente.UseVisualStyleBackColor = true;
-            this.cbDocente.CheckedChanged += new System.EventHandler(this.cbDocente_CheckedChanged);
+            this.cbDocente.CheckedChanged += new System.EventHandler(this.cbDocenteCordinatore_CheckedChanged);
             // 
             // cbCoordinatore
             // 
@@ -268,6 +269,7 @@
             this.cbCoordinatore.TabIndex = 6;
             this.cbCoordinatore.Text = "Coordinatore";
             this.cbCoordinatore.UseVisualStyleBackColor = true;
+            this.cbCoordinatore.CheckedChanged += new System.EventHandler(this.cbDocenteCordinatore_CheckedChanged);
             // 
             // cbAmminstratore
             // 
@@ -291,6 +293,8 @@
             // 
             // btAnnullaFiltra
             // 
+            this.btAnnullaFiltra.Enabled = false;
+            this.btAnnullaFiltra.ForeColor = System.Drawing.Color.Red;
             this.btAnnullaFiltra.Location = new System.Drawing.Point(938, 37);
             this.btAnnullaFiltra.Name = "btAnnullaFiltra";
             this.btAnnullaFiltra.Size = new System.Drawing.Size(34, 23);

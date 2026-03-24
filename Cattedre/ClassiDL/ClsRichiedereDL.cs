@@ -27,7 +27,9 @@ namespace Cattedre
         }
         public ClsRichiedereDL()
         {
-
+            IDutente = 0;
+            IDdisciplina = 0;
+            IDclassediconcorso = 0;
         }
         public ClsRichiedereDL(long idClasseDiConcorso)
         {

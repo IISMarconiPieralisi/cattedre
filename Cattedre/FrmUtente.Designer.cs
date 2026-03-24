@@ -50,6 +50,8 @@
             this.cbAutoEmail = new System.Windows.Forms.CheckBox();
             this.btColore = new System.Windows.Forms.Button();
             this.pnCDC = new System.Windows.Forms.Panel();
+            this.clbDisciplina = new System.Windows.Forms.CheckedListBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.clbCLasseDiConcorso = new System.Windows.Forms.CheckedListBox();
             this.label7 = new System.Windows.Forms.Label();
             this.pnDipartimento = new System.Windows.Forms.Panel();
@@ -96,7 +98,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(18, 139);
+            this.label3.Location = new System.Drawing.Point(18, 130);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 2;
@@ -123,7 +125,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(18, 296);
+            this.label6.Location = new System.Drawing.Point(18, 279);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(75, 13);
             this.label6.TabIndex = 5;
@@ -151,7 +153,7 @@
             // 
             this.tbEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbEmail.Location = new System.Drawing.Point(109, 136);
+            this.tbEmail.Location = new System.Drawing.Point(108, 123);
             this.tbEmail.Name = "tbEmail";
             this.tbEmail.Size = new System.Drawing.Size(219, 20);
             this.tbEmail.TabIndex = 8;
@@ -165,6 +167,8 @@
             this.tbPassword.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tbPassword.Size = new System.Drawing.Size(219, 20);
             this.tbPassword.TabIndex = 9;
+            this.tbPassword.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbPassword.UseSystemPasswordChar = true;
             this.tbPassword.UseWaitCursor = true;
             // 
             // cbTipoUtente
@@ -210,7 +214,7 @@
             // ckbDocenteTeorico
             // 
             this.ckbDocenteTeorico.AutoSize = true;
-            this.ckbDocenteTeorico.Location = new System.Drawing.Point(109, 296);
+            this.ckbDocenteTeorico.Location = new System.Drawing.Point(109, 279);
             this.ckbDocenteTeorico.Name = "ckbDocenteTeorico";
             this.ckbDocenteTeorico.Size = new System.Drawing.Size(58, 17);
             this.ckbDocenteTeorico.TabIndex = 15;
@@ -220,7 +224,7 @@
             // ckbDocentePratico
             // 
             this.ckbDocentePratico.AutoSize = true;
-            this.ckbDocentePratico.Location = new System.Drawing.Point(269, 295);
+            this.ckbDocentePratico.Location = new System.Drawing.Point(269, 278);
             this.ckbDocentePratico.Name = "ckbDocentePratico";
             this.ckbDocentePratico.Size = new System.Drawing.Size(58, 17);
             this.ckbDocentePratico.TabIndex = 16;
@@ -259,6 +263,7 @@
             // 
             // pnColore
             // 
+            this.pnColore.BackColor = System.Drawing.Color.White;
             this.pnColore.Location = new System.Drawing.Point(192, 326);
             this.pnColore.Name = "pnColore";
             this.pnColore.Size = new System.Drawing.Size(24, 23);
@@ -276,7 +281,7 @@
             // cbAutoEmail
             // 
             this.cbAutoEmail.AutoSize = true;
-            this.cbAutoEmail.Location = new System.Drawing.Point(109, 259);
+            this.cbAutoEmail.Location = new System.Drawing.Point(109, 149);
             this.cbAutoEmail.Name = "cbAutoEmail";
             this.cbAutoEmail.Size = new System.Drawing.Size(107, 17);
             this.cbAutoEmail.TabIndex = 18;
@@ -297,22 +302,43 @@
             // pnCDC
             // 
             this.pnCDC.AutoSize = true;
+            this.pnCDC.Controls.Add(this.clbDisciplina);
+            this.pnCDC.Controls.Add(this.label14);
             this.pnCDC.Controls.Add(this.clbCLasseDiConcorso);
             this.pnCDC.Controls.Add(this.label7);
             this.pnCDC.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnCDC.Location = new System.Drawing.Point(346, 0);
             this.pnCDC.Name = "pnCDC";
-            this.pnCDC.Size = new System.Drawing.Size(163, 466);
+            this.pnCDC.Size = new System.Drawing.Size(193, 466);
             this.pnCDC.TabIndex = 19;
             this.pnCDC.Visible = false;
+            // 
+            // clbDisciplina
+            // 
+            this.clbDisciplina.Enabled = false;
+            this.clbDisciplina.FormattingEnabled = true;
+            this.clbDisciplina.Location = new System.Drawing.Point(3, 248);
+            this.clbDisciplina.Name = "clbDisciplina";
+            this.clbDisciplina.Size = new System.Drawing.Size(184, 139);
+            this.clbDisciplina.TabIndex = 20;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 232);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(55, 13);
+            this.label14.TabIndex = 19;
+            this.label14.Text = "Discipline:";
             // 
             // clbCLasseDiConcorso
             // 
             this.clbCLasseDiConcorso.FormattingEnabled = true;
             this.clbCLasseDiConcorso.Location = new System.Drawing.Point(3, 59);
             this.clbCLasseDiConcorso.Name = "clbCLasseDiConcorso";
-            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(157, 139);
+            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(187, 139);
             this.clbCLasseDiConcorso.TabIndex = 18;
+            this.clbCLasseDiConcorso.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCLasseDiConcorso_ItemCheck);
             // 
             // label7
             // 
@@ -331,7 +357,7 @@
             this.pnDipartimento.Controls.Add(this.lbDcoordinato);
             this.pnDipartimento.Controls.Add(this.label8);
             this.pnDipartimento.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnDipartimento.Location = new System.Drawing.Point(509, 0);
+            this.pnDipartimento.Location = new System.Drawing.Point(539, 0);
             this.pnDipartimento.Margin = new System.Windows.Forms.Padding(3, 5, 5, 5);
             this.pnDipartimento.Name = "pnDipartimento";
             this.pnDipartimento.Size = new System.Drawing.Size(171, 466);
@@ -390,9 +416,9 @@
             this.PnContratto.Controls.Add(this.label13);
             this.PnContratto.Dock = System.Windows.Forms.DockStyle.Right;
             this.PnContratto.Enabled = false;
-            this.PnContratto.Location = new System.Drawing.Point(688, 0);
+            this.PnContratto.Location = new System.Drawing.Point(741, 0);
             this.PnContratto.Name = "PnContratto";
-            this.PnContratto.Size = new System.Drawing.Size(296, 466);
+            this.PnContratto.Size = new System.Drawing.Size(300, 466);
             this.PnContratto.TabIndex = 21;
             // 
             // dtpDataFine
@@ -401,7 +427,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpDataFine.Location = new System.Drawing.Point(89, 232);
             this.dtpDataFine.Name = "dtpDataFine";
-            this.dtpDataFine.Size = new System.Drawing.Size(195, 20);
+            this.dtpDataFine.Size = new System.Drawing.Size(199, 20);
             this.dtpDataFine.TabIndex = 21;
             // 
             // dtpDataInizio
@@ -410,7 +436,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpDataInizio.Location = new System.Drawing.Point(89, 185);
             this.dtpDataInizio.Name = "dtpDataInizio";
-            this.dtpDataInizio.Size = new System.Drawing.Size(195, 20);
+            this.dtpDataInizio.Size = new System.Drawing.Size(199, 20);
             this.dtpDataInizio.TabIndex = 20;
             // 
             // label10
@@ -437,7 +463,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.nudMonteOre.Location = new System.Drawing.Point(88, 138);
             this.nudMonteOre.Name = "nudMonteOre";
-            this.nudMonteOre.Size = new System.Drawing.Size(196, 20);
+            this.nudMonteOre.Size = new System.Drawing.Size(200, 20);
             this.nudMonteOre.TabIndex = 17;
             // 
             // label12
@@ -489,7 +515,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 466);
+            this.ClientSize = new System.Drawing.Size(1041, 466);
             this.Controls.Add(this.PnContratto);
             this.Controls.Add(this.pnDipartimento);
             this.Controls.Add(this.pnCDC);
@@ -553,5 +579,7 @@
         private System.Windows.Forms.ColorDialog cldColori;
         private System.Windows.Forms.Panel pnColore;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.CheckedListBox clbDisciplina;
+        private System.Windows.Forms.Label label14;
     }
 }

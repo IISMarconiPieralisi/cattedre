@@ -8,10 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Cattedre</RootNamespace>
     <AssemblyName>Cattedre</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -447,9 +448,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1-47b4fe04.ico" />
+    <Content Include="Resources\Immagini\Icone\CDC.ico" />
+    <Content Include="Resources\Immagini\Icone\CLASSI.ico" />
+    <Content Include="Resources\Immagini\Icone\DIPARTIMENTI.ico" />
+    <Content Include="Resources\Immagini\Icone\DISCIPLINE.ico" />
+    <Content Include="Resources\Immagini\Icone\UTENTI.ico" />
+    <Content Include="Resources\Immagini\Icone\INDIRIZZI.ico" />
+    <Content Include="Resources\Immagini\vecchie immagini\1-47b4fe04.ico" />
+    <Content Include="Resources\Immagini\vecchie immagini\iconeDekstop.png" />
+    <Content Include="Resources\Immagini\vecchie immagini\LoginImg.png" />
+    <Content Include="Resources\Immagini\vecchie immagini\Sfondo.png" />
+    <Content Include="Resources\Immagini\vecchie immagini\user-account-management-logo-user-icon-11562867145a56rus2zwu.png" />
+    <None Include="Resources\incolla.png" />
+    <None Include="Resources\copia.png" />
+    <None Include="Resources\taglia.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <Folder Include="MigliorieGrafiche\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

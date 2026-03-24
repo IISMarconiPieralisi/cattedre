@@ -68,7 +68,7 @@ namespace Cattedre
 
                     //controllo colore
                     if (string.IsNullOrEmpty(_utente.Colore))
-                        throw new Exception("Seleziona un colore al docente.");
+                        _utente.Colore = "255255255";
                     
 
                     // controlli classe di concorso
@@ -138,8 +138,6 @@ namespace Cattedre
                 this.DialogResult = DialogResult.None;
             }
         }
-
-
 
         private void FrmUtente_Load(object sender, EventArgs e)
         {
@@ -259,6 +257,22 @@ namespace Cattedre
 
             }
         }
+
+        public static string CreateMD5(string input)
+        {
+            // Use input string to calculate MD5 hash
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                //return Convert.ToHexString(hashBytes); // .NET 5 +
+                return BitConverter.ToString(hashBytes).Replace("-", ""); // "010203"
+
+            }
+        }
+
+
         private void btAnnulla_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -296,6 +310,7 @@ namespace Cattedre
                     PnContratto.Visible = true;
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
+                    cbDipartimentoCoordinato.Text = string.Empty;
                     break;
 
                 case "Coordinatore di dipartimento":
@@ -313,6 +328,7 @@ namespace Cattedre
                     PnContratto.Enabled = false;
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
+                    cbDipartimentoCoordinato.Text = string.Empty;
                     break;
             }
         } 
@@ -335,7 +351,6 @@ namespace Cattedre
         }
 
         #endregion
-
         #region metodi di popolamento con query esterne
         private void popolaClbClasseDiConcorso(List<ClsClasseDiConcorsoDL> cdcs)
         {
@@ -383,10 +398,9 @@ namespace Cattedre
             if (_bloccoEvdipCoord)
                 return;
             ClsUtenteDL coord = ClsDipartimentoBL.utenteCoordinaDiparimento(dipartimentoScelto);
-            if (coord != null && coord.ID != _utente.ID)
+            if (coord != null && (_utente==null ||coord.ID != _utente.ID))
             {
-                DialogResult dr = MessageBox.Show($"Attualmente il dipartimento {dipartimentoScelto} viene coordinato da {coord.Cognome} {coord.Nome}; \nVuoi sostituirlo?",
-                           "Cambio Coordinatore", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult dr = MessageBox.Show($"Attualmente il dipartimento {dipartimentoScelto} viene coordinato da {coord.Cognome} {coord.Nome}; \nVuoi sostituirlo?","Cambio Coordinatore", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == DialogResult.No)
                 {
                     _bloccoEvdipCoord = true;
@@ -493,6 +507,64 @@ namespace Cattedre
                     clbCLasseDiConcorso.SetItemChecked(i, true);
             }
         }
+        private void PopolaDisciplinePerCDC()
+        {
+            clbDisciplina.Items.Clear();
+            // Se non ci sono elementi selezionati, disabilita e esci
+            if (clbCLasseDiConcorso.CheckedItems.Count == 0)
+            {
+                clbDisciplina.Enabled = false;
+                return;
+            }
+            clbDisciplina.Enabled = true;
+            //creo una lista di disciplina di appoggio
+            List<ClsDisciplinaDL> disc = new List<ClsDisciplinaDL>();
+            if (clbCLasseDiConcorso.Items.Count <= 0)
+                return;
+            foreach (var item in clbCLasseDiConcorso.CheckedItems)
+            {
+                string Livello = DividiClasseConcorso(item.ToString()).Trim();
+                ClsClasseDiConcorsoDL cdc = cdcs.Find(d => d.Livello == Livello.ToString());
+
+                if (cdc != null)
+                {
+                    List<ClsDisciplinaDL> discipline = ClsRichiedereBL.RilevaDiscipinaCDC(cdc.ID);
+
+                    foreach (var d in discipline)
+                    {
+                        if (!disc.Any(esistente => esistente.ID == d.ID))
+                        {
+                            disc.Add(d);
+                        }
+                    }
+                }
+            }
+            if (disc.Count <= 0)
+                return;
+            foreach(var d in disc.OrderBy(d => d.Nome).ThenBy(d => d.Anno)) // le ordino per  anno e per sezione per comodità
+                clbDisciplina.Items.Add($"{d.Nome} {d.Anno}°");
+            
+        }
+        private void LoadDiscipline()
+        {
+            // Carico tutte le CDC dell'utente
+            List<ClsDisciplinaDL> disciplineUtente =
+                ClsRichiedereBL.RilevaDisciplineDocente(_utente.ID);
+
+            if (disciplineUtente == null || disciplineUtente.Count == 0)
+                return;
+
+            // Creo l'elenco delle CDC dell'utente nel formato "Nome anno°"
+            HashSet<string> disciplinaUtenteScritta = new HashSet<string>(disciplineUtente.Select(c => $"{c.Nome} {c.Anno}°"),StringComparer.OrdinalIgnoreCase);
+
+            // Scorro gli item della CheckedListBox
+            for (int i = 0; i < clbDisciplina.Items.Count; i++)
+            {
+                string nomeItem = clbDisciplina.Items[i].ToString();
+                if (disciplinaUtenteScritta.Contains(nomeItem))
+                    clbDisciplina.SetItemChecked(i, true);
+            }
+        }
 
         private string DividiClasseConcorso(string item)
         {
@@ -500,7 +572,6 @@ namespace Cattedre
             return vs[0];
         }
         #endregion
-      
         #region gestione colore utente
         private void btColore_Click(object sender, EventArgs e)
         {
@@ -517,10 +588,15 @@ namespace Cattedre
 
         public Color OttieniColore(string rgb)
         {
-            int r = int.Parse(rgb.Substring(0, 3));
-            int g = int.Parse(rgb.Substring(3, 3));
-            int b = int.Parse(rgb.Substring(6, 3));
-            return Color.FromArgb(r, g, b);
+            if (rgb.Length >= 9)
+            {
+                int r = int.Parse(rgb.Substring(0, 3));
+                int g = int.Parse(rgb.Substring(3, 3));
+                int b = int.Parse(rgb.Substring(6, 3));
+                return Color.FromArgb(r, g, b);
+            }
+            else
+                return Color.White;
         }
 
         public static string ScriviColore(Color colore)
@@ -528,6 +604,12 @@ namespace Cattedre
             return $"{colore.R:D3}{colore.G:D3}{colore.B:D3}";
         }
 
+        private void clbCLasseDiConcorso_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            // Usiamo BeginInvoke solo per assicurarci che la lista sia aggiornata 
+            // prima di leggere i CheckedItems. È il modo più affidabile.
+            this.BeginInvoke(new Action(() => PopolaDisciplinePerCDC()));
+        }
 
     }
 

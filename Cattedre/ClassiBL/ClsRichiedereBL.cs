@@ -12,52 +12,49 @@ namespace Cattedre
     public static class ClsRichiedereBL
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
-        public static List<ClsClasseDiConcorsoDL> RilevaCDCDiscipina(long IDdisciplina)
+        
+        public static List<ClsDisciplinaDL> RilevaDiscipinaCDC(long IDcdc)
         {
-            List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
-            
-
+            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            DataTable ds = new DataTable();
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
 
-                    string sql = @"SELECT c.id,c.livello,c.nome,c.abilitazioniRichieste
-                                    FROM classidiconcorso c
-                                    INNER JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
-                                    WHERE r.IDdisciplina = @IDdisciplina";
+                    string sql = @"SELECT d.ID, d.nome,d.anno
+                                    FROM discipline d
+                                    INNER JOIN richiedere r ON d.ID = r.IDdisciplina
+                                    WHERE r.IDclasseDiConcorso  = @IDclasseDiConcorso ";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.Add("@IDdisciplina", MySqlDbType.Int64).Value = IDdisciplina;
+                        cmd.Parameters.AddWithValue("@IDclasseDiConcorso", IDcdc);
 
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
-                            while (dr.Read())
-                            {
-                                ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL
-                                {
-                                    ID = dr.GetInt32("id"),
-                                    Livello = dr.GetString("livello"),
-                                    Nome = dr.GetString("nome"),
-                                    AbilitazioniRichieste = dr.GetString("abilitazioniRichieste")
-                                };
-
-                                CDCs.Add(cdc);
-                            }
+                            dr.Fill(ds);
                         }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in ds.Rows)
+                    {
+                        ClsDisciplinaDL disc = new ClsDisciplinaDL();
+                        disc.ID = Convert.ToInt64(row["id"]);
+                        disc.Nome = row["nome"].ToString();
+                        disc.Anno = Convert.ToInt16(row["anno"]);
+                        discipline.Add(disc);
+
                     }
                 }
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
-                throw;
+                throw new Exception(ex.Message);
             }
 
-            return CDCs;
+            return discipline;
         }
         public static List<ClsClasseDiConcorsoDL> RilevaCDCDocente(long IDutente)
         {
@@ -97,6 +94,92 @@ namespace Cattedre
             {
                 throw new Exception($"errore nella query: {ex.Message}", ex);
 
+            }
+
+            return CDCs;
+        }
+        public static List<ClsDisciplinaDL> RilevaDisciplineDocente(long IDutente)
+        {
+            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            DataTable ds = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT d.ID, d.nome,d.anno
+                                    FROM discipline d
+                                    JOIN richiedere r ON d.ID = r.IDdisciplina
+                                    WHERE r.IDutente = @IdUtente";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(ds);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in ds.Rows)
+                    {
+                        ClsDisciplinaDL disc = new ClsDisciplinaDL();
+                        disc.ID = Convert.ToInt64(row["id"]);
+                        disc.Nome = row["nome"].ToString();
+                        disc.Anno =Convert.ToInt16(row["nome"]);
+                        discipline.Add(disc);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"errore nella query: {ex.Message}", ex);
+
+            }
+            return discipline;
+        }
+        public static List<ClsClasseDiConcorsoDL> RilevaCDCDiscipina(long IDdisciplina)
+        {
+            List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
+            DataTable ds = new DataTable();
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT c.id,c.livello,c.nome,c.abilitazioniRichieste
+                                    FROM classidiconcorso c
+                                    INNER JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
+                                    WHERE r.IDdisciplina = @IDdisciplina";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(ds);
+                        }
+                    }
+
+                }
+                foreach (DataRow row in ds.Rows)
+                {
+                    ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL
+                    {
+                        ID = Convert.ToInt64(row["id"]),
+                        Livello = row["livello"].ToString(),
+                        Nome = row["nome"].ToString(),
+                        AbilitazioniRichieste = row["abilitazioniRichieste"].ToString()
+                    };
+                    CDCs.Add(cdc);
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
 
             return CDCs;

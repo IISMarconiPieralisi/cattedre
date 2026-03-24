@@ -192,10 +192,10 @@
             this.rbDeterminato.AutoSize = true;
             this.rbDeterminato.Location = new System.Drawing.Point(7, 20);
             this.rbDeterminato.Name = "rbDeterminato";
-            this.rbDeterminato.Size = new System.Drawing.Size(73, 17);
+            this.rbDeterminato.Size = new System.Drawing.Size(82, 17);
             this.rbDeterminato.TabIndex = 0;
             this.rbDeterminato.TabStop = true;
-            this.rbDeterminato.Text = "Derminato";
+            this.rbDeterminato.Text = "Determinato";
             this.rbDeterminato.UseVisualStyleBackColor = true;
             // 
             // gBtipoDocente

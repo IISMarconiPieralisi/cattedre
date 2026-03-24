@@ -13,6 +13,27 @@ namespace Cattedre
 {
     public partial class FrmUtenti : Form
     {
+        #region dizionari filtri
+        Dictionary<string, string> mappaUtenti = new Dictionary<string, string>()
+                {
+                    { "Preside", "'P'" },
+                    { "Amministratore", "'A'" },
+                    { "Docente", "'D'" },
+                    { "Coordinatore", "'C'" }
+                };
+
+        Dictionary<string, string> mappaContratto = new Dictionary<string, string>()
+                {
+                    { "Determinato", "'D'" },
+                    { "Indeterminato", "'I'" }
+                };
+
+        Dictionary<string, string> mappaTipoDocente = new Dictionary<string, string>()
+                {
+                    { "Laboratorio", "'L'" },
+                    { "Teorico", "'T'" }
+                };
+        #endregion
         public List<ClsUtenteDL> _utenti = new List<ClsUtenteDL>();
         Dictionary<string, List<string>> filtri = new Dictionary<string, List<string>>();
         string _parametroRicerca = string.Empty;
@@ -239,89 +260,31 @@ namespace Cattedre
                 btAnnullaFiltra.Enabled = true;
 
                 bool parametroSelezionato = false;
-                Dictionary<string, string> mappaUtenti = new Dictionary<string, string>()
-                {
-                    { "Preside", "P" },
-                    { "Amministratore", "A" },
-                    { "Docente", "D" },
-                    { "Coordinatore", "C" }
-                };
 
-                Dictionary<string, string> mappaContratto = new Dictionary<string, string>()
-                {
-                    { "Determinato", "D" },
-                    { "Indeterminato", "I" }
-                };
-
-                Dictionary<string, string> mappaTipoDocente = new Dictionary<string, string>()
-                {
-                    { "Laboratorio", "L" },
-                    { "Teorico", "T" }
-                };
-
-
-                var tipiUtente = CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox));
-
-                if (tipiUtente.Any())
-                {
-                    List<string> valori = new List<string>();
-
-                    foreach (string item in tipiUtente)
-                    {
-                        if (mappaUtenti.ContainsKey(item))
-                            valori.Add(mappaUtenti[item]);
-                    }
-
-                    if (valori.Any())
-                    {
-                        filtri.Add("tipoUtente", valori);
-                        parametroSelezionato = true;
-                    }
-                }
-                var contratto = CaricaElementiSelezionati(gbContratto, typeof(RadioButton));
-                if (contratto.Any())
-                {
-                    List<string> valori = new List<string>();
-                    foreach (string item in contratto)
-                    {
-                        if (mappaContratto.ContainsKey(item))
-                            valori.Add(mappaContratto[item]);
-                    }
-                    if (valori.Any())
-                    {
-                        filtri.Add("tipoContratto", valori);
-                        parametroSelezionato = true;
-                    }
-                }
-                var tipoDocente = CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton));
-                if (tipoDocente.Any())
-                {
-                    List<string> valori = new List<string>();
-
-                    foreach (string item in tipoDocente)
-                    {
-                        if (mappaTipoDocente.ContainsKey(item))
-                            valori.Add(mappaTipoDocente[item]);
-                    }
-
-                    if (valori.Any())
-                    {
-                        filtri.Add("tipoDocente", valori);
-                        parametroSelezionato = true;
-                    }
-                }
+                parametroSelezionato |= AggiungiFiltro(filtri,"tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
+                parametroSelezionato |= AggiungiFiltro(filtri,"tipoContratto",CaricaElementiSelezionati(gbContratto, typeof(RadioButton)),mappaContratto);
+                parametroSelezionato |= AggiungiFiltro(filtri,"tipoDocente",CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)),mappaTipoDocente);
 
                 if (!parametroSelezionato)
                     throw new Exception("non è stato selezionato nessun parametro di ricerca");
 
                 _parametroRicerca = string.Empty;
-                _utenti = ClsUtenteBL.FiltraUtenti(filtri);
                 gestisciListview();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}\n riprova", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+        private bool AggiungiFiltro(Dictionary<string, List<string>> filtri,string chiave,IEnumerable<string> selezionati,Dictionary<string, string> mappa)
+        {
+            var valori = selezionati.Where(item => mappa.ContainsKey(item)).Select(item => mappa[item]).ToList();
+            if (valori.Any())
+            {
+                filtri.Add(chiave, valori);
+                return true;
+            }
+            return false;
         }
         private List<string> CaricaElementiSelezionati(GroupBox gb, Type tipoControllo)
         {

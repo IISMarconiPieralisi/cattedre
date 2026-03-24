@@ -40,6 +40,7 @@ namespace Cattedre
         public UcAssegnazioni()
         {
             InitializeComponent();
+
           
         }
 

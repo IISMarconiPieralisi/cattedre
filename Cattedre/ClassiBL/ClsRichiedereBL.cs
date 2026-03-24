@@ -15,7 +15,8 @@ namespace Cattedre
         
         public static List<ClsDisciplinaDL> RilevaDiscipinaCDC(long IDcdc)
         {
-            List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
+            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            DataTable ds = new DataTable();
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -27,23 +28,12 @@ namespace Cattedre
                            WHERE r.IDdisciplina = @IDdisciplina";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.Add("@IDdisciplina", MySqlDbType.Int64).Value = IDdisciplina;
+                        cmd.Parameters.Add("@IDdisciplina", MySqlDbType.Int64).Value = IDcdc;
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             da.Fill(dt);
                         }
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            CDCs.Add(new ClsClasseDiConcorsoDL
-                            {
-                                ID = Convert.ToInt64(row["id"]),
-                                Livello = row["livello"].ToString(),
-                                Nome = row["nome"].ToString(),
-                                AbilitazioniRichieste = row["abilitazioniRichieste"].ToString()
-                            });
-                        }
-                        conn.Close();
                     }
                     foreach (DataRow row in ds.Rows)
                     {
@@ -60,7 +50,7 @@ namespace Cattedre
             {
                 throw new Exception("Errore durante il rilevamento delle CDC per disciplina: " + ex.Message);
             }
-            return CDCs;
+            return discipline;
         }
         public static List<ClsClasseDiConcorsoDL> RilevaCDCDocente(long IDutente)
         {
@@ -157,6 +147,7 @@ namespace Cattedre
                                     WHERE r.IDdisciplina = @IDdisciplina";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
                             dr.Fill(ds);

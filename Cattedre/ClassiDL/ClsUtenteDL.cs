@@ -59,23 +59,24 @@ namespace Cattedre
 
             }
         }
-        public string Cognome 
+        public string Cognome
         {
             get => _cognome;
             set
             {
-                if (!string.IsNullOrEmpty(value))
+                if (value != null)
                     _cognome = value;
                 else
                     throw new Exception("Inserire un Cognome Valido");
             }
         }
-        public string Nome 
+
+        public string Nome
         {
-            get => _nome; 
+            get => _nome;
             set
             {
-                if(!string.IsNullOrWhiteSpace(value))
+                if (value != null)
                     _nome = value;
                 else
                     throw new Exception("Inserire un Nome Valido");

@@ -31,6 +31,7 @@ namespace Cattedre
                     _cdc.Nome = tbNome.Text;
                     _dot.NumcattedreDiritto = Convert.ToInt32(nudNumCattedreDiritto.Value);
                     _dot.NumcattedreFatto = Convert.ToInt32(nudNumCattedreFatto.Value);
+                    _dot.IdAnnoscolastico = ClsAnnoScolasticoBL.RilevaIDanno(cbAnnoScolastico.SelectedItem.ToString());
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -48,9 +49,15 @@ namespace Cattedre
         private void FrmCdC_Load(object sender, EventArgs e)
         {
             FrmCdCs frmCdCs = new FrmCdCs();
+            List<ClsAnnoScolasticoDL> _anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
+            foreach(ClsAnnoScolasticoDL _as in _anniscolastici)
+            {
+                cbAnnoScolastico.Items.Add(_as.Sigla);
+            }
 
             if (_cdc.Nome != null)
             {
+                cbAnnoScolastico.SelectedItem = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(_dot.IdAnnoscolastico);
                 tbNome.Text = _cdc.Nome;
                 tbLivello.Text = _cdc.Livello;
                 rtbAbilitazioni.Text = _cdc.AbilitazioniRichieste;

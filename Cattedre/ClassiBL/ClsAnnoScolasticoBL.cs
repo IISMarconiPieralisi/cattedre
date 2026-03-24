@@ -166,6 +166,36 @@ namespace Cattedre
             return IDanno;
         }
 
+        public static long RilevaIDanno(string sigla)
+        {
+            long IDanno = 0;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID FROM anniscolastici 
+                          WHERE sigla = @sigla";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@sigla", sigla);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                            IDanno = Convert.ToInt64(dt.Rows[0]["ID"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento dell'anno scolastico: " + ex.Message);
+            }
+            return IDanno;
+        }
+
         public static string RilevaSiglaAnnoScolastico(long ID)
         {
             string Sigla = "-";

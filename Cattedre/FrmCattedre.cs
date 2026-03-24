@@ -141,8 +141,8 @@ namespace Cattedre
 
             foreach (ClsClasseDiConcorsoDL cdc in cdcUniche)
             {
-                int numCattedreDiritto = ClsDotareBL.TrovaNumCattedreDiDiritto(cdc.ID);
-                int numCattedreFatto = ClsDotareBL.TrovaNumCattedreDiFatto(cdc.ID);
+                int numCattedreDiritto = ClsDotareBL.TrovaNumCattedreDiDiritto(cdc.ID, ClsAnnoScolasticoBL.RilevaIDanno(annoscolasticoselezionato));
+                int numCattedreFatto = ClsDotareBL.TrovaNumCattedreDiFatto(cdc.ID, ClsAnnoScolasticoBL.RilevaIDanno(annoscolasticoselezionato));
 
                 // Riga 1: "Livello → Num Cattedre di Fatto: X"
                 Label lbl = new Label();

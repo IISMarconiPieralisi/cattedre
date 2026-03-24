@@ -375,17 +375,6 @@ namespace Cattedre
         #endregion
         #region ricerca
 
-        private void tbRicerca_TextChanged(object sender, EventArgs e)
-        {
-            if(tbRicerca.Text!="cognome nome" && tbRicerca.Text.Length>2)
-            {
-                btRicerca.Enabled = true;
-            }else
-            {
-                btRicerca.Enabled = false;
-            }
-        }
-
         private void tbRicerca_Enter(object sender, EventArgs e)
         {
             if (tbRicerca.Text == "cognome nome")
@@ -409,7 +398,6 @@ namespace Cattedre
             {
                 //cancello il filtra in modo che non mi dia problemi
                 filtri = new Dictionary<string, List<string>>();
-                btAnnullaRicerca.Enabled = true;
                 _parametroRicerca = tbRicerca.Text.Replace(" ", "").ToLower();
                 _utenti = ClsUtenteBL.RicercaPerNomeCognome(_parametroRicerca);
                 CaricaListView();
@@ -420,8 +408,6 @@ namespace Cattedre
 
         private void btAnnullaRicerca_Click(object sender, EventArgs e)
         {
-            btRicerca.Enabled = false;
-            btAnnullaRicerca.Enabled = false;
             _parametroRicerca = string.Empty;
             tbRicerca.Text = string.Empty;
             gestisciListview();
@@ -438,5 +424,7 @@ namespace Cattedre
                 PulisciGroubBox(gBtipoDocente);
             }
         }
+
+
     }
 }

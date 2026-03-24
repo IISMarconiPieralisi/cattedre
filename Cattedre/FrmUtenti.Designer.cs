@@ -41,7 +41,7 @@
             this.btInserisci = new System.Windows.Forms.Button();
             this.btModifica = new System.Windows.Forms.Button();
             this.btElimina = new System.Windows.Forms.Button();
-            this.pnFiltra = new System.Windows.Forms.Panel();
+            this.tbRicerca = new System.Windows.Forms.TextBox();
             this.gbContratto = new System.Windows.Forms.GroupBox();
             this.rbIndireterminato = new System.Windows.Forms.RadioButton();
             this.rbDeterminato = new System.Windows.Forms.RadioButton();
@@ -55,16 +55,9 @@
             this.cbPreside = new System.Windows.Forms.CheckBox();
             this.btAnnullaFiltra = new System.Windows.Forms.Button();
             this.btFiltro = new System.Windows.Forms.Button();
-            this.pnRicerca = new System.Windows.Forms.Panel();
-            this.tbRicerca = new System.Windows.Forms.TextBox();
-            this.btAnnullaRicerca = new System.Windows.Forms.Button();
-            this.btRicerca = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.pnFiltra.SuspendLayout();
             this.gbContratto.SuspendLayout();
             this.gBtipoDocente.SuspendLayout();
             this.gbTipiUtenti.SuspendLayout();
-            this.pnRicerca.SuspendLayout();
             this.SuspendLayout();
             // 
             // lvUtenti
@@ -83,9 +76,9 @@
             this.chDataFine});
             this.lvUtenti.FullRowSelect = true;
             this.lvUtenti.HideSelection = false;
-            this.lvUtenti.Location = new System.Drawing.Point(45, 105);
+            this.lvUtenti.Location = new System.Drawing.Point(45, 89);
             this.lvUtenti.Name = "lvUtenti";
-            this.lvUtenti.Size = new System.Drawing.Size(1286, 571);
+            this.lvUtenti.Size = new System.Drawing.Size(1286, 631);
             this.lvUtenti.TabIndex = 0;
             this.lvUtenti.UseCompatibleStateImageBehavior = false;
             this.lvUtenti.View = System.Windows.Forms.View.Details;
@@ -133,7 +126,7 @@
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(1337, 105);
+            this.btInserisci.Location = new System.Drawing.Point(1337, 89);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.Size = new System.Drawing.Size(118, 23);
             this.btInserisci.TabIndex = 1;
@@ -144,7 +137,7 @@
             // btModifica
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btModifica.Location = new System.Drawing.Point(1337, 134);
+            this.btModifica.Location = new System.Drawing.Point(1337, 118);
             this.btModifica.Name = "btModifica";
             this.btModifica.Size = new System.Drawing.Size(118, 23);
             this.btModifica.TabIndex = 2;
@@ -155,7 +148,7 @@
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(1337, 163);
+            this.btElimina.Location = new System.Drawing.Point(1337, 147);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(118, 23);
             this.btElimina.TabIndex = 3;
@@ -163,27 +156,22 @@
             this.btElimina.UseVisualStyleBackColor = true;
             this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
             // 
-            // pnFiltra
+            // tbRicerca
             // 
-            this.pnFiltra.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnFiltra.Controls.Add(this.gbContratto);
-            this.pnFiltra.Controls.Add(this.gBtipoDocente);
-            this.pnFiltra.Controls.Add(this.gbTipiUtenti);
-            this.pnFiltra.Controls.Add(this.btAnnullaFiltra);
-            this.pnFiltra.Controls.Add(this.btFiltro);
-            this.pnFiltra.Location = new System.Drawing.Point(42, 28);
-            this.pnFiltra.Name = "pnFiltra";
-            this.pnFiltra.Size = new System.Drawing.Size(1289, 71);
-            this.pnFiltra.TabIndex = 4;
+            this.tbRicerca.ForeColor = System.Drawing.Color.Gray;
+            this.tbRicerca.Location = new System.Drawing.Point(750, 37);
+            this.tbRicerca.Name = "tbRicerca";
+            this.tbRicerca.Size = new System.Drawing.Size(182, 20);
+            this.tbRicerca.TabIndex = 6;
+            this.tbRicerca.Text = "cognome nome";
             // 
             // gbContratto
             // 
             this.gbContratto.Controls.Add(this.rbIndireterminato);
             this.gbContratto.Controls.Add(this.rbDeterminato);
-            this.gbContratto.Location = new System.Drawing.Point(822, 6);
+            this.gbContratto.Location = new System.Drawing.Point(564, 20);
             this.gbContratto.Name = "gbContratto";
-            this.gbContratto.Size = new System.Drawing.Size(267, 47);
+            this.gbContratto.Size = new System.Drawing.Size(180, 47);
             this.gbContratto.TabIndex = 9;
             this.gbContratto.TabStop = false;
             this.gbContratto.Text = "Contratto";
@@ -191,7 +179,7 @@
             // rbIndireterminato
             // 
             this.rbIndireterminato.AutoSize = true;
-            this.rbIndireterminato.Location = new System.Drawing.Point(156, 18);
+            this.rbIndireterminato.Location = new System.Drawing.Point(86, 20);
             this.rbIndireterminato.Name = "rbIndireterminato";
             this.rbIndireterminato.Size = new System.Drawing.Size(89, 17);
             this.rbIndireterminato.TabIndex = 1;
@@ -202,7 +190,7 @@
             // rbDeterminato
             // 
             this.rbDeterminato.AutoSize = true;
-            this.rbDeterminato.Location = new System.Drawing.Point(7, 18);
+            this.rbDeterminato.Location = new System.Drawing.Point(7, 20);
             this.rbDeterminato.Name = "rbDeterminato";
             this.rbDeterminato.Size = new System.Drawing.Size(73, 17);
             this.rbDeterminato.TabIndex = 0;
@@ -215,9 +203,9 @@
             this.gBtipoDocente.Controls.Add(this.rbPratico);
             this.gBtipoDocente.Controls.Add(this.rdTeorico);
             this.gBtipoDocente.Enabled = false;
-            this.gBtipoDocente.Location = new System.Drawing.Point(527, 6);
+            this.gBtipoDocente.Location = new System.Drawing.Point(400, 20);
             this.gBtipoDocente.Name = "gBtipoDocente";
-            this.gBtipoDocente.Size = new System.Drawing.Size(248, 47);
+            this.gBtipoDocente.Size = new System.Drawing.Size(158, 47);
             this.gBtipoDocente.TabIndex = 8;
             this.gBtipoDocente.TabStop = false;
             this.gBtipoDocente.Text = "Docente";
@@ -225,7 +213,7 @@
             // rbPratico
             // 
             this.rbPratico.AutoSize = true;
-            this.rbPratico.Location = new System.Drawing.Point(162, 20);
+            this.rbPratico.Location = new System.Drawing.Point(74, 20);
             this.rbPratico.Name = "rbPratico";
             this.rbPratico.Size = new System.Drawing.Size(78, 17);
             this.rbPratico.TabIndex = 1;
@@ -250,9 +238,9 @@
             this.gbTipiUtenti.Controls.Add(this.cbCoordinatore);
             this.gbTipiUtenti.Controls.Add(this.cbAmminstratore);
             this.gbTipiUtenti.Controls.Add(this.cbPreside);
-            this.gbTipiUtenti.Location = new System.Drawing.Point(18, 6);
+            this.gbTipiUtenti.Location = new System.Drawing.Point(45, 20);
             this.gbTipiUtenti.Name = "gbTipiUtenti";
-            this.gbTipiUtenti.Size = new System.Drawing.Size(472, 47);
+            this.gbTipiUtenti.Size = new System.Drawing.Size(349, 47);
             this.gbTipiUtenti.TabIndex = 7;
             this.gbTipiUtenti.TabStop = false;
             this.gbTipiUtenti.Text = "Utente";
@@ -260,7 +248,7 @@
             // cbDocente
             // 
             this.cbDocente.AutoSize = true;
-            this.cbDocente.Location = new System.Drawing.Point(388, 20);
+            this.cbDocente.Location = new System.Drawing.Point(277, 20);
             this.cbDocente.Name = "cbDocente";
             this.cbDocente.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.cbDocente.Size = new System.Drawing.Size(67, 17);
@@ -272,7 +260,7 @@
             // cbCoordinatore
             // 
             this.cbCoordinatore.AutoSize = true;
-            this.cbCoordinatore.Location = new System.Drawing.Point(257, 20);
+            this.cbCoordinatore.Location = new System.Drawing.Point(185, 20);
             this.cbCoordinatore.Name = "cbCoordinatore";
             this.cbCoordinatore.Size = new System.Drawing.Size(86, 17);
             this.cbCoordinatore.TabIndex = 6;
@@ -282,7 +270,7 @@
             // cbAmminstratore
             // 
             this.cbAmminstratore.AutoSize = true;
-            this.cbAmminstratore.Location = new System.Drawing.Point(121, 20);
+            this.cbAmminstratore.Location = new System.Drawing.Point(85, 20);
             this.cbAmminstratore.Name = "cbAmminstratore";
             this.cbAmminstratore.Size = new System.Drawing.Size(94, 17);
             this.cbAmminstratore.TabIndex = 5;
@@ -301,111 +289,52 @@
             // 
             // btAnnullaFiltra
             // 
-            this.btAnnullaFiltra.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btAnnullaFiltra.Location = new System.Drawing.Point(1185, 16);
+            this.btAnnullaFiltra.Location = new System.Drawing.Point(938, 37);
             this.btAnnullaFiltra.Name = "btAnnullaFiltra";
-            this.btAnnullaFiltra.Size = new System.Drawing.Size(87, 23);
+            this.btAnnullaFiltra.Size = new System.Drawing.Size(34, 23);
             this.btAnnullaFiltra.TabIndex = 4;
-            this.btAnnullaFiltra.Text = "Annulla";
+            this.btAnnullaFiltra.Text = "X";
             this.btAnnullaFiltra.UseVisualStyleBackColor = true;
             this.btAnnullaFiltra.Click += new System.EventHandler(this.btAnnullaFiltra_Click);
             // 
             // btFiltro
             // 
             this.btFiltro.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btFiltro.Location = new System.Drawing.Point(1096, 16);
+            this.btFiltro.Location = new System.Drawing.Point(1337, 35);
             this.btFiltro.Name = "btFiltro";
-            this.btFiltro.Size = new System.Drawing.Size(83, 23);
+            this.btFiltro.Size = new System.Drawing.Size(118, 23);
             this.btFiltro.TabIndex = 2;
-            this.btFiltro.Text = "Filtra";
+            this.btFiltro.Text = "Cerca";
             this.btFiltro.UseVisualStyleBackColor = true;
             this.btFiltro.Click += new System.EventHandler(this.btFiltro_Click);
-            // 
-            // pnRicerca
-            // 
-            this.pnRicerca.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnRicerca.Controls.Add(this.tbRicerca);
-            this.pnRicerca.Controls.Add(this.btAnnullaRicerca);
-            this.pnRicerca.Controls.Add(this.btRicerca);
-            this.pnRicerca.Controls.Add(this.label2);
-            this.pnRicerca.Location = new System.Drawing.Point(45, 682);
-            this.pnRicerca.Name = "pnRicerca";
-            this.pnRicerca.Size = new System.Drawing.Size(1286, 51);
-            this.pnRicerca.TabIndex = 5;
-            // 
-            // tbRicerca
-            // 
-            this.tbRicerca.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbRicerca.ForeColor = System.Drawing.Color.Gray;
-            this.tbRicerca.Location = new System.Drawing.Point(83, 19);
-            this.tbRicerca.Name = "tbRicerca";
-            this.tbRicerca.Size = new System.Drawing.Size(959, 20);
-            this.tbRicerca.TabIndex = 5;
-            this.tbRicerca.Text = "cognome nome";
-            this.tbRicerca.TextChanged += new System.EventHandler(this.tbRicerca_TextChanged);
-            this.tbRicerca.Enter += new System.EventHandler(this.tbRicerca_Enter);
-            this.tbRicerca.Leave += new System.EventHandler(this.tbRicerca_Leave);
-            // 
-            // btAnnullaRicerca
-            // 
-            this.btAnnullaRicerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btAnnullaRicerca.Enabled = false;
-            this.btAnnullaRicerca.Location = new System.Drawing.Point(1182, 16);
-            this.btAnnullaRicerca.Name = "btAnnullaRicerca";
-            this.btAnnullaRicerca.Size = new System.Drawing.Size(87, 23);
-            this.btAnnullaRicerca.TabIndex = 4;
-            this.btAnnullaRicerca.Text = "Annulla";
-            this.btAnnullaRicerca.UseVisualStyleBackColor = true;
-            this.btAnnullaRicerca.Click += new System.EventHandler(this.btAnnullaRicerca_Click);
-            // 
-            // btRicerca
-            // 
-            this.btRicerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btRicerca.Enabled = false;
-            this.btRicerca.Location = new System.Drawing.Point(1093, 16);
-            this.btRicerca.Name = "btRicerca";
-            this.btRicerca.Size = new System.Drawing.Size(83, 23);
-            this.btRicerca.TabIndex = 2;
-            this.btRicerca.Text = "Filtra";
-            this.btRicerca.UseVisualStyleBackColor = true;
-            this.btRicerca.Click += new System.EventHandler(this.btRicerca_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 21);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Ricerca per:";
             // 
             // FrmUtenti
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1467, 745);
-            this.Controls.Add(this.pnRicerca);
-            this.Controls.Add(this.pnFiltra);
+            this.Controls.Add(this.tbRicerca);
+            this.Controls.Add(this.gbContratto);
+            this.Controls.Add(this.gBtipoDocente);
             this.Controls.Add(this.btElimina);
+            this.Controls.Add(this.gbTipiUtenti);
             this.Controls.Add(this.btModifica);
+            this.Controls.Add(this.btAnnullaFiltra);
             this.Controls.Add(this.btInserisci);
+            this.Controls.Add(this.btFiltro);
             this.Controls.Add(this.lvUtenti);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmUtenti";
             this.Text = "Utenti";
             this.Load += new System.EventHandler(this.FrmUtenti_Load);
-            this.pnFiltra.ResumeLayout(false);
             this.gbContratto.ResumeLayout(false);
             this.gbContratto.PerformLayout();
             this.gBtipoDocente.ResumeLayout(false);
             this.gBtipoDocente.PerformLayout();
             this.gbTipiUtenti.ResumeLayout(false);
             this.gbTipiUtenti.PerformLayout();
-            this.pnRicerca.ResumeLayout(false);
-            this.pnRicerca.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -423,14 +352,8 @@
         private System.Windows.Forms.ColumnHeader chMonteOre;
         private System.Windows.Forms.ColumnHeader chDataInzio;
         private System.Windows.Forms.ColumnHeader chDataFine;
-        private System.Windows.Forms.Panel pnFiltra;
         private System.Windows.Forms.Button btFiltro;
         private System.Windows.Forms.Button btAnnullaFiltra;
-        private System.Windows.Forms.Panel pnRicerca;
-        private System.Windows.Forms.TextBox tbRicerca;
-        private System.Windows.Forms.Button btAnnullaRicerca;
-        private System.Windows.Forms.Button btRicerca;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox gbContratto;
         private System.Windows.Forms.RadioButton rbIndireterminato;
         private System.Windows.Forms.RadioButton rbDeterminato;
@@ -442,5 +365,6 @@
         private System.Windows.Forms.CheckBox cbCoordinatore;
         private System.Windows.Forms.CheckBox cbAmminstratore;
         private System.Windows.Forms.CheckBox cbPreside;
+        private System.Windows.Forms.TextBox tbRicerca;
     }
 }

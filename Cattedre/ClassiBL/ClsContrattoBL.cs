@@ -16,7 +16,6 @@ namespace Cattedre
         public static List<long> IDutenti = new List<long>();
         static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
-
         public static List<ClsContrattoDL> CaricaContratti()
         {
             IDutenti.Clear();

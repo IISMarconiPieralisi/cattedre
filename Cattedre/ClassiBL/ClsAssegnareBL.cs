@@ -170,7 +170,8 @@ namespace Cattedre
                                 a.IDclasse,
                                 a.IDdisciplina,
                                 a.oreSpeciali,
-                                a.IDannoscolastico
+                                a.IDannoscolastico,
+                                c.tipoContratto  
 
                             FROM utenti u
 
@@ -181,12 +182,15 @@ namespace Cattedre
                                 ON a.IDutente = u.ID
                                 AND a.IDannoscolastico = @IDannoScolastico
 
+                            LEFT JOIN contratti c 
+                                ON c.IDutente= u.ID
+
                             LEFT JOIN anniscolastici ans
                                 ON a.IDannoscolastico = ans.ID
                                 AND CURDATE() BETWEEN ans.datainizio AND ans.datafine
 
                             WHERE af.IDdipartimento = @IDdipartimento
-                                AND u.tipoUtente IN('D','C','A')
+                                AND u.tipoUtente IN('D','C','A')                          
 
                             ORDER BY u.cognome, u.nome";
 

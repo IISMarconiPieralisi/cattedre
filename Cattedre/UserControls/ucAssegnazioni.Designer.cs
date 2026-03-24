@@ -41,6 +41,8 @@
             this.lblOreLaboratorio = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.lblDocentiNonDiRuoloTEORICI = new System.Windows.Forms.Label();
+            this.lblDocentiNonDiRuoloITP = new System.Windows.Forms.Label();
             this.cmDocente.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -166,10 +168,32 @@
             this.label4.TabIndex = 19;
             this.label4.Text = "h";
             // 
+            // lblDocentiNonDiRuoloTEORICI
+            // 
+            this.lblDocentiNonDiRuoloTEORICI.AutoSize = true;
+            this.lblDocentiNonDiRuoloTEORICI.Location = new System.Drawing.Point(117, 11);
+            this.lblDocentiNonDiRuoloTEORICI.Name = "lblDocentiNonDiRuoloTEORICI";
+            this.lblDocentiNonDiRuoloTEORICI.Size = new System.Drawing.Size(11, 13);
+            this.lblDocentiNonDiRuoloTEORICI.TabIndex = 20;
+            this.lblDocentiNonDiRuoloTEORICI.Text = "*";
+            this.lblDocentiNonDiRuoloTEORICI.Visible = false;
+            // 
+            // lblDocentiNonDiRuoloITP
+            // 
+            this.lblDocentiNonDiRuoloITP.AutoSize = true;
+            this.lblDocentiNonDiRuoloITP.Location = new System.Drawing.Point(117, 56);
+            this.lblDocentiNonDiRuoloITP.Name = "lblDocentiNonDiRuoloITP";
+            this.lblDocentiNonDiRuoloITP.Size = new System.Drawing.Size(11, 13);
+            this.lblDocentiNonDiRuoloITP.TabIndex = 21;
+            this.lblDocentiNonDiRuoloITP.Text = "*";
+            this.lblDocentiNonDiRuoloITP.Visible = false;
+            // 
             // UcAssegnazioni
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblDocentiNonDiRuoloITP);
+            this.Controls.Add(this.lblDocentiNonDiRuoloTEORICI);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lblOreLaboratorio);
@@ -202,5 +226,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiIncolla;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.Label lblDocentiNonDiRuoloTEORICI;
+        public System.Windows.Forms.Label lblDocentiNonDiRuoloITP;
     }
 }

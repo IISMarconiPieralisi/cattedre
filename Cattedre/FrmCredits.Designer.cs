@@ -179,6 +179,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FrmCredits";
             this.Text = "Credits";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FrmCredits_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

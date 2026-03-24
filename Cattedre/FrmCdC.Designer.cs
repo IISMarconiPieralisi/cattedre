@@ -41,6 +41,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.nudNumCattedreDiritto = new System.Windows.Forms.NumericUpDown();
             this.nudNumCattedreFatto = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cbAnnoScolastico = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumCattedreDiritto)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumCattedreFatto)).BeginInit();
             this.SuspendLayout();
@@ -163,11 +165,31 @@
             this.nudNumCattedreFatto.Size = new System.Drawing.Size(43, 20);
             this.nudNumCattedreFatto.TabIndex = 24;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(11, 22);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(30, 13);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "A.S.:";
+            // 
+            // cbAnnoScolastico
+            // 
+            this.cbAnnoScolastico.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAnnoScolastico.FormattingEnabled = true;
+            this.cbAnnoScolastico.Location = new System.Drawing.Point(138, 19);
+            this.cbAnnoScolastico.Name = "cbAnnoScolastico";
+            this.cbAnnoScolastico.Size = new System.Drawing.Size(232, 21);
+            this.cbAnnoScolastico.TabIndex = 26;
+            // 
             // FrmCdC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(383, 419);
+            this.Controls.Add(this.cbAnnoScolastico);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.nudNumCattedreFatto);
             this.Controls.Add(this.nudNumCattedreDiritto);
             this.Controls.Add(this.label5);
@@ -206,5 +228,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown nudNumCattedreDiritto;
         private System.Windows.Forms.NumericUpDown nudNumCattedreFatto;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cbAnnoScolastico;
     }
 }

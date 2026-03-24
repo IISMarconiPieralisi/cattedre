@@ -19,6 +19,7 @@ namespace Cattedre
         FrmClassi frmClassi;
         FrmUtenti frmUtenti;
         FrmAnniScolastici FrmAnniScolastici;
+        FrmCredits frmCredits;
 
 
         private ClsUtenteDL utente;
@@ -154,11 +155,9 @@ namespace Cattedre
         {
             if (Application.OpenForms["FrmCredits"] == null)
             {
-                FrmCredits frmCredits = new FrmCredits();
-                MostraFormMDI(frmCredits);
-
+                frmCredits = new FrmCredits();              
             }
-
+            MostraFormMDI(frmCredits);
 
         }
 

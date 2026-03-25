@@ -586,7 +586,7 @@ namespace Cattedre
             }
         }
 
-        public Color OttieniColore(string rgb)
+        public static Color OttieniColore(string rgb)
         {
             if (rgb.Length >= 9)
             {

@@ -101,19 +101,9 @@ namespace Cattedre
             {
                 if (string.IsNullOrWhiteSpace(coloreDB))
                     return Color.LightGray;
-
                 coloreDB = coloreDB.Trim();
-
-                if (coloreDB.StartsWith("#"))
-                    return ColorTranslator.FromHtml(coloreDB);
-
-                if (long.TryParse(coloreDB, out long val))
-                {
-                    int r = (int)((val >> 16) & 0xFF);
-                    int g = (int)((val >> 8) & 0xFF);
-                    int b = (int)(val & 0xFF);
-                    return Color.FromArgb(r, g, b);
-                }
+                return FrmUtente.OttieniColore(coloreDB);
+                
             }
             catch { }
 

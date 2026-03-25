@@ -207,7 +207,13 @@ namespace Cattedre
                 })
                 .GroupBy(d => d.ID)
                 .Select(g => g.First())
-                .OrderBy(d => d.TipoDocente) // prima teorici poi pratici
+                .OrderBy(d =>
+                {
+                    var cdcs = ClsRichiedereBL.RilevaCDCDocente(d.ID);
+                    return cdcs.Any(c => c.AbilitazioniRichieste != null &&
+                                         c.AbilitazioniRichieste.ToLower().Contains("laurea")) ? 0 : 1;
+                })
+                .ThenBy(d => d.TipoDocente)
                 .ThenBy(d => d.Cognome)
                 .ToList();
 

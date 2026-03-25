@@ -258,7 +258,7 @@ namespace Cattedre
                 _imputEmail = tbEmail.Text;
                 if (!string.IsNullOrWhiteSpace(tbNome.Text) && !string.IsNullOrWhiteSpace(tbCognome.Text))
                 {
-                    string _Email = $"{tbNome.Text}.{tbCognome.Text}@iismarconipieralisi.it";
+                    string _Email = $"{tbNome.Text.ToLower()}.{tbCognome.Text.ToLower()}@iismarconipieralisi.it";
                     tbEmail.Enabled = false;
                     tbEmail.Text = _Email;
                 }
@@ -624,6 +624,50 @@ namespace Cattedre
             // Usiamo BeginInvoke solo per assicurarci che la lista sia aggiornata 
             // prima di leggere i CheckedItems. È il modo più affidabile.
             this.BeginInvoke(new Action(() => PopolaDisciplinePerCDC()));
+        }
+        #endregion
+        #region navigazione comoda
+        private void tbNome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+                this.ActiveControl = tbCognome;
+            
+        }
+
+        private void tbCognome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                this.ActiveControl = cbAutoEmail;
+        }
+
+        private void cbAutoEmail_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Enter)
+            {
+                cbAutoEmail.Checked = true;
+                this.ActiveControl = tbPassword;
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                this.ActiveControl = tbEmail;
+            }
+        }
+
+        private void tbEmail_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                this.ActiveControl = tbPassword;
+            }
+        }
+        private void checkBoxAutoEmail_Enter(object sender, EventArgs e)
+        {
+            cbAutoEmail.ForeColor = Color.Blue;
+        }
+
+        private void checkBoxAutoEmail_Leave(object sender, EventArgs e)
+        {
+            cbAutoEmail.ForeColor = SystemColors.ControlText;
         }
 
     }

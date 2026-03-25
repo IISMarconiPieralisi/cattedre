@@ -43,6 +43,9 @@
             this.btAnnulla = new System.Windows.Forms.Button();
             this.btSalva = new System.Windows.Forms.Button();
             this.PnUtente = new System.Windows.Forms.Panel();
+            this.pnTipoDocente = new System.Windows.Forms.Panel();
+            this.rbLaboratorio = new System.Windows.Forms.RadioButton();
+            this.rbTeorico = new System.Windows.Forms.RadioButton();
             this.pnColore = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.cbAutoEmail = new System.Windows.Forms.CheckBox();
@@ -68,15 +71,12 @@
             this.rbDeterminato = new System.Windows.Forms.RadioButton();
             this.label13 = new System.Windows.Forms.Label();
             this.cldColori = new System.Windows.Forms.ColorDialog();
-            this.pnTipoDocente = new System.Windows.Forms.Panel();
-            this.rbTeorico = new System.Windows.Forms.RadioButton();
-            this.rbLaboratorio = new System.Windows.Forms.RadioButton();
             this.PnUtente.SuspendLayout();
+            this.pnTipoDocente.SuspendLayout();
             this.pnCDC.SuspendLayout();
             this.pnDipartimento.SuspendLayout();
             this.PnContratto.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).BeginInit();
-            this.pnTipoDocente.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -141,6 +141,7 @@
             this.tbNome.Name = "tbNome";
             this.tbNome.Size = new System.Drawing.Size(219, 20);
             this.tbNome.TabIndex = 6;
+            this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
             // tbCognome
             // 
@@ -150,6 +151,7 @@
             this.tbCognome.Name = "tbCognome";
             this.tbCognome.Size = new System.Drawing.Size(219, 20);
             this.tbCognome.TabIndex = 7;
+            this.tbCognome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbCognome_KeyDown);
             // 
             // tbEmail
             // 
@@ -159,11 +161,11 @@
             this.tbEmail.Name = "tbEmail";
             this.tbEmail.Size = new System.Drawing.Size(219, 20);
             this.tbEmail.TabIndex = 8;
+            this.tbEmail.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbEmail_KeyDown);
             // 
             // tbPassword
             // 
-            this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbPassword.Cursor = System.Windows.Forms.Cursors.WaitCursor;
             this.tbPassword.Location = new System.Drawing.Point(109, 184);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -242,6 +244,37 @@
             this.PnUtente.Size = new System.Drawing.Size(346, 466);
             this.PnUtente.TabIndex = 18;
             // 
+            // pnTipoDocente
+            // 
+            this.pnTipoDocente.Controls.Add(this.rbLaboratorio);
+            this.pnTipoDocente.Controls.Add(this.rbTeorico);
+            this.pnTipoDocente.Location = new System.Drawing.Point(108, 270);
+            this.pnTipoDocente.Name = "pnTipoDocente";
+            this.pnTipoDocente.Size = new System.Drawing.Size(219, 31);
+            this.pnTipoDocente.TabIndex = 25;
+            // 
+            // rbLaboratorio
+            // 
+            this.rbLaboratorio.AutoSize = true;
+            this.rbLaboratorio.Location = new System.Drawing.Point(131, 7);
+            this.rbLaboratorio.Name = "rbLaboratorio";
+            this.rbLaboratorio.Size = new System.Drawing.Size(78, 17);
+            this.rbLaboratorio.TabIndex = 1;
+            this.rbLaboratorio.TabStop = true;
+            this.rbLaboratorio.Text = "Laboratorio";
+            this.rbLaboratorio.UseVisualStyleBackColor = true;
+            // 
+            // rbTeorico
+            // 
+            this.rbTeorico.AutoSize = true;
+            this.rbTeorico.Location = new System.Drawing.Point(4, 7);
+            this.rbTeorico.Name = "rbTeorico";
+            this.rbTeorico.Size = new System.Drawing.Size(61, 17);
+            this.rbTeorico.TabIndex = 0;
+            this.rbTeorico.TabStop = true;
+            this.rbTeorico.Text = "Teorico";
+            this.rbTeorico.UseVisualStyleBackColor = true;
+            // 
             // pnColore
             // 
             this.pnColore.BackColor = System.Drawing.Color.White;
@@ -269,6 +302,9 @@
             this.cbAutoEmail.Text = "Email Automatica";
             this.cbAutoEmail.UseVisualStyleBackColor = true;
             this.cbAutoEmail.CheckedChanged += new System.EventHandler(this.cbAutoEmail_CheckedChanged);
+            this.cbAutoEmail.Enter += new System.EventHandler(this.checkBoxAutoEmail_Enter);
+            this.cbAutoEmail.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAutoEmail_KeyDown);
+            this.cbAutoEmail.Leave += new System.EventHandler(this.checkBoxAutoEmail_Leave);
             // 
             // btColore
             // 
@@ -492,37 +528,6 @@
             // 
             this.cldColori.FullOpen = true;
             // 
-            // pnTipoDocente
-            // 
-            this.pnTipoDocente.Controls.Add(this.rbLaboratorio);
-            this.pnTipoDocente.Controls.Add(this.rbTeorico);
-            this.pnTipoDocente.Location = new System.Drawing.Point(108, 270);
-            this.pnTipoDocente.Name = "pnTipoDocente";
-            this.pnTipoDocente.Size = new System.Drawing.Size(219, 31);
-            this.pnTipoDocente.TabIndex = 25;
-            // 
-            // rbTeorico
-            // 
-            this.rbTeorico.AutoSize = true;
-            this.rbTeorico.Location = new System.Drawing.Point(4, 7);
-            this.rbTeorico.Name = "rbTeorico";
-            this.rbTeorico.Size = new System.Drawing.Size(61, 17);
-            this.rbTeorico.TabIndex = 0;
-            this.rbTeorico.TabStop = true;
-            this.rbTeorico.Text = "Teorico";
-            this.rbTeorico.UseVisualStyleBackColor = true;
-            // 
-            // rbLaboratorio
-            // 
-            this.rbLaboratorio.AutoSize = true;
-            this.rbLaboratorio.Location = new System.Drawing.Point(131, 7);
-            this.rbLaboratorio.Name = "rbLaboratorio";
-            this.rbLaboratorio.Size = new System.Drawing.Size(78, 17);
-            this.rbLaboratorio.TabIndex = 1;
-            this.rbLaboratorio.TabStop = true;
-            this.rbLaboratorio.Text = "Laboratorio";
-            this.rbLaboratorio.UseVisualStyleBackColor = true;
-            // 
             // FrmUtente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -538,6 +543,8 @@
             this.Load += new System.EventHandler(this.FrmUtente_Load);
             this.PnUtente.ResumeLayout(false);
             this.PnUtente.PerformLayout();
+            this.pnTipoDocente.ResumeLayout(false);
+            this.pnTipoDocente.PerformLayout();
             this.pnCDC.ResumeLayout(false);
             this.pnCDC.PerformLayout();
             this.pnDipartimento.ResumeLayout(false);
@@ -545,8 +552,6 @@
             this.PnContratto.ResumeLayout(false);
             this.PnContratto.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).EndInit();
-            this.pnTipoDocente.ResumeLayout(false);
-            this.pnTipoDocente.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -39,6 +39,7 @@ namespace Cattedre
         public FrmUtenti()
         {
             InitializeComponent();
+           
         }
 
         private void CaricaListView()

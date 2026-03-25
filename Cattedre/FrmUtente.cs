@@ -626,18 +626,24 @@ namespace Cattedre
             this.BeginInvoke(new Action(() => PopolaDisciplinePerCDC()));
         }
         #endregion
-        #region navigazione comoda
+        #region navigazione con enter
         private void tbNome_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter && tbNome.Text.Length>2)
+            {
                 this.ActiveControl = tbCognome;
-            
+
+            }
+
         }
 
         private void tbCognome_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-                this.ActiveControl = cbAutoEmail;
+            if (e.KeyCode == Keys.Enter && tbCognome.Text.Length > 2)
+            {
+                e.SuppressKeyPress = true;
+                this.ActiveControl = tbEmail;
+            }
         }
 
         private void cbAutoEmail_KeyDown(object sender, KeyEventArgs e)
@@ -647,17 +653,14 @@ namespace Cattedre
                 cbAutoEmail.Checked = true;
                 this.ActiveControl = tbPassword;
             }
-            else if (e.KeyCode == Keys.Escape)
-            {
-                this.ActiveControl = tbEmail;
-            }
         }
 
         private void tbEmail_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                this.ActiveControl = tbPassword;
+                if (string.IsNullOrWhiteSpace(tbEmail.Text)) this.ActiveControl = cbAutoEmail;
+                else tbPassword.Focus();
             }
         }
         private void checkBoxAutoEmail_Enter(object sender, EventArgs e)
@@ -670,8 +673,155 @@ namespace Cattedre
             cbAutoEmail.ForeColor = SystemColors.ControlText;
         }
 
-    }
+        private void cbTipoUtente_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter &&cbTipoUtente.SelectedIndex!=-1)
+            {
+                if (GetTipoUtente() != "P")this.ActiveControl = rbTeorico;
+                else this.ActiveControl = btSalva;
+            }
+        }
 
+        private void rbTipoDocente(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode==Keys.Enter)
+            {
+                if (GetTipoUtente() == "P") this.ActiveControl = btSalva;
+                else this.ActiveControl = clbDipartimento;
+            }
+        }
+
+        private void tbPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) //&& tbPassword.Text.Length > 2
+                this.ActiveControl = cbTipoUtente;
+        }
+
+        private void cbTipoUtente_Enter(object sender, EventArgs e)
+        {
+            // Quando l'utente clicca o si sposta sulla combo
+            cbTipoUtente.FlatStyle = FlatStyle.Flat;
+        }
+
+        private void cbTipoUtente_Leave(object sender, EventArgs e)
+        {
+            // Quando l'utente cambia controllo
+            cbTipoUtente.FlatStyle = FlatStyle.Standard;
+            cbTipoUtente.ForeColor = SystemColors.ControlText; // Torna il colore standard
+        }
+        private long _lastTick = 0;
+
+        private void clbDipartimento_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Evita il "Ding" di Windows
+
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+
+                if (elapsedMilliseconds < 500) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    if (GetTipoUtente()=="D")
+                        this.ActiveControl = clbCLasseDiConcorso;
+                    else
+                        this.ActiveControl = cbDipartimentoCoordinato;
+                }else
+                {
+                    // Al primo colpo fa solo il check
+                    int index = clbDipartimento.SelectedIndex;
+                    if (index != -1)clbDipartimento.SetItemChecked(index, !clbDipartimento.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+
+        private void cbDipartimentoCoordinato_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; 
+
+                if (GetTipoUtente() == "A" || (GetTipoUtente() == "C" && cbDipartimentoCoordinato.SelectedIndex != -1))
+                    clbCLasseDiConcorso.Focus(); 
+            }
+
+        }
+        private void clbCLasseDiConcorso_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+
+                if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    if (clbDisciplina.Enabled == true) clbDisciplina.Focus();
+                    else rbDeterminato.Focus();
+                }
+                else
+                {
+                    // Al primo colpo fa solo il check
+                    int index = clbCLasseDiConcorso.SelectedIndex;
+                    if (index != -1) clbCLasseDiConcorso.SetItemChecked(index, !clbCLasseDiConcorso.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+        private void clbDisciplina_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+
+                if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    rbDeterminato.Focus();
+                }
+                else
+                {
+                    // Al primo colpo fa solo il check
+                    int index = clbDisciplina.SelectedIndex;
+                    if (index != -1) clbDisciplina.SetItemChecked(index, !clbDisciplina.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+        private void rbContratto_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                nudMonteOre.Focus();
+        }
+        private void nudMonteOre_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && nudMonteOre.Value>0)
+            {
+                e.SuppressKeyPress = true;
+                dtpDataInizio.Focus();
+            }
+        }
+        private void dtpDataInizio_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter && dtpDataInizio.Value!=DateTime.Now)
+            {
+                if (dtpDataFine.Enabled == true) dtpDataFine.Focus();
+                else btSalva.Focus();
+            }
+        }
+        private void dtpDataFine_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                btSalva.Focus();
+        }
+    }
     #endregion
 
 }

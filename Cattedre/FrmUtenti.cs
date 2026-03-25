@@ -39,7 +39,7 @@ namespace Cattedre
         public FrmUtenti()
         {
             InitializeComponent();
-           
+
         }
 
         private void CaricaListView()
@@ -161,7 +161,7 @@ namespace Cattedre
         }
         private void gestisciListview()
         {
-            if (filtri.Count!=0)
+            if (filtri.Count != 0)
                 _utenti = ClsUtenteBL.FiltraUtenti(filtri);
             else
                 _utenti = ClsUtenteBL.CaricaUtenti();
@@ -259,9 +259,9 @@ namespace Cattedre
 
                 bool parametroSelezionato = false;
 
-                parametroSelezionato |= AggiungiFiltro(filtri,"tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
-                parametroSelezionato |= AggiungiFiltro(filtri,"tipoContratto",CaricaElementiSelezionati(gbContratto, typeof(RadioButton)),mappaContratto);
-                parametroSelezionato |= AggiungiFiltro(filtri,"tipoDocente",CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)),mappaTipoDocente);
+                parametroSelezionato |= AggiungiFiltro(filtri, "tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
+                parametroSelezionato |= AggiungiFiltro(filtri, "tipoContratto", CaricaElementiSelezionati(gbContratto, typeof(RadioButton)), mappaContratto);
+                parametroSelezionato |= AggiungiFiltro(filtri, "tipoDocente", CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)), mappaTipoDocente);
 
                 string NomeCognome = (tbRicerca.Text != "cognome nome" && !string.IsNullOrWhiteSpace(tbRicerca.Text)) ? tbRicerca.Text.Trim() : string.Empty;
                 if (NomeCognome != string.Empty)
@@ -283,7 +283,7 @@ namespace Cattedre
                 MessageBox.Show($"{ex.Message}\n riprova", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        private bool AggiungiFiltro(Dictionary<string, List<string>> filtri,string chiave,IEnumerable<string> selezionati,Dictionary<string, string> mappa)
+        private bool AggiungiFiltro(Dictionary<string, List<string>> filtri, string chiave, IEnumerable<string> selezionati, Dictionary<string, string> mappa)
         {
             var valori = selezionati.Where(item => mappa.ContainsKey(item)).Select(item => mappa[item]).ToList();
             if (valori.Any())
@@ -321,7 +321,7 @@ namespace Cattedre
             PulisciGroubBox(gBtipoDocente);
             filtri = new Dictionary<string, List<string>>();
             //gestione tbricerca
-            tbRicerca.Text =string.Empty;
+            tbRicerca.Text = string.Empty;
             tbRicerca_Leave(null, null);
             btAnnullaFiltra.Enabled = false;
             //ricamento della listview
@@ -375,7 +375,7 @@ namespace Cattedre
         //        MessageBox.Show("Inserire Input valido per la ricerca", "attenzione", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         //}
 
-      
+
         private void cbDocenteCordinatore_CheckedChanged(object sender, EventArgs e)
         {
             if (cbDocente.Checked || cbCoordinatore.Checked)
@@ -402,5 +402,46 @@ namespace Cattedre
                 tbRicerca_Enter(null, null);
             }
         }
+        #region mappattura tasti
+        private void lvUtenti_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && lvUtenti.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete && lvUtenti.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
+            }
+        }
+
+        private void GenericCheckBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Evita il "beep"
+
+                // Trasforma il 'sender' in una CheckBox ed esegue l'inversione
+                if (sender is CheckBox cb)
+                {
+                    cb.Checked = !cb.Checked;
+
+                }
+            }
+        }
+
+        private void rbTipoDocente_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                rbIndireterminato.Focus();
+        }
+        private void rbTipoContratto_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                tbRicerca.Focus();
+        }
+        #endregion
     }
 }

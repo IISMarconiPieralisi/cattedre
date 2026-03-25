@@ -133,7 +133,6 @@ namespace Cattedre
             {
                 throw new Exception("Errore nella query: " + ex.Message);
             }
-            return false;
         }
 
         #endregion

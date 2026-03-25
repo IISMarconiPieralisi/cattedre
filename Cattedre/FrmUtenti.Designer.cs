@@ -82,6 +82,7 @@
             this.lvUtenti.TabIndex = 0;
             this.lvUtenti.UseCompatibleStateImageBehavior = false;
             this.lvUtenti.View = System.Windows.Forms.View.Details;
+            this.lvUtenti.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvUtenti_KeyDown);
             // 
             // chNome
             // 
@@ -162,7 +163,7 @@
             this.tbRicerca.Location = new System.Drawing.Point(750, 37);
             this.tbRicerca.Name = "tbRicerca";
             this.tbRicerca.Size = new System.Drawing.Size(182, 20);
-            this.tbRicerca.TabIndex = 6;
+            this.tbRicerca.TabIndex = 7;
             this.tbRicerca.Text = "cognome nome";
             this.tbRicerca.Enter += new System.EventHandler(this.tbRicerca_Enter);
             this.tbRicerca.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbRicerca_KeyDown);
@@ -175,7 +176,7 @@
             this.gbContratto.Location = new System.Drawing.Point(564, 20);
             this.gbContratto.Name = "gbContratto";
             this.gbContratto.Size = new System.Drawing.Size(180, 47);
-            this.gbContratto.TabIndex = 9;
+            this.gbContratto.TabIndex = 6;
             this.gbContratto.TabStop = false;
             this.gbContratto.Text = "Contratto";
             // 
@@ -189,6 +190,7 @@
             this.rbIndireterminato.TabStop = true;
             this.rbIndireterminato.Text = "Indeterminato";
             this.rbIndireterminato.UseVisualStyleBackColor = true;
+            this.rbIndireterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbTipoContratto_KeyDown);
             // 
             // rbDeterminato
             // 
@@ -200,6 +202,7 @@
             this.rbDeterminato.TabStop = true;
             this.rbDeterminato.Text = "Determinato";
             this.rbDeterminato.UseVisualStyleBackColor = true;
+            this.rbDeterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbTipoContratto_KeyDown);
             // 
             // gBtipoDocente
             // 
@@ -209,7 +212,7 @@
             this.gBtipoDocente.Location = new System.Drawing.Point(400, 20);
             this.gBtipoDocente.Name = "gBtipoDocente";
             this.gBtipoDocente.Size = new System.Drawing.Size(158, 47);
-            this.gBtipoDocente.TabIndex = 8;
+            this.gBtipoDocente.TabIndex = 5;
             this.gBtipoDocente.TabStop = false;
             this.gBtipoDocente.Text = "Docente";
             // 
@@ -223,6 +226,7 @@
             this.rbPratico.TabStop = true;
             this.rbPratico.Text = "Laboratorio";
             this.rbPratico.UseVisualStyleBackColor = true;
+            this.rbPratico.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbTipoDocente_KeyDown);
             // 
             // rdTeorico
             // 
@@ -234,6 +238,7 @@
             this.rdTeorico.TabStop = true;
             this.rdTeorico.Text = "Teorico";
             this.rdTeorico.UseVisualStyleBackColor = true;
+            this.rdTeorico.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbTipoDocente_KeyDown);
             // 
             // gbTipiUtenti
             // 
@@ -244,7 +249,7 @@
             this.gbTipiUtenti.Location = new System.Drawing.Point(45, 20);
             this.gbTipiUtenti.Name = "gbTipiUtenti";
             this.gbTipiUtenti.Size = new System.Drawing.Size(349, 47);
-            this.gbTipiUtenti.TabIndex = 7;
+            this.gbTipiUtenti.TabIndex = 4;
             this.gbTipiUtenti.TabStop = false;
             this.gbTipiUtenti.Text = "Utente";
             // 
@@ -259,6 +264,7 @@
             this.cbDocente.Text = "Docente";
             this.cbDocente.UseVisualStyleBackColor = true;
             this.cbDocente.CheckedChanged += new System.EventHandler(this.cbDocenteCordinatore_CheckedChanged);
+            this.cbDocente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GenericCheckBox_KeyDown);
             // 
             // cbCoordinatore
             // 
@@ -270,6 +276,7 @@
             this.cbCoordinatore.Text = "Coordinatore";
             this.cbCoordinatore.UseVisualStyleBackColor = true;
             this.cbCoordinatore.CheckedChanged += new System.EventHandler(this.cbDocenteCordinatore_CheckedChanged);
+            this.cbCoordinatore.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GenericCheckBox_KeyDown);
             // 
             // cbAmminstratore
             // 
@@ -280,6 +287,7 @@
             this.cbAmminstratore.TabIndex = 5;
             this.cbAmminstratore.Text = "Amministratore";
             this.cbAmminstratore.UseVisualStyleBackColor = true;
+            this.cbAmminstratore.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GenericCheckBox_KeyDown);
             // 
             // cbPreside
             // 
@@ -290,6 +298,7 @@
             this.cbPreside.TabIndex = 4;
             this.cbPreside.Text = "Preside";
             this.cbPreside.UseVisualStyleBackColor = true;
+            this.cbPreside.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GenericCheckBox_KeyDown);
             // 
             // btAnnullaFiltra
             // 
@@ -298,7 +307,7 @@
             this.btAnnullaFiltra.Location = new System.Drawing.Point(938, 37);
             this.btAnnullaFiltra.Name = "btAnnullaFiltra";
             this.btAnnullaFiltra.Size = new System.Drawing.Size(34, 23);
-            this.btAnnullaFiltra.TabIndex = 4;
+            this.btAnnullaFiltra.TabIndex = 9;
             this.btAnnullaFiltra.Text = "X";
             this.btAnnullaFiltra.UseVisualStyleBackColor = true;
             this.btAnnullaFiltra.Click += new System.EventHandler(this.btAnnullaFiltra_Click);
@@ -309,7 +318,7 @@
             this.btFiltro.Location = new System.Drawing.Point(1337, 35);
             this.btFiltro.Name = "btFiltro";
             this.btFiltro.Size = new System.Drawing.Size(118, 23);
-            this.btFiltro.TabIndex = 2;
+            this.btFiltro.TabIndex = 8;
             this.btFiltro.Text = "Cerca";
             this.btFiltro.UseVisualStyleBackColor = true;
             this.btFiltro.Click += new System.EventHandler(this.btFiltro_Click);

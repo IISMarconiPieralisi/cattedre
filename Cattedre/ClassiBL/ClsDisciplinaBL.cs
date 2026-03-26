@@ -11,10 +11,8 @@ namespace Cattedre
 {
     public static class ClsDisciplinaBL
     {
-        public static int _IDdipartimento;
-        public static List<int> IDdipartimenti = new List<int>();
         static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
+        #region rilevamenti specifici
         public static ClsDisciplinaDL CaricaDisciplina(long id)
         {
             try
@@ -130,6 +128,11 @@ namespace Cattedre
 
             return discipline;
         }
+        #endregion
+        #region rilevamento parametri specifici
+        public static int MostraOreDocentePratico(long IDdocente)
+        {
+            int _oreDocentePratico = 0;
 
         public static List<ClsDisciplinaDL> CaricaDiscipline(long iddipartimento=0, int anno=0, string nome="")
         {
@@ -138,111 +141,34 @@ namespace Cattedre
             IDdipartimenti.Clear();
             try
             {
-                string sql = $"SELECT * FROM discipline WHERE 1=1 ";
-                if (iddipartimento > 0)
-                    sql += "AND IDdipartimento = " + iddipartimento + "  ";
-                if (anno > 0)
-                    sql += "AND anno = " + anno + "  ";
-                if (nome != "")
-                    sql += "AND nome LIKE '%" + nome + "%' ";
-                sql += "ORDER BY anno, nome ASC";
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
-                        {
-                            dr.Fill(dt);
-                        }
-                        conn.Close();
-                    }
-                    foreach (DataRow row in dt.Rows)
-                    {
-                        ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
-                        disciplina.ID = Convert.ToInt32(row["id"]);
-                        disciplina.Nome = row["nome"].ToString();
-                        disciplina.Anno = Convert.ToInt32(row["anno"]);
-                        disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
-                        disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
-                        disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
-                        disciplina.IDdisciplinaSuccessiva = (row["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplinaSuccessiva"]);
-                        discipline.Add(disciplina);
-                    }
-                    conn.Close();
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return discipline;
-        }
-
-    
-        public static void InserisciDisciplina(ClsDisciplinaDL disciplina)
-        {
-            
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-
-            try
-            {
-
-                conn.Open();
-                string sql = "INSERT INTO discipline (nome, anno, oreLaboratorio, oreTeoria, disciplinaSpeciale,IDdisciplinaSuccessiva) " +
-                    "VALUES (@nome, @anno, @oreLaboratorio, @oreTeoria, @disciplinaSpeciale,@IDdisciplinaSuccessiva)";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                {
-                    cmd.Parameters.AddWithValue("@nome", disciplina.Nome);
-                    cmd.Parameters.AddWithValue("@anno", disciplina.Anno);
-                    cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
-                    cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
-                    cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
-                    if (disciplina.IDdisciplinaSuccessiva != 0)
-                        cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", disciplina.IDdisciplinaSuccessiva);
-                    else
-                        cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", DBNull.Value);
-
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-
-                    if (righeCoinvolte < 0)
-                        throw new Exception("non � stato inserito nessuna disciplina");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public static void EliminaDisciplina(int id)
-        {
-            
-
-            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-
-            try
-            {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "DELETE FROM discipline WHERE id = @ID";
-                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    string sql = @"SELECT d.ID, d.Nome, d.oreTeoria, d.oreLaboratorio 
+                                 FROM assegnare a 
+                                 JOIN discipline d ON a.IDdisciplina = d.ID 
+                                 WHERE a.IDutente = @idDocente";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ID", id);
-                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        cmd.Parameters.AddWithValue("@idDocente", IDdocente);
 
-                        if (righeCoinvolte < 0)
-                            throw new Exception("non � stato eliminato nessun record");
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.HasRows)
+                            {
+                                if (dr.Read())
+                                    _oreDocentePratico = Convert.ToInt32(dr["orelaboratorio"]);
+                            }
+                        }
+
                     }
                 }
-
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
+            return _oreDocentePratico;
         }
 
         public static int TrovaIDPotenziamento()
@@ -451,6 +377,166 @@ namespace Cattedre
         //}
 
 
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT ID 
+                       FROM discipline 
+                       WHERE nome LIKE '%otenziamento%' 
+                       LIMIT 1";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null && result != DBNull.Value)
+                    {
+                        return Convert.ToInt32(result);
+                    }
+                }
+            }
+
+            return 0;
+        }
+        #endregion
+        #region Crud
+        public static List<ClsDisciplinaDL> CaricaDiscipline(long iddipartimento=0, int anno=0, string nome="")
+        {
+            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = CreaComandoRicerca(iddipartimento,anno,nome, conn))
+                    {
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                }
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
+                    disciplina.ID = Convert.ToInt32(row["id"]);
+                    disciplina.Nome = row["nome"].ToString();
+                    disciplina.Anno = Convert.ToInt32(row["anno"]);
+                    disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
+                    disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
+                    disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
+                    disciplina.IDdisciplinaSuccessiva = (row["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplinaSuccessiva"]);
+                    discipline.Add(disciplina);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return discipline;
+        }
+
+        private static MySqlCommand CreaComandoRicerca(long iddipartimento, int anno, string nome, MySqlConnection conn)
+        {
+            string sql = $"SELECT id,nome,anno,oreteoria,orelaboratorio,disciplinaspeciale,IDdisciplinaSuccessiva FROM discipline";
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conn;
+            string par=string.Empty;
+            List<string> condizioni = new List<string>();
+            if (iddipartimento > 0)
+            {
+                par = "IDdipartimento=@IDdipartimento";
+                cmd.Parameters.AddWithValue("@IDdipartimento", iddipartimento);
+                condizioni.Add(par);
+            }
+            if (anno > 0)
+            {
+                par = "anno=@anno";
+                cmd.Parameters.AddWithValue("@anno", anno);
+                condizioni.Add(par);
+            }
+            if(!string.IsNullOrWhiteSpace(nome))
+            {
+                par = "nome Like @nome";
+                cmd.Parameters.AddWithValue("@nome",$"%{nome}%");
+                condizioni.Add(par);
+            }
+            if (condizioni.Count > 0)
+                    sql += " WHERE " + string.Join(" AND ", condizioni);
+                
+            cmd.CommandText = sql;
+            return cmd;
+        }
+
+        public static void InserisciDisciplina(ClsDisciplinaDL disciplina)
+        {
+            
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+
+            try
+            {
+
+                conn.Open();
+                string sql = "INSERT INTO discipline (nome, anno, oreLaboratorio, oreTeoria, disciplinaSpeciale,IDdisciplinaSuccessiva) " +
+                    "VALUES (@nome, @anno, @oreLaboratorio, @oreTeoria, @disciplinaSpeciale,@IDdisciplinaSuccessiva)";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                {
+                    cmd.Parameters.AddWithValue("@nome", disciplina.Nome);
+                    cmd.Parameters.AddWithValue("@anno", disciplina.Anno);
+                    cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
+                    cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
+                    cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
+                    if (disciplina.IDdisciplinaSuccessiva != 0)
+                        cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", disciplina.IDdisciplinaSuccessiva);
+                    else
+                        cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", DBNull.Value);
+
+                    int righeCoinvolte = cmd.ExecuteNonQuery();
+
+                    if (righeCoinvolte < 0)
+                        throw new Exception("non � stato inserito nessuna disciplina");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static void EliminaDisciplina(int id)
+        {
+            
+
+            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "DELETE FROM discipline WHERE id = @ID";
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    {
+                        cmd.Parameters.AddWithValue("@ID", id);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+
+                        if (righeCoinvolte < 0)
+                            throw new Exception("non � stato eliminato nessun record");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public static void ModificaDisciplina(ClsDisciplinaDL disciplina)
         {
             FrmDisciplina frmDisciplina = new FrmDisciplina();
@@ -490,6 +576,7 @@ namespace Cattedre
             }
 
         }
+        #endregion
 
         public static int RilevaOrePotenziamentoDipartimento(int IDdipartimento)
         {

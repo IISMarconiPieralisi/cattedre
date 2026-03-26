@@ -16,26 +16,25 @@ namespace Cattedre
         public static List<ClsDisciplinaDL> RilevaDiscipinaCDC(long IDcdc)
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-            DataTable ds = new DataTable();
+            DataTable dt = new DataTable();
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT c.id, c.livello, c.nome, c.abilitazioniRichieste
-                           FROM classidiconcorso c
-                           INNER JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
-                           WHERE r.IDdisciplina = @IDdisciplina";
+                    string sql = @"SELECT d.ID, d.nome,d.anno
+                                    FROM discipline d
+                                    JOIN richiedere r ON d.ID = r.IDdisciplina
+                           WHERE r.IDclasseDiConcorso = @IDclasseDiconcorso";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.Add("@IDdisciplina", MySqlDbType.Int64).Value = IDcdc;
-                        DataTable dt = new DataTable();
+                        cmd.Parameters.AddWithValue("@IDclasseDiconcorso",IDcdc);
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             da.Fill(dt);
                         }
                     }
-                    foreach (DataRow row in ds.Rows)
+                    foreach (DataRow row in dt.Rows)
                     {
                         ClsDisciplinaDL disc = new ClsDisciplinaDL();
                         disc.ID = Convert.ToInt64(row["id"]);
@@ -108,6 +107,7 @@ namespace Cattedre
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
+                        cmd.Parameters.AddWithValue("@IdUtente", IDutente);
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
                             dr.Fill(ds);
@@ -119,7 +119,7 @@ namespace Cattedre
                         ClsDisciplinaDL disc = new ClsDisciplinaDL();
                         disc.ID = Convert.ToInt64(row["id"]);
                         disc.Nome = row["nome"].ToString();
-                        disc.Anno =Convert.ToInt16(row["nome"]);
+                        disc.Anno =Convert.ToInt16(row["anno"]);
                         discipline.Add(disc);
                     }
                 }
@@ -192,14 +192,16 @@ namespace Cattedre
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-
-                        cmd.Parameters.AddWithValue("@IDclasseDiConcorso", Richiedere.IDclassediconcorso);
+                        if (Richiedere.IDclassediconcorso > 0)
+                            cmd.Parameters.AddWithValue("@IDclasseDiConcorso", Richiedere.IDclassediconcorso);
+                        else
+                            cmd.Parameters.AddWithValue("@IDclasseDiConcorso", DBNull.Value);
 
                         if(Richiedere.IDutente > 0)
                             cmd.Parameters.AddWithValue("@IDutente", Richiedere.IDutente);
                         else
                             cmd.Parameters.AddWithValue("@IDutente", DBNull.Value);
-                        //controllo temporaneo  che  verrà rimosso successivamente
+
                         if (Richiedere.IDdisciplina > 0)
                             cmd.Parameters.AddWithValue("@IDdisciplina", Richiedere.IDdisciplina);
                         else
@@ -217,7 +219,7 @@ namespace Cattedre
                 }
             }
         }
-        public static void EliminaRichiesta(ClsRichiedereDL ric)
+        public static void EliminaRichiesta(long IDrichiedere)
         {
             
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -225,16 +227,12 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = @"DELETE FROM afferire" +
-                             " WHERE IDutente = @IDutente " +
-                             " AND IDclasseDiConcorso=@IDclasseDiConcorso" +
-                             " AND IDdisciplina=@IDdisciplina";
+                string sql = @"DELETE FROM Richiedere" +
+                             " WHERE ID = @ID ";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@IDutente", ric.IDutente);
-                    cmd.Parameters.AddWithValue("@IDclasseDiConcorso", ric.IDclassediconcorso);
-                    cmd.Parameters.AddWithValue("@IDdisciplina", ric.IDdisciplina);
+                    cmd.Parameters.AddWithValue("@ID", IDrichiedere);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
                     if(righeCoinvolte<=0)
                     {
@@ -245,11 +243,11 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
         }
-        public static List<ClsRichiedereDL> CaricaClassiRichiedere(long IDutente)
+        public static List<ClsRichiedereDL> CaricaClassiRichiedereUtente(long IDutente)
         {
             
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -258,10 +256,11 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = "SELECT ID, IDutente, IDclasseDiConcorso, IDdisciplina, oreSpeciali FROM richiedere ";
+                string sql = "SELECT ID, IDutente, IDclasseDiConcorso, IDdisciplina, oreSpeciali FROM richiedere WHERE IDutente=@IDutente";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
+                    cmd.Parameters.AddWithValue("@IDutente", IDutente);
                     using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                     {
                         dr.Fill(ds);
@@ -272,7 +271,7 @@ namespace Cattedre
                 {
                     ClsRichiedereDL richiedere = new ClsRichiedereDL();
                     richiedere.ID = Convert.ToInt64(row["ID"]);
-                    richiedere.IDutente = Convert.ToInt64(row["IDutente"]);
+                    richiedere.IDutente = IDutente;
                     richiedere.IDclassediconcorso =(row["IDclasseDiConcorso"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDclasseDiConcorso"]);
                     richiedere.IDdisciplina =(row["IDdisciplina"]==DBNull.Value) ?0: Convert.ToInt64(row["IDdisciplina"]);
                     richiedere.OreSpeciali = Convert.ToInt32(row["OreSpeciali"]);
@@ -325,45 +324,34 @@ namespace Cattedre
             return Richiederes;
         }
 
-        public static void ModificaRichiesta(long idUtente,List<ClsRichiedereDL> RichModifica,long idDisciplina=0)
+        public static void ModificaRichiestaUtente(long idUtente, List<ClsRichiedereDL> RichModifica)
         {
-            List<ClsRichiedereDL> RichiesteAttuali = new List<ClsRichiedereDL>();
+            if (RichModifica.Count <= 0) return;
+            if (idUtente <= 0)
+                throw new Exception("Errore: l'utente non può avere ID 0");
 
-            if (idUtente > 0 && idDisciplina > 0)
-                throw new Exception("Errore: passare solo idUtente o solo idDisciplina, non entrambi.");
-
-            if (idUtente > 0)
-                RichiesteAttuali = CaricaClassiRichiedere(idUtente); // Supponendo che il metodo accetti idUtente
-            else if (idDisciplina > 0)
-                RichiesteAttuali = CaricaClassiRichiedereConDisciplina(idDisciplina); // Qui serve il metodo corretto per disciplina!
-            else
-                return; // Nessun filtro fornito
+            List<ClsRichiedereDL> RichUtente = CaricaClassiRichiedereUtente(idUtente); // Supponendo che il metodo accetti idUtente
+          
 
             // Eliminiamo ciò che è nel DB ma NON è nella nuova lista
-            foreach (ClsRichiedereDL ric in RichiesteAttuali)
+            foreach (ClsRichiedereDL ric in RichUtente)
             {
-                bool ancoraPresente = RichModifica.Any(r =>r.IDclassediconcorso == ric.IDclassediconcorso &&r.IDdisciplina == ric.IDdisciplina &&
-                    (idUtente > 0 ? r.IDutente == ric.IDutente : true)
-                );
+                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina==ric.IDdisciplina); // se non ha un ID significa che non è stato inserito prima d'ora
                 if (!ancoraPresente)
-                    EliminaRichiesta(ric);
+                    EliminaRichiesta(ric.ID);
+               
+                //se non esiste, non cancello nulla e  mi limito successivamente a caricarla
             }
 
-            // Inseriamo ciò che è nella nuova lista ma NON era nel DB
-            foreach (ClsRichiedereDL ric in RichModifica)
+            // Inseriamo ciò che è nella nuova lista ma NON era nel DB
+            foreach (ClsRichiedereDL ric in RichModifica)
             {
-                // Assicuriamo che l'ID del filtro sia applicato all'oggetto
-                if (idUtente > 0) ric.IDutente = idUtente;
-                if (idDisciplina > 0) ric.IDdisciplina = idDisciplina;
-
-                bool giaEsistente = RichiesteAttuali.Any(r =>
-                    r.IDclassediconcorso == ric.IDclassediconcorso &&
-                    r.IDdisciplina == ric.IDdisciplina &&
-                    r.IDutente == ric.IDutente);
-
-                if (!giaEsistente)
+                ric.IDutente = idUtente;
+                // Assicuriamo che l'ID del filtro sia applicato all'oggetto
+                if (!RichUtente.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && ric.IDdisciplina == ric.IDdisciplina))
                     InserisciRichiedere(ric);
             }
         }
-    }
+   }
+    
 }

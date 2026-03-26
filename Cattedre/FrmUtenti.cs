@@ -50,8 +50,9 @@ namespace Cattedre
             {
                 //prendo un metodo che cerca il contratto in base all'id utente
                 ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(utente.ID);
-                ListViewItem lvi = new ListViewItem(utente.Nome);
+                ListViewItem lvi = new ListViewItem(utente.ID.ToString());
 
+                lvi.SubItems.Add(utente.Nome);
                 lvi.SubItems.Add(utente.Cognome);
                 lvi.SubItems.Add(utente.Email);
                 string _tipoDocente = (utente.TipoDocente == 'T') ? " teorico" : (utente.TipoDocente == 'L') ? " partico" : string.Empty;

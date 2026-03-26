@@ -28,7 +28,8 @@ namespace Cattedre
             lvCdCs.Items.Clear();
             for(int i = 0; i < cdcs.Count; i++)
             {
-                ListViewItem lvi = new ListViewItem(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
+                ListViewItem lvi = new ListViewItem(cdcs[i].ID.ToString());
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
                 lvi.SubItems.Add(cdcs[i].Livello);
                 lvi.SubItems.Add(cdcs[i].Nome);
                 lvi.SubItems.Add(cdcs[i].AbilitazioniRichieste);

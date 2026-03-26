@@ -31,7 +31,8 @@ namespace Cattedre
             lvClassi.Items.Clear();
             foreach (ClsClasseDL classe in classi)
             {
-                ListViewItem lvi = new ListViewItem(classe.Sigla);
+                ListViewItem lvi = new ListViewItem(classe.ID.ToString());
+                lvi.SubItems.Add(classe.Sigla);
                 lvi.SubItems.Add(classe.Anno.ToString());
                 lvi.SubItems.Add(classe.Sezione);
                 lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(classe.ClasseArticolataCon));

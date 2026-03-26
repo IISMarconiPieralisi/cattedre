@@ -130,46 +130,6 @@ namespace Cattedre
         }
         #endregion
         #region rilevamento parametri specifici
-        public static int MostraOreDocentePratico(long IDdocente)
-        {
-            int _oreDocentePratico = 0;
-
-        public static List<ClsDisciplinaDL> CaricaDiscipline(long iddipartimento=0, int anno=0, string nome="")
-        {
-            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-            DataTable dt = new DataTable();
-            IDdipartimenti.Clear();
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = @"SELECT d.ID, d.Nome, d.oreTeoria, d.oreLaboratorio 
-                                 FROM assegnare a 
-                                 JOIN discipline d ON a.IDdisciplina = d.ID 
-                                 WHERE a.IDutente = @idDocente";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@idDocente", IDdocente);
-
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
-                        {
-                            if (dr.HasRows)
-                            {
-                                if (dr.Read())
-                                    _oreDocentePratico = Convert.ToInt32(dr["orelaboratorio"]);
-                            }
-                        }
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return _oreDocentePratico;
-        }
 
         public static int TrovaIDPotenziamento()
         {
@@ -376,7 +336,9 @@ namespace Cattedre
         //    return dipartimento.Nome;
         //}
 
-
+        public static int MostraOreDocentePratico(long IDdocente)
+        {
+            int _oreDocentePratico = 0;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
@@ -399,6 +361,49 @@ namespace Cattedre
 
             return 0;
         }
+        public static int RilevaOrePotenziamentoDipartimento(int IDdipartimento)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT d.* 
+                           FROM discipline d
+                           JOIN gestire g ON g.IDdisciplina = d.ID
+                           WHERE g.IDdipartimento = @IDdipartimento
+                           AND d.nome LIKE '%otenziamento%'
+                           LIMIT 1";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                        {
+                            ClsDisciplinaDL disciplina = new ClsDisciplinaDL(
+                                Convert.ToInt64(dt.Rows[0]["ID"]),
+                                dt.Rows[0]["nome"].ToString(),
+                                Convert.ToInt32(dt.Rows[0]["anno"]),
+                                Convert.ToInt32(dt.Rows[0]["oreLaboratorio"]),
+                                Convert.ToInt32(dt.Rows[0]["oreTeoria"]),
+                                dt.Rows[0]["disciplinaSpeciale"].ToString()
+                            );
+                            return disciplina.OreLaboratorio;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nel recupero ore potenziamento: " + ex.Message);
+            }
+            return 0;
+        }
+
         #endregion
         #region Crud
         public static List<ClsDisciplinaDL> CaricaDiscipline(long iddipartimento=0, int anno=0, string nome="")
@@ -443,13 +448,14 @@ namespace Cattedre
 
         private static MySqlCommand CreaComandoRicerca(long iddipartimento, int anno, string nome, MySqlConnection conn)
         {
-            string sql = $"SELECT id,nome,anno,oreteoria,orelaboratorio,disciplinaspeciale,IDdisciplinaSuccessiva FROM discipline";
+            string sql = @"SELECT d.id,nome,anno,oreteoria,orelaboratorio,disciplinaspeciale,IDdisciplinaSuccessiva FROM discipline d ";
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = conn;
             string par=string.Empty;
             List<string> condizioni = new List<string>();
             if (iddipartimento > 0)
             {
+                sql += " JOIN gestire ON d.ID= gestire.IDdisciplina";
                 par = "IDdipartimento=@IDdipartimento";
                 cmd.Parameters.AddWithValue("@IDdipartimento", iddipartimento);
                 condizioni.Add(par);
@@ -468,7 +474,7 @@ namespace Cattedre
             }
             if (condizioni.Count > 0)
                     sql += " WHERE " + string.Join(" AND ", condizioni);
-                
+            sql += " ORDER BY anno ASC;";
             cmd.CommandText = sql;
             return cmd;
         }
@@ -500,7 +506,7 @@ namespace Cattedre
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 
                     if (righeCoinvolte < 0)
-                        throw new Exception("non � stato inserito nessuna disciplina");
+                        throw new Exception("non è stato inserito nessuna disciplina");
                 }
             }
             catch (Exception ex)
@@ -509,7 +515,7 @@ namespace Cattedre
             }
         }
 
-        public static void EliminaDisciplina(int id)
+        public static void EliminaDisciplina(long id)
         {
             
 
@@ -527,7 +533,7 @@ namespace Cattedre
                         int righeCoinvolte = cmd.ExecuteNonQuery();
 
                         if (righeCoinvolte < 0)
-                            throw new Exception("non � stato eliminato nessun record");
+                            throw new Exception("non è stato eliminato nessun record");
                     }
                 }
 
@@ -551,8 +557,7 @@ namespace Cattedre
                                anno = @anno, 
                                oreLaboratorio = @oreLaboratorio, 
                                oreTeoria = @oreTeoria, 
-                               disciplinaSpeciale = @disciplinaSpeciale, 
-                               IDdipartimento = @IDdipartimento 
+                               disciplinaSpeciale = @disciplinaSpeciale
                            WHERE id = @id";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
@@ -578,47 +583,6 @@ namespace Cattedre
         }
         #endregion
 
-        public static int RilevaOrePotenziamentoDipartimento(int IDdipartimento)
-        {
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = @"SELECT d.* 
-                           FROM discipline d
-                           JOIN gestire g ON g.IDdisciplina = d.ID
-                           WHERE g.IDdipartimento = @IDdipartimento
-                           AND d.nome LIKE '%otenziamento%'
-                           LIMIT 1";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-                        DataTable dt = new DataTable();
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                        if (dt.Rows.Count > 0)
-                        {
-                            ClsDisciplinaDL disciplina = new ClsDisciplinaDL(
-                                Convert.ToInt64(dt.Rows[0]["ID"]),
-                                dt.Rows[0]["nome"].ToString(),
-                                Convert.ToInt32(dt.Rows[0]["anno"]),
-                                Convert.ToInt32(dt.Rows[0]["oreLaboratorio"]),
-                                Convert.ToInt32(dt.Rows[0]["oreTeoria"]),
-                                dt.Rows[0]["disciplinaSpeciale"].ToString()
-                            );
-                            return disciplina.OreLaboratorio;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Errore nel recupero ore potenziamento: " + ex.Message);
-            }
-            return 0;
-        }
+        
     }
 }

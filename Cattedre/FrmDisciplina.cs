@@ -14,12 +14,14 @@ namespace Cattedre
     {
         List<ClsDipartimentoDL> _dipartimenti= ClsDipartimentoBL.CaricaDipartimenti();
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
-        List<ClsDisciplinaDL> _discipline = ClsDisciplinaBL.CaricaDiscipline(0, 0, "");
-
+        List<ClsDisciplinaDL> _discipline = ClsDisciplinaBL.CaricaDiscipline();
+        List<ClsClasseDiConcorsoDL> _cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
         //variabili pubbliche
         public List<ClsAppartenereDL> _apparteneres = new List<ClsAppartenereDL>();
+        public List<ClsRichiedereDL> _richiederes = new List<ClsRichiedereDL>();
         public List<ClsGestireDL> _gestires = new List<ClsGestireDL>();
         public ClsDisciplinaDL _disciplina;
+        
 
         private int anno = 0;
         public FrmDisciplina()
@@ -51,7 +53,9 @@ namespace Cattedre
                         throw new Exception("Disciplina già presente in archivio per questo anno.");
                 }
                 if (_gestires.Count <= 0 && tbDisciplinaSpeciale.Text==string.Empty)
-                    throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina");
+                    throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina.");
+                if (_richiederes.Count <= 0 && tbDisciplinaSpeciale.Text == string.Empty)
+                    throw new Exception("Selezionare almeno una classe di concorso a cui la disciplina è riferita.");
                 // --- Caricamento ID Classe Collegata ---
                 if (_discipline.Any(p => _disciplina.ID > 0 && p.ID != _disciplina.ID))
                     _disciplina.IDdisciplinaSuccessiva = CercaDisciplina();
@@ -92,6 +96,7 @@ namespace Cattedre
             controlloRadioBottom();
             PopolaclbIndirizzi();
             PopolaClbDipartenti();
+            PopolaclbCdcs();
             if (_disciplina != null)
             {
                 //carico le informazioni della disciplina
@@ -101,6 +106,7 @@ namespace Cattedre
                 nudOreTeoria.Value = _disciplina.OreTeoria;
                 CheckComboBoxs();
                 checkClbDipartenti();
+                checkClbCdcs();
                 RiempiCbDisciplinaSuccessiva(_disciplina.Anno,_disciplina.IDdisciplinaSuccessiva);
                 //carico le informazioni del collegamento con indirizzi
                 _apparteneres = ClsAppartenereBL.CaricaClassiAppartenereByDisciplina(_disciplina.ID);
@@ -232,7 +238,7 @@ namespace Cattedre
 
         private void ControlloCbDisciplinaSuccessiva()
         {
-            if (_gestires.Count != 0 && anno < 5 && anno != 0)
+            if (_gestires.Count != 0 &&_richiederes.Count!=0 && anno < 5 && anno != 0)
             {
                 cbDisciplinaSucessiva.Enabled = true;
                 popolaCbDisciplinaSuccessiva();
@@ -247,7 +253,7 @@ namespace Cattedre
         private void popolaCbDisciplinaSuccessiva()
         {
                 // Se non ci sono dipartimenti selezionati, non ha senso cercare discipline successive
-                if (_gestires.Count == 0 || anno >= 5 || anno == 0)
+                if (_gestires.Count == 0|| _richiederes.Count == 0 || anno >= 5 || anno == 0)
                 {
                     cbDisciplinaSucessiva.DataSource = null;
                     cbDisciplinaSucessiva.Enabled = false;
@@ -268,8 +274,9 @@ namespace Cattedre
                     // Chiediamo alla BL quali dipartimenti gestiscono questa specifica disciplina 'disc'
                     List<ClsGestireDL> gestioniDisc = ClsGestireBL.CaricaGestioneDisciplina(disc.ID);
 
-                    // Se esiste un'intersezione tra i dipartimenti di 'disc' e i dipartimenti in '_gestires'
-                    if (gestioniDisc.Any(gd => _gestires.Any(g => g.IDdipartimento == gd.IDdipartimento)))
+                    // Se esiste un'intersezione tra i dipartimenti di 'disc' e i dipartimenti in '_gestires' 
+                    if (gestioniDisc.Any(gd => _gestires.Any(g => g.IDdipartimento == gd.IDdipartimento)) &&
+                        gestioniDisc.Any(r=>_richiederes.Any(ric=>ric.IDclassediconcorso== ric.IDclassediconcorso)))
                     {
                         ListaDisciplineFiltrate.Add(disc);
                     }
@@ -361,6 +368,58 @@ namespace Cattedre
                 else if (rb == rbTerzo) anno = 3;
                 else if (rb == rbQuarto) anno = 4;
                 else if (rb == rbQuinto) anno = 5;
+            }
+        }
+        #endregion
+        #region gestisci richiedere
+        private void clbCdcs_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            _richiederes.Clear();
+            long IDdis = (_disciplina.ID <= 0) ? 0 : _disciplina.ID;
+            // Cicliamo tutti gli elementi attualmente "checkati" nella UI
+            for (int i = 0; i < clbCdcs.Items.Count; i++)
+            {
+                bool isChecked;
+                if (i == e.Index)
+                    isChecked = (e.NewValue == CheckState.Checked);
+                else
+                    isChecked = clbCdcs.GetItemChecked(i);
+                // Troviamo l'oggetto dipartimento corrispondente al nome spuntato
+
+                if (isChecked)
+                {
+                    string nome = clbCdcs.Items[i].ToString();
+                    ClsClasseDiConcorsoDL cdc = _cdcs.Find(d => d.Nome == nome);
+                    if (cdc != null)
+                        _richiederes.Add(new ClsRichiedereDL(cdc.ID,IDdis));
+                }
+            }
+            ControlloCbDisciplinaSuccessiva();
+        }
+        void PopolaclbCdcs()
+        {
+            clbCdcs.Items.Clear();
+            foreach (var cdc in _cdcs)
+            {
+                clbCdcs.Items.Add(cdc.Nome);
+            }
+        }
+        void checkClbCdcs()
+        {
+            List<ClsClasseDiConcorsoDL> cdcsDisciplina = ClsRichiedereBL.RilevaCDCDiscipina(_disciplina.ID);
+            if (cdcsDisciplina.Count > 0)
+            {
+                for (int i = 0; i < clbCdcs.Items.Count; i++)
+                {
+                    string nomeItem = clbCdcs.Items[i].ToString();
+
+                    bool richiedere = _cdcs.Any(d => string.Equals(d.Nome, nomeItem, StringComparison.OrdinalIgnoreCase));
+
+                    clbDipartimenti.SetItemChecked(i, richiedere);
+                }
+                //quando ha fatto l'inserimento pulisce la lista per sicurezza
+                _richiederes.Clear();
+
             }
         }
         #endregion

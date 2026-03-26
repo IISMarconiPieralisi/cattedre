@@ -55,6 +55,8 @@
             this.tbDisciplinaSpeciale = new System.Windows.Forms.TextBox();
             this.lblAnnoSuc = new System.Windows.Forms.Label();
             this.frmDisciplinaBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.label6 = new System.Windows.Forms.Label();
+            this.clbCdcs = new System.Windows.Forms.CheckedListBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudOreTeoria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudOreLab)).BeginInit();
             this.pnRB.SuspendLayout();
@@ -65,7 +67,7 @@
             // 
             this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btSalva.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalva.Location = new System.Drawing.Point(222, 512);
+            this.btSalva.Location = new System.Drawing.Point(222, 592);
             this.btSalva.Margin = new System.Windows.Forms.Padding(2);
             this.btSalva.Name = "btSalva";
             this.btSalva.Size = new System.Drawing.Size(146, 31);
@@ -77,7 +79,7 @@
             // btAnnulla
             // 
             this.btAnnulla.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btAnnulla.Location = new System.Drawing.Point(20, 512);
+            this.btAnnulla.Location = new System.Drawing.Point(20, 592);
             this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.Size = new System.Drawing.Size(146, 31);
@@ -293,7 +295,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(31, 441);
+            this.label5.Location = new System.Drawing.Point(31, 550);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(97, 13);
@@ -304,7 +306,7 @@
             // 
             this.tbDisciplinaSpeciale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(179, 438);
+            this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(179, 547);
             this.tbDisciplinaSpeciale.Margin = new System.Windows.Forms.Padding(2);
             this.tbDisciplinaSpeciale.Name = "tbDisciplinaSpeciale";
             this.tbDisciplinaSpeciale.Size = new System.Drawing.Size(189, 20);
@@ -324,11 +326,33 @@
             // 
             this.frmDisciplinaBindingSource.DataSource = typeof(Cattedre.FrmDisciplina);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(31, 429);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(95, 13);
+            this.label6.TabIndex = 42;
+            this.label6.Text = "Classi di concorso:";
+            // 
+            // clbCdcs
+            // 
+            this.clbCdcs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.clbCdcs.FormattingEnabled = true;
+            this.clbCdcs.Location = new System.Drawing.Point(179, 429);
+            this.clbCdcs.Name = "clbCdcs";
+            this.clbCdcs.Size = new System.Drawing.Size(189, 94);
+            this.clbCdcs.TabIndex = 41;
+            this.clbCdcs.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCdcs_ItemCheck);
+            // 
             // FrmDisciplina
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(416, 564);
+            this.ClientSize = new System.Drawing.Size(416, 644);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.clbCdcs);
             this.Controls.Add(this.lblAnnoSuc);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.clbDipartimenti);
@@ -384,11 +408,13 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox cbDisciplinaSucessiva;
-        private System.Windows.Forms.BindingSource frmDisciplinaBindingSource;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckedListBox clbDipartimenti;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbDisciplinaSpeciale;
         private System.Windows.Forms.Label lblAnnoSuc;
+        private System.Windows.Forms.BindingSource frmDisciplinaBindingSource;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckedListBox clbCdcs;
     }
 }

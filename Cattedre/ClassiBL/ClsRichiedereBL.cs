@@ -352,6 +352,36 @@ namespace Cattedre
                     InserisciRichiedere(ric);
             }
         }
-   }
+        public static void ModificaRichiestaDisciplina(long idDisciplina, List<ClsRichiedereDL> RichModifica)
+        {
+            // 1. Controllo validità input
+            if (RichModifica == null || RichModifica.Count <= 0) return;
+            if (idDisciplina <= 0)
+                throw new Exception("Errore: la disciplina non può avere ID 0");
+
+            // 2. Carichiamo lo stato attuale dal DB filtrando per Disciplina
+            List<ClsRichiedereDL> RichDisciplina = CaricaClassiRichiedereConDisciplina(idDisciplina);
+
+            // 3. ELIMINAZIONE: Rimuoviamo i record presenti nel DB ma non più nella nuova lista
+            foreach (ClsRichiedereDL ric in RichDisciplina)
+            {
+                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
+                if (!ancoraPresente)
+                    EliminaRichiesta(ric.ID);
+            }
+
+            // 4. INSERIMENTO: Aggiungiamo i record nuovi
+            foreach (ClsRichiedereDL ric in RichModifica)
+            {
+                bool esisteGia = RichDisciplina.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
+
+                if (!esisteGia)
+                {
+                    //ric.IDdisciplina = idDisciplina; // Opzionale: assicura la coerenza del dato
+                    InserisciRichiedere(ric);
+                }
+            }
+        }
+    }
     
 }

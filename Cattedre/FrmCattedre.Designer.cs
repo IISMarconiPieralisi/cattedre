@@ -67,7 +67,7 @@ namespace Cattedre
             this.btGeneraASsucc.Location = new System.Drawing.Point(76, 35);
             this.btGeneraASsucc.Name = "btGeneraASsucc";
             this.btGeneraASsucc.Size = new System.Drawing.Size(80, 23);
-            this.btGeneraASsucc.TabIndex = 6;
+            this.btGeneraASsucc.TabIndex = 3;
             this.btGeneraASsucc.Text = "Genera";
             this.btGeneraASsucc.UseVisualStyleBackColor = true;
             this.btGeneraASsucc.Click += new System.EventHandler(this.btGeneraASsucc_Click);
@@ -79,7 +79,7 @@ namespace Cattedre
             this.cbAnniScolastici.Location = new System.Drawing.Point(11, 37);
             this.cbAnniScolastici.Name = "cbAnniScolastici";
             this.cbAnniScolastici.Size = new System.Drawing.Size(59, 21);
-            this.cbAnniScolastici.TabIndex = 6;
+            this.cbAnniScolastici.TabIndex = 2;
             this.cbAnniScolastici.SelectedIndexChanged += new System.EventHandler(this.cbAnniScolastici_SelectedIndexChanged);
             // 
             // cbDipartimenti
@@ -115,7 +115,7 @@ namespace Cattedre
             this.pnlInfoNumCattedre.Margin = new System.Windows.Forms.Padding(2);
             this.pnlInfoNumCattedre.Name = "pnlInfoNumCattedre";
             this.pnlInfoNumCattedre.Size = new System.Drawing.Size(230, 687);
-            this.pnlInfoNumCattedre.TabIndex = 1;
+            this.pnlInfoNumCattedre.TabIndex = 2;
             // 
             // splitter1
             // 

@@ -17,6 +17,9 @@ namespace Cattedre
         private long _iddocth = 0;
         private long _iddoclab = 0;
 
+        private static long _clipboardIDDocente = 0;
+        private static string _clipboardTipo = ""; // "T" o "L"
+
         public long IDdocTh => _iddocth;
         public long IDdocLab => _iddoclab;
 
@@ -213,25 +216,59 @@ namespace Cattedre
             ContextMenuStrip cm = (ContextMenuStrip)tsmi.GetCurrentParent();
             Control cb = cm.SourceControl;
 
-            if (cb is ComboBox)
+            if (cb.Name == cbDocentiTeorici.Name && cbDocentiTeorici.SelectedItem is ClsUtenteDL ut && ut.ID > 0)
             {
-                if (cb.Name == cbDocentiTeorici.Name)
-                    MessageBox.Show("Taglia" + _iddocth);
-                else if (cb.Name == cbDocentiItip.Name)
-                    MessageBox.Show("Taglia" + _iddoclab);
+                _clipboardIDDocente = ut.ID;
+                _clipboardTipo = "T";
+                cbDocentiTeorici.SelectedIndex = 0; // deseleziona (voce vuota)
             }
-
-            
+            else if (cb.Name == cbDocentiItip.Name && cbDocentiItip.SelectedItem is ClsUtenteDL ul && ul.ID > 0)
+            {
+                _clipboardIDDocente = ul.ID;
+                _clipboardTipo = "L";
+                cbDocentiItip.SelectedIndex = 0;
+            }
         }
 
         private void tsmiCopia_Click(object sender, EventArgs e)
         {
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            ContextMenuStrip cm = (ContextMenuStrip)tsmi.GetCurrentParent();
+            Control cb = cm.SourceControl;
 
+            if (cb.Name == cbDocentiTeorici.Name && cbDocentiTeorici.SelectedItem is ClsUtenteDL ut && ut.ID > 0)
+            {
+                _clipboardIDDocente = ut.ID;
+                _clipboardTipo = "T";
+            }
+            else if (cb.Name == cbDocentiItip.Name && cbDocentiItip.SelectedItem is ClsUtenteDL ul && ul.ID > 0)
+            {
+                _clipboardIDDocente = ul.ID;
+                _clipboardTipo = "L";
+            }
         }
 
         private void tsmiIncolla_Click(object sender, EventArgs e)
         {
+            if (_clipboardIDDocente <= 0) return;
 
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            ContextMenuStrip cm = (ContextMenuStrip)tsmi.GetCurrentParent();
+            Control cb = cm.SourceControl;
+
+            ComboBox target = cb.Name == cbDocentiTeorici.Name ? cbDocentiTeorici : cbDocentiItip;
+
+            // cerca il docente nella combo di destinazione e lo seleziona
+            foreach (var item in target.Items)
+            {
+                if (item is ClsUtenteDL u && u.ID == _clipboardIDDocente)
+                {
+                    target.SelectedItem = item;
+                    return;
+                }
+            }
+
+            MessageBox.Show("Il docente non è disponibile in questa lista.", "Incolla", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 

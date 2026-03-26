@@ -36,7 +36,7 @@
             this.btLogout = new System.Windows.Forms.Button();
             this.btVaiACattedre = new System.Windows.Forms.Button();
             this.pnCarUtente = new System.Windows.Forms.Panel();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pbFotoProfilo = new System.Windows.Forms.PictureBox();
             this.lblEmail = new System.Windows.Forms.Label();
             this.lblNominativo = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -51,7 +51,7 @@
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2.SuspendLayout();
             this.pnCarUtente.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFotoProfilo)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -166,7 +166,7 @@
             // 
             this.pnCarUtente.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(241)))), ((int)(((byte)(250)))));
             this.pnCarUtente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pnCarUtente.Controls.Add(this.pictureBox2);
+            this.pnCarUtente.Controls.Add(this.pbFotoProfilo);
             this.pnCarUtente.Controls.Add(this.lblEmail);
             this.pnCarUtente.Controls.Add(this.lblNominativo);
             this.pnCarUtente.Dock = System.Windows.Forms.DockStyle.Top;
@@ -177,17 +177,17 @@
             this.pnCarUtente.Size = new System.Drawing.Size(333, 207);
             this.pnCarUtente.TabIndex = 29;
             // 
-            // pictureBox2
+            // pbFotoProfilo
             // 
-            this.pictureBox2.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pictureBox2.Location = new System.Drawing.Point(23, 26);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(79, 76);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 24;
-            this.pictureBox2.TabStop = false;
+            this.pbFotoProfilo.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+            this.pbFotoProfilo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pbFotoProfilo.Location = new System.Drawing.Point(23, 26);
+            this.pbFotoProfilo.Margin = new System.Windows.Forms.Padding(2);
+            this.pbFotoProfilo.Name = "pbFotoProfilo";
+            this.pbFotoProfilo.Size = new System.Drawing.Size(79, 76);
+            this.pbFotoProfilo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbFotoProfilo.TabIndex = 24;
+            this.pbFotoProfilo.TabStop = false;
             // 
             // lblEmail
             // 
@@ -325,7 +325,7 @@
             this.panel2.ResumeLayout(false);
             this.pnCarUtente.ResumeLayout(false);
             this.pnCarUtente.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFotoProfilo)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -339,7 +339,7 @@
         private System.Windows.Forms.Button btLogout;
         private System.Windows.Forms.Label lblNominativo;
         private System.Windows.Forms.Label lblEmail;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        public System.Windows.Forms.PictureBox pbFotoProfilo;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem cDCToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iNDIRIZZIToolStripMenuItem;

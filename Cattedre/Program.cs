@@ -26,15 +26,18 @@ namespace Cattedre
 
                 if (result == DialogResult.OK)
                 {
-                    utente = frmLogin.UtenteLoggato;
+                    utente = frmLogin.UtenteLoggato; FrmHome frmHome = new FrmHome(utente);
+                    if (frmLogin.FotoProfilo != null)
+                        frmHome.pbFotoProfilo.Image = frmLogin.FotoProfilo;
+                    Application.Run(frmHome);
                 }
                 else
                 {
-                    return; // chiude l'app
+                    return;
                 }
             }
 
-            Application.Run(new FrmHome(utente));
+            //Application.Run(new FrmHome(utente));
 
 
         }

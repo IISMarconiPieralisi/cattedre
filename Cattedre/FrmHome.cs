@@ -85,6 +85,9 @@ namespace Cattedre
 
         private void RenderFotoTonda()
         {
+            if (_fotoProfilo == null)
+                return;
+
             // taglia fisicamente la forma del controllo a cerchio
             System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
             path.AddEllipse(0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);

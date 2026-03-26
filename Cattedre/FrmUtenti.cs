@@ -39,6 +39,7 @@ namespace Cattedre
         public FrmUtenti()
         {
             InitializeComponent();
+
         }
 
         private void CaricaListView()
@@ -112,6 +113,7 @@ namespace Cattedre
             {
                 try
                 {
+                    this.Cursor = Cursors.WaitCursor;
                     ClsUtenteBL.InserisciUtente(frmUtente._utente); //l'utente che mando non ha un ID che creo quando lo inzializzo nel server
                     ClsUtenteDL utente = ClsUtenteBL.caricautenteByEmail(frmUtente._utente.Email); //essendo che l'email è univoca riesco a risalire anche all'id del utente in questo modo
                     if (frmUtente._afferenze != null && frmUtente._afferenze.Count > 0)
@@ -147,8 +149,10 @@ namespace Cattedre
                 }
                 catch (Exception ex)
                 {
+                    this.Cursor = Cursors.Arrow;
                     MessageBox.Show($"Errore durante il inserimento:{ex.Message}", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                this.Cursor = Cursors.Arrow;
                 gestisciListview();
             }
         }
@@ -160,7 +164,7 @@ namespace Cattedre
         }
         private void gestisciListview()
         {
-            if (filtri.Count!=0)
+            if (filtri.Count != 0)
                 _utenti = ClsUtenteBL.FiltraUtenti(filtri);
             else
                 _utenti = ClsUtenteBL.CaricaUtenti();
@@ -185,7 +189,7 @@ namespace Cattedre
                 if (afferire != null && afferire.Count > 0) //se non esiste restituirà null e quindi non restituirà la lista
                     frmUtente._afferenze = afferire;
 
-                List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedere(_utenti[indiceDaModificare].ID);
+                List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedereUtente(_utenti[indiceDaModificare].ID);
                 if (richiedere != null && richiedere.Count > 0)
                     frmUtente._richieste = richiedere;
                 ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(_utenti[indiceDaModificare].ID); //se non esiste restituirà null
@@ -198,6 +202,7 @@ namespace Cattedre
                 {
                     try
                     {
+                        this.Cursor = Cursors.WaitCursor;
                         ClsUtenteBL.ModificaUtente(frmUtente._utente, frmUtente._utente.ID);
 
                         if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C" || frmUtente._utente.TipoUtente == "A")
@@ -205,7 +210,7 @@ namespace Cattedre
 
                             //modifica contratto, afferenze e richieste
                             ClsAfferireBL.ModificaAfferenze(frmUtente._utente.ID, frmUtente._afferenze);
-                            ClsRichiedereBL.ModificaRichiesta(frmUtente._utente.ID, frmUtente._richieste);
+                            ClsRichiedereBL.ModificaRichiestaUtente(frmUtente._utente.ID, frmUtente._richieste);
                             ClsContrattoBL.ModificaContratto(frmUtente._contratto, frmUtente._utente.ID);
                             //controllo e inserimento coordinatore di dipartimento
                             if (frmUtente._utente.TipoUtente == "C")
@@ -218,8 +223,10 @@ namespace Cattedre
                     }
                     catch (Exception ex)
                     {
+                        this.Cursor = Cursors.Arrow;
                         MessageBox.Show("Errore durante il salvataggio: " + ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    this.Cursor = Cursors.Arrow;
                     gestisciListview();
 
 
@@ -258,15 +265,16 @@ namespace Cattedre
 
                 bool parametroSelezionato = false;
 
-                parametroSelezionato |= AggiungiFiltro(filtri,"tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
-                parametroSelezionato |= AggiungiFiltro(filtri,"tipoContratto",CaricaElementiSelezionati(gbContratto, typeof(RadioButton)),mappaContratto);
-                parametroSelezionato |= AggiungiFiltro(filtri,"tipoDocente",CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)),mappaTipoDocente);
+                parametroSelezionato |= AggiungiFiltro(filtri, "tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
+                parametroSelezionato |= AggiungiFiltro(filtri, "tipoContratto", CaricaElementiSelezionati(gbContratto, typeof(RadioButton)), mappaContratto);
+                parametroSelezionato |= AggiungiFiltro(filtri, "tipoDocente", CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)), mappaTipoDocente);
 
-                string NomeCognome = (tbRicerca.Text != "nome cognome" && !string.IsNullOrWhiteSpace(tbRicerca.Text)) ? tbRicerca.Text.Trim() : string.Empty;
+                string NomeCognome = (tbRicerca.Text != "cognome nome" && !string.IsNullOrWhiteSpace(tbRicerca.Text)) ? tbRicerca.Text.Trim() : string.Empty;
                 if (NomeCognome != string.Empty)
                 {
                     string NomeCognomeFiltrati = NomeCognome.Replace(" ", "").ToLower();
                     filtri.Add("CONCAT(cognome,nome)", new List<string> { NomeCognomeFiltrati });
+                    parametroSelezionato = true;
                 }
                 if (!parametroSelezionato)
                 {
@@ -281,7 +289,7 @@ namespace Cattedre
                 MessageBox.Show($"{ex.Message}\n riprova", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        private bool AggiungiFiltro(Dictionary<string, List<string>> filtri,string chiave,IEnumerable<string> selezionati,Dictionary<string, string> mappa)
+        private bool AggiungiFiltro(Dictionary<string, List<string>> filtri, string chiave, IEnumerable<string> selezionati, Dictionary<string, string> mappa)
         {
             var valori = selezionati.Where(item => mappa.ContainsKey(item)).Select(item => mappa[item]).ToList();
             if (valori.Any())
@@ -318,7 +326,10 @@ namespace Cattedre
             PulisciGroubBox(gbTipiUtenti);
             PulisciGroubBox(gBtipoDocente);
             filtri = new Dictionary<string, List<string>>();
-            tbRicerca.Text = "cognome nome";
+            //gestione tbricerca
+            tbRicerca.Text = string.Empty;
+            tbRicerca_Leave(null, null);
+            btAnnullaFiltra.Enabled = false;
             //ricamento della listview
             gestisciListview();
         }
@@ -370,10 +381,10 @@ namespace Cattedre
         //        MessageBox.Show("Inserire Input valido per la ricerca", "attenzione", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         //}
 
-      
-        private void cbDocente_CheckedChanged(object sender, EventArgs e)
+
+        private void cbDocenteCordinatore_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbDocente.Checked)
+            if (cbDocente.Checked || cbCoordinatore.Checked)
                 gBtipoDocente.Enabled = true;
             else
             {
@@ -382,8 +393,61 @@ namespace Cattedre
             }
         }
 
+
         #endregion
 
-       
+        private void tbRicerca_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) //se si preme enter simula il click del pulsante
+            {
+                btFiltro_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                btAnnullaFiltra_Click(null, null);
+                tbRicerca_Enter(null, null);
+            }
+        }
+        #region mappattura tasti
+        private void lvUtenti_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && lvUtenti.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete && lvUtenti.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
+            }
+        }
+
+        private void GenericCheckBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Evita il "beep"
+
+                // Trasforma il 'sender' in una CheckBox ed esegue l'inversione
+                if (sender is CheckBox cb)
+                {
+                    cb.Checked = !cb.Checked;
+
+                }
+            }
+        }
+
+        private void rbTipoDocente_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                rbIndireterminato.Focus();
+        }
+        private void rbTipoContratto_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                tbRicerca.Focus();
+        }
+        #endregion
     }
 }

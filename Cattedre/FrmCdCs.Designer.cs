@@ -47,7 +47,7 @@ namespace Cattedre
             this.btElimina.Location = new System.Drawing.Point(1387, 93);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(105, 23);
-            this.btElimina.TabIndex = 10;
+            this.btElimina.TabIndex = 4;
             this.btElimina.Text = "Elimina";
             this.btElimina.UseVisualStyleBackColor = true;
             this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
@@ -58,7 +58,7 @@ namespace Cattedre
             this.btModifica.Location = new System.Drawing.Point(1387, 64);
             this.btModifica.Name = "btModifica";
             this.btModifica.Size = new System.Drawing.Size(105, 23);
-            this.btModifica.TabIndex = 9;
+            this.btModifica.TabIndex = 3;
             this.btModifica.Text = "Modifica";
             this.btModifica.UseVisualStyleBackColor = true;
             this.btModifica.Click += new System.EventHandler(this.btModifica_Click);
@@ -69,7 +69,7 @@ namespace Cattedre
             this.btInserisci.Location = new System.Drawing.Point(1387, 35);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.Size = new System.Drawing.Size(105, 23);
-            this.btInserisci.TabIndex = 8;
+            this.btInserisci.TabIndex = 2;
             this.btInserisci.Text = "Inserisci";
             this.btInserisci.UseVisualStyleBackColor = true;
             this.btInserisci.Click += new System.EventHandler(this.btInserisci_Click);
@@ -92,9 +92,10 @@ namespace Cattedre
             this.lvCdCs.Name = "lvCdCs";
             this.lvCdCs.Size = new System.Drawing.Size(1345, 471);
             this.lvCdCs.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.lvCdCs.TabIndex = 11;
+            this.lvCdCs.TabIndex = 1;
             this.lvCdCs.UseCompatibleStateImageBehavior = false;
             this.lvCdCs.View = System.Windows.Forms.View.Details;
+            this.lvCdCs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvCdCs_KeyDown);
             // 
             // chAnnoScolastico
             // 

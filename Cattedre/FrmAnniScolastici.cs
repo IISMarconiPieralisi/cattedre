@@ -26,7 +26,9 @@ namespace Cattedre
 
             foreach (ClsAnnoScolasticoDL annoScolastico in anniScolastici)
             {
-                ListViewItem lvi = new ListViewItem(annoScolastico.Sigla);
+                //ListViewItem lvi = new ListViewItem(annoScolastico.Sigla);
+                ListViewItem lvi = new ListViewItem(annoScolastico.ID.ToString());
+                lvi.SubItems.Add(annoScolastico.Sigla);
                 lvi.SubItems.Add(annoScolastico.DataInizio.ToShortDateString());
                 lvi.SubItems.Add(annoScolastico.DataFine.ToShortDateString());
                 lvi.Tag = annoScolastico.ID;

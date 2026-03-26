@@ -131,7 +131,7 @@ namespace Cattedre
             return discipline;
         }
 
-        public static List<ClsDisciplinaDL> CaricaDiscipline(long iddipartimento, int anno, string nome)
+        public static List<ClsDisciplinaDL> CaricaDiscipline(long iddipartimento=0, int anno=0, string nome="")
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
             DataTable dt = new DataTable();

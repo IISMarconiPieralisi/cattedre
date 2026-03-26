@@ -170,12 +170,16 @@ namespace Cattedre
                                 a.IDclasse,
                                 a.IDdisciplina,
                                 a.oreSpeciali,
-                                a.IDannoscolastico
+                                a.IDannoscolastico,
+                                c.tipoContratto
 
                             FROM utenti u
 
                             JOIN afferire af
                                 ON af.IDutente = u.ID
+
+                            LEFT JOIN contratti c
+                                ON c.IDutente = u.ID
 
                             LEFT JOIN assegnare a
                                 ON a.IDutente = u.ID

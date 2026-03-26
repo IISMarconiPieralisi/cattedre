@@ -55,6 +55,7 @@
             this.cbPreside = new System.Windows.Forms.CheckBox();
             this.btAnnullaFiltra = new System.Windows.Forms.Button();
             this.btFiltro = new System.Windows.Forms.Button();
+            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbContratto.SuspendLayout();
             this.gBtipoDocente.SuspendLayout();
             this.gbTipiUtenti.SuspendLayout();
@@ -66,6 +67,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvUtenti.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chID,
             this.chNome,
             this.chCognome,
             this.chEmail,
@@ -310,6 +312,11 @@
             this.btFiltro.UseVisualStyleBackColor = true;
             this.btFiltro.Click += new System.EventHandler(this.btFiltro_Click);
             // 
+            // chID
+            // 
+            this.chID.Text = "ID";
+            this.chID.Width = 50;
+            // 
             // FrmUtenti
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -327,6 +334,7 @@
             this.Controls.Add(this.lvUtenti);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmUtenti";
+            this.ShowInTaskbar = false;
             this.Text = "Utenti";
             this.Load += new System.EventHandler(this.FrmUtenti_Load);
             this.gbContratto.ResumeLayout(false);
@@ -368,5 +376,6 @@
         private System.Windows.Forms.CheckBox cbAmminstratore;
         private System.Windows.Forms.CheckBox cbPreside;
         private System.Windows.Forms.TextBox tbRicerca;
+        private System.Windows.Forms.ColumnHeader chID;
     }
 }

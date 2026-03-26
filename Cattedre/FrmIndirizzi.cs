@@ -25,7 +25,8 @@ namespace Cattedre
 
             foreach (ClsIndirizzoDL indirizzo in indirizzi)
             {
-                ListViewItem lvi = new ListViewItem(indirizzo.Nome);
+                ListViewItem lvi = new ListViewItem(indirizzo.ID.ToString());
+                lvi.SubItems.Add(indirizzo.Nome);
                 lvi.Tag = indirizzo.ID;
                 lvIndirizzi.Items.Add(lvi);
             }

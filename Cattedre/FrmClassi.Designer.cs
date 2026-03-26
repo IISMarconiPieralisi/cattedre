@@ -50,6 +50,7 @@
             this.btClasseSuccessiva = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.tplAnniScolastici = new System.Windows.Forms.TableLayoutPanel();
+            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // cbAnnoClasse
@@ -120,6 +121,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvClassi.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chID,
             this.chSigla,
             this.chAnno,
             this.chSezione,
@@ -139,46 +141,46 @@
             // 
             // chSigla
             // 
-            this.chSigla.DisplayIndex = 1;
+            this.chSigla.DisplayIndex = 2;
             this.chSigla.Text = "Sigla";
             // 
             // chAnno
             // 
-            this.chAnno.DisplayIndex = 2;
+            this.chAnno.DisplayIndex = 3;
             this.chAnno.Text = "Anno";
             // 
             // chSezione
             // 
-            this.chSezione.DisplayIndex = 3;
+            this.chSezione.DisplayIndex = 4;
             this.chSezione.Text = "Sezione";
             // 
             // chClasseArticolataCon
             // 
-            this.chClasseArticolataCon.DisplayIndex = 4;
+            this.chClasseArticolataCon.DisplayIndex = 5;
             this.chClasseArticolataCon.Text = "Articolata Con";
             this.chClasseArticolataCon.Width = 83;
             // 
             // chNomeCoordinatore
             // 
-            this.chNomeCoordinatore.DisplayIndex = 5;
+            this.chNomeCoordinatore.DisplayIndex = 6;
             this.chNomeCoordinatore.Text = "Nome Coordinatore";
             this.chNomeCoordinatore.Width = 171;
             // 
             // chIndirizzo
             // 
-            this.chIndirizzo.DisplayIndex = 6;
+            this.chIndirizzo.DisplayIndex = 7;
             this.chIndirizzo.Text = "Indirizzo";
             this.chIndirizzo.Width = 102;
             // 
             // clDipartimento
             // 
-            this.clDipartimento.DisplayIndex = 7;
+            this.clDipartimento.DisplayIndex = 8;
             this.clDipartimento.Text = "Dipartimento";
             this.clDipartimento.Width = 150;
             // 
             // chAnnoScolastico
             // 
-            this.chAnnoScolastico.DisplayIndex = 0;
+            this.chAnnoScolastico.DisplayIndex = 1;
             this.chAnnoScolastico.Text = "Anno scolastico";
             this.chAnnoScolastico.Width = 90;
             // 
@@ -247,6 +249,11 @@
             this.tplAnniScolastici.Size = new System.Drawing.Size(612, 36);
             this.tplAnniScolastici.TabIndex = 26;
             // 
+            // chID
+            // 
+            this.chID.Text = "ID";
+            this.chID.Width = 50;
+            // 
             // FrmClassi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -268,6 +275,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmClassi";
+            this.ShowInTaskbar = false;
             this.Text = "FrmClassi";
             this.Load += new System.EventHandler(this.FrmClassi_Load);
             this.ResumeLayout(false);
@@ -298,5 +306,6 @@
         private System.Windows.Forms.ColumnHeader chAnnoScolastico;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TableLayoutPanel tplAnniScolastici;
+        private System.Windows.Forms.ColumnHeader chID;
     }
 }

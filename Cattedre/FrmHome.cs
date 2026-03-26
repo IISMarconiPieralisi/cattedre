@@ -23,6 +23,8 @@ namespace Cattedre
 
 
         private ClsUtenteDL utente;
+
+        public Action OnLogout { get; set; }
         public FrmHome(ClsUtenteDL utenteLoggato)
         {
             InitializeComponent();
@@ -44,6 +46,7 @@ namespace Cattedre
         }
         private void FrmHomeUpdate_Load(object sender, EventArgs e)
         {
+            RenderFotoTonda();
             if (utente.TipoUtente == "A")
             {
                 menuStrip1.Enabled = true;
@@ -69,6 +72,35 @@ namespace Cattedre
             // AggiornaLabel(lblEmail.Text, lblEmail);
         }
 
+        public void ImpostaFotoProfilo(Image foto)
+        {
+            _fotoProfilo = foto;
+            pbFotoProfilo.Image = null; // non lasciare che la picturebox disegni da sola
+            pbFotoProfilo.Invalidate();
+        }
+
+        private Image _fotoProfilo = null;
+
+        private void RenderFotoTonda()
+        {
+            // taglia fisicamente la forma del controllo a cerchio
+            System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
+            path.AddEllipse(0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);
+            pbFotoProfilo.Region = new Region(path);
+
+            pbFotoProfilo.Paint += (s, e) =>
+            {
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                if (_fotoProfilo != null)
+                    e.Graphics.DrawImage(_fotoProfilo, 0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);
+
+                // bordo
+                using (Pen pen = new Pen(Color.Gray, 2))
+                    e.Graphics.DrawEllipse(pen, 1, 1, pbFotoProfilo.Width - 2, pbFotoProfilo.Height - 2);
+            };
+        }
+
         private void AggiornaLabel(string nuovoTesto, Label label1)  // per allargare la label non più verso destra ma verso sinistra
         {
             label1.Text = nuovoTesto;
@@ -84,22 +116,19 @@ namespace Cattedre
         {
             try
             {
-                //FrmLogin frmLogin = new FrmLogin();
-                //if (ClsUtenteBL.TokenEsistente(utente.ID))
-                //    FrmLogin.logout();
-                //frmLogin.Show();
-                //this.Close();
                 if (ClsUtenteBL.TokenEsistente(utente.ID))
                     FrmLogin.logout();
 
-                Application.Restart();
+                foreach (Form figlio in this.MdiChildren.ToList())
+                    figlio.Close();
+
+                OnLogout?.Invoke(); // segnala al Program che è un logout
+                this.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Errore Durante il logout, contattare un amministratore", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
 
         private void cDCToolStripMenuItem_Click(object sender, EventArgs e)

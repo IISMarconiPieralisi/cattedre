@@ -41,8 +41,10 @@ namespace Cattedre
             frm.StartPosition = FormStartPosition.CenterParent; // Su MDI non serve
             frm.MdiParent = this;
             frm.BringToFront();
-            frm.WindowState = FormWindowState.Maximized; // Di default nelle proprietà deve essere a Normal!
             frm.Show();
+            frm.WindowState = FormWindowState.Normal;
+            frm.WindowState = FormWindowState.Maximized;
+            frm.Refresh();
         }
         private void FrmHomeUpdate_Load(object sender, EventArgs e)
         {

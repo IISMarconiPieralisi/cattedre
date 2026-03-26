@@ -40,6 +40,7 @@
             this.chDisciplinaSpeciale = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDipartimento = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chIndirizzi = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cbDisciplinaSucessiva = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
             this.btPulisciCb = new System.Windows.Forms.Button();
             this.gbAnni = new System.Windows.Forms.GroupBox();
@@ -52,7 +53,7 @@
             this.btElimina = new System.Windows.Forms.Button();
             this.btModifica = new System.Windows.Forms.Button();
             this.btInserisci = new System.Windows.Forms.Button();
-            this.cbDisciplinaSucessiva = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbAnni.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,6 +95,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvDiscipline.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chID,
             this.chAnno,
             this.chNome,
             this.chOreLab,
@@ -124,13 +126,13 @@
             // 
             // chOreLab
             // 
-            this.chOreLab.DisplayIndex = 3;
+            this.chOreLab.DisplayIndex = 4;
             this.chOreLab.Text = "Ore Lab";
             this.chOreLab.Width = 77;
             // 
             // chOreTeoria
             // 
-            this.chOreTeoria.DisplayIndex = 2;
+            this.chOreTeoria.DisplayIndex = 3;
             this.chOreTeoria.Text = "Ore Teoria";
             this.chOreTeoria.Width = 83;
             // 
@@ -148,6 +150,11 @@
             // 
             this.chIndirizzi.Text = "Indirizzi";
             this.chIndirizzi.Width = 200;
+            // 
+            // cbDisciplinaSucessiva
+            // 
+            this.cbDisciplinaSucessiva.Text = "Disciplina successiva";
+            this.cbDisciplinaSucessiva.Width = 150;
             // 
             // label2
             // 
@@ -284,10 +291,10 @@
             this.btInserisci.UseVisualStyleBackColor = true;
             this.btInserisci.Click += new System.EventHandler(this.btInserisci_Click);
             // 
-            // cbDisciplinaSucessiva
+            // chID
             // 
-            this.cbDisciplinaSucessiva.Text = "Disciplina successiva";
-            this.cbDisciplinaSucessiva.Width = 150;
+            this.chID.Text = "ID";
+            this.chID.Width = 50;
             // 
             // FrmDiscipline
             // 
@@ -308,6 +315,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmDiscipline";
+            this.ShowInTaskbar = false;
             this.Text = "Discipline";
             this.Load += new System.EventHandler(this.FrmDiscipline_Load);
             this.gbAnni.ResumeLayout(false);
@@ -343,5 +351,6 @@
         private System.Windows.Forms.Button btModifica;
         private System.Windows.Forms.Button btInserisci;
         private System.Windows.Forms.ColumnHeader cbDisciplinaSucessiva;
+        private System.Windows.Forms.ColumnHeader chID;
     }
 }

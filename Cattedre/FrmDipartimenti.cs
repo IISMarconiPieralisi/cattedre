@@ -28,7 +28,8 @@ namespace Cattedre
 
             foreach (ClsDipartimentoDL dipartimento in dipartimenti)
             {
-                ListViewItem lvi = new ListViewItem(dipartimento.Nome);
+                ListViewItem lvi = new ListViewItem(dipartimento.ID.ToString());
+                lvi.SubItems.Add(dipartimento.Nome);
                 lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(dipartimento.IDutente));
                 lvi.Tag = dipartimento.ID;
                 lvDipartimenti.Items.Add(lvi);

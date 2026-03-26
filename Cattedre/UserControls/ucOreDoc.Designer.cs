@@ -39,7 +39,7 @@
             // lblOreDiCattedra
             // 
             this.lblOreDiCattedra.AutoSize = true;
-            this.lblOreDiCattedra.Location = new System.Drawing.Point(145, 25);
+            this.lblOreDiCattedra.Location = new System.Drawing.Point(145, 18);
             this.lblOreDiCattedra.Name = "lblOreDiCattedra";
             this.lblOreDiCattedra.Size = new System.Drawing.Size(16, 13);
             this.lblOreDiCattedra.TabIndex = 0;
@@ -48,7 +48,7 @@
             // lblOreEffettive
             // 
             this.lblOreEffettive.AutoSize = true;
-            this.lblOreEffettive.Location = new System.Drawing.Point(227, 25);
+            this.lblOreEffettive.Location = new System.Drawing.Point(227, 18);
             this.lblOreEffettive.Name = "lblOreEffettive";
             this.lblOreEffettive.Size = new System.Drawing.Size(16, 13);
             this.lblOreEffettive.TabIndex = 1;
@@ -57,7 +57,7 @@
             // lblOreTotali
             // 
             this.lblOreTotali.AutoSize = true;
-            this.lblOreTotali.Location = new System.Drawing.Point(367, 25);
+            this.lblOreTotali.Location = new System.Drawing.Point(367, 18);
             this.lblOreTotali.Name = "lblOreTotali";
             this.lblOreTotali.Size = new System.Drawing.Size(16, 13);
             this.lblOreTotali.TabIndex = 3;
@@ -66,7 +66,7 @@
             // lblDocente
             // 
             this.lblDocente.AutoSize = true;
-            this.lblDocente.Location = new System.Drawing.Point(3, 25);
+            this.lblDocente.Location = new System.Drawing.Point(8, 18);
             this.lblDocente.Name = "lblDocente";
             this.lblDocente.Size = new System.Drawing.Size(16, 13);
             this.lblDocente.TabIndex = 4;
@@ -74,7 +74,7 @@
             // 
             // nudOrePot
             // 
-            this.nudOrePot.Location = new System.Drawing.Point(295, 23);
+            this.nudOrePot.Location = new System.Drawing.Point(295, 16);
             this.nudOrePot.Maximum = new decimal(new int[] {
             18,
             0,

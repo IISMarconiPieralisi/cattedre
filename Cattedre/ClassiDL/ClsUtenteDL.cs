@@ -52,9 +52,8 @@ namespace Cattedre
             set
             {
                 if (!string.IsNullOrEmpty(value))
-                    _password = value;
-                else
-                    throw new Exception("Inserire una Password Valida");
+                    _password = CreateMD5(value);
+
 
             }
         }
@@ -153,10 +152,8 @@ namespace Cattedre
 
                 //return Convert.ToHexString(hashBytes); // .NET 5 +
                 return BitConverter.ToString(hashBytes).Replace("-", ""); // "010203"
-
             }
         }
-
         #endregion
 
     }

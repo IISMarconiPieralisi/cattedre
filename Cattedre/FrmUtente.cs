@@ -45,16 +45,17 @@ namespace Cattedre
 
             try
             {
+                if (_utente.ID == 0 && tbPassword.Text.Length <6)
+                    throw new Exception("la password deve avere almeno 8 caratteri");
                 //dati base utente
                 _utente.Nome = tbNome.Text.Trim();
                 _utente.Cognome = tbCognome.Text.Trim();
                 _utente.Email = tbEmail.Text.Trim();
-                _utente.Password = tbPassword.Text.Trim();
+                _utente.Password =(tbPassword.Text== "********")?"": tbPassword.Text.Trim();
                 _utente.TipoUtente = GetTipoUtente();
                 _utente.Colore = _colore;
 
                 bool isDocente = _utente.TipoUtente == "D" || _utente.TipoUtente == "C" || _utente.TipoUtente == "A";
-               
                 //inserimento controlli Docente
                 if (isDocente)
                 {
@@ -152,8 +153,6 @@ namespace Cattedre
             }
 }
 
-        
-
         private void FrmUtente_Load(object sender, EventArgs e)
         {
 
@@ -164,13 +163,15 @@ namespace Cattedre
             popolaDipartimenti(dipartimenti);
 
             //controllo se l'utente passato ha dei dati da mostrare
-            if (_utente!= null)
+            if (_utente!= null && _utente.ID>0)
             {
                 tbNome.Text = _utente.Nome;
                 tbCognome.Text = _utente.Cognome;
                 tbEmail.Text = _utente.Email;
-                if(tbPassword!=null && _utente.ID==0)
-                    tbPassword.Text = _utente.Password;
+                    tbPassword.Text = "********";
+                //aggiungo il metodo enter e quando l'utente va su utente
+                tbPassword.Enter += tbPassword_Enter;
+                tbPassword.Leave += tbPassword_Leave;
                 cbTipoUtente.SelectedItem = GetNomeTipoUtente(_utente.TipoUtente);
                 if (_utente.TipoDocente == 'T') rbTeorico.Checked = true;
                 else if (_utente.TipoDocente == 'L')    rbLaboratorio.Checked = true;
@@ -626,6 +627,19 @@ namespace Cattedre
             this.BeginInvoke(new Action(() => PopolaDisciplinePerCDC()));
         }
         #endregion
+        #region gestione password grafica
+        private void tbPassword_Enter(object sender, EventArgs e)
+        {
+            if (tbPassword.Text == "********")
+                tbPassword.Text = "";
+        }
+
+        private void tbPassword_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tbPassword.Text) && tbPassword.Text.Length <=2) 
+                tbPassword.Text = "********";
+        }
+        #endregion
         #region navigazione con enter
         private void tbNome_KeyDown(object sender, KeyEventArgs e)
         {
@@ -693,7 +707,7 @@ namespace Cattedre
 
         private void tbPassword_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) //&& tbPassword.Text.Length > 2
+            if (e.KeyCode == Keys.Enter && tbPassword.Text.Length > 2)
                 this.ActiveControl = cbTipoUtente;
         }
 
@@ -820,6 +834,18 @@ namespace Cattedre
         {
             if (e.KeyCode == Keys.Enter)
                 btSalva.Focus();
+        }
+
+        private void dtpDataFine_ValueChanged(object sender, EventArgs e)
+        {
+            if (dtpDataFine.Value <= dtpDataInizio.Value)
+                dtpDataFine.Value = dtpDataInizio.Value.AddDays(1);
+        }
+
+        private void dtpDataInizio_ValueChanged(object sender, EventArgs e)
+        {
+            if (dtpDataFine.Value <= dtpDataInizio.Value)
+                dtpDataFine.Value = dtpDataInizio.Value.AddDays(1);
         }
     }
     #endregion

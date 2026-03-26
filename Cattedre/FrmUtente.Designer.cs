@@ -50,6 +50,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.cbAutoEmail = new System.Windows.Forms.CheckBox();
             this.btColore = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.pnCDC = new System.Windows.Forms.Panel();
             this.clbDisciplina = new System.Windows.Forms.CheckedListBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -72,15 +73,14 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.cldColori = new System.Windows.Forms.ColorDialog();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.PnUtente.SuspendLayout();
             this.pnTipoDocente.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.pnCDC.SuspendLayout();
             this.pnDipartimento.SuspendLayout();
             this.PnContratto.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).BeginInit();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -325,6 +325,15 @@
             this.btColore.UseVisualStyleBackColor = true;
             this.btColore.Click += new System.EventHandler(this.btColore_Click);
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.btAnnulla);
+            this.panel2.Controls.Add(this.btSalva);
+            this.panel2.Location = new System.Drawing.Point(21, 366);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(312, 100);
+            this.panel2.TabIndex = 26;
+            // 
             // pnCDC
             // 
             this.pnCDC.AutoSize = true;
@@ -492,6 +501,7 @@
             this.dtpDataFine.Name = "dtpDataFine";
             this.dtpDataFine.Size = new System.Drawing.Size(199, 20);
             this.dtpDataFine.TabIndex = 21;
+            this.dtpDataFine.ValueChanged += new System.EventHandler(this.dtpDataFine_ValueChanged);
             this.dtpDataFine.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataFine_KeyDown);
             // 
             // dtpDataInizio
@@ -502,6 +512,7 @@
             this.dtpDataInizio.Name = "dtpDataInizio";
             this.dtpDataInizio.Size = new System.Drawing.Size(199, 20);
             this.dtpDataInizio.TabIndex = 20;
+            this.dtpDataInizio.ValueChanged += new System.EventHandler(this.dtpDataInizio_ValueChanged);
             this.dtpDataInizio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataInizio_KeyDown);
             // 
             // label10
@@ -554,15 +565,6 @@
             // 
             this.cldColori.FullOpen = true;
             // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.btAnnulla);
-            this.panel2.Controls.Add(this.btSalva);
-            this.panel2.Location = new System.Drawing.Point(21, 366);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(312, 100);
-            this.panel2.TabIndex = 26;
-            // 
             // FrmUtente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -580,6 +582,7 @@
             this.PnUtente.PerformLayout();
             this.pnTipoDocente.ResumeLayout(false);
             this.pnTipoDocente.PerformLayout();
+            this.panel2.ResumeLayout(false);
             this.pnCDC.ResumeLayout(false);
             this.pnCDC.PerformLayout();
             this.pnDipartimento.ResumeLayout(false);
@@ -589,7 +592,6 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).EndInit();
-            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

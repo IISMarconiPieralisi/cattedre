@@ -343,17 +343,18 @@ namespace Cattedre
                            SET nome = @nome, 
                                cognome = @cognome, 
                                email = @email, 
-                               password = @password, 
+                               password = CASE WHEN (NULLIF(@password, '') IS NULL) THEN password ELSE @password END,
                                tipoUtente = @tipoUtente,
                                tipoDocente = @tipoDocente,
-                               colore=@colore
+                               colore = @colore
                            WHERE id = @IDutente";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", utente.Nome);
                         cmd.Parameters.AddWithValue("@cognome", utente.Cognome);
                         cmd.Parameters.AddWithValue("@email", utente.Email);
-                        cmd.Parameters.AddWithValue("@password", utente.Password);
+                        cmd.Parameters.AddWithValue("@password", (object)utente.Password ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@tipoUtente", utente.TipoUtente);
                         cmd.Parameters.AddWithValue("@tipoDocente", utente.TipoDocente);
                         cmd.Parameters.AddWithValue("@colore", utente.Colore);
@@ -363,7 +364,6 @@ namespace Cattedre
                         if (righeCoinvolte <= 0)
                             throw new InvalidOperationException("No rows were inserted.");
                     }
-                    conn.Close();
                 }
             }
             catch (Exception ex)
@@ -371,7 +371,6 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
-
         public static void EliminaUtente(long IDutente)
         {
             
@@ -472,7 +471,7 @@ namespace Cattedre
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@email", email);
-                        cmd.Parameters.AddWithValue("@password", password);
+                        cmd.Parameters.AddWithValue("@password",ClsUtenteDL.CreateMD5(password));
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {

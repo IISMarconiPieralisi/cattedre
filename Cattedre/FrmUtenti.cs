@@ -113,6 +113,7 @@ namespace Cattedre
             {
                 try
                 {
+                    this.Cursor = Cursors.WaitCursor;
                     ClsUtenteBL.InserisciUtente(frmUtente._utente); //l'utente che mando non ha un ID che creo quando lo inzializzo nel server
                     ClsUtenteDL utente = ClsUtenteBL.caricautenteByEmail(frmUtente._utente.Email); //essendo che l'email è univoca riesco a risalire anche all'id del utente in questo modo
                     if (frmUtente._afferenze != null && frmUtente._afferenze.Count > 0)
@@ -148,8 +149,10 @@ namespace Cattedre
                 }
                 catch (Exception ex)
                 {
+                    this.Cursor = Cursors.Arrow;
                     MessageBox.Show($"Errore durante il inserimento:{ex.Message}", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                this.Cursor = Cursors.Arrow;
                 gestisciListview();
             }
         }
@@ -199,6 +202,7 @@ namespace Cattedre
                 {
                     try
                     {
+                        this.Cursor = Cursors.WaitCursor;
                         ClsUtenteBL.ModificaUtente(frmUtente._utente, frmUtente._utente.ID);
 
                         if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C" || frmUtente._utente.TipoUtente == "A")
@@ -219,8 +223,10 @@ namespace Cattedre
                     }
                     catch (Exception ex)
                     {
+                        this.Cursor = Cursors.Arrow;
                         MessageBox.Show("Errore durante il salvataggio: " + ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    this.Cursor = Cursors.Arrow;
                     gestisciListview();
 
 

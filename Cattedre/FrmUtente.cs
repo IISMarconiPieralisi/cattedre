@@ -25,6 +25,7 @@ namespace Cattedre
         //creazione degli array che verranno popolati con le query
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
         List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
+        List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDiscipline();
         int _oldValuedipCoord=0;
         bool _bloccoEvdipCoord = false;
         string _imputEmail;
@@ -44,40 +45,35 @@ namespace Cattedre
 
             try
             {
+                if (_utente.ID == 0 && tbPassword.Text.Length <6)
+                    throw new Exception("la password deve avere almeno 8 caratteri");
                 //dati base utente
                 _utente.Nome = tbNome.Text.Trim();
                 _utente.Cognome = tbCognome.Text.Trim();
                 _utente.Email = tbEmail.Text.Trim();
-                _utente.Password = tbPassword.Text.Trim();
+                _utente.Password =(tbPassword.Text== "********")?"": tbPassword.Text.Trim();
                 _utente.TipoUtente = GetTipoUtente();
                 _utente.Colore = _colore;
 
                 bool isDocente = _utente.TipoUtente == "D" || _utente.TipoUtente == "C" || _utente.TipoUtente == "A";
-               
                 //inserimento controlli Docente
                 if (isDocente)
                 {
-                    // Tipi docente (Teorico o Pratico)
-                    if (ckbDocenteTeorico.Checked && ckbDocentePratico.Checked)
-                        throw new Exception("Seleziona un solo tipo docente.");
-
-                    if (!ckbDocenteTeorico.Checked && !ckbDocentePratico.Checked)
-                        throw new Exception("Seleziona un tipo docente.");
-                    else
-                        _utente.TipoDocente = ckbDocenteTeorico.Checked ? 'T' : 'L';
-
+                        _utente.TipoDocente = rbTeorico.Checked ? 'T' :(rbLaboratorio.Checked)? 'L': throw new Exception("seleziona un tipo di docente");
                     //controllo colore
                     if (string.IsNullOrEmpty(_utente.Colore))
                         _utente.Colore = "255255255";
                     
 
-                    // controlli classe di concorso
+                    // controlli classe di concorso e disciplina
                     if (clbCLasseDiConcorso.CheckedItems.Count == 0)
                         throw new Exception("Seleziona almeno una classe di concorso.");
+                    if (clbDisciplina.CheckedItems.Count == 0)
+                        throw new Exception("seleziona almeno una disciplina");
 
 
-                    // ---- Contratto ----
-                    if (nudMonteOre.Value <= 0 || (!rbDeterminato.Checked && !rbIndeterminato.Checked))
+                        // ---- Contratto ----
+                        if (nudMonteOre.Value <= 0 || (!rbDeterminato.Checked && !rbIndeterminato.Checked))
                         throw new Exception("Inserire un monte ore valido e selezionare il tipo di contratto.");
                     
                     //creazione  contratto se non esiste  (caso inserimento)
@@ -104,9 +100,11 @@ namespace Cattedre
                         if (dip != null)
                             _afferenze.Add(new ClsAfferireDL(dip.ID));
                     }
-                    if(_richieste==null)
-                        _richieste = new List<ClsRichiedereDL>();
                     //controlli richiedere e inserimento
+
+                    // gestione Classi di concorso
+                        _richieste = new List<ClsRichiedereDL>();
+
                     foreach (var item in clbCLasseDiConcorso.CheckedItems)
                     {
                         string Livello = DividiClasseConcorso(item.ToString()).Trim();
@@ -115,6 +113,22 @@ namespace Cattedre
 
                         if (cdc != null)
                             _richieste.Add(new ClsRichiedereDL(cdc.ID));
+                    }
+                    //gestione Disciplina insegnata
+                    foreach(var item in clbDisciplina.CheckedItems)
+                    {
+                        string Nome = string.Empty;
+                        int Anno =0;
+                        DividiDisciplina( item.ToString() ,out Nome, out Anno);
+                        ClsDisciplinaDL disc = discipline
+                            .Find(d => d.Nome == Nome && d.Anno==Anno);
+
+                        if (disc != null)
+                        {
+                            ClsRichiedereDL richiedere = new ClsRichiedereDL();
+                            richiedere.IDdisciplina = disc.ID;
+                            _richieste.Add(richiedere);
+                        }
                     }
                 }
                 
@@ -131,13 +145,13 @@ namespace Cattedre
 
                 // Se arrivi qui, tutto è valido
                 this.DialogResult = DialogResult.OK;
-            }
+        }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
-        }
+}
 
         private void FrmUtente_Load(object sender, EventArgs e)
         {
@@ -148,20 +162,20 @@ namespace Cattedre
             //ancora non li filtro in base alla cdc selezionata funzione da fare
             popolaDipartimenti(dipartimenti);
 
-
             //controllo se l'utente passato ha dei dati da mostrare
-            if (_utente!= null)
+            if (_utente!= null && _utente.ID>0)
             {
                 tbNome.Text = _utente.Nome;
                 tbCognome.Text = _utente.Cognome;
                 tbEmail.Text = _utente.Email;
-                if(tbPassword!=null && _utente.ID==0)
-                    tbPassword.Text = _utente.Password;
+                    tbPassword.Text = "********";
+                //aggiungo il metodo enter e quando l'utente va su utente
+                tbPassword.Enter += tbPassword_Enter;
+                tbPassword.Leave += tbPassword_Leave;
                 cbTipoUtente.SelectedItem = GetNomeTipoUtente(_utente.TipoUtente);
-                if (_utente.TipoDocente == 'T')
-                    ckbDocenteTeorico.Checked = true;
-                else if (_utente.TipoDocente == 'L')
-                    ckbDocentePratico.Checked = true;
+                if (_utente.TipoDocente == 'T') rbTeorico.Checked = true;
+                else if (_utente.TipoDocente == 'L')    rbLaboratorio.Checked = true;
+
                 if (_utente.TipoUtente == "C")
                 {
                     ClsDipartimentoDL dipCoordinato = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utente.ID);
@@ -199,9 +213,15 @@ namespace Cattedre
             //controllo afferanza
             if(_afferenze!=null && _afferenze.Count>0)
                 loadDipartimenti();
-            //inserimento classe di concorso
+            //inserimento classe di concorso e discipline
             if (_richieste != null)
+            {
+                clbCLasseDiConcorso.ItemCheck -= clbCLasseDiConcorso_ItemCheck;
                 loadCDC();
+                PopolaDisciplinePerCDC();
+                clbCLasseDiConcorso.ItemCheck += clbCLasseDiConcorso_ItemCheck;
+                LoadDiscipline();
+            }
         }
 
         private void cbTipoUtente_SelectionChangeCommitted(object sender, EventArgs e)
@@ -210,15 +230,14 @@ namespace Cattedre
                 cbTipoUtente.SelectedItem.ToString() == "C" ||
                 cbTipoUtente.SelectedItem.ToString() == "A")
             {
-                ckbDocenteTeorico.Enabled = true;
-                ckbDocentePratico.Enabled = true;
+                pnTipoDocente.Enabled = true;
             }
             //se l'utente selezionato è amministratore o preside non gli è possibile selezionare il tipo di docente
 
             if (cbTipoUtente.SelectedItem.ToString() == "P")
             {
-                ckbDocentePratico.Enabled = false;
-                ckbDocenteTeorico.Enabled = false;
+                pnTipoDocente.Enabled = false;
+
             }
         }
         private void rbIndeterminato_CheckedChanged(object sender, EventArgs e)
@@ -233,9 +252,6 @@ namespace Cattedre
                 dtpDataFine.Enabled = true;
             }
         }
-
-
-
         private void cbAutoEmail_CheckedChanged(object sender, EventArgs e)
         {
             if (cbAutoEmail.Checked)
@@ -243,36 +259,18 @@ namespace Cattedre
                 _imputEmail = tbEmail.Text;
                 if (!string.IsNullOrWhiteSpace(tbNome.Text) && !string.IsNullOrWhiteSpace(tbCognome.Text))
                 {
-                    string _Email = $"{tbNome.Text}.{tbCognome.Text}@iismarconipieralisi.it";
+                    string _Email = $"{tbNome.Text.ToLower()}.{tbCognome.Text.ToLower()}@iismarconipieralisi.it";
                     tbEmail.Enabled = false;
                     tbEmail.Text = _Email;
-
                 }
 
             }
             else
             {
                 tbEmail.Enabled = true;
-                tbEmail.Text = _imputEmail;
-
+                tbEmail.Text = _imputEmail;    
             }
         }
-
-        public static string CreateMD5(string input)
-        {
-            // Use input string to calculate MD5 hash
-            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-            {
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-                //return Convert.ToHexString(hashBytes); // .NET 5 +
-                return BitConverter.ToString(hashBytes).Replace("-", ""); // "010203"
-
-            }
-        }
-
-
         private void btAnnulla_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -311,6 +309,7 @@ namespace Cattedre
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
                     cbDipartimentoCoordinato.Text = string.Empty;
+                    pnTipoDocente.Enabled = true;
                     break;
 
                 case "Coordinatore di dipartimento":
@@ -320,7 +319,16 @@ namespace Cattedre
                     PnContratto.Visible = true;
                     lbDcoordinato.Visible = true;
                     cbDipartimentoCoordinato.Visible = true;
-
+                    pnTipoDocente.Enabled = true;
+                    break;
+                case "Amministratore":
+                    pnCDC.Visible = true;
+                    pnDipartimento.Visible = true;
+                    PnContratto.Enabled = true;
+                    PnContratto.Visible = true;
+                    lbDcoordinato.Visible = true;
+                    cbDipartimentoCoordinato.Visible = true;
+                    pnTipoDocente.Enabled = true;
                     break;
                 default:
                     pnCDC.Visible = false;
@@ -329,6 +337,9 @@ namespace Cattedre
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
                     cbDipartimentoCoordinato.Text = string.Empty;
+                    pnTipoDocente.Enabled = false;
+                    rbLaboratorio.Checked = false;
+                    rbTeorico.Checked = false;
                     break;
             }
         } 
@@ -519,8 +530,6 @@ namespace Cattedre
             clbDisciplina.Enabled = true;
             //creo una lista di disciplina di appoggio
             List<ClsDisciplinaDL> disc = new List<ClsDisciplinaDL>();
-            if (clbCLasseDiConcorso.Items.Count <= 0)
-                return;
             foreach (var item in clbCLasseDiConcorso.CheckedItems)
             {
                 string Livello = DividiClasseConcorso(item.ToString()).Trim();
@@ -543,7 +552,8 @@ namespace Cattedre
                 return;
             foreach(var d in disc.OrderBy(d => d.Nome).ThenBy(d => d.Anno)) // le ordino per  anno e per sezione per comodità
                 clbDisciplina.Items.Add($"{d.Nome} {d.Anno}°");
-            
+
+
         }
         private void LoadDiscipline()
         {
@@ -571,6 +581,12 @@ namespace Cattedre
             string[] vs = item.Split('|');
             return vs[0];
         }
+        private void DividiDisciplina( string item,out string nome, out int anno)
+        {
+            anno = Convert.ToInt16(item.Substring(item.Length - 2, 1));
+            nome = item.Substring(0, item.Length - 3);
+
+        }
         #endregion
         #region gestione colore utente
         private void btColore_Click(object sender, EventArgs e)
@@ -586,7 +602,7 @@ namespace Cattedre
             }
         }
 
-        public Color OttieniColore(string rgb)
+        public static Color OttieniColore(string rgb)
         {
             if (rgb.Length >= 9)
             {
@@ -610,9 +626,228 @@ namespace Cattedre
             // prima di leggere i CheckedItems. È il modo più affidabile.
             this.BeginInvoke(new Action(() => PopolaDisciplinePerCDC()));
         }
+        #endregion
+        #region gestione password grafica
+        private void tbPassword_Enter(object sender, EventArgs e)
+        {
+            if (tbPassword.Text == "********")
+                tbPassword.Text = "";
+        }
 
+        private void tbPassword_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tbPassword.Text) && tbPassword.Text.Length <=2) 
+                tbPassword.Text = "********";
+        }
+        #endregion
+        #region navigazione con enter
+        private void tbNome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbNome.Text.Length>2)
+            {
+                this.ActiveControl = tbCognome;
+
+            }
+
+        }
+
+        private void tbCognome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbCognome.Text.Length > 2)
+            {
+                e.SuppressKeyPress = true;
+                this.ActiveControl = tbEmail;
+            }
+        }
+
+        private void cbAutoEmail_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Enter)
+            {
+                cbAutoEmail.Checked = true;
+                this.ActiveControl = tbPassword;
+            }
+        }
+
+        private void tbEmail_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (string.IsNullOrWhiteSpace(tbEmail.Text)) this.ActiveControl = cbAutoEmail;
+                else tbPassword.Focus();
+            }
+        }
+        private void checkBoxAutoEmail_Enter(object sender, EventArgs e)
+        {
+            cbAutoEmail.ForeColor = Color.Blue;
+        }
+
+        private void checkBoxAutoEmail_Leave(object sender, EventArgs e)
+        {
+            cbAutoEmail.ForeColor = SystemColors.ControlText;
+        }
+
+        private void cbTipoUtente_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter &&cbTipoUtente.SelectedIndex!=-1)
+            {
+                if (GetTipoUtente() != "P")this.ActiveControl = rbTeorico;
+                else this.ActiveControl = btSalva;
+            }
+        }
+
+        private void rbTipoDocente(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode==Keys.Enter)
+            {
+                if (GetTipoUtente() == "P") this.ActiveControl = btSalva;
+                else this.ActiveControl = clbDipartimento;
+            }
+        }
+
+        private void tbPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbPassword.Text.Length > 2)
+                this.ActiveControl = cbTipoUtente;
+        }
+
+        private void cbTipoUtente_Enter(object sender, EventArgs e)
+        {
+            // Quando l'utente clicca o si sposta sulla combo
+            cbTipoUtente.FlatStyle = FlatStyle.Flat;
+        }
+
+        private void cbTipoUtente_Leave(object sender, EventArgs e)
+        {
+            // Quando l'utente cambia controllo
+            cbTipoUtente.FlatStyle = FlatStyle.Standard;
+            cbTipoUtente.ForeColor = SystemColors.ControlText; // Torna il colore standard
+        }
+        private long _lastTick = 0;
+
+        private void clbDipartimento_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Evita il "Ding" di Windows
+
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+
+                if (elapsedMilliseconds < 500) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    if (GetTipoUtente()=="D")
+                        this.ActiveControl = clbCLasseDiConcorso;
+                    else
+                        this.ActiveControl = cbDipartimentoCoordinato;
+                }else
+                {
+                    // Al primo colpo fa solo il check
+                    int index = clbDipartimento.SelectedIndex;
+                    if (index != -1)clbDipartimento.SetItemChecked(index, !clbDipartimento.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+
+        private void cbDipartimentoCoordinato_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; 
+
+                if (GetTipoUtente() == "A" || (GetTipoUtente() == "C" && cbDipartimentoCoordinato.SelectedIndex != -1))
+                    clbCLasseDiConcorso.Focus(); 
+            }
+
+        }
+        private void clbCLasseDiConcorso_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+
+                if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    if (clbDisciplina.Enabled == true) clbDisciplina.Focus();
+                    else rbDeterminato.Focus();
+                }
+                else
+                {
+                    // Al primo colpo fa solo il check
+                    int index = clbCLasseDiConcorso.SelectedIndex;
+                    if (index != -1) clbCLasseDiConcorso.SetItemChecked(index, !clbCLasseDiConcorso.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+        private void clbDisciplina_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+
+                if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    rbDeterminato.Focus();
+                }
+                else
+                {
+                    // Al primo colpo fa solo il check
+                    int index = clbDisciplina.SelectedIndex;
+                    if (index != -1) clbDisciplina.SetItemChecked(index, !clbDisciplina.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+        private void rbContratto_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                nudMonteOre.Focus();
+        }
+        private void nudMonteOre_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && nudMonteOre.Value>0)
+            {
+                e.SuppressKeyPress = true;
+                dtpDataInizio.Focus();
+            }
+        }
+        private void dtpDataInizio_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter && dtpDataInizio.Value!=DateTime.Now)
+            {
+                if (dtpDataFine.Enabled == true) dtpDataFine.Focus();
+                else btSalva.Focus();
+            }
+        }
+        private void dtpDataFine_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                btSalva.Focus();
+        }
+
+        private void dtpDataFine_ValueChanged(object sender, EventArgs e)
+        {
+            if (dtpDataFine.Value <= dtpDataInizio.Value)
+                dtpDataFine.Value = dtpDataInizio.Value.AddDays(1);
+        }
+
+        private void dtpDataInizio_ValueChanged(object sender, EventArgs e)
+        {
+            if (dtpDataFine.Value <= dtpDataInizio.Value)
+                dtpDataFine.Value = dtpDataInizio.Value.AddDays(1);
+        }
     }
-
     #endregion
 
 }

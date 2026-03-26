@@ -14,10 +14,11 @@ namespace Cattedre
     {
         public ClsClasseDiConcorsoDL _cdc = new ClsClasseDiConcorsoDL();
         public ClsDotareDL _dot = new ClsDotareDL();
-
+        long _lastTick = 0;
         public FrmCdC()
         {
             InitializeComponent();
+            cbAnnoScolastico.Focus();
         }
 
         private void btSava_Click(object sender, EventArgs e)
@@ -42,12 +43,12 @@ namespace Cattedre
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message +"\n riprovare!", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                tbLivello.Focus();
             }
         }
 
         private void FrmCdC_Load(object sender, EventArgs e)
         {
+            cbAnnoScolastico.Focus();
             FrmCdCs frmCdCs = new FrmCdCs();
             List<ClsAnnoScolasticoDL> _anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
             foreach(ClsAnnoScolasticoDL _as in _anniscolastici)
@@ -65,10 +66,61 @@ namespace Cattedre
                 nudNumCattedreFatto.Value = _dot.NumcattedreFatto;
             }
         }
+        
 
         private void btAnnulla_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+        #region navigazione 
+
+
+        private void cbAnnoScolastico_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbAnnoScolastico.SelectedIndex != -1)
+                tbLivello.Focus();
+        }
+
+        private void tbLivello_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbLivello.Text.Length > 2)
+                tbNome.Focus();
+        }
+
+        private void tbNome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbNome.Text.Length > 2)
+                rtbAbilitazioni.Focus();
+        }
+
+        private void rtbAbilitazioni_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Evita il "Ding" di Windows
+
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+
+                if (elapsedMilliseconds < 500) // DOPPIO INVIO RAPIDO
+                    nudNumCattedreDiritto.Focus();
+                _lastTick = currentTick;
+
+            }
+        }
+
+        private void nudNumCattedreDiritto_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && nudNumCattedreDiritto.Value > 0)
+                nudNumCattedreFatto.Focus();
+        }
+
+        private void nudNumCattedreFatto_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && nudNumCattedreFatto.Value > 0)
+                btSava.Focus();
+        }
+        #endregion
+
     }
 }

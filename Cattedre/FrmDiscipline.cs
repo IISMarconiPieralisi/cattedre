@@ -28,7 +28,8 @@ namespace Cattedre
             lvDiscipline.Items.Clear();
             foreach (ClsDisciplinaDL disciplina in discipline)
             {
-                ListViewItem lvi = new ListViewItem(Convert.ToString(disciplina.Anno));
+                ListViewItem lvi = new ListViewItem(Convert.ToString(disciplina.ID));
+                lvi.SubItems.Add(disciplina.Anno.ToString());
                 lvi.SubItems.Add(disciplina.Nome);
                 lvi.SubItems.Add(Convert.ToString(disciplina.OreLaboratorio));
                 lvi.SubItems.Add(Convert.ToString(disciplina.OreTeoria));

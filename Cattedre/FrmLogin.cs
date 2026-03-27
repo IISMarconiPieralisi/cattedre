@@ -26,6 +26,7 @@ namespace Cattedre
         }
 
         public ClsUtenteDL UtenteLoggato { get; private set; }
+        public Image FotoProfilo { get; private set; }
 
         private void btLogin_Click(object sender, EventArgs e)
         {
@@ -66,6 +67,7 @@ namespace Cattedre
                     //FrmHome frmHome = new FrmHome(utenteLoggato);
                     //frmHome.Show();
                     //this.Hide();
+                    FotoProfilo = TrovaFotoProfiloByEmail(email);
                     UtenteLoggato = utenteLoggato;
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -157,6 +159,9 @@ namespace Cattedre
                         //FrmHome frmHome = new FrmHome(utenteLoggato);
                         //frmHome.Show();
                         //this.Hide();
+                        if (!string.IsNullOrEmpty(userinfo.Picture))
+                            FotoProfilo = ScaricaFotoProfilo(userinfo.Picture);
+
                         UtenteLoggato = utenteLoggato;
                         this.DialogResult = DialogResult.OK;
                         this.Close();
@@ -172,6 +177,42 @@ namespace Cattedre
             
         }
 
+        private Image ScaricaFotoProfilo(string url)
+        {
+            try
+            {
+                using (var client = new System.Net.WebClient())
+                {
+                    byte[] data = client.DownloadData(url);
+                    using (var ms = new System.IO.MemoryStream(data))
+                        return Image.FromStream(ms);
+                }
+            }
+            catch { return null; }
+        }
+
+        private Image TrovaFotoProfiloByEmail(string email)
+        {
+            try
+            {
+                string credPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                credPath = Path.Combine(credPath, ".credentials/", System.Reflection.Assembly.GetExecutingAssembly().GetName().Name);
+
+                // se non esiste il token salvato non aprire il browser, restituisci null
+                if (!Directory.Exists(credPath) || !Directory.EnumerateFiles(credPath).Any())
+                    return null;
+
+                string[] scopes = { "email", "profile" };
+                var credential = GetUserCredential("credentials-cattedre-win.json", "cattedre-win", scopes);
+                var service = GetService(credential);
+                var userinfo = service.Userinfo.Get().Execute();
+
+                if (userinfo.Email?.ToLower() == email.ToLower() && !string.IsNullOrEmpty(userinfo.Picture))
+                    return ScaricaFotoProfilo(userinfo.Picture);
+            }
+            catch { }
+            return null;
+        }
 
         private Oauth2Service GetOauth2Service(string clientSecretJson, string userName, string[] scopes)
         {

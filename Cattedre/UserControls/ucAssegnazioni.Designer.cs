@@ -60,19 +60,20 @@
             // 
             // cmDocente
             // 
+            this.cmDocente.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmDocente.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiTaglia,
             this.tsmiCopia,
             this.tsmiIncolla});
             this.cmDocente.Name = "cmDocente";
-            this.cmDocente.Size = new System.Drawing.Size(160, 70);
+            this.cmDocente.Size = new System.Drawing.Size(164, 82);
             // 
             // tsmiTaglia
             // 
             this.tsmiTaglia.Image = global::Cattedre.Properties.Resources.taglia;
             this.tsmiTaglia.Name = "tsmiTaglia";
             this.tsmiTaglia.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.tsmiTaglia.Size = new System.Drawing.Size(159, 22);
+            this.tsmiTaglia.Size = new System.Drawing.Size(163, 26);
             this.tsmiTaglia.Text = "Taglia";
             this.tsmiTaglia.Click += new System.EventHandler(this.tsmiTaglia_Click);
             // 
@@ -81,7 +82,7 @@
             this.tsmiCopia.Image = global::Cattedre.Properties.Resources.copia;
             this.tsmiCopia.Name = "tsmiCopia";
             this.tsmiCopia.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.tsmiCopia.Size = new System.Drawing.Size(159, 22);
+            this.tsmiCopia.Size = new System.Drawing.Size(163, 26);
             this.tsmiCopia.Text = "Copia";
             this.tsmiCopia.Click += new System.EventHandler(this.tsmiCopia_Click);
             // 
@@ -90,7 +91,7 @@
             this.tsmiIncolla.Image = global::Cattedre.Properties.Resources.incolla;
             this.tsmiIncolla.Name = "tsmiIncolla";
             this.tsmiIncolla.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.tsmiIncolla.Size = new System.Drawing.Size(159, 22);
+            this.tsmiIncolla.Size = new System.Drawing.Size(163, 26);
             this.tsmiIncolla.Text = "Incolla";
             this.tsmiIncolla.Click += new System.EventHandler(this.tsmiIncolla_Click);
             // 
@@ -171,9 +172,10 @@
             // lblDocentiNonDiRuoloTEORICI
             // 
             this.lblDocentiNonDiRuoloTEORICI.AutoSize = true;
-            this.lblDocentiNonDiRuoloTEORICI.Location = new System.Drawing.Point(117, 11);
+            this.lblDocentiNonDiRuoloTEORICI.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDocentiNonDiRuoloTEORICI.Location = new System.Drawing.Point(112, 4);
             this.lblDocentiNonDiRuoloTEORICI.Name = "lblDocentiNonDiRuoloTEORICI";
-            this.lblDocentiNonDiRuoloTEORICI.Size = new System.Drawing.Size(11, 13);
+            this.lblDocentiNonDiRuoloTEORICI.Size = new System.Drawing.Size(26, 31);
             this.lblDocentiNonDiRuoloTEORICI.TabIndex = 20;
             this.lblDocentiNonDiRuoloTEORICI.Text = "*";
             this.lblDocentiNonDiRuoloTEORICI.Visible = false;
@@ -181,9 +183,10 @@
             // lblDocentiNonDiRuoloITP
             // 
             this.lblDocentiNonDiRuoloITP.AutoSize = true;
-            this.lblDocentiNonDiRuoloITP.Location = new System.Drawing.Point(117, 56);
+            this.lblDocentiNonDiRuoloITP.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDocentiNonDiRuoloITP.Location = new System.Drawing.Point(112, 49);
             this.lblDocentiNonDiRuoloITP.Name = "lblDocentiNonDiRuoloITP";
-            this.lblDocentiNonDiRuoloITP.Size = new System.Drawing.Size(11, 13);
+            this.lblDocentiNonDiRuoloITP.Size = new System.Drawing.Size(26, 31);
             this.lblDocentiNonDiRuoloITP.TabIndex = 21;
             this.lblDocentiNonDiRuoloITP.Text = "*";
             this.lblDocentiNonDiRuoloITP.Visible = false;
@@ -192,8 +195,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.lblDocentiNonDiRuoloITP);
-            this.Controls.Add(this.lblDocentiNonDiRuoloTEORICI);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lblOreLaboratorio);
@@ -202,6 +203,8 @@
             this.Controls.Add(this.cbDocentiItip);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbDocentiTeorici);
+            this.Controls.Add(this.lblDocentiNonDiRuoloITP);
+            this.Controls.Add(this.lblDocentiNonDiRuoloTEORICI);
             this.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.Name = "UcAssegnazioni";
             this.Size = new System.Drawing.Size(163, 94);

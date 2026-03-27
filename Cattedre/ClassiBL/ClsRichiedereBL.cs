@@ -59,7 +59,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT c.id, c.livello, c.nome
+                    string sql = @"SELECT c.id, c.livello, c.nome, c.abilitazioniRichieste
                            FROM classidiconcorso c
                            JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
                            WHERE r.IDutente = @IdUtente";
@@ -77,7 +77,8 @@ namespace Cattedre
                             {
                                 ID = Convert.ToInt64(row["id"]),
                                 Livello = row["livello"].ToString(),
-                                Nome = row["nome"].ToString()
+                                Nome = row["nome"].ToString(),
+                                AbilitazioniRichieste = row["abilitazioniRichieste"].ToString()
                             });
                         }
                     }

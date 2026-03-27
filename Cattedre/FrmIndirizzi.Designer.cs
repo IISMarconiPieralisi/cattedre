@@ -38,6 +38,7 @@
             this.btCerca = new System.Windows.Forms.Button();
             this.tbRicerca = new System.Windows.Forms.TextBox();
             this.btAnnulla = new System.Windows.Forms.Button();
+            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // btElimina
@@ -78,6 +79,7 @@
             this.lvIndirizzi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvIndirizzi.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chID,
             this.chNome});
             this.lvIndirizzi.FullRowSelect = true;
             this.lvIndirizzi.HideSelection = false;
@@ -136,6 +138,11 @@
             this.btAnnulla.UseVisualStyleBackColor = true;
             this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
             // 
+            // chID
+            // 
+            this.chID.Text = "ID";
+            this.chID.Width = 50;
+            // 
             // FrmIndirizzi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -152,6 +159,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmIndirizzi";
+            this.ShowInTaskbar = false;
             this.Text = "Indirizzi";
             this.Load += new System.EventHandler(this.FrmIndirizzi_Load);
             this.ResumeLayout(false);
@@ -169,5 +177,6 @@
         private System.Windows.Forms.Button btCerca;
         private System.Windows.Forms.TextBox tbRicerca;
         private System.Windows.Forms.Button btAnnulla;
+        private System.Windows.Forms.ColumnHeader chID;
     }
 }

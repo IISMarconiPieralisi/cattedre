@@ -17,8 +17,13 @@ namespace Cattedre
         private long _iddocth = 0;
         private long _iddoclab = 0;
 
+        private static long _clipboardIDDocente = 0;
+        private static string _clipboardTipo = ""; // "T" o "L"
+
         public long IDdocTh => _iddocth;
         public long IDdocLab => _iddoclab;
+
+        public DataTable DocentiData { get; set; }
 
         public class ProfessoreItem
         {
@@ -99,19 +104,9 @@ namespace Cattedre
             {
                 if (string.IsNullOrWhiteSpace(coloreDB))
                     return Color.LightGray;
-
                 coloreDB = coloreDB.Trim();
-
-                if (coloreDB.StartsWith("#"))
-                    return ColorTranslator.FromHtml(coloreDB);
-
-                if (long.TryParse(coloreDB, out long val))
-                {
-                    int r = (int)((val >> 16) & 0xFF);
-                    int g = (int)((val >> 8) & 0xFF);
-                    int b = (int)(val & 0xFF);
-                    return Color.FromArgb(r, g, b);
-                }
+                return FrmUtente.OttieniColore(coloreDB);
+                
             }
             catch { }
 
@@ -130,17 +125,46 @@ namespace Cattedre
         private void cbDocentiTeorici_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDocentiTeorici.SelectedItem is ClsUtenteDL utente)
+            {
                 _iddocth = utente.ID;
+
+                // Cerca tipoContratto nel DataTable
+                var riga = DocentiData?.AsEnumerable()
+                    .FirstOrDefault(r => r["IDutente"] != DBNull.Value &&
+                                         Convert.ToInt64(r["IDutente"]) == utente.ID);
+
+                string tipoContratto = (riga == null || riga["tipoContratto"] == DBNull.Value) ? ""
+                       : riga["tipoContratto"].ToString();
+
+                lblDocentiNonDiRuoloTEORICI.Visible = tipoContratto == "D";
+            }
             else
+            {
                 _iddocth = 0;
+                lblDocentiNonDiRuoloTEORICI.Visible = false;
+            }
         }
 
         private void cbDocentiItip_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDocentiItip.SelectedItem is ClsUtenteDL utente)
+            {
                 _iddoclab = utente.ID;
+
+                var riga = DocentiData?.AsEnumerable()
+                    .FirstOrDefault(r => r["IDutente"] != DBNull.Value &&
+                                         Convert.ToInt64(r["IDutente"]) == utente.ID);
+
+                string tipoContratto = (riga == null || riga["tipoContratto"] == DBNull.Value) ? ""
+                       : riga["tipoContratto"].ToString();
+
+                lblDocentiNonDiRuoloITP.Visible = tipoContratto == "D";
+            }
             else
+            {
                 _iddoclab = 0;
+                lblDocentiNonDiRuoloITP.Visible = false;
+            }
         }
 
         // CaricaProfessori chiamata UNA SOLA VOLTA, nel Load
@@ -192,25 +216,59 @@ namespace Cattedre
             ContextMenuStrip cm = (ContextMenuStrip)tsmi.GetCurrentParent();
             Control cb = cm.SourceControl;
 
-            if (cb is ComboBox)
+            if (cb.Name == cbDocentiTeorici.Name && cbDocentiTeorici.SelectedItem is ClsUtenteDL ut && ut.ID > 0)
             {
-                if (cb.Name == cbDocentiTeorici.Name)
-                    MessageBox.Show("Taglia" + _iddocth);
-                else if (cb.Name == cbDocentiItip.Name)
-                    MessageBox.Show("Taglia" + _iddoclab);
+                _clipboardIDDocente = ut.ID;
+                _clipboardTipo = "T";
+                cbDocentiTeorici.SelectedIndex = 0; // deseleziona (voce vuota)
             }
-
-            
+            else if (cb.Name == cbDocentiItip.Name && cbDocentiItip.SelectedItem is ClsUtenteDL ul && ul.ID > 0)
+            {
+                _clipboardIDDocente = ul.ID;
+                _clipboardTipo = "L";
+                cbDocentiItip.SelectedIndex = 0;
+            }
         }
 
         private void tsmiCopia_Click(object sender, EventArgs e)
         {
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            ContextMenuStrip cm = (ContextMenuStrip)tsmi.GetCurrentParent();
+            Control cb = cm.SourceControl;
 
+            if (cb.Name == cbDocentiTeorici.Name && cbDocentiTeorici.SelectedItem is ClsUtenteDL ut && ut.ID > 0)
+            {
+                _clipboardIDDocente = ut.ID;
+                _clipboardTipo = "T";
+            }
+            else if (cb.Name == cbDocentiItip.Name && cbDocentiItip.SelectedItem is ClsUtenteDL ul && ul.ID > 0)
+            {
+                _clipboardIDDocente = ul.ID;
+                _clipboardTipo = "L";
+            }
         }
 
         private void tsmiIncolla_Click(object sender, EventArgs e)
         {
+            if (_clipboardIDDocente <= 0) return;
 
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            ContextMenuStrip cm = (ContextMenuStrip)tsmi.GetCurrentParent();
+            Control cb = cm.SourceControl;
+
+            ComboBox target = cb.Name == cbDocentiTeorici.Name ? cbDocentiTeorici : cbDocentiItip;
+
+            // cerca il docente nella combo di destinazione e lo seleziona
+            foreach (var item in target.Items)
+            {
+                if (item is ClsUtenteDL u && u.ID == _clipboardIDDocente)
+                {
+                    target.SelectedItem = item;
+                    return;
+                }
+            }
+
+            MessageBox.Show("Il docente non è disponibile in questa lista.", "Incolla", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 

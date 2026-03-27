@@ -74,10 +74,32 @@ namespace Cattedre
             cbCoordinatore.DataSource = sorgenteDati;
             cbCoordinatore.DisplayMember = "NomeCompleto";
             cbCoordinatore.ValueMember = "ID";
-            if (sorgenteDati.Count <= 0)
+            if ((_dipartimento!=null &&_dipartimento.ID>0)||sorgenteDati.Count <= 0)
                 cbCoordinatore.Enabled = false;
 
             cbCoordinatore.SelectedIndex = -1;
         }
+        #region controlli tastiera
+        private void tbNomeDipartimento_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Enter&&tbNomeDipartimento.Text.Length>2)
+            {
+                e.SuppressKeyPress = true;
+                if (cbCoordinatore.Enabled)
+                    cbCoordinatore.Focus();
+                else
+                    btSalvaDipartimento.Focus();
+            }
+        }
+
+        private void cbCoordinatore_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btSalvaDipartimento.Focus();
+            }
+        }
+        #endregion
     }
 }

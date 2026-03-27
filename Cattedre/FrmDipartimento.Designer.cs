@@ -35,32 +35,37 @@
             this.btSalvaDipartimento = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.cbCoordinatore = new System.Windows.Forms.ComboBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 24);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(16, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.Size = new System.Drawing.Size(49, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Nome:";
             // 
             // tbNomeDipartimento
             // 
-            this.tbNomeDipartimento.Location = new System.Drawing.Point(91, 17);
-            this.tbNomeDipartimento.Margin = new System.Windows.Forms.Padding(2);
+            this.tbNomeDipartimento.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbNomeDipartimento.Location = new System.Drawing.Point(121, 21);
+            this.tbNomeDipartimento.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbNomeDipartimento.Name = "tbNomeDipartimento";
-            this.tbNomeDipartimento.Size = new System.Drawing.Size(191, 20);
+            this.tbNomeDipartimento.Size = new System.Drawing.Size(253, 22);
             this.tbNomeDipartimento.TabIndex = 4;
+            this.tbNomeDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNomeDipartimento_KeyDown);
             // 
             // btAnnulla
             // 
-            this.btAnnulla.Location = new System.Drawing.Point(5, 138);
-            this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
+            this.btAnnulla.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btAnnulla.Location = new System.Drawing.Point(0, 2);
+            this.btAnnulla.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btAnnulla.Name = "btAnnulla";
-            this.btAnnulla.Size = new System.Drawing.Size(134, 28);
+            this.btAnnulla.Size = new System.Drawing.Size(179, 34);
             this.btAnnulla.TabIndex = 8;
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
@@ -68,11 +73,12 @@
             // 
             // btSalvaDipartimento
             // 
+            this.btSalvaDipartimento.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btSalvaDipartimento.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalvaDipartimento.Location = new System.Drawing.Point(148, 138);
-            this.btSalvaDipartimento.Margin = new System.Windows.Forms.Padding(2);
+            this.btSalvaDipartimento.Location = new System.Drawing.Point(185, 2);
+            this.btSalvaDipartimento.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btSalvaDipartimento.Name = "btSalvaDipartimento";
-            this.btSalvaDipartimento.Size = new System.Drawing.Size(134, 28);
+            this.btSalvaDipartimento.Size = new System.Drawing.Size(179, 34);
             this.btSalvaDipartimento.TabIndex = 9;
             this.btSalvaDipartimento.Text = "Salva";
             this.btSalvaDipartimento.UseVisualStyleBackColor = true;
@@ -81,37 +87,53 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 83);
+            this.label2.Location = new System.Drawing.Point(16, 102);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(70, 13);
+            this.label2.Size = new System.Drawing.Size(94, 17);
             this.label2.TabIndex = 10;
             this.label2.Text = "Coordinatore:";
             // 
             // cbCoordinatore
             // 
+            this.cbCoordinatore.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbCoordinatore.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCoordinatore.FormattingEnabled = true;
-            this.cbCoordinatore.Location = new System.Drawing.Point(91, 80);
+            this.cbCoordinatore.Location = new System.Drawing.Point(121, 98);
+            this.cbCoordinatore.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbCoordinatore.Name = "cbCoordinatore";
-            this.cbCoordinatore.Size = new System.Drawing.Size(191, 21);
+            this.cbCoordinatore.Size = new System.Drawing.Size(253, 24);
             this.cbCoordinatore.TabIndex = 11;
+            this.cbCoordinatore.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbCoordinatore_KeyDown);
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.btSalvaDipartimento);
+            this.panel1.Controls.Add(this.btAnnulla);
+            this.panel1.Location = new System.Drawing.Point(12, 170);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(364, 36);
+            this.panel1.TabIndex = 12;
             // 
             // FrmDipartimento
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(299, 177);
+            this.ClientSize = new System.Drawing.Size(399, 218);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.cbCoordinatore);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.btSalvaDipartimento);
-            this.Controls.Add(this.btAnnulla);
             this.Controls.Add(this.tbNomeDipartimento);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FrmDipartimento";
             this.Text = "Dipartimento";
             this.Load += new System.EventHandler(this.FrmDipartimento_Load);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -125,5 +147,6 @@
         private System.Windows.Forms.Button btSalvaDipartimento;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbCoordinatore;
+        private System.Windows.Forms.Panel panel1;
     }
 }

@@ -13,7 +13,7 @@ namespace Cattedre
     public partial class FrmDiscipline : Form
     {
         public List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-        public List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
+        public List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
 
         private ClsUtenteDL UtenteLoggato;
         public FrmDiscipline(ClsUtenteDL utenteLog)
@@ -23,7 +23,6 @@ namespace Cattedre
         }
         private void CaricaListView(List<ClsDisciplinaDL> discipline)
         {
-            lvDiscipline.BeginUpdate();
             lvDiscipline.Items.Clear();
             foreach (ClsDisciplinaDL disciplina in discipline)
             {
@@ -59,6 +58,7 @@ namespace Cattedre
             {
                 try
                 {
+                    this.Cursor = Cursors.WaitCursor;
                     ClsDisciplinaBL.InserisciDisciplina(frmDisciplina._disciplina);
                     int ID = ClsDisciplinaBL.CercaIdDisciplina(frmDisciplina._disciplina);
                     foreach (var appartenere in frmDisciplina._apparteneres)
@@ -76,9 +76,12 @@ namespace Cattedre
                         richiedere.IDdisciplina = ID;
                         ClsRichiedereBL.InserisciRichiedere(richiedere);
                     }
+                    this.Cursor = Cursors.Arrow;
+
                 }
                 catch (Exception ex)
                 {
+                    this.Cursor = Cursors.Arrow;
                     MessageBox.Show($"Errore: {ex.Message} in riga {ex.Source} /n riprovare", "Errore");
                 }
                 discipline = ClsDisciplinaBL.CaricaDiscipline();
@@ -89,7 +92,6 @@ namespace Cattedre
         private void FrmDiscipline_Load(object sender, EventArgs e)
         {
             discipline = ClsDisciplinaBL.CaricaDiscipline();
-            dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
             CaricaListView(discipline);
             GestionePermessi();
 
@@ -147,13 +149,17 @@ namespace Cattedre
                 {
                     try
                     {
+                        this.Cursor = Cursors.WaitCursor;
                         ClsDisciplinaBL.ModificaDisciplina(frmDisciplina._disciplina);
                         ClsAppartenereBL.ModificaAppartenenze(frmDisciplina._disciplina.ID, frmDisciplina._apparteneres);
                         ClsGestireBL.ModificaGestioni(frmDisciplina._disciplina.ID, frmDisciplina._gestires);
                         ClsRichiedereBL.ModificaRichiestaDisciplina(frmDisciplina._disciplina.ID, frmDisciplina._richiederes);
+                        this.Cursor = Cursors.Arrow;
+
                     }
                     catch (Exception ex)
                     {
+                        this.Cursor = Cursors.Arrow;
                         MessageBox.Show($"Errore nella modifica {ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     discipline = ClsDisciplinaBL.CaricaDiscipline();

@@ -79,7 +79,7 @@
             this.btDiscipline.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
             this.btDiscipline.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(185)))));
             this.btDiscipline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btDiscipline.Font = new System.Drawing.Font("Segoe UI Symbol", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btDiscipline.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btDiscipline.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.btDiscipline.Location = new System.Drawing.Point(0, 389);
             this.btDiscipline.Name = "btDiscipline";
@@ -96,7 +96,7 @@
             this.btClassi.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
             this.btClassi.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(185)))));
             this.btClassi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btClassi.Font = new System.Drawing.Font("Segoe UI Symbol", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btClassi.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btClassi.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.btClassi.Location = new System.Drawing.Point(0, 326);
             this.btClassi.Name = "btClassi";
@@ -113,7 +113,7 @@
             this.btUtenti.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(85)))), ((int)(((byte)(155)))));
             this.btUtenti.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(185)))));
             this.btUtenti.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btUtenti.Font = new System.Drawing.Font("Segoe UI Symbol", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btUtenti.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btUtenti.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.btUtenti.Location = new System.Drawing.Point(0, 263);
             this.btUtenti.Name = "btUtenti";
@@ -125,13 +125,13 @@
             // 
             // btLogout
             // 
-            this.btLogout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(158)))), ((int)(((byte)(11)))));
+            this.btLogout.BackColor = System.Drawing.Color.DarkRed;
             this.btLogout.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btLogout.FlatAppearance.BorderSize = 0;
             this.btLogout.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(217)))), ((int)(((byte)(119)))), ((int)(((byte)(6)))));
             this.btLogout.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(191)))), ((int)(((byte)(36)))));
             this.btLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btLogout.Font = new System.Drawing.Font("Segoe UI Symbol", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btLogout.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btLogout.ForeColor = System.Drawing.Color.White;
             this.btLogout.Location = new System.Drawing.Point(0, 786);
             this.btLogout.Margin = new System.Windows.Forms.Padding(2);
@@ -151,7 +151,7 @@
             this.btVaiACattedre.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(220)))));
             this.btVaiACattedre.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(225)))), ((int)(((byte)(245)))));
             this.btVaiACattedre.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btVaiACattedre.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btVaiACattedre.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btVaiACattedre.ForeColor = System.Drawing.Color.White;
             this.btVaiACattedre.Location = new System.Drawing.Point(0, 207);
             this.btVaiACattedre.Margin = new System.Windows.Forms.Padding(2);
@@ -192,7 +192,7 @@
             // lblEmail
             // 
             this.lblEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblEmail.Font = new System.Drawing.Font("Segoe Fluent Icons", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEmail.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(71)))), ((int)(((byte)(112)))));
             this.lblEmail.Location = new System.Drawing.Point(19, 149);
             this.lblEmail.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);

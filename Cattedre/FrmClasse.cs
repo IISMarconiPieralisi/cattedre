@@ -229,5 +229,14 @@ namespace Cattedre
             else
                 cbClasseArticolataCon.Enabled = false;
         }
+
+        private void tbSezione_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter && tbSezione.Text.Length >= 2)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoScolastico.Focus();
+            }
+        }
     }
 }

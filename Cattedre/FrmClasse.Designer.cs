@@ -83,6 +83,7 @@
             this.tbSezione.Name = "tbSezione";
             this.tbSezione.Size = new System.Drawing.Size(190, 20);
             this.tbSezione.TabIndex = 29;
+            this.tbSezione.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSezione_KeyDown);
             // 
             // label4
             // 

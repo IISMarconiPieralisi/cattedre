@@ -21,9 +21,8 @@ namespace Cattedre
         public List<ClsRichiedereDL> _richiederes = new List<ClsRichiedereDL>();
         public List<ClsGestireDL> _gestires = new List<ClsGestireDL>();
         public ClsDisciplinaDL _disciplina;
-        
-
         private int anno = 0;
+        private long _lastTick;
         public FrmDisciplina()
         {
             InitializeComponent();
@@ -90,7 +89,10 @@ namespace Cattedre
                 this.DialogResult = DialogResult.None;
             }
         }
-
+        private void btAnnulla_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         private void FrmDisciplina_Load(object sender, EventArgs e)
         {
             controlloRadioBottom();
@@ -118,6 +120,7 @@ namespace Cattedre
             }
 
         }
+        #region checkboxs
         private void CheckComboBoxs()
         {
             switch (_disciplina.Anno)
@@ -142,10 +145,7 @@ namespace Cattedre
                     break;
             }
         }
-        private void btAnnulla_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        #endregion
         #region gestione ClsGestire
         private void clbDipartimenti_ItemCheck(object sender, ItemCheckEventArgs e)
         {
@@ -412,15 +412,134 @@ namespace Cattedre
                 for (int i = 0; i < clbCdcs.Items.Count; i++)
                 {
                     string nomeItem = clbCdcs.Items[i].ToString();
-
                     bool richiedere = _cdcs.Any(d => string.Equals(d.Nome, nomeItem, StringComparison.OrdinalIgnoreCase));
-
                     clbDipartimenti.SetItemChecked(i, richiedere);
                 }
                 //quando ha fatto l'inserimento pulisce la lista per sicurezza
                 _richiederes.Clear();
 
             }
+        }
+        #endregion
+        #region tasto enter
+        private void tbNome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Enter && tbNome.Text.Length>=2)
+            {
+                e.SuppressKeyPress = true;
+                nudOreTeoria.Focus();
+            }
+        }
+        private void nudOreTeoria_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                nudOreLab.Focus();
+            }
+        }
+
+        private void nudOreLab_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                rbPrimo.Focus();
+            }
+        }
+
+        private void rbAnno_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                clbIndirizzi.Focus();
+            }
+        }
+
+        private void cbDisciplinaSucessiva_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btSalva.Focus();
+            }
+        }
+
+        private void clbIndirizzi_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+                if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    _lastTick = 0;
+                    clbDipartimenti.Focus();
+                }
+                else
+                {
+                    // Al primo colpo fa solo il check
+                    int index = clbIndirizzi.SelectedIndex;
+                    if (index != -1) clbIndirizzi.SetItemChecked(index, !clbIndirizzi.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+
+        private void clbDipartimenti_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+                if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    _lastTick = 0;
+                    clbCdcs.Focus();
+                }
+                else
+                {
+                    // Al primo colpo fa solo il check
+                    int index = clbDipartimenti.SelectedIndex;
+                    if (index != -1) clbDipartimenti.SetItemChecked(index, !clbDipartimenti.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+
+        private void clbCdcs_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+                if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    _lastTick = 0;
+                    if (anno == 0) tbDisciplinaSpeciale.Focus();
+                    else cbDisciplinaSucessiva.Focus();
+                }
+                else                    // Al primo colpo fa solo il check
+                {
+                    int index = clbDipartimenti.SelectedIndex;
+                    if (index != -1) clbCdcs.SetItemChecked(index, !clbCdcs.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+
+        private void tbDisciplinaSpeciale_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbDisciplinaSpeciale.Text.Length >= 2)
+                btSalva.Focus();
         }
         #endregion
     }

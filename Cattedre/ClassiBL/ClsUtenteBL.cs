@@ -174,7 +174,7 @@ namespace Cattedre
             return utenti;
         }
 
-        public static List<ClsUtenteDL> CaricaCoordinatoriClassi()
+        public static List<ClsUtenteDL> CaricaDocenti()
         {
             
 

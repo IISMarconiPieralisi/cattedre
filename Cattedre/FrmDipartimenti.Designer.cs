@@ -48,10 +48,9 @@
             this.chCoordinatore});
             this.lvDipartimenti.FullRowSelect = true;
             this.lvDipartimenti.HideSelection = false;
-            this.lvDipartimenti.Location = new System.Drawing.Point(31, 22);
-            this.lvDipartimenti.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lvDipartimenti.Location = new System.Drawing.Point(23, 18);
             this.lvDipartimenti.Name = "lvDipartimenti";
-            this.lvDipartimenti.Size = new System.Drawing.Size(564, 386);
+            this.lvDipartimenti.Size = new System.Drawing.Size(431, 314);
             this.lvDipartimenti.TabIndex = 0;
             this.lvDipartimenti.UseCompatibleStateImageBehavior = false;
             this.lvDipartimenti.View = System.Windows.Forms.View.Details;
@@ -75,10 +74,9 @@
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(604, 23);
-            this.btInserisci.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btInserisci.Location = new System.Drawing.Point(460, 19);
             this.btInserisci.Name = "btInserisci";
-            this.btInserisci.Size = new System.Drawing.Size(100, 28);
+            this.btInserisci.Size = new System.Drawing.Size(75, 23);
             this.btInserisci.TabIndex = 1;
             this.btInserisci.Text = "Inserisci";
             this.btInserisci.UseVisualStyleBackColor = true;
@@ -87,10 +85,9 @@
             // btModifica
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btModifica.Location = new System.Drawing.Point(604, 59);
-            this.btModifica.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btModifica.Location = new System.Drawing.Point(460, 48);
             this.btModifica.Name = "btModifica";
-            this.btModifica.Size = new System.Drawing.Size(100, 28);
+            this.btModifica.Size = new System.Drawing.Size(75, 23);
             this.btModifica.TabIndex = 2;
             this.btModifica.Text = "Modifica";
             this.btModifica.UseVisualStyleBackColor = true;
@@ -99,10 +96,9 @@
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(604, 95);
-            this.btElimina.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btElimina.Location = new System.Drawing.Point(460, 77);
             this.btElimina.Name = "btElimina";
-            this.btElimina.Size = new System.Drawing.Size(100, 28);
+            this.btElimina.Size = new System.Drawing.Size(75, 23);
             this.btElimina.TabIndex = 3;
             this.btElimina.Text = "Elimina";
             this.btElimina.UseVisualStyleBackColor = true;
@@ -110,15 +106,14 @@
             // 
             // FrmDipartimenti
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(749, 441);
+            this.ClientSize = new System.Drawing.Size(569, 358);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.btModifica);
             this.Controls.Add(this.btInserisci);
             this.Controls.Add(this.lvDipartimenti);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FrmDipartimenti";
             this.ShowInTaskbar = false;
             this.Text = "Dipartimenti";

@@ -16,7 +16,7 @@ namespace Cattedre
         #region dichiarazione ListeElementi
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
         List<ClsClasseDL> _classi = ClsClasseBL.CaricaClassi();
-        List<ClsUtenteDL> _coordinatori = ClsUtenteBL.CaricaCoordinatoriClassi();
+        List<ClsUtenteDL> _coordinatori = ClsUtenteBL.CaricaDocenti();
         List<ClsDipartimentoDL> _dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
         List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
         #endregion

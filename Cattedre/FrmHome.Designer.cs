@@ -84,10 +84,11 @@
             this.btDiscipline.Location = new System.Drawing.Point(0, 389);
             this.btDiscipline.Name = "btDiscipline";
             this.btDiscipline.Size = new System.Drawing.Size(333, 63);
-            this.btDiscipline.TabIndex = 26;
+            this.btDiscipline.TabIndex = 3;
             this.btDiscipline.Text = "Discipline";
             this.btDiscipline.UseVisualStyleBackColor = true;
             this.btDiscipline.Click += new System.EventHandler(this.dISCIPLINEToolStripMenuItem_Click);
+            this.btDiscipline.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btDiscipline_KeyDown);
             // 
             // btClassi
             // 
@@ -101,7 +102,7 @@
             this.btClassi.Location = new System.Drawing.Point(0, 326);
             this.btClassi.Name = "btClassi";
             this.btClassi.Size = new System.Drawing.Size(333, 63);
-            this.btClassi.TabIndex = 28;
+            this.btClassi.TabIndex = 2;
             this.btClassi.Text = "Classi";
             this.btClassi.UseVisualStyleBackColor = true;
             this.btClassi.Click += new System.EventHandler(this.cLASSIToolStripMenuItem_Click);
@@ -118,7 +119,7 @@
             this.btUtenti.Location = new System.Drawing.Point(0, 263);
             this.btUtenti.Name = "btUtenti";
             this.btUtenti.Size = new System.Drawing.Size(333, 63);
-            this.btUtenti.TabIndex = 27;
+            this.btUtenti.TabIndex = 1;
             this.btUtenti.Text = "Utenti";
             this.btUtenti.UseVisualStyleBackColor = true;
             this.btUtenti.Click += new System.EventHandler(this.uTENTIToolStripMenuItem_Click);
@@ -137,7 +138,7 @@
             this.btLogout.Margin = new System.Windows.Forms.Padding(2);
             this.btLogout.Name = "btLogout";
             this.btLogout.Size = new System.Drawing.Size(333, 42);
-            this.btLogout.TabIndex = 3;
+            this.btLogout.TabIndex = 5;
             this.btLogout.Text = "Logout";
             this.btLogout.UseVisualStyleBackColor = false;
             this.btLogout.Click += new System.EventHandler(this.btLogout_Click);
@@ -231,8 +232,11 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1706, 29);
-            this.menuStrip1.TabIndex = 5;
+            this.menuStrip1.TabIndex = 4;
+            this.menuStrip1.TabStop = true;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.MenuDeactivate += new System.EventHandler(this.menuStrip1_MenuDeactivate);
+            this.menuStrip1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.menuStrip1_KeyDown);
             // 
             // cDCToolStripMenuItem
             // 

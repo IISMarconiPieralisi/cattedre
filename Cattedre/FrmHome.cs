@@ -202,6 +202,34 @@ namespace Cattedre
                 MostraFormMDI(FrmAnniScolastici);
         }
 
+        private void btDiscipline_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab)
+            {
+                e.SuppressKeyPress = true;
+                menuStrip1.Focus();
+                // Seleziona il primo item (CDC)
+                menuStrip1.Items[0].Select();
+            }
+        }
+
+        private void menuStrip1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape || (e.KeyCode == Keys.Tab && e.Shift))
+            {
+                e.SuppressKeyPress = true;
+                menuStrip1.MenuDeactivate += menuStrip1_MenuDeactivate;
+                //menuStrip1.Enabled = true; // assicurati che sia attivo
+                btVaiACattedre.Focus();
+            }
+        }
+
+        private void menuStrip1_MenuDeactivate(object sender, EventArgs e)
+        {
+            menuStrip1.MenuDeactivate -= menuStrip1_MenuDeactivate;
+            btVaiACattedre.Focus();
+        }
+
         //private void cONTRATTIToolStripMenuItem_Click(object sender, EventArgs e)
         //{
         //    FrmContratti frmContratti = new FrmContratti();

@@ -16,6 +16,7 @@ namespace Cattedre
         #region dichiarazione ListeElementi
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
         List<ClsClasseDL> _classi = ClsClasseBL.CaricaClassi();
+        List<ClsClasseDL> _classiArticolate = new List<ClsClasseDL>();
         List<ClsUtenteDL> _coordinatori = ClsUtenteBL.CaricaDocenti();
         List<ClsDipartimentoDL> _dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
         List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
@@ -71,9 +72,8 @@ namespace Cattedre
                 }
                 //gestione classe articolata
                 if(cbClasseArticolataCon.SelectedIndex>-1)
-                {
-                    _classe.ClasseArticolataCon = ClsClasseBL.RilevaIDclasse(cbClasseArticolataCon.Text);
-                }
+                    _classe.ClasseArticolataCon =Convert.ToInt32(cbClasseArticolataCon.SelectedValue);
+
                 //  gestisco i duplicati
                 // Se stiamo modificando, l'ID esiste già quindi il controllo va saltato o gestito diversamente
                 if (!_modifica)
@@ -128,12 +128,6 @@ namespace Cattedre
                 nudAnno.Value = _classe.Anno;
                 tbSezione.Text = _classe.Sezione;
                 nudAnno_ValueChanged(null, null);
-
-                if (_classe.ClasseArticolataCon > 0)
-                    cbClasseArticolataCon.SelectedItem = _classi.Find(p => p.ID == _classe.ClasseArticolataCon).Sigla;
-                else
-                    cbClasseArticolataCon.SelectedIndex = -1;
-
                 //popolamento FK
                 cbIndirizzo.SelectedValue = (_classe.Idindirizzo > 0) ? _classe.Idindirizzo : -1;
                 //tolgo e rimuovo il selectedIndexChanged per non dare errori durante il popolamento
@@ -144,6 +138,14 @@ namespace Cattedre
 
                 cbDipartimento.SelectedValue = (_classe.IDdipartimento > 0) ? _classe.IDdipartimento : -1;
                 cbAnnoScolastico.SelectedValue = (_classe.IDannoscolastico>0) ? _classe.IDannoscolastico: -1;
+
+                if (_classe.ClasseArticolataCon > 0)
+                {
+                    PopolaClassiArticolate(); // lo richiamo per sicurezza
+                    cbClasseArticolataCon.SelectedValue = _classe.ClasseArticolataCon;
+                }
+                else
+                    cbClasseArticolataCon.SelectedIndex = -1;
             }
             else
             {
@@ -163,21 +165,37 @@ namespace Cattedre
 
         private void PopolaClassiArticolate()
         {
+            cbClasseArticolataCon.DataSource = null;
             cbClasseArticolataCon.Items.Clear();
+            _classiArticolate.Clear();
+
             if (cbAnnoScolastico.SelectedIndex == -1) return;
+
             var annoScolastico = cbAnnoScolastico.SelectedItem as ClsAnnoScolasticoDL;
             long idAnnoSelezionato = annoScolastico.ID;
-            int anno =(int) nudAnno.Value;
+            int anno = (int)nudAnno.Value;
+
             foreach (ClsClasseDL classe in _classi)
             {
                 if (classe.Anno == anno && classe.IDannoscolastico == idAnnoSelezionato)
                 {
-                    if (_classe == null)
-                        cbClasseArticolataCon.Items.Add(classe.Sigla);
-                    else if (_classe.ID != classe.ID)
-                        cbClasseArticolataCon.Items.Add(classe.Sigla);
+                    // Escludi la classe stessa in modalità modifica
+                    if (_classe == null || _classe.ID != classe.ID)
+                        _classiArticolate.Add(classe);
                 }
             }
+
+            // Aggiunge la classe attualmente articolata solo se non è già nella lista
+            if (_classe != null && _classe.ID > 0 && _classe.ClasseArticolataCon > 0)
+            {
+                if (!_classiArticolate.Any(c => c.ID == _classe.ClasseArticolataCon))
+                    _classiArticolate.Add(ClsClasseBL.CaricaClasse(_classe.ClasseArticolataCon));
+            }
+
+            cbClasseArticolataCon.DataSource = _classiArticolate;
+            cbClasseArticolataCon.DisplayMember = "Sigla";
+            cbClasseArticolataCon.ValueMember = "ID";
+            cbClasseArticolataCon.SelectedIndex = -1;
         }
 
 

@@ -308,10 +308,9 @@ namespace Cattedre
                         foreach (DataRow row in dt.Rows)
                         {
                             ClsRichiedereDL richiedere = new ClsRichiedereDL();
-                            richiedere.IDutente = Convert.ToInt64(row["IDutente"]);
-                            richiedere.IDclassediconcorso = Convert.ToInt64(row["IDclasseDiConcorso"]);
-                            if (row["IDdisciplina"] != DBNull.Value)
-                                richiedere.IDdisciplina = Convert.ToInt64(row["IDdisciplina"]);
+                            richiedere.IDutente = (row["IDutente"] == DBNull.Value)?0: Convert.ToInt64(row["IDutente"]);
+                            richiedere.IDclassediconcorso = (row["IDclasseDiConcorso"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDclasseDiConcorso"]);
+                            richiedere.IDdisciplina = (row["IDdisciplina"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdisciplina"]);
                             Richiederes.Add(richiedere);
                         }
                     }

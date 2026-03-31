@@ -320,21 +320,24 @@ namespace Cattedre
             if (_anno < 5 && _anno > 0)
             {
                 this.anno = _anno;
+
                 if (_disciplina != null && _disciplina.ID > 0 && (_gestires == null || _gestires.Count == 0))
                     _gestires = ClsGestireBL.CaricaGestioneDisciplina(_disciplina.ID);
-                
+
+                // Carica i richiederes dal DB se non sono già in memoria
+                if (_disciplina != null && _disciplina.ID > 0 && (_richiederes == null || _richiederes.Count == 0))
+                    _richiederes = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(_disciplina.ID);
                 popolaCbDisciplinaSuccessiva();
 
-                // 3. Se esiste una disciplina successiva già salvata, la seleziona
                 if (_IDdiscSuccessiva > 0)
                     cbDisciplinaSucessiva.SelectedValue = _IDdiscSuccessiva;
                 else
                     cbDisciplinaSucessiva.SelectedIndex = -1;
+
                 cbDisciplinaSucessiva.Enabled = (cbDisciplinaSucessiva.Items.Count > 0);
             }
             else
             {
-                // Se è 5° anno o speciale, disabilita tutto
                 cbDisciplinaSucessiva.DataSource = null;
                 cbDisciplinaSucessiva.Enabled = false;
             }
@@ -412,12 +415,10 @@ namespace Cattedre
                 for (int i = 0; i < clbCdcs.Items.Count; i++)
                 {
                     string nomeItem = clbCdcs.Items[i].ToString();
-                    bool richiedere = _cdcs.Any(d => string.Equals(d.Nome, nomeItem, StringComparison.OrdinalIgnoreCase));
-                    clbDipartimenti.SetItemChecked(i, richiedere);
+                    bool richiedere = cdcsDisciplina.Any(d => string.Equals(d.Nome, nomeItem, StringComparison.OrdinalIgnoreCase));
+                    clbCdcs.SetItemChecked(i, richiedere);
                 }
-                //quando ha fatto l'inserimento pulisce la lista per sicurezza
                 _richiederes.Clear();
-
             }
         }
         #endregion

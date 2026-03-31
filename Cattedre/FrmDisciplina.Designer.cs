@@ -55,33 +55,37 @@
             this.tbDisciplinaSpeciale = new System.Windows.Forms.TextBox();
             this.lblAnnoSuc = new System.Windows.Forms.Label();
             this.frmDisciplinaBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.label6 = new System.Windows.Forms.Label();
+            this.clbCdcs = new System.Windows.Forms.CheckedListBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.nudOreTeoria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudOreLab)).BeginInit();
             this.pnRB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btSalva
             // 
-            this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btSalva.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btSalva.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalva.Location = new System.Drawing.Point(222, 512);
+            this.btSalva.Location = new System.Drawing.Point(200, 2);
             this.btSalva.Margin = new System.Windows.Forms.Padding(2);
             this.btSalva.Name = "btSalva";
             this.btSalva.Size = new System.Drawing.Size(146, 31);
-            this.btSalva.TabIndex = 19;
+            this.btSalva.TabIndex = 11;
             this.btSalva.Text = "Salva";
             this.btSalva.UseVisualStyleBackColor = true;
             this.btSalva.Click += new System.EventHandler(this.btSalva_Click);
             // 
             // btAnnulla
             // 
-            this.btAnnulla.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btAnnulla.Location = new System.Drawing.Point(20, 512);
+            this.btAnnulla.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btAnnulla.Location = new System.Drawing.Point(2, 2);
             this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.Size = new System.Drawing.Size(146, 31);
-            this.btAnnulla.TabIndex = 18;
+            this.btAnnulla.TabIndex = 0;
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
             this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
@@ -94,7 +98,8 @@
             this.tbNome.Margin = new System.Windows.Forms.Padding(2);
             this.tbNome.Name = "tbNome";
             this.tbNome.Size = new System.Drawing.Size(182, 20);
-            this.tbNome.TabIndex = 14;
+            this.tbNome.TabIndex = 1;
+            this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
             // label4
             // 
@@ -143,7 +148,8 @@
             this.nudOreTeoria.Location = new System.Drawing.Point(186, 62);
             this.nudOreTeoria.Name = "nudOreTeoria";
             this.nudOreTeoria.Size = new System.Drawing.Size(182, 20);
-            this.nudOreTeoria.TabIndex = 22;
+            this.nudOreTeoria.TabIndex = 2;
+            this.nudOreTeoria.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudOreTeoria_KeyDown);
             // 
             // nudOreLab
             // 
@@ -152,7 +158,8 @@
             this.nudOreLab.Location = new System.Drawing.Point(186, 97);
             this.nudOreLab.Name = "nudOreLab";
             this.nudOreLab.Size = new System.Drawing.Size(182, 20);
-            this.nudOreLab.TabIndex = 23;
+            this.nudOreLab.TabIndex = 3;
+            this.nudOreLab.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudOreLab_KeyDown);
             // 
             // pnRB
             // 
@@ -166,13 +173,13 @@
             this.pnRB.Location = new System.Drawing.Point(117, 132);
             this.pnRB.Name = "pnRB";
             this.pnRB.Size = new System.Drawing.Size(251, 34);
-            this.pnRB.TabIndex = 33;
+            this.pnRB.TabIndex = 4;
             // 
             // rbQuinto
             // 
             this.rbQuinto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbQuinto.AutoSize = true;
-            this.rbQuinto.Location = new System.Drawing.Point(205, 10);
+            this.rbQuinto.Location = new System.Drawing.Point(204, 10);
             this.rbQuinto.Name = "rbQuinto";
             this.rbQuinto.Size = new System.Drawing.Size(35, 17);
             this.rbQuinto.TabIndex = 4;
@@ -180,12 +187,13 @@
             this.rbQuinto.Text = "5°";
             this.rbQuinto.UseVisualStyleBackColor = true;
             this.rbQuinto.CheckedChanged += new System.EventHandler(this.rb_CheckedChanged);
+            this.rbQuinto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbAnno_KeyDown);
             // 
             // rbQuarto
             // 
             this.rbQuarto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbQuarto.AutoSize = true;
-            this.rbQuarto.Location = new System.Drawing.Point(152, 10);
+            this.rbQuarto.Location = new System.Drawing.Point(155, 10);
             this.rbQuarto.Name = "rbQuarto";
             this.rbQuarto.Size = new System.Drawing.Size(35, 17);
             this.rbQuarto.TabIndex = 3;
@@ -193,6 +201,7 @@
             this.rbQuarto.Text = "4°";
             this.rbQuarto.UseVisualStyleBackColor = true;
             this.rbQuarto.CheckedChanged += new System.EventHandler(this.rb_CheckedChanged);
+            this.rbQuarto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbAnno_KeyDown);
             // 
             // rbTerzo
             // 
@@ -206,11 +215,12 @@
             this.rbTerzo.Text = "3°";
             this.rbTerzo.UseVisualStyleBackColor = true;
             this.rbTerzo.CheckedChanged += new System.EventHandler(this.rb_CheckedChanged);
+            this.rbTerzo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbAnno_KeyDown);
             // 
             // rbSecondo
             // 
             this.rbSecondo.AutoSize = true;
-            this.rbSecondo.Location = new System.Drawing.Point(61, 10);
+            this.rbSecondo.Location = new System.Drawing.Point(57, 10);
             this.rbSecondo.Name = "rbSecondo";
             this.rbSecondo.Size = new System.Drawing.Size(35, 17);
             this.rbSecondo.TabIndex = 1;
@@ -218,6 +228,7 @@
             this.rbSecondo.Text = "2°";
             this.rbSecondo.UseVisualStyleBackColor = true;
             this.rbSecondo.CheckedChanged += new System.EventHandler(this.rb_CheckedChanged);
+            this.rbSecondo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbAnno_KeyDown);
             // 
             // rbPrimo
             // 
@@ -230,21 +241,23 @@
             this.rbPrimo.Text = "1°";
             this.rbPrimo.UseVisualStyleBackColor = true;
             this.rbPrimo.CheckedChanged += new System.EventHandler(this.rb_CheckedChanged);
+            this.rbPrimo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbAnno_KeyDown);
             // 
             // clbIndirizzi
             // 
             this.clbIndirizzi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbIndirizzi.FormattingEnabled = true;
-            this.clbIndirizzi.Location = new System.Drawing.Point(179, 220);
+            this.clbIndirizzi.Location = new System.Drawing.Point(179, 181);
             this.clbIndirizzi.Name = "clbIndirizzi";
             this.clbIndirizzi.Size = new System.Drawing.Size(189, 94);
-            this.clbIndirizzi.TabIndex = 34;
+            this.clbIndirizzi.TabIndex = 5;
+            this.clbIndirizzi.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbIndirizzi_KeyDown);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(31, 220);
+            this.label7.Location = new System.Drawing.Point(31, 180);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(44, 13);
             this.label7.TabIndex = 35;
@@ -253,7 +266,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(31, 183);
+            this.label8.Location = new System.Drawing.Point(31, 511);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(114, 13);
             this.label8.TabIndex = 36;
@@ -265,15 +278,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDisciplinaSucessiva.Enabled = false;
             this.cbDisciplinaSucessiva.FormattingEnabled = true;
-            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(198, 184);
+            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(179, 508);
             this.cbDisciplinaSucessiva.Name = "cbDisciplinaSucessiva";
-            this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(170, 21);
-            this.cbDisciplinaSucessiva.TabIndex = 37;
+            this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(189, 21);
+            this.cbDisciplinaSucessiva.TabIndex = 8;
+            this.cbDisciplinaSucessiva.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDisciplinaSucessiva_KeyDown);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(31, 326);
+            this.label9.Location = new System.Drawing.Point(31, 286);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(65, 13);
             this.label9.TabIndex = 39;
@@ -284,16 +298,17 @@
             this.clbDipartimenti.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbDipartimenti.FormattingEnabled = true;
-            this.clbDipartimenti.Location = new System.Drawing.Point(179, 326);
+            this.clbDipartimenti.Location = new System.Drawing.Point(179, 290);
             this.clbDipartimenti.Name = "clbDipartimenti";
             this.clbDipartimenti.Size = new System.Drawing.Size(189, 94);
-            this.clbDipartimenti.TabIndex = 38;
+            this.clbDipartimenti.TabIndex = 6;
             this.clbDipartimenti.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbDipartimenti_ItemCheck);
+            this.clbDipartimenti.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDipartimenti_KeyDown);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(31, 441);
+            this.label5.Location = new System.Drawing.Point(31, 547);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(97, 13);
@@ -304,16 +319,17 @@
             // 
             this.tbDisciplinaSpeciale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(179, 438);
+            this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(179, 544);
             this.tbDisciplinaSpeciale.Margin = new System.Windows.Forms.Padding(2);
             this.tbDisciplinaSpeciale.Name = "tbDisciplinaSpeciale";
             this.tbDisciplinaSpeciale.Size = new System.Drawing.Size(189, 20);
-            this.tbDisciplinaSpeciale.TabIndex = 32;
+            this.tbDisciplinaSpeciale.TabIndex = 9;
+            this.tbDisciplinaSpeciale.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbDisciplinaSpeciale_KeyDown);
             // 
             // lblAnnoSuc
             // 
             this.lblAnnoSuc.AutoSize = true;
-            this.lblAnnoSuc.Location = new System.Drawing.Point(176, 187);
+            this.lblAnnoSuc.Location = new System.Drawing.Point(157, 511);
             this.lblAnnoSuc.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblAnnoSuc.Name = "lblAnnoSuc";
             this.lblAnnoSuc.Size = new System.Drawing.Size(17, 13);
@@ -324,11 +340,46 @@
             // 
             this.frmDisciplinaBindingSource.DataSource = typeof(Cattedre.FrmDisciplina);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(31, 399);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(95, 13);
+            this.label6.TabIndex = 42;
+            this.label6.Text = "Classi di concorso:";
+            // 
+            // clbCdcs
+            // 
+            this.clbCdcs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.clbCdcs.FormattingEnabled = true;
+            this.clbCdcs.Location = new System.Drawing.Point(179, 399);
+            this.clbCdcs.Name = "clbCdcs";
+            this.clbCdcs.Size = new System.Drawing.Size(189, 94);
+            this.clbCdcs.TabIndex = 7;
+            this.clbCdcs.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCdcs_ItemCheck);
+            this.clbCdcs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbCdcs_KeyDown);
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.btSalva);
+            this.panel1.Controls.Add(this.btAnnulla);
+            this.panel1.Location = new System.Drawing.Point(20, 592);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(348, 40);
+            this.panel1.TabIndex = 10;
+            // 
             // FrmDisciplina
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(416, 564);
+            this.ClientSize = new System.Drawing.Size(416, 644);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.clbCdcs);
             this.Controls.Add(this.lblAnnoSuc);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.clbDipartimenti);
@@ -341,8 +392,6 @@
             this.Controls.Add(this.nudOreLab);
             this.Controls.Add(this.nudOreTeoria);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.btSalva);
-            this.Controls.Add(this.btAnnulla);
             this.Controls.Add(this.tbNome);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -358,6 +407,7 @@
             this.pnRB.ResumeLayout(false);
             this.pnRB.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -384,11 +434,14 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox cbDisciplinaSucessiva;
-        private System.Windows.Forms.BindingSource frmDisciplinaBindingSource;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckedListBox clbDipartimenti;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbDisciplinaSpeciale;
         private System.Windows.Forms.Label lblAnnoSuc;
+        private System.Windows.Forms.BindingSource frmDisciplinaBindingSource;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckedListBox clbCdcs;
+        private System.Windows.Forms.Panel panel1;
     }
 }

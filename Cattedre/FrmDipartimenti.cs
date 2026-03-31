@@ -104,5 +104,19 @@ namespace Cattedre
             CaricaListView();
             _coordinatori = ClsUtenteBL.CaricaCoordinatoriDipartimenti();
         }
+
+        private void lvDipartimenti_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(lvDipartimenti.SelectedIndices.Count==1)
+            if(e.KeyCode==Keys.Enter)
+            {
+                    e.SuppressKeyPress = true;
+                    btModifica_Click(null, null);
+            }
+            else if (e.KeyCode==Keys.Delete)
+            {
+                    btInserisci_Click(null, null);
+            }
+        }
     }
 }

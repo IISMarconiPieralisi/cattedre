@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,7 +12,7 @@ namespace Cattedre
 {
     public partial class FrmDipartimento : Form
     {
-        public List<ClsUtenteDL> coordinatori = new List<ClsUtenteDL>();
+        public List<ClsUtenteDL> coordinatori = ClsUtenteBL.CaricaCoordinatoriDipartimenti();
         public ClsDipartimentoDL _dipartimento;
         List<ClsDipartimentoDL> _dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
         public FrmDipartimento()
@@ -29,10 +29,7 @@ namespace Cattedre
 
                 _dipartimento.Nome = tbNomeDipartimento.Text;
                 if(cbCoordinatore.SelectedIndex!=-1)
-                {
                     _dipartimento.IDutente =Convert.ToInt32( cbCoordinatore.SelectedValue);
-
-                }
                 this.DialogResult = DialogResult.OK;
 
             }
@@ -52,9 +49,7 @@ namespace Cattedre
             {
                 tbNomeDipartimento.Text = _dipartimento.Nome;
                 if (coordinatori.Any(c => c.ID == _dipartimento.IDutente))
-                {
                     cbCoordinatore.SelectedValue = _dipartimento.IDutente;
-                }
 
             }
 
@@ -68,7 +63,6 @@ namespace Cattedre
         {
             var tuttiCoordinatori = ClsUtenteBL.CaricaCoordinatoriDipartimenti();
             var idOccupati = new HashSet<long>(listaDipartimenti.Select(d => d.IDutente));
-
             var sorgenteDati = tuttiCoordinatori
                 .Select(u => new { u.ID, NomeCompleto = u.Nome + " " + u.Cognome })
                 .ToList();
@@ -90,36 +84,29 @@ namespace Cattedre
 
             if (idOccupati.Contains(idSelezionato))
             {
-               DialogResult dr= MessageBox.Show(
-                    "Il coordinatore selezionato è già assegnato a un dipartimento,\n Vuoi selezionarlo?.",
-                    "Coordinatore occupato",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning
-                );
+               DialogResult dr= MessageBox.Show("Il coordinatore selezionato è già assegnato a un dipartimento,\n Vuoi sostituirlo?","Coordinatore occupato",MessageBoxButtons.YesNo,MessageBoxIcon.Warning);
                 if(dr==DialogResult.No)
                     cbCoordinatore.SelectedIndex = -1;
             }
         }
         #region controlli enter
-
-        #endregion
-
         private void tbNomeDipartimento_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode==Keys.Enter && tbNomeDipartimento.Text.Length>=2)
+            if (e.KeyCode == Keys.Enter && tbNomeDipartimento.Text.Length >= 2)
             {
                 e.SuppressKeyPress = true;
                 cbCoordinatore.Focus();
-            }   
+            }
         }
 
         private void cbCoordinatore_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && cbCoordinatore.SelectedIndex==-1)
+            if (e.KeyCode == Keys.Enter && cbCoordinatore.SelectedIndex == -1)
             {
                 e.SuppressKeyPress = true;
                 btSalvaDipartimento.Focus();
             }
         }
+        #endregion
     }
 }

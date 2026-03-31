@@ -736,11 +736,10 @@ namespace Cattedre
 
                 if (elapsedMilliseconds < 500) // DOPPIO INVIO RAPIDO
                 {
+                    _lastTick = 0;
                     // Passa al prossimo controllo
-                    if (GetTipoUtente()=="D")
-                        this.ActiveControl = clbCLasseDiConcorso;
-                    else
-                        this.ActiveControl = cbDipartimentoCoordinato;
+                    if (GetTipoUtente()=="D") clbCLasseDiConcorso.Focus();
+                    else cbDipartimentoCoordinato.Focus();
                 }else
                 {
                     // Al primo colpo fa solo il check
@@ -773,6 +772,7 @@ namespace Cattedre
 
                 if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
                 {
+                    _lastTick = 0;
                     // Passa al prossimo controllo
                     if (clbDisciplina.Enabled == true) clbDisciplina.Focus();
                     else rbDeterminato.Focus();
@@ -797,6 +797,7 @@ namespace Cattedre
 
                 if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
                 {
+                    _lastTick = 0;
                     // Passa al prossimo controllo
                     rbDeterminato.Focus();
                 }

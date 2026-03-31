@@ -30,12 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDipartimenti));
             this.lvDipartimenti = new System.Windows.Forms.ListView();
+            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chNome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chCoordinatore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btInserisci = new System.Windows.Forms.Button();
             this.btModifica = new System.Windows.Forms.Button();
             this.btElimina = new System.Windows.Forms.Button();
-            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvDipartimenti
@@ -50,10 +50,16 @@
             this.lvDipartimenti.HideSelection = false;
             this.lvDipartimenti.Location = new System.Drawing.Point(23, 18);
             this.lvDipartimenti.Name = "lvDipartimenti";
-            this.lvDipartimenti.Size = new System.Drawing.Size(424, 314);
+            this.lvDipartimenti.Size = new System.Drawing.Size(431, 314);
             this.lvDipartimenti.TabIndex = 0;
             this.lvDipartimenti.UseCompatibleStateImageBehavior = false;
             this.lvDipartimenti.View = System.Windows.Forms.View.Details;
+            this.lvDipartimenti.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvDipartimenti_KeyDown);
+            // 
+            // chID
+            // 
+            this.chID.Text = "ID";
+            this.chID.Width = 50;
             // 
             // chNome
             // 
@@ -68,7 +74,7 @@
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btInserisci.Location = new System.Drawing.Point(453, 19);
+            this.btInserisci.Location = new System.Drawing.Point(460, 19);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.Size = new System.Drawing.Size(75, 23);
             this.btInserisci.TabIndex = 1;
@@ -79,7 +85,7 @@
             // btModifica
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btModifica.Location = new System.Drawing.Point(453, 48);
+            this.btModifica.Location = new System.Drawing.Point(460, 48);
             this.btModifica.Name = "btModifica";
             this.btModifica.Size = new System.Drawing.Size(75, 23);
             this.btModifica.TabIndex = 2;
@@ -90,7 +96,7 @@
             // btElimina
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btElimina.Location = new System.Drawing.Point(453, 77);
+            this.btElimina.Location = new System.Drawing.Point(460, 77);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(75, 23);
             this.btElimina.TabIndex = 3;
@@ -98,16 +104,11 @@
             this.btElimina.UseVisualStyleBackColor = true;
             this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
             // 
-            // chID
-            // 
-            this.chID.Text = "ID";
-            this.chID.Width = 50;
-            // 
             // FrmDipartimenti
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(562, 358);
+            this.ClientSize = new System.Drawing.Size(569, 358);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.btModifica);
             this.Controls.Add(this.btInserisci);

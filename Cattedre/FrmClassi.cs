@@ -47,8 +47,8 @@ namespace Cattedre
 
         private void FrmClassi_Load(object sender, EventArgs e)
         {
-            classi = ClsClasseBL.CaricaClassi();
-            CaricaListView(classi);
+            GestisciListview();
+
             GestionePermessi();
             //popolo combobox filtraggio
             foreach (ClsClasseDL classe in classi)
@@ -89,10 +89,10 @@ namespace Cattedre
                 if (dr == DialogResult.OK)
                 {
                     ClsClasseBL.InserisciClasse(frmClasse._classe);
-                    classi = ClsClasseBL.CaricaClassi();
-                    CaricaListView(classi);
+                    GestisciListview();
                 }
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                  MessageBox.Show($"errore:{ex.Message}\n riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -114,10 +114,10 @@ namespace Cattedre
                     if (dr == DialogResult.OK)
                     {
                         ClsClasseBL.ModificaClasse(frmClasse._classe);
-                        classi = ClsClasseBL.CaricaClassi();
-                        CaricaListView(classi);
+                        GestisciListview();
                     }
-                }catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                    MessageBox.Show($"errore:\n{ex.Message}\nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -135,9 +135,8 @@ namespace Cattedre
                 if (dr == DialogResult.Yes)
                 {
                     ClsClasseBL.EliminaClasse(idDaEliminare);
-                    classi = ClsClasseBL.CaricaClassi();
+                    GestisciListview();
                 }
-                CaricaListView(classi);
             }
         }
         #region  gestione classe successivo
@@ -175,10 +174,10 @@ namespace Cattedre
                 Cursor.Current = Cursors.Default;
                 if (NumeroClassiAggiunte>1)
                     MessageBox.Show($"Sono state aggiunte {NumeroClassiAggiunte} classi.", "Informazione", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                classi = ClsClasseBL.CaricaClassi();
-                CaricaListView(classi);
+                GestisciListview();
 
-           }else
+            }
+            else
            {
                 MessageBox.Show("Classe non selezionata", "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
            }
@@ -212,8 +211,7 @@ namespace Cattedre
                 if (Filtri.Count<=0)
                     throw new Exception("Inserire almeno un criterio di ricerca");
 
-                classi = ClsClasseBL.CaricaClassiFiltrate(Filtri);
-                CaricaListView(classi);
+                GestisciListview();
                 btRipristina.Enabled = true;
             }
             catch (Exception ex)
@@ -225,8 +223,7 @@ namespace Cattedre
         private void btRipristina_Click(object sender, EventArgs e)
         {
             btRipristina.Enabled = false;
-            classi = ClsClasseBL.CaricaClassi();
-            CaricaListView(classi);
+            GestisciListview();
             cbAnnoClasse.SelectedIndex = -1;
             cbIndirizzi.SelectedIndex = -1;
             DeselezionaCheckBox(tplAnniScolastici);
@@ -267,14 +264,15 @@ namespace Cattedre
             }
         }
         #endregion
-
+        #region  gestioni shortcut
         private void lvClassi_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode==Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
                 brModifica_Click(null, null);
-            }else if (e.KeyCode == Keys.Delete)
+            }
+            else if (e.KeyCode == Keys.Delete)
             {
                 e.SuppressKeyPress = true;
                 btElimina_Click(null, null);
@@ -335,6 +333,22 @@ namespace Cattedre
                 _ultimoControlloClick = null;
                 _ultimoClickCheckBox = DateTime.MinValue;
             }
+
         }
+        #endregion
+        #region gestione Anni
+        private void GestisciListview()
+        {
+            classi = ClsClasseBL.CaricaClassi();
+            long IDannoCorrente = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+            List<ClsClasseDL> classiAnnoCorrente = classi
+                .Where(c => c.IDannoscolastico == IDannoCorrente)
+                .OrderBy(c => c.Anno)
+                .ThenBy(c => c.Sezione)
+                .ToList();
+            CaricaListView(classiAnnoCorrente);
+        }
+        #endregion
+    
     }
 }

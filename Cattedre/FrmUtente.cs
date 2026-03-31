@@ -29,7 +29,7 @@ namespace Cattedre
         int _oldValuedipCoord=0;
         bool _bloccoEvdipCoord = false;
         string _imputEmail;
-        string _colore=string.Empty;
+        string _colore = string.Empty;
         //tenuti fuori in modo tale che  all'occorrenza non si deve riaprire ogni volta una connessione al db
         #endregion
         public FrmUtente()
@@ -53,18 +53,13 @@ namespace Cattedre
                 _utente.Email = tbEmail.Text.Trim();
                 _utente.Password =(tbPassword.Text== "********")?"": tbPassword.Text.Trim();
                 _utente.TipoUtente = GetTipoUtente();
-                _utente.Colore = _colore;
+                _utente.Colore =_colore;
 
                 bool isDocente = _utente.TipoUtente == "D" || _utente.TipoUtente == "C" || _utente.TipoUtente == "A";
                 //inserimento controlli Docente
                 if (isDocente)
                 {
                         _utente.TipoDocente = rbTeorico.Checked ? 'T' :(rbLaboratorio.Checked)? 'L': throw new Exception("seleziona un tipo di docente");
-                    //controllo colore
-                    if (string.IsNullOrEmpty(_utente.Colore))
-                        _utente.Colore = "255255255";
-                    
-
                     // controlli classe di concorso e disciplina
                     if (clbCLasseDiConcorso.CheckedItems.Count == 0)
                         throw new Exception("Seleziona almeno una classe di concorso.");
@@ -161,7 +156,7 @@ namespace Cattedre
             //funzione per popolare sia i dipartimenti coordinati anche se non visibili sia quelli in cui partecipare
             //ancora non li filtro in base alla cdc selezionata funzione da fare
             popolaDipartimenti(dipartimenti);
-
+            cldColori.Color = Color.White;
             //controllo se l'utente passato ha dei dati da mostrare
             if (_utente!= null && _utente.ID>0)
             {
@@ -187,8 +182,9 @@ namespace Cattedre
                 }
                 if(!string.IsNullOrEmpty(_utente.Colore))
                 {
+                    _colore = _utente.Colore;
                     Color coloreUC = OttieniColore(_utente.Colore);
-                    cldColori.Color=(coloreUC);
+                    cldColori.Color=coloreUC;
                     pnColore.BackColor = coloreUC;
                 }
             }

@@ -48,7 +48,8 @@ namespace Cattedre
             //pnlDipartimento.AutoScroll = true;
             //pnlDipartimento.HorizontalScroll.Enabled = true;
             //pnlDipartimento.VerticalScroll.Enabled = false;
-
+            //pnlDipartimento.TabStop = true;
+            //pnlDipartimento.TabIndex = 4;
 
             if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "C")
             {
@@ -207,12 +208,51 @@ namespace Cattedre
                 })
                 .GroupBy(d => d.ID)
                 .Select(g => g.First())
-                .OrderBy(d => d.TipoDocente) // prima teorici poi pratici
+                .OrderBy(d =>
+                {
+                    var cdcs = ClsRichiedereBL.RilevaCDCDocente(d.ID);
+                    return cdcs.Any(c => c.AbilitazioniRichieste != null &&
+                                         c.AbilitazioniRichieste.ToLower().Contains("laurea")) ? 0 : 1;
+                })
+                .ThenBy(d => d.TipoDocente)
                 .ThenBy(d => d.Cognome)
                 .ToList();
 
+            bool labelTeoriciAggiunta = false;
+            bool labelPraticiAggiunta = false;
+
             foreach (var doc in docenti)
             {
+                var cdcs = ClsRichiedereBL.RilevaCDCDocente(doc.ID);
+                bool richiedeLaurea = cdcs.Any(c => c.AbilitazioniRichieste != null &&
+                                                    c.AbilitazioniRichieste.ToLower().Contains("laurea"));
+
+                if (richiedeLaurea && !labelTeoriciAggiunta)
+                {
+                    y += 20;
+                    Label lblGruppo = new Label();
+                    lblGruppo.AutoSize = true;
+                    lblGruppo.Font = new Font(lblGruppo.Font, FontStyle.Bold);
+                    lblGruppo.Text = cdcs.FirstOrDefault()?.Livello ?? "Teorici";
+                    lblGruppo.Location = new Point(8, y);
+                    pnlOreDoc.Controls.Add(lblGruppo);
+                    y += lblGruppo.Height;
+                    labelTeoriciAggiunta = true;
+                }
+
+                if (!richiedeLaurea && !labelPraticiAggiunta)
+                {
+                    y += 25;
+                    Label lblGruppo = new Label();
+                    lblGruppo.AutoSize = true;
+                    lblGruppo.Font = new Font(lblGruppo.Font, FontStyle.Bold);
+                    lblGruppo.Text = cdcs.FirstOrDefault()?.Livello ?? "Pratici";
+                    lblGruppo.Location = new Point(8, y);
+                    pnlOreDoc.Controls.Add(lblGruppo);
+                    y += lblGruppo.Height;
+                    labelPraticiAggiunta = true;
+                }
+
                 ucOreDoc uc = new ucOreDoc();
 
                 uc.lblDocente.Text = $"{doc.Nome} {doc.Cognome}";
@@ -421,8 +461,7 @@ namespace Cattedre
             docenti = ClsAssegnareBL
                 .CaricaDocentiConAssegnazioni(IDdipartimento, IDannoscolastico);
 
-
-
+            int tabIndex = 5;
             int oreTotaliGenerali = 0;
 
             for (int riga = 0; riga < classi.Count; riga++)
@@ -454,6 +493,7 @@ namespace Cattedre
                         continue;
 
                     UcAssegnazioni uc = new UcAssegnazioni();
+                    uc.DocentiData = docenti;
 
                     List<ClsUtenteDL> teorici = new List<ClsUtenteDL>();
                     teorici.Add(new ClsUtenteDL { ID = 0, Cognome = "", Nome = "", Colore = "" });
@@ -551,6 +591,12 @@ namespace Cattedre
                     int y = 72 + riga * 100;
                     uc.Location = new Point(x, y);
 
+                    //NON FUNZIONA IL TAB
+                    //uc.TabStop = true;
+                    //uc.cbDocentiTeorici.TabStop = true;
+                    //uc.cbDocentiItip.TabStop = true;
+                    //uc.cbDocentiTeorici.TabIndex = tabIndex++;
+                    //uc.cbDocentiItip.TabIndex = tabIndex++;
                     pnlDipartimento.Controls.Add(uc);
 
                     if (utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "D")

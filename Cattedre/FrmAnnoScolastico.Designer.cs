@@ -94,23 +94,25 @@
             this.mtbSigla.Mask = "00-00";
             this.mtbSigla.Name = "mtbSigla";
             this.mtbSigla.Size = new System.Drawing.Size(40, 20);
-            this.mtbSigla.TabIndex = 5;
+            this.mtbSigla.TabIndex = 2;
             // 
             // dtpDataInizio
             // 
             this.dtpDataInizio.Location = new System.Drawing.Point(86, 20);
             this.dtpDataInizio.Name = "dtpDataInizio";
             this.dtpDataInizio.Size = new System.Drawing.Size(200, 20);
-            this.dtpDataInizio.TabIndex = 6;
+            this.dtpDataInizio.TabIndex = 0;
             this.dtpDataInizio.ValueChanged += new System.EventHandler(this.dtpDataInizio_ValueChanged);
+            this.dtpDataInizio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataInizio_KeyDown);
             // 
             // dtpDataFine
             // 
             this.dtpDataFine.Location = new System.Drawing.Point(86, 68);
             this.dtpDataFine.Name = "dtpDataFine";
             this.dtpDataFine.Size = new System.Drawing.Size(200, 20);
-            this.dtpDataFine.TabIndex = 7;
+            this.dtpDataFine.TabIndex = 1;
             this.dtpDataFine.ValueChanged += new System.EventHandler(this.dtpDataFine_ValueChanged);
+            this.dtpDataFine.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataFine_KeyDown);
             // 
             // FrmAnnoScolastico
             // 

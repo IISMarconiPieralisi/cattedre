@@ -28,7 +28,8 @@ namespace Cattedre
             lvCdCs.Items.Clear();
             for(int i = 0; i < cdcs.Count; i++)
             {
-                ListViewItem lvi = new ListViewItem(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
+                ListViewItem lvi = new ListViewItem(cdcs[i].ID.ToString());
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
                 lvi.SubItems.Add(cdcs[i].Livello);
                 lvi.SubItems.Add(cdcs[i].Nome);
                 lvi.SubItems.Add(cdcs[i].AbilitazioniRichieste);
@@ -94,6 +95,20 @@ namespace Cattedre
                 }
                 
                 CaricaListView();
+            }
+        }
+
+        private void lvCdCs_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && lvCdCs.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete && lvCdCs.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
             }
         }
     }

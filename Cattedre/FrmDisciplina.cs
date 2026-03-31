@@ -14,14 +14,15 @@ namespace Cattedre
     {
         List<ClsDipartimentoDL> _dipartimenti= ClsDipartimentoBL.CaricaDipartimenti();
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
-        List<ClsDisciplinaDL> _discipline = ClsDisciplinaBL.CaricaDiscipline(0, 0, "");
-
+        List<ClsDisciplinaDL> _discipline = ClsDisciplinaBL.CaricaDiscipline();
+        List<ClsClasseDiConcorsoDL> _cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
         //variabili pubbliche
         public List<ClsAppartenereDL> _apparteneres = new List<ClsAppartenereDL>();
+        public List<ClsRichiedereDL> _richiederes = new List<ClsRichiedereDL>();
         public List<ClsGestireDL> _gestires = new List<ClsGestireDL>();
         public ClsDisciplinaDL _disciplina;
-
         private int anno = 0;
+        private long _lastTick;
         public FrmDisciplina()
         {
             InitializeComponent();
@@ -51,7 +52,9 @@ namespace Cattedre
                         throw new Exception("Disciplina già presente in archivio per questo anno.");
                 }
                 if (_gestires.Count <= 0 && tbDisciplinaSpeciale.Text==string.Empty)
-                    throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina");
+                    throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina.");
+                if (_richiederes.Count <= 0 && tbDisciplinaSpeciale.Text == string.Empty)
+                    throw new Exception("Selezionare almeno una classe di concorso a cui la disciplina è riferita.");
                 // --- Caricamento ID Classe Collegata ---
                 if (_discipline.Any(p => _disciplina.ID > 0 && p.ID != _disciplina.ID))
                     _disciplina.IDdisciplinaSuccessiva = CercaDisciplina();
@@ -86,12 +89,16 @@ namespace Cattedre
                 this.DialogResult = DialogResult.None;
             }
         }
-
+        private void btAnnulla_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         private void FrmDisciplina_Load(object sender, EventArgs e)
         {
             controlloRadioBottom();
             PopolaclbIndirizzi();
             PopolaClbDipartenti();
+            PopolaclbCdcs();
             if (_disciplina != null)
             {
                 //carico le informazioni della disciplina
@@ -101,6 +108,7 @@ namespace Cattedre
                 nudOreTeoria.Value = _disciplina.OreTeoria;
                 CheckComboBoxs();
                 checkClbDipartenti();
+                checkClbCdcs();
                 RiempiCbDisciplinaSuccessiva(_disciplina.Anno,_disciplina.IDdisciplinaSuccessiva);
                 //carico le informazioni del collegamento con indirizzi
                 _apparteneres = ClsAppartenereBL.CaricaClassiAppartenereByDisciplina(_disciplina.ID);
@@ -112,6 +120,7 @@ namespace Cattedre
             }
 
         }
+        #region checkboxs
         private void CheckComboBoxs()
         {
             switch (_disciplina.Anno)
@@ -136,10 +145,7 @@ namespace Cattedre
                     break;
             }
         }
-        private void btAnnulla_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        #endregion
         #region gestione ClsGestire
         private void clbDipartimenti_ItemCheck(object sender, ItemCheckEventArgs e)
         {
@@ -232,7 +238,7 @@ namespace Cattedre
 
         private void ControlloCbDisciplinaSuccessiva()
         {
-            if (_gestires.Count != 0 && anno < 5 && anno != 0)
+            if (_gestires.Count != 0 &&_richiederes.Count!=0 && anno < 5 && anno != 0)
             {
                 cbDisciplinaSucessiva.Enabled = true;
                 popolaCbDisciplinaSuccessiva();
@@ -247,7 +253,7 @@ namespace Cattedre
         private void popolaCbDisciplinaSuccessiva()
         {
                 // Se non ci sono dipartimenti selezionati, non ha senso cercare discipline successive
-                if (_gestires.Count == 0 || anno >= 5 || anno == 0)
+                if (_gestires.Count == 0|| _richiederes.Count == 0 || anno >= 5 || anno == 0)
                 {
                     cbDisciplinaSucessiva.DataSource = null;
                     cbDisciplinaSucessiva.Enabled = false;
@@ -268,8 +274,9 @@ namespace Cattedre
                     // Chiediamo alla BL quali dipartimenti gestiscono questa specifica disciplina 'disc'
                     List<ClsGestireDL> gestioniDisc = ClsGestireBL.CaricaGestioneDisciplina(disc.ID);
 
-                    // Se esiste un'intersezione tra i dipartimenti di 'disc' e i dipartimenti in '_gestires'
-                    if (gestioniDisc.Any(gd => _gestires.Any(g => g.IDdipartimento == gd.IDdipartimento)))
+                    // Se esiste un'intersezione tra i dipartimenti di 'disc' e i dipartimenti in '_gestires' 
+                    if (gestioniDisc.Any(gd => _gestires.Any(g => g.IDdipartimento == gd.IDdipartimento)) &&
+                        gestioniDisc.Any(r=>_richiederes.Any(ric=>ric.IDclassediconcorso== ric.IDclassediconcorso)))
                     {
                         ListaDisciplineFiltrate.Add(disc);
                     }
@@ -313,21 +320,24 @@ namespace Cattedre
             if (_anno < 5 && _anno > 0)
             {
                 this.anno = _anno;
+
                 if (_disciplina != null && _disciplina.ID > 0 && (_gestires == null || _gestires.Count == 0))
                     _gestires = ClsGestireBL.CaricaGestioneDisciplina(_disciplina.ID);
-                
+
+                // Carica i richiederes dal DB se non sono già in memoria
+                if (_disciplina != null && _disciplina.ID > 0 && (_richiederes == null || _richiederes.Count == 0))
+                    _richiederes = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(_disciplina.ID);
                 popolaCbDisciplinaSuccessiva();
 
-                // 3. Se esiste una disciplina successiva già salvata, la seleziona
                 if (_IDdiscSuccessiva > 0)
                     cbDisciplinaSucessiva.SelectedValue = _IDdiscSuccessiva;
                 else
                     cbDisciplinaSucessiva.SelectedIndex = -1;
+
                 cbDisciplinaSucessiva.Enabled = (cbDisciplinaSucessiva.Items.Count > 0);
             }
             else
             {
-                // Se è 5° anno o speciale, disabilita tutto
                 cbDisciplinaSucessiva.DataSource = null;
                 cbDisciplinaSucessiva.Enabled = false;
             }
@@ -362,6 +372,175 @@ namespace Cattedre
                 else if (rb == rbQuarto) anno = 4;
                 else if (rb == rbQuinto) anno = 5;
             }
+        }
+        #endregion
+        #region gestisci richiedere
+        private void clbCdcs_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            _richiederes.Clear();
+            long IDdis = (_disciplina.ID <= 0) ? 0 : _disciplina.ID;
+            // Cicliamo tutti gli elementi attualmente "checkati" nella UI
+            for (int i = 0; i < clbCdcs.Items.Count; i++)
+            {
+                bool isChecked;
+                if (i == e.Index)
+                    isChecked = (e.NewValue == CheckState.Checked);
+                else
+                    isChecked = clbCdcs.GetItemChecked(i);
+                // Troviamo l'oggetto dipartimento corrispondente al nome spuntato
+
+                if (isChecked)
+                {
+                    string nome = clbCdcs.Items[i].ToString();
+                    ClsClasseDiConcorsoDL cdc = _cdcs.Find(d => d.Nome == nome);
+                    if (cdc != null)
+                        _richiederes.Add(new ClsRichiedereDL(cdc.ID,IDdis));
+                }
+            }
+            ControlloCbDisciplinaSuccessiva();
+        }
+        void PopolaclbCdcs()
+        {
+            clbCdcs.Items.Clear();
+            foreach (var cdc in _cdcs)
+            {
+                clbCdcs.Items.Add(cdc.Nome);
+            }
+        }
+        void checkClbCdcs()
+        {
+            List<ClsClasseDiConcorsoDL> cdcsDisciplina = ClsRichiedereBL.RilevaCDCDiscipina(_disciplina.ID);
+            if (cdcsDisciplina.Count > 0)
+            {
+                for (int i = 0; i < clbCdcs.Items.Count; i++)
+                {
+                    string nomeItem = clbCdcs.Items[i].ToString();
+                    bool richiedere = cdcsDisciplina.Any(d => string.Equals(d.Nome, nomeItem, StringComparison.OrdinalIgnoreCase));
+                    clbCdcs.SetItemChecked(i, richiedere);
+                }
+                _richiederes.Clear();
+            }
+        }
+        #endregion
+        #region tasto enter
+        private void tbNome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Enter && tbNome.Text.Length>=2)
+            {
+                e.SuppressKeyPress = true;
+                nudOreTeoria.Focus();
+            }
+        }
+        private void nudOreTeoria_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                nudOreLab.Focus();
+            }
+        }
+
+        private void nudOreLab_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                rbPrimo.Focus();
+            }
+        }
+
+        private void rbAnno_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                clbIndirizzi.Focus();
+            }
+        }
+
+        private void cbDisciplinaSucessiva_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btSalva.Focus();
+            }
+        }
+
+        private void clbIndirizzi_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+                if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    _lastTick = 0;
+                    clbDipartimenti.Focus();
+                }
+                else
+                {
+                    // Al primo colpo fa solo il check
+                    int index = clbIndirizzi.SelectedIndex;
+                    if (index != -1) clbIndirizzi.SetItemChecked(index, !clbIndirizzi.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+
+        private void clbDipartimenti_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+                if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    _lastTick = 0;
+                    clbCdcs.Focus();
+                }
+                else
+                {
+                    // Al primo colpo fa solo il check
+                    int index = clbDipartimenti.SelectedIndex;
+                    if (index != -1) clbDipartimenti.SetItemChecked(index, !clbDipartimenti.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+
+        private void clbCdcs_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+                if (elapsedMilliseconds < 800) // DOPPIO INVIO RAPIDO
+                {
+                    // Passa al prossimo controllo
+                    _lastTick = 0;
+                    if (anno == 0) tbDisciplinaSpeciale.Focus();
+                    else cbDisciplinaSucessiva.Focus();
+                }
+                else                    // Al primo colpo fa solo il check
+                {
+                    int index = clbDipartimenti.SelectedIndex;
+                    if (index != -1) clbCdcs.SetItemChecked(index, !clbCdcs.GetItemChecked(index));
+                }
+                _lastTick = currentTick;
+            }
+        }
+
+        private void tbDisciplinaSpeciale_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbDisciplinaSpeciale.Text.Length >= 2)
+                btSalva.Focus();
         }
         #endregion
     }

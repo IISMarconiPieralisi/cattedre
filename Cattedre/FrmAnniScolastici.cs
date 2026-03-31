@@ -26,7 +26,9 @@ namespace Cattedre
 
             foreach (ClsAnnoScolasticoDL annoScolastico in anniScolastici)
             {
-                ListViewItem lvi = new ListViewItem(annoScolastico.Sigla);
+                //ListViewItem lvi = new ListViewItem(annoScolastico.Sigla);
+                ListViewItem lvi = new ListViewItem(annoScolastico.ID.ToString());
+                lvi.SubItems.Add(annoScolastico.Sigla);
                 lvi.SubItems.Add(annoScolastico.DataInizio.ToShortDateString());
                 lvi.SubItems.Add(annoScolastico.DataFine.ToShortDateString());
                 lvi.Tag = annoScolastico.ID;
@@ -92,6 +94,20 @@ namespace Cattedre
                     ClsAnnoScolasticoBL.EliminaAnnoScolastico(idDaEliminare);
                 }
                 CaricaListView();
+            }
+        }
+
+        private void lvAnniScolastici_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
             }
         }
     }

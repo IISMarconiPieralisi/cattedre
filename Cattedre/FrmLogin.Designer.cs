@@ -50,7 +50,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(285, 193);
+            this.label2.Location = new System.Drawing.Point(285, 197);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(72, 16);
             this.label2.TabIndex = 13;
@@ -60,7 +60,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(285, 133);
+            this.label1.Location = new System.Drawing.Point(285, 137);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 16);
             this.label1.TabIndex = 12;
@@ -70,31 +70,31 @@
             // 
             this.tbPassword.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbPassword.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbPassword.Location = new System.Drawing.Point(297, 214);
+            this.tbPassword.Location = new System.Drawing.Point(297, 218);
             this.tbPassword.Margin = new System.Windows.Forms.Padding(2);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(219, 15);
             this.tbPassword.TabIndex = 11;
-            this.tbPassword.Text = "Pigini";
+            this.tbPassword.Text = "vitalf00!";
             this.tbPassword.Click += new System.EventHandler(this.tbPassword_Click);
             // 
             // tbNomeUtente
             // 
             this.tbNomeUtente.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbNomeUtente.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbNomeUtente.Location = new System.Drawing.Point(288, 154);
+            this.tbNomeUtente.Location = new System.Drawing.Point(291, 155);
             this.tbNomeUtente.Margin = new System.Windows.Forms.Padding(2);
             this.tbNomeUtente.Name = "tbNomeUtente";
             this.tbNomeUtente.Size = new System.Drawing.Size(241, 15);
             this.tbNomeUtente.TabIndex = 10;
-            this.tbNomeUtente.Text = "marcello.pigini@iismarconipieralisi.it";
+            this.tbNomeUtente.Text = "vittorio.alfieri@iismarconipieralisi.it";
             this.tbNomeUtente.Click += new System.EventHandler(this.tbNomeUtente_Click);
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.RoyalBlue;
-            this.panel2.Location = new System.Drawing.Point(300, 229);
+            this.panel2.Location = new System.Drawing.Point(300, 233);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(200, 2);
             this.panel2.TabIndex = 9;
@@ -102,7 +102,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.RoyalBlue;
-            this.panel1.Location = new System.Drawing.Point(291, 169);
+            this.panel1.Location = new System.Drawing.Point(291, 173);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(222, 2);
             this.panel1.TabIndex = 8;
@@ -132,23 +132,25 @@
             // 
             // btLogin
             // 
-            this.btLogin.Location = new System.Drawing.Point(364, 266);
+            this.btLogin.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btLogin.Location = new System.Drawing.Point(313, 275);
             this.btLogin.Margin = new System.Windows.Forms.Padding(2);
             this.btLogin.Name = "btLogin";
-            this.btLogin.Size = new System.Drawing.Size(76, 22);
+            this.btLogin.Size = new System.Drawing.Size(164, 36);
             this.btLogin.TabIndex = 16;
-            this.btLogin.Text = "Login";
+            this.btLogin.Text = "Effettua il Login";
             this.btLogin.UseVisualStyleBackColor = true;
             this.btLogin.Click += new System.EventHandler(this.btLogin_Click);
             // 
             // lblInserisciNomeUtente
             // 
             this.lblInserisciNomeUtente.AutoSize = true;
+            this.lblInserisciNomeUtente.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
             this.lblInserisciNomeUtente.ForeColor = System.Drawing.Color.Red;
-            this.lblInserisciNomeUtente.Location = new System.Drawing.Point(297, 174);
+            this.lblInserisciNomeUtente.Location = new System.Drawing.Point(288, 178);
             this.lblInserisciNomeUtente.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.lblInserisciNomeUtente.Name = "lblInserisciNomeUtente";
-            this.lblInserisciNomeUtente.Size = new System.Drawing.Size(110, 13);
+            this.lblInserisciNomeUtente.Size = new System.Drawing.Size(127, 15);
             this.lblInserisciNomeUtente.TabIndex = 17;
             this.lblInserisciNomeUtente.Text = "Inserisci nome utente!";
             this.lblInserisciNomeUtente.Visible = false;
@@ -156,23 +158,23 @@
             // lblInserisciPassword
             // 
             this.lblInserisciPassword.AutoSize = true;
+            this.lblInserisciPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
             this.lblInserisciPassword.ForeColor = System.Drawing.Color.Red;
-            this.lblInserisciPassword.Location = new System.Drawing.Point(297, 234);
+            this.lblInserisciPassword.Location = new System.Drawing.Point(297, 238);
             this.lblInserisciPassword.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.lblInserisciPassword.Name = "lblInserisciPassword";
-            this.lblInserisciPassword.Size = new System.Drawing.Size(96, 13);
+            this.lblInserisciPassword.Size = new System.Drawing.Size(111, 15);
             this.lblInserisciPassword.TabIndex = 18;
             this.lblInserisciPassword.Text = "Inserisci password!";
             this.lblInserisciPassword.Visible = false;
             // 
             // btLoginGoogle
             // 
-            this.btLoginGoogle.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btLoginGoogle.BackgroundImage")));
-            this.btLoginGoogle.Font = new System.Drawing.Font("Microsoft YaHei UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btLoginGoogle.Location = new System.Drawing.Point(288, 355);
+            this.btLoginGoogle.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.btLoginGoogle.Location = new System.Drawing.Point(313, 332);
             this.btLoginGoogle.Margin = new System.Windows.Forms.Padding(2);
             this.btLoginGoogle.Name = "btLoginGoogle";
-            this.btLoginGoogle.Size = new System.Drawing.Size(238, 37);
+            this.btLoginGoogle.Size = new System.Drawing.Size(164, 36);
             this.btLoginGoogle.TabIndex = 19;
             this.btLoginGoogle.Text = "Login con google";
             this.btLoginGoogle.UseVisualStyleBackColor = true;
@@ -181,10 +183,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(360, 310);
+            this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(362, 313);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 24);
+            this.label3.Size = new System.Drawing.Size(61, 17);
             this.label3.TabIndex = 20;
             this.label3.Text = "Oppure:";
             // 
@@ -212,6 +214,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Load += new System.EventHandler(this.FrmLogin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);

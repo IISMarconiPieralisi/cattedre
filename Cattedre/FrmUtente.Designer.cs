@@ -42,13 +42,15 @@
             this.cbTipoUtente = new System.Windows.Forms.ComboBox();
             this.btAnnulla = new System.Windows.Forms.Button();
             this.btSalva = new System.Windows.Forms.Button();
-            this.ckbDocenteTeorico = new System.Windows.Forms.CheckBox();
-            this.ckbDocentePratico = new System.Windows.Forms.CheckBox();
             this.PnUtente = new System.Windows.Forms.Panel();
+            this.pnTipoDocente = new System.Windows.Forms.Panel();
+            this.rbLaboratorio = new System.Windows.Forms.RadioButton();
+            this.rbTeorico = new System.Windows.Forms.RadioButton();
             this.pnColore = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.cbAutoEmail = new System.Windows.Forms.CheckBox();
             this.btColore = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.pnCDC = new System.Windows.Forms.Panel();
             this.clbDisciplina = new System.Windows.Forms.CheckedListBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -60,20 +62,24 @@
             this.lbDcoordinato = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.PnContratto = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.rbDeterminato = new System.Windows.Forms.RadioButton();
+            this.rbIndeterminato = new System.Windows.Forms.RadioButton();
             this.dtpDataFine = new System.Windows.Forms.DateTimePicker();
             this.dtpDataInizio = new System.Windows.Forms.DateTimePicker();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.nudMonteOre = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
-            this.rbIndeterminato = new System.Windows.Forms.RadioButton();
-            this.rbDeterminato = new System.Windows.Forms.RadioButton();
             this.label13 = new System.Windows.Forms.Label();
             this.cldColori = new System.Windows.Forms.ColorDialog();
             this.PnUtente.SuspendLayout();
+            this.pnTipoDocente.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.pnCDC.SuspendLayout();
             this.pnDipartimento.SuspendLayout();
             this.PnContratto.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).BeginInit();
             this.SuspendLayout();
             // 
@@ -137,8 +143,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbNome.Location = new System.Drawing.Point(109, 40);
             this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(219, 20);
+            this.tbNome.Size = new System.Drawing.Size(207, 20);
             this.tbNome.TabIndex = 6;
+            this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
             // tbCognome
             // 
@@ -146,8 +153,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbCognome.Location = new System.Drawing.Point(108, 88);
             this.tbCognome.Name = "tbCognome";
-            this.tbCognome.Size = new System.Drawing.Size(219, 20);
+            this.tbCognome.Size = new System.Drawing.Size(207, 20);
             this.tbCognome.TabIndex = 7;
+            this.tbCognome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbCognome_KeyDown);
             // 
             // tbEmail
             // 
@@ -155,21 +163,22 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbEmail.Location = new System.Drawing.Point(108, 123);
             this.tbEmail.Name = "tbEmail";
-            this.tbEmail.Size = new System.Drawing.Size(219, 20);
+            this.tbEmail.Size = new System.Drawing.Size(207, 20);
             this.tbEmail.TabIndex = 8;
+            this.tbEmail.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbEmail_KeyDown);
             // 
             // tbPassword
             // 
-            this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbPassword.Cursor = System.Windows.Forms.Cursors.WaitCursor;
             this.tbPassword.Location = new System.Drawing.Point(109, 184);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.tbPassword.Size = new System.Drawing.Size(219, 20);
+            this.tbPassword.Size = new System.Drawing.Size(208, 20);
             this.tbPassword.TabIndex = 9;
             this.tbPassword.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.tbPassword.UseSystemPasswordChar = true;
             this.tbPassword.UseWaitCursor = true;
+            this.tbPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbPassword_KeyDown);
             // 
             // cbTipoUtente
             // 
@@ -184,14 +193,17 @@
             "Coordinatore di dipartimento"});
             this.cbTipoUtente.Location = new System.Drawing.Point(109, 232);
             this.cbTipoUtente.Name = "cbTipoUtente";
-            this.cbTipoUtente.Size = new System.Drawing.Size(219, 21);
+            this.cbTipoUtente.Size = new System.Drawing.Size(207, 21);
             this.cbTipoUtente.TabIndex = 10;
             this.cbTipoUtente.SelectedIndexChanged += new System.EventHandler(this.cbTipoUtente_SelectedIndexChanged);
+            this.cbTipoUtente.Enter += new System.EventHandler(this.cbTipoUtente_Enter);
+            this.cbTipoUtente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbTipoUtente_KeyDown);
+            this.cbTipoUtente.Leave += new System.EventHandler(this.cbTipoUtente_Leave);
             // 
             // btAnnulla
             // 
             this.btAnnulla.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btAnnulla.Location = new System.Drawing.Point(21, 420);
+            this.btAnnulla.Location = new System.Drawing.Point(4, 41);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.Size = new System.Drawing.Size(307, 33);
             this.btAnnulla.TabIndex = 13;
@@ -203,7 +215,7 @@
             // 
             this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btSalva.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalva.Location = new System.Drawing.Point(21, 380);
+            this.btSalva.Location = new System.Drawing.Point(5, 3);
             this.btSalva.Name = "btSalva";
             this.btSalva.Size = new System.Drawing.Size(307, 34);
             this.btSalva.TabIndex = 14;
@@ -211,41 +223,18 @@
             this.btSalva.UseVisualStyleBackColor = true;
             this.btSalva.Click += new System.EventHandler(this.btSalva_Click);
             // 
-            // ckbDocenteTeorico
-            // 
-            this.ckbDocenteTeorico.AutoSize = true;
-            this.ckbDocenteTeorico.Location = new System.Drawing.Point(109, 279);
-            this.ckbDocenteTeorico.Name = "ckbDocenteTeorico";
-            this.ckbDocenteTeorico.Size = new System.Drawing.Size(58, 17);
-            this.ckbDocenteTeorico.TabIndex = 15;
-            this.ckbDocenteTeorico.Text = "teorico";
-            this.ckbDocenteTeorico.UseVisualStyleBackColor = true;
-            // 
-            // ckbDocentePratico
-            // 
-            this.ckbDocentePratico.AutoSize = true;
-            this.ckbDocentePratico.Location = new System.Drawing.Point(269, 278);
-            this.ckbDocentePratico.Name = "ckbDocentePratico";
-            this.ckbDocentePratico.Size = new System.Drawing.Size(58, 17);
-            this.ckbDocentePratico.TabIndex = 16;
-            this.ckbDocentePratico.Text = "pratico";
-            this.ckbDocentePratico.UseVisualStyleBackColor = true;
-            // 
             // PnUtente
             // 
             this.PnUtente.AutoSize = true;
+            this.PnUtente.Controls.Add(this.pnTipoDocente);
             this.PnUtente.Controls.Add(this.pnColore);
             this.PnUtente.Controls.Add(this.label9);
             this.PnUtente.Controls.Add(this.cbAutoEmail);
             this.PnUtente.Controls.Add(this.btColore);
-            this.PnUtente.Controls.Add(this.btSalva);
             this.PnUtente.Controls.Add(this.label1);
-            this.PnUtente.Controls.Add(this.ckbDocentePratico);
             this.PnUtente.Controls.Add(this.label2);
-            this.PnUtente.Controls.Add(this.ckbDocenteTeorico);
             this.PnUtente.Controls.Add(this.label3);
             this.PnUtente.Controls.Add(this.label4);
-            this.PnUtente.Controls.Add(this.btAnnulla);
             this.PnUtente.Controls.Add(this.label5);
             this.PnUtente.Controls.Add(this.cbTipoUtente);
             this.PnUtente.Controls.Add(this.label6);
@@ -253,13 +242,47 @@
             this.PnUtente.Controls.Add(this.tbNome);
             this.PnUtente.Controls.Add(this.tbEmail);
             this.PnUtente.Controls.Add(this.tbCognome);
+            this.PnUtente.Controls.Add(this.panel2);
             this.PnUtente.Dock = System.Windows.Forms.DockStyle.Left;
             this.PnUtente.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.PnUtente.Location = new System.Drawing.Point(0, 0);
             this.PnUtente.Name = "PnUtente";
             this.PnUtente.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.PnUtente.Size = new System.Drawing.Size(346, 466);
+            this.PnUtente.Size = new System.Drawing.Size(358, 466);
             this.PnUtente.TabIndex = 18;
+            // 
+            // pnTipoDocente
+            // 
+            this.pnTipoDocente.Controls.Add(this.rbLaboratorio);
+            this.pnTipoDocente.Controls.Add(this.rbTeorico);
+            this.pnTipoDocente.Location = new System.Drawing.Point(108, 270);
+            this.pnTipoDocente.Name = "pnTipoDocente";
+            this.pnTipoDocente.Size = new System.Drawing.Size(219, 31);
+            this.pnTipoDocente.TabIndex = 25;
+            // 
+            // rbLaboratorio
+            // 
+            this.rbLaboratorio.AutoSize = true;
+            this.rbLaboratorio.Location = new System.Drawing.Point(131, 7);
+            this.rbLaboratorio.Name = "rbLaboratorio";
+            this.rbLaboratorio.Size = new System.Drawing.Size(78, 17);
+            this.rbLaboratorio.TabIndex = 1;
+            this.rbLaboratorio.TabStop = true;
+            this.rbLaboratorio.Text = "Laboratorio";
+            this.rbLaboratorio.UseVisualStyleBackColor = true;
+            this.rbLaboratorio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbTipoDocente);
+            // 
+            // rbTeorico
+            // 
+            this.rbTeorico.AutoSize = true;
+            this.rbTeorico.Location = new System.Drawing.Point(4, 7);
+            this.rbTeorico.Name = "rbTeorico";
+            this.rbTeorico.Size = new System.Drawing.Size(61, 17);
+            this.rbTeorico.TabIndex = 0;
+            this.rbTeorico.TabStop = true;
+            this.rbTeorico.Text = "Teorico";
+            this.rbTeorico.UseVisualStyleBackColor = true;
+            this.rbTeorico.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbTipoDocente);
             // 
             // pnColore
             // 
@@ -288,6 +311,9 @@
             this.cbAutoEmail.Text = "Email Automatica";
             this.cbAutoEmail.UseVisualStyleBackColor = true;
             this.cbAutoEmail.CheckedChanged += new System.EventHandler(this.cbAutoEmail_CheckedChanged);
+            this.cbAutoEmail.Enter += new System.EventHandler(this.checkBoxAutoEmail_Enter);
+            this.cbAutoEmail.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAutoEmail_KeyDown);
+            this.cbAutoEmail.Leave += new System.EventHandler(this.checkBoxAutoEmail_Leave);
             // 
             // btColore
             // 
@@ -299,6 +325,15 @@
             this.btColore.UseVisualStyleBackColor = true;
             this.btColore.Click += new System.EventHandler(this.btColore_Click);
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.btAnnulla);
+            this.panel2.Controls.Add(this.btSalva);
+            this.panel2.Location = new System.Drawing.Point(21, 366);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(312, 100);
+            this.panel2.TabIndex = 26;
+            // 
             // pnCDC
             // 
             this.pnCDC.AutoSize = true;
@@ -307,9 +342,9 @@
             this.pnCDC.Controls.Add(this.clbCLasseDiConcorso);
             this.pnCDC.Controls.Add(this.label7);
             this.pnCDC.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnCDC.Location = new System.Drawing.Point(346, 0);
+            this.pnCDC.Location = new System.Drawing.Point(358, 0);
             this.pnCDC.Name = "pnCDC";
-            this.pnCDC.Size = new System.Drawing.Size(193, 466);
+            this.pnCDC.Size = new System.Drawing.Size(235, 466);
             this.pnCDC.TabIndex = 19;
             this.pnCDC.Visible = false;
             // 
@@ -319,8 +354,9 @@
             this.clbDisciplina.FormattingEnabled = true;
             this.clbDisciplina.Location = new System.Drawing.Point(3, 248);
             this.clbDisciplina.Name = "clbDisciplina";
-            this.clbDisciplina.Size = new System.Drawing.Size(184, 139);
+            this.clbDisciplina.Size = new System.Drawing.Size(226, 139);
             this.clbDisciplina.TabIndex = 20;
+            this.clbDisciplina.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDisciplina_KeyDown);
             // 
             // label14
             // 
@@ -336,9 +372,10 @@
             this.clbCLasseDiConcorso.FormattingEnabled = true;
             this.clbCLasseDiConcorso.Location = new System.Drawing.Point(3, 59);
             this.clbCLasseDiConcorso.Name = "clbCLasseDiConcorso";
-            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(187, 139);
+            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(229, 139);
             this.clbCLasseDiConcorso.TabIndex = 18;
             this.clbCLasseDiConcorso.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCLasseDiConcorso_ItemCheck);
+            this.clbCLasseDiConcorso.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbCLasseDiConcorso_KeyDown);
             // 
             // label7
             // 
@@ -357,10 +394,10 @@
             this.pnDipartimento.Controls.Add(this.lbDcoordinato);
             this.pnDipartimento.Controls.Add(this.label8);
             this.pnDipartimento.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnDipartimento.Location = new System.Drawing.Point(539, 0);
+            this.pnDipartimento.Location = new System.Drawing.Point(593, 0);
             this.pnDipartimento.Margin = new System.Windows.Forms.Padding(3, 5, 5, 5);
             this.pnDipartimento.Name = "pnDipartimento";
-            this.pnDipartimento.Size = new System.Drawing.Size(171, 466);
+            this.pnDipartimento.Size = new System.Drawing.Size(166, 466);
             this.pnDipartimento.TabIndex = 20;
             this.pnDipartimento.Visible = false;
             // 
@@ -372,17 +409,19 @@
             this.clbDipartimento.Size = new System.Drawing.Size(157, 139);
             this.clbDipartimento.TabIndex = 19;
             this.clbDipartimento.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbDipartimento_ItemCheck);
+            this.clbDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDipartimento_KeyDown);
             // 
             // cbDipartimentoCoordinato
             // 
             this.cbDipartimentoCoordinato.FormattingEnabled = true;
-            this.cbDipartimentoCoordinato.Location = new System.Drawing.Point(10, 248);
+            this.cbDipartimentoCoordinato.Location = new System.Drawing.Point(6, 248);
             this.cbDipartimentoCoordinato.Name = "cbDipartimentoCoordinato";
-            this.cbDipartimentoCoordinato.Size = new System.Drawing.Size(158, 21);
+            this.cbDipartimentoCoordinato.Size = new System.Drawing.Size(157, 21);
             this.cbDipartimentoCoordinato.TabIndex = 19;
             this.cbDipartimentoCoordinato.Visible = false;
             this.cbDipartimentoCoordinato.DropDown += new System.EventHandler(this.cbDipartimentoCoordinato_DropDown);
             this.cbDipartimentoCoordinato.SelectedIndexChanged += new System.EventHandler(this.cbDipartimentoCoordinato_SelectedIndexChanged);
+            this.cbDipartimentoCoordinato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDipartimentoCoordinato_KeyDown);
             // 
             // lbDcoordinato
             // 
@@ -405,21 +444,54 @@
             // 
             // PnContratto
             // 
+            this.PnContratto.Controls.Add(this.panel1);
             this.PnContratto.Controls.Add(this.dtpDataFine);
             this.PnContratto.Controls.Add(this.dtpDataInizio);
             this.PnContratto.Controls.Add(this.label10);
             this.PnContratto.Controls.Add(this.label11);
             this.PnContratto.Controls.Add(this.nudMonteOre);
             this.PnContratto.Controls.Add(this.label12);
-            this.PnContratto.Controls.Add(this.rbIndeterminato);
-            this.PnContratto.Controls.Add(this.rbDeterminato);
             this.PnContratto.Controls.Add(this.label13);
             this.PnContratto.Dock = System.Windows.Forms.DockStyle.Right;
             this.PnContratto.Enabled = false;
-            this.PnContratto.Location = new System.Drawing.Point(741, 0);
+            this.PnContratto.Location = new System.Drawing.Point(763, 0);
             this.PnContratto.Name = "PnContratto";
             this.PnContratto.Size = new System.Drawing.Size(300, 466);
             this.PnContratto.TabIndex = 21;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.rbDeterminato);
+            this.panel1.Controls.Add(this.rbIndeterminato);
+            this.panel1.Location = new System.Drawing.Point(89, 76);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(200, 32);
+            this.panel1.TabIndex = 22;
+            // 
+            // rbDeterminato
+            // 
+            this.rbDeterminato.AutoSize = true;
+            this.rbDeterminato.Location = new System.Drawing.Point(3, 13);
+            this.rbDeterminato.Name = "rbDeterminato";
+            this.rbDeterminato.Size = new System.Drawing.Size(80, 17);
+            this.rbDeterminato.TabIndex = 14;
+            this.rbDeterminato.TabStop = true;
+            this.rbDeterminato.Text = "determinato";
+            this.rbDeterminato.UseVisualStyleBackColor = true;
+            this.rbDeterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbContratto_KeyDown);
+            // 
+            // rbIndeterminato
+            // 
+            this.rbIndeterminato.AutoSize = true;
+            this.rbIndeterminato.Location = new System.Drawing.Point(109, 13);
+            this.rbIndeterminato.Name = "rbIndeterminato";
+            this.rbIndeterminato.Size = new System.Drawing.Size(88, 17);
+            this.rbIndeterminato.TabIndex = 15;
+            this.rbIndeterminato.TabStop = true;
+            this.rbIndeterminato.Text = "indeterminato";
+            this.rbIndeterminato.UseVisualStyleBackColor = true;
+            this.rbIndeterminato.CheckedChanged += new System.EventHandler(this.rbIndeterminato_CheckedChanged);
+            this.rbIndeterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbContratto_KeyDown);
             // 
             // dtpDataFine
             // 
@@ -429,6 +501,8 @@
             this.dtpDataFine.Name = "dtpDataFine";
             this.dtpDataFine.Size = new System.Drawing.Size(199, 20);
             this.dtpDataFine.TabIndex = 21;
+            this.dtpDataFine.ValueChanged += new System.EventHandler(this.dtpDataFine_ValueChanged);
+            this.dtpDataFine.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataFine_KeyDown);
             // 
             // dtpDataInizio
             // 
@@ -438,6 +512,8 @@
             this.dtpDataInizio.Name = "dtpDataInizio";
             this.dtpDataInizio.Size = new System.Drawing.Size(199, 20);
             this.dtpDataInizio.TabIndex = 20;
+            this.dtpDataInizio.ValueChanged += new System.EventHandler(this.dtpDataInizio_ValueChanged);
+            this.dtpDataInizio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataInizio_KeyDown);
             // 
             // label10
             // 
@@ -465,6 +541,7 @@
             this.nudMonteOre.Name = "nudMonteOre";
             this.nudMonteOre.Size = new System.Drawing.Size(200, 20);
             this.nudMonteOre.TabIndex = 17;
+            this.nudMonteOre.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudMonteOre_KeyDown);
             // 
             // label12
             // 
@@ -474,29 +551,6 @@
             this.label12.Size = new System.Drawing.Size(58, 13);
             this.label12.TabIndex = 16;
             this.label12.Text = "Monte ore:";
-            // 
-            // rbIndeterminato
-            // 
-            this.rbIndeterminato.AutoSize = true;
-            this.rbIndeterminato.Location = new System.Drawing.Point(201, 89);
-            this.rbIndeterminato.Name = "rbIndeterminato";
-            this.rbIndeterminato.Size = new System.Drawing.Size(88, 17);
-            this.rbIndeterminato.TabIndex = 15;
-            this.rbIndeterminato.TabStop = true;
-            this.rbIndeterminato.Text = "indeterminato";
-            this.rbIndeterminato.UseVisualStyleBackColor = true;
-            this.rbIndeterminato.CheckedChanged += new System.EventHandler(this.rbIndeterminato_CheckedChanged);
-            // 
-            // rbDeterminato
-            // 
-            this.rbDeterminato.AutoSize = true;
-            this.rbDeterminato.Location = new System.Drawing.Point(79, 89);
-            this.rbDeterminato.Name = "rbDeterminato";
-            this.rbDeterminato.Size = new System.Drawing.Size(80, 17);
-            this.rbDeterminato.TabIndex = 14;
-            this.rbDeterminato.TabStop = true;
-            this.rbDeterminato.Text = "determinato";
-            this.rbDeterminato.UseVisualStyleBackColor = true;
             // 
             // label13
             // 
@@ -515,7 +569,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1041, 466);
+            this.ClientSize = new System.Drawing.Size(1063, 466);
             this.Controls.Add(this.PnContratto);
             this.Controls.Add(this.pnDipartimento);
             this.Controls.Add(this.pnCDC);
@@ -526,12 +580,17 @@
             this.Load += new System.EventHandler(this.FrmUtente_Load);
             this.PnUtente.ResumeLayout(false);
             this.PnUtente.PerformLayout();
+            this.pnTipoDocente.ResumeLayout(false);
+            this.pnTipoDocente.PerformLayout();
+            this.panel2.ResumeLayout(false);
             this.pnCDC.ResumeLayout(false);
             this.pnCDC.PerformLayout();
             this.pnDipartimento.ResumeLayout(false);
             this.pnDipartimento.PerformLayout();
             this.PnContratto.ResumeLayout(false);
             this.PnContratto.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -553,8 +612,6 @@
         private System.Windows.Forms.ComboBox cbTipoUtente;
         private System.Windows.Forms.Button btAnnulla;
         private System.Windows.Forms.Button btSalva;
-        private System.Windows.Forms.CheckBox ckbDocenteTeorico;
-        private System.Windows.Forms.CheckBox ckbDocentePratico;
         private System.Windows.Forms.Panel PnUtente;
         private System.Windows.Forms.Panel pnCDC;
         private System.Windows.Forms.Panel pnDipartimento;
@@ -581,5 +638,10 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckedListBox clbDisciplina;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Panel pnTipoDocente;
+        private System.Windows.Forms.RadioButton rbLaboratorio;
+        private System.Windows.Forms.RadioButton rbTeorico;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
     }
 }

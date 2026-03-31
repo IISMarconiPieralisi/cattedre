@@ -12,7 +12,7 @@ namespace Cattedre
    public static class ClsDipartimentoBL
    {
         static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
+        #region crud
         public static List<ClsDipartimentoDL> CaricaDipartimenti()
          {
             
@@ -53,10 +53,9 @@ namespace Cattedre
 
         public static void InserisciDipartimento(ClsDipartimentoDL dip)
         {
-            
-
             try
             {
+                CambiaCoordinatoreDipartimento(dip, dip.IDutente);
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
@@ -115,6 +114,7 @@ namespace Cattedre
 
             try
             {
+                CambiaCoordinatoreDipartimento(dipartimento, dipartimento.IDutente);
                 conn.Open();
                 string sql = @"UPDATE dipartimenti 
                            SET nome = @nome, 
@@ -128,6 +128,7 @@ namespace Cattedre
                     int righeCoinvolte = cmd.ExecuteNonQuery();
                     if (righeCoinvolte < 0)
                         throw new Exception("non è stato modificato nessun record");
+
                 }
             }
             catch (Exception ex)
@@ -135,10 +136,54 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
+        #region crud specifiche
+        public static void CambiaCoordinatoreDipartimento(ClsDipartimentoDL dipartimento,long IDutente)
+        {
+            ClsDipartimentoDL dipartimentoCordinato = UtenteCoordinaDipartimento(IDutente);
+            if (dipartimentoCordinato.ID != dipartimento.ID)
+            {
+                ModificaCoordinatoreDipartimento(dipartimentoCordinato, 0);
+            }
+        }
+
+
+
         public static bool ModificaCoordinatoreDipartimento(ClsDipartimentoDL dipartimento, long IDutente)
         {
-            if (dipartimento == null || dipartimento.ID <= 0)
+            if (dipartimento.ID <= 0)
                 return false;
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"UPDATE dipartimenti
+                           SET IDutente = @IDutente
+                           WHERE id = @id";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente <= 0 ? (object)DBNull.Value : IDutente);
+                        cmd.Parameters.AddWithValue("@id", dipartimento.ID);
+
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        return righeCoinvolte > 0;
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                throw new Exception($"Errore database durante la modifica del coordinatore: {ex.Message}", ex);
+            }
+        }
+
+        public static void EliminaCoordinatoreDipartimento(long IDutente)
+        {
+            ClsDipartimentoDL dipartimentoCoordinato = UtenteCoordinaDipartimento(IDutente);
+            if (dipartimentoCoordinato == null)
+                return;
 
             try
             {
@@ -147,16 +192,13 @@ namespace Cattedre
                     conn.Open();
 
                     string sql = @"UPDATE dipartimenti
-                           SET IDutente = @IDutente
+                           SET IDutente = NULL
                            WHERE id = @id";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
-                        cmd.Parameters.AddWithValue("@id", dipartimento.ID);
-
+                        cmd.Parameters.AddWithValue("@id", dipartimentoCoordinato.ID);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
-                        return righeCoinvolte > 0;
                     }
                 }
             }
@@ -164,8 +206,10 @@ namespace Cattedre
             {
                 throw new Exception(ex.Message);
             }
-        }
 
+        }
+        #endregion
+        #region rilevamenti specifici
 
         public static ClsDipartimentoDL UtenteCoordinaDipartimento(long IDutente)
         {
@@ -241,35 +285,7 @@ namespace Cattedre
             }
             return utente;
         }
-        public static void EliminaCoordinatoreDipartimento (long IDutente)
-        {
-            ClsDipartimentoDL dipartimentoCoordinato = UtenteCoordinaDipartimento(IDutente);
-            if (dipartimentoCoordinato == null)
-                return;
-            
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
 
-                    string sql = @"UPDATE dipartimenti
-                           SET IDutente = NULL
-                           WHERE id = @id";
-
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@id", dipartimentoCoordinato.ID);
-                        int righeCoinvolte = cmd.ExecuteNonQuery();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-
-        }
         //public static long RilevaIDdipartimento (string nome)
         //{
 
@@ -336,5 +352,7 @@ namespace Cattedre
             }
             return NomeDipartimento;
         }
+        #endregion
+
     }
 }

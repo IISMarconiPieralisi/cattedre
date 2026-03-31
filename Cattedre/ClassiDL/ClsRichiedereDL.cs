@@ -35,6 +35,12 @@ namespace Cattedre
         {
             IDclassediconcorso = idClasseDiConcorso;
         }
+        public ClsRichiedereDL (long idclasseDiconcorso,long iddisciplina)
+        {
+            IDclassediconcorso = idclasseDiconcorso;
+            IDdisciplina = iddisciplina;
+            IDutente = 0;
+        }
         #endregion
 
         #region proprietà

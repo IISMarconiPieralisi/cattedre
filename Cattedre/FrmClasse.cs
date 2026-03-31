@@ -230,12 +230,66 @@ namespace Cattedre
                 cbClasseArticolataCon.Enabled = false;
         }
 
+        private void nudAnno_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                tbSezione.Focus();
+            }
+        }
+
         private void tbSezione_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter && tbSezione.Text.Length >= 2)
+            if (e.KeyCode == Keys.Enter && tbSezione.Text.Length >= 2)
             {
                 e.SuppressKeyPress = true;
                 cbAnnoScolastico.Focus();
+            }
+        }
+
+        private void cbAnnoScolastico_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbAnnoScolastico.SelectedIndex != -1)
+            {
+                e.SuppressKeyPress = true;
+                cbClasseArticolataCon.Focus();
+            }
+        }
+
+        private void cbClasseArticolataCon_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbClasseArticolataCon.SelectedIndex != -1)
+            {
+                e.SuppressKeyPress = true;
+                cbIndirizzo.Focus();
+            }
+        }
+
+        private void cbIndirizzo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbIndirizzo.SelectedIndex != -1)
+            {
+                e.SuppressKeyPress = true;
+                cbDipartimento.Focus();
+            }
+        }
+
+        private void cbDipartimento_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbDipartimento.SelectedIndex != -1)
+            {
+                e.SuppressKeyPress = true;
+                cbCoordinatore.Focus();
+            }
+        }
+
+        private void cbCoordinatore_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbCoordinatore.SelectedIndex != -1)
+            {
+                e.SuppressKeyPress = true;
+                btSalva.Focus();
             }
         }
     }

@@ -82,7 +82,7 @@
             this.tbSezione.MaxLength = 3;
             this.tbSezione.Name = "tbSezione";
             this.tbSezione.Size = new System.Drawing.Size(190, 20);
-            this.tbSezione.TabIndex = 29;
+            this.tbSezione.TabIndex = 1;
             this.tbSezione.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSezione_KeyDown);
             // 
             // label4
@@ -132,13 +132,14 @@
             0});
             this.nudAnno.Name = "nudAnno";
             this.nudAnno.Size = new System.Drawing.Size(190, 20);
-            this.nudAnno.TabIndex = 33;
+            this.nudAnno.TabIndex = 0;
             this.nudAnno.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.nudAnno.ValueChanged += new System.EventHandler(this.nudAnno_ValueChanged);
+            this.nudAnno.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudAnno_KeyDown);
             // 
             // label5
             // 
@@ -158,10 +159,11 @@
             this.cbCoordinatore.Location = new System.Drawing.Point(132, 324);
             this.cbCoordinatore.Name = "cbCoordinatore";
             this.cbCoordinatore.Size = new System.Drawing.Size(190, 21);
-            this.cbCoordinatore.TabIndex = 35;
+            this.cbCoordinatore.TabIndex = 6;
             this.cbCoordinatore.DropDown += new System.EventHandler(this.cbCoordinatore_DropDown);
             this.cbCoordinatore.SelectedIndexChanged += new System.EventHandler(this.cbCoordinatore_SelectedIndexChanged);
             this.cbCoordinatore.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.cbCoordinatore_Format);
+            this.cbCoordinatore.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbCoordinatore_KeyDown);
             // 
             // label1
             // 
@@ -181,7 +183,8 @@
             this.cbIndirizzo.Location = new System.Drawing.Point(132, 220);
             this.cbIndirizzo.Name = "cbIndirizzo";
             this.cbIndirizzo.Size = new System.Drawing.Size(190, 21);
-            this.cbIndirizzo.TabIndex = 37;
+            this.cbIndirizzo.TabIndex = 4;
+            this.cbIndirizzo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbIndirizzo_KeyDown);
             // 
             // cbClasseArticolataCon
             // 
@@ -193,7 +196,8 @@
             this.cbClasseArticolataCon.Location = new System.Drawing.Point(132, 168);
             this.cbClasseArticolataCon.Name = "cbClasseArticolataCon";
             this.cbClasseArticolataCon.Size = new System.Drawing.Size(190, 21);
-            this.cbClasseArticolataCon.TabIndex = 38;
+            this.cbClasseArticolataCon.TabIndex = 3;
+            this.cbClasseArticolataCon.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbClasseArticolataCon_KeyDown);
             // 
             // label6
             // 
@@ -222,8 +226,9 @@
             this.cbAnnoScolastico.Location = new System.Drawing.Point(132, 116);
             this.cbAnnoScolastico.Name = "cbAnnoScolastico";
             this.cbAnnoScolastico.Size = new System.Drawing.Size(190, 21);
-            this.cbAnnoScolastico.TabIndex = 41;
+            this.cbAnnoScolastico.TabIndex = 2;
             this.cbAnnoScolastico.SelectedIndexChanged += new System.EventHandler(this.cbAnnoScolastico_SelectedIndexChanged);
+            this.cbAnnoScolastico.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAnnoScolastico_KeyDown);
             // 
             // cbDipartimento
             // 
@@ -234,7 +239,8 @@
             this.cbDipartimento.Location = new System.Drawing.Point(132, 272);
             this.cbDipartimento.Name = "cbDipartimento";
             this.cbDipartimento.Size = new System.Drawing.Size(190, 21);
-            this.cbDipartimento.TabIndex = 42;
+            this.cbDipartimento.TabIndex = 5;
+            this.cbDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDipartimento_KeyDown);
             // 
             // FrmClasse
             // 

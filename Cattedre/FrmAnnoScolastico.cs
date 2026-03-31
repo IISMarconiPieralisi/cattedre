@@ -132,5 +132,23 @@ namespace Cattedre
             dtpDataInizio.Value = (_annoScolastico.DataFine).AddYears(-1);
             dtpDataFine.Value = _annoScolastico.DataFine;
         }
+
+        private void dtpDataInizio_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                dtpDataFine.Focus();
+            }
+        }
+
+        private void dtpDataFine_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btSalva.Focus();
+            }
+        }
     }
 }

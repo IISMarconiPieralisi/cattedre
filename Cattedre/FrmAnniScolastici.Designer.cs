@@ -30,13 +30,13 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAnniScolastici));
             this.lvAnniScolastici = new System.Windows.Forms.ListView();
+            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chSigla = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDataInizio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDataFine = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btInserisci = new System.Windows.Forms.Button();
             this.btModifica = new System.Windows.Forms.Button();
             this.btElimina = new System.Windows.Forms.Button();
-            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvAnniScolastici
@@ -57,6 +57,12 @@
             this.lvAnniScolastici.TabIndex = 0;
             this.lvAnniScolastici.UseCompatibleStateImageBehavior = false;
             this.lvAnniScolastici.View = System.Windows.Forms.View.Details;
+            this.lvAnniScolastici.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvAnniScolastici_KeyDown);
+            // 
+            // chID
+            // 
+            this.chID.Text = "ID";
+            this.chID.Width = 50;
             // 
             // chSigla
             // 
@@ -104,11 +110,6 @@
             this.btElimina.Text = "Elimina";
             this.btElimina.UseVisualStyleBackColor = true;
             this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
-            // 
-            // chID
-            // 
-            this.chID.Text = "ID";
-            this.chID.Width = 50;
             // 
             // FrmAnniScolastici
             // 

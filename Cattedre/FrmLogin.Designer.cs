@@ -78,7 +78,7 @@
             this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(219, 15);
             this.tbPassword.TabIndex = 11;
-            this.tbPassword.Text = "vitalf00!";
+            this.tbPassword.Text = "Pigini";
             this.tbPassword.Click += new System.EventHandler(this.tbPassword_Click);
             // 
             // tbNomeUtente
@@ -90,7 +90,7 @@
             this.tbNomeUtente.Name = "tbNomeUtente";
             this.tbNomeUtente.Size = new System.Drawing.Size(241, 15);
             this.tbNomeUtente.TabIndex = 10;
-            this.tbNomeUtente.Text = "vittorio.alfieri@iismarconipieralisi.it";
+            this.tbNomeUtente.Text = "marcello.pigini@iismarconipieralisi.it";
             this.tbNomeUtente.Click += new System.EventHandler(this.tbNomeUtente_Click);
             // 
             // panel1

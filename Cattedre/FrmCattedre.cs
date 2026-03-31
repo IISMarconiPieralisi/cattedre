@@ -29,7 +29,6 @@ namespace Cattedre
 
         ClsUtenteDL utenteLoggato;
 
-        int riga = 0;
         int IDdipartimento = 0;
         long IDannoscolastico = 0;
         string annoscolasticoselezionato = "";

@@ -76,7 +76,7 @@
             this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(219, 15);
             this.tbPassword.TabIndex = 11;
-            this.tbPassword.Text = "Pigini";
+            this.tbPassword.Text = "vitalf00!";
             this.tbPassword.Click += new System.EventHandler(this.tbPassword_Click);
             // 
             // tbNomeUtente
@@ -88,7 +88,7 @@
             this.tbNomeUtente.Name = "tbNomeUtente";
             this.tbNomeUtente.Size = new System.Drawing.Size(241, 15);
             this.tbNomeUtente.TabIndex = 10;
-            this.tbNomeUtente.Text = "marcello.pigini@iismarconipieralisi.it";
+            this.tbNomeUtente.Text = "vittorio.alfieri@iismarconipieralisi.it";
             this.tbNomeUtente.Click += new System.EventHandler(this.tbNomeUtente_Click);
             // 
             // panel2
@@ -214,6 +214,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Load += new System.EventHandler(this.FrmLogin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);

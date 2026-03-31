@@ -178,6 +178,9 @@ namespace Cattedre
                 classi = ClsClasseBL.CaricaClassi();
                 CaricaListView(classi);
 
+           }else
+           {
+                MessageBox.Show("Classe non selezionata", "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
            }
         }
         private ClsClasseDL classeSuccessiva(ClsClasseDL classe)
@@ -239,6 +242,7 @@ namespace Cattedre
                 cb.Name = $"{anno.ID}";
                 cb.Text = anno.Sigla;
                 cb.Dock = DockStyle.Fill;
+                cb.KeyDown += CheckBoxAnno_KeyDown;
                 tplAnniScolastici.Controls.Add(cb, Sezioni, 0);
                 Sezioni++;
             }
@@ -263,5 +267,74 @@ namespace Cattedre
             }
         }
         #endregion
+
+        private void lvClassi_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                brModifica_Click(null, null);
+            }else if (e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
+            }
+        }
+
+        private void cbAnnoClasse_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbAnnoClasse.SelectedIndex != -1)
+            {
+                e.SuppressKeyPress = true;
+                cbIndirizzi.Focus();
+            }
+        }
+
+        private void cbIndirizzi_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbIndirizzi.SelectedIndex != -1)
+            {
+                e.SuppressKeyPress = true;
+                tplAnniScolastici.Controls.OfType<CheckBox>().FirstOrDefault()?.Focus();
+            }
+        }
+
+        private DateTime _ultimoClickCheckBox = DateTime.MinValue;
+        private object _ultimoControlloClick = null;
+
+        private void CheckBoxAnno_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                if (sender is CheckBox cb)
+                {
+                    DateTime now = DateTime.Now;
+                    TimeSpan intervallo = now - _ultimoClickCheckBox;
+
+                    // Se è lo stesso controllo e il tempo è inferiore a 800ms (come in FrmUtente)
+                    if (_ultimoControlloClick == sender && intervallo.TotalMilliseconds < 800)
+                    {
+                        // Doppio click rapido -> passa a btCerca
+                        _ultimoControlloClick = null;
+                        _ultimoClickCheckBox = DateTime.MinValue;
+                        btCerca.Focus();
+                    }
+                    else
+                    {
+                        // Click singolo -> cambia lo stato della checkbox
+                        cb.Checked = !cb.Checked;
+                        _ultimoControlloClick = sender;
+                        _ultimoClickCheckBox = now;
+                    }
+                }
+            }
+            else
+            {
+                // Reset se premi altro tasto
+                _ultimoControlloClick = null;
+                _ultimoClickCheckBox = DateTime.MinValue;
+            }
+        }
     }
 }

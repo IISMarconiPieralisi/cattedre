@@ -110,7 +110,6 @@
             this.lvDiscipline.Location = new System.Drawing.Point(12, 72);
             this.lvDiscipline.Name = "lvDiscipline";
             this.lvDiscipline.Size = new System.Drawing.Size(1146, 314);
-            this.lvDiscipline.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvDiscipline.TabIndex = 1;
             this.lvDiscipline.UseCompatibleStateImageBehavior = false;
             this.lvDiscipline.View = System.Windows.Forms.View.Details;

@@ -55,7 +55,7 @@ namespace Cattedre
                 lvi.SubItems.Add(utente.Nome);
                 lvi.SubItems.Add(utente.Cognome);
                 lvi.SubItems.Add(utente.Email);
-                string _tipoDocente = (utente.TipoDocente == 'T') ? " teorico" : (utente.TipoDocente == 'L') ? " partico" : string.Empty;
+                string _tipoDocente = (utente.TipoDocente == 'T') ? " teorico" : (utente.TipoDocente == 'L') ? " pratico" : string.Empty;
                 switch (utente.TipoUtente)
                 {
                     case "P":
@@ -68,7 +68,7 @@ namespace Cattedre
                         lvi.SubItems.Add($"docente{_tipoDocente}");
                         break;
                     case "C":
-                        lvi.SubItems.Add($" docente{_tipoDocente} coordinatore dipartimento");
+                        lvi.SubItems.Add($"docente{_tipoDocente} coordinatore dipartimento");
                         break;
                 }
                 if (contratto != null)

@@ -338,7 +338,6 @@ namespace Cattedre
 
         public static int MostraOreDocentePratico(long IDdocente)
         {
-            int _oreDocentePratico = 0;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();

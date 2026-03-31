@@ -130,7 +130,7 @@ namespace Cattedre
                 OnLogout?.Invoke(); // segnala al Program che è un logout
                 this.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Errore Durante il logout, contattare un amministratore", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

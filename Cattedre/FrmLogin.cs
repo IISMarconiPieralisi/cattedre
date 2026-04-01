@@ -14,11 +14,10 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using System.IO;
 using System.Threading;
-using ComponentFactory.Krypton.Toolkit;
 
 namespace Cattedre
 {
-    public partial class FrmLogin : KryptonForm
+    public partial class FrmLogin : Form
     {
         public FrmLogin()
         {

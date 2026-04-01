@@ -16,6 +16,7 @@ namespace Cattedre
         List<ClsUtenteDL> _coordinatori = new List<ClsUtenteDL>();
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
         List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
+        Dictionary<string, List<string>> Filtri = new Dictionary<string, List<string>>();
         //inserisco il utenteLoggato a in questa pagina;
         ClsUtenteDL UtenteLoggato;
         public FrmClassi(ClsUtenteDL utenteLog)
@@ -197,8 +198,8 @@ namespace Cattedre
         {
             try
             {
-                Dictionary<string, List<string>> Filtri = new Dictionary<string, List<string>>();
-                if(cbAnnoClasse.SelectedIndex!=-1)
+                Filtri = new Dictionary<string, List<string>>();
+                if (cbAnnoClasse.SelectedIndex!=-1)
                 {
                     Filtri.Add("anno",new List<string> { $"'{cbAnnoClasse.Text}'" });
                 }
@@ -223,10 +224,12 @@ namespace Cattedre
         private void btRipristina_Click(object sender, EventArgs e)
         {
             btRipristina.Enabled = false;
-            GestisciListview();
             cbAnnoClasse.SelectedIndex = -1;
             cbIndirizzi.SelectedIndex = -1;
+            Filtri.Clear();
             DeselezionaCheckBox(tplAnniScolastici);
+            GestisciListview();
+
 
         }
         private void GeneraFiltriAnnoScolastico()
@@ -339,14 +342,18 @@ namespace Cattedre
         #region gestione Anni
         private void GestisciListview()
         {
-            classi = ClsClasseBL.CaricaClassi();
-            long IDannoCorrente = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
-            List<ClsClasseDL> classiAnnoCorrente = classi
-                .Where(c => c.IDannoscolastico == IDannoCorrente)
-                .OrderBy(c => c.Anno)
-                .ThenBy(c => c.Sezione)
-                .ToList();
-            CaricaListView(classiAnnoCorrente);
+            if(Filtri.Count>0)classi = ClsClasseBL.CaricaClassiFiltrate(Filtri);
+            else classi = ClsClasseBL.CaricaClassi();
+            if (!Filtri.ContainsKey("IDannoScolastico"))
+            {
+                long IDannoCorrente = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+                 classi = classi
+                    .Where(c => c.IDannoscolastico == IDannoCorrente)
+                    .OrderBy(c => c.Anno)
+                    .ThenBy(c => c.Sezione)
+                    .ToList();
+            }
+            CaricaListView(classi);
         }
         #endregion
     

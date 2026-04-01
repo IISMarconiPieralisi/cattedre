@@ -140,10 +140,10 @@ namespace Cattedre
         #region crud specifiche
         public static void CambiaCoordinatoreDipartimento(ClsDipartimentoDL dipartimento,long IDutente)
         {
-            ClsDipartimentoDL dipartimentoCordinato = UtenteCoordinaDipartimento(IDutente);
-            if (dipartimentoCordinato.ID != dipartimento.ID)
+            ClsDipartimentoDL dipartimentoCoordinato = UtenteCoordinaDipartimento(IDutente);
+            if ( dipartimentoCoordinato!=null && dipartimentoCoordinato.ID != dipartimento.ID)
             {
-                ModificaCoordinatoreDipartimento(dipartimentoCordinato, 0);
+                ModificaCoordinatoreDipartimento(dipartimentoCoordinato, 0);
             }
         }
 

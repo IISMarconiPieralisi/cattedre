@@ -556,7 +556,8 @@ namespace Cattedre
                                anno = @anno, 
                                oreLaboratorio = @oreLaboratorio, 
                                oreTeoria = @oreTeoria, 
-                               disciplinaSpeciale = @disciplinaSpeciale
+                               disciplinaSpeciale = @disciplinaSpeciale,
+                               IDdisciplinaSuccessiva=@IDdisciplinaSuccessiva
                            WHERE id = @id";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
@@ -565,6 +566,10 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
                     cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                     cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
+                    if (disciplina.IDdisciplinaSuccessiva > 0)
+                        cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", disciplina.IDdisciplinaSuccessiva);
+                    else
+                        cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", DBNull.Value);
                     cmd.Parameters.AddWithValue("@id", disciplina.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 

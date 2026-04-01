@@ -68,11 +68,12 @@ namespace Cattedre
             {
                 // todo aggiungere nomi reali 
             new ClsPersona("Brutti", "Luca", new[] { "Home", "Login", "Grafica","DataBase","Form Dipartimento","Credits","Form Cattedre"}),
-            new ClsPersona("Scotichini", "Matteo", new[] { "DataBase", "Form CDC", "Form Indirizzo", "Form Disciplina "}),
-            new ClsPersona("Pierigè", "Samuel", new[] { "DataBase","Form Cattedre", "Form Utenti",}),
-            new ClsPersona("Vagnini", "Natan", new[] { "Form Cattedre", "Form Disciplina ","DataBase" }),
-            new ClsPersona("Tornari", "Lorenzo", new[] { "Form Disciplina ", "Form A.s", "F orm Classe" }),
-            new ClsPersona("Ercoli", "Mattia", new[] { "Form Dipartimento", "Form Utenti", "Form Contratto" }),
+            new ClsPersona("Scotichini", "Matteo", new[] {"DataBase", "Form CDC", "Form Indirizzo", "Form Disciplina "}),
+            new ClsPersona("Pierigè", "Samuel", new[] { "DataBase","Form Cattedre", "Form Utenti","Login","Home", "Form Classe"}),
+            new ClsPersona("Vagnini", "Natan", new[] { "Form Cattedre","Home", "Form Disciplina ","DataBase" ,"Form CDC"}),
+            new ClsPersona("Tornari", "Lorenzo", new[] { "Form Disciplina ", "Form A.s", "Form Classe" }),
+            new ClsPersona("Ercoli", "Mattia", new[] { "DataBase", "Form CDC", "Form Indirizzo", "Form Dipartimento",
+                "Form Utenti", "Form Contratto","Form Cattedre","Form Disciplina ", "Form A.s", "Form Classe","Grafica","Home", "Login" }),
 
             };
 

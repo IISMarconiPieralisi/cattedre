@@ -292,7 +292,7 @@ namespace Cattedre
                 {
                     sql += string.Join(" AND ", condizioni);
                 }
-
+                sql += " ORDER BY anno ASC";
                 cmd.CommandText = sql;
                 return cmd;
 

@@ -48,6 +48,11 @@ namespace Cattedre
         }
         private void FrmHomeUpdate_Load(object sender, EventArgs e)
         {
+            panel5.Visible = false;
+            panel6.Visible = false;
+            panel7.Visible = false;
+            panel8.Visible = false;
+
             RenderFotoTonda();
             if (utente.TipoUtente == "A")
             {
@@ -138,6 +143,8 @@ namespace Cattedre
 
         private void cDCToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            panel3.Visible = false;
             if (Application.OpenForms["frmCdcs"] == null)
                 frmCdcs = new FrmCdCs();
             MostraFormMDI(frmCdcs);
@@ -145,6 +152,8 @@ namespace Cattedre
 
         private void iNDIRIZZIToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            panel3.Visible = false;
             if (Application.OpenForms["FrmIndirizzi"] == null)
                 frmIndirizzi = new FrmIndirizzi();
             MostraFormMDI(frmIndirizzi);
@@ -152,6 +161,8 @@ namespace Cattedre
 
         private void dIPARTIMENTIToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            panel3.Visible = false;
             if (Application.OpenForms["FrmDipartimenti"] == null)
                 frmDipartimenti = new FrmDipartimenti();
             MostraFormMDI(frmDipartimenti);
@@ -159,6 +170,8 @@ namespace Cattedre
 
         private void dISCIPLINEToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            panel3.Visible = false;
             if (Application.OpenForms["FrmDiscipline"] == null)
                 frmDiscipline = new FrmDiscipline(utente);
             MostraFormMDI(frmDiscipline);
@@ -166,6 +179,8 @@ namespace Cattedre
 
         private void cLASSIToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            panel3.Visible = false;
             if (Application.OpenForms["FrmClassi"] == null)
                 frmClassi = new FrmClassi(utente);
             MostraFormMDI(frmClassi);
@@ -173,6 +188,8 @@ namespace Cattedre
 
         private void uTENTIToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            panel3.Visible = false;
             if (Application.OpenForms["FrmUtenti"] == null)
             {
                 frmUtenti = new FrmUtenti();
@@ -187,6 +204,8 @@ namespace Cattedre
 
         private void creditToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            panel3.Visible = false;
             if (Application.OpenForms["FrmCredits"] == null)
             {
                 frmCredits = new FrmCredits();              
@@ -197,6 +216,8 @@ namespace Cattedre
 
         private void annoScolasticoToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            panel3.Visible = false;
             if (Application.OpenForms["FrmAnniScolastici"] == null)
                 FrmAnniScolastici = new FrmAnniScolastici();
                 MostraFormMDI(FrmAnniScolastici);
@@ -204,6 +225,8 @@ namespace Cattedre
 
         private void btDiscipline_KeyDown(object sender, KeyEventArgs e)
         {
+            panel1.Visible = false;
+            panel3.Visible = false;
             if (e.KeyCode == Keys.Tab)
             {
                 e.SuppressKeyPress = true;
@@ -215,6 +238,8 @@ namespace Cattedre
 
         private void menuStrip1_KeyDown(object sender, KeyEventArgs e)
         {
+            panel1.Visible = false;
+            panel3.Visible = false;
             if (e.KeyCode == Keys.Escape || (e.KeyCode == Keys.Tab && e.Shift))
             {
                 e.SuppressKeyPress = true;
@@ -223,12 +248,82 @@ namespace Cattedre
                 btVaiACattedre.Focus();
             }
         }
+        private void CentraControlli()
+        {
+            // 5,3,4 le label 
+            // Esempio per una Label chiamata 'label1' dentro 'panel1'
+            label5.Left = (panel3.ClientSize.Width - label5.Width) / 2;
+            label5.Top = (panel3.ClientSize.Height - label5.Height) / 2;
+
+            // Esempio per un Bottone 'button1' posizionato sotto la label
+            btVaiACattedre2.Left = (panel3.ClientSize.Width - btVaiACattedre2.Width) / 2;
+            btVaiACattedre2.Top = label4.Bottom + 10; // 10 pixel di margine sotto la label
+        }
+
+        // Aggancia la funzione all'evento Resize del Panel
+        private void Panel3_Resize(object sender, EventArgs e)
+        {
+            CentraControlli();
+        }
 
         private void menuStrip1_MenuDeactivate(object sender, EventArgs e)
         {
+
             menuStrip1.MenuDeactivate -= menuStrip1_MenuDeactivate;
             btVaiACattedre.Focus();
         }
+
+        private void btVaiACattedre_MouseEnter(object sender, EventArgs e)
+        {
+            panel5.Visible = true ;
+
+        }
+
+        private void btVaiACattedre_MouseLeave(object sender, EventArgs e)
+        {
+            panel5.Visible = false;
+
+        }
+       
+
+        private void btUtenti_MouseEnter(object sender, EventArgs e)
+        {
+            panel6.Visible = true;
+
+        }
+
+        private void btUtenti_MouseLeave(object sender, EventArgs e)
+        {
+            panel6.Visible = false;
+
+        }
+
+        private void btClassi_MouseEnter(object sender, EventArgs e)
+        {
+            panel7.Visible = true;
+
+        }
+
+        private void btClassi_MouseLeave(object sender, EventArgs e)
+        {
+            panel7.Visible = false;
+
+        }
+
+        private void btDiscipline_MouseEnter(object sender, EventArgs e)
+        {
+            panel8.Visible = true;
+
+        }
+
+        private void btDiscipline_MouseLeave(object sender, EventArgs e)
+        {
+            panel8.Visible = false;
+
+        }
+
+
+
 
         //private void cONTRATTIToolStripMenuItem_Click(object sender, EventArgs e)
         //{

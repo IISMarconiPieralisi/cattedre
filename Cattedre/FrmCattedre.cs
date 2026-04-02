@@ -790,37 +790,42 @@ namespace Cattedre
                 MessageBox.Show("Anno successivo non trovato", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            List<ClsClasseDL> classiAnnoSuccessivo = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, annoSuccessivo.ID);
+            if (classiAnnoSuccessivo == null || classiAnnoSuccessivo.Count == 0)
+            {
+                MessageBox.Show("Non esistono classi per l'anno scolastico successivo. Impossibile generare le cattedre.", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            bool esistonoAssegnazioniAnnoSuccessivo = ClsAssegnareBL.EsistonoAssegnazioniAnnoSuccessivo(annoSuccessivo.ID);
+
+            if (utenteLoggato.TipoUtente == "C" && !esistonoAssegnazioniAnnoSuccessivo)
+            {
+                DialogResult dr = MessageBox.Show(
+                    "Vuoi generare le cattedre per l'anno successivo?",
+                    "Generazione",
+                    MessageBoxButtons.YesNo);
+
+                if (dr != DialogResult.Yes)
+                    return;
+
+                if (annoCorrente.ID == annoSuccessivo.ID)
+                {
+                    MessageBox.Show("Anno non valido", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                ClsAssegnareBL.GeneraCattedreAnnoSuccessivo(
+                    IDdipartimento,
+                    (int)annoCorrente.ID,
+                    (int)annoSuccessivo.ID);
+
+                MessageBox.Show("Cattedre generate con successo", "GENERAZIONE RIUSCITA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             else
             {
-                bool esistonoAssegnazioniAnnoSuccessivo = ClsAssegnareBL.EsistonoAssegnazioniAnnoSuccessivo(annoSuccessivo.ID);
-
-                if (utenteLoggato.TipoUtente == "C" && !esistonoAssegnazioniAnnoSuccessivo)
-                {
-                    DialogResult dr = MessageBox.Show(
-                        "Vuoi generare le cattedre per l'anno successivo?",
-                        "Generazione",
-                        MessageBoxButtons.YesNo);
-
-                    if (dr != DialogResult.Yes)
-                        return;
-
-                    if (annoCorrente.ID == annoSuccessivo.ID)
-                    {
-                        MessageBox.Show("Anno non valido", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    ClsAssegnareBL.GeneraCattedreAnnoSuccessivo(
-                        IDdipartimento,
-                        (int)annoCorrente.ID,
-                        (int)annoSuccessivo.ID);
-
-                    MessageBox.Show("Cattedre generate con successo", "GENERAZIONE RIUSCITA", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Cattedre per anno successivo già generate", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                MessageBox.Show("Cattedre per anno successivo già generate", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

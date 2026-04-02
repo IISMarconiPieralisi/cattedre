@@ -194,7 +194,8 @@ namespace Cattedre
                     conn.Open();
                     string sql = "SELECT * FROM classi " +
                                  "WHERE classi.IDdipartimento = @IDdipartimento " +
-                                 "AND classi.IDannoscolastico = @IDannoscolastico";
+                                 "AND classi.IDannoscolastico = @IDannoscolastico " +
+                                 "ORDER BY classi.anno, classi.sezione";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);

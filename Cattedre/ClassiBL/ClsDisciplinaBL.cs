@@ -338,7 +338,6 @@ namespace Cattedre
 
         public static int MostraOreDocentePratico(long IDdocente)
         {
-            int _oreDocentePratico = 0;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
@@ -448,33 +447,38 @@ namespace Cattedre
 
         private static MySqlCommand CreaComandoRicerca(long iddipartimento, int anno, string nome, MySqlConnection conn)
         {
-            string sql = @"SELECT d.id,nome,anno,oreteoria,orelaboratorio,disciplinaspeciale,IDdisciplinaSuccessiva FROM discipline d ";
+            string sql = @"SELECT DISTINCT d.id, d.nome, d.anno, d.oreteoria, d.orelaboratorio, 
+                          d.disciplinaspeciale, d.IDdisciplinaSuccessiva 
+                   FROM discipline d";
+
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = conn;
-            string par=string.Empty;
+
             List<string> condizioni = new List<string>();
+
             if (iddipartimento > 0)
             {
-                sql += " JOIN gestire ON d.ID= gestire.IDdisciplina";
-                par = "IDdipartimento=@IDdipartimento";
+                sql += " JOIN gestire ON d.ID = gestire.IDdisciplina";
+                condizioni.Add("gestire.IDdipartimento = @IDdipartimento");
                 cmd.Parameters.AddWithValue("@IDdipartimento", iddipartimento);
-                condizioni.Add(par);
             }
+
             if (anno > 0)
             {
-                par = "anno=@anno";
+                condizioni.Add("d.anno = @anno");
                 cmd.Parameters.AddWithValue("@anno", anno);
-                condizioni.Add(par);
             }
-            if(!string.IsNullOrWhiteSpace(nome))
+
+            if (!string.IsNullOrWhiteSpace(nome))
             {
-                par = "nome Like @nome";
-                cmd.Parameters.AddWithValue("@nome",$"%{nome}%");
-                condizioni.Add(par);
+                condizioni.Add("d.nome LIKE @nome");
+                cmd.Parameters.AddWithValue("@nome", $"%{nome}%");
             }
+
             if (condizioni.Count > 0)
-                    sql += " WHERE " + string.Join(" AND ", condizioni);
-            sql += " ORDER BY anno ASC;";
+                sql += " WHERE " + string.Join(" AND ", condizioni);
+
+            sql += " ORDER BY d.anno ASC;";
             cmd.CommandText = sql;
             return cmd;
         }
@@ -557,7 +561,8 @@ namespace Cattedre
                                anno = @anno, 
                                oreLaboratorio = @oreLaboratorio, 
                                oreTeoria = @oreTeoria, 
-                               disciplinaSpeciale = @disciplinaSpeciale
+                               disciplinaSpeciale = @disciplinaSpeciale,
+                               IDdisciplinaSuccessiva=@IDdisciplinaSuccessiva
                            WHERE id = @id";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
@@ -566,6 +571,10 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
                     cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                     cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
+                    if (disciplina.IDdisciplinaSuccessiva > 0)
+                        cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", disciplina.IDdisciplinaSuccessiva);
+                    else
+                        cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", DBNull.Value);
                     cmd.Parameters.AddWithValue("@id", disciplina.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 

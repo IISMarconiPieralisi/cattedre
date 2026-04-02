@@ -101,8 +101,8 @@ namespace Cattedre
             PopolaclbCdcs();
             if (_disciplina != null)
             {
-                //carico le informazioni della disciplina
-                lblAnnoSuc.Text = (_disciplina.Anno + 1).ToString() + "°";
+                //carico le informazioni della disciplina successiva
+                anno = _disciplina.Anno;
                 tbNome.Text = _disciplina.Nome;
                 nudOreLab.Value = _disciplina.OreLaboratorio;
                 nudOreTeoria.Value = _disciplina.OreTeoria;
@@ -115,37 +115,12 @@ namespace Cattedre
                 LoadclbIndirizzi();
             }
             else
-            {
                 _disciplina = new ClsDisciplinaDL();
-            }
+            CambiaAnnoDisciplinaSuccessivaPotenziale();
+
+
 
         }
-        #region checkboxs
-        private void CheckComboBoxs()
-        {
-            switch (_disciplina.Anno)
-            {
-                case 1:
-                    rbPrimo.Checked = true;
-                    break;
-                case 2:
-                    rbSecondo.Checked = true;
-                    break;
-                case 3:
-                    rbTerzo.Checked = true;
-                    break;
-                case 4:
-                    rbQuarto.Checked = true;
-                    break;
-                case 5:
-                    rbQuinto.Checked = true;
-                    break;
-                default:
-                    tbDisciplinaSpeciale.Text = _disciplina.DisciplinaSpeciale;
-                    break;
-            }
-        }
-        #endregion
         #region gestione ClsGestire
         private void clbDipartimenti_ItemCheck(object sender, ItemCheckEventArgs e)
         {
@@ -235,7 +210,16 @@ namespace Cattedre
         }
         #endregion
         #region gestisci Disciplina successiva
-
+        private void CambiaAnnoDisciplinaSuccessivaPotenziale()
+        {
+            if (anno < 5 && anno >0)
+            {
+                lblAnnoSuc.Visible = true;
+                lblAnnoSuc.Text = (anno + 1).ToString() + "°";
+            }
+            else
+                lblAnnoSuc.Visible = false;
+        }
         private void ControlloCbDisciplinaSuccessiva()
         {
             if (_gestires.Count != 0 &&_richiederes.Count!=0 && anno < 5 && anno != 0)
@@ -306,13 +290,10 @@ namespace Cattedre
         {
             // 'sender' è esattamente il RadioButton che l'utente ha cliccato
             RadioButton rb = (RadioButton)sender;
-
             if (rb.Checked)
             {
                 anno = Convert.ToInt16(rb.Text.Replace('°', ' ').Trim());
                 ControlloCbDisciplinaSuccessiva();
-
-
             }
         }
         private void RiempiCbDisciplinaSuccessiva(int _anno, long _IDdiscSuccessiva)
@@ -350,9 +331,7 @@ namespace Cattedre
             if (cbDisciplinaSucessiva.Enabled && cbDisciplinaSucessiva.SelectedValue != null)
             {
                 // Poiché abbiamo impostato ValueMember = "ID", SelectedValue ci restituisce l'ID
-                // Lo convertiamo in long in modo sicuro
-                if (long.TryParse(cbDisciplinaSucessiva.SelectedValue.ToString(), out long idSelezionato))
-                    ID = idSelezionato;
+                ID = Convert.ToInt32(cbDisciplinaSucessiva.SelectedValue);
             }
 
             return ID;
@@ -371,6 +350,32 @@ namespace Cattedre
                 else if (rb == rbTerzo) anno = 3;
                 else if (rb == rbQuarto) anno = 4;
                 else if (rb == rbQuinto) anno = 5;
+            }
+            CambiaAnnoDisciplinaSuccessivaPotenziale();
+        }
+        private void CheckComboBoxs()
+        {
+            switch (_disciplina.Anno)
+            {
+                case 1:
+                    rbPrimo.Checked = true;
+                    break;
+                case 2:
+                    rbSecondo.Checked = true;
+                    break;
+                case 3:
+                    rbTerzo.Checked = true;
+                    break;
+                case 4:
+                    rbQuarto.Checked = true;
+                    break;
+                case 5:
+                    rbQuinto.Checked = true;
+                    break;
+                default:
+                    tbDisciplinaSpeciale.Text = _disciplina.DisciplinaSpeciale;
+                    break;
+               
             }
         }
         #endregion

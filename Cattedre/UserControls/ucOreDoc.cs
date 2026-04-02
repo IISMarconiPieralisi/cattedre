@@ -13,7 +13,6 @@ namespace Cattedre
     public partial class ucOreDoc : UserControl
     {
         int _idassegnare = 0;
-        string nome, cognome;
 
         public int IDassegnare
         {

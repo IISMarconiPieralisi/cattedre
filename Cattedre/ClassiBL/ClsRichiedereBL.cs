@@ -329,25 +329,23 @@ namespace Cattedre
             if (idUtente <= 0)
                 throw new Exception("Errore: l'utente non può avere ID 0");
 
-            List<ClsRichiedereDL> RichUtente = CaricaClassiRichiedereUtente(idUtente); // Supponendo che il metodo accetti idUtente
-          
+            List<ClsRichiedereDL> RichUtente = CaricaClassiRichiedereUtente(idUtente);
 
-            // Eliminiamo ciò che è nel DB ma NON è nella nuova lista
+            // Elimina ciò che è nel DB ma NON è nella nuova lista
             foreach (ClsRichiedereDL ric in RichUtente)
             {
-                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina==ric.IDdisciplina); // se non ha un ID significa che non è stato inserito prima d'ora
+                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso
+                                                         && r.IDdisciplina == ric.IDdisciplina);
                 if (!ancoraPresente)
                     EliminaRichiesta(ric.ID);
-               
-                //se non esiste, non cancello nulla e  mi limito successivamente a caricarla
             }
 
-            // Inseriamo ciò che è nella nuova lista ma NON era nel DB
-            foreach (ClsRichiedereDL ric in RichModifica)
+            // Inserisce ciò che è nella nuova lista ma NON era nel DB
+            foreach (ClsRichiedereDL ric in RichModifica)
             {
                 ric.IDutente = idUtente;
-                // Assicuriamo che l'ID del filtro sia applicato all'oggetto
-                if (!RichUtente.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && ric.IDdisciplina == ric.IDdisciplina))
+                if (!RichUtente.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso
+                                      && r.IDdisciplina == ric.IDdisciplina)) 
                     InserisciRichiedere(ric);
             }
         }

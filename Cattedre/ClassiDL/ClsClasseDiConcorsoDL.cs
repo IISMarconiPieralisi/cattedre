@@ -21,7 +21,7 @@ namespace Cattedre
         }
         #endregion
 
-        string formatoLivello = @"\d{2}$";
+        // formato può essere  @"\d{2}$";
 
         #region PROPRIETA
         public long ID { get => _id; set => _id = value; }

@@ -29,7 +29,6 @@ namespace Cattedre
 
         ClsUtenteDL utenteLoggato;
 
-        int riga = 0;
         int IDdipartimento = 0;
         long IDannoscolastico = 0;
         string annoscolasticoselezionato = "";
@@ -541,24 +540,27 @@ namespace Cattedre
                     uc.ImpostaColoriCombo(uc.cbDocentiItip);
 
                     // docente già assegnato (in memoria)
-                    var assegnazione = docenti.AsEnumerable()
-                        .FirstOrDefault(r =>
-                            r["IDclasse"] != DBNull.Value &&
-                            r["IDdisciplina"] != DBNull.Value &&
-                            Convert.ToInt64(r["IDclasse"]) == classe.ID &&
-                            Convert.ToInt64(r["IDdisciplina"]) == disciplina.ID
-                        );
+                    var assegnazioni = docenti.AsEnumerable()
+                    .Where(r =>
+                        r["IDclasse"] != DBNull.Value &&
+                        r["IDdisciplina"] != DBNull.Value &&
+                        Convert.ToInt64(r["IDclasse"]) == classe.ID &&
+                        Convert.ToInt64(r["IDdisciplina"]) == disciplina.ID
+                    ).ToList();
 
-                    if (assegnazione != null)
+                    if (assegnazioni.Any())
                     {
-                        long idDoc = Convert.ToInt64(assegnazione["IDutente"]);
-                        string tipoString = assegnazione["tipoDocente"]?.ToString();
-                        char tipo = string.IsNullOrEmpty(tipoString) ? ' ' : tipoString[0];
+                        foreach (var assegnazione in assegnazioni)
+                        {
+                            long idDoc = Convert.ToInt64(assegnazione["IDutente"]);
+                            string tipoString = assegnazione["tipoDocente"]?.ToString();
+                            char tipo = string.IsNullOrEmpty(tipoString) ? ' ' : tipoString[0];
 
-                        if (tipo == 'T')
-                            uc.cbDocentiTeorici.SelectedValue = idDoc;
-                        else if (tipo == 'L')
-                            uc.cbDocentiItip.SelectedValue = idDoc;
+                            if (tipo == 'T')
+                                uc.cbDocentiTeorici.SelectedValue = idDoc;
+                            else if (tipo == 'L')
+                                uc.cbDocentiItip.SelectedValue = idDoc;
+                        }
                     }
                     else
                     {
@@ -577,18 +579,31 @@ namespace Cattedre
                     {
                         AggiornaOreEffettive();
                         if (uc.cbDocentiTeorici.SelectedItem is ClsUtenteDL u)
-                            ClsAssegnareBL.UpdateCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID);
+                            ClsAssegnareBL.SalvaCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID, 'T');
                     };
 
                     uc.cbDocentiItip.SelectedIndexChanged += (s, e) =>
                     {
                         AggiornaOreEffettive();
                         if (uc.cbDocentiItip.SelectedItem is ClsUtenteDL u)
-                            ClsAssegnareBL.UpdateCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID);
+                            ClsAssegnareBL.SalvaCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID, 'L');
                     };
 
-                    int x = 20 + colonna * 170;
-                    int y = 72 + riga * 100;
+                    UcDisciplina ucDisciplinaRif = pnlDipartimento.Controls
+                    .OfType<UcDisciplina>()
+                    .ElementAtOrDefault(colonna);
+
+                    int x, y;
+                    if (ucDisciplinaRif != null)
+                    {
+                        // Centra la UcAssegnazioni rispetto alla UcDisciplina corrispondente
+                        x = ucDisciplinaRif.Left + (ucDisciplinaRif.Width - uc.Width) / 2 + 10;
+                    }
+                    else
+                    {
+                        x = 20 + colonna * 170; // fallback
+                    }
+                    y = 72 + riga * 100;
                     uc.Location = new Point(x, y);
 
                     //NON FUNZIONA IL TAB
@@ -775,37 +790,42 @@ namespace Cattedre
                 MessageBox.Show("Anno successivo non trovato", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            List<ClsClasseDL> classiAnnoSuccessivo = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, annoSuccessivo.ID);
+            if (classiAnnoSuccessivo == null || classiAnnoSuccessivo.Count == 0)
+            {
+                MessageBox.Show("Non esistono classi per l'anno scolastico successivo. Impossibile generare le cattedre.", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            bool esistonoAssegnazioniAnnoSuccessivo = ClsAssegnareBL.EsistonoAssegnazioniAnnoSuccessivo(annoSuccessivo.ID);
+
+            if (utenteLoggato.TipoUtente == "C" && !esistonoAssegnazioniAnnoSuccessivo)
+            {
+                DialogResult dr = MessageBox.Show(
+                    "Vuoi generare le cattedre per l'anno successivo?",
+                    "Generazione",
+                    MessageBoxButtons.YesNo);
+
+                if (dr != DialogResult.Yes)
+                    return;
+
+                if (annoCorrente.ID == annoSuccessivo.ID)
+                {
+                    MessageBox.Show("Anno non valido", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                ClsAssegnareBL.GeneraCattedreAnnoSuccessivo(
+                    IDdipartimento,
+                    (int)annoCorrente.ID,
+                    (int)annoSuccessivo.ID);
+
+                MessageBox.Show("Cattedre generate con successo", "GENERAZIONE RIUSCITA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             else
             {
-                bool esistonoAssegnazioniAnnoSuccessivo = ClsAssegnareBL.EsistonoAssegnazioniAnnoSuccessivo(annoSuccessivo.ID);
-
-                if (utenteLoggato.TipoUtente == "C" && !esistonoAssegnazioniAnnoSuccessivo)
-                {
-                    DialogResult dr = MessageBox.Show(
-                        "Vuoi generare le cattedre per l'anno successivo?",
-                        "Generazione",
-                        MessageBoxButtons.YesNo);
-
-                    if (dr != DialogResult.Yes)
-                        return;
-
-                    if (annoCorrente.ID == annoSuccessivo.ID)
-                    {
-                        MessageBox.Show("Anno non valido", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    ClsAssegnareBL.GeneraCattedreAnnoSuccessivo(
-                        IDdipartimento,
-                        (int)annoCorrente.ID,
-                        (int)annoSuccessivo.ID);
-
-                    MessageBox.Show("Cattedre generate con successo", "GENERAZIONE RIUSCITA", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Cattedre per anno successivo già generate", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                MessageBox.Show("Cattedre per anno successivo già generate", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

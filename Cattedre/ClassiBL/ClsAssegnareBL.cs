@@ -209,7 +209,7 @@ namespace Cattedre
             return dt;
         }
 
-        public static void UpdateCattedra(long IDclasse, long IDannoscolastico, long IDdisciplina, long IDutente)
+        public static void SalvaCattedra(long IDclasse, long IDannoscolastico, long IDdisciplina, long IDutente, char tipoDocente)
         {
             try
             {
@@ -217,55 +217,68 @@ namespace Cattedre
                 {
                     conn.Open();
 
-                    // se IDutente è 0 (item vuoto selezionato) -> DELETE
+                    // se IDutente è 0 (item vuoto) -> DELETE solo la riga del tipo specifico
                     if (IDutente == 0)
                     {
-                        string sqlDelete = @"DELETE FROM assegnare 
-                                     WHERE IDclasse = @IDclasse 
-                                     AND IDdisciplina = @IDdisciplina 
-                                     AND IDannoscolastico = @IDannoscolastico";
+                        string sqlDelete = @"DELETE a FROM assegnare a
+                                     JOIN utenti u ON u.ID = a.IDutente
+                                     WHERE a.IDclasse = @IDclasse
+                                       AND a.IDdisciplina = @IDdisciplina
+                                       AND a.IDannoscolastico = @IDannoscolastico
+                                       AND u.tipoDocente = @tipoDocente";
 
                         MySqlCommand cmdDelete = new MySqlCommand(sqlDelete, conn);
                         cmdDelete.Parameters.Add("@IDclasse", MySqlDbType.Int64).Value = IDclasse;
                         cmdDelete.Parameters.Add("@IDannoscolastico", MySqlDbType.Int64).Value = IDannoscolastico;
                         cmdDelete.Parameters.Add("@IDdisciplina", MySqlDbType.Int64).Value = IDdisciplina;
+                        cmdDelete.Parameters.Add("@tipoDocente", MySqlDbType.VarChar).Value = tipoDocente.ToString();
                         cmdDelete.ExecuteNonQuery();
                         return;
                     }
 
-                    // verifico se esiste già la riga
-                    string sqlSelect = @"SELECT COUNT(*) FROM assegnare 
-                                 WHERE IDclasse = @IDclasse 
-                                 AND IDdisciplina = @IDdisciplina 
-                                 AND IDannoscolastico = @IDannoscolastico";
+                    // Cerca se esiste già una riga per questo TIPO di docente
+                    string sqlSelect = @"SELECT a.ID FROM assegnare a
+                                 JOIN utenti u ON u.ID = a.IDutente
+                                 WHERE a.IDclasse = @IDclasse
+                                   AND a.IDdisciplina = @IDdisciplina
+                                   AND a.IDannoscolastico = @IDannoscolastico
+                                   AND u.tipoDocente = @tipoDocente
+                                 LIMIT 1";
 
                     MySqlCommand cmdSelect = new MySqlCommand(sqlSelect, conn);
                     cmdSelect.Parameters.Add("@IDclasse", MySqlDbType.Int64).Value = IDclasse;
                     cmdSelect.Parameters.Add("@IDannoscolastico", MySqlDbType.Int64).Value = IDannoscolastico;
                     cmdSelect.Parameters.Add("@IDdisciplina", MySqlDbType.Int64).Value = IDdisciplina;
+                    cmdSelect.Parameters.Add("@tipoDocente", MySqlDbType.VarChar).Value = tipoDocente.ToString();
 
-                    int count = Convert.ToInt32(cmdSelect.ExecuteScalar());
-                    string sqlSave;
+                    object existing = cmdSelect.ExecuteScalar();
 
-                    if (count > 0)
+                    if (existing != null)
                     {
-                        sqlSave = @"UPDATE assegnare 
-                            SET IDutente = @IDutente 
-                            WHERE IDclasse = @IDclasse 
-                            AND IDdisciplina = @IDdisciplina 
-                            AND IDannoscolastico = @IDannoscolastico";
+                        // Esiste già la riga per questo tipo -> UPDATE quella riga specifica tramite ID
+                        long rigaID = Convert.ToInt64(existing);
+
+                        string sqlUpdate = @"UPDATE assegnare 
+                                     SET IDutente = @IDutente 
+                                     WHERE ID = @ID";
+
+                        MySqlCommand cmdUpdate = new MySqlCommand(sqlUpdate, conn);
+                        cmdUpdate.Parameters.Add("@IDutente", MySqlDbType.Int64).Value = IDutente;
+                        cmdUpdate.Parameters.Add("@ID", MySqlDbType.Int64).Value = rigaID;
+                        cmdUpdate.ExecuteNonQuery();
                     }
                     else
                     {
+                        // Non esiste -> INSERT nuova riga
                         string sigla = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
                         ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(sigla);
 
-                        sqlSave = @"INSERT INTO assegnare 
-                            (IDclasse, IDannoscolastico, IDdisciplina, IDutente, oreSpeciali, dal, al)
-                            VALUES 
-                            (@IDclasse, @IDannoscolastico, @IDdisciplina, @IDutente, 0, @dal, @al)";
+                        string sqlInsert = @"INSERT INTO assegnare 
+                                     (IDclasse, IDannoscolastico, IDdisciplina, IDutente, oreSpeciali, dal, al)
+                                     VALUES 
+                                     (@IDclasse, @IDannoscolastico, @IDdisciplina, @IDutente, 0, @dal, @al)";
 
-                        MySqlCommand cmdInsert = new MySqlCommand(sqlSave, conn);
+                        MySqlCommand cmdInsert = new MySqlCommand(sqlInsert, conn);
                         cmdInsert.Parameters.Add("@IDclasse", MySqlDbType.Int64).Value = IDclasse;
                         cmdInsert.Parameters.Add("@IDannoscolastico", MySqlDbType.Int64).Value = IDannoscolastico;
                         cmdInsert.Parameters.Add("@IDdisciplina", MySqlDbType.Int64).Value = IDdisciplina;
@@ -273,15 +286,7 @@ namespace Cattedre
                         cmdInsert.Parameters.AddWithValue("@dal", anno.DataInizio);
                         cmdInsert.Parameters.AddWithValue("@al", anno.DataFine);
                         cmdInsert.ExecuteNonQuery();
-                        return;
                     }
-
-                    MySqlCommand cmdSave = new MySqlCommand(sqlSave, conn);
-                    cmdSave.Parameters.Add("@IDclasse", MySqlDbType.Int64).Value = IDclasse;
-                    cmdSave.Parameters.Add("@IDannoscolastico", MySqlDbType.Int64).Value = IDannoscolastico;
-                    cmdSave.Parameters.Add("@IDdisciplina", MySqlDbType.Int64).Value = IDdisciplina;
-                    cmdSave.Parameters.Add("@IDutente", MySqlDbType.Int64).Value = IDutente;
-                    cmdSave.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)

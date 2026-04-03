@@ -30,10 +30,13 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmHome));
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.panel5 = new System.Windows.Forms.Panel();
             this.btDiscipline = new System.Windows.Forms.Button();
             this.btClassi = new System.Windows.Forms.Button();
             this.btUtenti = new System.Windows.Forms.Button();
-            this.btLogout = new System.Windows.Forms.Button();
             this.btVaiACattedre = new System.Windows.Forms.Button();
             this.pnCarUtente = new System.Windows.Forms.Panel();
             this.pbFotoProfilo = new System.Windows.Forms.PictureBox();
@@ -50,6 +53,7 @@
             this.preferenzeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -58,24 +62,22 @@
             this.btVaiACattedre2 = new Krypton.Toolkit.KryptonButton();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.kryptonButtonLogOut = new Krypton.Toolkit.KryptonButton();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel2.SuspendLayout();
             this.pnCarUtente.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbFotoProfilo)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.kryptonButtonLogOut);
             this.panel2.Controls.Add(this.panel8);
             this.panel2.Controls.Add(this.panel7);
             this.panel2.Controls.Add(this.panel6);
@@ -83,7 +85,6 @@
             this.panel2.Controls.Add(this.btDiscipline);
             this.panel2.Controls.Add(this.btClassi);
             this.panel2.Controls.Add(this.btUtenti);
-            this.panel2.Controls.Add(this.btLogout);
             this.panel2.Controls.Add(this.btVaiACattedre);
             this.panel2.Controls.Add(this.pnCarUtente);
             this.panel2.Cursor = System.Windows.Forms.Cursors.Arrow;
@@ -92,6 +93,38 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(452, 873);
             this.panel2.TabIndex = 3;
+            // 
+            // panel8
+            // 
+            this.panel8.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.panel8.Location = new System.Drawing.Point(11, 544);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(5, 67);
+            this.panel8.TabIndex = 30;
+            // 
+            // panel7
+            // 
+            this.panel7.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.panel7.Location = new System.Drawing.Point(11, 461);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(5, 67);
+            this.panel7.TabIndex = 27;
+            // 
+            // panel6
+            // 
+            this.panel6.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.panel6.Location = new System.Drawing.Point(11, 374);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(5, 67);
+            this.panel6.TabIndex = 26;
+            // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.panel5.Location = new System.Drawing.Point(11, 287);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(5, 67);
+            this.panel5.TabIndex = 25;
             // 
             // btDiscipline
             // 
@@ -102,7 +135,7 @@
             this.btDiscipline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btDiscipline.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btDiscipline.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btDiscipline.Location = new System.Drawing.Point(0, 578);
+            this.btDiscipline.Location = new System.Drawing.Point(0, 536);
             this.btDiscipline.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btDiscipline.Name = "btDiscipline";
             this.btDiscipline.Size = new System.Drawing.Size(450, 87);
@@ -123,7 +156,7 @@
             this.btClassi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btClassi.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btClassi.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btClassi.Location = new System.Drawing.Point(0, 491);
+            this.btClassi.Location = new System.Drawing.Point(0, 449);
             this.btClassi.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btClassi.Name = "btClassi";
             this.btClassi.Size = new System.Drawing.Size(450, 87);
@@ -143,7 +176,7 @@
             this.btUtenti.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btUtenti.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btUtenti.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btUtenti.Location = new System.Drawing.Point(0, 404);
+            this.btUtenti.Location = new System.Drawing.Point(0, 362);
             this.btUtenti.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btUtenti.Name = "btUtenti";
             this.btUtenti.Size = new System.Drawing.Size(450, 87);
@@ -153,24 +186,6 @@
             this.btUtenti.Click += new System.EventHandler(this.uTENTIToolStripMenuItem_Click);
             this.btUtenti.MouseEnter += new System.EventHandler(this.btUtenti_MouseEnter);
             this.btUtenti.MouseLeave += new System.EventHandler(this.btUtenti_MouseLeave);
-            // 
-            // btLogout
-            // 
-            this.btLogout.BackColor = System.Drawing.Color.Red;
-            this.btLogout.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btLogout.FlatAppearance.BorderSize = 0;
-            this.btLogout.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btLogout.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.btLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btLogout.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btLogout.ForeColor = System.Drawing.Color.White;
-            this.btLogout.Location = new System.Drawing.Point(0, 806);
-            this.btLogout.Name = "btLogout";
-            this.btLogout.Size = new System.Drawing.Size(450, 65);
-            this.btLogout.TabIndex = 5;
-            this.btLogout.Text = "Logout";
-            this.btLogout.UseVisualStyleBackColor = false;
-            this.btLogout.Click += new System.EventHandler(this.btLogout_Click);
             // 
             // btVaiACattedre
             // 
@@ -183,7 +198,7 @@
             this.btVaiACattedre.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btVaiACattedre.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btVaiACattedre.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btVaiACattedre.Location = new System.Drawing.Point(0, 317);
+            this.btVaiACattedre.Location = new System.Drawing.Point(0, 275);
             this.btVaiACattedre.Name = "btVaiACattedre";
             this.btVaiACattedre.Size = new System.Drawing.Size(450, 87);
             this.btVaiACattedre.TabIndex = 0;
@@ -195,7 +210,7 @@
             // 
             // pnCarUtente
             // 
-            this.pnCarUtente.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.pnCarUtente.BackColor = System.Drawing.Color.LightSkyBlue;
             this.pnCarUtente.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pnCarUtente.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnCarUtente.Controls.Add(this.pbFotoProfilo);
@@ -207,16 +222,16 @@
             this.pnCarUtente.Location = new System.Drawing.Point(0, 0);
             this.pnCarUtente.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnCarUtente.Name = "pnCarUtente";
-            this.pnCarUtente.Size = new System.Drawing.Size(450, 317);
+            this.pnCarUtente.Size = new System.Drawing.Size(450, 275);
             this.pnCarUtente.TabIndex = 29;
             // 
             // pbFotoProfilo
             // 
             this.pbFotoProfilo.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.pbFotoProfilo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pbFotoProfilo.Location = new System.Drawing.Point(12, 12);
+            this.pbFotoProfilo.Location = new System.Drawing.Point(18, 11);
             this.pbFotoProfilo.Name = "pbFotoProfilo";
-            this.pbFotoProfilo.Size = new System.Drawing.Size(118, 117);
+            this.pbFotoProfilo.Size = new System.Drawing.Size(131, 120);
             this.pbFotoProfilo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbFotoProfilo.TabIndex = 24;
             this.pbFotoProfilo.TabStop = false;
@@ -226,7 +241,7 @@
             this.lblEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblEmail.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEmail.ForeColor = System.Drawing.Color.Black;
-            this.lblEmail.Location = new System.Drawing.Point(8, 200);
+            this.lblEmail.Location = new System.Drawing.Point(10, 200);
             this.lblEmail.Name = "lblEmail";
             this.lblEmail.Size = new System.Drawing.Size(440, 42);
             this.lblEmail.TabIndex = 0;
@@ -238,15 +253,15 @@
             this.lblNominativo.AutoSize = true;
             this.lblNominativo.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNominativo.ForeColor = System.Drawing.Color.Black;
-            this.lblNominativo.Location = new System.Drawing.Point(41, 142);
+            this.lblNominativo.Location = new System.Drawing.Point(10, 145);
             this.lblNominativo.Name = "lblNominativo";
-            this.lblNominativo.Size = new System.Drawing.Size(366, 43);
+            this.lblNominativo.Size = new System.Drawing.Size(333, 43);
             this.lblNominativo.TabIndex = 20;
-            this.lblNominativo.Text = "NOME e COGNOME";
+            this.lblNominativo.Text = "NOME COGNOME";
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.menuStrip1.BackColor = System.Drawing.Color.LightSkyBlue;
             this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -343,7 +358,7 @@
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.panel1.BackColor = System.Drawing.Color.LightSkyBlue;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.label2);
@@ -354,15 +369,26 @@
             this.panel1.Size = new System.Drawing.Size(785, 100);
             this.panel1.TabIndex = 6;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(679, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(104, 98);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(21, 57);
+            this.label2.Location = new System.Drawing.Point(19, 57);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(424, 21);
+            this.label2.Size = new System.Drawing.Size(491, 21);
             this.label2.TabIndex = 1;
-            this.label2.Text = "usa il menù per navigare all\'interno del software";
+            this.label2.Text = "In questo momento si è nella home del nostro software";
             // 
             // label1
             // 
@@ -370,13 +396,14 @@
             this.label1.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(19, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(433, 34);
+            this.label1.Size = new System.Drawing.Size(324, 34);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Scegi un\'aspetto da consultare";
+            this.label1.Text = "Benvenuto nella Home";
             // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.White;
+            this.panel3.Controls.Add(this.splitter1);
             this.panel3.Controls.Add(this.panel4);
             this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.btVaiACattedre2);
@@ -393,7 +420,7 @@
             this.panel4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panel4.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.panel4.Location = new System.Drawing.Point(318, 305);
+            this.panel4.Location = new System.Drawing.Point(301, 305);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(245, 3);
             this.panel4.TabIndex = 24;
@@ -403,7 +430,7 @@
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(368, 114);
+            this.label5.Location = new System.Drawing.Point(351, 114);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(143, 30);
             this.label5.TabIndex = 23;
@@ -413,7 +440,7 @@
             // 
             this.btVaiACattedre2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btVaiACattedre2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btVaiACattedre2.Location = new System.Drawing.Point(284, 404);
+            this.btVaiACattedre2.Location = new System.Drawing.Point(264, 381);
             this.btVaiACattedre2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btVaiACattedre2.Name = "btVaiACattedre2";
             this.btVaiACattedre2.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
@@ -428,7 +455,7 @@
             this.btVaiACattedre2.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btVaiACattedre2.OverrideDefault.Border.Rounding = 20F;
             this.btVaiACattedre2.OverrideDefault.Border.Width = 1;
-            this.btVaiACattedre2.Size = new System.Drawing.Size(328, 58);
+            this.btVaiACattedre2.Size = new System.Drawing.Size(342, 68);
             this.btVaiACattedre2.StateCommon.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btVaiACattedre2.StateCommon.Back.Color2 = System.Drawing.Color.RoyalBlue;
             this.btVaiACattedre2.StateCommon.Back.ColorAngle = 45F;
@@ -484,7 +511,7 @@
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(155, 239);
+            this.label4.Location = new System.Drawing.Point(138, 239);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(559, 23);
             this.label4.TabIndex = 1;
@@ -495,54 +522,89 @@
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 22F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(197, 167);
+            this.label3.Location = new System.Drawing.Point(180, 167);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(491, 51);
             this.label3.TabIndex = 0;
             this.label3.Text = "Seleziona una sezione";
             // 
-            // panel5
+            // kryptonButtonLogOut
             // 
-            this.panel5.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.panel5.Location = new System.Drawing.Point(14, 325);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(5, 67);
-            this.panel5.TabIndex = 25;
+            this.kryptonButtonLogOut.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.kryptonButtonLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.kryptonButtonLogOut.Location = new System.Drawing.Point(62, 767);
+            this.kryptonButtonLogOut.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.kryptonButtonLogOut.Name = "kryptonButtonLogOut";
+            this.kryptonButtonLogOut.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.OverrideDefault.Back.ColorAngle = 45F;
+            this.kryptonButtonLogOut.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.OverrideDefault.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.OverrideDefault.Border.ColorAngle = 45F;
+            this.kryptonButtonLogOut.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonButtonLogOut.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.kryptonButtonLogOut.OverrideDefault.Border.Rounding = 20F;
+            this.kryptonButtonLogOut.OverrideDefault.Border.Width = 1;
+            this.kryptonButtonLogOut.Size = new System.Drawing.Size(342, 66);
+            this.kryptonButtonLogOut.StateCommon.Back.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateCommon.Back.ColorAngle = 45F;
+            this.kryptonButtonLogOut.StateCommon.Border.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateCommon.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateCommon.Border.ColorAngle = 45F;
+            this.kryptonButtonLogOut.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonButtonLogOut.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.kryptonButtonLogOut.StateCommon.Border.Rounding = 20F;
+            this.kryptonButtonLogOut.StateCommon.Border.Width = 1;
+            this.kryptonButtonLogOut.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.kryptonButtonLogOut.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.kryptonButtonLogOut.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.kryptonButtonLogOut.StateNormal.Back.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateNormal.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateNormal.Border.Color1 = System.Drawing.Color.RoyalBlue;
+            this.kryptonButtonLogOut.StateNormal.Border.Color2 = System.Drawing.Color.RoyalBlue;
+            this.kryptonButtonLogOut.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonButtonLogOut.StatePressed.Back.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StatePressed.Back.Color2 = System.Drawing.Color.Yellow;
+            this.kryptonButtonLogOut.StatePressed.Back.ColorAngle = 135F;
+            this.kryptonButtonLogOut.StatePressed.Border.Color1 = System.Drawing.Color.Yellow;
+            this.kryptonButtonLogOut.StatePressed.Border.Color2 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StatePressed.Border.ColorAngle = 135F;
+            this.kryptonButtonLogOut.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonButtonLogOut.StatePressed.Border.Rounding = 20F;
+            this.kryptonButtonLogOut.StatePressed.Border.Width = 1;
+            this.kryptonButtonLogOut.StateTracking.Back.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateTracking.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateTracking.Back.ColorAngle = 45F;
+            this.kryptonButtonLogOut.StateTracking.Border.Color1 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateTracking.Border.Color2 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateTracking.Border.ColorAngle = 45F;
+            this.kryptonButtonLogOut.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonButtonLogOut.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.kryptonButtonLogOut.StateTracking.Border.Rounding = 20F;
+            this.kryptonButtonLogOut.StateTracking.Border.Width = 1;
+            this.kryptonButtonLogOut.TabIndex = 25;
+            this.kryptonButtonLogOut.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.kryptonButtonLogOut.Values.Text = "LOGOUT";
+            this.kryptonButtonLogOut.Click += new System.EventHandler(this.btLogout_Click);
             // 
-            // panel6
+            // splitter1
             // 
-            this.panel6.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.panel6.Location = new System.Drawing.Point(14, 416);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(5, 67);
-            this.panel6.TabIndex = 26;
-            // 
-            // panel7
-            // 
-            this.panel7.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.panel7.Location = new System.Drawing.Point(14, 503);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(5, 67);
-            this.panel7.TabIndex = 27;
-            // 
-            // panel8
-            // 
-            this.panel8.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.panel8.Location = new System.Drawing.Point(14, 586);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(5, 67);
-            this.panel8.TabIndex = 30;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(679, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(104, 98);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
+            this.splitter1.Location = new System.Drawing.Point(0, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 773);
+            this.splitter1.TabIndex = 25;
+            this.splitter1.TabStop = false;
             // 
             // FrmHome
             // 
@@ -572,9 +634,9 @@
             this.menuStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -583,7 +645,6 @@
         #endregion
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btVaiACattedre;
-        private System.Windows.Forms.Button btLogout;
         private System.Windows.Forms.Label lblNominativo;
         private System.Windows.Forms.Label lblEmail;
         public System.Windows.Forms.PictureBox pbFotoProfilo;
@@ -615,5 +676,7 @@
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private Krypton.Toolkit.KryptonButton kryptonButtonLogOut;
+        private System.Windows.Forms.Splitter splitter1;
     }
 }

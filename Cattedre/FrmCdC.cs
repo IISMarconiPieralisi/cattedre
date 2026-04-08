@@ -118,7 +118,7 @@ namespace Cattedre
         private void nudNumCattedreFatto_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && nudNumCattedreFatto.Value > 0)
-                btSava.Focus();
+                btSalva.Focus();
         }
         #endregion
 

@@ -138,24 +138,22 @@ namespace Cattedre
 
                 }
 
-                //if(_utente.Colore == "255255255")
-                //{
-                    
-                //}
-
                 //controllo se il colore è libero
-                if(!ClsUtenteBL.ColoreLibero(_utente.Colore))
-                    throw new Exception("Colore occupato");
+                if (_utente.Colore != "255255255")
+                {
+                    if (ClsUtenteBL.ColoreOccupato(_utente.Colore))
+                        throw new Exception("Colore occupato");
+                }
 
                 // Se arrivi qui, tutto è valido
                 this.DialogResult = DialogResult.OK;
-        }
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
-}
+        }
 
         private void FrmUtente_Load(object sender, EventArgs e)
         {

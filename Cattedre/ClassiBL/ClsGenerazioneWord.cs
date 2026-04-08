@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 
@@ -13,19 +14,18 @@ namespace Cattedre
         private const string FontName = "Arial";
         private const double FontSize = 9;
 
-        /// <summary>
-        /// Punto di ingresso principale.
-        /// Passa qui le tue liste già caricate dal DB e il percorso di output.
-        /// </summary>
-        public static void Generate(
-            /* TODO: List<ClsClassiDiConcorsoDL>  listClassiConcorso, */
-            /* TODO: List<ClsUtenteDL>             listDocenti,        */
-            /* TODO: List<ClsAssegnareDL>          listAssegnazioni,   */
-            /* TODO: List<ClsDisciplineDL>         listDiscipline,     */
-            /* TODO: List<ClsClassiDL>             listClassi,         */
-            /* TODO: List<ClsDotareDL>             listDotare,         */
-            /* TODO: List<ClsContrattiDL>          listContratti,      */
-            string outputPath)
+
+        public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno,ClsDipartimentoDL dipartimento)
+        {
+            List<ClsUtenteDL> Docenti/*metodo prendere utente di quel dipartimento*/;
+            List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioni();
+            List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDisciplina(dipartimento.ID);
+           // List<ClsDisciplinaDL> discipline =ClsGestireBL.
+        }
+        public static void GenerateFileWord(ClsAnnoScolasticoDL As, List<ClsClasseDiConcorsoDL>  listClassiConcorso,List<ClsUtenteDL> listDocenti,
+                                            List<ClsAssegnareDL> listAssegnazioni, List<ClsDisciplinaDL> listDiscipline,     
+                                            List<ClsClasseDL>listClassi,List<ClsDotareDL>listDotare,
+                                            List<ClsContrattoDL>listContratti,string outputPath)
         {
             using (DocX doc = DocX.Create(outputPath))
             {
@@ -35,14 +35,11 @@ namespace Cattedre
                 doc.MarginBottom = 36f;
                 doc.MarginLeft = 36f;
                 doc.MarginRight = 36f;
-                InserisciIntestazioneConcorso(
-               doc,
-               codiceClasse:  /* TODO: classeConcorso.livello (es. "A041") */ "",
-               nomeClasse:    /* TODO: classeConcorso.nome (es. "SCIENZE E TECNOLOGIE INFORMATICHE") */ "",
-               riepilogo:     /* TODO: costruisci da listDotare
-                                           es. $"{dotare.numcattedrediritto} cattedre + {oreResiduo} h residue"
-                                           filtrando su IDclassediconcorso == classeConcorso.ID */ ""
-           );
+                foreach (var CDC in listClassiConcorso)
+                {
+                    ClsDotareDL dotCDC = listDotare.FirstOrDefault(p => p.IdClasseDiConcorso == CDC.ID);
+                    InserisciIntestazioneConcorso(doc,CDC, dotCDC);
+                }
 
                 // ── CICLO DOCENTI di questa classe di concorso ────────────────
                 // TODO: var docentiClasse = listDocenti
@@ -57,17 +54,16 @@ namespace Cattedre
                 //           .Where(a => a.IDutente == docente.ID)
                 //           .ToList();
 
-                InserisciDocente(
-                    doc,
-                    titolo:   /* TODO: docente.tipoDocente == 'F' ? "Prof.ssa" : "Prof." */ "",
-                    cognome:  /* TODO: docente.cognome */ "",
-                    nome:     /* TODO: docente.nome    */ "",
-                    totaleOre:/* TODO: contratto.monteOre  (join su listContratti dove IDutente == docente.ID)
-                                           oppure somma delle ore da listAssegnazioni */ "",
-                    righe: BuildRigheDocente(
-                              /* TODO: righeDocente, listDiscipline, listClassi */
-                              )
-                );
+                //InserisciDocente(
+                //    doc,
+                //    cognome:  /* TODO: docente.cognome */ "",
+                //    nome:     /* TODO: docente.nome    */ "",
+                //    totaleOre:/* TODO: contratto.monteOre  (join su listContratti dove IDutente == docente.ID)
+                //                           oppure somma delle ore da listAssegnazioni */ "",
+                //    righe: BuildRigheDocente(
+                //              /* TODO: righeDocente, listDiscipline, listClassi */
+                //              )
+                //);
                 // }  // fine foreach docenti
 
                 // ── NOTE FINALI (ore potenziamento residue) ───────────────────
@@ -131,7 +127,7 @@ namespace Cattedre
         // ─────────────────────────────────────────────────────────────────────
 
         private static void InserisciIntestazioneConcorso(DocX doc,
-            string codiceClasse, string nomeClasse, string riepilogo)
+            ClsClasseDiConcorsoDL cdc, ClsDotareDL dot)
         {
             var p1 = doc.InsertParagraph();
             p1.SpacingBefore(10);
@@ -140,41 +136,32 @@ namespace Cattedre
               .CapsStyle(CapsStyle.smallCaps);
 
             var p2 = doc.InsertParagraph();
-            p2.Append($"{codiceClasse} {nomeClasse}")
+            p2.Append($"{cdc.Livello} - {cdc.Nome}")
               .Bold().Font(FontName).FontSize(11)
               .CapsStyle(CapsStyle.smallCaps);
 
-            if (!string.IsNullOrWhiteSpace(riepilogo))
+            if (dot!=null && dot.Id>0)
             {
                 var pR = doc.InsertParagraph();
                 pR.SpacingAfter(4);
-                pR.Append(riepilogo)
+                pR.Append($"{dot.NumcattedreDiritto} cattedre" /* + {oreResiduo} h residue"*/)
                   .Bold().Font(FontName).FontSize(10);
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
-        //  GRAFICA: BLOCCO DOCENTE
-        // ─────────────────────────────────────────────────────────────────────
-
         private static void InserisciDocente(DocX doc,
-            string titolo, string cognome, string nome, string totaleOre,
+            string cognome, string nome, string totaleOre,
             List<(string ore, string materia, string classe, bool evidenziata, bool barrato)> righe)
         {
             var pNome = doc.InsertParagraph();
             pNome.SpacingBefore(6);
-            pNome.Append($"{titolo} {cognome} {nome}")
+            pNome.Append($"Docenter {cognome} {nome}")
                  .Bold().Italic()
                  .UnderlineStyle(UnderlineStyle.singleLine)
                  .Font(FontName).FontSize(10);
 
             InserisciTabella(doc, righe, totaleOre);
         }
-
-        // ─────────────────────────────────────────────────────────────────────
-        //  GRAFICA: NOTA FINALE (potenziamento residuo)
-        // ─────────────────────────────────────────────────────────────────────
-
         private static void InserisciNotaFinale(DocX doc, string titolo,
             List<(string ore, string materia, string classe, bool evidenziata, bool barrato)> righe,
             string totale)
@@ -188,10 +175,6 @@ namespace Cattedre
 
             InserisciTabella(doc, righe, totale);
         }
-
-        // ─────────────────────────────────────────────────────────────────────
-        //  GRAFICA: TABELLA ORE  (non toccare)
-        // ─────────────────────────────────────────────────────────────────────
 
         private static void InserisciTabella(DocX doc,
             List<(string ore, string materia, string classe, bool evidenziata, bool barrato)> righe,

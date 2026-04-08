@@ -138,6 +138,15 @@ namespace Cattedre
 
                 }
 
+                //if(_utente.Colore == "255255255")
+                //{
+                    
+                //}
+
+                //controllo se il colore è libero
+                if(!ClsUtenteBL.ColoreLibero(_utente.Colore))
+                    throw new Exception("Colore occupato");
+
                 // Se arrivi qui, tutto è valido
                 this.DialogResult = DialogResult.OK;
         }

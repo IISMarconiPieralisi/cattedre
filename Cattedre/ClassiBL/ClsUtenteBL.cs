@@ -135,6 +135,32 @@ namespace Cattedre
             }
         }
 
+        public static bool ColoreLibero(string colore)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT colore FROM utenti WHERE colore = @colore";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@colore", colore);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        return dt.Rows.Count > 0 && dt.Rows[0]["colore"] != DBNull.Value;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nella query: " + ex.Message);
+            }
+        }
+
         #endregion
         #region caricamente by utentispecifici
         public static List<ClsUtenteDL> CaricaCoordinatoriDipartimenti()

@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCdC));
-            this.btSava = new System.Windows.Forms.Button();
-            this.btAnnulla = new System.Windows.Forms.Button();
             this.tbLivello = new System.Windows.Forms.TextBox();
             this.tbNome = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -44,37 +42,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.cbAnnoScolastico = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btSalva = new Krypton.Toolkit.KryptonButton();
+            this.kryptonButtonLogOut = new Krypton.Toolkit.KryptonButton();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumCattedreDiritto)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumCattedreFatto)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btSava
-            // 
-            this.btSava.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btSava.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSava.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.btSava.Location = new System.Drawing.Point(180, 2);
-            this.btSava.Margin = new System.Windows.Forms.Padding(2);
-            this.btSava.Name = "btSava";
-            this.btSava.Size = new System.Drawing.Size(178, 37);
-            this.btSava.TabIndex = 7;
-            this.btSava.Text = "Salva";
-            this.btSava.UseVisualStyleBackColor = true;
-            this.btSava.Click += new System.EventHandler(this.btSava_Click);
-            // 
-            // btAnnulla
-            // 
-            this.btAnnulla.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.btAnnulla.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.btAnnulla.Location = new System.Drawing.Point(0, 2);
-            this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
-            this.btAnnulla.Name = "btAnnulla";
-            this.btAnnulla.Size = new System.Drawing.Size(180, 37);
-            this.btAnnulla.TabIndex = 8;
-            this.btAnnulla.Text = "Annulla";
-            this.btAnnulla.UseVisualStyleBackColor = true;
-            this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
             // 
             // tbLivello
             // 
@@ -84,7 +57,7 @@
             this.tbLivello.Location = new System.Drawing.Point(138, 59);
             this.tbLivello.Margin = new System.Windows.Forms.Padding(2);
             this.tbLivello.Name = "tbLivello";
-            this.tbLivello.Size = new System.Drawing.Size(232, 20);
+            this.tbLivello.Size = new System.Drawing.Size(359, 20);
             this.tbLivello.TabIndex = 2;
             this.tbLivello.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbLivello_KeyDown);
             // 
@@ -96,7 +69,7 @@
             this.tbNome.Location = new System.Drawing.Point(138, 100);
             this.tbNome.Margin = new System.Windows.Forms.Padding(2);
             this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(232, 20);
+            this.tbNome.Size = new System.Drawing.Size(359, 20);
             this.tbNome.TabIndex = 3;
             this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
@@ -141,7 +114,7 @@
             this.rtbAbilitazioni.Location = new System.Drawing.Point(140, 142);
             this.rtbAbilitazioni.Margin = new System.Windows.Forms.Padding(2);
             this.rtbAbilitazioni.Name = "rtbAbilitazioni";
-            this.rtbAbilitazioni.Size = new System.Drawing.Size(230, 84);
+            this.rtbAbilitazioni.Size = new System.Drawing.Size(357, 84);
             this.rtbAbilitazioni.TabIndex = 4;
             this.rtbAbilitazioni.Text = "";
             this.rtbAbilitazioni.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rtbAbilitazioni_KeyDown);
@@ -170,7 +143,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.nudNumCattedreDiritto.Location = new System.Drawing.Point(138, 251);
             this.nudNumCattedreDiritto.Name = "nudNumCattedreDiritto";
-            this.nudNumCattedreDiritto.Size = new System.Drawing.Size(43, 20);
+            this.nudNumCattedreDiritto.Size = new System.Drawing.Size(170, 20);
             this.nudNumCattedreDiritto.TabIndex = 5;
             this.nudNumCattedreDiritto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudNumCattedreDiritto_KeyDown);
             // 
@@ -180,7 +153,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.nudNumCattedreFatto.Location = new System.Drawing.Point(138, 294);
             this.nudNumCattedreFatto.Name = "nudNumCattedreFatto";
-            this.nudNumCattedreFatto.Size = new System.Drawing.Size(43, 20);
+            this.nudNumCattedreFatto.Size = new System.Drawing.Size(170, 20);
             this.nudNumCattedreFatto.TabIndex = 6;
             this.nudNumCattedreFatto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudNumCattedreFatto_KeyDown);
             // 
@@ -201,7 +174,7 @@
             this.cbAnnoScolastico.FormattingEnabled = true;
             this.cbAnnoScolastico.Location = new System.Drawing.Point(138, 19);
             this.cbAnnoScolastico.Name = "cbAnnoScolastico";
-            this.cbAnnoScolastico.Size = new System.Drawing.Size(232, 21);
+            this.cbAnnoScolastico.Size = new System.Drawing.Size(359, 21);
             this.cbAnnoScolastico.TabIndex = 1;
             this.cbAnnoScolastico.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAnnoScolastico_KeyDown);
             // 
@@ -209,18 +182,157 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.btAnnulla);
-            this.panel1.Controls.Add(this.btSava);
-            this.panel1.Location = new System.Drawing.Point(12, 320);
+            this.panel1.Controls.Add(this.kryptonButtonLogOut);
+            this.panel1.Controls.Add(this.btSalva);
+            this.panel1.Location = new System.Drawing.Point(12, 387);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(358, 40);
+            this.panel1.Size = new System.Drawing.Size(485, 57);
             this.panel1.TabIndex = 27;
+            // 
+            // btSalva
+            // 
+            this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btSalva.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btSalva.Location = new System.Drawing.Point(254, 10);
+            this.btSalva.Name = "btSalva";
+            this.btSalva.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
+            this.btSalva.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
+            this.btSalva.OverrideDefault.Back.ColorAngle = 45F;
+            this.btSalva.OverrideDefault.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
+            this.btSalva.OverrideDefault.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
+            this.btSalva.OverrideDefault.Border.ColorAngle = 45F;
+            this.btSalva.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btSalva.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btSalva.OverrideDefault.Border.Rounding = 20F;
+            this.btSalva.OverrideDefault.Border.Width = 1;
+            this.btSalva.Size = new System.Drawing.Size(228, 44);
+            this.btSalva.StateCommon.Back.Color1 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateCommon.Back.Color2 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateCommon.Back.ColorAngle = 45F;
+            this.btSalva.StateCommon.Border.Color1 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateCommon.Border.Color2 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateCommon.Border.ColorAngle = 45F;
+            this.btSalva.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btSalva.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btSalva.StateCommon.Border.Rounding = 20F;
+            this.btSalva.StateCommon.Border.Width = 1;
+            this.btSalva.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.btSalva.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.btSalva.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btSalva.StateNormal.Back.Color1 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateNormal.Back.Color2 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateNormal.Border.Color1 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateNormal.Border.Color2 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btSalva.StatePressed.Back.Color1 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StatePressed.Back.Color2 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StatePressed.Back.ColorAngle = 135F;
+            this.btSalva.StatePressed.Border.Color1 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StatePressed.Border.Color2 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StatePressed.Border.ColorAngle = 135F;
+            this.btSalva.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btSalva.StatePressed.Border.Rounding = 20F;
+            this.btSalva.StatePressed.Border.Width = 1;
+            this.btSalva.StateTracking.Back.Color1 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateTracking.Back.Color2 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateTracking.Back.ColorAngle = 45F;
+            this.btSalva.StateTracking.Border.Color1 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateTracking.Border.Color2 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateTracking.Border.ColorAngle = 45F;
+            this.btSalva.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btSalva.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btSalva.StateTracking.Border.Rounding = 20F;
+            this.btSalva.StateTracking.Border.Width = 1;
+            this.btSalva.TabIndex = 23;
+            this.btSalva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.btSalva.Values.Text = "Salva";
+            this.btSalva.Click += new System.EventHandler(this.btSava_Click);
+            // 
+            // kryptonButtonLogOut
+            // 
+            this.kryptonButtonLogOut.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.kryptonButtonLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.kryptonButtonLogOut.Location = new System.Drawing.Point(5, 10);
+            this.kryptonButtonLogOut.Name = "kryptonButtonLogOut";
+            this.kryptonButtonLogOut.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.OverrideDefault.Back.ColorAngle = 45F;
+            this.kryptonButtonLogOut.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.OverrideDefault.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.OverrideDefault.Border.ColorAngle = 45F;
+            this.kryptonButtonLogOut.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonButtonLogOut.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.kryptonButtonLogOut.OverrideDefault.Border.Rounding = 20F;
+            this.kryptonButtonLogOut.OverrideDefault.Border.Width = 1;
+            this.kryptonButtonLogOut.Size = new System.Drawing.Size(228, 43);
+            this.kryptonButtonLogOut.StateCommon.Back.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateCommon.Back.ColorAngle = 45F;
+            this.kryptonButtonLogOut.StateCommon.Border.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateCommon.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateCommon.Border.ColorAngle = 45F;
+            this.kryptonButtonLogOut.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonButtonLogOut.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.kryptonButtonLogOut.StateCommon.Border.Rounding = 20F;
+            this.kryptonButtonLogOut.StateCommon.Border.Width = 1;
+            this.kryptonButtonLogOut.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.kryptonButtonLogOut.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.kryptonButtonLogOut.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.kryptonButtonLogOut.StateNormal.Back.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateNormal.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateNormal.Border.Color1 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateNormal.Border.Color2 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonButtonLogOut.StatePressed.Back.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StatePressed.Back.Color2 = System.Drawing.Color.Yellow;
+            this.kryptonButtonLogOut.StatePressed.Back.ColorAngle = 135F;
+            this.kryptonButtonLogOut.StatePressed.Border.Color1 = System.Drawing.Color.Yellow;
+            this.kryptonButtonLogOut.StatePressed.Border.Color2 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StatePressed.Border.ColorAngle = 135F;
+            this.kryptonButtonLogOut.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonButtonLogOut.StatePressed.Border.Rounding = 20F;
+            this.kryptonButtonLogOut.StatePressed.Border.Width = 1;
+            this.kryptonButtonLogOut.StateTracking.Back.Color1 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateTracking.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateTracking.Back.ColorAngle = 45F;
+            this.kryptonButtonLogOut.StateTracking.Border.Color1 = System.Drawing.Color.DarkRed;
+            this.kryptonButtonLogOut.StateTracking.Border.Color2 = System.Drawing.Color.Red;
+            this.kryptonButtonLogOut.StateTracking.Border.ColorAngle = 45F;
+            this.kryptonButtonLogOut.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonButtonLogOut.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.kryptonButtonLogOut.StateTracking.Border.Rounding = 20F;
+            this.kryptonButtonLogOut.StateTracking.Border.Width = 1;
+            this.kryptonButtonLogOut.TabIndex = 28;
+            this.kryptonButtonLogOut.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.kryptonButtonLogOut.Values.Text = "Annulla";
+            this.kryptonButtonLogOut.Click += new System.EventHandler(this.btAnnulla_Click);
             // 
             // FrmCdC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 389);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(510, 456);
             this.Controls.Add(this.cbAnnoScolastico);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.nudNumCattedreFatto);
@@ -248,9 +360,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btSava;
-        private System.Windows.Forms.Button btAnnulla;
         private System.Windows.Forms.TextBox tbLivello;
         private System.Windows.Forms.TextBox tbNome;
         private System.Windows.Forms.Label label3;
@@ -264,5 +373,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cbAnnoScolastico;
         private System.Windows.Forms.Panel panel1;
+        private Krypton.Toolkit.KryptonButton btSalva;
+        private Krypton.Toolkit.KryptonButton kryptonButtonLogOut;
     }
 }

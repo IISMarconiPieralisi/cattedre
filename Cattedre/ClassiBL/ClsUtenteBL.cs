@@ -135,7 +135,7 @@ namespace Cattedre
             }
         }
 
-        public static bool ColoreLibero(string colore)
+        public static bool ColoreOccupato(string colore)
         {
             try
             {

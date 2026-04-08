@@ -165,6 +165,15 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Xceed.Document.NET, Version=5.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.5.0.0\lib\net40\Xceed.Document.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Drawing.NET, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.5.0.0\lib\net40\Xceed.Drawing.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Words.NET, Version=5.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.5.0.0\lib\net40\Xceed.Words.NET.dll</HintPath>
+    </Reference>
     <Reference Include="ZstdSharp, Version=0.8.5.0, Culture=neutral, PublicKeyToken=8d151af33a4ad5cf, processorArchitecture=MSIL">
       <HintPath>..\packages\ZstdSharp.Port.0.8.5\lib\netstandard2.0\ZstdSharp.dll</HintPath>
     </Reference>
@@ -180,6 +189,7 @@
     <Compile Include="ClassiBL\ClsDipartimentoBL.cs" />
     <Compile Include="ClassiBL\ClsDisciplinaBL.cs" />
     <Compile Include="ClassiBL\ClsDotareBL.cs" />
+    <Compile Include="ClassiBL\ClsGenerazioneWord.cs" />
     <Compile Include="ClassiBL\ClsGestireBL.cs" />
     <Compile Include="ClassiBL\ClsIndirizzoBL.cs" />
     <Compile Include="ClassiBL\ClsUtenteBL.cs" />

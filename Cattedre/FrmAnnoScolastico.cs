@@ -30,6 +30,15 @@ namespace Cattedre
                 if (dtpDataFine.Value.Year - dtpDataInizio.Value.Year != 1)
                     throw new Exception("le date di inizio e fine, non possono coprire un intervallo di due anni.");
 
+                // Controllo sovrapposizione con l'anno precedente
+                ClsAnnoScolasticoDL ultimoAnno = ClsAnnoScolasticoBL.CaricaAnniScolastici()
+                    .Where(a => a.ID != _annoScolastico.ID)
+                    .OrderByDescending(a => a.DataFine)
+                    .FirstOrDefault();
+
+                if (ultimoAnno != null && dtpDataInizio.Value.Month <= ultimoAnno.DataFine.Month)
+                    throw new Exception($"La data di inizio deve essere successiva al {ultimoAnno.DataFine.ToShortDateString()}.");
+
                 _annoScolastico.DataInizio = dtpDataInizio.Value;
                 _annoScolastico.DataFine = dtpDataFine.Value;
                 this.DialogResult = DialogResult.OK;
@@ -129,8 +138,8 @@ namespace Cattedre
         }
         private void CaricamentoDataFine()
         {
-            dtpDataInizio.Value = (_annoScolastico.DataFine).AddYears(-1);
             dtpDataFine.Value = _annoScolastico.DataFine;
+            dtpDataInizio.Value = (_annoScolastico.DataFine).AddYears(-1);
         }
 
         private void dtpDataInizio_KeyDown(object sender, KeyEventArgs e)

@@ -31,14 +31,18 @@ namespace Cattedre
         {
             try
             {
-                // --- Inizializzazione e Validazione Anno ---
-                if (_disciplina.ID <= 0)
+                if (_disciplina == null || _disciplina.ID <= 0)
                     _disciplina = new ClsDisciplinaDL();
 
                 _disciplina.Anno = anno;
 
                 if (_disciplina.Anno == 0 && tbDisciplinaSpeciale.Text.Trim() == string.Empty)
                     throw new Exception("inserire un anno valido");
+
+                if (_disciplina.ID > 0 && _gestires.Count == 0)
+                    _gestires = ClsGestireBL.CaricaGestioneDisciplina(_disciplina.ID);
+                if (_disciplina.ID > 0 && _richiederes.Count == 0)
+                    _richiederes = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(_disciplina.ID);
 
                 // --- Controllo Duplicati in Archivio ---
                 if (_disciplina.ID <= 0)

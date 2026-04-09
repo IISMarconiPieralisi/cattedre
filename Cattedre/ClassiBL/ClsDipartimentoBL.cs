@@ -352,6 +352,35 @@ namespace Cattedre
             }
             return NomeDipartimento;
         }
+
+        public static long RilevaIDdipartimento(string dip)
+        {
+            long IDdip = -1;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT d.ID FROM dipartimenti d WHERE d.nome = @dip";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@dip", dip);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                            IDdip = Convert.ToInt64(dt.Rows[0]["ID"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento dell'ID del dipartimento: " + ex.Message);
+            }
+            return IDdip;
+        }
         #endregion
 
     }

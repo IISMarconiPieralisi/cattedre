@@ -135,23 +135,32 @@ namespace Cattedre
             }
         }
 
-        public static bool ColoreOccupato(string colore)
+        public static bool ColoreOccupatoInDipartimento(string colore, long idDipartimento, long idUtente)
         {
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT colore FROM utenti WHERE colore = @colore";
+
+                    string sql = @"
+                            SELECT 1 
+                            FROM utenti u
+                            JOIN afferire a ON u.ID = a.IDutente
+                            WHERE u.colore = @colore
+                            AND a.IDdipartimento = @idDipartimento
+                            AND u.ID <> @idUtente
+                            LIMIT 1";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@colore", colore);
-                        DataTable dt = new DataTable();
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                        return dt.Rows.Count > 0 && dt.Rows[0]["colore"] != DBNull.Value;
+                        cmd.Parameters.AddWithValue("@idDipartimento", idDipartimento);
+                        cmd.Parameters.AddWithValue("@idUtente", idUtente);
+
+                        object result = cmd.ExecuteScalar();
+
+                        return result != null; // true se esiste almeno uno
                     }
                 }
             }

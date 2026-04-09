@@ -40,6 +40,7 @@ namespace Cattedre
             this.btInserisci = new Krypton.Toolkit.KryptonButton();
             this.kryptonButtonElimina = new Krypton.Toolkit.KryptonButton();
             this.kryptonButtonModifica = new Krypton.Toolkit.KryptonButton();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lvCdCs
@@ -54,9 +55,10 @@ namespace Cattedre
             this.chAbilitazioniRichieste,
             this.chNumCattedreDiritto,
             this.chNumCattedreDiFatto});
+            this.lvCdCs.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvCdCs.FullRowSelect = true;
             this.lvCdCs.HideSelection = false;
-            this.lvCdCs.Location = new System.Drawing.Point(22, 34);
+            this.lvCdCs.Location = new System.Drawing.Point(23, 45);
             this.lvCdCs.Margin = new System.Windows.Forms.Padding(2);
             this.lvCdCs.Name = "lvCdCs";
             this.lvCdCs.Size = new System.Drawing.Size(1407, 471);
@@ -104,7 +106,7 @@ namespace Cattedre
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btInserisci.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btInserisci.Location = new System.Drawing.Point(1434, 34);
+            this.btInserisci.Location = new System.Drawing.Point(1435, 45);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btInserisci.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -166,14 +168,14 @@ namespace Cattedre
             this.btInserisci.StateTracking.Border.Width = 1;
             this.btInserisci.TabIndex = 24;
             this.btInserisci.Values.DropDownArrowColor = System.Drawing.Color.Empty;
-            this.btInserisci.Values.Text = "Inserici";
+            this.btInserisci.Values.Text = "Inserisci";
             this.btInserisci.Click += new System.EventHandler(this.btInserisci_Click);
             // 
             // kryptonButtonElimina
             // 
             this.kryptonButtonElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonButtonElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.kryptonButtonElimina.Location = new System.Drawing.Point(1434, 137);
+            this.kryptonButtonElimina.Location = new System.Drawing.Point(1435, 148);
             this.kryptonButtonElimina.Name = "kryptonButtonElimina";
             this.kryptonButtonElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.kryptonButtonElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -242,7 +244,7 @@ namespace Cattedre
             // 
             this.kryptonButtonModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonButtonModifica.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.kryptonButtonModifica.Location = new System.Drawing.Point(1434, 84);
+            this.kryptonButtonModifica.Location = new System.Drawing.Point(1435, 95);
             this.kryptonButtonModifica.Name = "kryptonButtonModifica";
             this.kryptonButtonModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.kryptonButtonModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -307,11 +309,22 @@ namespace Cattedre
             this.kryptonButtonModifica.Values.Text = "Modifica";
             this.kryptonButtonModifica.Click += new System.EventHandler(this.btModifica_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(185, 23);
+            this.label1.TabIndex = 31;
+            this.label1.Text = "Classi di Concorso:";
+            // 
             // FrmCdCs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1551, 577);
+            this.ClientSize = new System.Drawing.Size(1551, 555);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.kryptonButtonModifica);
             this.Controls.Add(this.kryptonButtonElimina);
             this.Controls.Add(this.btInserisci);
@@ -323,6 +336,7 @@ namespace Cattedre
             this.Text = "Classi di concorso";
             this.Load += new System.EventHandler(this.FrmCdCs_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -338,5 +352,6 @@ namespace Cattedre
         private Krypton.Toolkit.KryptonButton btInserisci;
         private Krypton.Toolkit.KryptonButton kryptonButtonElimina;
         private Krypton.Toolkit.KryptonButton kryptonButtonModifica;
+        private System.Windows.Forms.Label label1;
     }
 }

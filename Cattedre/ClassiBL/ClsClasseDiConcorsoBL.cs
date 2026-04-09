@@ -156,7 +156,7 @@ namespace Cattedre
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@IDdisciplina",IDdiparitimento);
+                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdiparitimento);
                     using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                     {
                         dr.Fill(dt);

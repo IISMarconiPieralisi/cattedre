@@ -64,7 +64,7 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.nome, d.anno,d.oreteoria,orelaboratorio,disciplinaspeciale
-                               FROM disciplina d
+                               FROM discipline d
                                INNER JOIN gestire g ON d.ID = g.IDdisciplina
                                WHERE g.IDdipartimento = @IDdipartimento
                                ORDER BY d.Nome";

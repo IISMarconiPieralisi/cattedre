@@ -841,5 +841,10 @@ namespace Cattedre
             LoadAssegnazioni(IDdipartimento, annoscolastico.ID, out dtDocentiAssegnazioni);
             LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
         }
+
+        private void btGeneraWord_Click(object sender, EventArgs e)
+        {
+            ClsGenerazioneWord.PreparazioneCreazioneFile(ClsAnnoScolasticoBL.CercaAnnoScolastico(IDannoscolastico),ClsDipartimentoBL.CaricaDipartimento( IDdipartimento), Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+        }
     }
 }

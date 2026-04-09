@@ -10,15 +10,19 @@ namespace Cattedre
     {
         private static readonly Xceed.Drawing.Color GialloEvidenziazione = Xceed.Drawing.Color.Yellow;
         private static readonly Xceed.Drawing.Color GrigioIntestazione = Xceed.Drawing.Color.GrayText;
-        private const string FontName = "Arial";
-        private const double FontSize = 9;
+        private const string FontName = "Calibri";
+        private const double FontSize = 12;
         public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento,string filePath)
         {
-            List<ClsUtenteDL> Docenti/*metodo prendere utente di quel dipartimento*/;
+            List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
             List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioni();
             List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDisciplina(dipartimento.ID);
             List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
-            List<ClsDotareDL> listDotare = ClsDotareBL.CaricaDotare();
+            List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
+            List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);
+
+            filePath += $"\\Cattedre.Docx";
+            GenerateFileWord(anno, cdc, Docenti, assegnare, discipline,classi,Dotare,filePath);
         }
 
         public static void GenerateFileWord(ClsAnnoScolasticoDL annoScolastico,List<ClsClasseDiConcorsoDL> listClassiConcorso,
@@ -36,21 +40,17 @@ namespace Cattedre
 
                 foreach (ClsClasseDiConcorsoDL cdc in listClassiConcorso)
                 {
+
                     ClsDotareDL dotazione = listDotare
                         .FirstOrDefault(d => d.IdClasseDiConcorso == cdc.ID);
+                    InserisciIntestazioneCDC(doc, cdc, dotazione);
+                    var DocentiFiltrati = ClsRichiedereBL.RilevaUtentiCDC(cdc.ID);
 
-                    InserisciIntestazioneConcorso(doc, cdc, dotazione);
-
-                    foreach (ClsUtenteDL docente in listDocenti)
+                    foreach (ClsUtenteDL docente in DocentiFiltrati)
                     {
-                        // Filtro assegnazioni del singolo docente
-                        List<ClsAssegnareDL> assegnazioniDocente = listAssegnazioni
-                            .Where(a => a.IDUtente == docente.ID)
-                            .ToList();
-                        InserisciDocente(doc, docente, assegnazioniDocente, listDiscipline, listClassi);
+                        InserisciDocente(doc, docente, listAssegnazioni, listDiscipline, listClassi);
                     }
-                    InserisciNotaFinale(doc, cdc.Livello, listAssegnazioni, listDiscipline, listClassi);
-
+                    //InserisciNotaFinale(doc, cdc.Livello, listAssegnazioni, listDiscipline, listClassi);
                 }
 
                 doc.Save();
@@ -82,18 +82,12 @@ namespace Cattedre
         private static void InserisciDocente(DocX doc,ClsUtenteDL docente,List<ClsAssegnareDL> assegnazioni,List<ClsDisciplinaDL> listDiscipline,
                                                 List<ClsClasseDL> listClassi)
         {
-            // Carica le discipline abilitate per questo docente tramite ClsRichiedereBL
+            // Filtro le liste in modo tale da usare delle liste pulite 
+            List<ClsAssegnareDL> assegnazioniDocente = assegnazioni.Where(a => a.IDUtente == docente.ID).ToList();
             List<ClsRichiedereDL> richiesteDocente = ClsRichiedereBL.CaricaClassiRichiedereUtente(docente.ID);
-
-            // Ricava le sole discipline di questo docente
-            List<ClsDisciplinaDL> listDisciplineDocente = listDiscipline
-            .Where(d => richiesteDocente.Any(r => r.IDdisciplina == d.ID))
-            .ToList();
-
-            // Filtra le assegnazioni solo per le discipline abilitate del docente
-            List<ClsAssegnareDL> assegnazioniDocente = assegnazioni
-                .Where(a => richiesteDocente.Any(r => r.IDdisciplina == a.IDDisciplina))
-                .ToList();
+            List<ClsDisciplinaDL> listDisciplineDocente = listDiscipline.Where(d => assegnazioniDocente.Any(r => r.IDDisciplina == d.ID)).ToList();
+            List<ClsClasseDL> listClassiDocente = listClassi.Where(c => assegnazioniDocente.Any(r => r.IDClasse == c.ID)).ToList();
+            if (listClassiDocente.Count <= 0) return;
             // Intestazione docente
             var pNome = doc.InsertParagraph();
             pNome.SpacingBefore(6);
@@ -101,12 +95,7 @@ namespace Cattedre
                  .Bold().Italic()
                  .UnderlineStyle(UnderlineStyle.singleLine)
                  .Font(FontName).FontSize(10);
-
-            // Monte ore dal contratto
-            ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(docente.ID);
-            string monteOre = contratto?.MonteOre.ToString() ?? "0";
-
-            InserisciTabella(doc, assegnazioniDocente, listDisciplineDocente, listClassi, monteOre);
+            InserisciTabella(doc, assegnazioniDocente, listDisciplineDocente, listClassiDocente, docente);
         }
 
         private static void InserisciNotaFinale( DocX doc, string titolo, List<ClsAssegnareDL> assegnazioni,
@@ -121,12 +110,16 @@ namespace Cattedre
                    .UnderlineStyle(UnderlineStyle.singleLine)
                    .Font(FontName).FontSize(10);
 
-           // InserisciTabella(doc, assegnazioni, listDiscipline, listClassi, totale);
+           //InserisciTabella(doc, assegnazioni, listDiscipline, listClassi, totale);
         }
 
         private static void InserisciTabella(DocX doc,List<ClsAssegnareDL> assegnazioni,List<ClsDisciplinaDL> listDiscipline,List<ClsClasseDL> listClassi,
-            string totale)
+            ClsUtenteDL Docente)
         {
+            // Monte ore dal contratto
+            ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(Docente.ID);
+            int monteOre = (contratto == null) ? 0 : contratto.MonteOre;
+
             int numRighe = assegnazioni.Count + 2; // intestazione + dati + totale
             var tabella = doc.InsertTable(numRighe, 3);
 
@@ -147,24 +140,63 @@ namespace Cattedre
                 ClsAssegnareDL assegnazione = assegnazioni[i];
 
                 ClsDisciplinaDL disciplina = listDiscipline
-                    .FirstOrDefault(d => d.ID == assegnazione.IDDisciplina);
+                    .FirstOrDefault(d =>d!=null && d.ID == assegnazione.IDDisciplina && (!string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) || assegnazione.IDClasse>0));
 
                 ClsClasseDL classe = listClassi
                     .FirstOrDefault(c => c.ID == assegnazione.IDClasse);
-
+                int Ore = (!string.IsNullOrWhiteSpace(disciplina.DisciplinaSpeciale)) 
+                    ? assegnazione.OreSpeciali :
+                    (Docente.TipoDocente=='L')?disciplina.OreLaboratorio:disciplina.OreTeoria;
                 string nomeMateria = disciplina?.Nome ?? "N/D";
-                string nomeClasse = classe?.Sezione ?? "N/D";
+                string nomeClasse = (classe==null)?"N/D":$"{classe.Anno}{classe.Sezione}";
 
                 // evidenziata/barrato: puoi aggiungere logica qui in futuro
-                ImpostaRigaDati(tabella.Rows[i + 1],
-                    assegnazione.OreSpeciali, nomeMateria, nomeClasse,
+                ImpostaRigaDati(tabella.Rows[i + 1], Ore
+                    , nomeMateria, nomeClasse,
                     evidenziata: false,
                     barrato: false);
             }
 
-            ImpostaRigaTotale(tabella.Rows[numRighe - 1], totale);
+            ImpostaRigaTotale(tabella.Rows[numRighe - 1], monteOre.ToString());
 
             doc.InsertParagraph().SpacingAfter(4);
+        }
+        private static void InserisciIntestazioneCDC(DocX doc, ClsClasseDiConcorsoDL cdc, ClsDotareDL dotazione)
+        {
+            Paragraph p = doc.InsertParagraph();
+            p.Alignment = Alignment.center;
+
+            // "CLASSE DI CONCORSO:" – nero
+            p.Append("CLASSE DI CONCORSO:")
+             .Bold()
+             .Font(FontName)
+             .FontSize(FontSize)
+             .Color(Xceed.Drawing.Color.Black);
+
+            // Vai a capo nello stesso paragrafo
+            p.AppendLine();
+
+            // Codice + Nome CDC – nero
+            p.Append($"{cdc.Livello} {cdc.Nome.ToUpper()}")
+             .Bold()
+             .Font(FontName)
+             .FontSize(FontSize)
+             .Color(Xceed.Drawing.Color.Black);
+
+            // Cattedre + ore residue – rosso
+            if (dotazione != null)
+            {
+                p.AppendLine();
+                p.Append($"{dotazione.NumcattedreDiritto} cattedre + h residue")
+                 .Bold()
+                 .Font(FontName)
+                 .FontSize(FontSize)
+                 .Color(Xceed.Drawing.Color.Red);
+            }
+
+            // Nessuna spaziatura
+            p.SpacingBefore(0);
+            p.SpacingAfter(0);
         }
         #region elementi grafici
         private static void ImpostaRigaIntestazione(Row riga)

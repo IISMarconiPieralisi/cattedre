@@ -183,7 +183,7 @@ namespace Cattedre
 
 
         #region popolamenti Specifici
-        public static List<ClsClasseDL> CaricaClassiDipartimento(int IDdipartimento, long IDannoscolastico)
+        public static List<ClsClasseDL> CaricaClassiDipartimento(long IDdipartimento, long IDannoscolastico)
         {
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
             DataTable dt = new DataTable();

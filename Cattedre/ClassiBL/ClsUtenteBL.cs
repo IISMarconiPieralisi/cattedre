@@ -162,7 +162,7 @@ namespace Cattedre
         }
 
         #endregion
-        #region caricamente by utentispecifici
+        #region caricamente utentispecifici
         public static List<ClsUtenteDL> CaricaCoordinatoriDipartimenti()
         {
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
@@ -202,8 +202,6 @@ namespace Cattedre
 
         public static List<ClsUtenteDL> CaricaDocenti()
         {
-            
-
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             DataTable dt = new DataTable();
             try
@@ -280,6 +278,48 @@ namespace Cattedre
                 throw new Exception("Errore durante il caricamento dell'utente: " + ex.Message);
             }
             return utente;
+        }
+        public static List<ClsUtenteDL> OttieniUtentiDipartimento(long IDdiparimento)
+        {
+            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT u.ID,u.cognome,u.nome,tipoUtente,colore,tipoDocente FROM utenti u
+                                    JOIN afferire a ON u.ID = a.IDutente
+                                    WHERE a.IDdipartimento = @IDdipartimento";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdiparimento);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        ClsUtenteDL utente = new ClsUtenteDL();
+                        utente.ID = Convert.ToInt64(row["ID"]);
+                        utente.Cognome = row["cognome"].ToString();
+                        utente.Nome = row["nome"].ToString();
+                        utente.TipoUtente = row["tipoUtente"].ToString();
+                        utente.TipoDocente = row["tipoDocente"] == null ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                        utenti.Add(utente);
+                    }
+                    conn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return utenti;
         }
         #endregion
         #region OperazioniCRUD

@@ -270,7 +270,10 @@ namespace Cattedre
                 _imputEmail = tbEmail.Text;
                 if (!string.IsNullOrWhiteSpace(tbNome.Text) && !string.IsNullOrWhiteSpace(tbCognome.Text))
                 {
-                    string _Email = $"{tbNome.Text.ToLower()}.{tbCognome.Text.ToLower()}@iismarconipieralisi.it";
+                    string nomeSenzaSpazi = tbNome.Text.ToLower().Replace(" ", "");
+                    string cognomeSenzaSpazi = tbCognome.Text.ToLower().Replace(" ", "");
+
+                    string _Email = $"{nomeSenzaSpazi}.{cognomeSenzaSpazi}@iismarconipieralisi.it";
                     tbEmail.Enabled = false;
                     tbEmail.Text = _Email;
                 }

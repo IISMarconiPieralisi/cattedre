@@ -159,5 +159,10 @@ namespace Cattedre
                 btSalva.Focus();
             }
         }
+
+        private void mtbSigla_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
     }
 }

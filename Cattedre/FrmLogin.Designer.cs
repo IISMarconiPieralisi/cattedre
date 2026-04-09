@@ -66,14 +66,14 @@
             this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbPassword.Location = new System.Drawing.Point(286, 217);
-            this.tbPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbPassword.Margin = new System.Windows.Forms.Padding(2);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(219, 22);
             this.tbPassword.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbPassword.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.TabIndex = 11;
-            this.tbPassword.Text = "Pigini";
+            this.tbPassword.Text = "vitalf00!";
             this.tbPassword.Click += new System.EventHandler(this.tbPassword_Click);
             // 
             // tbNomeUtente
@@ -81,13 +81,13 @@
             this.tbNomeUtente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbNomeUtente.Location = new System.Drawing.Point(285, 150);
-            this.tbNomeUtente.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbNomeUtente.Margin = new System.Windows.Forms.Padding(2);
             this.tbNomeUtente.Name = "tbNomeUtente";
             this.tbNomeUtente.Size = new System.Drawing.Size(273, 22);
             this.tbNomeUtente.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbNomeUtente.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNomeUtente.TabIndex = 10;
-            this.tbNomeUtente.Text = "marcello.pigini@iismarconipieralisi.it";
+            this.tbNomeUtente.Text = "vittorio.alfieri@iismarconipieralisi.it";
             this.tbNomeUtente.Click += new System.EventHandler(this.tbNomeUtente_Click);
             // 
             // panel1
@@ -373,7 +373,7 @@
             this.Controls.Add(this.tbPassword);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.FrmLogin_Load);

@@ -122,5 +122,9 @@ namespace Cattedre
         }
         #endregion
 
+        private void tbLivello_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

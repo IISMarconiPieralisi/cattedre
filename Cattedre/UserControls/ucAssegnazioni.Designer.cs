@@ -207,7 +207,7 @@
             this.Controls.Add(this.lblDocentiNonDiRuoloTEORICI);
             this.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.Name = "UcAssegnazioni";
-            this.Size = new System.Drawing.Size(163, 94);
+            this.Size = new System.Drawing.Size(147, 94);
             this.Load += new System.EventHandler(this.UcAssegnazioni_Load);
             this.cmDocente.ResumeLayout(false);
             this.ResumeLayout(false);

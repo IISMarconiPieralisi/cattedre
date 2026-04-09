@@ -139,10 +139,18 @@ namespace Cattedre
                 }
 
                 //controllo se il colore è libero
-                if (_utente.Colore != "255255255")
+                foreach (var item in clbDipartimento.CheckedItems)
                 {
-                    if (ClsUtenteBL.ColoreOccupato(_utente.Colore))
-                        throw new Exception("Colore occupato");
+                    string nomeDip = item.ToString();
+
+                    long idDip = ClsDipartimentoBL.RilevaIDdipartimento(nomeDip);
+
+                    //il bianco può essere riutilizzato
+                    if (_utente.Colore != "255255255")
+                    {
+                        if (ClsUtenteBL.ColoreOccupatoInDipartimento(_utente.Colore, idDip, _utente.ID))
+                            throw new Exception($"Colore occupato nel dipartimento: {nomeDip}");
+                    }
                 }
 
                 // Se arrivi qui, tutto è valido
@@ -262,7 +270,10 @@ namespace Cattedre
                 _imputEmail = tbEmail.Text;
                 if (!string.IsNullOrWhiteSpace(tbNome.Text) && !string.IsNullOrWhiteSpace(tbCognome.Text))
                 {
-                    string _Email = $"{tbNome.Text.ToLower()}.{tbCognome.Text.ToLower()}@iismarconipieralisi.it";
+                    string nomeSenzaSpazi = tbNome.Text.ToLower().Replace(" ", "");
+                    string cognomeSenzaSpazi = tbCognome.Text.ToLower().Replace(" ", "");
+
+                    string _Email = $"{nomeSenzaSpazi}.{cognomeSenzaSpazi}@iismarconipieralisi.it";
                     tbEmail.Enabled = false;
                     tbEmail.Text = _Email;
                 }

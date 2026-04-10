@@ -30,11 +30,11 @@ namespace Cattedre
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCattedre));
             this.pnlClassi = new System.Windows.Forms.Panel();
+            this.btGeneraWord = new System.Windows.Forms.Button();
             this.btGeneraASsucc = new System.Windows.Forms.Button();
             this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
             this.cbDipartimenti = new System.Windows.Forms.ComboBox();
             this.pnlDipartimento = new System.Windows.Forms.Panel();
-            this.pnlInfoNumCattedre = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.pnlOreDoc = new System.Windows.Forms.Panel();
             this.lblOreEff = new System.Windows.Forms.Label();
@@ -45,7 +45,6 @@ namespace Cattedre
             this.pnlAnnullaSalva = new System.Windows.Forms.Panel();
             this.btSalva = new System.Windows.Forms.Button();
             this.btAnnulla = new System.Windows.Forms.Button();
-            this.btGeneraWord = new System.Windows.Forms.Button();
             this.pnlClassi.SuspendLayout();
             this.pnlDipartimento.SuspendLayout();
             this.pnlOreDoc.SuspendLayout();
@@ -63,6 +62,16 @@ namespace Cattedre
             this.pnlClassi.Name = "pnlClassi";
             this.pnlClassi.Size = new System.Drawing.Size(169, 687);
             this.pnlClassi.TabIndex = 0;
+            // 
+            // btGeneraWord
+            // 
+            this.btGeneraWord.Location = new System.Drawing.Point(133, 37);
+            this.btGeneraWord.Name = "btGeneraWord";
+            this.btGeneraWord.Size = new System.Drawing.Size(23, 22);
+            this.btGeneraWord.TabIndex = 6;
+            this.btGeneraWord.Text = ".";
+            this.btGeneraWord.UseVisualStyleBackColor = true;
+            this.btGeneraWord.Click += new System.EventHandler(this.btGeneraWord_Click);
             // 
             // btGeneraASsucc
             // 
@@ -99,7 +108,6 @@ namespace Cattedre
             // 
             this.pnlDipartimento.AutoScroll = true;
             this.pnlDipartimento.BackColor = System.Drawing.Color.Transparent;
-            this.pnlDipartimento.Controls.Add(this.pnlInfoNumCattedre);
             this.pnlDipartimento.Controls.Add(this.splitter1);
             this.pnlDipartimento.Controls.Add(this.pnlOreDoc);
             this.pnlDipartimento.Controls.Add(this.pnlAnnullaSalva);
@@ -108,16 +116,6 @@ namespace Cattedre
             this.pnlDipartimento.Name = "pnlDipartimento";
             this.pnlDipartimento.Size = new System.Drawing.Size(986, 687);
             this.pnlDipartimento.TabIndex = 1;
-            // 
-            // pnlInfoNumCattedre
-            // 
-            this.pnlInfoNumCattedre.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlInfoNumCattedre.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlInfoNumCattedre.Location = new System.Drawing.Point(303, 0);
-            this.pnlInfoNumCattedre.Margin = new System.Windows.Forms.Padding(2);
-            this.pnlInfoNumCattedre.Name = "pnlInfoNumCattedre";
-            this.pnlInfoNumCattedre.Size = new System.Drawing.Size(230, 687);
-            this.pnlInfoNumCattedre.TabIndex = 2;
             // 
             // splitter1
             // 
@@ -232,16 +230,6 @@ namespace Cattedre
             this.btAnnulla.UseVisualStyleBackColor = true;
             this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
             // 
-            // btGeneraWord
-            // 
-            this.btGeneraWord.Location = new System.Drawing.Point(133, 37);
-            this.btGeneraWord.Name = "btGeneraWord";
-            this.btGeneraWord.Size = new System.Drawing.Size(23, 22);
-            this.btGeneraWord.TabIndex = 6;
-            this.btGeneraWord.Text = ".";
-            this.btGeneraWord.UseVisualStyleBackColor = true;
-            this.btGeneraWord.Click += new System.EventHandler(this.btGeneraWord_Click);
-            // 
             // FrmCattedre
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -268,7 +256,6 @@ namespace Cattedre
 
         private System.Windows.Forms.Panel pnlClassi;
         private System.Windows.Forms.Panel pnlDipartimento;
-        private System.Windows.Forms.Panel pnlInfoNumCattedre;
         private System.Windows.Forms.Panel pnlAnnullaSalva;
         private System.Windows.Forms.Button btSalva;
         private System.Windows.Forms.Button btAnnulla;

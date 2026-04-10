@@ -311,18 +311,6 @@
     <Compile Include="UserControls\ucOreDoc.Designer.cs">
       <DependentUpon>ucOreDoc.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ucOreTotali.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ucOreTotali.Designer.cs">
-      <DependentUpon>ucOreTotali.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ucOreTotalixClasse.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ucOreTotalixClasse.Designer.cs">
-      <DependentUpon>ucOreTotalixClasse.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmUtente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -337,12 +325,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserControls\ucOre.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ucOre.Designer.cs">
-      <DependentUpon>ucOre.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ucAssegnazioni.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -412,12 +394,6 @@
     <EmbeddedResource Include="UserControls\ucOreDoc.resx">
       <DependentUpon>ucOreDoc.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ucOreTotali.resx">
-      <DependentUpon>ucOreTotali.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ucOreTotalixClasse.resx">
-      <DependentUpon>ucOreTotalixClasse.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FrmUtente.resx">
       <DependentUpon>FrmUtente.cs</DependentUpon>
     </EmbeddedResource>
@@ -442,9 +418,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ucDisciplina.resx">
       <DependentUpon>ucDisciplina.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ucOre.resx">
-      <DependentUpon>ucOre.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

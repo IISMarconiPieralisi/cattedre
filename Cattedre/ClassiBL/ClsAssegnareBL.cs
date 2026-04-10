@@ -435,6 +435,50 @@ namespace Cattedre
             return lista;
         }
         #endregion
+        #region Popolamenti specifici
+        public static List<ClsAssegnareDL> PopolaAssegnazioniAnnoScolasticoDipartimento(long IDdipartimento, long IDannoScolastico)
+        {
+            List<ClsAssegnareDL> ass = new List<ClsAssegnareDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT * FROM assegnare a " +
+                                 "JOIN Gestire g ON a.IDdisciplina = g.IDdisciplina " +
+                                 "WHERE a.IDannoscolastico = @IDannoScolastico AND g.IDdipartimento = @IDdipartimento AND a.IDclasse IS NOT NULL";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                    }
+                }
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsAssegnareDL assegnare = new ClsAssegnareDL();
+                    assegnare.ID = Convert.ToInt32(row["ID"]);
+                    assegnare.OreSpeciali = Convert.ToInt32(row["oreSpeciali"]);
+                    // Campi che permettono NULL nel DB 
+                    assegnare.IDAnnoScolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDannoscolastico"]);
+                    assegnare.IDUtente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDutente"]);
+                    assegnare.IDDisciplina = (row["IDdisciplina"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplina"]);
+                    assegnare.IDClasse = (row["IDclasse"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDclasse"]);
+                    ass.Add(assegnare);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return ass;
+        }
+        #endregion
         #region Codice vecchio
         //public static void CopiaDocentiAnnoSuccessivo(long nuovoAnno, long vecchioAnno)
         //{

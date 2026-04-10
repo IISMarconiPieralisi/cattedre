@@ -407,9 +407,9 @@ namespace Cattedre
 
                 if (totale > cattedra)
                 {
-                    uc.lblDocente.ForeColor = Color.Red;
-                    uc.lblOreEffettive.ForeColor = Color.Red;
-                    uc.lblOreTotali.ForeColor = Color.Red;
+                    uc.lblDocente.ForeColor = Color.Orange;
+                    uc.lblOreEffettive.ForeColor = Color.Orange;
+                    uc.lblOreTotali.ForeColor = Color.Orange;
 
                     uc.lblDocente.Font = new Font(uc.lblDocente.Font, FontStyle.Bold);
                     uc.lblOreEffettive.Font = new Font(uc.lblOreEffettive.Font, FontStyle.Bold);
@@ -417,9 +417,9 @@ namespace Cattedre
                 }
                 else if (totale < cattedra)
                 {
-                    uc.lblDocente.ForeColor = Color.Orange;
-                    uc.lblOreEffettive.ForeColor = Color.Orange;
-                    uc.lblOreTotali.ForeColor = Color.Orange;
+                    uc.lblDocente.ForeColor = Color.Red;
+                    uc.lblOreEffettive.ForeColor = Color.Red;
+                    uc.lblOreTotali.ForeColor = Color.Red;
 
                     uc.lblDocente.Font = new Font(uc.lblDocente.Font, FontStyle.Bold);
                     uc.lblOreEffettive.Font = new Font(uc.lblOreEffettive.Font, FontStyle.Bold);
@@ -544,11 +544,11 @@ namespace Cattedre
 
 
                     uc.cbDocentiTeorici.DataSource = teorici;
-                    uc.cbDocentiTeorici.DisplayMember = "Cognome";
+                    uc.cbDocentiTeorici.DisplayMember = "DisplayText";
                     uc.cbDocentiTeorici.ValueMember = "ID";
 
                     uc.cbDocentiItip.DataSource = pratici;
-                    uc.cbDocentiItip.DisplayMember = "Cognome";
+                    uc.cbDocentiItip.DisplayMember = "DisplayText";
                     uc.cbDocentiItip.ValueMember = "ID";
 
                     uc.ImpostaColoriCombo(uc.cbDocentiTeorici);
@@ -678,7 +678,7 @@ namespace Cattedre
                 string nomeCompleto = disciplineUniche[i].Nome;
 
                 // nome tagliato
-                string nomeTagliato = nomeCompleto?.Length > 15 ? nomeCompleto.Substring(0, 15) : nomeCompleto;
+                string nomeTagliato = nomeCompleto?.Length > 15 ? nomeCompleto.Substring(0, 15) + "." : nomeCompleto;
                 ClsDisciplinaDL disciplinaDaMostrare = new ClsDisciplinaDL(disciplineUniche[i], nomeTagliato);
 
                 UcDisciplina ucDisciplina = new UcDisciplina(disciplinaDaMostrare, nomeCompleto);

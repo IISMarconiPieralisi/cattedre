@@ -154,6 +154,16 @@ namespace Cattedre
                 return BitConverter.ToString(hashBytes).Replace("-", ""); // "010203"
             }
         }
+
+        public string DisplayText
+        {
+            get
+            {
+                string nomeCorto = string.IsNullOrEmpty(Nome) ? "" :
+                                  (Nome.Length > 3 ? Nome.Substring(0, 3) : Nome);
+                return $"{Cognome} {nomeCorto}";
+            }
+        }
         #endregion
 
     }

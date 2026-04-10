@@ -14,10 +14,11 @@ namespace Cattedre
     {
         public ClsClasseDiConcorsoDL _cdc = new ClsClasseDiConcorsoDL();
         public ClsDotareDL _dot = new ClsDotareDL();
-
+        long _lastTick = 0;
         public FrmCdC()
         {
             InitializeComponent();
+            cbAnnoScolastico.Focus();
         }
 
         private void btSava_Click(object sender, EventArgs e)
@@ -31,6 +32,7 @@ namespace Cattedre
                     _cdc.Nome = tbNome.Text;
                     _dot.NumcattedreDiritto = Convert.ToInt32(nudNumCattedreDiritto.Value);
                     _dot.NumcattedreFatto = Convert.ToInt32(nudNumCattedreFatto.Value);
+                    _dot.IdAnnoscolastico = ClsAnnoScolasticoBL.RilevaIDanno(cbAnnoScolastico.SelectedItem.ToString());
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -41,16 +43,22 @@ namespace Cattedre
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message +"\n riprovare!", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                tbLivello.Focus();
             }
         }
 
         private void FrmCdC_Load(object sender, EventArgs e)
         {
+            cbAnnoScolastico.Focus();
             FrmCdCs frmCdCs = new FrmCdCs();
+            List<ClsAnnoScolasticoDL> _anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
+            foreach(ClsAnnoScolasticoDL _as in _anniscolastici)
+            {
+                cbAnnoScolastico.Items.Add(_as.Sigla);
+            }
 
             if (_cdc.Nome != null)
             {
+                cbAnnoScolastico.SelectedItem = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(_dot.IdAnnoscolastico);
                 tbNome.Text = _cdc.Nome;
                 tbLivello.Text = _cdc.Livello;
                 rtbAbilitazioni.Text = _cdc.AbilitazioniRichieste;
@@ -58,10 +66,65 @@ namespace Cattedre
                 nudNumCattedreFatto.Value = _dot.NumcattedreFatto;
             }
         }
+        
 
         private void btAnnulla_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+        #region navigazione 
+
+
+        private void cbAnnoScolastico_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbAnnoScolastico.SelectedIndex != -1)
+                tbLivello.Focus();
+        }
+
+        private void tbLivello_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbLivello.Text.Length > 2)
+                tbNome.Focus();
+        }
+
+        private void tbNome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbNome.Text.Length > 2)
+                rtbAbilitazioni.Focus();
+        }
+
+        private void rtbAbilitazioni_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Evita il "Ding" di Windows
+
+                long currentTick = DateTime.Now.Ticks;
+                long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
+
+                if (elapsedMilliseconds < 500) // DOPPIO INVIO RAPIDO
+                    nudNumCattedreDiritto.Focus();
+                _lastTick = currentTick;
+
+            }
+        }
+
+        private void nudNumCattedreDiritto_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && nudNumCattedreDiritto.Value > 0)
+                nudNumCattedreFatto.Focus();
+        }
+
+        private void nudNumCattedreFatto_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && nudNumCattedreFatto.Value > 0)
+                btSalva.Focus();
+        }
+        #endregion
+
+        private void tbLivello_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

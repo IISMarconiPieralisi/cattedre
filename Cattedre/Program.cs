@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,25 +18,29 @@ namespace Cattedre
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            ClsUtenteDL utente = null;
+            bool logout = false;
 
-            using (FrmLogin frmLogin = new FrmLogin())
+            FrmLogin frmLogin = new FrmLogin();
+            if (frmLogin.ShowDialog() != DialogResult.OK)
+                return;
+
+            while (true)
             {
-                var result = frmLogin.ShowDialog();
+                FrmHome frmHome = new FrmHome(frmLogin.UtenteLoggato);
+                if (frmLogin.FotoProfilo != null)
+                    frmHome.ImpostaFotoProfilo(frmLogin.FotoProfilo);
 
-                if (result == DialogResult.OK)
-                {
-                    utente = frmLogin.UtenteLoggato;
-                }
-                else
-                {
-                    return; // chiude l'app
-                }
+                frmHome.OnLogout = () => logout = true; // segnale che è stato premuto logout
+                Application.Run(frmHome);
+
+                if (!logout)
+                    break; // chiuso con la X -> esci dall'app
+
+                logout = false;
+                frmLogin = new FrmLogin();
+                if (frmLogin.ShowDialog() != DialogResult.OK)
+                    break; // ha chiuso il login -> esci dall'app
             }
-
-            Application.Run(new FrmHome(utente));
-
-
         }
     }
 }

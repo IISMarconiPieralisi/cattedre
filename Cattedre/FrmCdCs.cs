@@ -24,15 +24,18 @@ namespace Cattedre
         private void CaricaListView()
         {
             cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
-            dots = ClsDotareBL.CaricaDotare(1);
+            dots = ClsDotareBL.CaricaDotare();
             lvCdCs.Items.Clear();
             for(int i = 0; i < cdcs.Count; i++)
             {
-                ListViewItem lvi = new ListViewItem(cdcs[i].Livello);
+                ListViewItem lvi = new ListViewItem(cdcs[i].ID.ToString());
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
+                lvi.SubItems.Add(cdcs[i].Livello);
                 lvi.SubItems.Add(cdcs[i].Nome);
                 lvi.SubItems.Add(cdcs[i].AbilitazioniRichieste);
-                lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiDiritto(cdcs[i].ID).ToString());
-                lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiFatto(cdcs[i].ID).ToString());
+                lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiDiritto(cdcs[i].ID, dots[i].IdAnnoscolastico).ToString());
+                lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiFatto(cdcs[i].ID, dots[i].IdAnnoscolastico).ToString());
+                
                 lvi.Tag = cdcs[i].ID;
                 lvCdCs.Items.Add(lvi);
             }
@@ -88,10 +91,24 @@ namespace Cattedre
                 if (dr == DialogResult.Yes)
                 {
                     ClsClasseDiConcorsoBL.EliminaCdc(idDaEliminare);
-                    ClsDotareBL.EliminaDotare(1, idDaEliminare);
+                    ClsDotareBL.EliminaDotare(idDaEliminare);
                 }
                 
                 CaricaListView();
+            }
+        }
+
+        private void lvCdCs_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && lvCdCs.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete && lvCdCs.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
             }
         }
     }

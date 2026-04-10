@@ -63,9 +63,29 @@ namespace Cattedre.Properties {
         /// <summary>
         ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap user_account_management_logo_user_icon_11562867145a56rus2zwu {
+        internal static System.Drawing.Bitmap copia {
             get {
-                object obj = ResourceManager.GetObject("user-account-management-logo-user-icon-11562867145a56rus2zwu", resourceCulture);
+                object obj = ResourceManager.GetObject("copia", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap incolla {
+            get {
+                object obj = ResourceManager.GetObject("incolla", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap taglia {
+            get {
+                object obj = ResourceManager.GetObject("taglia", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

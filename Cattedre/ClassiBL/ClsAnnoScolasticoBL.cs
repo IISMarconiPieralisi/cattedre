@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,17 +11,136 @@ namespace Cattedre
 {
     public static class ClsAnnoScolasticoBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
+
+        public static long TrovaIDannoscolastico()
+        {
+            ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID FROM anniscolastici 
+                           WHERE CURDATE() BETWEEN datainizio AND datafine 
+                           LIMIT 1";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        anno.ID = Convert.ToInt64(row["ID"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return anno.ID;
+        }
+
+        public static ClsAnnoScolasticoDL TrovaAnnoSuccessivo(long IDanno)
+        {
+            List<ClsAnnoScolasticoDL> anni = CaricaAnniScolastici();
+
+            return anni
+                .Where(a => a.ID > IDanno)
+                .OrderBy(a => a.ID)
+                .FirstOrDefault();
+        }
+        public static ClsAnnoScolasticoDL CercaAnnoScolastico(long ID)
+        {
+            ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT * FROM anniscolastici
+                                   WHERE ID = @ID";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ID);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        anno.ID = Convert.ToInt64(row["ID"]);
+                        anno.Sigla = row["sigla"].ToString();
+                        anno.DataInizio = Convert.ToDateTime(row["datainizio"]);
+                        anno.DataFine = Convert.ToDateTime(row["datafine"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return anno;
+        }
+        public static ClsAnnoScolasticoDL CercaAnnoScolastico(string sigla)
+        {
+            ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT * FROM anniscolastici
+                                   WHERE sigla = @sigla";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@sigla", sigla);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        anno.ID = Convert.ToInt64(row["ID"]);
+                        anno.Sigla = row["sigla"].ToString();
+                        anno.DataInizio = Convert.ToDateTime(row["datainizio"]);
+                        anno.DataFine = Convert.ToDateTime(row["datafine"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return anno;
+        }
         public static List<ClsAnnoScolasticoDL> CaricaAnniScolastici()
         {
             List<ClsAnnoScolasticoDL> anniScolastici = new List<ClsAnnoScolasticoDL>();
             DataTable dt = new DataTable();
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM anniscolastici";
+                    string sql = "SELECT id,sigla,datainizio,datafine FROM anniscolastici ORDER BY sigla DESC";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
@@ -48,89 +167,175 @@ namespace Cattedre
             }
             return anniScolastici;
         }
+        public static long RilevaIDAnnoSuccessivo(long IDannoScolastico)
+        {
+            if (IDannoScolastico <= 0) return 0;
+
+            long IDanno = 0;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID FROM anniscolastici 
+                          WHERE TIMESTAMPDIFF(YEAR,(
+                                SELECT datainizio FROM anniscolastici 
+                                WHERE ID=@ID),datainizio
+                          )=1 LIMIT 1";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", IDannoScolastico);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                            IDanno = Convert.ToInt64(dt.Rows[0]["ID"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento dell'anno scolastico successivo: " + ex.Message);
+            }
+            return IDanno;
+        }
+
+        public static long RilevaIDanno(string sigla)
+        {
+            long IDanno = 0;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT ID FROM anniscolastici 
+                          WHERE sigla = @sigla";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@sigla", sigla);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                            IDanno = Convert.ToInt64(dt.Rows[0]["ID"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento dell'anno scolastico: " + ex.Message);
+            }
+            return IDanno;
+        }
+
+        public static string RilevaSiglaAnnoScolastico(long ID)
+        {
+            string Sigla = "-";
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT sigla FROM anniscolastici WHERE id=@ID";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ID);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                            Sigla = dt.Rows[0]["sigla"].ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento della sigla: " + ex.Message);
+            }
+            return Sigla;
+        }
 
         public static void InserisciAnnoScolastico(ClsAnnoScolasticoDL anno)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            List<ClsAnnoScolasticoDL> anniScolastici = new List<ClsAnnoScolasticoDL>();
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
                     string sql = "INSERT INTO anniscolastici (sigla, datainizio, datafine) VALUES (@sigla, @datainizio, @datafine)";
-                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@sigla", anno.Sigla);
                         cmd.Parameters.AddWithValue("@datainizio", anno.DataInizio);
                         cmd.Parameters.AddWithValue("@datafine", anno.DataFine);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
                         if (righeCoinvolte <= 0)
-                            throw new EvaluateException("errore durante l'inserimento");
+                            throw new EvaluateException("Errore durante l'inserimento.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante l'inserimento dell'anno scolastico: " + ex.Message);
             }
-
         }
 
         public static void ModificaAnnoScolastico(ClsAnnoScolasticoDL anno)
         {
-            FrmAnnoScolastico frmAnnoScolastico = new FrmAnnoScolastico();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-
-            try
-            {
-                conn.Open();
-                string sql = @"UPDATE anniscolastici 
-                           SET sigla = @sigla, 
-                               datainizio = @datainizio, 
-                               datafine = @datafine 
-                           WHERE id = @ID";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                {
-                    cmd.Parameters.AddWithValue("@sigla", anno.Sigla);
-                    cmd.Parameters.AddWithValue("@datainizio", anno.DataInizio);
-                    cmd.Parameters.AddWithValue("@datafine", anno.DataFine);
-                    cmd.Parameters.AddWithValue("@ID", anno.ID);
-                    int righeCoinvolte = cmd.ExecuteNonQuery();
-                    if (righeCoinvolte <= 0)
-                        throw new EvaluateException("errore durante la modifica");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public static void EliminaAnnoScolastico(int id)
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "DELETE FROM anniscolastici WHERE id =@ID";
+                    string sql = @"UPDATE anniscolastici 
+                           SET sigla      = @sigla, 
+                               datainizio = @datainizio, 
+                               datafine   = @datafine 
+                           WHERE id = @ID";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
+                        cmd.Parameters.AddWithValue("@sigla", anno.Sigla);
+                        cmd.Parameters.AddWithValue("@datainizio", anno.DataInizio);
+                        cmd.Parameters.AddWithValue("@datafine", anno.DataFine);
+                        cmd.Parameters.AddWithValue("@ID", anno.ID);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
                         if (righeCoinvolte <= 0)
-                            throw new EvaluateException("errore durante la modifica");
+                            throw new EvaluateException("Errore durante la modifica.");
                     }
                 }
-                   
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante la modifica dell'anno scolastico: " + ex.Message);
+            }
+        }
+
+        public static void EliminaAnnoScolastico(long id)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "DELETE FROM anniscolastici WHERE id = @ID";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", id);
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        if (righeCoinvolte <= 0)
+                            throw new EvaluateException("Errore durante l'eliminazione.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante l'eliminazione dell'anno scolastico: " + ex.Message);
             }
         }
     }

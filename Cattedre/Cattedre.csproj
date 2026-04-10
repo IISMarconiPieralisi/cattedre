@@ -8,10 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Cattedre</RootNamespace>
     <AssemblyName>Cattedre</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,7 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>1-47b4fe04.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
@@ -71,6 +73,9 @@
     </Reference>
     <Reference Include="K4os.Hash.xxHash, Version=1.0.8.0, Culture=neutral, PublicKeyToken=32cd54395057cec3, processorArchitecture=MSIL">
       <HintPath>..\packages\K4os.Hash.xxHash.1.0.8\lib\netstandard2.0\K4os.Hash.xxHash.dll</HintPath>
+    </Reference>
+    <Reference Include="Krypton.Toolkit, Version=100.26.1.19, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Krypton.Toolkit.100.26.1.19\lib\net472\Krypton.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.0\lib\netstandard2.0\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -160,6 +165,15 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Xceed.Document.NET, Version=5.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.5.0.0\lib\net40\Xceed.Document.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Drawing.NET, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.5.0.0\lib\net40\Xceed.Drawing.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Words.NET, Version=5.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.5.0.0\lib\net40\Xceed.Words.NET.dll</HintPath>
+    </Reference>
     <Reference Include="ZstdSharp, Version=0.8.5.0, Culture=neutral, PublicKeyToken=8d151af33a4ad5cf, processorArchitecture=MSIL">
       <HintPath>..\packages\ZstdSharp.Port.0.8.5\lib\netstandard2.0\ZstdSharp.dll</HintPath>
     </Reference>
@@ -175,6 +189,8 @@
     <Compile Include="ClassiBL\ClsDipartimentoBL.cs" />
     <Compile Include="ClassiBL\ClsDisciplinaBL.cs" />
     <Compile Include="ClassiBL\ClsDotareBL.cs" />
+    <Compile Include="ClassiBL\ClsGenerazioneWord.cs" />
+    <Compile Include="ClassiBL\ClsGestireBL.cs" />
     <Compile Include="ClassiBL\ClsIndirizzoBL.cs" />
     <Compile Include="ClassiBL\ClsUtenteBL.cs" />
     <Compile Include="ClassiDL\ClsAfferireDL.cs" />
@@ -187,6 +203,7 @@
     <Compile Include="ClassiDL\ClsDipartimentoDL.cs" />
     <Compile Include="ClassiDL\ClsDisciplinaDL.cs" />
     <Compile Include="ClassiDL\ClsDotareDL.cs" />
+    <Compile Include="ClassiDL\ClsGestireDL.cs" />
     <Compile Include="ClassiDL\ClsIndirizzoDL.cs" />
     <Compile Include="ClassiDL\ClsPersona.cs" />
     <Compile Include="ClassiDL\ClsUtenteDL.cs" />
@@ -445,7 +462,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1-47b4fe04.ico" />
-    <None Include="Resources\user-account-management-logo-user-icon-11562867145a56rus2zwu.png" />
+    <Content Include="Resources\Immagini\Icone\CDC.ico" />
+    <Content Include="Resources\Immagini\Icone\CLASSI.ico" />
+    <Content Include="Resources\Immagini\Icone\DIPARTIMENTI.ico" />
+    <Content Include="Resources\Immagini\Icone\DISCIPLINE.ico" />
+    <Content Include="Resources\Immagini\Icone\UTENTI.ico" />
+    <Content Include="Resources\Immagini\Icone\INDIRIZZI.ico" />
+    <Content Include="Resources\Immagini\vecchie immagini\1-47b4fe04.ico" />
+    <Content Include="Resources\Immagini\vecchie immagini\iconeDekstop.png" />
+    <Content Include="Resources\Immagini\vecchie immagini\LoginImg.png" />
+    <Content Include="Resources\Immagini\vecchie immagini\Sfondo.png" />
+    <Content Include="Resources\Immagini\vecchie immagini\user-account-management-logo-user-icon-11562867145a56rus2zwu.png" />
+    <None Include="Resources\incolla.png" />
+    <None Include="Resources\copia.png" />
+    <None Include="Resources\taglia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MigliorieGrafiche\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

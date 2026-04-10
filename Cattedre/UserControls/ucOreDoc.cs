@@ -13,7 +13,6 @@ namespace Cattedre
     public partial class ucOreDoc : UserControl
     {
         int _idassegnare = 0;
-        string nome, cognome;
 
         public int IDassegnare
         {
@@ -28,22 +27,18 @@ namespace Cattedre
             InitializeComponent();
         }
 
-        private void ucOreDoc_Load(object sender, EventArgs e)
-        {
-            long idUtente = Convert.ToInt64(this.Tag);
-            ClsRichiedereBL.RilevaCDCDocente(idUtente);
-
-        }
-
         private void nudOrePot_ValueChanged(object sender, EventArgs e)
         {
             if (this.Tag == null)
                 return;
 
-            int idUtente = Convert.ToInt32(this.Tag);
+            int IDutente = Convert.ToInt32(this.Tag);
+            FrmCattedre frmCattedre = (FrmCattedre)this.ParentForm;
+            string siglaannoscolastico = frmCattedre.Annoscolasticoselezionato;
+            ClsAnnoScolasticoDL annoCorrente = ClsAnnoScolasticoBL.CercaAnnoScolastico(siglaannoscolastico);
             int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
-
-            ClsAssegnareBL.SalvaOrePot(oreSpeciali, idUtente);
+            int IDdisciplina = ClsDisciplinaBL.TrovaIDPotenziamento();
+            ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, annoCorrente.ID, IDdisciplina);
         }
     }
 }

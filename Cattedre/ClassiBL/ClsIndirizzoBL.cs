@@ -11,79 +11,69 @@ namespace Cattedre
 {
     public static class ClsIndirizzoBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
         public static long RilevaIDindirizzo(string nome)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            long ID=0;
+            long ID = 0;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT ID 
-                             FROM indirizzi 
-                             WHERE nome =@nome";
+                    string sql = "SELECT ID FROM indirizzi WHERE nome = @nome";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", nome);
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            if (dr.HasRows)
-                            {
-                                dr.Read();
-                                ID = Convert.ToInt64(dr["ID"]);
-                            }
+                            da.Fill(dt);
                         }
+                        if (dt.Rows.Count > 0)
+                            ID = Convert.ToInt64(dt.Rows[0]["ID"]);
                     }
-                    conn.Close();
-                }         
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
-           }
+                throw new Exception("Errore durante il rilevamento dell'ID indirizzo: " + ex.Message);
+            }
             return ID;
         }
 
         public static string RilevaNomeIndirizzo(long id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            string nome="-";
+            string nome = "-";
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT nome 
-                             FROM indirizzi 
-                             WHERE ID =@id";
-
+                    string sql = "SELECT nome FROM indirizzi WHERE ID = @id";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", id);
-                        MySqlDataReader dr = cmd.ExecuteReader();
-                        if (dr.HasRows)
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            dr.Read();
-                            nome = (!string.IsNullOrWhiteSpace(dr["nome"].ToString())) ? dr["nome"].ToString() : "-";
-                            nome = dr["nome"].ToString();
+                            da.Fill(dt);
                         }
+                        if (dt.Rows.Count > 0 && !string.IsNullOrWhiteSpace(dt.Rows[0]["nome"].ToString()))
+                            nome = dt.Rows[0]["nome"].ToString();
                     }
-                    
-                    conn.Close();
                 }
-                   
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante il rilevamento del nome indirizzo: " + ex.Message);
             }
             return nome;
         }
 
         public static List<ClsIndirizzoDL> CaricaIndirizzi()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
             DataTable dt = new DataTable();
 
@@ -120,7 +110,7 @@ namespace Cattedre
 
         public static void InserisciIndirizzo(ClsIndirizzoDL indirizzo)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             try
             {
@@ -146,7 +136,7 @@ namespace Cattedre
 
         public static void ModificaIndirizzo(ClsIndirizzoDL indirizzo)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -175,7 +165,7 @@ namespace Cattedre
 
         public static void EliminaIndirizzo(long id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -199,7 +189,7 @@ namespace Cattedre
         }
         public static List<ClsIndirizzoDL> RicercaPerNome(string _ricerca)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             List<ClsIndirizzoDL> indirizzi = new List<ClsIndirizzoDL>();
             DataTable dt = new DataTable();
             _ricerca = $"%{_ricerca}%";

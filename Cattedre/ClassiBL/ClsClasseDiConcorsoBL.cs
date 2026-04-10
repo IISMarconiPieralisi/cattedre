@@ -11,10 +11,12 @@ namespace Cattedre
 {
     public static class ClsClasseDiConcorsoBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
         public static List<ClsClasseDiConcorsoDL> CaricaCdcs()
         {
 
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             DataTable dt = new DataTable();
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
             try
@@ -51,7 +53,7 @@ namespace Cattedre
 
         public static long InserisciCdc(ClsClasseDiConcorsoDL cdc)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -85,7 +87,7 @@ namespace Cattedre
 
         public static void ModificaCdc(ClsClasseDiConcorsoDL cdc, int indice)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
@@ -115,7 +117,7 @@ namespace Cattedre
 
         public static void EliminaCdc(int id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -138,9 +140,49 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
+        public static List<ClsClasseDiConcorsoDL> CaricaCDCperDisciplina(long IDdiparitimento)
+        {
+            DataTable dt = new DataTable();
+            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(connectionString);
+                conn.Open();
+                string sql = @"SELECT * FROM classidiconcorso c
+                             JOIN richiedere r ON c.ID=r.IDclassediconcorso 
+                             JOIN discipline d ON r.IDdisciplina = d.ID
+                             JOIN gestire g ON d.ID= g.IDdisciplina
+                             WHERE g.IDdipartimento =@IDdipartimento";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdiparitimento);
+                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                    {
+                        dr.Fill(dt);
+                    }
+                    conn.Close();
+                }
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
+                    cdc.ID = Convert.ToInt32(row["id"]);
+                    cdc.Livello = row["livello"].ToString();
+                    cdc.Nome = row["nome"].ToString();
+                    cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
+                    cdcs.Add(cdc);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return cdcs;
+        }
         public static List<ClsClasseDiConcorsoDL> RicercaPerNome(string _ricerca)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
             DataTable dt = new DataTable();
             _ricerca = $"%{_ricerca}%";

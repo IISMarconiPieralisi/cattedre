@@ -13,8 +13,7 @@ namespace Cattedre
     public partial class FrmDiscipline : Form
     {
         public List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-        public List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
-        public int indiceDaModificare = 0;
+        public List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
 
         private ClsUtenteDL UtenteLoggato;
         public FrmDiscipline(ClsUtenteDL utenteLog)
@@ -22,19 +21,28 @@ namespace Cattedre
             InitializeComponent();
             UtenteLoggato = utenteLog;
         }
-
         private void CaricaListView(List<ClsDisciplinaDL> discipline)
         {
+            discipline = discipline.OrderBy(p => p.Anno).ThenBy(p => p.Nome).ToList();
             lvDiscipline.Items.Clear();
             foreach (ClsDisciplinaDL disciplina in discipline)
             {
-                ListViewItem lvi = new ListViewItem(Convert.ToString(disciplina.Anno));
+                ListViewItem lvi = new ListViewItem(Convert.ToString(disciplina.ID));
+                lvi.SubItems.Add(disciplina.Anno<=0?"-": disciplina.Anno.ToString());
                 lvi.SubItems.Add(disciplina.Nome);
                 lvi.SubItems.Add(Convert.ToString(disciplina.OreLaboratorio));
                 lvi.SubItems.Add(Convert.ToString(disciplina.OreTeoria));
-                lvi.SubItems.Add(Convert.ToString(disciplina.DisciplinaSpeciale));
-                lvi.SubItems.Add(ClsDisciplinaBL.RilevaNomeDipartimento(disciplina.IDdipartimento));
+                lvi.SubItems.Add((disciplina.DisciplinaSpeciale == string.Empty) ? "-" : disciplina.DisciplinaSpeciale);
+                lvi.SubItems.Add(caricaGraficamenteDipartimenti(disciplina));
                 lvi.SubItems.Add(CaricaGraficamenteIndirizzi(disciplina));
+                if (disciplina.IDdisciplinaSuccessiva != 0)
+                {
+                    ClsDisciplinaDL discAssociata = ClsDisciplinaBL.RilevaDisciplina(disciplina.IDdisciplinaSuccessiva);
+                    lvi.SubItems.Add($"{discAssociata.Nome } {discAssociata.Anno}°");
+                }
+                else
+                    lvi.SubItems.Add("-");
+
                 lvi.Tag = disciplina.ID;
                 lvDiscipline.Items.Add(lvi);
             }
@@ -51,35 +59,48 @@ namespace Cattedre
             {
                 try
                 {
+                    this.Cursor = Cursors.WaitCursor;
                     ClsDisciplinaBL.InserisciDisciplina(frmDisciplina._disciplina);
-                    int ID=ClsDisciplinaBL.CercaIdDisciplina(frmDisciplina._disciplina);
-                    foreach (var appartenere in frmDisciplina._Apparteneres)
+                    int ID = ClsDisciplinaBL.CercaIdDisciplina(frmDisciplina._disciplina);
+                    foreach (var appartenere in frmDisciplina._apparteneres)
                     {
                         appartenere.IDdisicplina = ID;
                         ClsAppartenereBL.InserireAppartenere(appartenere);
                     }
-                }catch(Exception ex)
+                    foreach (var gestire in frmDisciplina._gestires)
+                    {
+                        gestire.IDdisciplina = ID;
+                        ClsGestireBL.InserireGestione(gestire);
+                    }
+                    foreach (var richiedere in frmDisciplina._richiederes)
+                    {
+                        richiedere.IDdisciplina = ID;
+                        ClsRichiedereBL.InserisciRichiedere(richiedere);
+                    }
+                    this.Cursor = Cursors.Arrow;
+
+                }
+                catch (Exception ex)
                 {
+                    this.Cursor = Cursors.Arrow;
                     MessageBox.Show($"Errore: {ex.Message} in riga {ex.Source} /n riprovare", "Errore");
                 }
                 discipline = ClsDisciplinaBL.CaricaDiscipline();
                 CaricaListView(discipline);
-
             }
         }
 
         private void FrmDiscipline_Load(object sender, EventArgs e)
         {
             discipline = ClsDisciplinaBL.CaricaDiscipline();
-            dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
             CaricaListView(discipline);
             GestionePermessi();
 
             //popolo combobox filtraggio per dipartimenti
             foreach (ClsDipartimentoDL dipartimento in dipartimenti)
             {
-                if(!cbDipartimenti.Items.Contains(dipartimento.Nome))
-                cbDipartimenti.Items.Add(dipartimento.Nome);
+                if (!cbDipartimenti.Items.Contains(dipartimento.Nome))
+                    cbDipartimenti.Items.Add(dipartimento.Nome);
             }
         }
         private void GestionePermessi()
@@ -100,7 +121,8 @@ namespace Cattedre
             if (lvDiscipline.SelectedIndices.Count == 1)
             {
                 int indiceDaEliminare = lvDiscipline.SelectedIndices[0];
-                int idDaEliminare = Convert.ToInt32(lvDiscipline.Items[indiceDaEliminare].Tag);
+                int idTag = Convert.ToInt32(lvDiscipline.Items[indiceDaEliminare].Tag);
+                long idDaEliminare = discipline.Where(d => d.ID == idTag).Select(d => d.ID).FirstOrDefault(); // Prendiamo il primo risultato (o 0 se non trovato)
                 DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
                 if (dr == DialogResult.Yes)
                 {
@@ -117,24 +139,32 @@ namespace Cattedre
         {
             if (lvDiscipline.SelectedIndices.Count == 1)
             {
-                indiceDaModificare = lvDiscipline.SelectedIndices[0];
+                int indiceDaModificare = lvDiscipline.SelectedIndices[0];
                 FrmDisciplina frmDisciplina = new FrmDisciplina();
-                frmDisciplina._disciplina = discipline[indiceDaModificare];
+                int idCercato = Convert.ToInt32(lvDiscipline.Items[indiceDaModificare].Tag);
+                // 2. Cerchiamo l'INTERO OGGETTO nella lista 'discipline'
+                // Usiamo .FirstOrDefault() così se non lo trova restituisce null invece di crashare
+                frmDisciplina._disciplina = discipline.FirstOrDefault(d => d.ID == idCercato);
                 DialogResult dr = frmDisciplina.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
                     try
                     {
+                        this.Cursor = Cursors.WaitCursor;
                         ClsDisciplinaBL.ModificaDisciplina(frmDisciplina._disciplina);
-                        ClsAppartenereBL.ModificaAppartenenze(frmDisciplina._disciplina.ID, frmDisciplina._Apparteneres);
+                        ClsAppartenereBL.ModificaAppartenenze(frmDisciplina._disciplina.ID, frmDisciplina._apparteneres);
+                        ClsGestireBL.ModificaGestioni(frmDisciplina._disciplina.ID, frmDisciplina._gestires);
+                        ClsRichiedereBL.ModificaRichiestaDisciplina(frmDisciplina._disciplina.ID, frmDisciplina._richiederes);
+                        this.Cursor = Cursors.Arrow;
+
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
+                        this.Cursor = Cursors.Arrow;
                         MessageBox.Show($"Errore nella modifica {ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     discipline = ClsDisciplinaBL.CaricaDiscipline();
                     CaricaListView(discipline);
-
                 }
             }
         }
@@ -169,7 +199,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"Errore",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -198,6 +228,60 @@ namespace Cattedre
         {
             var listaIndirizzi = ClsAppartenereBL.caricaIndirizziDisciplina(disc.ID).Select(i => i.Nome);
             return string.Join(", ", listaIndirizzi);
+        }
+        string caricaGraficamenteDipartimenti(ClsDisciplinaDL disc)
+        {
+            List<string> listaIndirizzi = ClsGestireBL.DipartimentiDellaDisciplina(disc.ID).Select(i => i.Nome).ToList();
+            if (listaIndirizzi.Count == 0) return "-";
+            return string.Join(", ", listaIndirizzi);
+        }
+        #region controlli tastiera
+
+
+        private void lvDiscipline_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
+            }
+        }
+        #endregion
+
+        private void tbDisciplina_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbDisciplina.Text.Length > 2)
+            {
+                e.SuppressKeyPress = true;
+                btCerca_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                tbDisciplina.Text = "";
+                e.SuppressKeyPress = true;
+                btPulisciCb_Click(null, null);
+            }
+        }
+
+        private void cbDipartimenti_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbDipartimenti.SelectedIndex != -1)
+            {
+                e.SuppressKeyPress = true;
+                rbAnno1.Focus();
+            }
+        }
+        private void rbAnni_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Enter)
+            {
+                tbDisciplina.Focus(); 
+            }
         }
     }
 }

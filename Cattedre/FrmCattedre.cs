@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +16,7 @@ namespace Cattedre
     {
         List<ClsClasseDL> classi = new List<ClsClasseDL>();
         List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
+        List<ClsAnnoScolasticoDL> anniscolastici = new List<ClsAnnoScolasticoDL>();
         List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
         List<ClsUtenteDL> docentiDipartimento = new List<ClsUtenteDL>();
         List<ClsDisciplinaDL> disciplinerilevate = new List<ClsDisciplinaDL>();
@@ -28,15 +29,21 @@ namespace Cattedre
 
         ClsUtenteDL utenteLoggato;
 
-        int riga = 0;
         int IDdipartimento = 0;
-
+        long IDannoscolastico = 0;
+        string annoscolasticoselezionato = "";
         DataTable dtDocentiAssegnazioni;
+
+        //private ToolTip toolTipDiscipline;
+
+        public string Annoscolasticoselezionato { get => annoscolasticoselezionato; set => annoscolasticoselezionato = value; }
 
         public FrmCattedre(ClsUtenteDL utente)
         {
             InitializeComponent();
             utenteLoggato = utente;
+
+            //toolTipDiscipline = new ToolTip();
         }
 
         private void FrmCattedre_Load(object sender, EventArgs e)
@@ -44,7 +51,8 @@ namespace Cattedre
             //pnlDipartimento.AutoScroll = true;
             //pnlDipartimento.HorizontalScroll.Enabled = true;
             //pnlDipartimento.VerticalScroll.Enabled = false;
-
+            //pnlDipartimento.TabStop = true;
+            //pnlDipartimento.TabIndex = 4;
 
             if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "C")
             {
@@ -62,6 +70,8 @@ namespace Cattedre
                 //LoadAssegnazioni(IDdipartimento);
                 //cbDipartimenti.Enabled = false;
             }
+
+            LoadAnniScolastici();
         }
 
         private async void FrmCattedre_Shown(object sender, EventArgs e)
@@ -73,13 +83,15 @@ namespace Cattedre
                 await Task.Run(() =>
                 {
                     IDdipartimento = ClsUtenteBL.TrovaIDdipartimento(utenteLoggato.ID);
-                    classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento);
+                    IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+                    classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
                     discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
                 });
 
-                LoadClassi(IDdipartimento);
+                LoadClassi(IDdipartimento, IDannoscolastico);
                 LoadDiscipline(IDdipartimento);
-                LoadAssegnazioni(IDdipartimento);
+                LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
+                LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
 
                 this.Cursor = Cursors.Default;
             }
@@ -88,9 +100,95 @@ namespace Cattedre
                 cbDipartimenti.SelectedIndex = IDdipartimento - 1;
                 cbDipartimenti.Enabled = false;
             }
+            if (utenteLoggato.TipoUtente == "A")
+                btGeneraASsucc.Enabled = false;
+
+            string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
+            cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
         }
 
-        private void LoadOreDoc()
+        private void LoadInfoNumCattedre(long idDip, DataTable docenti)
+        {
+            pnlInfoNumCattedre.Controls.Clear();
+            int y = 10;
+
+            Label lblPrinc = new Label();
+            lblPrinc.AutoSize = true;
+            lblPrinc.Location = new Point(10, y);
+            lblPrinc.Text = "INFO NUM CATTEDRE X CDC";
+            lblPrinc.Font = new Font(lblPrinc.Font, FontStyle.Bold);
+            pnlInfoNumCattedre.Controls.Add(lblPrinc);
+
+            y = 50;
+            int numDocentiEstratti = docenti.AsEnumerable()
+                .Select(r => Convert.ToInt64(r["IDutente"]))
+                .Distinct()
+                .Count();
+
+            Label lblNumProfEstratti = new Label();
+            lblNumProfEstratti.AutoSize = true;
+            lblNumProfEstratti.Location = new Point(10, y);
+            lblNumProfEstratti.Text = "Num Docenti Assegnati: " + numDocentiEstratti;
+            lblNumProfEstratti.Font = new Font(lblNumProfEstratti.Font.FontFamily, 10f, lblNumProfEstratti.Font.Style);
+            pnlInfoNumCattedre.Controls.Add(lblNumProfEstratti);
+
+            y = 100;
+            List<ClsDisciplinaDL> discipline = ClsDisciplinaBL
+                .CaricaDisciplineDipartimento(Convert.ToInt32(idDip));
+
+            List<ClsClasseDiConcorsoDL> cdcUniche = discipline
+                .SelectMany(d => ClsRichiedereBL.RilevaCDCDiscipina(d.ID))
+                .GroupBy(c => c.ID)
+                .Select(g => g.First())
+                .OrderBy(c => c.Livello)
+                .ToList();
+
+            foreach (ClsClasseDiConcorsoDL cdc in cdcUniche)
+            {
+                int numCattedreDiritto = ClsDotareBL.TrovaNumCattedreDiDiritto(cdc.ID, ClsAnnoScolasticoBL.RilevaIDanno(annoscolasticoselezionato));
+                int numCattedreFatto = ClsDotareBL.TrovaNumCattedreDiFatto(cdc.ID, ClsAnnoScolasticoBL.RilevaIDanno(annoscolasticoselezionato));
+
+                // Riga 1: "Livello → Num Cattedre di Fatto: X"
+                Label lbl = new Label();
+                lbl.AutoSize = true;
+                lbl.Location = new Point(10, y);
+                lbl.Text = $"{cdc.Livello} → Num Cattedre di Fatto: {numCattedreFatto}";
+                pnlInfoNumCattedre.Controls.Add(lbl);
+                y += 20;
+
+                // Riga 2
+                Label lblInfo = new Label();
+                lblInfo.AutoSize = true;
+                lblInfo.Location = new Point(10, y);
+                if (numDocentiEstratti == numCattedreFatto)
+                {
+                    lblInfo.Text = "CATTEDRE COPERTE";
+                    lblInfo.ForeColor = Color.Green;
+                }
+                else if (numDocentiEstratti < numCattedreFatto)
+                {
+                    lblInfo.Text = "CATTEDRE SCOPERTE";
+                    lblInfo.ForeColor = Color.Red;
+                }
+                else
+                {
+                    lblInfo.Text = "CATTEDRE SOVRAFFOLLATE";
+                    lblInfo.ForeColor = Color.Red;
+                }
+                pnlInfoNumCattedre.Controls.Add(lblInfo);
+                y += 25;
+
+                // Riga 3: "Num Cattedre di Diritto: X"
+                Label lblNumCattedreDiritto = new Label();
+                lblNumCattedreDiritto.AutoSize = true;
+                lblNumCattedreDiritto.Location = new Point(10, y);
+                lblNumCattedreDiritto.Text = $"Num Cattedre di Diritto: {numCattedreDiritto}";
+                pnlInfoNumCattedre.Controls.Add(lblNumCattedreDiritto);
+                y += 40;  // ampio spazio prima del blocco CDC successivo
+            }
+        }
+
+        private void LoadOreDoc(long IDannoscolastico)
         {
             pnlOreDoc.Controls.Clear();
             dictDocenti.Clear();
@@ -98,7 +196,7 @@ namespace Cattedre
             if (dtDocentiAssegnazioni == null || dtDocentiAssegnazioni.Rows.Count == 0)
                 return;
 
-            int y = 10;
+            int y = 25;
 
             // prendo docenti distinti dal DataTable
             List<ClsUtenteDL> docenti = dtDocentiAssegnazioni.AsEnumerable()
@@ -113,22 +211,74 @@ namespace Cattedre
                 })
                 .GroupBy(d => d.ID)
                 .Select(g => g.First())
-                .OrderBy(d => d.TipoDocente) // prima teorici poi pratici
+                .OrderBy(d =>
+                {
+                    var cdcs = ClsRichiedereBL.RilevaCDCDocente(d.ID);
+                    return cdcs.Any(c => c.AbilitazioniRichieste != null &&
+                                         c.AbilitazioniRichieste.ToLower().Contains("laurea")) ? 0 : 1;
+                })
+                .ThenBy(d => d.TipoDocente)
                 .ThenBy(d => d.Cognome)
                 .ToList();
 
+            bool labelTeoriciAggiunta = false;
+            bool labelPraticiAggiunta = false;
+
             foreach (var doc in docenti)
             {
+                var cdcs = ClsRichiedereBL.RilevaCDCDocente(doc.ID);
+                bool richiedeLaurea = cdcs.Any(c => c.AbilitazioniRichieste != null &&
+                                                    c.AbilitazioniRichieste.ToLower().Contains("laurea"));
+
+                if (richiedeLaurea && !labelTeoriciAggiunta)
+                {
+                    y += 20;
+                    Label lblGruppo = new Label();
+                    lblGruppo.AutoSize = true;
+                    lblGruppo.Font = new Font(lblGruppo.Font, FontStyle.Bold);
+                    lblGruppo.Text = cdcs.FirstOrDefault()?.Livello ?? "Teorici";
+                    lblGruppo.Location = new Point(8, y);
+                    pnlOreDoc.Controls.Add(lblGruppo);
+                    y += lblGruppo.Height;
+                    labelTeoriciAggiunta = true;
+                }
+
+                if (!richiedeLaurea && !labelPraticiAggiunta)
+                {
+                    y += 25;
+                    Label lblGruppo = new Label();
+                    lblGruppo.AutoSize = true;
+                    lblGruppo.Font = new Font(lblGruppo.Font, FontStyle.Bold);
+                    lblGruppo.Text = cdcs.FirstOrDefault()?.Livello ?? "Pratici";
+                    lblGruppo.Location = new Point(8, y);
+                    pnlOreDoc.Controls.Add(lblGruppo);
+                    y += lblGruppo.Height;
+                    labelPraticiAggiunta = true;
+                }
+
                 ucOreDoc uc = new ucOreDoc();
 
                 uc.lblDocente.Text = $"{doc.Nome} {doc.Cognome}";
                 uc.lblOreDiCattedra.Text =
-                    ClsContrattoBL.RilevaOreContrattoDoc(doc.ID).ToString();
+                ClsContrattoBL.RilevaOreContrattoDoc(doc.ID).ToString();
 
                 // ore potenziamento dalla QUERY UNICA
+                //int orePot = dtDocentiAssegnazioni.AsEnumerable()
+                //    .Where(r => r["IDutente"] != DBNull.Value &&
+                //                Convert.ToInt64(r["IDutente"]) == doc.ID)
+                //    .Sum(r =>
+                //    {
+                //        if (r["oreSpeciali"] == DBNull.Value)
+                //            return 0;
+
+                //        return Convert.ToInt32(r["oreSpeciali"]);
+                //    });
+
                 int orePot = dtDocentiAssegnazioni.AsEnumerable()
                     .Where(r => r["IDutente"] != DBNull.Value &&
-                                Convert.ToInt64(r["IDutente"]) == doc.ID)
+                                Convert.ToInt64(r["IDutente"]) == doc.ID &&
+                                r["IDannoscolastico"] != DBNull.Value &&
+                                Convert.ToInt64(r["IDannoscolastico"]) == IDannoscolastico)
                     .Sum(r =>
                     {
                         if (r["oreSpeciali"] == DBNull.Value)
@@ -145,10 +295,16 @@ namespace Cattedre
                 uc.Tag = doc.ID;
                 uc.Location = new Point(0, y);
 
+                pnlOreDoc.Controls.Add(lblDocente);
+                pnlOreDoc.Controls.Add(lblOreCattedra);
+                pnlOreDoc.Controls.Add(lblOreEff);
+                pnlOreDoc.Controls.Add(lblOrePot);
+                pnlOreDoc.Controls.Add(lblOreTot);
                 pnlOreDoc.Controls.Add(uc);
+
                 dictDocenti[doc.ID] = uc;
 
-                y += uc.Height + 5;
+                y += uc.Height;
 
                 // disabilita modifica per Preside o Admin
                 if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
@@ -157,10 +313,42 @@ namespace Cattedre
                 }
 
                 // evento aggiornamento automatico
-                uc.nudOrePot.ValueChanged += (s, e) => AggiornaOreEffettive();
+                int valorePrec = orePot; // salvo il valore attuale prima di ogni cambio
+
+                uc.nudOrePot.ValueChanged += (s, e) =>
+                {
+                    int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimento(IDdipartimento);
+                    int orePotTotaliInserite = dictDocenti.Values.Sum(u => (int)u.nudOrePot.Value);
+
+                    if (orePotTotaliInserite > oreMax)
+                    {
+                        MessageBox.Show("Superato il limite di ore di potenziamento consentite: " + oreMax, "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        uc.nudOrePot.ValueChanged -= null;
+                        uc.nudOrePot.Value = valorePrec;  // ripristino valore precedente
+                    }
+                    else
+                    {
+                        valorePrec = (int)uc.nudOrePot.Value; // aggiorno il valore precedente
+                        AggiornaOreEffettive();
+                    }
+                };
             }
 
             AggiornaOreEffettive();
+            ControllaOrePotenzamentoTotali();
+        }
+
+        private void ControllaOrePotenzamentoTotali()
+        {
+            int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimento(IDdipartimento);
+
+            int orePotTotaliInserite = dictDocenti.Values
+                .Sum(uc => (int)uc.nudOrePot.Value);
+
+            if (orePotTotaliInserite > oreMax)
+            {
+                MessageBox.Show("Superato il limite di ore di potenziamento consentite - " + oreMax, "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void AggiornaOreEffettive()
@@ -173,8 +361,13 @@ namespace Cattedre
             {
                 uc.lblOreEffettive.Text = "0";
                 uc.lblOreTotali.Text = "0";
+                uc.lblDocente.ForeColor = Color.Black;
                 uc.lblOreEffettive.ForeColor = Color.Black;
                 uc.lblOreTotali.ForeColor = Color.Black;
+
+                uc.lblDocente.Font = new Font(uc.lblDocente.Font, FontStyle.Regular);
+                uc.lblOreEffettive.Font = new Font(uc.lblOreEffettive.Font, FontStyle.Regular);
+                uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Regular);
             }
 
             // calcolo ore effettive
@@ -205,7 +398,7 @@ namespace Cattedre
             foreach (var uc in dictDocenti.Values)
             {
                 int eff = int.Parse(uc.lblOreEffettive.Text);
-                int pot = int.Parse(uc.nudOrePot.Text);
+                int pot = (int)uc.nudOrePot.Value;
                 int cattedra = int.Parse(uc.lblOreDiCattedra.Text);
 
                 int totale = eff + pot;
@@ -213,8 +406,21 @@ namespace Cattedre
 
                 if (totale > cattedra)
                 {
+                    uc.lblDocente.ForeColor = Color.Red;
                     uc.lblOreEffettive.ForeColor = Color.Red;
                     uc.lblOreTotali.ForeColor = Color.Red;
+
+                    uc.lblDocente.Font = new Font(uc.lblDocente.Font, FontStyle.Bold);
+                    uc.lblOreEffettive.Font = new Font(uc.lblOreEffettive.Font, FontStyle.Bold);
+                    uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Bold);
+                }
+                else if (totale < cattedra)
+                {
+                    uc.lblDocente.ForeColor = Color.Orange;
+                    uc.lblOreEffettive.ForeColor = Color.Orange;
+                    uc.lblOreTotali.ForeColor = Color.Orange;
+
+                    uc.lblDocente.Font = new Font(uc.lblDocente.Font, FontStyle.Bold);
                     uc.lblOreEffettive.Font = new Font(uc.lblOreEffettive.Font, FontStyle.Bold);
                     uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Bold);
                 }
@@ -228,9 +434,9 @@ namespace Cattedre
             int x = 0;
             int y;
             y = 72 + riga * 100;
-           
+
             ucOreTotali.Location = new Point(x, y);
-            pnlOre.Controls.Add(ucOreTotali);
+            pnlInfoNumCattedre.Controls.Add(ucOreTotali);
 
             ucOreTotali.Refresh();
         }
@@ -245,21 +451,30 @@ namespace Cattedre
             }
         }
 
-        private void LoadAssegnazioni(int IDdipartimento)
+        private void LoadAnniScolastici()
+        {
+            anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
+
+            for (int i = 0; i < anniscolastici.Count; i++)
+                cbAnniScolastici.Items.Add(anniscolastici[i].Sigla);
+        }
+
+        private void LoadAssegnazioni(int IDdipartimento, long IDannoscolastico, out DataTable docenti)
         {
             pnlDipartimento.Controls
                 .OfType<UcAssegnazioni>()
                 .ToList()
                 .ForEach(c => { pnlDipartimento.Controls.Remove(c); c.Dispose(); });
 
-            pnlOre.Controls.Clear();
+            //pnlInfoNumCattedre.Controls.Clear();
             docentiTeoriciUsati.Clear();
             docentiPraticiUsati.Clear();
 
             // QUERY UNICA x recuperare tutti i docenti del dipartimento
-            dtDocentiAssegnazioni = ClsAssegnareBL
-                .CaricaDocentiConAssegnazioni(IDdipartimento, 1);
+            docenti = ClsAssegnareBL
+                .CaricaDocentiConAssegnazioni(IDdipartimento, IDannoscolastico);
 
+            int tabIndex = 5;
             int oreTotaliGenerali = 0;
 
             for (int riga = 0; riga < classi.Count; riga++)
@@ -291,34 +506,41 @@ namespace Cattedre
                         continue;
 
                     UcAssegnazioni uc = new UcAssegnazioni();
+                    uc.DocentiData = docenti;
 
-                    // docenti teorici
-                    List<ClsUtenteDL> teorici = dtDocentiAssegnazioni.AsEnumerable()
+                    List<ClsUtenteDL> teorici = new List<ClsUtenteDL>();
+                    teorici.Add(new ClsUtenteDL { ID = 0, Cognome = "", Nome = "", Colore = "" });
+                    teorici.AddRange(docenti.AsEnumerable()
                         .Where(r => r["tipoDocente"].ToString() == "T")
                         .Select(r => new ClsUtenteDL
                         {
                             ID = Convert.ToInt64(r["IDutente"]),
                             Nome = r.Field<string>("nome"),
                             Cognome = r.Field<string>("cognome"),
-                            TipoDocente = 'T'
+                            TipoDocente = 'T',
+                            Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
                         })
                         .GroupBy(_x => _x.ID)
                         .Select(g => g.First())
-                        .ToList();
+                        .ToList());
 
                     // docenti pratici
-                    List<ClsUtenteDL> pratici = dtDocentiAssegnazioni.AsEnumerable()
+                    List<ClsUtenteDL> pratici = new List<ClsUtenteDL>();
+                    pratici.Add(new ClsUtenteDL { ID = 0, Cognome = "", Nome = "", Colore = "" }); // item vuoto
+                    pratici.AddRange(docenti.AsEnumerable()
                         .Where(r => r["tipoDocente"].ToString() == "L")
                         .Select(r => new ClsUtenteDL
                         {
                             ID = Convert.ToInt64(r["IDutente"]),
                             Nome = r.Field<string>("nome"),
                             Cognome = r.Field<string>("cognome"),
-                            TipoDocente = 'L'
+                            TipoDocente = 'L',
+                            Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
                         })
                         .GroupBy(_x => _x.ID)
                         .Select(g => g.First())
-                        .ToList();
+                        .ToList());
+
 
                     uc.cbDocentiTeorici.DataSource = teorici;
                     uc.cbDocentiTeorici.DisplayMember = "Cognome";
@@ -328,25 +550,36 @@ namespace Cattedre
                     uc.cbDocentiItip.DisplayMember = "Cognome";
                     uc.cbDocentiItip.ValueMember = "ID";
 
+                    uc.ImpostaColoriCombo(uc.cbDocentiTeorici);
+                    uc.ImpostaColoriCombo(uc.cbDocentiItip);
+
                     // docente già assegnato (in memoria)
-                    var assegnazione = dtDocentiAssegnazioni.AsEnumerable()
-                        .FirstOrDefault(r =>
-                            r["IDclasse"] != DBNull.Value &&
-                            r["IDdisciplina"] != DBNull.Value &&
-                            Convert.ToInt64(r["IDclasse"]) == classe.ID &&
-                            Convert.ToInt64(r["IDdisciplina"]) == disciplina.ID
-                        );
+                    var assegnazioni = docenti.AsEnumerable()
+                    .Where(r =>
+                        r["IDclasse"] != DBNull.Value &&
+                        r["IDdisciplina"] != DBNull.Value &&
+                        Convert.ToInt64(r["IDclasse"]) == classe.ID &&
+                        Convert.ToInt64(r["IDdisciplina"]) == disciplina.ID
+                    ).ToList();
 
-                    if (assegnazione != null)
+                    if (assegnazioni.Any())
                     {
-                        long idDoc = Convert.ToInt64(assegnazione["IDutente"]);
-                        string tipoString = assegnazione["tipoDocente"]?.ToString();
-                        char tipo = string.IsNullOrEmpty(tipoString) ? ' ' : tipoString[0];
+                        foreach (var assegnazione in assegnazioni)
+                        {
+                            long idDoc = Convert.ToInt64(assegnazione["IDutente"]);
+                            string tipoString = assegnazione["tipoDocente"]?.ToString();
+                            char tipo = string.IsNullOrEmpty(tipoString) ? ' ' : tipoString[0];
 
-                        if (tipo == 'T')
-                            uc.cbDocentiTeorici.SelectedValue = idDoc;
-                        else if (tipo == 'L')
-                            uc.cbDocentiItip.SelectedValue = idDoc;
+                            if (tipo == 'T')
+                                uc.cbDocentiTeorici.SelectedValue = idDoc;
+                            else if (tipo == 'L')
+                                uc.cbDocentiItip.SelectedValue = idDoc;
+                        }
+                    }
+                    else
+                    {
+                        uc.cbDocentiTeorici.SelectedIndex = 0;
+                        uc.cbDocentiItip.SelectedIndex = 0;
                     }
 
                     // ore
@@ -359,46 +592,53 @@ namespace Cattedre
                     uc.cbDocentiTeorici.SelectedIndexChanged += (s, e) =>
                     {
                         AggiornaOreEffettive();
-
-                        if (uc.cbDocentiTeorici.SelectedValue != null)
-                            ClsAssegnareBL.UpdateCattedra(
-                                classe.ID,
-                                1,
-                                disciplina.ID,
-                                Convert.ToInt64(uc.cbDocentiTeorici.SelectedValue));
+                        if (uc.cbDocentiTeorici.SelectedItem is ClsUtenteDL u)
+                            ClsAssegnareBL.SalvaCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID, 'T');
                     };
 
                     uc.cbDocentiItip.SelectedIndexChanged += (s, e) =>
                     {
                         AggiornaOreEffettive();
-
-                        if (uc.cbDocentiItip.SelectedValue != null)
-                            ClsAssegnareBL.UpdateCattedra(
-                                classe.ID,
-                                1,
-                                disciplina.ID,
-                                Convert.ToInt64(uc.cbDocentiItip.SelectedValue));
+                        if (uc.cbDocentiItip.SelectedItem is ClsUtenteDL u)
+                            ClsAssegnareBL.SalvaCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID, 'L');
                     };
 
-                    int x = 10 + colonna * 225;
-                    int y = 72 + riga * 100;
+                    UcDisciplina ucDisciplinaRif = pnlDipartimento.Controls
+                    .OfType<UcDisciplina>()
+                    .ElementAtOrDefault(colonna);
+
+                    int x, y;
+                    if (ucDisciplinaRif != null)
+                    {
+                        // Centra la UcAssegnazioni rispetto alla UcDisciplina corrispondente
+                        x = ucDisciplinaRif.Left + (ucDisciplinaRif.Width - uc.Width) / 2;
+                    }
+                    else
+                    {
+                        x = 20 + colonna * 170; // fallback
+                    }
+                    y = 72 + riga * 100;
                     uc.Location = new Point(x, y);
 
+                    //NON FUNZIONA IL TAB
+                    //uc.TabStop = true;
+                    //uc.cbDocentiTeorici.TabStop = true;
+                    //uc.cbDocentiItip.TabStop = true;
+                    //uc.cbDocentiTeorici.TabIndex = tabIndex++;
+                    //uc.cbDocentiItip.TabIndex = tabIndex++;
                     pnlDipartimento.Controls.Add(uc);
 
-                    //cambio dei diritti di modifica
-                    if(utenteLoggato.TipoUtente=="A" || utenteLoggato.TipoUtente=="P" || utenteLoggato.TipoUtente == "D")
+                    if (utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "D")
                     {
                         uc.cbDocentiItip.Enabled = false;
                         uc.cbDocentiTeorici.Enabled = false;
                     }
-
                 }
 
                 oreTotaliGenerali += oreTotaliClasse;
             }
 
-            LoadOreDoc();
+            LoadOreDoc(IDannoscolastico);
             AggiornaOreEffettive();
         }
 
@@ -414,7 +654,7 @@ namespace Cattedre
             discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
 
             // Rimuovo le discipline con lo stesso nome, mantengo solo la prima
-            List<string> nomiUsati = new List<string>();            
+            List<string> nomiUsati = new List<string>();
 
             foreach (ClsDisciplinaDL d in discipline)
             {
@@ -425,16 +665,24 @@ namespace Cattedre
                 }
             }
 
-            // Mostro le discipline uniche nel pnlDisciplina
+            // Discipline uniche nel pnlDisciplina
             int x = 10;
             int y = 10;
+
+            ToolTip toolTipDiscipline = new ToolTip();
+            toolTipDiscipline.ShowAlways = true;
+
             for (int i = 0; i < disciplineUniche.Count; i++)
             {
-                UcDisciplina ucDisciplina = new UcDisciplina(disciplineUniche[i]);
+                string nomeCompleto = disciplineUniche[i].Nome;
+
+                // nome tagliato
+                string nomeTagliato = nomeCompleto?.Length > 15 ? nomeCompleto.Substring(0, 15) : nomeCompleto;
+                ClsDisciplinaDL disciplinaDaMostrare = new ClsDisciplinaDL(disciplineUniche[i], nomeTagliato);
+
+                UcDisciplina ucDisciplina = new UcDisciplina(disciplinaDaMostrare, nomeCompleto);
                 ucDisciplina.Location = new Point(x, y);
                 pnlDipartimento.Controls.Add(ucDisciplina);
-
-                //ucDisciplina.Refresh();
 
                 x += ucDisciplina.Width + 10;
             }
@@ -444,7 +692,7 @@ namespace Cattedre
 
             //ucOre.Refresh();
         }
-        private void LoadClassi(int IDdipartimento)
+        private void LoadClassi(int IDdipartimento, long Idannoscolastico)
         {
             foreach (UcClasse uc in pnlClassi.Controls.OfType<UcClasse>().ToList())
             {
@@ -452,14 +700,14 @@ namespace Cattedre
                 uc.Dispose();
             }
 
-            classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento);
+            classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, Idannoscolastico);
 
             int x = 10;
             int y = 72;
             for (int i = 0; i < classi.Count; i++)
             {
                 UcClasse ucClasse = new UcClasse(classi[i]);
-                ucClasse.Location = new Point(x,y);
+                ucClasse.Location = new Point(x, y);
                 pnlClassi.Controls.Add(ucClasse);
 
                 ucClasse.Refresh();
@@ -473,7 +721,7 @@ namespace Cattedre
             // Svuoto pannelli
             //pnlDipartimento.Controls.Clear();
             //pnlClassi.Controls.Clear();
-            pnlOre.Controls.Clear();
+            pnlInfoNumCattedre.Controls.Clear();
             pnlOreDoc.Controls.Clear();
 
             // Svuoto liste
@@ -498,10 +746,10 @@ namespace Cattedre
 
         private void btAnnulla_Click(object sender, EventArgs e)
         {
-            
+
         }
 
-        private async void btCaricaDipartimento_Click_1(object sender, EventArgs e)
+        private async void btCaricaDipartimento_Click_1(object sender, EventArgs e) //evento SelectedIndexChanged di cbDipartimenti
         {
             //IDdipartimento = cbDipartimenti.SelectedIndex + 1;
 
@@ -519,21 +767,27 @@ namespace Cattedre
 
 
                     IDdipartimento = cbDipartimenti.SelectedIndex + 1;
+                    //IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
 
                     PulisciDipartimento();
 
                     await Task.Run(() =>
                     {
-                        classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento);
+                        IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+                        classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
                         discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
                     });
 
-                    LoadClassi(IDdipartimento);
+                    LoadClassi(IDdipartimento, IDannoscolastico);
                     LoadDiscipline(IDdipartimento);
-                    LoadAssegnazioni(IDdipartimento);
+                    LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
+                    LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+
+                    string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
+                    cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Errore:{ex.Message}. \nRiprovare!", "riprovare", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -541,6 +795,78 @@ namespace Cattedre
             {
                 this.UseWaitCursor = false;
             }
+        }
+
+        private void btGeneraASsucc_Click(object sender, EventArgs e)
+        {
+            string siglaAnno = cbAnniScolastici.SelectedItem.ToString();
+
+            ClsAnnoScolasticoDL annoCorrente =
+                ClsAnnoScolasticoBL.CercaAnnoScolastico(siglaAnno);
+
+            ClsAnnoScolasticoDL annoSuccessivo =
+                ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(annoCorrente.ID);
+
+            if (annoSuccessivo == null)
+            {
+                MessageBox.Show("Anno successivo non trovato", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            List<ClsClasseDL> classiAnnoSuccessivo = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, annoSuccessivo.ID);
+            if (classiAnnoSuccessivo == null || classiAnnoSuccessivo.Count == 0)
+            {
+                MessageBox.Show("Non esistono classi per l'anno scolastico successivo. Impossibile generare le cattedre.", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            bool esistonoAssegnazioniAnnoSuccessivo = ClsAssegnareBL.EsistonoAssegnazioniAnnoSuccessivo(annoSuccessivo.ID);
+
+            if (utenteLoggato.TipoUtente == "C" && !esistonoAssegnazioniAnnoSuccessivo)
+            {
+                DialogResult dr = MessageBox.Show(
+                    "Vuoi generare le cattedre per l'anno successivo?",
+                    "Generazione",
+                    MessageBoxButtons.YesNo);
+
+                if (dr != DialogResult.Yes)
+                    return;
+
+                if (annoCorrente.ID == annoSuccessivo.ID)
+                {
+                    MessageBox.Show("Anno non valido", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                ClsAssegnareBL.GeneraCattedreAnnoSuccessivo(
+                    IDdipartimento,
+                    (int)annoCorrente.ID,
+                    (int)annoSuccessivo.ID);
+
+                MessageBox.Show("Cattedre generate con successo", "GENERAZIONE RIUSCITA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Cattedre per anno successivo già generate", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //IDdipartimento = cbDipartimenti.SelectedIndex + 1;
+            //IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
+
+            Annoscolasticoselezionato = cbAnniScolastici.SelectedItem.ToString();
+            ClsAnnoScolasticoDL annoscolastico = new ClsAnnoScolasticoDL();
+            annoscolastico = ClsAnnoScolasticoBL.CercaAnnoScolastico(Annoscolasticoselezionato);
+            LoadClassi(IDdipartimento, annoscolastico.ID);
+            LoadAssegnazioni(IDdipartimento, annoscolastico.ID, out dtDocentiAssegnazioni);
+            LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+        }
+
+        private void btGeneraWord_Click(object sender, EventArgs e)
+        {
+            ClsGenerazioneWord.PreparazioneCreazioneFile(ClsAnnoScolasticoBL.CercaAnnoScolastico(IDannoscolastico),ClsDipartimentoBL.CaricaDipartimento( IDdipartimento), Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
         }
     }
 }

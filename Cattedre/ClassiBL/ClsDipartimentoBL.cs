@@ -361,35 +361,33 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM dipartimenti WHERE ID = @ID";
+                    string sql = "SELECT id, nome, IDutente FROM dipartimenti WHERE id = @ID";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", ID);
-                       
-                            DataTable dt = new DataTable();
-                            using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
                             {
-                                da.Fill(dt);
+                                dipartimento = new ClsDipartimentoDL
+                                {
+                                    ID = reader.GetInt64(reader.GetOrdinal("id")),
+                                    Nome = reader.GetString(reader.GetOrdinal("nome")),
+                                    IDutente = !reader.IsDBNull(reader.GetOrdinal("IDutente"))
+                                               ? reader.GetInt64(reader.GetOrdinal("IDutente"))
+                                               : 0
+                                };
                             }
-                            if (dt.Rows.Count > 0)
-                            {
-                                DataRow row = dt.Rows[0];
-                                dipartimento = new ClsDipartimentoDL();
-                                dipartimento.ID = Convert.ToInt64(row["id"]);
-                                dipartimento.Nome = row["nome"].ToString();
-                                dipartimento.IDutente = row["IDutente"] != DBNull.Value ? Convert.ToInt64(row["IDutente"]) : 0;
-                            }
+                        }
                     }
                 }
-                
             }
-            catch (Exception ex)
+            catch (MySqlException ex)
             {
-                throw new Exception("Errore durante il rilevamento del dipartimento coordinato: " + ex.Message);
+                throw new Exception("Errore durante il rilevamento del dipartimento: " + ex.Message, ex);
             }
             return dipartimento;
         }
-
         public static long RilevaIDdipartimento(string dip)
         {
             try

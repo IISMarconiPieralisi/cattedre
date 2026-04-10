@@ -353,62 +353,72 @@ namespace Cattedre
             return NomeDipartimento;
         }
 
-<<<<<<< HEAD
         internal static ClsDipartimentoDL CaricaDipartimento(long ID)
         {
             ClsDipartimentoDL dipartimento = null;
-=======
-        public static long RilevaIDdipartimento(string dip)
-        {
-            long IDdip = -1;
->>>>>>> origin/cattedre
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-<<<<<<< HEAD
                     string sql = "SELECT * FROM dipartimenti WHERE ID = @ID";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", ID);
-=======
+                       
+                            DataTable dt = new DataTable();
+                            using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                            {
+                                da.Fill(dt);
+                            }
+                            if (dt.Rows.Count > 0)
+                            {
+                                DataRow row = dt.Rows[0];
+                                dipartimento = new ClsDipartimentoDL();
+                                dipartimento.ID = Convert.ToInt64(row["id"]);
+                                dipartimento.Nome = row["nome"].ToString();
+                                dipartimento.IDutente = row["IDutente"] != DBNull.Value ? Convert.ToInt64(row["IDutente"]) : 0;
+                            }
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento del dipartimento coordinato: " + ex.Message);
+            }
+            return dipartimento;
+        }
+
+        public static long RilevaIDdipartimento(string dip)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
                     string sql = "SELECT d.ID FROM dipartimenti d WHERE d.nome = @dip";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@dip", dip);
->>>>>>> origin/cattedre
-                        DataTable dt = new DataTable();
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        conn.Open();
+
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
                         {
-                            da.Fill(dt);
+                            return Convert.ToInt64(result);
                         }
-                        if (dt.Rows.Count > 0)
-<<<<<<< HEAD
+                        else
                         {
-                            DataRow row = dt.Rows[0];
-                            dipartimento = new ClsDipartimentoDL();
-                            dipartimento.ID = Convert.ToInt64(row["id"]);
-                            dipartimento.Nome = row["nome"].ToString();
-                            dipartimento.IDutente = row["IDutente"] != DBNull.Value ? Convert.ToInt64(row["IDutente"]) : 0;
+                            return -1;       
                         }
-=======
-                            IDdip = Convert.ToInt64(dt.Rows[0]["ID"]);
->>>>>>> origin/cattedre
                     }
                 }
             }
             catch (Exception ex)
             {
-<<<<<<< HEAD
                 throw new Exception("Errore durante il rilevamento del dipartimento coordinato: " + ex.Message);
             }
-            return dipartimento;
-=======
-                throw new Exception("Errore durante il rilevamento dell'ID del dipartimento: " + ex.Message);
-            }
-            return IDdip;
->>>>>>> origin/cattedre
         }
         #endregion
 

@@ -225,6 +225,10 @@ namespace Cattedre
             bool labelTeoriciAggiunta = false;
             bool labelPraticiAggiunta = false;
 
+            // Label totali da aggiungere dopo ogni gruppo
+            Label lblTotaleTeorici = null;
+            Label lblTotalePratici = null;
+
             foreach (var doc in docenti)
             {
                 var cdcs = ClsRichiedereBL.RilevaCDCDocente(doc.ID);
@@ -246,6 +250,16 @@ namespace Cattedre
 
                 if (!richiedeLaurea && !labelPraticiAggiunta)
                 {
+                    // Prima di iniziare il gruppo pratici, aggiungi il totale teorici
+                    lblTotaleTeorici = new Label();
+                    lblTotaleTeorici.AutoSize = true;
+                    lblTotaleTeorici.Font = new Font(lblTotaleTeorici.Font, FontStyle.Bold);
+                    lblTotaleTeorici.Text = "Totale: 0";
+                    lblTotaleTeorici.Name = "lblTotaleTeorici";
+                    lblTotaleTeorici.Location = new Point(8, y + 5);
+                    pnlOreDoc.Controls.Add(lblTotaleTeorici);
+                    y += lblTotaleTeorici.Height + 15;
+
                     y += 25;
                     Label lblGruppo = new Label();
                     lblGruppo.AutoSize = true;
@@ -258,41 +272,19 @@ namespace Cattedre
                 }
 
                 ucOreDoc uc = new ucOreDoc();
-
                 uc.lblDocente.Text = $"{doc.Nome} {doc.Cognome}";
-                uc.lblOreDiCattedra.Text =
-                ClsContrattoBL.RilevaOreContrattoDoc(doc.ID).ToString();
-
-                // ore potenziamento dalla QUERY UNICA
-                //int orePot = dtDocentiAssegnazioni.AsEnumerable()
-                //    .Where(r => r["IDutente"] != DBNull.Value &&
-                //                Convert.ToInt64(r["IDutente"]) == doc.ID)
-                //    .Sum(r =>
-                //    {
-                //        if (r["oreSpeciali"] == DBNull.Value)
-                //            return 0;
-
-                //        return Convert.ToInt32(r["oreSpeciali"]);
-                //    });
+                uc.lblOreDiCattedra.Text = ClsContrattoBL.RilevaOreContrattoDoc(doc.ID).ToString();
 
                 int orePot = dtDocentiAssegnazioni.AsEnumerable()
                     .Where(r => r["IDutente"] != DBNull.Value &&
                                 Convert.ToInt64(r["IDutente"]) == doc.ID &&
                                 r["IDannoscolastico"] != DBNull.Value &&
                                 Convert.ToInt64(r["IDannoscolastico"]) == IDannoscolastico)
-                    .Sum(r =>
-                    {
-                        if (r["oreSpeciali"] == DBNull.Value)
-                            return 0;
-
-                        return Convert.ToInt32(r["oreSpeciali"]);
-                    });
+                    .Sum(r => r["oreSpeciali"] == DBNull.Value ? 0 : Convert.ToInt32(r["oreSpeciali"]));
 
                 uc.nudOrePot.Value = orePot;
-
                 uc.lblOreEffettive.Text = "0";
                 uc.lblOreTotali.Text = "0";
-
                 uc.Tag = doc.ID;
                 uc.Location = new Point(0, y);
 
@@ -304,18 +296,12 @@ namespace Cattedre
                 pnlOreDoc.Controls.Add(uc);
 
                 dictDocenti[doc.ID] = uc;
-
                 y += uc.Height;
 
-                // disabilita modifica per Preside o Admin
                 if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
-                {
                     uc.nudOrePot.Enabled = false;
-                }
 
-                // evento aggiornamento automatico
-                int valorePrec = orePot; // salvo il valore attuale prima di ogni cambio
-
+                int valorePrec = orePot;
                 uc.nudOrePot.ValueChanged += (s, e) =>
                 {
                     int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimento(IDdipartimento);
@@ -324,16 +310,24 @@ namespace Cattedre
                     if (orePotTotaliInserite > oreMax)
                     {
                         MessageBox.Show("Superato il limite di ore di potenziamento consentite: " + oreMax, "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        uc.nudOrePot.ValueChanged -= null;
-                        uc.nudOrePot.Value = valorePrec;  // ripristino valore precedente
+                        uc.nudOrePot.Value = valorePrec;
                     }
                     else
                     {
-                        valorePrec = (int)uc.nudOrePot.Value; // aggiorno il valore precedente
+                        valorePrec = (int)uc.nudOrePot.Value;
                         AggiornaOreEffettive();
                     }
                 };
             }
+
+            // Totale pratici alla fine del loop
+            lblTotalePratici = new Label();
+            lblTotalePratici.AutoSize = true;
+            lblTotalePratici.Font = new Font(lblTotalePratici.Font, FontStyle.Bold);
+            lblTotalePratici.Text = "Totale: 0";
+            lblTotalePratici.Name = "lblTotalePratici";
+            lblTotalePratici.Location = new Point(8, y + 5);
+            pnlOreDoc.Controls.Add(lblTotalePratici);
 
             AggiornaOreEffettive();
             ControllaOrePotenzamentoTotali();
@@ -425,6 +419,29 @@ namespace Cattedre
                     uc.lblOreEffettive.Font = new Font(uc.lblOreEffettive.Font, FontStyle.Bold);
                     uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Bold);
                 }
+            }
+            Label lblTotTeo = pnlOreDoc.Controls.Find("lblTotaleTeorici", false).FirstOrDefault() as Label;
+            Label lblTotPra = pnlOreDoc.Controls.Find("lblTotalePratici", false).FirstOrDefault() as Label;
+
+            if (lblTotTeo != null || lblTotPra != null)
+            {
+                int totTeorici = 0, totPratici = 0;
+
+                foreach (var kvp in dictDocenti)
+                {
+                    var cdcs = ClsRichiedereBL.RilevaCDCDocente(kvp.Key);
+                    bool richiedeLaurea = cdcs.Any(c => c.AbilitazioniRichieste != null &&
+                                                        c.AbilitazioniRichieste.ToLower().Contains("laurea"));
+                    int tot = int.Parse(kvp.Value.lblOreTotali.Text);
+
+                    if (richiedeLaurea)
+                        totTeorici += tot;
+                    else
+                        totPratici += tot;
+                }
+
+                if (lblTotTeo != null) lblTotTeo.Text = $"Totale: {totTeorici}";
+                if (lblTotPra != null) lblTotPra.Text = $"Totale: {totPratici}";
             }
         }
 

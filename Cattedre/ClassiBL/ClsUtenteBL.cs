@@ -68,7 +68,7 @@ namespace Cattedre
                             DataRow row = dt.Rows[0];
                             string nome = row["nome"] != DBNull.Value ? row["nome"].ToString() : "";
                             string cognome = row["cognome"] != DBNull.Value ? row["cognome"].ToString() : "";
-                            risultato = $"{nome} {cognome}".Trim();
+                            risultato = $"{cognome} {nome}".Trim();
                         }
                     }
                 }

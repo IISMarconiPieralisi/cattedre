@@ -160,7 +160,7 @@ namespace Cattedre
             get
             {
                 string nomeCorto = string.IsNullOrEmpty(Nome) ? "" :
-                                  (Nome.Length > 3 ? Nome.Substring(0, 3) : Nome);
+                                  (Nome.Length > 3 ? Nome.Substring(0, 3) + "." : Nome);
                 return $"{Cognome} {nomeCorto}";
             }
         }

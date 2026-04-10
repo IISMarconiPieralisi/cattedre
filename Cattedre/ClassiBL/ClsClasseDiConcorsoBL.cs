@@ -140,6 +140,46 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
+        public static List<ClsClasseDiConcorsoDL> CaricaCDCperDisciplina(long IDdiparitimento)
+        {
+            DataTable dt = new DataTable();
+            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(connectionString);
+                conn.Open();
+                string sql = @"SELECT * FROM classidiconcorso c
+                             JOIN richiedere r ON c.ID=r.IDclassediconcorso 
+                             JOIN discipline d ON r.IDdisciplina = d.ID
+                             JOIN gestire g ON d.ID= g.IDdisciplina
+                             WHERE g.IDdipartimento =@IDdipartimento";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdiparitimento);
+                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                    {
+                        dr.Fill(dt);
+                    }
+                    conn.Close();
+                }
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
+                    cdc.ID = Convert.ToInt32(row["id"]);
+                    cdc.Livello = row["livello"].ToString();
+                    cdc.Nome = row["nome"].ToString();
+                    cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
+                    cdcs.Add(cdc);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return cdcs;
+        }
         public static List<ClsClasseDiConcorsoDL> RicercaPerNome(string _ricerca)
         {
             

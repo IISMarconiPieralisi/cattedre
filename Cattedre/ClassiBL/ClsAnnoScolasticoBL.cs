@@ -57,7 +57,43 @@ namespace Cattedre
                 .OrderBy(a => a.ID)
                 .FirstOrDefault();
         }
+        public static ClsAnnoScolasticoDL CercaAnnoScolastico(long ID)
+        {
+            ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
+            DataTable dt = new DataTable();
 
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT * FROM anniscolastici
+                                   WHERE ID = @ID";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ID);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        anno.ID = Convert.ToInt64(row["ID"]);
+                        anno.Sigla = row["sigla"].ToString();
+                        anno.DataInizio = Convert.ToDateTime(row["datainizio"]);
+                        anno.DataFine = Convert.ToDateTime(row["datafine"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return anno;
+        }
         public static ClsAnnoScolasticoDL CercaAnnoScolastico(string sigla)
         {
             ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();

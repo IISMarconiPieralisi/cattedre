@@ -26,6 +26,18 @@ namespace Cattedre
             _disciplinaSpeciale = disciplinaspeciale;
         }
 
+        // Nuovo costruttore che permette di specificare un nome diverso per la visualizzazione su frmCattedre
+        public ClsDisciplinaDL(ClsDisciplinaDL originale, string nomeVisualizzato)
+        {
+            _id = originale._id;
+            _nome = nomeVisualizzato;  // Uso il nome tagliato
+            _anno = originale._anno;
+            _oreLaboratorio = originale._oreLaboratorio;
+            _oreTeoria = originale._oreTeoria;
+            _disciplinaSpeciale = originale._disciplinaSpeciale;
+            _iddisciplinaSuccessiva = originale._iddisciplinaSuccessiva;
+        }
+
         public ClsDisciplinaDL()
         {
 

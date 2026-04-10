@@ -34,12 +34,16 @@ namespace Cattedre
         string annoscolasticoselezionato = "";
         DataTable dtDocentiAssegnazioni;
 
+        //private ToolTip toolTipDiscipline;
+
         public string Annoscolasticoselezionato { get => annoscolasticoselezionato; set => annoscolasticoselezionato = value; }
 
         public FrmCattedre(ClsUtenteDL utente)
         {
             InitializeComponent();
             utenteLoggato = utente;
+
+            //toolTipDiscipline = new ToolTip();
         }
 
         private void FrmCattedre_Load(object sender, EventArgs e)
@@ -400,11 +404,21 @@ namespace Cattedre
                 int totale = eff + pot;
                 uc.lblOreTotali.Text = totale.ToString();
 
-                if (totale > cattedra || totale < cattedra)
+                if (totale > cattedra)
                 {
                     uc.lblDocente.ForeColor = Color.Red;
                     uc.lblOreEffettive.ForeColor = Color.Red;
                     uc.lblOreTotali.ForeColor = Color.Red;
+
+                    uc.lblDocente.Font = new Font(uc.lblDocente.Font, FontStyle.Bold);
+                    uc.lblOreEffettive.Font = new Font(uc.lblOreEffettive.Font, FontStyle.Bold);
+                    uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Bold);
+                }
+                else if (totale < cattedra)
+                {
+                    uc.lblDocente.ForeColor = Color.Orange;
+                    uc.lblOreEffettive.ForeColor = Color.Orange;
+                    uc.lblOreTotali.ForeColor = Color.Orange;
 
                     uc.lblDocente.Font = new Font(uc.lblDocente.Font, FontStyle.Bold);
                     uc.lblOreEffettive.Font = new Font(uc.lblOreEffettive.Font, FontStyle.Bold);
@@ -597,7 +611,7 @@ namespace Cattedre
                     if (ucDisciplinaRif != null)
                     {
                         // Centra la UcAssegnazioni rispetto alla UcDisciplina corrispondente
-                        x = ucDisciplinaRif.Left + (ucDisciplinaRif.Width - uc.Width) / 2 + 10;
+                        x = ucDisciplinaRif.Left + (ucDisciplinaRif.Width - uc.Width) / 2;
                     }
                     else
                     {
@@ -651,16 +665,24 @@ namespace Cattedre
                 }
             }
 
-            // Mostro le discipline uniche nel pnlDisciplina
+            // Discipline uniche nel pnlDisciplina
             int x = 10;
             int y = 10;
+
+            ToolTip toolTipDiscipline = new ToolTip();
+            toolTipDiscipline.ShowAlways = true;
+
             for (int i = 0; i < disciplineUniche.Count; i++)
             {
-                UcDisciplina ucDisciplina = new UcDisciplina(disciplineUniche[i]);
+                string nomeCompleto = disciplineUniche[i].Nome;
+
+                // nome tagliato
+                string nomeTagliato = nomeCompleto?.Length > 15 ? nomeCompleto.Substring(0, 15) : nomeCompleto;
+                ClsDisciplinaDL disciplinaDaMostrare = new ClsDisciplinaDL(disciplineUniche[i], nomeTagliato);
+
+                UcDisciplina ucDisciplina = new UcDisciplina(disciplinaDaMostrare, nomeCompleto);
                 ucDisciplina.Location = new Point(x, y);
                 pnlDipartimento.Controls.Add(ucDisciplina);
-
-                //ucDisciplina.Refresh();
 
                 x += ucDisciplina.Width + 10;
             }
@@ -840,6 +862,11 @@ namespace Cattedre
             LoadClassi(IDdipartimento, annoscolastico.ID);
             LoadAssegnazioni(IDdipartimento, annoscolastico.ID, out dtDocentiAssegnazioni);
             LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+        }
+
+        private void btGeneraWord_Click(object sender, EventArgs e)
+        {
+            ClsGenerazioneWord.PreparazioneCreazioneFile(ClsAnnoScolasticoBL.CercaAnnoScolastico(IDannoscolastico),ClsDipartimentoBL.CaricaDipartimento( IDdipartimento), Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
         }
     }
 }

@@ -45,6 +45,7 @@ namespace Cattedre
             this.pnlAnnullaSalva = new System.Windows.Forms.Panel();
             this.btSalva = new System.Windows.Forms.Button();
             this.btAnnulla = new System.Windows.Forms.Button();
+            this.btGeneraWord = new System.Windows.Forms.Button();
             this.pnlClassi.SuspendLayout();
             this.pnlDipartimento.SuspendLayout();
             this.pnlOreDoc.SuspendLayout();
@@ -53,6 +54,7 @@ namespace Cattedre
             // 
             // pnlClassi
             // 
+            this.pnlClassi.Controls.Add(this.btGeneraWord);
             this.pnlClassi.Controls.Add(this.btGeneraASsucc);
             this.pnlClassi.Controls.Add(this.cbAnniScolastici);
             this.pnlClassi.Controls.Add(this.cbDipartimenti);
@@ -66,7 +68,7 @@ namespace Cattedre
             // 
             this.btGeneraASsucc.Location = new System.Drawing.Point(76, 35);
             this.btGeneraASsucc.Name = "btGeneraASsucc";
-            this.btGeneraASsucc.Size = new System.Drawing.Size(80, 23);
+            this.btGeneraASsucc.Size = new System.Drawing.Size(51, 23);
             this.btGeneraASsucc.TabIndex = 3;
             this.btGeneraASsucc.Text = "Genera";
             this.btGeneraASsucc.UseVisualStyleBackColor = true;
@@ -142,7 +144,7 @@ namespace Cattedre
             // 
             // lblOreEff
             // 
-            this.lblOreEff.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.lblOreEff.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOreEff.AutoSize = true;
             this.lblOreEff.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -154,7 +156,7 @@ namespace Cattedre
             // 
             // lblDocente
             // 
-            this.lblDocente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.lblDocente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDocente.AutoSize = true;
             this.lblDocente.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -166,7 +168,7 @@ namespace Cattedre
             // 
             // lblOreTot
             // 
-            this.lblOreTot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.lblOreTot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOreTot.AutoSize = true;
             this.lblOreTot.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -178,7 +180,7 @@ namespace Cattedre
             // 
             // lblOrePot
             // 
-            this.lblOrePot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.lblOrePot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOrePot.AutoSize = true;
             this.lblOrePot.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -190,7 +192,7 @@ namespace Cattedre
             // 
             // lblOreCattedra
             // 
-            this.lblOreCattedra.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.lblOreCattedra.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOreCattedra.AutoSize = true;
             this.lblOreCattedra.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -229,6 +231,16 @@ namespace Cattedre
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
             this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
+            // 
+            // btGeneraWord
+            // 
+            this.btGeneraWord.Location = new System.Drawing.Point(133, 37);
+            this.btGeneraWord.Name = "btGeneraWord";
+            this.btGeneraWord.Size = new System.Drawing.Size(23, 22);
+            this.btGeneraWord.TabIndex = 6;
+            this.btGeneraWord.Text = ".";
+            this.btGeneraWord.UseVisualStyleBackColor = true;
+            this.btGeneraWord.Click += new System.EventHandler(this.btGeneraWord_Click);
             // 
             // FrmCattedre
             // 
@@ -270,5 +282,6 @@ namespace Cattedre
         private System.Windows.Forms.Label lblOreEff;
         private System.Windows.Forms.Label lblOreCattedra;
         private System.Windows.Forms.Label lblDocente;
+        private System.Windows.Forms.Button btGeneraWord;
     }
 }

@@ -138,15 +138,30 @@ namespace Cattedre
 
                 }
 
+                //controllo se il colore è libero
+                foreach (var item in clbDipartimento.CheckedItems)
+                {
+                    string nomeDip = item.ToString();
+
+                    long idDip = ClsDipartimentoBL.RilevaIDdipartimento(nomeDip);
+
+                    //il bianco può essere riutilizzato
+                    if (_utente.Colore != "255255255")
+                    {
+                        if (ClsUtenteBL.ColoreOccupatoInDipartimento(_utente.Colore, idDip, _utente.ID))
+                            throw new Exception($"Colore occupato nel dipartimento: {nomeDip}");
+                    }
+                }
+
                 // Se arrivi qui, tutto è valido
                 this.DialogResult = DialogResult.OK;
-        }
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
-}
+        }
 
         private void FrmUtente_Load(object sender, EventArgs e)
         {
@@ -255,7 +270,10 @@ namespace Cattedre
                 _imputEmail = tbEmail.Text;
                 if (!string.IsNullOrWhiteSpace(tbNome.Text) && !string.IsNullOrWhiteSpace(tbCognome.Text))
                 {
-                    string _Email = $"{tbNome.Text.ToLower()}.{tbCognome.Text.ToLower()}@iismarconipieralisi.it";
+                    string nomeSenzaSpazi = tbNome.Text.ToLower().Replace(" ", "");
+                    string cognomeSenzaSpazi = tbCognome.Text.ToLower().Replace(" ", "");
+
+                    string _Email = $"{nomeSenzaSpazi}.{cognomeSenzaSpazi}@iismarconipieralisi.it";
                     tbEmail.Enabled = false;
                     tbEmail.Text = _Email;
                 }

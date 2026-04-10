@@ -12,7 +12,7 @@ namespace Cattedre
     public static class ClsRichiedereBL
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-        
+        #region Rilevazioni
         public static List<ClsDisciplinaDL> RilevaDiscipinaCDC(long IDcdc)
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
@@ -50,6 +50,46 @@ namespace Cattedre
                 throw new Exception("Errore durante il rilevamento delle CDC per disciplina: " + ex.Message);
             }
             return discipline;
+        }
+        public static List<ClsUtenteDL> RilevaUtentiCDC(long IDcdc)
+        {
+            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT d.ID, d.nome,d.cognome,d.TipoDocente,d.TipoUtente 
+                                    FROM utenti d
+                                    JOIN richiedere r ON d.ID = r.IDUtente
+                           WHERE r.IDclasseDiConcorso = @IDclasseDiconcorso";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDclasseDiconcorso", IDcdc);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        ClsUtenteDL utente = new ClsUtenteDL();
+                        utente.ID = Convert.ToInt64(row["ID"]);
+                        utente.Cognome = row["cognome"].ToString();
+                        utente.Nome = row["nome"].ToString();
+                        utente.TipoUtente = row["tipoUtente"].ToString();
+                        utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                        utenti.Add(utente);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento delle CDC per utente: " + ex.Message);
+            }
+            return utenti;
         }
         public static List<ClsClasseDiConcorsoDL> RilevaCDCDocente(long IDutente)
         {
@@ -178,6 +218,8 @@ namespace Cattedre
 
             return CDCs;
         }
+        #endregion
+        #region crud
         public static void InserisciRichiedere(ClsRichiedereDL Richiedere)
         {
             
@@ -219,6 +261,62 @@ namespace Cattedre
                 }
             }
         }
+        public static void ModificaRichiestaUtente(long idUtente, List<ClsRichiedereDL> RichModifica)
+        {
+            if (RichModifica.Count <= 0) return;
+            if (idUtente <= 0)
+                throw new Exception("Errore: l'utente non può avere ID 0");
+
+            List<ClsRichiedereDL> RichUtente = CaricaClassiRichiedereUtente(idUtente);
+
+            // Elimina ciò che è nel DB ma NON è nella nuova lista
+            foreach (ClsRichiedereDL ric in RichUtente)
+            {
+                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso
+                                                         && r.IDdisciplina == ric.IDdisciplina);
+                if (!ancoraPresente)
+                    EliminaRichiesta(ric.ID);
+            }
+
+            // Inserisce ciò che è nella nuova lista ma NON era nel DB
+            foreach (ClsRichiedereDL ric in RichModifica)
+            {
+                ric.IDutente = idUtente;
+                if (!RichUtente.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso
+                                      && r.IDdisciplina == ric.IDdisciplina))
+                    InserisciRichiedere(ric);
+            }
+        }
+        public static void ModificaRichiestaDisciplina(long idDisciplina, List<ClsRichiedereDL> RichModifica)
+        {
+            // 1. Controllo validità input
+            if (RichModifica == null || RichModifica.Count <= 0) return;
+            if (idDisciplina <= 0)
+                throw new Exception("Errore: la disciplina non può avere ID 0");
+
+            // 2. Carichiamo lo stato attuale dal DB filtrando per Disciplina
+            List<ClsRichiedereDL> RichDisciplina = CaricaClassiRichiedereConDisciplina(idDisciplina);
+
+            // 3. ELIMINAZIONE: Rimuoviamo i record presenti nel DB ma non più nella nuova lista
+            foreach (ClsRichiedereDL ric in RichDisciplina)
+            {
+                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
+                if (!ancoraPresente)
+                    EliminaRichiesta(ric.ID);
+            }
+
+            // 4. INSERIMENTO: Aggiungiamo i record nuovi
+            foreach (ClsRichiedereDL ric in RichModifica)
+            {
+                bool esisteGia = RichDisciplina.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
+
+                if (!esisteGia)
+                {
+                    //ric.IDdisciplina = idDisciplina; // Opzionale: assicura la coerenza del dato
+                    InserisciRichiedere(ric);
+                }
+            }
+        }
         public static void EliminaRichiesta(long IDrichiedere)
         {
             
@@ -247,6 +345,8 @@ namespace Cattedre
             }
 
         }
+        #endregion
+        #region Carica Richiedere
         public static List<ClsRichiedereDL> CaricaClassiRichiedereUtente(long IDutente)
         {
             
@@ -322,63 +422,9 @@ namespace Cattedre
             }
             return Richiederes;
         }
+        #endregion
 
-        public static void ModificaRichiestaUtente(long idUtente, List<ClsRichiedereDL> RichModifica)
-        {
-            if (RichModifica.Count <= 0) return;
-            if (idUtente <= 0)
-                throw new Exception("Errore: l'utente non può avere ID 0");
 
-            List<ClsRichiedereDL> RichUtente = CaricaClassiRichiedereUtente(idUtente);
-
-            // Elimina ciò che è nel DB ma NON è nella nuova lista
-            foreach (ClsRichiedereDL ric in RichUtente)
-            {
-                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso
-                                                         && r.IDdisciplina == ric.IDdisciplina);
-                if (!ancoraPresente)
-                    EliminaRichiesta(ric.ID);
-            }
-
-            // Inserisce ciò che è nella nuova lista ma NON era nel DB
-            foreach (ClsRichiedereDL ric in RichModifica)
-            {
-                ric.IDutente = idUtente;
-                if (!RichUtente.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso
-                                      && r.IDdisciplina == ric.IDdisciplina)) 
-                    InserisciRichiedere(ric);
-            }
-        }
-        public static void ModificaRichiestaDisciplina(long idDisciplina, List<ClsRichiedereDL> RichModifica)
-        {
-            // 1. Controllo validità input
-            if (RichModifica == null || RichModifica.Count <= 0) return;
-            if (idDisciplina <= 0)
-                throw new Exception("Errore: la disciplina non può avere ID 0");
-
-            // 2. Carichiamo lo stato attuale dal DB filtrando per Disciplina
-            List<ClsRichiedereDL> RichDisciplina = CaricaClassiRichiedereConDisciplina(idDisciplina);
-
-            // 3. ELIMINAZIONE: Rimuoviamo i record presenti nel DB ma non più nella nuova lista
-            foreach (ClsRichiedereDL ric in RichDisciplina)
-            {
-                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
-                if (!ancoraPresente)
-                    EliminaRichiesta(ric.ID);
-            }
-
-            // 4. INSERIMENTO: Aggiungiamo i record nuovi
-            foreach (ClsRichiedereDL ric in RichModifica)
-            {
-                bool esisteGia = RichDisciplina.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
-
-                if (!esisteGia)
-                {
-                    //ric.IDdisciplina = idDisciplina; // Opzionale: assicura la coerenza del dato
-                    InserisciRichiedere(ric);
-                }
-            }
-        }
     }
-    
+
 }

@@ -14,11 +14,12 @@ namespace Cattedre
     {
         public static int _IDutente;
         public static List<long> IDutenti = new List<long>();
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
         public static List<ClsContrattoDL> CaricaContratti()
         {
             IDutenti.Clear();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
             MySqlConnection conn = new MySqlConnection(connectionString);
             DataTable ds = new DataTable();
             List<ClsContrattoDL> Contratti = new List<ClsContrattoDL>();
@@ -59,9 +60,9 @@ namespace Cattedre
 
         public static void InserisciContratto(ClsContrattoDL contratto, long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
             MySqlConnection conn = new MySqlConnection(connectionString);
-            
+
             IDutenti.Clear();
 
             try
@@ -74,7 +75,7 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@tipoContratto", contratto.TipoContratto);
                     cmd.Parameters.AddWithValue("@monteOre", contratto.MonteOre);
                     cmd.Parameters.AddWithValue("@datainizio", contratto.DataInizioContratto);
-                    if(contratto.TipoContratto=='D')
+                    if (contratto.TipoContratto == 'D')
                         cmd.Parameters.AddWithValue("@datafine", contratto.DataFineContratto);
                     else
                         cmd.Parameters.AddWithValue("@datafine", null);
@@ -91,10 +92,10 @@ namespace Cattedre
 
         public static void ModificaContratto(ClsContrattoDL contratto, long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
             MySqlConnection conn = new MySqlConnection(connectionString);
             //se il contratto non esiste lo inserisco al posto di modificarlo
-            if (cercaContratto(IDutente)==null)
+            if (cercaContratto(IDutente) == null)
             {
                 InserisciContratto(contratto, IDutente);
                 return;
@@ -114,10 +115,10 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@tipoContratto", contratto.TipoContratto);
                     cmd.Parameters.AddWithValue("@monteOre", contratto.MonteOre);
                     cmd.Parameters.AddWithValue("@datainizio", contratto.DataInizioContratto);
-                     if (contratto.TipoContratto == 'D')
-                            cmd.Parameters.AddWithValue("@datafine", contratto.DataFineContratto);
-                     else
-                        cmd.Parameters.AddWithValue("@datafine", DBNull.Value); 
+                    if (contratto.TipoContratto == 'D')
+                        cmd.Parameters.AddWithValue("@datafine", contratto.DataFineContratto);
+                    else
+                        cmd.Parameters.AddWithValue("@datafine", DBNull.Value);
                     cmd.Parameters.AddWithValue("@IDutente", IDutente);
                     cmd.Parameters.AddWithValue("@id", contratto.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
@@ -132,7 +133,7 @@ namespace Cattedre
 
         public static List<ClsContrattoDL> EliminaContratto(int id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
             MySqlConnection conn = new MySqlConnection(connectionString);
             List<ClsContrattoDL> contratti = new List<ClsContrattoDL>();
 
@@ -160,79 +161,69 @@ namespace Cattedre
         public static ClsContrattoDL cercaContratto(long idUtente)
         {
             ClsContrattoDL contrattoTrovato = null;
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
-            string sql = @"SELECT * 
-                   FROM contratti 
-                   WHERE IDutente = @IdUtente";
-
+            string sql = @"SELECT * FROM contratti WHERE IDutente = @IdUtente";
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@IdUtente", idUtente);
-
                     conn.Open();
-
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        if (dr.Read())
+                        cmd.Parameters.AddWithValue("@IdUtente", idUtente);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                        {
+                            DataRow row = dt.Rows[0];
                             contrattoTrovato = new ClsContrattoDL();
-                            contrattoTrovato.ID = Convert.ToInt32(dr["id"]);
-                            contrattoTrovato.TipoContratto = Convert.ToChar(dr["tipoContratto"]); 
-                            contrattoTrovato.MonteOre = Convert.ToInt32(dr["monteOre"]);
-                            contrattoTrovato.DataInizioContratto = dr.GetDateTime("datainizio");
-
-                            int idxDataFine = dr.GetOrdinal("datafine");
-                            if (!dr.IsDBNull(idxDataFine))
-                                contrattoTrovato.DataFineContratto = dr.GetDateTime(idxDataFine);
-
-                            contrattoTrovato.IDutente = Convert.ToInt32(dr["IDutente"]);
+                            contrattoTrovato.ID = Convert.ToInt32(row["id"]);
+                            contrattoTrovato.TipoContratto = Convert.ToChar(row["tipoContratto"]);
+                            contrattoTrovato.MonteOre = Convert.ToInt32(row["monteOre"]);
+                            contrattoTrovato.DataInizioContratto = Convert.ToDateTime(row["datainizio"]);
+                            if (row["datafine"] != DBNull.Value)
+                                contrattoTrovato.DataFineContratto = Convert.ToDateTime(row["datafine"]);
+                            contrattoTrovato.IDutente = Convert.ToInt32(row["IDutente"]);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Gestione dell'errore - considera di loggarla o rilanciarla
-                string errore = ex.Message;
-                // Potresti voler fare: throw; o loggare l'errore
+                throw new Exception("Errore durante la ricerca del contratto: " + ex.Message);
             }
-
             return contrattoTrovato;
         }
 
         public static int RilevaOreContrattoDoc(long id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            ClsContrattoDL contratto = new ClsContrattoDL();
+            int monteOre = -1;
             try
             {
-                conn.Open();
-                string sql = "SELECT monteOre " +
-                             "FROM contratti " +
-                             "WHERE IDutente = " + id;
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    dr.Read();
-                    contratto.MonteOre = Convert.ToInt32(dr["monteOre"]);
+                    conn.Open();
+                    string sql = "SELECT monteOre FROM contratti WHERE IDutente = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                            monteOre = Convert.ToInt32(dt.Rows[0]["monteOre"]);
+                    }
                 }
-                conn.Close();
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception("Errore durante il rilevamento delle ore contratto: " + ex.Message);
             }
-            if (contratto != null)
-                return contratto.MonteOre;
-            else
-                return -1;
+            return monteOre;
         }
     }
 }

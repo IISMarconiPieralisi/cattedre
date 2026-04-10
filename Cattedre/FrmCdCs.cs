@@ -13,6 +13,7 @@ namespace Cattedre
     public partial class FrmCdCs : Form
     {
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+        List<ClsDotareDL> dots = new List<ClsDotareDL>();
         public int indiceDaModificare = 0;
 
         public FrmCdCs()
@@ -23,13 +24,19 @@ namespace Cattedre
         private void CaricaListView()
         {
             cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+            dots = ClsDotareBL.CaricaDotare();
             lvCdCs.Items.Clear();
-            foreach (ClsClasseDiConcorsoDL cdc in cdcs)
+            for(int i = 0; i < cdcs.Count; i++)
             {
-                ListViewItem lvi = new ListViewItem(cdc.Livello);
-                lvi.SubItems.Add(cdc.Nome);
-                lvi.SubItems.Add(cdc.AbilitazioniRichieste);
-                lvi.Tag = cdc.ID;
+                ListViewItem lvi = new ListViewItem(cdcs[i].ID.ToString());
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
+                lvi.SubItems.Add(cdcs[i].Livello);
+                lvi.SubItems.Add(cdcs[i].Nome);
+                lvi.SubItems.Add(cdcs[i].AbilitazioniRichieste);
+                lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiDiritto(cdcs[i].ID, dots[i].IdAnnoscolastico).ToString());
+                lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiFatto(cdcs[i].ID, dots[i].IdAnnoscolastico).ToString());
+                
+                lvi.Tag = cdcs[i].ID;
                 lvCdCs.Items.Add(lvi);
             }
         }
@@ -43,29 +50,30 @@ namespace Cattedre
                 dr = DialogResult.No;
             if (dr == DialogResult.OK)
             {
-                ClsClasseDiConcorsoBL.InserisciCdc(frmCdC._cdc);
-                cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+                long idCdc = ClsClasseDiConcorsoBL.InserisciCdc(frmCdC._cdc);
+                ClsDotareBL.InserisciDotare(frmCdC._dot, idCdc);
                 CaricaListView();
             }
         }
 
         private void FrmCdCs_Load(object sender, EventArgs e)
         {
-            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
             CaricaListView();
         }
 
-        private void brModifica_Click(object sender, EventArgs e)
+        private void btModifica_Click(object sender, EventArgs e)
         {
             if (lvCdCs.SelectedIndices.Count == 1)
             {
-                int ID =Convert.ToInt32(lvCdCs.SelectedItems[0].Tag);
+                indiceDaModificare = Convert.ToInt32(lvCdCs.SelectedItems[0].Tag);
                 FrmCdC frmCdC = new FrmCdC();
-                frmCdC._cdc = cdcs.Find(p=>p.ID== ID);
+                frmCdC._cdc = cdcs.Find(p => p.ID == indiceDaModificare);
+                frmCdC._dot = dots.Find(p => p.IdClasseDiConcorso == frmCdC._cdc.ID);
                 DialogResult dr = frmCdC.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
                     ClsClasseDiConcorsoBL.ModificaCdc(frmCdC._cdc, indiceDaModificare);
+                    ClsDotareBL.AggiornaDotare(frmCdC._dot);
                     CaricaListView();
                 }
             }
@@ -81,9 +89,26 @@ namespace Cattedre
                 int idDaEliminare = Convert.ToInt32(lvCdCs.Items[indiceDaEliminare].Tag);
                 DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
                 if (dr == DialogResult.Yes)
+                {
                     ClsClasseDiConcorsoBL.EliminaCdc(idDaEliminare);
+                    ClsDotareBL.EliminaDotare(idDaEliminare);
+                }
                 
                 CaricaListView();
+            }
+        }
+
+        private void lvCdCs_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && lvCdCs.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete && lvCdCs.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
             }
         }
     }

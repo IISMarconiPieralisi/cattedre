@@ -11,3 +11,9 @@ Cattedre/obj/
 *.json
 
 
+
+<<<<<<< HEAD
+Cattedre/ClassiDL/ClsDotareDL.cs
+=======
+Cattedre/ClassiBL/ClsClasseBL.cs
+>>>>>>> ut-cont-cdc

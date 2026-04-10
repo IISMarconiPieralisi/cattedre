@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +11,170 @@ namespace Cattedre
 {
     public static class ClsRichiedereBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        #region Rilevazioni
+        public static List<ClsDisciplinaDL> RilevaDiscipinaCDC(long IDcdc)
+        {
+            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT d.ID, d.nome,d.anno
+                                    FROM discipline d
+                                    JOIN richiedere r ON d.ID = r.IDdisciplina
+                           WHERE r.IDclasseDiConcorso = @IDclasseDiconcorso";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDclasseDiconcorso",IDcdc);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        ClsDisciplinaDL disc = new ClsDisciplinaDL();
+                        disc.ID = Convert.ToInt64(row["id"]);
+                        disc.Nome = row["nome"].ToString();
+                        disc.Anno = Convert.ToInt16(row["anno"]);
+                        discipline.Add(disc);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento delle CDC per disciplina: " + ex.Message);
+            }
+            return discipline;
+        }
+        public static List<ClsUtenteDL> RilevaUtentiCDC(long IDcdc)
+        {
+            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT d.ID, d.nome,d.cognome,d.TipoDocente,d.TipoUtente 
+                                    FROM utenti d
+                                    JOIN richiedere r ON d.ID = r.IDUtente
+                           WHERE r.IDclasseDiConcorso = @IDclasseDiconcorso";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDclasseDiconcorso", IDcdc);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        ClsUtenteDL utente = new ClsUtenteDL();
+                        utente.ID = Convert.ToInt64(row["ID"]);
+                        utente.Cognome = row["cognome"].ToString();
+                        utente.Nome = row["nome"].ToString();
+                        utente.TipoUtente = row["tipoUtente"].ToString();
+                        utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                        utenti.Add(utente);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento delle CDC per utente: " + ex.Message);
+            }
+            return utenti;
+        }
+        public static List<ClsClasseDiConcorsoDL> RilevaCDCDocente(long IDutente)
+        {
+            List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT c.id, c.livello, c.nome, c.abilitazioniRichieste
+                           FROM classidiconcorso c
+                           JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
+                           WHERE r.IDutente = @IdUtente";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.Add("@IdUtente", MySqlDbType.Int64).Value = IDutente;
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            CDCs.Add(new ClsClasseDiConcorsoDL
+                            {
+                                ID = Convert.ToInt64(row["id"]),
+                                Livello = row["livello"].ToString(),
+                                Nome = row["nome"].ToString(),
+                                AbilitazioniRichieste = row["abilitazioniRichieste"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento delle CDC del docente: " + ex.Message);
+            }
+            return CDCs;
+        }
+        public static List<ClsDisciplinaDL> RilevaDisciplineDocente(long IDutente)
+        {
+            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            DataTable ds = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT d.ID, d.nome,d.anno
+                                    FROM discipline d
+                                    JOIN richiedere r ON d.ID = r.IDdisciplina
+                                    WHERE r.IDutente = @IdUtente";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IdUtente", IDutente);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(ds);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in ds.Rows)
+                    {
+                        ClsDisciplinaDL disc = new ClsDisciplinaDL();
+                        disc.ID = Convert.ToInt64(row["id"]);
+                        disc.Nome = row["nome"].ToString();
+                        disc.Anno =Convert.ToInt16(row["anno"]);
+                        discipline.Add(disc);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"errore nella query: {ex.Message}", ex);
+
+            }
+            return discipline;
+        }
         public static List<ClsClasseDiConcorsoDL> RilevaCDCDiscipina(long IDdisciplina)
         {
             List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            DataTable ds = new DataTable();
 
             try
             {
@@ -25,83 +185,44 @@ namespace Cattedre
                     string sql = @"SELECT c.id,c.livello,c.nome,c.abilitazioniRichieste
                                     FROM classidiconcorso c
                                     INNER JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
-                                    WHERE r.ID = @IDdisciplina";
-
+                                    WHERE r.IDdisciplina = @IDdisciplina";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.Add("@IDdisciplina", MySqlDbType.Int64).Value = IDdisciplina;
-
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
-                            while (dr.Read())
-                            {
-                                ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL
-                                {
-                                    ID = dr.GetInt32("id"),
-                                    Livello = dr.GetString("livello"),
-                                    Nome = dr.GetString("nome"),
-                                    AbilitazioniRichieste = dr.GetString("abilitazioniRichieste")
-                                };
-
-                                CDCs.Add(cdc);
-                            }
+                            dr.Fill(ds);
                         }
                     }
+
                 }
-            }
-            catch (Exception ex)
-            {
-                string errore = ex.Message;
-                throw;
-            }
-
-            return CDCs;
-        }
-        public static List<ClsClasseDiConcorsoDL> RilevaCDCDocente(long IDutente)
-        {
-            List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                foreach (DataRow row in ds.Rows)
                 {
-                    conn.Open();
-
-                    string sql = @"SELECT c.id,c.livello,c.nome
-                                    FROM classidiconcorso c
-                                    JOIN richiedere r ON c.ID = r.IDclasseDiConcorso
-                                    WHERE r.IDutente = @IdUtente";
-
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL
                     {
-                        cmd.Parameters.Add("@IdUtente", MySqlDbType.Int64).Value = IDutente;
-
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
-                        {
-                            while (dr.Read())
-                            {
-                                ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
-                                cdc.ID =Convert.ToInt64(dr["id"]);
-                                cdc.Livello =dr["livello"].ToString();
-                                cdc.Nome = dr["nome"].ToString();
-                                CDCs.Add(cdc);
-                            }
-                        }
-                    }
+                        ID = Convert.ToInt64(row["id"]),
+                        Livello = row["livello"].ToString(),
+                        Nome = row["nome"].ToString(),
+                        AbilitazioniRichieste = row["abilitazioniRichieste"].ToString()
+                    };
+                    CDCs.Add(cdc);
                 }
+
+
+
             }
             catch (Exception ex)
             {
-                throw new Exception($"errore nella query: {ex.Message}", ex);
-
+                throw new Exception(ex.Message);
             }
 
             return CDCs;
         }
+        #endregion
+        #region crud
         public static void InserisciRichiedere(ClsRichiedereDL Richiedere)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -113,14 +234,16 @@ namespace Cattedre
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-
-                        cmd.Parameters.AddWithValue("@IDclasseDiConcorso", Richiedere.IDclassediconcorso);
+                        if (Richiedere.IDclassediconcorso > 0)
+                            cmd.Parameters.AddWithValue("@IDclasseDiConcorso", Richiedere.IDclassediconcorso);
+                        else
+                            cmd.Parameters.AddWithValue("@IDclasseDiConcorso", DBNull.Value);
 
                         if(Richiedere.IDutente > 0)
                             cmd.Parameters.AddWithValue("@IDutente", Richiedere.IDutente);
                         else
                             cmd.Parameters.AddWithValue("@IDutente", DBNull.Value);
-                        //controllo temporaneo  che  verrà rimosso successivamente
+
                         if (Richiedere.IDdisciplina > 0)
                             cmd.Parameters.AddWithValue("@IDdisciplina", Richiedere.IDdisciplina);
                         else
@@ -138,24 +261,76 @@ namespace Cattedre
                 }
             }
         }
-        public static void EliminaRichiesta(ClsRichiedereDL ric)
+        public static void ModificaRichiestaUtente(long idUtente, List<ClsRichiedereDL> RichModifica)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            if (RichModifica.Count <= 0) return;
+            if (idUtente <= 0)
+                throw new Exception("Errore: l'utente non può avere ID 0");
+
+            List<ClsRichiedereDL> RichUtente = CaricaClassiRichiedereUtente(idUtente);
+
+            // Elimina ciò che è nel DB ma NON è nella nuova lista
+            foreach (ClsRichiedereDL ric in RichUtente)
+            {
+                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso
+                                                         && r.IDdisciplina == ric.IDdisciplina);
+                if (!ancoraPresente)
+                    EliminaRichiesta(ric.ID);
+            }
+
+            // Inserisce ciò che è nella nuova lista ma NON era nel DB
+            foreach (ClsRichiedereDL ric in RichModifica)
+            {
+                ric.IDutente = idUtente;
+                if (!RichUtente.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso
+                                      && r.IDdisciplina == ric.IDdisciplina))
+                    InserisciRichiedere(ric);
+            }
+        }
+        public static void ModificaRichiestaDisciplina(long idDisciplina, List<ClsRichiedereDL> RichModifica)
+        {
+            // 1. Controllo validità input
+            if (RichModifica == null || RichModifica.Count <= 0) return;
+            if (idDisciplina <= 0)
+                throw new Exception("Errore: la disciplina non può avere ID 0");
+
+            // 2. Carichiamo lo stato attuale dal DB filtrando per Disciplina
+            List<ClsRichiedereDL> RichDisciplina = CaricaClassiRichiedereConDisciplina(idDisciplina);
+
+            // 3. ELIMINAZIONE: Rimuoviamo i record presenti nel DB ma non più nella nuova lista
+            foreach (ClsRichiedereDL ric in RichDisciplina)
+            {
+                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
+                if (!ancoraPresente)
+                    EliminaRichiesta(ric.ID);
+            }
+
+            // 4. INSERIMENTO: Aggiungiamo i record nuovi
+            foreach (ClsRichiedereDL ric in RichModifica)
+            {
+                bool esisteGia = RichDisciplina.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
+
+                if (!esisteGia)
+                {
+                    //ric.IDdisciplina = idDisciplina; // Opzionale: assicura la coerenza del dato
+                    InserisciRichiedere(ric);
+                }
+            }
+        }
+        public static void EliminaRichiesta(long IDrichiedere)
+        {
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
 
             try
             {
                 conn.Open();
-                string sql = @"DELETE FROM afferire" +
-                             " WHERE IDutente = @IDutente " +
-                             " AND IDclasseDiConcorso=@IDclasseDiConcorso" +
-                             " AND IDdisciplina=@IDdisciplina";
+                string sql = @"DELETE FROM Richiedere" +
+                             " WHERE ID = @ID ";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@IDutente", ric.IDutente);
-                    cmd.Parameters.AddWithValue("@IDclasseDiConcorso", ric.IDclassediconcorso);
-                    cmd.Parameters.AddWithValue("@IDdisciplina", ric.IDdisciplina);
+                    cmd.Parameters.AddWithValue("@ID", IDrichiedere);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
                     if(righeCoinvolte<=0)
                     {
@@ -166,23 +341,26 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                string errore = ex.Message;
+                throw new Exception(ex.Message);
             }
 
         }
-        public static List<ClsRichiedereDL> CaricaClassiRichiedere(long IDutente)
+        #endregion
+        #region Carica Richiedere
+        public static List<ClsRichiedereDL> CaricaClassiRichiedereUtente(long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             DataTable ds = new DataTable();
             List<ClsRichiedereDL> richiederes = new List<ClsRichiedereDL>();
             try
             {
                 conn.Open();
-                string sql = "SELECT ID, IDutente, IDclasseDiConcorso, IDdisciplina, oreSpeciali FROM richiedere ";
+                string sql = "SELECT ID, IDutente, IDclasseDiConcorso, IDdisciplina, oreSpeciali FROM richiedere WHERE IDutente=@IDutente";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
+                    cmd.Parameters.AddWithValue("@IDutente", IDutente);
                     using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                     {
                         dr.Fill(ds);
@@ -193,9 +371,9 @@ namespace Cattedre
                 {
                     ClsRichiedereDL richiedere = new ClsRichiedereDL();
                     richiedere.ID = Convert.ToInt64(row["ID"]);
-                    richiedere.IDutente = Convert.ToInt64(row["IDutente"]);
-                    richiedere.IDclassediconcorso = Convert.ToInt64(row["IDclasseDiConcorso"]);
-                    richiedere.IDdisciplina = Convert.ToInt64(row["IDdisciplina"]);
+                    richiedere.IDutente = IDutente;
+                    richiedere.IDclassediconcorso =(row["IDclasseDiConcorso"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDclasseDiConcorso"]);
+                    richiedere.IDdisciplina =(row["IDdisciplina"]==DBNull.Value) ?0: Convert.ToInt64(row["IDdisciplina"]);
                     richiedere.OreSpeciali = Convert.ToInt32(row["OreSpeciali"]);
                     richiederes.Add(richiedere);
                 }
@@ -211,79 +389,42 @@ namespace Cattedre
         public static List<ClsRichiedereDL> CaricaClassiRichiedereConDisciplina(long IDdisciplina)
         {
             List<ClsRichiedereDL> Richiederes = new List<ClsRichiedereDL>();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT IDutente, IDclasseDiConcorso, IDdisciplina 
-                                FROM richiedere
-                                WHERE IDdisciplina=@IDdisciplina";
-
+                           FROM richiedere
+                           WHERE IDdisciplina = @IDdisciplina";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            while (dr.Read())
-                            {
-                                ClsRichiedereDL richiedere = new ClsRichiedereDL();
-
-                                richiedere.IDutente = Convert.ToInt64(dr["IDutente"]);
-                                richiedere.IDclassediconcorso = Convert.ToInt64(dr["IDclasseDiConcorso"]);
-                                if (dr["IDdisciplina"] != DBNull.Value)
-                                    richiedere.IDdisciplina = Convert.ToInt64(dr["IDdisciplina"]);
-
-                                Richiederes.Add(richiedere);
-                            }
+                            da.Fill(dt);
+                        }
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            ClsRichiedereDL richiedere = new ClsRichiedereDL();
+                            richiedere.IDutente = (row["IDutente"] == DBNull.Value)?0: Convert.ToInt64(row["IDutente"]);
+                            richiedere.IDclassediconcorso = (row["IDclasseDiConcorso"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDclasseDiConcorso"]);
+                            richiedere.IDdisciplina = (row["IDdisciplina"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdisciplina"]);
+                            Richiederes.Add(richiedere);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella richiesta della query " + ex);
-
+                throw new Exception("Errore durante il caricamento delle classi richiedere: " + ex.Message);
             }
             return Richiederes;
         }
+        #endregion
 
-        public static void ModificaRichiesta(long idUtente,long idDisciplina, List<ClsRichiedereDL> RichModifica) //se idutente è 0 allora uso iddisciplina e viceversa
-        {
-            //questo metodo prendo e cancello tutte le form  che trovo in cui è presente quello specifico utente
-            //poi le andro a ricreare dopo
-            //prendo tutte le afferenze del utente
-            //metodo poco elegante ma il migliore per la  logica in cui è stata concepita la form
-            List<ClsRichiedereDL> RichiesteUtente= new List<ClsRichiedereDL>();
-            if(idUtente > 0 && idDisciplina>0)
-                throw new Exception("Errore nei parametri passati al metodo ModificaRichiesta");
-            else if (idUtente>0)
-                RichiesteUtente = CaricaClassiRichiedere(idUtente);
-            else if(idDisciplina>0)
-                RichiesteUtente = CaricaClassiRichiedere(idUtente);
-            //cancello le afferenze eliminate
-            foreach (ClsRichiedereDL ric in RichiesteUtente)
-                {
-                    //controllo se l'afferenza è presente  nella lista delle afferenze modificate
-                    bool esiste = RichModifica.Any(r => r.IDutente == ric.IDutente &&
-                                                    r.IDclassediconcorso == ric.IDclassediconcorso &&
-                                                    r.IDdisciplina == ric.IDdisciplina);
-                    if (!esiste)
-                        EliminaRichiesta(ric);
 
-                    //se non esiste, non cancello nulla e  mi limito successivamente a caricarla
-                }
-            //carico le afferenze create
-            foreach (ClsRichiedereDL ric in RichModifica)
-            {
-                ric.IDutente = idUtente;
-                bool giaPresente = RichiesteUtente.Any(r =>r.IDutente == ric.IDutente &&
-                                                       r.IDclassediconcorso == ric.IDclassediconcorso &&
-                                                       r.IDdisciplina == ric.IDdisciplina);
-                if(!giaPresente)
-                    InserisciRichiedere(ric);
-            }
-        }
     }
+
 }

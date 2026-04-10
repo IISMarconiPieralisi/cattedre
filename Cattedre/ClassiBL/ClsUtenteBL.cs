@@ -13,129 +13,63 @@ namespace Cattedre
 {
     public static class ClsUtenteBL
     {
+        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+
         #region rilevamento by Parametes
         public static long RilevaIDutente(string nome, string cognome)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             long IDutente = 0;
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID FROM utenti WHERE nome = @nome AND cognome = @cognome LIMIT 1";
-
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", nome);
                         cmd.Parameters.AddWithValue("@cognome", cognome);
-
-                        // ExecuteScalar restituisce la prima colonna della prima riga
-                        object result = cmd.ExecuteScalar();
-
-                        if (result != null && result != DBNull.Value)
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            IDutente = Convert.ToInt64(result);
+                            da.Fill(dt);
                         }
+                        if (dt.Rows.Count > 0)
+                            IDutente = Convert.ToInt64(dt.Rows[0]["ID"]);
                     }
-                    conn.Close();
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception("Errore nel recupero ID utente: " + ex.Message);
             }
-
             return IDutente;
         }
+
         public static string RilevaNomeUtente(long id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
             string risultato = null;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT u.nome, u.cognome 
-                                 FROM utenti u  
-                                 WHERE u.ID = @ID";
+                    string sql = "SELECT u.nome, u.cognome FROM utenti u WHERE u.ID = @ID";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", id);
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            if (dr.Read())
-                            {
-                                string nome = dr.IsDBNull(0) ? "" : dr.GetString(0);
-                                string cognome = dr.IsDBNull(1) ? "" : dr.GetString(1);
-                                risultato = $"{nome} {cognome}".Trim();
-                            }
+                            da.Fill(dt);
                         }
-                        conn.Close();
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("errore nella query" + ex);
-            }
-            return !string.IsNullOrEmpty(risultato) ? risultato : "-";
-        }
-        public static int TrovaIDdipartimento(long IDutente)
-        {
-            int risultato = 0;
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = @"SELECT IDdipartimento FROM afferire 
-                        WHERE IDutente =@IDutente ";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        if (dt.Rows.Count > 0)
                         {
-                            if (dr.Read())
-                                risultato = Convert.ToInt32(dr["IDdipartimento"]);
-
+                            DataRow row = dt.Rows[0];
+                            string nome = row["nome"] != DBNull.Value ? row["nome"].ToString() : "";
+                            string cognome = row["cognome"] != DBNull.Value ? row["cognome"].ToString() : "";
+                            risultato = $"{nome} {cognome}".Trim();
                         }
-                    }
-                    conn.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-
-            return risultato;
-        }
-        public static bool TokenEsistente(long IDutente)
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = @"SELECT token FROM utenti 
-                           WHERE ID = @id";
-
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@id", IDutente);
-
-
-                        var result = cmd.ExecuteScalar();
-
-                        return result != null && result != DBNull.Value;
                     }
                 }
             }
@@ -143,58 +77,140 @@ namespace Cattedre
             {
                 throw new Exception("Errore nella query: " + ex.Message);
             }
-            return false;
+            return !string.IsNullOrEmpty(risultato) ? risultato : "-";
         }
 
-        #endregion
-        #region caricamente by utentispecifici
-        public static List<ClsUtenteDL> CaricaCoordinatoriDipartimenti()
+        public static int TrovaIDdipartimento(long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+            int risultato = 0;
             try
             {
-                conn.Open();
-                string sql = "SELECT ID,email,cognome,nome,tipoUtente,tipoUtente, tipoDocente FROM utenti u WHERE u.tipoUtente = 'C'";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    while (dr.Read())
+                    conn.Open();
+                    string sql = "SELECT IDdipartimento FROM afferire WHERE IDutente = @IDutente";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        ClsUtenteDL utente = new ClsUtenteDL();
-                        utente.ID = Convert.ToInt64(dr["ID"]);
-                        utente.Email = dr["email"].ToString();
-                        utente.Cognome = dr["cognome"].ToString();
-                        utente.Nome = dr["nome"].ToString();
-                        utente.TipoUtente = dr["tipoUtente"].ToString();
-                        if (!dr.IsDBNull(dr.GetOrdinal("tipoDocente")))
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            utente.TipoDocente = Convert.ToChar(dr["tipoDocente"]);
+                            da.Fill(dt);
                         }
-                        else
-                        {
-                            utente.TipoDocente = '\0'; // oppure un altro valore di default
-                        }
-
-                        utenti.Add(utente);
+                        if (dt.Rows.Count > 0)
+                            risultato = Convert.ToInt32(dt.Rows[0]["IDdipartimento"]);
                     }
                 }
-                conn.Close();
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("Errore durante il rilevamento del dipartimento: " + ex.Message);
+            }
+            return risultato;
+        }
+
+        public static bool TokenEsistente(long IDutente)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT token FROM utenti WHERE ID = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", IDutente);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        return dt.Rows.Count > 0 && dt.Rows[0]["token"] != DBNull.Value;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nella query: " + ex.Message);
+            }
+        }
+
+        public static bool ColoreOccupatoInDipartimento(string colore, long idDipartimento, long idUtente)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"
+                            SELECT 1 
+                            FROM utenti u
+                            JOIN afferire a ON u.ID = a.IDutente
+                            WHERE u.colore = @colore
+                            AND a.IDdipartimento = @idDipartimento
+                            AND u.ID <> @idUtente
+                            LIMIT 1";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@colore", colore);
+                        cmd.Parameters.AddWithValue("@idDipartimento", idDipartimento);
+                        cmd.Parameters.AddWithValue("@idUtente", idUtente);
+
+                        object result = cmd.ExecuteScalar();
+
+                        return result != null; // true se esiste almeno uno
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nella query: " + ex.Message);
+            }
+        }
+
+        #endregion
+        #region caricamente utentispecifici
+        public static List<ClsUtenteDL> CaricaCoordinatoriDipartimenti()
+        {
+            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT ID, email, cognome, nome, tipoUtente, tipoDocente FROM utenti u WHERE u.tipoUtente = 'C'";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            ClsUtenteDL utente = new ClsUtenteDL();
+                            utente.ID = Convert.ToInt64(row["ID"]);
+                            utente.Email = row["email"].ToString();
+                            utente.Cognome = row["cognome"].ToString();
+                            utente.Nome = row["nome"].ToString();
+                            utente.TipoUtente = row["tipoUtente"].ToString();
+                            utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                            utenti.Add(utente);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il caricamento dei coordinatori: " + ex.Message);
             }
             return utenti;
         }
 
-        public static List<ClsUtenteDL> CaricaCoordinatoriClassi()
+        public static List<ClsUtenteDL> CaricaDocenti()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             DataTable dt = new DataTable();
             try
@@ -202,7 +218,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT ID,email,cognome,nome,tipoUtente,colore,tipoDocente FROM utenti u WHERE u.tipoUtente LIKE '%D'";
+                    string sql = "SELECT ID,email,cognome,nome,tipoUtente,colore,tipoDocente FROM utenti  WHERE tipoUtente ='D' OR tipoUtente='C'";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -238,46 +254,88 @@ namespace Cattedre
         public static ClsUtenteDL caricautenteByEmail(string _email)
         {
             ClsUtenteDL utente = null;
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-
             try
             {
-                conn.Open();
-                string sql = "SELECT ID,email,cognome,nome,tipoUtente,tipoUtente, tipoDocente  FROM utenti" +
-                    " WHERE email=@email";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@email", _email);
-                MySqlDataReader dr = cmd.ExecuteReader();
-
-                if (dr.Read())
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    utente = new ClsUtenteDL();
-
-                    utente.ID = Convert.ToInt64(dr["ID"]);
-                    utente.Email = dr["email"].ToString();
-                    utente.Cognome = dr["cognome"].ToString();
-                    utente.Nome = dr["nome"].ToString();
-                    utente.TipoUtente = dr["tipoUtente"].ToString();
-                    utente.TipoDocente = !dr.IsDBNull(dr.GetOrdinal("tipoDocente")) ? Convert.ToChar(dr["tipoDocente"]) : '\0';
+                    conn.Open();
+                    string sql = "SELECT ID, email, cognome, nome, tipoUtente, tipoDocente FROM utenti WHERE email = @email";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@email", _email);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                        {
+                            DataRow row = dt.Rows[0];
+                            utente = new ClsUtenteDL();
+                            utente.ID = Convert.ToInt64(row["ID"]);
+                            utente.Email = row["email"].ToString();
+                            utente.Cognome = row["cognome"].ToString();
+                            utente.Nome = row["nome"].ToString();
+                            utente.TipoUtente = row["tipoUtente"].ToString();
+                            utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                        }
+                    }
                 }
-
-                conn.Close();
             }
             catch (Exception ex)
             {
-                throw new Exception("errore nella query" + ex);
+                throw new Exception("Errore durante il caricamento dell'utente: " + ex.Message);
             }
-
             return utente;
+        }
+        public static List<ClsUtenteDL> OttieniUtentiDipartimento(long IDdiparimento)
+        {
+            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT u.ID,u.cognome,u.nome,tipoUtente,colore,tipoDocente FROM utenti u
+                                    JOIN afferire a ON u.ID = a.IDutente
+                                    WHERE a.IDdipartimento = @IDdipartimento";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdiparimento);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        ClsUtenteDL utente = new ClsUtenteDL();
+                        utente.ID = Convert.ToInt64(row["ID"]);
+                        utente.Cognome = row["cognome"].ToString();
+                        utente.Nome = row["nome"].ToString();
+                        utente.TipoUtente = row["tipoUtente"].ToString();
+                        utente.TipoDocente = row["tipoDocente"] == null ? Convert.ToChar(row["tipoDocente"]) : '\0';
+                        utenti.Add(utente);
+                    }
+                    conn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return utenti;
         }
         #endregion
         #region OperazioniCRUD
 
         public static List<ClsUtenteDL> CaricaUtenti()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             MySqlConnection conn = new MySqlConnection(connectionString);
             DataTable ds = new DataTable();
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
@@ -303,7 +361,7 @@ namespace Cattedre
                     utente.Cognome = row["cognome"].ToString();
                     utente.Nome = row["nome"].ToString();
                     utente.TipoUtente = row["tipoUtente"].ToString();
-                    //utente.Colore = row["colore"].ToString();
+                    utente.Colore = row["colore"].ToString();
                     utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
                     utenti.Add(utente);
                 }
@@ -317,7 +375,7 @@ namespace Cattedre
         }
         public static void InserisciUtente(ClsUtenteDL utente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -351,8 +409,6 @@ namespace Cattedre
         }
         public static void ModificaUtente(ClsUtenteDL utente, long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -362,17 +418,18 @@ namespace Cattedre
                            SET nome = @nome, 
                                cognome = @cognome, 
                                email = @email, 
-                               password = @password, 
+                               password = CASE WHEN (NULLIF(@password, '') IS NULL) THEN password ELSE @password END,
                                tipoUtente = @tipoUtente,
                                tipoDocente = @tipoDocente,
-                               colore=@colore
+                               colore = @colore
                            WHERE id = @IDutente";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", utente.Nome);
                         cmd.Parameters.AddWithValue("@cognome", utente.Cognome);
                         cmd.Parameters.AddWithValue("@email", utente.Email);
-                        cmd.Parameters.AddWithValue("@password", utente.Password);
+                        cmd.Parameters.AddWithValue("@password", (object)utente.Password ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@tipoUtente", utente.TipoUtente);
                         cmd.Parameters.AddWithValue("@tipoDocente", utente.TipoDocente);
                         cmd.Parameters.AddWithValue("@colore", utente.Colore);
@@ -382,7 +439,6 @@ namespace Cattedre
                         if (righeCoinvolte <= 0)
                             throw new InvalidOperationException("No rows were inserted.");
                     }
-                    conn.Close();
                 }
             }
             catch (Exception ex)
@@ -390,10 +446,9 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
-
         public static void EliminaUtente(long IDutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -419,7 +474,7 @@ namespace Cattedre
         #region Operazioni Crud specifiche
         public static void InserisciTokenUtente(string token, long Idutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -450,7 +505,7 @@ namespace Cattedre
         }
         public static void cancellaTokenUtente(long Idutente)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -482,32 +537,29 @@ namespace Cattedre
         #region Login e logout
         public static bool Login(string email, string password)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
-
             try
             {
-                conn.Open();
-                string sql = "SELECT COUNT(ID) as num_utenti FROM utenti " +
-                             "WHERE email =@email AND password = @password";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@email", email);
-                cmd.Parameters.AddWithValue("@password", password);
-                object result = cmd.ExecuteScalar();
-
-                int UtentiLoggati = 0;
-                if (result != null)
-                    UtentiLoggati = Convert.ToInt32(result);
-
-                conn.Close();
-                if (UtentiLoggati == 1)
-                    return true;
-
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT COUNT(ID) as num_utenti FROM utenti WHERE email = @email AND password = @password";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@email", email);
+                        cmd.Parameters.AddWithValue("@password",ClsUtenteDL.CreateMD5(password));
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                            return Convert.ToInt32(dt.Rows[0]["num_utenti"]) == 1;
+                    }
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante il login: " + ex.Message);
             }
             return false;
         }
@@ -518,35 +570,28 @@ namespace Cattedre
         /// <returns></returns>
         public static bool LoginByemail(string email)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            int UtentiLoggati = 0;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT COUNT(ID) as num_utenti FROM utenti " +
-                                 "WHERE email =@email";
-
+                    string sql = "SELECT COUNT(ID) as num_utenti FROM utenti WHERE email = @email";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@email", email);
-                        object result = cmd.ExecuteScalar();
-
-
-                        if (result != null)
-                            UtentiLoggati = Convert.ToInt32(result);
-
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        if (dt.Rows.Count > 0)
+                            return Convert.ToInt32(dt.Rows[0]["num_utenti"]) == 1;
                     }
                 }
-                if (UtentiLoggati == 1)
-                    return true;
-
-
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Errore durante il login per email: " + ex.Message);
             }
             return false;
         }
@@ -557,9 +602,9 @@ namespace Cattedre
 
         #endregion
         #region filtri
-        public static List<ClsUtenteDL> FiltraUtenti(List<string> parametri, string Filtro)
+        public static List<ClsUtenteDL> FiltraUtenti(Dictionary<string, List<string>> Filtri)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
 
             DataTable ds = new DataTable();
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
@@ -568,7 +613,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = CreaComandoRicerca(Filtro, parametri, conn))
+                    using (MySqlCommand cmd = CreaComandoRicerca(Filtri, conn))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
@@ -586,7 +631,7 @@ namespace Cattedre
                     utente.Cognome = row["cognome"].ToString();
                     utente.Nome = row["nome"].ToString();
                     utente.TipoUtente = row["tipoUtente"].ToString();
-                    //utente.Colore = row["colore"].ToString();
+                    utente.Colore = row["colore"].ToString();
                     utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
                     utenti.Add(utente);
                 }
@@ -598,31 +643,43 @@ namespace Cattedre
             }
             return utenti;
         }
-        public static MySqlCommand CreaComandoRicerca(string Filtro, List<string> parametri, MySqlConnection conn)
+        public static MySqlCommand CreaComandoRicerca(Dictionary<string, List<string>> filtri, MySqlConnection conn)
         {
-            string sql = "SELECT ID, nome, cognome, email, password, tipoutente, tipodocente, colore FROM utenti ";
-            MySqlCommand cmd = new MySqlCommand("", conn);
-            switch (Filtro)
+            string sql = "SELECT u.ID, u.nome, u.cognome, email, password, tipoutente, tipodocente, colore FROM utenti u LEFT JOIN contratti c ON u.ID=c.IDutente";
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conn;
+            List<string> condizioni = new List<string>();
+            foreach (var filtro in filtri)
             {
-                case "tipoDocente":
-                    sql += "WHERE tipoDocente = @tipoDocente";
-                    cmd.Parameters.AddWithValue("@TipoDocente", parametri[0]);
-                    break;
-                case "tipoUtente":
+                string colonna = filtro.Key;
+                List<string> valori = filtro.Value;
+                if (valori == null || valori.Count == 0)
+                    continue;
+                if (colonna == "CONCAT(cognome,nome)") //se questo valore ricerca per nome e cognome aggiungo una parte di query specifica
+                {
+                    string ricercaspecifica = $"CONCAT(u.cognome,u.nome) LIKE '%{filtro.Value[0]}%' ";
+                    condizioni.Add(ricercaspecifica);
+
+                }else
+                {
                     List<string> orConditions = new List<string>();
-                    for (int i = 0; i < parametri.Count; i++)
+
+                    foreach (var valore in valori)
                     {
-                        orConditions.Add($"tipoUtente = @param{i}");
-                        cmd.Parameters.AddWithValue($"@param{i}", parametri[i]);
+                        orConditions.Add($"{colonna} = {valore}");
                     }
-                    sql += "WHERE " + string.Join(" OR ", orConditions);
-                    break;
-                case "tipoContratto":
-                    // Corretto FORM in FROM e aggiunto parametro
-                    sql = "SELECT u.* FROM utenti u JOIN contratti c ON u.ID = c.IDutente WHERE c.tipoContratto = @param0";
-                    cmd.Parameters.AddWithValue("@param0", parametri[0]);
-                    break;
+                    // Combina valori dello stesso filtro con OR
+                    condizioni.Add("(" + string.Join(" OR ", orConditions) + ")");
+                }
             }
+
+            if (condizioni.Count > 0)
+            {
+                if (condizioni.Any(c => c.Contains("tipoContratto")))
+                    sql = sql.Replace("LEFT JOIN", "JOIN");
+                sql += " WHERE " + string.Join(" AND ", condizioni);
+            }
+
             cmd.CommandText = sql;
             return cmd;
         }
@@ -630,7 +687,7 @@ namespace Cattedre
         #region ricerca
         public static List<ClsUtenteDL> RicercaPerNomeCognome(string _ricerca)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             DataTable dt = new DataTable();
             _ricerca = $"%{_ricerca}%";

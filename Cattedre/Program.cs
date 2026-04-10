@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,11 +8,6 @@ namespace Cattedre
 {
     static class Program
     {
-        public static List<ClsClasseDL> classi = new List<ClsClasseDL>();
-        public static List<ClsClasseDL> Coordinatori = new List<ClsClasseDL>();
-        public static List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
-        public static List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-
         /// <summary>
         /// Punto di ingresso principale dell'applicazione.
         /// </summary>
@@ -22,9 +17,30 @@ namespace Cattedre
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmLogin());
 
-           
+            bool logout = false;
+
+            FrmLogin frmLogin = new FrmLogin();
+            if (frmLogin.ShowDialog() != DialogResult.OK)
+                return;
+
+            while (true)
+            {
+                FrmHome frmHome = new FrmHome(frmLogin.UtenteLoggato);
+                if (frmLogin.FotoProfilo != null)
+                    frmHome.ImpostaFotoProfilo(frmLogin.FotoProfilo);
+
+                frmHome.OnLogout = () => logout = true; // segnale che è stato premuto logout
+                Application.Run(frmHome);
+
+                if (!logout)
+                    break; // chiuso con la X -> esci dall'app
+
+                logout = false;
+                frmLogin = new FrmLogin();
+                if (frmLogin.ShowDialog() != DialogResult.OK)
+                    break; // ha chiuso il login -> esci dall'app
+            }
         }
     }
 }

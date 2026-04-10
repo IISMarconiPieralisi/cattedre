@@ -28,7 +28,8 @@ namespace Cattedre
 
             foreach (ClsDipartimentoDL dipartimento in dipartimenti)
             {
-                ListViewItem lvi = new ListViewItem(dipartimento.Nome);
+                ListViewItem lvi = new ListViewItem(dipartimento.ID.ToString());
+                lvi.SubItems.Add(dipartimento.Nome);
                 lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(dipartimento.IDutente));
                 lvi.Tag = dipartimento.ID;
                 lvDipartimenti.Items.Add(lvi);
@@ -44,8 +45,6 @@ namespace Cattedre
             {
                 try
                 {
-                    if (dipartimenti.Exists(p => p.IDutente == frmDipartimento._dipartimento.IDutente))
-                        throw new Exception("Coordinatore già impegnato in un dipartimento");
                     ClsDipartimentoBL.InserisciDipartimento(frmDipartimento._dipartimento);
                 }catch(Exception ex)
                 {
@@ -87,9 +86,8 @@ namespace Cattedre
                     try
                     {
                         ClsDipartimentoBL.ModificaDipartimento(frmDipartimento._dipartimento);
-                        if (dipartimenti.Exists(p => p.IDutente == frmDipartimento._dipartimento.IDutente))
-                            throw new Exception("Coordinatore già impegnato in un dipartimento");
-                    }catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         MessageBox.Show($"Errore:\n{ex.Message}; \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
@@ -105,6 +103,20 @@ namespace Cattedre
             dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
             CaricaListView();
             _coordinatori = ClsUtenteBL.CaricaCoordinatoriDipartimenti();
+        }
+
+        private void lvDipartimenti_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(lvDipartimenti.SelectedIndices.Count==1)
+            if(e.KeyCode==Keys.Enter)
+            {
+                    e.SuppressKeyPress = true;
+                    btModifica_Click(null, null);
+            }
+            else if (e.KeyCode==Keys.Delete)
+            {
+                    btInserisci_Click(null, null);
+            }
         }
     }
 }

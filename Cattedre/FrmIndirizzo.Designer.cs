@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmIndirizzo));
             this.btSalvaIndirizzo = new System.Windows.Forms.Button();
             this.btAnnulla = new System.Windows.Forms.Button();
             this.tbNome = new System.Windows.Forms.TextBox();
@@ -84,6 +85,7 @@
             this.Controls.Add(this.btAnnulla);
             this.Controls.Add(this.tbNome);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmIndirizzo";
             this.Text = "FrmIndirizzo";

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySqlConnector;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace Cattedre
 {
@@ -866,7 +867,42 @@ namespace Cattedre
 
         private void btGeneraWord_Click(object sender, EventArgs e)
         {
-            ClsGenerazioneWord.PreparazioneCreazioneFile(ClsAnnoScolasticoBL.CercaAnnoScolastico(IDannoscolastico),ClsDipartimentoBL.CaricaDipartimento( IDdipartimento), Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+            try
+            {
+                string filePath=string.Empty;
+                //controlli iniziali di errori
+                if (IDannoscolastico <= 0) throw new Exception("Selezionare un Anno scolastico valido");
+                if(IDdipartimento<=0) throw new Exception("Selezionare un dipartimento valido");
+
+                //creazione oggetti IDannoscolastico e dipartimento dai loro ID
+                ClsAnnoScolasticoDL anno=ClsAnnoScolasticoBL.CercaAnnoScolastico(IDannoscolastico);
+                ClsDipartimentoDL dipartimento = ClsDipartimentoBL.CaricaDipartimento(IDdipartimento);
+
+                //gestione percorso file
+                filePath = ClsGenerazioneWord.GestisciPercorsoFile(anno,dipartimento);
+                if (string.IsNullOrEmpty(filePath)) throw new Exception("Seleziona un percorso file per la creazione del .docx");
+
+                //metodo del effettiva creazione del file
+                ClsGenerazioneWord.PreparazioneCreazioneFile(anno,dipartimento,filePath);
+
+                //finistra di successo e richiesta di apertura del file
+                DialogResult dg = MessageBox.Show("File creato con successo, vuoi Aprirlo?", "successo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dg==DialogResult.Yes)
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        FileName = filePath,
+                        UseShellExecute = true 
+                    };
+                    Process.Start(startInfo);
+                }
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Errore durante la compilazione del File: \n{ex.Message}\nRiprovare.", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
         }
     }
 }

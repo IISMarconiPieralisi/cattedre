@@ -34,6 +34,8 @@ namespace Cattedre
             }
         }
 
+        
+
         public static void GeneraCattedreAnnoSuccessivo(int IDdipartimento, int IDannoCorrente, int IDannoSuccessivo)
         {
             DataTable assegnazioni = CaricaDocentiConAssegnazioni(IDdipartimento, IDannoCorrente);
@@ -476,6 +478,48 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
 
+            return ass;
+        }
+        internal static List<ClsAssegnareDL> PopolaAssegnazioniAnnoScolasticoDipartimentoPotenziamento(long IDannoScolastico, long IDdipartimento)
+        {
+            List<ClsAssegnareDL> ass = new List<ClsAssegnareDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT DISTINCT a.ID, a.oreSpeciali, a.IDannoscolastico, a.IDutente, a.IDdisciplina, a.IDclasse " +
+                                 "FROM assegnare a " +
+                                 "JOIN Gestire g ON a.IDdisciplina = g.IDdisciplina " +
+                                 "WHERE a.IDannoscolastico = @IDannoScolastico AND g.IDdipartimento = @IDdipartimento " +
+                                 "AND a.IDclasse IS NULL AND a.oreSpeciali > 0";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                    }
+                }
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsAssegnareDL assegnare = new ClsAssegnareDL();
+                    assegnare.ID = Convert.ToInt32(row["ID"]);
+                    assegnare.OreSpeciali = Convert.ToInt32(row["oreSpeciali"]);
+                    assegnare.IDAnnoScolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDannoscolastico"]);
+                    assegnare.IDUtente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDutente"]);
+                    assegnare.IDDisciplina = (row["IDdisciplina"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplina"]);
+                    assegnare.IDClasse = (row["IDclasse"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDclasse"]);
+                    ass.Add(assegnare);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
             return ass;
         }
         #endregion

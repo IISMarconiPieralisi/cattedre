@@ -126,12 +126,12 @@
             // chAnno
             // 
             this.chAnno.Text = "Anno";
-            this.chAnno.Width = 76;
+            this.chAnno.Width = 70;
             // 
             // chNome
             // 
             this.chNome.Text = "Nome";
-            this.chNome.Width = 127;
+            this.chNome.Width = 150;
             // 
             // chOreLab
             // 

@@ -300,7 +300,7 @@ namespace Cattedre
             // 3. ELIMINAZIONE: Rimuoviamo i record presenti nel DB ma non più nella nuova lista
             foreach (ClsRichiedereDL ric in RichDisciplina)
             {
-                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
+                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina && r.IDutente<=0);
                 if (!ancoraPresente)
                     EliminaRichiesta(ric.ID);
             }

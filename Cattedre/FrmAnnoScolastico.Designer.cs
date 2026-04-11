@@ -43,7 +43,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(51, 118);
+            this.label1.Location = new System.Drawing.Point(12, 117);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(42, 17);
             this.label1.TabIndex = 0;
@@ -63,7 +63,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(21, 72);
+            this.label3.Location = new System.Drawing.Point(12, 72);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(72, 17);
             this.label3.TabIndex = 2;
@@ -82,7 +82,7 @@
             // dtpDataInizio
             // 
             this.dtpDataInizio.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpDataInizio.Location = new System.Drawing.Point(108, 24);
+            this.dtpDataInizio.Location = new System.Drawing.Point(108, 21);
             this.dtpDataInizio.Name = "dtpDataInizio";
             this.dtpDataInizio.Size = new System.Drawing.Size(200, 22);
             this.dtpDataInizio.TabIndex = 0;
@@ -92,7 +92,7 @@
             // dtpDataFine
             // 
             this.dtpDataFine.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpDataFine.Location = new System.Drawing.Point(108, 72);
+            this.dtpDataFine.Location = new System.Drawing.Point(108, 69);
             this.dtpDataFine.Name = "dtpDataFine";
             this.dtpDataFine.Size = new System.Drawing.Size(200, 22);
             this.dtpDataFine.TabIndex = 1;
@@ -103,7 +103,7 @@
             // 
             this.btAnnulla.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btAnnulla.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btAnnulla.Location = new System.Drawing.Point(37, 189);
+            this.btAnnulla.Location = new System.Drawing.Point(12, 182);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btAnnulla.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -172,7 +172,7 @@
             // 
             this.btSalva.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btSalva.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btSalva.Location = new System.Drawing.Point(171, 189);
+            this.btSalva.Location = new System.Drawing.Point(191, 181);
             this.btSalva.Name = "btSalva";
             this.btSalva.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btSalva.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -241,7 +241,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(371, 367);
+            this.ClientSize = new System.Drawing.Size(371, 224);
             this.Controls.Add(this.btAnnulla);
             this.Controls.Add(this.btSalva);
             this.Controls.Add(this.dtpDataFine);

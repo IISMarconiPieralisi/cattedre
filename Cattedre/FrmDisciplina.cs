@@ -22,6 +22,7 @@ namespace Cattedre
         public List<ClsGestireDL> _gestires = new List<ClsGestireDL>();
         public ClsDisciplinaDL _disciplina;
         private int anno = 0;
+        private long _lastDiscSp=0;
         private long _lastTick;
         public FrmDisciplina()
         {
@@ -68,7 +69,11 @@ namespace Cattedre
 
                 _disciplina.OreLaboratorio = (int)nudOreLab.Value;
                 _disciplina.OreTeoria = (int)nudOreTeoria.Value;
-                if (cbDisciplinaSpeciale.Checked) _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text.Trim();
+                if (cbDisciplinaSpeciale.Checked)
+                {
+                    if (string.IsNullOrEmpty(tbDisciplinaSpeciale.Text)) throw new Exception("Inserire la descrizione della disciplina speciale");
+                    _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text.Trim().ToLower();
+                }
 
                 //Gestione Liste Collegate (ClsAppartenere) -
                 foreach (var item in clbIndirizzi.CheckedItems)
@@ -556,9 +561,18 @@ namespace Cattedre
             {
                 pnRB.Enabled = false;
                 cbDisciplinaSucessiva.Enabled = false;
+                cbDisciplinaSpeciale.Enabled = true;
+            }else
+            {
+                pnRB.Enabled = true;
+                cbDisciplinaSpeciale.Enabled = true;
+                tbDisciplinaSpeciale.Enabled = false;
+                tbDisciplinaSpeciale.Text = string.Empty;
             }
 
         }
         #endregion
+
+        
     }
 }

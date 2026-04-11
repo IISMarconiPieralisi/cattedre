@@ -50,7 +50,6 @@
             this.clbDipartimenti = new System.Windows.Forms.CheckedListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.lblAnnoSuc = new System.Windows.Forms.Label();
-            this.frmDisciplinaBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label6 = new System.Windows.Forms.Label();
             this.clbCdcs = new System.Windows.Forms.CheckedListBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -60,11 +59,12 @@
             this.tbDisciplinaSpeciale = new Krypton.Toolkit.KryptonTextBox();
             this.cbDisciplinaSpeciale = new Krypton.Toolkit.KryptonCheckBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.frmDisciplinaBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.nudOreTeoria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudOreLab)).BeginInit();
             this.pnRB.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // label4
@@ -314,10 +314,6 @@
             this.lblAnnoSuc.TabIndex = 40;
             this.lblAnnoSuc.Text = "5°";
             // 
-            // frmDisciplinaBindingSource
-            // 
-            this.frmDisciplinaBindingSource.DataSource = typeof(Cattedre.FrmDisciplina);
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -518,6 +514,7 @@
             // 
             this.tbDisciplinaSpeciale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbDisciplinaSpeciale.Enabled = false;
             this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 721);
             this.tbDisciplinaSpeciale.Name = "tbDisciplinaSpeciale";
             this.tbDisciplinaSpeciale.Size = new System.Drawing.Size(243, 29);
@@ -553,6 +550,10 @@
             this.label10.Size = new System.Drawing.Size(255, 32);
             this.label10.TabIndex = 46;
             this.label10.Text = "Gestisci disciplina:";
+            // 
+            // frmDisciplinaBindingSource
+            // 
+            this.frmDisciplinaBindingSource.DataSource = typeof(Cattedre.FrmDisciplina);
             // 
             // FrmDisciplina
             // 
@@ -590,8 +591,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudOreLab)).EndInit();
             this.pnRB.ResumeLayout(false);
             this.pnRB.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

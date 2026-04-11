@@ -272,8 +272,8 @@
             this.btModifica.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btModifica.Location = new System.Drawing.Point(1255, 122);
             this.btModifica.Name = "btModifica";
-            this.btModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
-            this.btModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
+            this.btModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.OrangeRed;
+            this.btModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.DarkOrange;
             this.btModifica.OverrideDefault.Back.ColorAngle = 45F;
             this.btModifica.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
             this.btModifica.OverrideDefault.Border.Color2 = System.Drawing.Color.DarkRed;
@@ -285,8 +285,8 @@
             this.btModifica.OverrideDefault.Border.Rounding = 20F;
             this.btModifica.OverrideDefault.Border.Width = 1;
             this.btModifica.Size = new System.Drawing.Size(109, 36);
-            this.btModifica.StateCommon.Back.Color1 = System.Drawing.Color.Red;
-            this.btModifica.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btModifica.StateCommon.Back.Color1 = System.Drawing.Color.Orange;
+            this.btModifica.StateCommon.Back.Color2 = System.Drawing.Color.DarkOrange;
             this.btModifica.StateCommon.Back.ColorAngle = 45F;
             this.btModifica.StateCommon.Border.Color1 = System.Drawing.Color.Red;
             this.btModifica.StateCommon.Border.Color2 = System.Drawing.Color.DarkRed;

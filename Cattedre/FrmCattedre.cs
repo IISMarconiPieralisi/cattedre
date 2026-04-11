@@ -253,9 +253,9 @@ namespace Cattedre
                     lblTotaleTeorici = new Label();
                     lblTotaleTeorici.AutoSize = true;
                     lblTotaleTeorici.Font = new Font(lblTotaleTeorici.Font, FontStyle.Bold);
-                    lblTotaleTeorici.Text = "Totale: 0";
+                    lblTotaleTeorici.Text = "0";
                     lblTotaleTeorici.Name = "lblTotaleTeorici";
-                    lblTotaleTeorici.Location = new Point(8, y + 5);
+                    lblTotaleTeorici.Location = new Point(367, y + 15);
                     pnlOreDoc.Controls.Add(lblTotaleTeorici);
                     y += lblTotaleTeorici.Height + 15;
 
@@ -323,9 +323,9 @@ namespace Cattedre
             lblTotalePratici = new Label();
             lblTotalePratici.AutoSize = true;
             lblTotalePratici.Font = new Font(lblTotalePratici.Font, FontStyle.Bold);
-            lblTotalePratici.Text = "Totale: 0";
+            lblTotalePratici.Text = "0";
             lblTotalePratici.Name = "lblTotalePratici";
-            lblTotalePratici.Location = new Point(8, y + 5);
+            lblTotalePratici.Location = new Point(367, y + 5);
             pnlOreDoc.Controls.Add(lblTotalePratici);
 
             AggiornaOreEffettive();
@@ -439,8 +439,8 @@ namespace Cattedre
                         totPratici += tot;
                 }
 
-                if (lblTotTeo != null) lblTotTeo.Text = $"Totale: {totTeorici}";
-                if (lblTotPra != null) lblTotPra.Text = $"Totale: {totPratici}";
+                if (lblTotTeo != null) lblTotTeo.Text = $"{totTeorici}";
+                if (lblTotPra != null) lblTotPra.Text = $"{totPratici}";
             }
         }
 

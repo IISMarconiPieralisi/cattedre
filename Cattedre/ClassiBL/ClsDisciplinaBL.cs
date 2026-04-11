@@ -139,7 +139,7 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM discipline 
-                           WHERE nome LIKE '%otenziamento%' 
+                           WHERE disciplinaSpeciale LIKE '%otenziamento%' 
                            LIMIT 1";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {

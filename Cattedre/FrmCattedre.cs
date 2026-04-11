@@ -355,6 +355,9 @@ namespace Cattedre
                 })
                 .ToList();
 
+            Label lblTotaleTeorici = null;
+            Label lblTotalePratici = null;
+
             // ── BLOCCO TEORICI ──────────────────────────────────────────
             if (docentiTeorici.Any())
             {
@@ -391,6 +394,15 @@ namespace Cattedre
                     dictDocenti[doc.ID] = uc;
                     y += uc.Height + 2;
                 }
+
+                lblTotaleTeorici = new Label();
+                lblTotaleTeorici.AutoSize = true;
+                lblTotaleTeorici.Font = new Font(lblTotaleTeorici.Font, FontStyle.Bold);
+                lblTotaleTeorici.Text = "0";
+                lblTotaleTeorici.Name = "lblTotaleTeorici";
+                lblTotaleTeorici.Location = new Point(367, y + 5);
+                pnlOreDoc.Controls.Add(lblTotaleTeorici);
+                y += lblTotaleTeorici.Height + 15;
             }
 
             // ── BLOCCO PRATICI ──────────────────────────────────────────
@@ -415,7 +427,7 @@ namespace Cattedre
                         AutoSize = true,
                         Font = new Font(Font, FontStyle.Bold),
                         Text = "Pratici",
-                        Location = new Point(8, y)
+                        Location = new Point(300, y)
                     };
                     pnlOreDoc.Controls.Add(lblFallback);
                     y += lblFallback.Height + 4;
@@ -429,6 +441,14 @@ namespace Cattedre
                     dictDocenti[doc.ID] = uc;
                     y += uc.Height + 2;
                 }
+
+                lblTotalePratici = new Label();
+                lblTotalePratici.AutoSize = true;
+                lblTotalePratici.Font = new Font(lblTotalePratici.Font, FontStyle.Bold);
+                lblTotalePratici.Text = "0";
+                lblTotalePratici.Name = "lblTotalePratici";
+                lblTotalePratici.Location = new Point(367, y + 5);
+                pnlOreDoc.Controls.Add(lblTotalePratici);
             }
 
             AggiornaOreEffettive();

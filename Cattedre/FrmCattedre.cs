@@ -326,7 +326,7 @@ namespace Cattedre
             lblTotalePratici.Font = new Font(lblTotalePratici.Font, FontStyle.Bold);
             lblTotalePratici.Text = "0";
             lblTotalePratici.Name = "lblTotalePratici";
-            lblTotalePratici.Location = new Point(367, y + 5);
+            lblTotalePratici.Location = new Point(367, y + 15);
             pnlOreDoc.Controls.Add(lblTotalePratici);
 
             AggiornaOreEffettive();

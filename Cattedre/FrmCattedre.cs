@@ -402,6 +402,23 @@ namespace Cattedre
                 lblTotaleTeorici.Name = "lblTotaleTeorici";
                 lblTotaleTeorici.Location = new Point(367, y + 5);
                 pnlOreDoc.Controls.Add(lblTotaleTeorici);
+                
+
+                Label lblTotPotTeorici = new Label();
+                lblTotPotTeorici.AutoSize = true;
+                lblTotPotTeorici.Font = new Font(lblTotPotTeorici.Font, FontStyle.Bold);
+                lblTotPotTeorici.Text = "0";
+                lblTotPotTeorici.Name = "lblTotalePotTeorici";
+                lblTotPotTeorici.Location = new Point(305, y + 5);
+                pnlOreDoc.Controls.Add(lblTotPotTeorici);
+
+                Label lblTotLabelTeorici = new Label();
+                lblTotLabelTeorici.AutoSize = true;
+                lblTotLabelTeorici.Font = new Font(lblTotLabelTeorici.Font, FontStyle.Bold);
+                lblTotLabelTeorici.Text = "Totale:";
+                lblTotLabelTeorici.Location = new Point(213, y + 5);
+                pnlOreDoc.Controls.Add(lblTotLabelTeorici);
+
                 y += lblTotaleTeorici.Height + 15;
             }
 
@@ -416,7 +433,7 @@ namespace Cattedre
                 {
                     Panel headerTeorici = CreaPanelHeaderCDC(cdcPratici, IDannoscolastico);
                     int offset = headerTeorici.Tag is int o ? o : 0;
-                    headerTeorici.Location = new Point(offset, y);  // ← spostato a destra
+                    headerTeorici.Location = new Point(offset, y);
                     pnlOreDoc.Controls.Add(headerTeorici);
                     y += headerTeorici.Height + 4;
                 }
@@ -449,6 +466,21 @@ namespace Cattedre
                 lblTotalePratici.Name = "lblTotalePratici";
                 lblTotalePratici.Location = new Point(367, y + 5);
                 pnlOreDoc.Controls.Add(lblTotalePratici);
+
+                Label lblTotPotPratici = new Label();
+                lblTotPotPratici.AutoSize = true;
+                lblTotPotPratici.Font = new Font(lblTotPotPratici.Font, FontStyle.Bold);
+                lblTotPotPratici.Text = "0";
+                lblTotPotPratici.Name = "lblTotalePotPratici";
+                lblTotPotPratici.Location = new Point(305, y + 5);
+                pnlOreDoc.Controls.Add(lblTotPotPratici);
+
+                Label lblTotLabelPratici = new Label();
+                lblTotLabelPratici.AutoSize = true;
+                lblTotLabelPratici.Font = new Font(lblTotLabelPratici.Font, FontStyle.Bold);
+                lblTotLabelPratici.Text = "Totale:";
+                lblTotLabelPratici.Location = new Point(213, y + 5);
+                pnlOreDoc.Controls.Add(lblTotLabelPratici);
             }
 
             AggiornaOreEffettive();
@@ -594,10 +626,13 @@ namespace Cattedre
             }
             Label lblTotTeo = pnlOreDoc.Controls.Find("lblTotaleTeorici", false).FirstOrDefault() as Label;
             Label lblTotPra = pnlOreDoc.Controls.Find("lblTotalePratici", false).FirstOrDefault() as Label;
+            Label lblTotPotTeo = pnlOreDoc.Controls.Find("lblTotalePotTeorici", false).FirstOrDefault() as Label;
+            Label lblTotPotPra = pnlOreDoc.Controls.Find("lblTotalePotPratici", false).FirstOrDefault() as Label;
 
             if (lblTotTeo != null || lblTotPra != null)
             {
                 int totTeorici = 0, totPratici = 0;
+                int totPotTeorici = 0, totPotPratici = 0;
 
                 foreach (var kvp in dictDocenti)
                 {
@@ -605,15 +640,25 @@ namespace Cattedre
                     bool richiedeLaurea = cdcs.Any(c => c.AbilitazioniRichieste != null &&
                                                         c.AbilitazioniRichieste.ToLower().Contains("laurea"));
                     int tot = int.Parse(kvp.Value.lblOreTotali.Text);
+                    int pot = (int)kvp.Value.nudOrePot.Value;
 
                     if (richiedeLaurea)
+                    {
                         totTeorici += tot;
+                        totPotTeorici += pot;
+                    }
+
                     else
+                    {
                         totPratici += tot;
+                        totPotPratici += pot;
+                    }
                 }
 
                 if (lblTotTeo != null) lblTotTeo.Text = $"{totTeorici}";
                 if (lblTotPra != null) lblTotPra.Text = $"{totPratici}";
+                if (lblTotPotTeo != null) lblTotPotTeo.Text = $"{totPotTeorici}";
+                if (lblTotPotPra != null) lblTotPotPra.Text = $"{totPotPratici}";
             }
         }
 

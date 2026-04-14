@@ -59,9 +59,9 @@
             this.cbAnnoClasse.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAnnoClasse.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbAnnoClasse.FormattingEnabled = true;
-            this.cbAnnoClasse.Location = new System.Drawing.Point(23, 67);
+            this.cbAnnoClasse.Location = new System.Drawing.Point(92, 54);
             this.cbAnnoClasse.Name = "cbAnnoClasse";
-            this.cbAnnoClasse.Size = new System.Drawing.Size(83, 25);
+            this.cbAnnoClasse.Size = new System.Drawing.Size(63, 25);
             this.cbAnnoClasse.TabIndex = 5;
             this.cbAnnoClasse.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAnnoClasse_KeyDown);
             // 
@@ -69,11 +69,11 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(20, 48);
+            this.label1.Location = new System.Drawing.Point(41, 58);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(107, 16);
+            this.label1.Size = new System.Drawing.Size(45, 16);
             this.label1.TabIndex = 19;
-            this.label1.Text = "Filtra per anno:";
+            this.label1.Text = "anno:";
             // 
             // lvClassi
             // 
@@ -93,9 +93,9 @@
             this.lvClassi.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvClassi.FullRowSelect = true;
             this.lvClassi.HideSelection = false;
-            this.lvClassi.Location = new System.Drawing.Point(24, 102);
+            this.lvClassi.Location = new System.Drawing.Point(44, 102);
             this.lvClassi.Name = "lvClassi";
-            this.lvClassi.Size = new System.Drawing.Size(1378, 437);
+            this.lvClassi.Size = new System.Drawing.Size(1358, 459);
             this.lvClassi.TabIndex = 0;
             this.lvClassi.UseCompatibleStateImageBehavior = false;
             this.lvClassi.View = System.Windows.Forms.View.Details;
@@ -104,7 +104,7 @@
             // chID
             // 
             this.chID.Text = "ID";
-            this.chID.Width = 50;
+            this.chID.Width = 28;
             // 
             // chSigla
             // 
@@ -125,7 +125,7 @@
             // 
             this.chClasseArticolataCon.DisplayIndex = 5;
             this.chClasseArticolataCon.Text = "Articolata Con";
-            this.chClasseArticolataCon.Width = 83;
+            this.chClasseArticolataCon.Width = 126;
             // 
             // chNomeCoordinatore
             // 
@@ -156,7 +156,7 @@
             this.cbIndirizzi.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbIndirizzi.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbIndirizzi.FormattingEnabled = true;
-            this.cbIndirizzi.Location = new System.Drawing.Point(216, 67);
+            this.cbIndirizzi.Location = new System.Drawing.Point(251, 54);
             this.cbIndirizzi.Name = "cbIndirizzi";
             this.cbIndirizzi.Size = new System.Drawing.Size(181, 25);
             this.cbIndirizzi.TabIndex = 6;
@@ -166,17 +166,17 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(213, 47);
+            this.label2.Location = new System.Drawing.Point(183, 58);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(124, 16);
+            this.label2.Size = new System.Drawing.Size(62, 16);
             this.label2.TabIndex = 22;
-            this.label2.Text = "Filtra per Indirizzi:";
+            this.label2.Text = "Indirizzi:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(486, 58);
+            this.label3.Location = new System.Drawing.Point(515, 58);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(176, 16);
             this.label3.TabIndex = 25;
@@ -189,19 +189,19 @@
             this.tplAnniScolastici.ColumnCount = 2;
             this.tplAnniScolastici.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.45055F));
             this.tplAnniScolastici.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.54945F));
-            this.tplAnniScolastici.Location = new System.Drawing.Point(668, 47);
+            this.tplAnniScolastici.Location = new System.Drawing.Point(697, 48);
             this.tplAnniScolastici.Name = "tplAnniScolastici";
             this.tplAnniScolastici.RowCount = 1;
             this.tplAnniScolastici.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tplAnniScolastici.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tplAnniScolastici.Size = new System.Drawing.Size(229, 36);
+            this.tplAnniScolastici.Size = new System.Drawing.Size(462, 36);
             this.tplAnniScolastici.TabIndex = 7;
             // 
             // btRipristina
             // 
             this.btRipristina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btRipristina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btRipristina.Location = new System.Drawing.Point(1129, 54);
+            this.btRipristina.Location = new System.Drawing.Point(1180, 50);
             this.btRipristina.Name = "btRipristina";
             this.btRipristina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btRipristina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -215,7 +215,7 @@
             this.btRipristina.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btRipristina.OverrideDefault.Border.Rounding = 20F;
             this.btRipristina.OverrideDefault.Border.Width = 1;
-            this.btRipristina.Size = new System.Drawing.Size(96, 32);
+            this.btRipristina.Size = new System.Drawing.Size(109, 32);
             this.btRipristina.StateCommon.Back.Color1 = System.Drawing.Color.Red;
             this.btRipristina.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
             this.btRipristina.StateCommon.Back.ColorAngle = 45F;
@@ -270,7 +270,7 @@
             // 
             this.brModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.brModifica.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.brModifica.Location = new System.Drawing.Point(1408, 197);
+            this.brModifica.Location = new System.Drawing.Point(1408, 189);
             this.brModifica.Name = "brModifica";
             this.brModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.brModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
@@ -339,7 +339,7 @@
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btElimina.Location = new System.Drawing.Point(1408, 260);
+            this.btElimina.Location = new System.Drawing.Point(1408, 240);
             this.btElimina.Name = "btElimina";
             this.btElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -477,7 +477,7 @@
             // 
             this.btCerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btCerca.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btCerca.Location = new System.Drawing.Point(1038, 54);
+            this.btCerca.Location = new System.Drawing.Point(1408, 50);
             this.btCerca.Name = "btCerca";
             this.btCerca.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btCerca.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -491,7 +491,7 @@
             this.btCerca.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btCerca.OverrideDefault.Border.Rounding = 20F;
             this.btCerca.OverrideDefault.Border.Width = 1;
-            this.btCerca.Size = new System.Drawing.Size(85, 32);
+            this.btCerca.Size = new System.Drawing.Size(109, 32);
             this.btCerca.StateCommon.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btCerca.StateCommon.Back.Color2 = System.Drawing.Color.RoyalBlue;
             this.btCerca.StateCommon.Back.ColorAngle = 45F;
@@ -546,7 +546,7 @@
             // 
             this.btClasseSuccessiva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btClasseSuccessiva.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btClasseSuccessiva.Location = new System.Drawing.Point(1408, 324);
+            this.btClasseSuccessiva.Location = new System.Drawing.Point(1408, 292);
             this.btClasseSuccessiva.Name = "btClasseSuccessiva";
             this.btClasseSuccessiva.OverrideDefault.Back.Color1 = System.Drawing.Color.Purple;
             this.btClasseSuccessiva.OverrideDefault.Back.Color2 = System.Drawing.Color.BlueViolet;
@@ -608,14 +608,14 @@
             this.btClasseSuccessiva.StateTracking.Border.Width = 1;
             this.btClasseSuccessiva.TabIndex = 50;
             this.btClasseSuccessiva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
-            this.btClasseSuccessiva.Values.Text = "Crea classi \r\nsuccessive";
+            this.btClasseSuccessiva.Values.Text = "Crea classe \r\nsuccessive";
             this.btClasseSuccessiva.Click += new System.EventHandler(this.btClasseSuccessiva_Click);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 9);
+            this.label4.Location = new System.Drawing.Point(40, 12);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(73, 23);
             this.label4.TabIndex = 51;
@@ -625,7 +625,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1529, 519);
+            this.ClientSize = new System.Drawing.Size(1529, 573);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btClasseSuccessiva);
             this.Controls.Add(this.btCerca);

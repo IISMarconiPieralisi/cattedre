@@ -63,18 +63,17 @@
             this.cbDipartimenti.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDipartimenti.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDipartimenti.FormattingEnabled = true;
-            this.cbDipartimenti.Location = new System.Drawing.Point(116, 53);
+            this.cbDipartimenti.Location = new System.Drawing.Point(137, 51);
             this.cbDipartimenti.Name = "cbDipartimenti";
-            this.cbDipartimenti.Size = new System.Drawing.Size(237, 25);
+            this.cbDipartimenti.Size = new System.Drawing.Size(233, 25);
             this.cbDipartimenti.TabIndex = 5;
-            this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.cbDipartimenti_SelectedIndexChanged);
             this.cbDipartimenti.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDipartimenti_KeyDown);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(14, 56);
+            this.label1.Location = new System.Drawing.Point(32, 56);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(96, 16);
             this.label1.TabIndex = 26;
@@ -98,9 +97,9 @@
             this.lvDiscipline.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvDiscipline.FullRowSelect = true;
             this.lvDiscipline.HideSelection = false;
-            this.lvDiscipline.Location = new System.Drawing.Point(17, 98);
+            this.lvDiscipline.Location = new System.Drawing.Point(35, 98);
             this.lvDiscipline.Name = "lvDiscipline";
-            this.lvDiscipline.Size = new System.Drawing.Size(1221, 314);
+            this.lvDiscipline.Size = new System.Drawing.Size(1248, 570);
             this.lvDiscipline.TabIndex = 1;
             this.lvDiscipline.UseCompatibleStateImageBehavior = false;
             this.lvDiscipline.View = System.Windows.Forms.View.Details;
@@ -157,7 +156,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(592, 53);
+            this.label2.Location = new System.Drawing.Point(669, 54);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 16);
             this.label2.TabIndex = 29;
@@ -171,9 +170,9 @@
             this.gbAnni.Controls.Add(this.rbAnno2);
             this.gbAnni.Controls.Add(this.rbAnno1);
             this.gbAnni.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbAnni.Location = new System.Drawing.Point(375, 38);
+            this.gbAnni.Location = new System.Drawing.Point(418, 38);
             this.gbAnni.Name = "gbAnni";
-            this.gbAnni.Size = new System.Drawing.Size(200, 43);
+            this.gbAnni.Size = new System.Drawing.Size(245, 43);
             this.gbAnni.TabIndex = 6;
             this.gbAnni.TabStop = false;
             this.gbAnni.Text = "Anno";
@@ -181,60 +180,65 @@
             // rbAnno5
             // 
             this.rbAnno5.AutoSize = true;
-            this.rbAnno5.Location = new System.Drawing.Point(155, 17);
+            this.rbAnno5.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbAnno5.Location = new System.Drawing.Point(202, 16);
             this.rbAnno5.Name = "rbAnno5";
-            this.rbAnno5.Size = new System.Drawing.Size(33, 20);
+            this.rbAnno5.Size = new System.Drawing.Size(38, 21);
             this.rbAnno5.TabIndex = 4;
             this.rbAnno5.TabStop = true;
-            this.rbAnno5.Text = "5";
+            this.rbAnno5.Text = "5°";
             this.rbAnno5.UseVisualStyleBackColor = true;
             this.rbAnno5.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbAnni_KeyDown);
             // 
             // rbAnno4
             // 
             this.rbAnno4.AutoSize = true;
-            this.rbAnno4.Location = new System.Drawing.Point(118, 17);
+            this.rbAnno4.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbAnno4.Location = new System.Drawing.Point(153, 16);
             this.rbAnno4.Name = "rbAnno4";
-            this.rbAnno4.Size = new System.Drawing.Size(33, 20);
+            this.rbAnno4.Size = new System.Drawing.Size(38, 21);
             this.rbAnno4.TabIndex = 3;
             this.rbAnno4.TabStop = true;
-            this.rbAnno4.Text = "4";
+            this.rbAnno4.Text = "4°";
             this.rbAnno4.UseVisualStyleBackColor = true;
             this.rbAnno4.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbAnni_KeyDown);
             // 
             // rbAnno3
             // 
             this.rbAnno3.AutoSize = true;
-            this.rbAnno3.Location = new System.Drawing.Point(81, 17);
+            this.rbAnno3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbAnno3.Location = new System.Drawing.Point(104, 16);
             this.rbAnno3.Name = "rbAnno3";
-            this.rbAnno3.Size = new System.Drawing.Size(33, 20);
+            this.rbAnno3.Size = new System.Drawing.Size(38, 21);
             this.rbAnno3.TabIndex = 2;
             this.rbAnno3.TabStop = true;
-            this.rbAnno3.Text = "3";
+            this.rbAnno3.Text = "3°";
             this.rbAnno3.UseVisualStyleBackColor = true;
             this.rbAnno3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbAnni_KeyDown);
             // 
             // rbAnno2
             // 
             this.rbAnno2.AutoSize = true;
-            this.rbAnno2.Location = new System.Drawing.Point(44, 17);
+            this.rbAnno2.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbAnno2.Location = new System.Drawing.Point(55, 16);
             this.rbAnno2.Name = "rbAnno2";
-            this.rbAnno2.Size = new System.Drawing.Size(33, 20);
+            this.rbAnno2.Size = new System.Drawing.Size(38, 21);
             this.rbAnno2.TabIndex = 1;
             this.rbAnno2.TabStop = true;
-            this.rbAnno2.Text = "2";
+            this.rbAnno2.Text = "2°";
             this.rbAnno2.UseVisualStyleBackColor = true;
             this.rbAnno2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbAnni_KeyDown);
             // 
             // rbAnno1
             // 
             this.rbAnno1.AutoSize = true;
-            this.rbAnno1.Location = new System.Drawing.Point(7, 17);
+            this.rbAnno1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbAnno1.Location = new System.Drawing.Point(6, 16);
             this.rbAnno1.Name = "rbAnno1";
-            this.rbAnno1.Size = new System.Drawing.Size(33, 20);
+            this.rbAnno1.Size = new System.Drawing.Size(38, 21);
             this.rbAnno1.TabIndex = 0;
             this.rbAnno1.TabStop = true;
-            this.rbAnno1.Text = "1";
+            this.rbAnno1.Text = "1°";
             this.rbAnno1.UseVisualStyleBackColor = true;
             this.rbAnno1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbAnni_KeyDown);
             // 
@@ -242,7 +246,7 @@
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btElimina.Location = new System.Drawing.Point(1260, 201);
+            this.btElimina.Location = new System.Drawing.Point(1298, 226);
             this.btElimina.Name = "btElimina";
             this.btElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -311,7 +315,7 @@
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btInserisci.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btInserisci.Location = new System.Drawing.Point(1260, 98);
+            this.btInserisci.Location = new System.Drawing.Point(1298, 123);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btInserisci.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -378,9 +382,11 @@
             // 
             // tbDisciplina
             // 
-            this.tbDisciplina.Location = new System.Drawing.Point(675, 49);
+            this.tbDisciplina.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbDisciplina.Location = new System.Drawing.Point(768, 48);
             this.tbDisciplina.Name = "tbDisciplina";
-            this.tbDisciplina.Size = new System.Drawing.Size(132, 29);
+            this.tbDisciplina.Size = new System.Drawing.Size(162, 29);
             this.tbDisciplina.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbDisciplina.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbDisciplina.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -394,12 +400,13 @@
             this.tbDisciplina.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbDisciplina.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.tbDisciplina.TabIndex = 37;
+            this.tbDisciplina.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbDisciplina_KeyDown);
             // 
             // btModifica
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btModifica.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btModifica.Location = new System.Drawing.Point(1260, 150);
+            this.btModifica.Location = new System.Drawing.Point(1298, 175);
             this.btModifica.Name = "btModifica";
             this.btModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
@@ -468,7 +475,7 @@
             // 
             this.btCerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btCerca.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btCerca.Location = new System.Drawing.Point(1129, 49);
+            this.btCerca.Location = new System.Drawing.Point(1298, 46);
             this.btCerca.Name = "btCerca";
             this.btCerca.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btCerca.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -535,8 +542,9 @@
             // 
             // btPulisciCb
             // 
+            this.btPulisciCb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btPulisciCb.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btPulisciCb.Location = new System.Drawing.Point(813, 49);
+            this.btPulisciCb.Location = new System.Drawing.Point(955, 46);
             this.btPulisciCb.Name = "btPulisciCb";
             this.btPulisciCb.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btPulisciCb.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -550,7 +558,7 @@
             this.btPulisciCb.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btPulisciCb.OverrideDefault.Border.Rounding = 20F;
             this.btPulisciCb.OverrideDefault.Border.Width = 1;
-            this.btPulisciCb.Size = new System.Drawing.Size(90, 32);
+            this.btPulisciCb.Size = new System.Drawing.Size(109, 32);
             this.btPulisciCb.StateCommon.Back.Color1 = System.Drawing.Color.Red;
             this.btPulisciCb.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
             this.btPulisciCb.StateCommon.Back.ColorAngle = 45F;
@@ -605,7 +613,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 9);
+            this.label3.Location = new System.Drawing.Point(31, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(110, 23);
             this.label3.TabIndex = 45;
@@ -615,7 +623,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1393, 414);
+            this.ClientSize = new System.Drawing.Size(1414, 689);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btCerca);
             this.Controls.Add(this.btPulisciCb);

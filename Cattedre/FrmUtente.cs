@@ -867,6 +867,17 @@ namespace Cattedre
             if (dtpDataFine.Value <= dtpDataInizio.Value)
                 dtpDataFine.Value = dtpDataInizio.Value.AddDays(1);
         }
+
+        private void tbNomativi_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(tbCognome.Text) && !string.IsNullOrEmpty(tbNome.Text))
+                cbAutoEmail.Enabled = true;
+            else
+            {
+                cbAutoEmail.Enabled = false;
+                cbAutoEmail.Checked = false;
+            }
+        }
     }
     #endregion
 

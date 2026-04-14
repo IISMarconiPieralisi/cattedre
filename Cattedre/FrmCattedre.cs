@@ -389,7 +389,7 @@ namespace Cattedre
 
                 foreach (var doc in docentiTeorici)
                 {
-                    ucOreDoc uc = CreaUcOreDoc(doc, IDannoscolastico);
+                    ucOreDoc uc = CreaUcOreDoc(doc, IDannoscolastico, cacheCDC);
                     uc.Location = new Point(0, y);
                     pnlOreDoc.Controls.Add(uc);
                     dictDocenti[doc.ID] = uc;
@@ -453,7 +453,7 @@ namespace Cattedre
 
                 foreach (var doc in docentiPratici)
                 {
-                    ucOreDoc uc = CreaUcOreDoc(doc, IDannoscolastico);
+                    ucOreDoc uc = CreaUcOreDoc(doc, IDannoscolastico, cacheCDC);
                     uc.Location = new Point(0, y);
                     pnlOreDoc.Controls.Add(uc);
                     dictDocenti[doc.ID] = uc;
@@ -489,7 +489,7 @@ namespace Cattedre
         }
 
         // ── METODO HELPER: crea e configura un ucOreDoc per un docente ──
-        private ucOreDoc CreaUcOreDoc(ClsUtenteDL doc, long IDannoscolastico)
+        private ucOreDoc CreaUcOreDoc(ClsUtenteDL doc, long IDannoscolastico, Dictionary<long, List<ClsClasseDiConcorsoDL>> cacheCDC)
         {
             ucOreDoc uc = new ucOreDoc();
 
@@ -516,8 +516,14 @@ namespace Cattedre
             .ToList();
             uc.CDCPotenziamento = cdcPotenziamento;
 
+            List<ClsClasseDiConcorsoDL> cdcDocente = cacheCDC[doc.ID];
+
+            bool docenteAbilitatoAlPotenziamento = cdcDocente.Any(cdcDoc =>
+            cdcPotenziamento.Any(cdcPot => cdcPot.ID == cdcDoc.ID)
+            );
+
             // Disabilita modifica per Preside o Admin
-            if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
+            if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || !docenteAbilitatoAlPotenziamento)
                 uc.nudOrePot.Enabled = false;
 
             // Evento aggiornamento ore potenziamento

@@ -11,12 +11,10 @@ namespace Cattedre
 {
     public static class ClsAssegnareBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
         #region GestioneAnnoSuccessivo
         public static bool EsistonoAssegnazioniAnnoSuccessivo(long IDannosuccessivo)
         {
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -103,7 +101,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM assegnare";
@@ -138,7 +136,7 @@ namespace Cattedre
         public static void InserisciAssegnazione(long IDclasse,long IDannoscolastico, long IDdisciplina,long IDutente,
             int oreSpeciali,DateTime dal,DateTime al)
         {
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -164,7 +162,7 @@ namespace Cattedre
         #region GestioneAssegnazioni
         public static bool EsisteAssegnazione(long IDclasse, long IDanno, long IDdisciplina)
         {
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -191,7 +189,7 @@ namespace Cattedre
 
             DataTable dt = new DataTable();
 
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -248,7 +246,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -337,7 +335,7 @@ namespace Cattedre
             DateTime dal = anno.DataInizio;
             DateTime al = anno.DataFine;
 
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             try
             {
                 conn.Open();
@@ -444,7 +442,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM assegnare a " +
@@ -486,7 +484,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT DISTINCT a.ID, a.oreSpeciali, a.IDannoscolastico, a.IDutente, a.IDdisciplina, a.IDclasse " +

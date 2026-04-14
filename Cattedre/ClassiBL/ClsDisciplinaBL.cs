@@ -11,13 +11,12 @@ namespace Cattedre
 {
     public static class ClsDisciplinaBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
         #region rilevamenti specifici
         public static ClsDisciplinaDL CaricaDisciplina(long id)
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM discipline WHERE ID = @id";
@@ -55,7 +54,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT * FROM discipline 
@@ -94,7 +93,7 @@ namespace Cattedre
 
         public static List<ClsDisciplinaDL> CaricaDisciplineDipartimento(int IDdipartimento)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
 
             conn.Open();
@@ -135,7 +134,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID 
@@ -240,7 +239,7 @@ namespace Cattedre
             ClsDisciplinaDL _disciplina = null;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM discipline WHERE ID = @ID";
@@ -277,7 +276,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM discipline 
@@ -338,7 +337,7 @@ namespace Cattedre
 
         public static int MostraOreDocentePratico(long IDdocente)
         {
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -364,7 +363,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT d.* 
@@ -411,7 +410,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = CreaComandoRicerca(iddipartimento,anno,nome, conn))
@@ -486,7 +485,7 @@ namespace Cattedre
         public static void InserisciDisciplina(ClsDisciplinaDL disciplina)
         {
             
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
 
             try
@@ -527,7 +526,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "DELETE FROM discipline WHERE id = @ID";
@@ -550,8 +549,7 @@ namespace Cattedre
         public static void ModificaDisciplina(ClsDisciplinaDL disciplina)
         {
             FrmDisciplina frmDisciplina = new FrmDisciplina();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try
             {

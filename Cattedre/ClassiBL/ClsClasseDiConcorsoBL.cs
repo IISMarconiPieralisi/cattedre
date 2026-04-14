@@ -11,8 +11,6 @@ namespace Cattedre
 {
     public static class ClsClasseDiConcorsoBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
         public static List<ClsClasseDiConcorsoDL> CaricaCdcs()
         {
 
@@ -21,7 +19,7 @@ namespace Cattedre
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
             try
             {
-                MySqlConnection conn = new MySqlConnection(connectionString);
+                MySqlConnection conn = new MySqlConnection(Program.connectionString);
                 conn.Open();
                 string sql = "SELECT * FROM classidiconcorso";
 
@@ -55,7 +53,7 @@ namespace Cattedre
         {
             
 
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -88,7 +86,7 @@ namespace Cattedre
         public static void ModificaCdc(ClsClasseDiConcorsoDL cdc, int indice)
         {
             
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try
             {
@@ -120,7 +118,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "DELETE FROM classidiconcorso WHERE ID = @id ";
@@ -146,7 +144,7 @@ namespace Cattedre
             var risultato = new List<(ClsClasseDiConcorsoDL, string)>();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT c.*, d.nome AS nomeDisciplina FROM classidiconcorso c
@@ -188,7 +186,7 @@ namespace Cattedre
             _ricerca = $"%{_ricerca}%";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID,livello,nome,abilitazioniRichieste

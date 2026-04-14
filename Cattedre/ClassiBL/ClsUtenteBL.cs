@@ -13,15 +13,13 @@ namespace Cattedre
 {
     public static class ClsUtenteBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
         #region rilevamento by Parametes
         public static long RilevaIDutente(string nome, string cognome)
         {
             long IDutente = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID FROM utenti WHERE nome = @nome AND cognome = @cognome LIMIT 1";
@@ -51,7 +49,7 @@ namespace Cattedre
             string risultato = null;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT u.nome, u.cognome FROM utenti u WHERE u.ID = @ID";
@@ -85,7 +83,7 @@ namespace Cattedre
             int risultato = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT IDdipartimento FROM afferire WHERE IDutente = @IDutente";
@@ -113,7 +111,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT token FROM utenti WHERE ID = @id";
@@ -139,7 +137,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -177,7 +175,7 @@ namespace Cattedre
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID, email, cognome, nome, tipoUtente, tipoDocente FROM utenti u WHERE u.tipoUtente = 'C'";
@@ -215,7 +213,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID,email,cognome,nome,tipoUtente,colore,tipoDocente FROM utenti  WHERE tipoUtente ='D' OR tipoUtente='C'";
@@ -256,7 +254,7 @@ namespace Cattedre
             ClsUtenteDL utente = null;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID, email, cognome, nome, tipoUtente, tipoDocente FROM utenti WHERE email = @email";
@@ -294,7 +292,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT u.ID,u.cognome,u.nome,tipoUtente,colore,tipoDocente FROM utenti u
@@ -336,7 +334,7 @@ namespace Cattedre
         public static List<ClsUtenteDL> CaricaUtenti()
         {
             
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             DataTable ds = new DataTable();
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             try
@@ -378,7 +376,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"INSERT INTO utenti (nome, cognome, email, password, tipoutente, tipodocente, colore)
@@ -411,7 +409,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE utenti 
@@ -451,7 +449,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"DELETE FROM utenti WHERE id = @IDutente";
@@ -477,7 +475,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE utenti 
@@ -508,7 +506,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE utenti 
@@ -539,7 +537,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT COUNT(ID) as num_utenti FROM utenti WHERE email = @email AND password = @password";
@@ -572,7 +570,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT COUNT(ID) as num_utenti FROM utenti WHERE email = @email";
@@ -610,7 +608,7 @@ namespace Cattedre
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = CreaComandoRicerca(Filtri, conn))
@@ -693,7 +691,7 @@ namespace Cattedre
             _ricerca = $"%{_ricerca}%";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID,nome, cognome, email, password, tipoutente, tipodocente, colore

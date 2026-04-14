@@ -300,7 +300,8 @@ namespace Cattedre
             // 3. ELIMINAZIONE: Rimuoviamo i record presenti nel DB ma non più nella nuova lista
             foreach (ClsRichiedereDL ric in RichDisciplina)
             {
-                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
+                bool ancoraPresente = RichModifica.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso
+                                                         && r.IDdisciplina == ric.IDdisciplina);
                 if (!ancoraPresente)
                     EliminaRichiesta(ric.ID);
             }
@@ -308,13 +309,10 @@ namespace Cattedre
             // 4. INSERIMENTO: Aggiungiamo i record nuovi
             foreach (ClsRichiedereDL ric in RichModifica)
             {
-                bool esisteGia = RichDisciplina.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso && r.IDdisciplina == ric.IDdisciplina);
-
+                bool esisteGia = RichDisciplina.Any(r => r.IDclassediconcorso == ric.IDclassediconcorso
+                                                      && r.IDdisciplina == ric.IDdisciplina);
                 if (!esisteGia)
-                {
-                    //ric.IDdisciplina = idDisciplina; // Opzionale: assicura la coerenza del dato
                     InserisciRichiedere(ric);
-                }
             }
         }
         public static void EliminaRichiesta(long IDrichiedere)
@@ -394,7 +392,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT IDutente, IDclasseDiConcorso, IDdisciplina 
+                    string sql = @"SELECT ID,IDutente, IDclasseDiConcorso, IDdisciplina 
                            FROM richiedere
                            WHERE IDdisciplina = @IDdisciplina";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -408,6 +406,7 @@ namespace Cattedre
                         foreach (DataRow row in dt.Rows)
                         {
                             ClsRichiedereDL richiedere = new ClsRichiedereDL();
+                            richiedere.ID =Convert.ToInt32( row["ID"]);
                             richiedere.IDutente = (row["IDutente"] == DBNull.Value)?0: Convert.ToInt64(row["IDutente"]);
                             richiedere.IDclassediconcorso = (row["IDclasseDiConcorso"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDclasseDiConcorso"]);
                             richiedere.IDdisciplina = (row["IDdisciplina"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdisciplina"]);

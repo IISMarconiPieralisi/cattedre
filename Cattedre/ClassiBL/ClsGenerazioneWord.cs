@@ -19,14 +19,13 @@ namespace Cattedre
             try
             {
                 List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID, anno.ID);
-                List<ClsAssegnareDL>assegnarePot = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimentoPotenziamento(dipartimento.ID, anno.ID);
                 List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDisciplina(dipartimento.ID);
                 List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
                 List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
                 List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);
 
                
-                GenerateFileWord(anno,dipartimento, cdc, Docenti, assegnare,assegnarePot, discipline, classi, Dotare, filePath);
+                GenerateFileWord(anno,dipartimento, cdc, Docenti, assegnare, discipline, classi, Dotare, filePath);
             }catch(Exception ex)
             {
                 throw new Exception("Errore Durante il Caricamento del file: " + ex.Message);
@@ -35,7 +34,7 @@ namespace Cattedre
         }
 
         public static void GenerateFileWord(ClsAnnoScolasticoDL annoScolastico,ClsDipartimentoDL dipartimento, List<ClsClasseDiConcorsoDL> listClassiConcorso,
-                                            List<ClsUtenteDL> listDocenti,List<ClsAssegnareDL> listAssegnazioni,List<ClsAssegnareDL> listAssegnazioniSpeciali, List<ClsDisciplinaDL> listDiscipline,
+                                            List<ClsUtenteDL> listDocenti,List<ClsAssegnareDL> listAssegnazioni, List<ClsDisciplinaDL> listDiscipline,
                                             List<ClsClasseDL> listClassi,List<ClsDotareDL> listDotare,string outputPath)
         {
             try
@@ -63,8 +62,10 @@ namespace Cattedre
                         //ciclo gli utenti con quella classe di concorso 
                         foreach (ClsUtenteDL docente in DocentiFiltrati)
                         {
-                            var assegnazioneSpeciale = listAssegnazioniSpeciali.FirstOrDefault(a => a.IDUtente == docente.ID);
-                            InserisciDocente(doc, docente, listAssegnazioni, assegnazioneSpeciale, listDiscipline, listClassi);
+                            List<ClsAssegnareDL> assegnazioni = listAssegnazioni
+                                .Where(a => a.IDUtente == docente.ID)
+                                .ToList();
+                            InserisciDocente(doc, docente, assegnazioni, listDiscipline, listClassi);
                         }
 
                         // Aggiunge il pagebreak solo se NON è l'ultimo elemento
@@ -114,16 +115,17 @@ namespace Cattedre
             }
         }
 
-        private static void InserisciDocente(DocX doc,ClsUtenteDL docente,List<ClsAssegnareDL> assegnazioni,ClsAssegnareDL assegnazioneSpec, List<ClsDisciplinaDL> listDiscipline,
+        private static void InserisciDocente(DocX doc,ClsUtenteDL docente,List<ClsAssegnareDL> assegnazioni, List<ClsDisciplinaDL> listDiscipline,
                                                 List<ClsClasseDL> listClassi)
         {
             // Filtro le liste in modo tale da usare delle liste pulite 
             List<ClsAssegnareDL> assegnazioniDocente = assegnazioni.Where(a => a.IDUtente == docente.ID).ToList();
-            if (assegnazioneSpec != null) assegnazioniDocente.Add(assegnazioneSpec);
             List<ClsRichiedereDL> richiesteDocente = ClsRichiedereBL.CaricaClassiRichiedereUtente(docente.ID);
-            List<ClsDisciplinaDL> listDisciplineDocente = listDiscipline.Where(d => assegnazioniDocente.Any(r => r.IDDisciplina == d.ID)).ToList();
+            List<ClsDisciplinaDL> listDisciplineDocente = listDiscipline.Where(d => d != null && assegnazioniDocente.Any(r => r.IDDisciplina == d.ID))
+                                                                        .OrderBy(d => !string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) ? 1 : 0)
+                                                                        .ToList();
             List<ClsClasseDL> listClassiDocente = listClassi.Where(c => assegnazioniDocente.Any(r => r.IDClasse == c.ID)).ToList();
-            if (listClassiDocente.Count <= 0) return;
+             if (listClassiDocente.Count <= 0) return;
             // Intestazione docente
             var pNome = doc.InsertParagraph();
             pNome.SpacingBefore(12);
@@ -150,37 +152,43 @@ namespace Cattedre
            //InserisciTabella(doc, assegnazioni, listDiscipline, listClassi, totale);
         }
 
-        private static void InserisciTabella(DocX doc, List<ClsAssegnareDL> assegnazioni,List<ClsDisciplinaDL> listDiscipline,
-            List<ClsClasseDL> listClassi, ClsUtenteDL Docente)
+        private static void InserisciTabella(DocX doc, List<ClsAssegnareDL> assegnazioni, List<ClsDisciplinaDL> listDiscipline,
+       List<ClsClasseDL> listClassi, ClsUtenteDL Docente)
         {
-
             // Monte ore dal contratto
             ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(Docente.ID);
             int monteOre = contratto?.MonteOre ?? 0;
             int OreEffettive = 0;
-            int numRighe = assegnazioni.Count + 2; 
+            int numRighe = assegnazioni.Count + 2;
             var tabella = doc.InsertTable(numRighe, 3);
             tabella.Design = TableDesign.None;
             tabella.AutoFit = AutoFit.Window;
-
             foreach (var row in tabella.Rows)
             {
-                row.Cells[0].Width = 10f;  // n. Ore
-                row.Cells[1].Width = 72f;  // Materia di Insegnamento
-                row.Cells[2].Width = 18f;  // Classi
+                row.Cells[0].Width = 10f;
+                row.Cells[1].Width = 72f;
+                row.Cells[2].Width = 18f;
             }
-
             ImpostaRigaIntestazione(tabella.Rows[0]);
+
+            assegnazioni = assegnazioni
+                .OrderBy(a => !string.IsNullOrWhiteSpace(
+                    listDiscipline.FirstOrDefault(d => d != null && d.ID == a.IDDisciplina)?.DisciplinaSpeciale) ? 1 : 0)
+                .ToList();
+
             for (int i = 0; i < assegnazioni.Count; i++)
             {
                 ClsAssegnareDL assegnazione = assegnazioni[i];
                 if (assegnazione == null) continue;
 
-                ClsDisciplinaDL disciplina = listDiscipline.FirstOrDefault(d =>d != null &&d.ID == assegnazione.IDDisciplina &&
-                                              (!string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) || assegnazione.IDClasse > 0));
+                ClsDisciplinaDL disciplina = listDiscipline.FirstOrDefault(d =>
+                    d != null &&
+                    d.ID == assegnazione.IDDisciplina &&
+                    (!string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) || assegnazione.IDClasse > 0) &&
+                    d.OreLaboratorio + d.OreTeoria > 0);
 
-                if (disciplina == null)
-                    continue;
+                if (disciplina == null) continue;
+
                 ClsClasseDL classe = listClassi.FirstOrDefault(c => c != null && c.ID == assegnazione.IDClasse);
 
                 int ore;
@@ -191,12 +199,12 @@ namespace Cattedre
 
                 string nomeMateria = disciplina.Nome ?? "N/D";
                 string nomeClasse = classe != null ? $"{classe.Anno}{classe.Sezione}" : string.Empty;
-                //sommo le ore cosi da mostrare la somma delle ore alla fine
+
                 OreEffettive += ore;
                 ImpostaRigaDati(tabella.Rows[i + 1], ore, nomeMateria, nomeClasse);
             }
 
-            ImpostaRigaTotale(tabella.Rows[numRighe - 1],$"{OreEffettive}/{monteOre}");
+            ImpostaRigaTotale(tabella.Rows[numRighe - 1], $"{OreEffettive}/{monteOre}");
             doc.InsertParagraph().SpacingAfter(4);
         }
         private static void InserisciIntestazioneCDC(DocX doc, ClsClasseDiConcorsoDL cdc, ClsDotareDL dotazione)

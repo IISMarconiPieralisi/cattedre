@@ -145,6 +145,7 @@ namespace Cattedre
             this.lblOreEff.Name = "lblOreEff";
             this.lblOreEff.Size = new System.Drawing.Size(51, 16);
             this.lblOreEff.TabIndex = 12;
+            this.lblOreEff.Tag = "header";
             this.lblOreEff.Text = "Ore Eff";
             // 
             // lblDocente
@@ -157,6 +158,7 @@ namespace Cattedre
             this.lblDocente.Name = "lblDocente";
             this.lblDocente.Size = new System.Drawing.Size(61, 16);
             this.lblDocente.TabIndex = 10;
+            this.lblDocente.Tag = "header";
             this.lblDocente.Text = "Docente";
             // 
             // lblOreTot
@@ -169,6 +171,7 @@ namespace Cattedre
             this.lblOreTot.Name = "lblOreTot";
             this.lblOreTot.Size = new System.Drawing.Size(26, 16);
             this.lblOreTot.TabIndex = 14;
+            this.lblOreTot.Tag = "header";
             this.lblOreTot.Text = "Tot";
             // 
             // lblOrePot
@@ -181,6 +184,7 @@ namespace Cattedre
             this.lblOrePot.Name = "lblOrePot";
             this.lblOrePot.Size = new System.Drawing.Size(55, 16);
             this.lblOrePot.TabIndex = 13;
+            this.lblOrePot.Tag = "header";
             this.lblOrePot.Text = "Ore Pot";
             // 
             // lblOreCattedra
@@ -193,6 +197,7 @@ namespace Cattedre
             this.lblOreCattedra.Name = "lblOreCattedra";
             this.lblOreCattedra.Size = new System.Drawing.Size(94, 16);
             this.lblOreCattedra.TabIndex = 11;
+            this.lblOreCattedra.Tag = "header";
             this.lblOreCattedra.Text = "Ore Cattedra";
             // 
             // FrmCattedre
@@ -204,6 +209,7 @@ namespace Cattedre
             this.Controls.Add(this.pnlClassi);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmCattedre";
+            this.Tag = "header";
             this.Text = "Cattedre";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FrmCattedre_Load);

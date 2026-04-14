@@ -299,7 +299,19 @@ namespace Cattedre
 
         private void LoadOreDoc(long IDannoscolastico)
         {
-            pnlOreDoc.Controls.Clear();
+            // Rimuove solo i controlli dinamici (ucOreDoc e label totali),
+            // lasciando intatte le label header del designer
+            var daRimuovere = pnlOreDoc.Controls
+    .Cast<Control>()
+    .Where(c => c.Tag?.ToString() != "header")
+    .ToList();
+
+            foreach (var c in daRimuovere)
+            {
+                pnlOreDoc.Controls.Remove(c);
+                c.Dispose();
+            }
+
             dictDocenti.Clear();
 
             if (dtDocentiAssegnazioni == null || dtDocentiAssegnazioni.Rows.Count == 0)

@@ -51,6 +51,10 @@ namespace Cattedre
 
         private void FrmAnnoScolastico_Load(object sender, EventArgs e)
         {
+            //elimino i controlli per sicurezza adesso
+            dtpDataFine.ValueChanged -= new System.EventHandler(this.dtpDataFine_ValueChanged);
+            dtpDataInizio.ValueChanged -= new System.EventHandler(this.dtpDataInizio_ValueChanged);
+
             if (_annoScolastico != null)
             {
                 mtbSigla.Text = _annoScolastico.Sigla;
@@ -64,6 +68,8 @@ namespace Cattedre
                 dtpDataInizio.Value = DateTime.Today;
                 AggiornaSigla();
             }
+            dtpDataFine.ValueChanged += new System.EventHandler(this.dtpDataFine_ValueChanged);
+            dtpDataInizio.ValueChanged += new System.EventHandler(this.dtpDataInizio_ValueChanged);
         }
 
         private void btAnnulla_Click(object sender, EventArgs e)

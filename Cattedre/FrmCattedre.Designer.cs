@@ -30,6 +30,7 @@ namespace Cattedre
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCattedre));
             this.pnlClassi = new System.Windows.Forms.Panel();
+            this.btGeneraWord = new System.Windows.Forms.Button();
             this.btGeneraASsucc = new System.Windows.Forms.Button();
             this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
             this.cbDipartimenti = new System.Windows.Forms.ComboBox();
@@ -45,7 +46,6 @@ namespace Cattedre
             this.pnlAnnullaSalva = new System.Windows.Forms.Panel();
             this.btSalva = new System.Windows.Forms.Button();
             this.btAnnulla = new System.Windows.Forms.Button();
-            this.btGeneraWord = new System.Windows.Forms.Button();
             this.pnlClassi.SuspendLayout();
             this.pnlDipartimento.SuspendLayout();
             this.pnlOreDoc.SuspendLayout();
@@ -64,9 +64,19 @@ namespace Cattedre
             this.pnlClassi.Size = new System.Drawing.Size(169, 687);
             this.pnlClassi.TabIndex = 0;
             // 
+            // btGeneraWord
+            // 
+            this.btGeneraWord.Location = new System.Drawing.Point(60, 31);
+            this.btGeneraWord.Name = "btGeneraWord";
+            this.btGeneraWord.Size = new System.Drawing.Size(23, 22);
+            this.btGeneraWord.TabIndex = 6;
+            this.btGeneraWord.Text = ".";
+            this.btGeneraWord.UseVisualStyleBackColor = true;
+            this.btGeneraWord.Click += new System.EventHandler(this.btGeneraWord_Click);
+            // 
             // btGeneraASsucc
             // 
-            this.btGeneraASsucc.Location = new System.Drawing.Point(76, 35);
+            this.btGeneraASsucc.Location = new System.Drawing.Point(3, 30);
             this.btGeneraASsucc.Name = "btGeneraASsucc";
             this.btGeneraASsucc.Size = new System.Drawing.Size(51, 23);
             this.btGeneraASsucc.TabIndex = 3;
@@ -78,7 +88,7 @@ namespace Cattedre
             // 
             this.cbAnniScolastici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAnniScolastici.FormattingEnabled = true;
-            this.cbAnniScolastici.Location = new System.Drawing.Point(11, 37);
+            this.cbAnniScolastici.Location = new System.Drawing.Point(104, 4);
             this.cbAnniScolastici.Name = "cbAnniScolastici";
             this.cbAnniScolastici.Size = new System.Drawing.Size(59, 21);
             this.cbAnniScolastici.TabIndex = 2;
@@ -88,10 +98,10 @@ namespace Cattedre
             // 
             this.cbDipartimenti.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDipartimenti.FormattingEnabled = true;
-            this.cbDipartimenti.Location = new System.Drawing.Point(11, 11);
+            this.cbDipartimenti.Location = new System.Drawing.Point(0, 4);
             this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2);
             this.cbDipartimenti.Name = "cbDipartimenti";
-            this.cbDipartimenti.Size = new System.Drawing.Size(145, 21);
+            this.cbDipartimenti.Size = new System.Drawing.Size(100, 21);
             this.cbDipartimenti.TabIndex = 1;
             this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.btCaricaDipartimento_Click_1);
             // 
@@ -231,16 +241,6 @@ namespace Cattedre
             this.btAnnulla.Text = "Annulla";
             this.btAnnulla.UseVisualStyleBackColor = true;
             this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
-            // 
-            // btGeneraWord
-            // 
-            this.btGeneraWord.Location = new System.Drawing.Point(133, 37);
-            this.btGeneraWord.Name = "btGeneraWord";
-            this.btGeneraWord.Size = new System.Drawing.Size(23, 22);
-            this.btGeneraWord.TabIndex = 6;
-            this.btGeneraWord.Text = ".";
-            this.btGeneraWord.UseVisualStyleBackColor = true;
-            this.btGeneraWord.Click += new System.EventHandler(this.btGeneraWord_Click);
             // 
             // FrmCattedre
             // 

@@ -450,5 +450,10 @@ namespace Cattedre
                 tbRicerca.Focus();
         }
         #endregion
+
+        private void tbRicerca_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

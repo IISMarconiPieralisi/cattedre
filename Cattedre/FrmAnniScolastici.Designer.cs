@@ -86,11 +86,11 @@
             this.btModifica.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btModifica.Location = new System.Drawing.Point(434, 96);
             this.btModifica.Name = "btModifica";
-            this.btModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
-            this.btModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
+            this.btModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
             this.btModifica.OverrideDefault.Back.ColorAngle = 45F;
-            this.btModifica.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
-            this.btModifica.OverrideDefault.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.btModifica.OverrideDefault.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btModifica.OverrideDefault.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btModifica.OverrideDefault.Border.ColorAngle = 45F;
             this.btModifica.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | Krypton.Toolkit.PaletteDrawBorders.Left) 
@@ -99,11 +99,11 @@
             this.btModifica.OverrideDefault.Border.Rounding = 20F;
             this.btModifica.OverrideDefault.Border.Width = 1;
             this.btModifica.Size = new System.Drawing.Size(109, 36);
-            this.btModifica.StateCommon.Back.Color1 = System.Drawing.Color.Red;
-            this.btModifica.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btModifica.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btModifica.StateCommon.Back.Color2 = System.Drawing.Color.DarkGoldenrod;
             this.btModifica.StateCommon.Back.ColorAngle = 45F;
-            this.btModifica.StateCommon.Border.Color1 = System.Drawing.Color.Red;
-            this.btModifica.StateCommon.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.btModifica.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btModifica.StateCommon.Border.Color2 = System.Drawing.Color.DarkGoldenrod;
             this.btModifica.StateCommon.Border.ColorAngle = 45F;
             this.btModifica.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | Krypton.Toolkit.PaletteDrawBorders.Left) 

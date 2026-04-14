@@ -119,9 +119,11 @@ namespace Cattedre
             // Filtro le liste in modo tale da usare delle liste pulite 
             List<ClsAssegnareDL> assegnazioniDocente = assegnazioni.Where(a => a.IDUtente == docente.ID).ToList();
             List<ClsRichiedereDL> richiesteDocente = ClsRichiedereBL.CaricaClassiRichiedereUtente(docente.ID);
-            List<ClsDisciplinaDL> listDisciplineDocente = listDiscipline.Where(d => assegnazioniDocente.Any(r => r.IDDisciplina == d.ID)).ToList();
+            List<ClsDisciplinaDL> listDisciplineDocente = listDiscipline.Where(d => d != null && assegnazioniDocente.Any(r => r.IDDisciplina == d.ID))
+                                                                        .OrderBy(d => !string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) ? 1 : 0)
+                                                                        .ToList();
             List<ClsClasseDL> listClassiDocente = listClassi.Where(c => assegnazioniDocente.Any(r => r.IDClasse == c.ID)).ToList();
-            if (listClassiDocente.Count <= 0) return;
+             if (listClassiDocente.Count <= 0) return;
             // Intestazione docente
             var pNome = doc.InsertParagraph();
             pNome.SpacingBefore(12);
@@ -148,37 +150,43 @@ namespace Cattedre
            //InserisciTabella(doc, assegnazioni, listDiscipline, listClassi, totale);
         }
 
-        private static void InserisciTabella(DocX doc, List<ClsAssegnareDL> assegnazioni,List<ClsDisciplinaDL> listDiscipline,
-            List<ClsClasseDL> listClassi, ClsUtenteDL Docente)
+        private static void InserisciTabella(DocX doc, List<ClsAssegnareDL> assegnazioni, List<ClsDisciplinaDL> listDiscipline,
+       List<ClsClasseDL> listClassi, ClsUtenteDL Docente)
         {
-
             // Monte ore dal contratto
             ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(Docente.ID);
             int monteOre = contratto?.MonteOre ?? 0;
             int OreEffettive = 0;
-            int numRighe = assegnazioni.Count + 2; 
+            int numRighe = assegnazioni.Count + 2;
             var tabella = doc.InsertTable(numRighe, 3);
             tabella.Design = TableDesign.None;
             tabella.AutoFit = AutoFit.Window;
-
             foreach (var row in tabella.Rows)
             {
-                row.Cells[0].Width = 10f;  // n. Ore
-                row.Cells[1].Width = 72f;  // Materia di Insegnamento
-                row.Cells[2].Width = 18f;  // Classi
+                row.Cells[0].Width = 10f;
+                row.Cells[1].Width = 72f;
+                row.Cells[2].Width = 18f;
             }
-
             ImpostaRigaIntestazione(tabella.Rows[0]);
+
+            assegnazioni = assegnazioni
+                .OrderBy(a => !string.IsNullOrWhiteSpace(
+                    listDiscipline.FirstOrDefault(d => d != null && d.ID == a.IDDisciplina)?.DisciplinaSpeciale) ? 1 : 0)
+                .ToList();
+
             for (int i = 0; i < assegnazioni.Count; i++)
             {
                 ClsAssegnareDL assegnazione = assegnazioni[i];
                 if (assegnazione == null) continue;
 
-                ClsDisciplinaDL disciplina = listDiscipline.FirstOrDefault(d =>d != null &&d.ID == assegnazione.IDDisciplina &&
-                                              (!string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) || assegnazione.IDClasse > 0));
+                ClsDisciplinaDL disciplina = listDiscipline.FirstOrDefault(d =>
+                    d != null &&
+                    d.ID == assegnazione.IDDisciplina &&
+                    (!string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) || assegnazione.IDClasse > 0) &&
+                    d.OreLaboratorio + d.OreTeoria > 0);
 
-                if (disciplina == null)
-                    continue;
+                if (disciplina == null) continue;
+
                 ClsClasseDL classe = listClassi.FirstOrDefault(c => c != null && c.ID == assegnazione.IDClasse);
 
                 int ore;
@@ -189,12 +197,12 @@ namespace Cattedre
 
                 string nomeMateria = disciplina.Nome ?? "N/D";
                 string nomeClasse = classe != null ? $"{classe.Anno}{classe.Sezione}" : string.Empty;
-                //sommo le ore cosi da mostrare la somma delle ore alla fine
+
                 OreEffettive += ore;
                 ImpostaRigaDati(tabella.Rows[i + 1], ore, nomeMateria, nomeClasse);
             }
 
-            ImpostaRigaTotale(tabella.Rows[numRighe - 1],$"{OreEffettive}/{monteOre}");
+            ImpostaRigaTotale(tabella.Rows[numRighe - 1], $"{OreEffettive}/{monteOre}");
             doc.InsertParagraph().SpacingAfter(4);
         }
         private static void InserisciIntestazioneCDC(DocX doc, ClsClasseDiConcorsoDL cdc, ClsDotareDL dotazione)

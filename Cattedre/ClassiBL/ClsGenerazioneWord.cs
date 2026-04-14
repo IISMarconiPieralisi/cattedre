@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -16,14 +16,14 @@ namespace Cattedre
         public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento,string filePath)
         {
             List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
-            try
-            {
-                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID, anno.ID);
-                List<ClsAssegnareDL>assegnarePot = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimentoPotenziamento(dipartimento.ID, anno.ID);
-                List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDisciplina(dipartimento.ID);
-                List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
-                List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
-                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);
+            List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioni();
+            List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL
+            .CaricaCDCperDisciplina(dipartimento.ID)
+            .Select(x => x.cdc)
+            .ToList();
+            List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
+            List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
+            List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);
 
                
                 GenerateFileWord(anno,dipartimento, cdc, Docenti, assegnare,assegnarePot, discipline, classi, Dotare, filePath);

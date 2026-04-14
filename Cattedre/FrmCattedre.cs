@@ -507,6 +507,14 @@ namespace Cattedre
             uc.lblOreEffettive.Text = "0";
             uc.lblOreTotali.Text = "0";
             uc.Tag = doc.ID;
+            uc.IDdipartimento = IDdipartimento;
+
+            List<ClsClasseDiConcorsoDL> cdcPotenziamento = ClsClasseDiConcorsoBL
+            .CaricaCDCperDisciplina(IDdipartimento)
+            .Where(x => x.nomeDisciplina.Contains("otenziamento"))
+            .Select(x => x.cdc)
+            .ToList();
+            uc.CDCPotenziamento = cdcPotenziamento;
 
             // Disabilita modifica per Preside o Admin
             if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")

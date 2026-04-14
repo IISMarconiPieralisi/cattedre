@@ -140,28 +140,26 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
-        public static List<ClsClasseDiConcorsoDL> CaricaCDCperDisciplina(long IDdiparitimento)
+        public static List<(ClsClasseDiConcorsoDL cdc, string nomeDisciplina)> CaricaCDCperDisciplina(long IDdipartimento)
         {
             DataTable dt = new DataTable();
-            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+            var risultato = new List<(ClsClasseDiConcorsoDL, string)>();
             try
             {
-                MySqlConnection conn = new MySqlConnection(connectionString);
-                conn.Open();
-                string sql = @"SELECT * FROM classidiconcorso c
-                             JOIN richiedere r ON c.ID=r.IDclassediconcorso 
-                             JOIN discipline d ON r.IDdisciplina = d.ID
-                             JOIN gestire g ON d.ID= g.IDdisciplina
-                             WHERE g.IDdipartimento =@IDdipartimento";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdiparitimento);
-                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                    conn.Open();
+                    string sql = @"SELECT c.*, d.nome AS nomeDisciplina FROM classidiconcorso c
+                         JOIN richiedere r ON c.ID = r.IDclassediconcorso
+                         JOIN discipline d ON r.IDdisciplina = d.ID
+                         JOIN gestire g ON d.ID = g.IDdisciplina
+                         WHERE g.IDdipartimento = @IDdipartimento";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        dr.Fill(dt);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                            dr.Fill(dt);
                     }
-                    conn.Close();
                 }
                 foreach (DataRow row in dt.Rows)
                 {
@@ -170,15 +168,17 @@ namespace Cattedre
                     cdc.Livello = row["livello"].ToString();
                     cdc.Nome = row["nome"].ToString();
                     cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
-                    cdcs.Add(cdc);
 
+                    string nomeDisciplina = row["nomeDisciplina"].ToString();
+
+                    risultato.Add((cdc, nomeDisciplina));
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            return cdcs;
+            return risultato;
         }
         public static List<ClsClasseDiConcorsoDL> RicercaPerNome(string _ricerca)
         {

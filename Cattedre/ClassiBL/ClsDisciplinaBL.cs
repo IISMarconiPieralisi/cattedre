@@ -131,31 +131,31 @@ namespace Cattedre
         #endregion
         #region rilevamento parametri specifici
 
-        public static int TrovaIDPotenziamento()
+        public static int TrovaIDPotenziamentoDipartimento(int IDdipartimento)
         {
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT ID FROM discipline 
-                           WHERE disciplinaSpeciale LIKE '%otenziamento%' 
+                    string sql = @"SELECT d.ID 
+                           FROM discipline d
+                           JOIN gestire g ON g.IDdisciplina = d.ID
+                           WHERE g.IDdipartimento = @IDdipartimento
+                           AND d.nome LIKE '%otenziamento%'
                            LIMIT 1";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        DataTable dt = new DataTable();
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                        if (dt.Rows.Count > 0)
-                            return Convert.ToInt32(dt.Rows[0]["ID"]);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            return Convert.ToInt32(result);
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore durante la ricerca del potenziamento: " + ex.Message);
+                throw new Exception("Errore ricerca potenziamento dipartimento: " + ex.Message);
             }
             return 0;
         }

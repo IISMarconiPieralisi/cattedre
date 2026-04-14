@@ -803,6 +803,16 @@ namespace Cattedre
                     uc.ImpostaColoriCombo(uc.cbDocentiTeorici);
                     uc.ImpostaColoriCombo(uc.cbDocentiItip);
 
+                    if (disciplina.OreLaboratorio == 0)
+                    {
+                        uc.cbDocentiItip.Enabled = false;
+                        uc.cbDocentiItip.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        uc.cbDocentiItip.Enabled = true;
+                    }
+
                     // docente già assegnato (in memoria)
                     var assegnazioni = docenti.AsEnumerable()
                     .Where(r =>

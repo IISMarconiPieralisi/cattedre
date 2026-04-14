@@ -562,6 +562,7 @@ namespace Cattedre
                 pnRB.Enabled = false;
                 cbDisciplinaSucessiva.Enabled = false;
                 cbDisciplinaSpeciale.Enabled = true;
+                tbDisciplinaSpeciale.Enabled = true;
             }else
             {
                 pnRB.Enabled = true;

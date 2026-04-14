@@ -15,18 +15,18 @@ namespace Cattedre
         private const double FontSize = 12;
         public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento,string filePath)
         {
-            List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
-            List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioni();
-            List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL
-            .CaricaCDCperDisciplina(dipartimento.ID)
-            .Select(x => x.cdc)
-            .ToList();
-            List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
-            List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
-            List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);
-
-               
-                GenerateFileWord(anno,dipartimento, cdc, Docenti, assegnare,assegnarePot, discipline, classi, Dotare, filePath);
+            try
+            { 
+                List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
+                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioni();
+                List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL
+                .CaricaCDCperDisciplina(dipartimento.ID)
+                .Select(x => x.cdc)
+                .ToList();
+                List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
+                List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
+                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);         
+                GenerateFileWord(anno,dipartimento, cdc, Docenti, assegnare, discipline, classi, Dotare, filePath);
             }catch(Exception ex)
             {
                 throw new Exception("Errore Durante il Caricamento del file: " + ex.Message);
@@ -35,7 +35,7 @@ namespace Cattedre
         }
 
         public static void GenerateFileWord(ClsAnnoScolasticoDL annoScolastico,ClsDipartimentoDL dipartimento, List<ClsClasseDiConcorsoDL> listClassiConcorso,
-                                            List<ClsUtenteDL> listDocenti,List<ClsAssegnareDL> listAssegnazioni,List<ClsAssegnareDL> listAssegnazioniSpeciali, List<ClsDisciplinaDL> listDiscipline,
+                                            List<ClsUtenteDL> listDocenti,List<ClsAssegnareDL> listAssegnazioni, List<ClsDisciplinaDL> listDiscipline,
                                             List<ClsClasseDL> listClassi,List<ClsDotareDL> listDotare,string outputPath)
         {
             try
@@ -63,8 +63,7 @@ namespace Cattedre
                         //ciclo gli utenti con quella classe di concorso 
                         foreach (ClsUtenteDL docente in DocentiFiltrati)
                         {
-                            var assegnazioneSpeciale = listAssegnazioniSpeciali.FirstOrDefault(a => a.IDUtente == docente.ID);
-                            InserisciDocente(doc, docente, listAssegnazioni, assegnazioneSpeciale, listDiscipline, listClassi);
+                            InserisciDocente(doc, docente, listAssegnazioni, listDiscipline, listClassi);
                         }
 
                         // Aggiunge il pagebreak solo se NON è l'ultimo elemento
@@ -114,12 +113,11 @@ namespace Cattedre
             }
         }
 
-        private static void InserisciDocente(DocX doc,ClsUtenteDL docente,List<ClsAssegnareDL> assegnazioni,ClsAssegnareDL assegnazioneSpec, List<ClsDisciplinaDL> listDiscipline,
+        private static void InserisciDocente(DocX doc,ClsUtenteDL docente,List<ClsAssegnareDL> assegnazioni, List<ClsDisciplinaDL> listDiscipline,
                                                 List<ClsClasseDL> listClassi)
         {
             // Filtro le liste in modo tale da usare delle liste pulite 
             List<ClsAssegnareDL> assegnazioniDocente = assegnazioni.Where(a => a.IDUtente == docente.ID).ToList();
-            if (assegnazioneSpec != null) assegnazioniDocente.Add(assegnazioneSpec);
             List<ClsRichiedereDL> richiesteDocente = ClsRichiedereBL.CaricaClassiRichiedereUtente(docente.ID);
             List<ClsDisciplinaDL> listDisciplineDocente = listDiscipline.Where(d => assegnazioniDocente.Any(r => r.IDDisciplina == d.ID)).ToList();
             List<ClsClasseDL> listClassiDocente = listClassi.Where(c => assegnazioniDocente.Any(r => r.IDClasse == c.ID)).ToList();

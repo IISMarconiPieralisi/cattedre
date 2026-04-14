@@ -284,6 +284,11 @@ namespace Cattedre
                 tbEmail.Enabled = true;
                 tbEmail.Text = _imputEmail;    
             }
+            if(string.IsNullOrEmpty(tbNome.Text) && string.IsNullOrEmpty(tbCognome.Text))
+            {
+                MessageBox.Show("Per la mail automatica, compila i campi obbligatori ovvero: nome e cognome");
+                cbAutoEmail.Checked=false; 
+            }
         }
         private void btAnnulla_Click(object sender, EventArgs e)
         {

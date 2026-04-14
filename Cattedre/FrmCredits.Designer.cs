@@ -53,6 +53,7 @@
             // chCognome
             // 
             chCognome.Text = "Cognome";
+            chCognome.Width = 89;
             // 
             // label1
             // 
@@ -93,10 +94,11 @@
             this.chUtenti,
             this.chGrafica,
             this.chCredits});
+            this.listView1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(16, 75);
+            this.listView1.Location = new System.Drawing.Point(12, 73);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1178, 404);
+            this.listView1.Size = new System.Drawing.Size(1442, 404);
             this.listView1.TabIndex = 2;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -109,6 +111,7 @@
             // chDB
             // 
             this.chDB.Text = "DataBase";
+            this.chDB.Width = 81;
             // 
             // chlogin
             // 
@@ -121,25 +124,27 @@
             // chAnnoScolastico
             // 
             this.chAnnoScolastico.Text = "Form A.s";
+            this.chAnnoScolastico.Width = 97;
             // 
             // chCattedre
             // 
             this.chCattedre.Text = "Form Cattedre";
-            this.chCattedre.Width = 86;
+            this.chCattedre.Width = 112;
             // 
             // chCdc
             // 
             this.chCdc.Text = "Form CDC";
+            this.chCdc.Width = 121;
             // 
             // chClasse
             // 
             this.chClasse.Text = "Form Classe";
-            this.chClasse.Width = 81;
+            this.chClasse.Width = 111;
             // 
             // chContratti
             // 
             this.chContratti.Text = "Form Contratto";
-            this.chContratti.Width = 86;
+            this.chContratti.Width = 105;
             // 
             // chDipartimento
             // 
@@ -149,17 +154,17 @@
             // chDisciplina
             // 
             this.chDisciplina.Text = "Form Disciplina ";
-            this.chDisciplina.Width = 98;
+            this.chDisciplina.Width = 116;
             // 
             // chIndirizzi
             // 
             this.chIndirizzi.Text = "Form Indirizzo";
-            this.chIndirizzi.Width = 85;
+            this.chIndirizzi.Width = 109;
             // 
             // chUtenti
             // 
             this.chUtenti.Text = "Form Utenti";
-            this.chUtenti.Width = 78;
+            this.chUtenti.Width = 95;
             // 
             // chGrafica
             // 

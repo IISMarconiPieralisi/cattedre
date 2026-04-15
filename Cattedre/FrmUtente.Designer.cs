@@ -37,6 +37,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.cbTipoUtente = new System.Windows.Forms.ComboBox();
             this.PnUtente = new System.Windows.Forms.Panel();
+            this.label16 = new System.Windows.Forms.Label();
             this.tbPassword = new Krypton.Toolkit.KryptonTextBox();
             this.tbEmail = new Krypton.Toolkit.KryptonTextBox();
             this.tbCognome = new Krypton.Toolkit.KryptonTextBox();
@@ -47,27 +48,28 @@
             this.pnColore = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.cbAutoEmail = new System.Windows.Forms.CheckBox();
-            this.btColore = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.kryptonButton1 = new Krypton.Toolkit.KryptonButton();
             this.btSalva = new Krypton.Toolkit.KryptonButton();
+            this.btColore = new System.Windows.Forms.Button();
             this.pnCDC = new System.Windows.Forms.Panel();
+            this.clbCLasseDiConcorso = new System.Windows.Forms.CheckedListBox();
             this.clbDisciplina = new System.Windows.Forms.CheckedListBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.clbCLasseDiConcorso = new System.Windows.Forms.CheckedListBox();
             this.label7 = new System.Windows.Forms.Label();
             this.PnContratto = new System.Windows.Forms.Panel();
-            this.cldColori = new System.Windows.Forms.ColorDialog();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.nudMonteOre = new System.Windows.Forms.NumericUpDown();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.dtpDataInizio = new System.Windows.Forms.DateTimePicker();
-            this.dtpDataFine = new System.Windows.Forms.DateTimePicker();
-            this.rbIndeterminato = new System.Windows.Forms.RadioButton();
-            this.rbDeterminato = new System.Windows.Forms.RadioButton();
+            this.label15 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.rbDeterminato = new System.Windows.Forms.RadioButton();
+            this.rbIndeterminato = new System.Windows.Forms.RadioButton();
+            this.dtpDataFine = new System.Windows.Forms.DateTimePicker();
+            this.dtpDataInizio = new System.Windows.Forms.DateTimePicker();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.nudMonteOre = new System.Windows.Forms.NumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.cldColori = new System.Windows.Forms.ColorDialog();
             this.pnDipartimento = new System.Windows.Forms.Panel();
             this.clbDipartimento = new System.Windows.Forms.CheckedListBox();
             this.cbDipartimentoCoordinato = new System.Windows.Forms.ComboBox();
@@ -78,8 +80,8 @@
             this.panel2.SuspendLayout();
             this.pnCDC.SuspendLayout();
             this.PnContratto.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).BeginInit();
             this.pnDipartimento.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -156,7 +158,7 @@
             "Coordinatore di dipartimento"});
             this.cbTipoUtente.Location = new System.Drawing.Point(129, 242);
             this.cbTipoUtente.Name = "cbTipoUtente";
-            this.cbTipoUtente.Size = new System.Drawing.Size(239, 21);
+            this.cbTipoUtente.Size = new System.Drawing.Size(264, 21);
             this.cbTipoUtente.TabIndex = 10;
             this.cbTipoUtente.SelectedIndexChanged += new System.EventHandler(this.cbTipoUtente_SelectedIndexChanged);
             this.cbTipoUtente.Enter += new System.EventHandler(this.cbTipoUtente_Enter);
@@ -166,6 +168,7 @@
             // PnUtente
             // 
             this.PnUtente.AutoSize = true;
+            this.PnUtente.Controls.Add(this.label16);
             this.PnUtente.Controls.Add(this.tbPassword);
             this.PnUtente.Controls.Add(this.tbEmail);
             this.PnUtente.Controls.Add(this.tbCognome);
@@ -188,16 +191,25 @@
             this.PnUtente.Location = new System.Drawing.Point(0, 0);
             this.PnUtente.Name = "PnUtente";
             this.PnUtente.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.PnUtente.Size = new System.Drawing.Size(383, 470);
+            this.PnUtente.Size = new System.Drawing.Size(408, 470);
             this.PnUtente.TabIndex = 18;
-            this.PnUtente.Paint += new System.Windows.Forms.PaintEventHandler(this.PnUtente_Paint);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(23, 7);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(77, 25);
+            this.label16.TabIndex = 24;
+            this.label16.Text = "Utente";
             // 
             // tbPassword
             // 
             this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbPassword.Location = new System.Drawing.Point(132, 194);
+            this.tbPassword.Location = new System.Drawing.Point(133, 194);
             this.tbPassword.Name = "tbPassword";
-            this.tbPassword.Size = new System.Drawing.Size(236, 29);
+            this.tbPassword.Size = new System.Drawing.Size(260, 29);
             this.tbPassword.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbPassword.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbPassword.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -216,9 +228,9 @@
             // tbEmail
             // 
             this.tbEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbEmail.Location = new System.Drawing.Point(129, 129);
+            this.tbEmail.Location = new System.Drawing.Point(133, 129);
             this.tbEmail.Name = "tbEmail";
-            this.tbEmail.Size = new System.Drawing.Size(239, 29);
+            this.tbEmail.Size = new System.Drawing.Size(260, 29);
             this.tbEmail.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbEmail.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbEmail.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -237,9 +249,9 @@
             // tbCognome
             // 
             this.tbCognome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbCognome.Location = new System.Drawing.Point(129, 81);
+            this.tbCognome.Location = new System.Drawing.Point(133, 81);
             this.tbCognome.Name = "tbCognome";
-            this.tbCognome.Size = new System.Drawing.Size(239, 29);
+            this.tbCognome.Size = new System.Drawing.Size(260, 29);
             this.tbCognome.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbCognome.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbCognome.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -259,9 +271,9 @@
             // tbNome
             // 
             this.tbNome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbNome.Location = new System.Drawing.Point(129, 33);
+            this.tbNome.Location = new System.Drawing.Point(133, 33);
             this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(239, 29);
+            this.tbNome.Size = new System.Drawing.Size(260, 29);
             this.tbNome.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbNome.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbNome.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -348,17 +360,6 @@
             this.cbAutoEmail.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAutoEmail_KeyDown);
             this.cbAutoEmail.Leave += new System.EventHandler(this.checkBoxAutoEmail_Leave);
             // 
-            // btColore
-            // 
-            this.btColore.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btColore.Location = new System.Drawing.Point(129, 337);
-            this.btColore.Name = "btColore";
-            this.btColore.Size = new System.Drawing.Size(89, 23);
-            this.btColore.TabIndex = 22;
-            this.btColore.Text = "seleziona";
-            this.btColore.UseVisualStyleBackColor = true;
-            this.btColore.Click += new System.EventHandler(this.btColore_Click);
-            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.kryptonButton1);
@@ -366,7 +367,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 370);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(368, 100);
+            this.panel2.Size = new System.Drawing.Size(393, 100);
             this.panel2.TabIndex = 26;
             // 
             // kryptonButton1
@@ -387,7 +388,7 @@
             this.kryptonButton1.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.kryptonButton1.OverrideDefault.Border.Rounding = 20F;
             this.kryptonButton1.OverrideDefault.Border.Width = 1;
-            this.kryptonButton1.Size = new System.Drawing.Size(306, 32);
+            this.kryptonButton1.Size = new System.Drawing.Size(337, 32);
             this.kryptonButton1.StateCommon.Back.Color1 = System.Drawing.Color.Red;
             this.kryptonButton1.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
             this.kryptonButton1.StateCommon.Back.ColorAngle = 45F;
@@ -456,7 +457,7 @@
             this.btSalva.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btSalva.OverrideDefault.Border.Rounding = 20F;
             this.btSalva.OverrideDefault.Border.Width = 1;
-            this.btSalva.Size = new System.Drawing.Size(306, 33);
+            this.btSalva.Size = new System.Drawing.Size(337, 33);
             this.btSalva.StateCommon.Back.Color1 = System.Drawing.Color.ForestGreen;
             this.btSalva.StateCommon.Back.Color2 = System.Drawing.Color.YellowGreen;
             this.btSalva.StateCommon.Back.ColorAngle = 45F;
@@ -505,23 +506,45 @@
             this.btSalva.TabIndex = 33;
             this.btSalva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btSalva.Values.Text = "Salva";
-            this.btSalva.Click += new System.EventHandler(this.btSalva_Click);
+            this.btSalva.Click += new System.EventHandler(this.BtSalva_Click);
+            // 
+            // btColore
+            // 
+            this.btColore.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btColore.Location = new System.Drawing.Point(129, 337);
+            this.btColore.Name = "btColore";
+            this.btColore.Size = new System.Drawing.Size(89, 23);
+            this.btColore.TabIndex = 22;
+            this.btColore.Text = "seleziona";
+            this.btColore.UseVisualStyleBackColor = true;
+            this.btColore.Click += new System.EventHandler(this.btColore_Click);
             // 
             // pnCDC
             // 
             this.pnCDC.AutoSize = true;
+            this.pnCDC.Controls.Add(this.clbCLasseDiConcorso);
             this.pnCDC.Controls.Add(this.clbDisciplina);
             this.pnCDC.Controls.Add(this.label14);
-            this.pnCDC.Controls.Add(this.clbCLasseDiConcorso);
             this.pnCDC.Controls.Add(this.label7);
             this.pnCDC.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnCDC.Location = new System.Drawing.Point(383, 0);
+            this.pnCDC.Enabled = false;
+            this.pnCDC.Location = new System.Drawing.Point(408, 0);
             this.pnCDC.Margin = new System.Windows.Forms.Padding(3, 3, 8, 6);
             this.pnCDC.Name = "pnCDC";
-            this.pnCDC.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
-            this.pnCDC.Size = new System.Drawing.Size(246, 470);
+            this.pnCDC.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.pnCDC.Size = new System.Drawing.Size(318, 470);
             this.pnCDC.TabIndex = 19;
-            this.pnCDC.Visible = false;
+            // 
+            // clbCLasseDiConcorso
+            // 
+            this.clbCLasseDiConcorso.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clbCLasseDiConcorso.FormattingEnabled = true;
+            this.clbCLasseDiConcorso.Location = new System.Drawing.Point(6, 40);
+            this.clbCLasseDiConcorso.Name = "clbCLasseDiConcorso";
+            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(299, 174);
+            this.clbCLasseDiConcorso.TabIndex = 18;
+            this.clbCLasseDiConcorso.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCLasseDiConcorso_ItemCheck);
+            this.clbCLasseDiConcorso.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbCLasseDiConcorso_KeyDown);
             // 
             // clbDisciplina
             // 
@@ -530,38 +553,25 @@
             this.clbDisciplina.FormattingEnabled = true;
             this.clbDisciplina.Location = new System.Drawing.Point(6, 250);
             this.clbDisciplina.Name = "clbDisciplina";
-            this.clbDisciplina.Size = new System.Drawing.Size(228, 208);
+            this.clbDisciplina.Size = new System.Drawing.Size(299, 208);
             this.clbDisciplina.TabIndex = 20;
-            this.clbDisciplina.SelectedIndexChanged += new System.EventHandler(this.clbDisciplina_SelectedIndexChanged);
             this.clbDisciplina.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDisciplina_KeyDown);
             // 
             // label14
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(14, 231);
+            this.label14.Location = new System.Drawing.Point(6, 229);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(76, 16);
             this.label14.TabIndex = 19;
             this.label14.Text = "Discipline:";
-            this.label14.Click += new System.EventHandler(this.label14_Click);
-            // 
-            // clbCLasseDiConcorso
-            // 
-            this.clbCLasseDiConcorso.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clbCLasseDiConcorso.FormattingEnabled = true;
-            this.clbCLasseDiConcorso.Location = new System.Drawing.Point(6, 35);
-            this.clbCLasseDiConcorso.Name = "clbCLasseDiConcorso";
-            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(229, 191);
-            this.clbCLasseDiConcorso.TabIndex = 18;
-            this.clbCLasseDiConcorso.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCLasseDiConcorso_ItemCheck);
-            this.clbCLasseDiConcorso.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbCLasseDiConcorso_KeyDown);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(14, 16);
+            this.label7.Location = new System.Drawing.Point(6, 16);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(135, 16);
             this.label7.TabIndex = 17;
@@ -570,6 +580,7 @@
             // PnContratto
             // 
             this.PnContratto.AutoSize = true;
+            this.PnContratto.Controls.Add(this.label15);
             this.PnContratto.Controls.Add(this.panel1);
             this.PnContratto.Controls.Add(this.dtpDataFine);
             this.PnContratto.Controls.Add(this.dtpDataInizio);
@@ -580,99 +591,53 @@
             this.PnContratto.Controls.Add(this.label13);
             this.PnContratto.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PnContratto.Enabled = false;
-            this.PnContratto.Location = new System.Drawing.Point(629, 269);
+            this.PnContratto.Location = new System.Drawing.Point(726, 229);
             this.PnContratto.Name = "PnContratto";
-            this.PnContratto.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
-            this.PnContratto.Size = new System.Drawing.Size(407, 201);
+            this.PnContratto.Padding = new System.Windows.Forms.Padding(0, 20, 0, 30);
+            this.PnContratto.Size = new System.Drawing.Size(396, 241);
             this.PnContratto.TabIndex = 21;
             // 
-            // cldColori
+            // label15
             // 
-            this.cldColori.FullOpen = true;
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(3, 7);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(106, 25);
+            this.label15.TabIndex = 23;
+            this.label15.Text = "Contratto";
             // 
-            // label13
+            // panel1
             // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(22, 29);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(39, 16);
-            this.label13.TabIndex = 13;
-            this.label13.Text = "Tipo:";
+            this.panel1.Controls.Add(this.rbDeterminato);
+            this.panel1.Controls.Add(this.rbIndeterminato);
+            this.panel1.Location = new System.Drawing.Point(94, 36);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(249, 41);
+            this.panel1.TabIndex = 22;
             // 
-            // label12
+            // rbDeterminato
             // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(22, 74);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(77, 16);
-            this.label12.TabIndex = 16;
-            this.label12.Text = "Monte ore:";
-            // 
-            // nudMonteOre
-            // 
-            this.nudMonteOre.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.nudMonteOre.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudMonteOre.Location = new System.Drawing.Point(129, 72);
-            this.nudMonteOre.Name = "nudMonteOre";
-            this.nudMonteOre.Size = new System.Drawing.Size(228, 22);
-            this.nudMonteOre.TabIndex = 17;
-            this.nudMonteOre.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudMonteOre_KeyDown);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(22, 124);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(81, 16);
-            this.label11.TabIndex = 18;
-            this.label11.Text = "Data inizio:";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(22, 172);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(71, 16);
-            this.label10.TabIndex = 19;
-            this.label10.Text = "Data fine:";
-            // 
-            // dtpDataInizio
-            // 
-            this.dtpDataInizio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpDataInizio.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpDataInizio.Location = new System.Drawing.Point(129, 119);
-            this.dtpDataInizio.Name = "dtpDataInizio";
-            this.dtpDataInizio.Size = new System.Drawing.Size(228, 22);
-            this.dtpDataInizio.TabIndex = 20;
-            this.dtpDataInizio.ValueChanged += new System.EventHandler(this.dtpDataInizio_ValueChanged);
-            this.dtpDataInizio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataInizio_KeyDown);
-            // 
-            // dtpDataFine
-            // 
-            this.dtpDataFine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpDataFine.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpDataFine.Location = new System.Drawing.Point(129, 166);
-            this.dtpDataFine.Name = "dtpDataFine";
-            this.dtpDataFine.Size = new System.Drawing.Size(228, 22);
-            this.dtpDataFine.TabIndex = 21;
-            this.dtpDataFine.ValueChanged += new System.EventHandler(this.dtpDataFine_ValueChanged);
-            this.dtpDataFine.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataFine_KeyDown);
+            this.rbDeterminato.AutoSize = true;
+            this.rbDeterminato.Dock = System.Windows.Forms.DockStyle.Left;
+            this.rbDeterminato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbDeterminato.Location = new System.Drawing.Point(0, 0);
+            this.rbDeterminato.Name = "rbDeterminato";
+            this.rbDeterminato.Size = new System.Drawing.Size(107, 41);
+            this.rbDeterminato.TabIndex = 14;
+            this.rbDeterminato.TabStop = true;
+            this.rbDeterminato.Text = "determinato";
+            this.rbDeterminato.UseVisualStyleBackColor = true;
+            this.rbDeterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbContratto_KeyDown);
             // 
             // rbIndeterminato
             // 
-            this.rbIndeterminato.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbIndeterminato.AutoSize = true;
+            this.rbIndeterminato.Dock = System.Windows.Forms.DockStyle.Right;
             this.rbIndeterminato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbIndeterminato.Location = new System.Drawing.Point(125, 11);
+            this.rbIndeterminato.Location = new System.Drawing.Point(131, 0);
             this.rbIndeterminato.Name = "rbIndeterminato";
-            this.rbIndeterminato.Size = new System.Drawing.Size(118, 21);
+            this.rbIndeterminato.Size = new System.Drawing.Size(118, 41);
             this.rbIndeterminato.TabIndex = 15;
             this.rbIndeterminato.TabStop = true;
             this.rbIndeterminato.Text = "indeterminato";
@@ -680,29 +645,78 @@
             this.rbIndeterminato.CheckedChanged += new System.EventHandler(this.rbIndeterminato_CheckedChanged);
             this.rbIndeterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbContratto_KeyDown);
             // 
-            // rbDeterminato
+            // dtpDataFine
             // 
-            this.rbDeterminato.AutoSize = true;
-            this.rbDeterminato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbDeterminato.Location = new System.Drawing.Point(3, 13);
-            this.rbDeterminato.Name = "rbDeterminato";
-            this.rbDeterminato.Size = new System.Drawing.Size(107, 21);
-            this.rbDeterminato.TabIndex = 14;
-            this.rbDeterminato.TabStop = true;
-            this.rbDeterminato.Text = "determinato";
-            this.rbDeterminato.UseVisualStyleBackColor = true;
-            this.rbDeterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbContratto_KeyDown);
+            this.dtpDataFine.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpDataFine.Location = new System.Drawing.Point(109, 186);
+            this.dtpDataFine.Name = "dtpDataFine";
+            this.dtpDataFine.Size = new System.Drawing.Size(234, 22);
+            this.dtpDataFine.TabIndex = 21;
+            this.dtpDataFine.ValueChanged += new System.EventHandler(this.dtpDataFine_ValueChanged);
+            this.dtpDataFine.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataFine_KeyDown);
             // 
-            // panel1
+            // dtpDataInizio
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.rbDeterminato);
-            this.panel1.Controls.Add(this.rbIndeterminato);
-            this.panel1.Location = new System.Drawing.Point(114, 16);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(247, 41);
-            this.panel1.TabIndex = 22;
+            this.dtpDataInizio.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpDataInizio.Location = new System.Drawing.Point(109, 139);
+            this.dtpDataInizio.Name = "dtpDataInizio";
+            this.dtpDataInizio.Size = new System.Drawing.Size(234, 22);
+            this.dtpDataInizio.TabIndex = 20;
+            this.dtpDataInizio.ValueChanged += new System.EventHandler(this.dtpDataInizio_ValueChanged);
+            this.dtpDataInizio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataInizio_KeyDown);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(2, 192);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(71, 16);
+            this.label10.TabIndex = 19;
+            this.label10.Text = "Data fine:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(2, 144);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(81, 16);
+            this.label11.TabIndex = 18;
+            this.label11.Text = "Data inizio:";
+            // 
+            // nudMonteOre
+            // 
+            this.nudMonteOre.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudMonteOre.Location = new System.Drawing.Point(109, 92);
+            this.nudMonteOre.Name = "nudMonteOre";
+            this.nudMonteOre.Size = new System.Drawing.Size(210, 22);
+            this.nudMonteOre.TabIndex = 17;
+            this.nudMonteOre.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudMonteOre_KeyDown);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(2, 94);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(77, 16);
+            this.label12.TabIndex = 16;
+            this.label12.Text = "Monte ore:";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(2, 49);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(39, 16);
+            this.label13.TabIndex = 13;
+            this.label13.Text = "Tipo:";
+            // 
+            // cldColori
+            // 
+            this.cldColori.FullOpen = true;
             // 
             // pnDipartimento
             // 
@@ -711,13 +725,13 @@
             this.pnDipartimento.Controls.Add(this.cbDipartimentoCoordinato);
             this.pnDipartimento.Controls.Add(this.lbDcoordinato);
             this.pnDipartimento.Controls.Add(this.label8);
-            this.pnDipartimento.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnDipartimento.Location = new System.Drawing.Point(629, 0);
+            this.pnDipartimento.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnDipartimento.Enabled = false;
+            this.pnDipartimento.Location = new System.Drawing.Point(726, 0);
             this.pnDipartimento.Name = "pnDipartimento";
             this.pnDipartimento.Padding = new System.Windows.Forms.Padding(0, 0, 0, 4);
-            this.pnDipartimento.Size = new System.Drawing.Size(407, 269);
+            this.pnDipartimento.Size = new System.Drawing.Size(396, 233);
             this.pnDipartimento.TabIndex = 23;
-            this.pnDipartimento.Visible = false;
             // 
             // clbDipartimento
             // 
@@ -726,9 +740,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbDipartimento.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbDipartimento.FormattingEnabled = true;
-            this.clbDipartimento.Location = new System.Drawing.Point(25, 35);
+            this.clbDipartimento.Location = new System.Drawing.Point(5, 33);
             this.clbDipartimento.Name = "clbDipartimento";
-            this.clbDipartimento.Size = new System.Drawing.Size(342, 157);
+            this.clbDipartimento.Size = new System.Drawing.Size(338, 140);
             this.clbDipartimento.TabIndex = 26;
             // 
             // cbDipartimentoCoordinato
@@ -736,18 +750,20 @@
             this.cbDipartimentoCoordinato.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbDipartimentoCoordinato.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDipartimentoCoordinato.FormattingEnabled = true;
-            this.cbDipartimentoCoordinato.Location = new System.Drawing.Point(129, 223);
+            this.cbDipartimentoCoordinato.Location = new System.Drawing.Point(109, 187);
             this.cbDipartimentoCoordinato.Name = "cbDipartimentoCoordinato";
-            this.cbDipartimentoCoordinato.Size = new System.Drawing.Size(238, 25);
+            this.cbDipartimentoCoordinato.Size = new System.Drawing.Size(210, 25);
             this.cbDipartimentoCoordinato.TabIndex = 27;
             this.cbDipartimentoCoordinato.Visible = false;
+            this.cbDipartimentoCoordinato.SelectedIndexChanged += new System.EventHandler(this.cbDipartimentoCoordinato_SelectedIndexChanged);
+            this.cbDipartimentoCoordinato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDipartimentoCoordinato_KeyDown);
             // 
             // lbDcoordinato
             // 
             this.lbDcoordinato.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lbDcoordinato.AutoSize = true;
             this.lbDcoordinato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbDcoordinato.Location = new System.Drawing.Point(22, 215);
+            this.lbDcoordinato.Location = new System.Drawing.Point(2, 180);
             this.lbDcoordinato.Name = "lbDcoordinato";
             this.lbDcoordinato.Size = new System.Drawing.Size(96, 32);
             this.lbDcoordinato.TabIndex = 28;
@@ -758,7 +774,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(22, 16);
+            this.label8.Location = new System.Drawing.Point(2, 14);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(96, 16);
             this.label8.TabIndex = 25;
@@ -769,7 +785,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1036, 470);
+            this.ClientSize = new System.Drawing.Size(1122, 470);
             this.Controls.Add(this.pnDipartimento);
             this.Controls.Add(this.PnContratto);
             this.Controls.Add(this.pnCDC);
@@ -787,9 +803,9 @@
             this.pnCDC.PerformLayout();
             this.PnContratto.ResumeLayout(false);
             this.PnContratto.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMonteOre)).EndInit();
             this.pnDipartimento.ResumeLayout(false);
             this.pnDipartimento.PerformLayout();
             this.ResumeLayout(false);
@@ -843,5 +859,7 @@
         private System.Windows.Forms.ComboBox cbDipartimentoCoordinato;
         private System.Windows.Forms.Label lbDcoordinato;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
     }
 }

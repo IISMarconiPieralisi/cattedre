@@ -50,9 +50,9 @@
             this.lvDipartimenti.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvDipartimenti.FullRowSelect = true;
             this.lvDipartimenti.HideSelection = false;
-            this.lvDipartimenti.Location = new System.Drawing.Point(12, 46);
+            this.lvDipartimenti.Location = new System.Drawing.Point(47, 46);
             this.lvDipartimenti.Name = "lvDipartimenti";
-            this.lvDipartimenti.Size = new System.Drawing.Size(431, 314);
+            this.lvDipartimenti.Size = new System.Drawing.Size(504, 410);
             this.lvDipartimenti.TabIndex = 0;
             this.lvDipartimenti.UseCompatibleStateImageBehavior = false;
             this.lvDipartimenti.View = System.Windows.Forms.View.Details;
@@ -77,7 +77,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(8, 9);
+            this.label1.Location = new System.Drawing.Point(43, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(133, 23);
             this.label1.TabIndex = 4;
@@ -87,7 +87,7 @@
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btElimina.Location = new System.Drawing.Point(448, 151);
+            this.btElimina.Location = new System.Drawing.Point(557, 170);
             this.btElimina.Name = "btElimina";
             this.btElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -156,7 +156,7 @@
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btInserisci.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btInserisci.Location = new System.Drawing.Point(448, 48);
+            this.btInserisci.Location = new System.Drawing.Point(557, 68);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btInserisci.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -225,7 +225,7 @@
             // 
             this.kryptonButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.kryptonButton1.Location = new System.Drawing.Point(449, 100);
+            this.kryptonButton1.Location = new System.Drawing.Point(558, 119);
             this.kryptonButton1.Name = "kryptonButton1";
             this.kryptonButton1.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.kryptonButton1.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
@@ -294,7 +294,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(569, 468);
+            this.ClientSize = new System.Drawing.Size(677, 468);
             this.Controls.Add(this.kryptonButton1);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.btInserisci);

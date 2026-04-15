@@ -35,7 +35,6 @@ namespace Cattedre
             this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
             this.cbDipartimenti = new System.Windows.Forms.ComboBox();
             this.pnlDipartimento = new System.Windows.Forms.Panel();
-            this.pnlInfoNumCattedre = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.pnlOreDoc = new System.Windows.Forms.Panel();
             this.lblOreEff = new System.Windows.Forms.Label();
@@ -43,13 +42,9 @@ namespace Cattedre
             this.lblOreTot = new System.Windows.Forms.Label();
             this.lblOrePot = new System.Windows.Forms.Label();
             this.lblOreCattedra = new System.Windows.Forms.Label();
-            this.pnlAnnullaSalva = new System.Windows.Forms.Panel();
-            this.btSalva = new System.Windows.Forms.Button();
-            this.btAnnulla = new System.Windows.Forms.Button();
             this.pnlClassi.SuspendLayout();
             this.pnlDipartimento.SuspendLayout();
             this.pnlOreDoc.SuspendLayout();
-            this.pnlAnnullaSalva.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlClassi
@@ -66,7 +61,7 @@ namespace Cattedre
             // 
             // btGeneraWord
             // 
-            this.btGeneraWord.Location = new System.Drawing.Point(60, 31);
+            this.btGeneraWord.Location = new System.Drawing.Point(133, 37);
             this.btGeneraWord.Name = "btGeneraWord";
             this.btGeneraWord.Size = new System.Drawing.Size(23, 22);
             this.btGeneraWord.TabIndex = 6;
@@ -109,25 +104,13 @@ namespace Cattedre
             // 
             this.pnlDipartimento.AutoScroll = true;
             this.pnlDipartimento.BackColor = System.Drawing.Color.Transparent;
-            this.pnlDipartimento.Controls.Add(this.pnlInfoNumCattedre);
             this.pnlDipartimento.Controls.Add(this.splitter1);
             this.pnlDipartimento.Controls.Add(this.pnlOreDoc);
-            this.pnlDipartimento.Controls.Add(this.pnlAnnullaSalva);
             this.pnlDipartimento.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlDipartimento.Location = new System.Drawing.Point(169, 0);
             this.pnlDipartimento.Name = "pnlDipartimento";
             this.pnlDipartimento.Size = new System.Drawing.Size(986, 687);
             this.pnlDipartimento.TabIndex = 1;
-            // 
-            // pnlInfoNumCattedre
-            // 
-            this.pnlInfoNumCattedre.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlInfoNumCattedre.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlInfoNumCattedre.Location = new System.Drawing.Point(303, 0);
-            this.pnlInfoNumCattedre.Margin = new System.Windows.Forms.Padding(2);
-            this.pnlInfoNumCattedre.Name = "pnlInfoNumCattedre";
-            this.pnlInfoNumCattedre.Size = new System.Drawing.Size(230, 687);
-            this.pnlInfoNumCattedre.TabIndex = 2;
             // 
             // splitter1
             // 
@@ -162,6 +145,7 @@ namespace Cattedre
             this.lblOreEff.Name = "lblOreEff";
             this.lblOreEff.Size = new System.Drawing.Size(51, 16);
             this.lblOreEff.TabIndex = 12;
+            this.lblOreEff.Tag = "header";
             this.lblOreEff.Text = "Ore Eff";
             // 
             // lblDocente
@@ -174,6 +158,7 @@ namespace Cattedre
             this.lblDocente.Name = "lblDocente";
             this.lblDocente.Size = new System.Drawing.Size(61, 16);
             this.lblDocente.TabIndex = 10;
+            this.lblDocente.Tag = "header";
             this.lblDocente.Text = "Docente";
             // 
             // lblOreTot
@@ -186,6 +171,7 @@ namespace Cattedre
             this.lblOreTot.Name = "lblOreTot";
             this.lblOreTot.Size = new System.Drawing.Size(26, 16);
             this.lblOreTot.TabIndex = 14;
+            this.lblOreTot.Tag = "header";
             this.lblOreTot.Text = "Tot";
             // 
             // lblOrePot
@@ -198,6 +184,7 @@ namespace Cattedre
             this.lblOrePot.Name = "lblOrePot";
             this.lblOrePot.Size = new System.Drawing.Size(55, 16);
             this.lblOrePot.TabIndex = 13;
+            this.lblOrePot.Tag = "header";
             this.lblOrePot.Text = "Ore Pot";
             // 
             // lblOreCattedra
@@ -210,37 +197,8 @@ namespace Cattedre
             this.lblOreCattedra.Name = "lblOreCattedra";
             this.lblOreCattedra.Size = new System.Drawing.Size(94, 16);
             this.lblOreCattedra.TabIndex = 11;
+            this.lblOreCattedra.Tag = "header";
             this.lblOreCattedra.Text = "Ore Cattedra";
-            // 
-            // pnlAnnullaSalva
-            // 
-            this.pnlAnnullaSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlAnnullaSalva.Controls.Add(this.btSalva);
-            this.pnlAnnullaSalva.Controls.Add(this.btAnnulla);
-            this.pnlAnnullaSalva.Location = new System.Drawing.Point(762, 613);
-            this.pnlAnnullaSalva.Name = "pnlAnnullaSalva";
-            this.pnlAnnullaSalva.Size = new System.Drawing.Size(256, 74);
-            this.pnlAnnullaSalva.TabIndex = 3;
-            // 
-            // btSalva
-            // 
-            this.btSalva.Location = new System.Drawing.Point(140, 17);
-            this.btSalva.Name = "btSalva";
-            this.btSalva.Size = new System.Drawing.Size(88, 41);
-            this.btSalva.TabIndex = 1;
-            this.btSalva.Text = "Salva";
-            this.btSalva.UseVisualStyleBackColor = true;
-            this.btSalva.Click += new System.EventHandler(this.btSalva_Click);
-            // 
-            // btAnnulla
-            // 
-            this.btAnnulla.Location = new System.Drawing.Point(17, 18);
-            this.btAnnulla.Name = "btAnnulla";
-            this.btAnnulla.Size = new System.Drawing.Size(88, 41);
-            this.btAnnulla.TabIndex = 0;
-            this.btAnnulla.Text = "Annulla";
-            this.btAnnulla.UseVisualStyleBackColor = true;
-            this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
             // 
             // FrmCattedre
             // 
@@ -251,6 +209,7 @@ namespace Cattedre
             this.Controls.Add(this.pnlClassi);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmCattedre";
+            this.Tag = "header";
             this.Text = "Cattedre";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FrmCattedre_Load);
@@ -259,7 +218,6 @@ namespace Cattedre
             this.pnlDipartimento.ResumeLayout(false);
             this.pnlOreDoc.ResumeLayout(false);
             this.pnlOreDoc.PerformLayout();
-            this.pnlAnnullaSalva.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -268,10 +226,6 @@ namespace Cattedre
 
         private System.Windows.Forms.Panel pnlClassi;
         private System.Windows.Forms.Panel pnlDipartimento;
-        private System.Windows.Forms.Panel pnlInfoNumCattedre;
-        private System.Windows.Forms.Panel pnlAnnullaSalva;
-        private System.Windows.Forms.Button btSalva;
-        private System.Windows.Forms.Button btAnnulla;
         private System.Windows.Forms.ComboBox cbDipartimenti;
         private System.Windows.Forms.Panel pnlOreDoc;
         private System.Windows.Forms.Splitter splitter1;

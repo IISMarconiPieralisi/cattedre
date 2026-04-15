@@ -11,13 +11,11 @@ namespace Cattedre
 {
     public static class ClsClasseBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
         public static ClsClasseDL CaricaClasse(long id)
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM classi WHERE ID = @id";
@@ -54,7 +52,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT * FROM classi
@@ -99,7 +97,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT IDindirizzo FROM classi WHERE ID = @IDclasse LIMIT 1";
@@ -128,7 +126,7 @@ namespace Cattedre
             string _sigla = "-";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT sigla FROM classi WHERE ID = @id";
@@ -157,7 +155,7 @@ namespace Cattedre
             long _ID = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID FROM classi WHERE sigla = @sigla";
@@ -189,7 +187,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM classi " +
@@ -234,7 +232,7 @@ namespace Cattedre
             DataTable ds = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = CreaQueryFiltri(conn, Filtri))
@@ -312,7 +310,7 @@ namespace Cattedre
             DataTable ds = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM classi " +
@@ -351,7 +349,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo,IDdipartimento,IDannoscolastico) 
@@ -384,7 +382,7 @@ namespace Cattedre
             try
             {
                 long idVecchiaCompagnaA = ClasseArticolataConQuale(classe.ID);
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE classi 
@@ -428,7 +426,7 @@ namespace Cattedre
             try
             {
                 
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "DELETE FROM classi WHERE id = @id";
@@ -482,7 +480,7 @@ namespace Cattedre
             long IDclasse = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM classi 
@@ -522,7 +520,7 @@ namespace Cattedre
             long classeArticolataCon = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT classeArticolataCon 
@@ -551,7 +549,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE classi 

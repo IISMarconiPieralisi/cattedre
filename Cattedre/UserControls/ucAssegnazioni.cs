@@ -91,7 +91,12 @@ namespace Cattedre
             using (SolidBrush brushTesto = new SolidBrush(coloreTesto))
             {
                 StringFormat sf = new StringFormat { LineAlignment = StringAlignment.Center };
-                e.Graphics.DrawString(utente.Cognome, e.Font, brushTesto, e.Bounds, sf);
+
+                string nomeCorto = string.IsNullOrEmpty(utente.Nome) ? "" :
+                                  (utente.Nome.Length > 3 ? utente.Nome.Substring(0, 3) + "." : utente.Nome);
+                string testoDaMostrare = $"{utente.Cognome} {nomeCorto}";
+
+                e.Graphics.DrawString(testoDaMostrare, e.Font, brushTesto, e.Bounds, sf);
             }
         }
 

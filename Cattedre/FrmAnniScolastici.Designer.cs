@@ -53,9 +53,9 @@
             this.lvAnniScolastici.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvAnniScolastici.FullRowSelect = true;
             this.lvAnniScolastici.HideSelection = false;
-            this.lvAnniScolastici.Location = new System.Drawing.Point(12, 46);
+            this.lvAnniScolastici.Location = new System.Drawing.Point(37, 46);
             this.lvAnniScolastici.Name = "lvAnniScolastici";
-            this.lvAnniScolastici.Size = new System.Drawing.Size(400, 300);
+            this.lvAnniScolastici.Size = new System.Drawing.Size(388, 300);
             this.lvAnniScolastici.TabIndex = 0;
             this.lvAnniScolastici.UseCompatibleStateImageBehavior = false;
             this.lvAnniScolastici.View = System.Windows.Forms.View.Details;
@@ -84,7 +84,7 @@
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btModifica.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btModifica.Location = new System.Drawing.Point(434, 96);
+            this.btModifica.Location = new System.Drawing.Point(431, 114);
             this.btModifica.Name = "btModifica";
             this.btModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
@@ -153,7 +153,7 @@
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btElimina.Location = new System.Drawing.Point(434, 149);
+            this.btElimina.Location = new System.Drawing.Point(431, 167);
             this.btElimina.Name = "btElimina";
             this.btElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -222,7 +222,7 @@
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btInserisci.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btInserisci.Location = new System.Drawing.Point(434, 46);
+            this.btInserisci.Location = new System.Drawing.Point(431, 64);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btInserisci.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -291,7 +291,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(8, 9);
+            this.label1.Location = new System.Drawing.Point(33, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(158, 23);
             this.label1.TabIndex = 34;

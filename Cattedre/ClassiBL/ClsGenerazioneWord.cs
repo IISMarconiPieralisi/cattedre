@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 
@@ -14,46 +15,79 @@ namespace Cattedre
         private const double FontSize = 12;
         public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento,string filePath)
         {
-            List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
-            List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioni();
-            List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDisciplina(dipartimento.ID);
-            List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
-            List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
-            List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);
-
-            filePath += $"\\Cattedre.Docx";
-            GenerateFileWord(anno, cdc, Docenti, assegnare, discipline,classi,Dotare,filePath);
+            try
+            { 
+                List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
+                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioni();
+                List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL
+                .CaricaCDCperDisciplina(dipartimento.ID)
+                .Select(x => x.cdc)
+                .ToList();
+                List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
+                List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
+                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);         
+                GenerateFileWord(anno,dipartimento, cdc, Docenti, assegnare, discipline, classi, Dotare, filePath);
+            }catch(Exception ex)
+            {
+                throw new Exception("Errore Durante il Caricamento del file: " + ex.Message);
+            }
+           
         }
 
-        public static void GenerateFileWord(ClsAnnoScolasticoDL annoScolastico,List<ClsClasseDiConcorsoDL> listClassiConcorso,
-                                            List<ClsUtenteDL> listDocenti,List<ClsAssegnareDL> listAssegnazioni,List<ClsDisciplinaDL> listDiscipline,
+        public static void GenerateFileWord(ClsAnnoScolasticoDL annoScolastico,ClsDipartimentoDL dipartimento, List<ClsClasseDiConcorsoDL> listClassiConcorso,
+                                            List<ClsUtenteDL> listDocenti,List<ClsAssegnareDL> listAssegnazioni, List<ClsDisciplinaDL> listDiscipline,
                                             List<ClsClasseDL> listClassi,List<ClsDotareDL> listDotare,string outputPath)
         {
-            using (DocX doc = DocX.Create(outputPath))
+            try
             {
-                doc.PageWidth = 595f;
-                doc.PageHeight = 842f;
-                doc.MarginTop = 36f;
-                doc.MarginBottom = 36f;
-                doc.MarginLeft = 36f;
-                doc.MarginRight = 36f;
-
-                foreach (ClsClasseDiConcorsoDL cdc in listClassiConcorso)
+                using (DocX doc = DocX.Create(outputPath))
                 {
-
-                    ClsDotareDL dotazione = listDotare
-                        .FirstOrDefault(d => d.IdClasseDiConcorso == cdc.ID);
-                    InserisciIntestazioneCDC(doc, cdc, dotazione);
-                    var DocentiFiltrati = ClsRichiedereBL.RilevaUtentiCDC(cdc.ID);
-
-                    foreach (ClsUtenteDL docente in DocentiFiltrati)
+                    doc.PageWidth = 595f;
+                    doc.PageHeight = 842f;
+                    doc.MarginTop = 36f;
+                    doc.MarginBottom = 36f;
+                    doc.MarginLeft = 36f;
+                    doc.MarginRight = 36f;
+                    //conto le righe, per gesitire al meglio le spaziature alla fine di ogni classe di concorso
+                    int i = 0;
+                    foreach (ClsClasseDiConcorsoDL cdc in listClassiConcorso)
                     {
-                        InserisciDocente(doc, docente, listAssegnazioni, listDiscipline, listClassi);
-                    }
-                    //InserisciNotaFinale(doc, cdc.Livello, listAssegnazioni, listDiscipline, listClassi);
-                }
+                        ClsDotareDL dotazione = listDotare
+                            .FirstOrDefault(d => d.IdClasseDiConcorso == cdc.ID);
+                        InserisciIntestazioneCDC(doc, cdc, dotazione);
 
-                doc.Save();
+                        var DocentiFiltrati = ClsRichiedereBL.RilevaUtentiCDC(cdc.ID); //metodi per trovare gli utanti con quella  CDC
+
+                        if (DocentiFiltrati.Count <= 0){    i++;    continue;
+                        }
+                        //ciclo gli utenti con quella classe di concorso 
+                        foreach (ClsUtenteDL docente in DocentiFiltrati)
+                        {
+                            InserisciDocente(doc, docente, listAssegnazioni, listDiscipline, listClassi);
+                        }
+
+                        // Aggiunge il pagebreak solo se NON è l'ultimo elemento
+                        if (i < listClassiConcorso.Count - 1)
+                        {
+                            Paragraph pageBreak = doc.InsertParagraph();
+                            pageBreak.InsertPageBreakAfterSelf();
+                        }
+                        i++;
+                    }
+                    //aggiunta piè di pagina e intersezione
+                    AggiuntaIntestazionePieDiPagina(doc, annoScolastico, dipartimento);
+                    try
+                    {
+                        doc.Save();
+                    }catch
+                    {
+                        throw new Exception("il file risulta aperto");
+                    }
+                }
+         
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
         private static void InserisciIntestazioneConcorso(
@@ -79,22 +113,25 @@ namespace Cattedre
             }
         }
 
-        private static void InserisciDocente(DocX doc,ClsUtenteDL docente,List<ClsAssegnareDL> assegnazioni,List<ClsDisciplinaDL> listDiscipline,
+        private static void InserisciDocente(DocX doc,ClsUtenteDL docente,List<ClsAssegnareDL> assegnazioni, List<ClsDisciplinaDL> listDiscipline,
                                                 List<ClsClasseDL> listClassi)
         {
             // Filtro le liste in modo tale da usare delle liste pulite 
             List<ClsAssegnareDL> assegnazioniDocente = assegnazioni.Where(a => a.IDUtente == docente.ID).ToList();
             List<ClsRichiedereDL> richiesteDocente = ClsRichiedereBL.CaricaClassiRichiedereUtente(docente.ID);
-            List<ClsDisciplinaDL> listDisciplineDocente = listDiscipline.Where(d => assegnazioniDocente.Any(r => r.IDDisciplina == d.ID)).ToList();
+            List<ClsDisciplinaDL> listDisciplineDocente = listDiscipline.Where(d => d != null && assegnazioniDocente.Any(r => r.IDDisciplina == d.ID))
+                                                                        .OrderBy(d => !string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) ? 1 : 0)
+                                                                        .ToList();
             List<ClsClasseDL> listClassiDocente = listClassi.Where(c => assegnazioniDocente.Any(r => r.IDClasse == c.ID)).ToList();
-            if (listClassiDocente.Count <= 0) return;
+             if (listClassiDocente.Count <= 0) return;
             // Intestazione docente
             var pNome = doc.InsertParagraph();
-            pNome.SpacingBefore(6);
-            pNome.Append($"Docente {docente.Cognome} {docente.Nome}")
-                 .Bold().Italic()
+            pNome.SpacingBefore(12);
+            pNome.Append($"Prof. {docente.Cognome.ToUpper()} {docente.Nome.ToUpper()}")
+                 .Bold()
                  .UnderlineStyle(UnderlineStyle.singleLine)
-                 .Font(FontName).FontSize(10);
+                 .Font(FontName).FontSize(FontSize).Color(Xceed.Drawing.Color.Red);
+            pNome.SpacingAfter(4);
             InserisciTabella(doc, assegnazioniDocente, listDisciplineDocente, listClassiDocente, docente);
         }
 
@@ -113,52 +150,59 @@ namespace Cattedre
            //InserisciTabella(doc, assegnazioni, listDiscipline, listClassi, totale);
         }
 
-        private static void InserisciTabella(DocX doc,List<ClsAssegnareDL> assegnazioni,List<ClsDisciplinaDL> listDiscipline,List<ClsClasseDL> listClassi,
-            ClsUtenteDL Docente)
+        private static void InserisciTabella(DocX doc, List<ClsAssegnareDL> assegnazioni, List<ClsDisciplinaDL> listDiscipline,
+       List<ClsClasseDL> listClassi, ClsUtenteDL Docente)
         {
             // Monte ore dal contratto
             ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(Docente.ID);
-            int monteOre = (contratto == null) ? 0 : contratto.MonteOre;
-
-            int numRighe = assegnazioni.Count + 2; // intestazione + dati + totale
+            int monteOre = contratto?.MonteOre ?? 0;
+            int OreEffettive = 0;
+            int numRighe = assegnazioni.Count + 2;
             var tabella = doc.InsertTable(numRighe, 3);
-
             tabella.Design = TableDesign.None;
             tabella.AutoFit = AutoFit.Window;
-
             foreach (var row in tabella.Rows)
             {
-                row.Cells[0].Width = 10f;   // n. Ore
-                row.Cells[1].Width = 72f;   // Materia di Insegnamento
-                row.Cells[2].Width = 18f;   // Classi
+                row.Cells[0].Width = 10f;
+                row.Cells[1].Width = 72f;
+                row.Cells[2].Width = 18f;
             }
-
             ImpostaRigaIntestazione(tabella.Rows[0]);
+
+            assegnazioni = assegnazioni
+                .OrderBy(a => !string.IsNullOrWhiteSpace(
+                    listDiscipline.FirstOrDefault(d => d != null && d.ID == a.IDDisciplina)?.DisciplinaSpeciale) ? 1 : 0)
+                .ToList();
 
             for (int i = 0; i < assegnazioni.Count; i++)
             {
                 ClsAssegnareDL assegnazione = assegnazioni[i];
+                if (assegnazione == null) continue;
 
-                ClsDisciplinaDL disciplina = listDiscipline
-                    .FirstOrDefault(d =>d!=null && d.ID == assegnazione.IDDisciplina && (!string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) || assegnazione.IDClasse>0));
+                ClsDisciplinaDL disciplina = listDiscipline.FirstOrDefault(d =>
+                    d != null &&
+                    d.ID == assegnazione.IDDisciplina &&
+                    (!string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) || assegnazione.IDClasse > 0) &&
+                    d.OreLaboratorio + d.OreTeoria > 0);
 
-                ClsClasseDL classe = listClassi
-                    .FirstOrDefault(c => c.ID == assegnazione.IDClasse);
-                int Ore = (!string.IsNullOrWhiteSpace(disciplina.DisciplinaSpeciale)) 
-                    ? assegnazione.OreSpeciali :
-                    (Docente.TipoDocente=='L')?disciplina.OreLaboratorio:disciplina.OreTeoria;
-                string nomeMateria = disciplina?.Nome ?? "N/D";
-                string nomeClasse = (classe==null)?"N/D":$"{classe.Anno}{classe.Sezione}";
+                if (disciplina == null) continue;
 
-                // evidenziata/barrato: puoi aggiungere logica qui in futuro
-                ImpostaRigaDati(tabella.Rows[i + 1], Ore
-                    , nomeMateria, nomeClasse,
-                    evidenziata: false,
-                    barrato: false);
+                ClsClasseDL classe = listClassi.FirstOrDefault(c => c != null && c.ID == assegnazione.IDClasse);
+
+                int ore;
+                if (!string.IsNullOrWhiteSpace(disciplina.DisciplinaSpeciale))
+                    ore = assegnazione.OreSpeciali;
+                else
+                    ore = Docente.TipoDocente == 'L' ? disciplina.OreLaboratorio : disciplina.OreTeoria;
+
+                string nomeMateria = disciplina.Nome ?? "N/D";
+                string nomeClasse = classe != null ? $"{classe.Anno}{classe.Sezione}" : string.Empty;
+
+                OreEffettive += ore;
+                ImpostaRigaDati(tabella.Rows[i + 1], ore, nomeMateria, nomeClasse);
             }
 
-            ImpostaRigaTotale(tabella.Rows[numRighe - 1], monteOre.ToString());
-
+            ImpostaRigaTotale(tabella.Rows[numRighe - 1], $"{OreEffettive}/{monteOre}");
             doc.InsertParagraph().SpacingAfter(4);
         }
         private static void InserisciIntestazioneCDC(DocX doc, ClsClasseDiConcorsoDL cdc, ClsDotareDL dotazione)
@@ -170,7 +214,7 @@ namespace Cattedre
             p.Append("CLASSE DI CONCORSO:")
              .Bold()
              .Font(FontName)
-             .FontSize(FontSize)
+             .FontSize(FontSize+2)
              .Color(Xceed.Drawing.Color.Black);
 
             // Vai a capo nello stesso paragrafo
@@ -180,7 +224,7 @@ namespace Cattedre
             p.Append($"{cdc.Livello} {cdc.Nome.ToUpper()}")
              .Bold()
              .Font(FontName)
-             .FontSize(FontSize)
+             .FontSize(FontSize+2)
              .Color(Xceed.Drawing.Color.Black);
 
             // Cattedre + ore residue – rosso
@@ -196,7 +240,7 @@ namespace Cattedre
 
             // Nessuna spaziatura
             p.SpacingBefore(0);
-            p.SpacingAfter(0);
+            p.SpacingAfter(5);
         }
         #region elementi grafici
         private static void ImpostaRigaIntestazione(Row riga)
@@ -251,11 +295,64 @@ namespace Cattedre
 
         private static void ImpostaBordi(Cell cella)
         {
-            var bordo = new Border(BorderStyle.Tcbs_single, BorderSize.one, 0, Xceed.Drawing.Color.Black);
+            var bordo = new Border(Xceed.Document.NET.BorderStyle.Tcbs_single, BorderSize.one, 0, Xceed.Drawing.Color.Black);
             cella.SetBorder(TableCellBorderType.Top, bordo);
             cella.SetBorder(TableCellBorderType.Bottom, bordo);
             cella.SetBorder(TableCellBorderType.Left, bordo);
             cella.SetBorder(TableCellBorderType.Right, bordo);
+        }
+        public static void AggiuntaIntestazionePieDiPagina(DocX doc, ClsAnnoScolasticoDL anno, ClsDipartimentoDL dip)
+        {
+            doc.AddHeaders();
+            Header header = doc.Headers.Odd;
+
+            Paragraph headerLine1 = header.InsertParagraph();
+            headerLine1.Append("I.I.S. \"Marconi Pieralisi\" - Jesi")
+                       .Font(FontName)
+                       .FontSize(FontSize+1)
+                       .Bold();
+            headerLine1.Alignment = Alignment.center;
+
+            // Riga 2: CATTEDRE ANNO SCOLASTICO 
+            Paragraph headerLine2 = header.InsertParagraph();
+            headerLine2.Append($"CATTEDRE ANNO SCOLASTICO {anno.Sigla}")
+                       .Font(FontName)
+                       .FontSize(FontSize-1)
+                       .Bold();
+            headerLine2.Alignment = Alignment.center;
+
+            // Riga 3: Dipartimento (se fornito)
+            if (dip!=null)
+            {
+                Paragraph headerLine3 = header.InsertParagraph();
+                headerLine3.Append($"Dipartimento: {dip.Nome}")
+                        .Font(FontName)
+                       .FontSize(FontSize - 1).SpacingAfter(5);
+                headerLine3.Alignment = Alignment.center;
+            }
+            //  PIÈ DI PAGINA 
+            doc.AddFooters();
+            Footer footer = doc.Footers.Odd;
+
+            Paragraph footerParagraph = footer.InsertParagraph();
+            footerParagraph.Alignment = Alignment.center;
+
+            footerParagraph.AppendPageNumber(PageNumberFormat.normal);
+        }
+
+        internal static string GestisciPercorsoFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.FileName = $"Cattedre { dipartimento.Nome}As{ anno.Sigla}";
+            // Impostazioni opzionali
+            saveFileDialog1.Filter = "Documento Word (*.docx)|*.docx|Tutti i file (*.*)|*.*";
+            saveFileDialog1.Title = "Scegli dove salvare il file";
+            saveFileDialog1.DefaultExt = "docx";
+
+            // Apertura del pannello e verifica del risultato
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                return  saveFileDialog1.FileName;
+            return string.Empty;
         }
     }
     #endregion

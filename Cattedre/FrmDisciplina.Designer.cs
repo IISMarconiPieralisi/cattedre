@@ -71,7 +71,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 213);
+            this.label4.Location = new System.Drawing.Point(12, 226);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 16);
             this.label4.TabIndex = 13;
@@ -140,7 +140,7 @@
             this.pnRB.Controls.Add(this.rbTerzo);
             this.pnRB.Controls.Add(this.rbSecondo);
             this.pnRB.Controls.Add(this.rbPrimo);
-            this.pnRB.Location = new System.Drawing.Point(205, 213);
+            this.pnRB.Location = new System.Drawing.Point(205, 209);
             this.pnRB.Margin = new System.Windows.Forms.Padding(4);
             this.pnRB.Name = "pnRB";
             this.pnRB.Size = new System.Drawing.Size(335, 44);
@@ -150,7 +150,7 @@
             // 
             this.rbQuinto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbQuinto.AutoSize = true;
-            this.rbQuinto.Location = new System.Drawing.Point(281, 13);
+            this.rbQuinto.Location = new System.Drawing.Point(279, 13);
             this.rbQuinto.Margin = new System.Windows.Forms.Padding(4);
             this.rbQuinto.Name = "rbQuinto";
             this.rbQuinto.Size = new System.Drawing.Size(38, 21);
@@ -165,7 +165,7 @@
             // 
             this.rbQuarto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbQuarto.AutoSize = true;
-            this.rbQuarto.Location = new System.Drawing.Point(216, 13);
+            this.rbQuarto.Location = new System.Drawing.Point(212, 13);
             this.rbQuarto.Margin = new System.Windows.Forms.Padding(4);
             this.rbQuarto.Name = "rbQuarto";
             this.rbQuarto.Size = new System.Drawing.Size(38, 21);
@@ -181,7 +181,7 @@
             this.rbTerzo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.rbTerzo.AutoSize = true;
             this.rbTerzo.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbTerzo.Location = new System.Drawing.Point(141, 13);
+            this.rbTerzo.Location = new System.Drawing.Point(145, 13);
             this.rbTerzo.Margin = new System.Windows.Forms.Padding(4);
             this.rbTerzo.Name = "rbTerzo";
             this.rbTerzo.Size = new System.Drawing.Size(38, 21);
@@ -195,7 +195,7 @@
             // rbSecondo
             // 
             this.rbSecondo.AutoSize = true;
-            this.rbSecondo.Location = new System.Drawing.Point(76, 13);
+            this.rbSecondo.Location = new System.Drawing.Point(78, 13);
             this.rbSecondo.Margin = new System.Windows.Forms.Padding(4);
             this.rbSecondo.Name = "rbSecondo";
             this.rbSecondo.Size = new System.Drawing.Size(38, 21);

@@ -11,9 +11,6 @@ namespace Cattedre
 {
     public static class ClsAppartenereBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
-
         public static List<ClsAppartenereDL> CaricaClassiAppartenere(long IDindirizzo)
         {
             List<ClsAppartenereDL> apparteneres = new List<ClsAppartenereDL>();
@@ -21,7 +18,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
 
                     conn.Open();
@@ -65,7 +62,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -105,7 +102,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
 
                     conn.Open();
@@ -137,7 +134,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.Nome, d.oreTeoria, d.oreLaboratorio
@@ -180,7 +177,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -220,7 +217,7 @@ namespace Cattedre
 
         public static void EliminaAppartenenza(ClsAppartenereDL app)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try
             {
@@ -276,7 +273,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT i.ID, i.nome FROM indirizzi i 

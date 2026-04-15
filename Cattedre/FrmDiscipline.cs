@@ -219,11 +219,6 @@ namespace Cattedre
             btPulisciCb.Enabled = false;
 
         }
-
-        private void cbDipartimenti_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
         private string CaricaGraficamenteIndirizzi(ClsDisciplinaDL disc)
         {
             var listaIndirizzi = ClsAppartenereBL.caricaIndirizziDisciplina(disc.ID).Select(i => i.Nome);

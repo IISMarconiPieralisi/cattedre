@@ -11,7 +11,6 @@ namespace Cattedre
 {
    public static class ClsDipartimentoBL
    {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
         #region crud
         public static List<ClsDipartimentoDL> CaricaDipartimenti()
          {
@@ -20,7 +19,7 @@ namespace Cattedre
             List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID, nome, IDutente FROM dipartimenti";
@@ -56,7 +55,7 @@ namespace Cattedre
             try
             {
                 CambiaCoordinatoreDipartimento(dip, dip.IDutente);
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "INSERT INTO dipartimenti (nome, IDutente) VALUES (@nome, @IDutente)";
@@ -86,7 +85,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "DELETE FROM dipartimenti WHERE id =@id ";
@@ -110,7 +109,7 @@ namespace Cattedre
         public static void ModificaDipartimento(ClsDipartimentoDL dipartimento)
         {
             
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try
             {
@@ -156,7 +155,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE dipartimenti
@@ -187,7 +186,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -216,7 +215,7 @@ namespace Cattedre
             ClsDipartimentoDL dipartimento = null;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM dipartimenti WHERE IDutente = @IDutente";
@@ -250,7 +249,7 @@ namespace Cattedre
             ClsUtenteDL utente = null;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT u.* 
@@ -329,7 +328,7 @@ namespace Cattedre
             string NomeDipartimento = "-";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT d.nome FROM dipartimenti d WHERE d.ID = @ID";
@@ -358,43 +357,41 @@ namespace Cattedre
             ClsDipartimentoDL dipartimento = null;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM dipartimenti WHERE ID = @ID";
+                    string sql = "SELECT id, nome, IDutente FROM dipartimenti WHERE id = @ID";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", ID);
-                       
-                            DataTable dt = new DataTable();
-                            using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
                             {
-                                da.Fill(dt);
+                                dipartimento = new ClsDipartimentoDL
+                                {
+                                    ID = reader.GetInt64(reader.GetOrdinal("id")),
+                                    Nome = reader.GetString(reader.GetOrdinal("nome")),
+                                    IDutente = !reader.IsDBNull(reader.GetOrdinal("IDutente"))
+                                               ? reader.GetInt64(reader.GetOrdinal("IDutente"))
+                                               : 0
+                                };
                             }
-                            if (dt.Rows.Count > 0)
-                            {
-                                DataRow row = dt.Rows[0];
-                                dipartimento = new ClsDipartimentoDL();
-                                dipartimento.ID = Convert.ToInt64(row["id"]);
-                                dipartimento.Nome = row["nome"].ToString();
-                                dipartimento.IDutente = row["IDutente"] != DBNull.Value ? Convert.ToInt64(row["IDutente"]) : 0;
-                            }
+                        }
                     }
                 }
-                
             }
-            catch (Exception ex)
+            catch (MySqlException ex)
             {
-                throw new Exception("Errore durante il rilevamento del dipartimento coordinato: " + ex.Message);
+                throw new Exception("Errore durante il rilevamento del dipartimento: " + ex.Message, ex);
             }
             return dipartimento;
         }
-
         public static long RilevaIDdipartimento(string dip)
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     string sql = "SELECT d.ID FROM dipartimenti d WHERE d.nome = @dip";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))

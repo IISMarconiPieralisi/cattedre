@@ -130,7 +130,7 @@ namespace Cattedre
         #endregion
         #region rilevamento parametri specifici
 
-        public static int TrovaIDPotenziamentoDipartimento(int IDdipartimento)
+        public static int TrovaIDPotenziamentoDipartimentoPerCDC(int IDdipartimento, long IDcdc)
         {
             try
             {
@@ -140,12 +140,15 @@ namespace Cattedre
                     string sql = @"SELECT d.ID 
                            FROM discipline d
                            JOIN gestire g ON g.IDdisciplina = d.ID
+                           JOIN richiedere r ON r.IDdisciplina = d.ID
                            WHERE g.IDdipartimento = @IDdipartimento
                            AND d.nome LIKE '%otenziamento%'
+                           AND r.IDclassediconcorso = @IDcdc
                            LIMIT 1";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDcdc", IDcdc);
                         object result = cmd.ExecuteScalar();
                         if (result != null && result != DBNull.Value)
                             return Convert.ToInt32(result);
@@ -154,7 +157,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore ricerca potenziamento dipartimento: " + ex.Message);
+                throw new Exception("Errore ricerca potenziamento dipartimento per CDC: " + ex.Message);
             }
             return 0;
         }

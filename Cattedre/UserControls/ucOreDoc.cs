@@ -41,7 +41,19 @@ namespace Cattedre
             string siglaannoscolastico = frmCattedre.Annoscolasticoselezionato;
             ClsAnnoScolasticoDL annoCorrente = ClsAnnoScolasticoBL.CercaAnnoScolastico(siglaannoscolastico);
             int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
-            int IDdisciplina = ClsDisciplinaBL.TrovaIDPotenziamentoDipartimento(IDdipartimento);
+
+            List<ClsClasseDiConcorsoDL> cdcDocente = ClsRichiedereBL.RilevaCDCDocente(IDutente);
+            ClsClasseDiConcorsoDL cdcPotDocente = cdcDocente
+                .FirstOrDefault(cdcDoc => CDCPotenziamento.Any(cdcPot => cdcPot.ID == cdcDoc.ID));
+
+            if (cdcPotDocente == null)
+                return;
+
+            int IDdisciplina = ClsDisciplinaBL.TrovaIDPotenziamentoDipartimentoPerCDC(IDdipartimento, cdcPotDocente.ID);
+
+            if (IDdisciplina == 0)
+                return;
+
             ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, annoCorrente.ID, IDdisciplina);
         }
     }

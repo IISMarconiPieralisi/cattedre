@@ -42,9 +42,6 @@ namespace Cattedre
             this.lblOreTot = new System.Windows.Forms.Label();
             this.lblOrePot = new System.Windows.Forms.Label();
             this.lblOreCattedra = new System.Windows.Forms.Label();
-            this.pnlAnnullaSalva = new System.Windows.Forms.Panel();
-            this.btSalva = new System.Windows.Forms.Button();
-            this.btAnnulla = new System.Windows.Forms.Button();
             this.pnlClassi.SuspendLayout();
             this.pnlDipartimento.SuspendLayout();
             this.pnlOreDoc.SuspendLayout();

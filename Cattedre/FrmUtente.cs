@@ -40,6 +40,7 @@ namespace Cattedre
 
         private void btSalva_Click(object sender, EventArgs e)
         {
+
             if (_utente == null)
                 _utente = new ClsUtenteDL();
 
@@ -165,7 +166,6 @@ namespace Cattedre
 
         private void FrmUtente_Load(object sender, EventArgs e)
         {
-
             //funzione per prendere solo i nomi delle cdc e non l'oggetto intero
             popolaClbClasseDiConcorso(cdcs);
             //funzione per popolare sia i dipartimenti coordinati anche se non visibili sia quelli in cui partecipare
@@ -329,6 +329,7 @@ namespace Cattedre
                     cbDipartimentoCoordinato.Visible = false;
                     cbDipartimentoCoordinato.Text = string.Empty;
                     pnTipoDocente.Enabled = true;
+                    PnContratto.Dock = DockStyle.Bottom;
                     break;
 
                 case "Coordinatore di dipartimento":
@@ -339,6 +340,8 @@ namespace Cattedre
                     lbDcoordinato.Visible = true;
                     cbDipartimentoCoordinato.Visible = true;
                     pnTipoDocente.Enabled = true;
+                    PnContratto.Dock = DockStyle.Bottom;
+
                     break;
                 case "Amministratore":
                     pnCDC.Visible = true;
@@ -348,6 +351,7 @@ namespace Cattedre
                     lbDcoordinato.Visible = true;
                     cbDipartimentoCoordinato.Visible = true;
                     pnTipoDocente.Enabled = true;
+                    PnContratto.Dock = DockStyle.Bottom;
                     break;
                 default:
                     pnCDC.Visible = false;
@@ -359,6 +363,8 @@ namespace Cattedre
                     pnTipoDocente.Enabled = false;
                     rbLaboratorio.Checked = false;
                     rbTeorico.Checked = false;
+                    PnContratto.Dock = DockStyle.Fill;
+
                     break;
             }
         } 
@@ -877,6 +883,21 @@ namespace Cattedre
                 cbAutoEmail.Enabled = false;
                 cbAutoEmail.Checked = false;
             }
+        }
+
+        private void PnUtente_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void clbDisciplina_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label14_Click(object sender, EventArgs e)
+        {
+
         }
     }
     #endregion

@@ -540,11 +540,36 @@ namespace Cattedre
 
             // Evento aggiornamento ore potenziamento
             int valorePrec = orePot;
+            bool isResetting = false;  // flag anti-rientranza
 
             uc.nudOrePot.ValueChanged += (s, e) =>
             {
-                int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimento(IDdipartimento);
-                int orePotTotaliInserite = dictDocenti.Values.Sum(u => (int)u.nudOrePot.Value);
+                if (isResetting) return;  // ignora l'evento causato dal ripristino
+
+                List<ClsClasseDiConcorsoDL> cdcPot = ClsClasseDiConcorsoBL
+                    .CaricaCDCperDisciplina(IDdipartimento)
+                    .Where(x => x.nomeDisciplina.Contains("otenziamento"))
+                    .Select(x => x.cdc)
+                    .ToList();
+
+                ClsClasseDiConcorsoDL cdcDocCorrente = cdcDocente
+                    .FirstOrDefault(cdcDoc => cdcPot.Any(cdcP => cdcP.ID == cdcDoc.ID));
+
+                if (cdcDocCorrente == null)
+                    return;
+
+                int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                    IDdipartimento, cdcDocCorrente.ID);
+
+                int orePotTotaliInserite = dictDocenti
+                    .Where(kvp =>
+                    {
+                        var cdcDocenteKvp = cacheCDC.ContainsKey(kvp.Key)
+                            ? cacheCDC[kvp.Key]
+                            : ClsRichiedereBL.RilevaCDCDocente(kvp.Key);
+                        return cdcDocenteKvp.Any(c => c.ID == cdcDocCorrente.ID);
+                    })
+                    .Sum(kvp => (int)kvp.Value.nudOrePot.Value);
 
                 if (orePotTotaliInserite > oreMax)
                 {
@@ -552,7 +577,9 @@ namespace Cattedre
                         "Superato il limite di ore di potenziamento consentite: " + oreMax,
                         "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    uc.nudOrePot.Value = valorePrec; // ripristino
+                    isResetting = true;           // attiva flag prima del ripristino
+                    uc.nudOrePot.Value = valorePrec;
+                    isResetting = false;          // disattiva flag dopo il ripristino
                 }
                 else
                 {
@@ -566,14 +593,33 @@ namespace Cattedre
 
         private void ControllaOrePotenzamentoTotali()
         {
-            int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimento(IDdipartimento);
+            List<ClsClasseDiConcorsoDL> cdcPotTutte = ClsClasseDiConcorsoBL
+                .CaricaCDCperDisciplina(IDdipartimento)
+                .Where(x => x.nomeDisciplina.Contains("otenziamento"))
+                .Select(x => x.cdc)
+                .GroupBy(c => c.ID)
+                .Select(g => g.First())
+                .ToList();
 
-            int orePotTotaliInserite = dictDocenti.Values
-                .Sum(uc => (int)uc.nudOrePot.Value);
-
-            if (orePotTotaliInserite > oreMax)
+            foreach (var cdcPot in cdcPotTutte)
             {
-                MessageBox.Show("Superato il limite di ore di potenziamento consentite - " + oreMax, "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                    IDdipartimento, cdcPot.ID);
+
+                int orePotTotali = dictDocenti
+                    .Where(kvp =>
+                    {
+                        var cdcDoc = ClsRichiedereBL.RilevaCDCDocente(kvp.Key);
+                        return cdcDoc.Any(c => c.ID == cdcPot.ID);
+                    })
+                    .Sum(kvp => (int)kvp.Value.nudOrePot.Value);
+
+                if (orePotTotali > oreMax)
+                {
+                    MessageBox.Show(
+                        $"Superato il limite ore potenziamento per CDC {cdcPot.Livello}: {oreMax}",
+                        "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

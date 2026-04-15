@@ -359,7 +359,7 @@ namespace Cattedre
 
             return 0;
         }
-        public static int RilevaOrePotenziamentoDipartimento(int IDdipartimento)
+        public static int RilevaOrePotenziamentoDipartimentoPerCDC(int IDdipartimento, long IDcdc)
         {
             try
             {
@@ -367,37 +367,30 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT d.* 
-                           FROM discipline d
-                           JOIN gestire g ON g.IDdisciplina = d.ID
-                           WHERE g.IDdipartimento = @IDdipartimento
-                           AND d.nome LIKE '%otenziamento%'
-                           LIMIT 1";
+                   FROM discipline d
+                   JOIN gestire g ON g.IDdisciplina = d.ID
+                   JOIN richiedere r ON r.IDdisciplina = d.ID
+                   WHERE g.IDdipartimento = @IDdipartimento
+                   AND d.nome LIKE '%otenziamento%'
+                   AND r.IDclassediconcorso = @IDcdc
+                   LIMIT 1";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDcdc", IDcdc);
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
                             da.Fill(dt);
-                        }
+
                         if (dt.Rows.Count > 0)
-                        {
-                            ClsDisciplinaDL disciplina = new ClsDisciplinaDL(
-                                Convert.ToInt64(dt.Rows[0]["ID"]),
-                                dt.Rows[0]["nome"].ToString(),
-                                Convert.ToInt32(dt.Rows[0]["anno"]),
-                                Convert.ToInt32(dt.Rows[0]["oreLaboratorio"]),
-                                Convert.ToInt32(dt.Rows[0]["oreTeoria"]),
-                                dt.Rows[0]["disciplinaSpeciale"].ToString()
-                            );
-                            return disciplina.OreLaboratorio;
-                        }
+                            return Convert.ToInt32(dt.Rows[0]["oreTeoria"]) +
+                                   Convert.ToInt32(dt.Rows[0]["oreLaboratorio"]);
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore nel recupero ore potenziamento: " + ex.Message);
+                throw new Exception("Errore nel recupero ore potenziamento per CDC: " + ex.Message);
             }
             return 0;
         }

@@ -15,13 +15,10 @@ namespace Cattedre
         public UcDisciplina(ClsDisciplinaDL clsDisciplinaDL, string nomeCompleto)
         {
             InitializeComponent();
-            // Il clsDisciplinaDL ha già il nome tagliato
             string nomeTagliato = clsDisciplinaDL.Nome;
 
-            // Usa la funzione AggiornaLabel per impostare e allineare il nome tagliato
             AggiornaLabel(nomeTagliato, lbldisciplina);
 
-            // Crea il ToolTip e assegnalo a TUTTI i controlli usando il nome completo
             ToolTip toolTip = new ToolTip();
             toolTip.ShowAlways = true;
             toolTip.SetToolTip(this, nomeCompleto);

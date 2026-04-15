@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +11,10 @@ namespace Cattedre
 {
     public static class ClsAssegnareBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
         #region GestioneAnnoSuccessivo
         public static bool EsistonoAssegnazioniAnnoSuccessivo(long IDannosuccessivo)
         {
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -33,6 +31,8 @@ namespace Cattedre
                 return count > 0;
             }
         }
+
+        
 
         public static void GeneraCattedreAnnoSuccessivo(int IDdipartimento, int IDannoCorrente, int IDannoSuccessivo)
         {
@@ -101,7 +101,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM assegnare";
@@ -136,7 +136,7 @@ namespace Cattedre
         public static void InserisciAssegnazione(long IDclasse,long IDannoscolastico, long IDdisciplina,long IDutente,
             int oreSpeciali,DateTime dal,DateTime al)
         {
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -162,7 +162,7 @@ namespace Cattedre
         #region GestioneAssegnazioni
         public static bool EsisteAssegnazione(long IDclasse, long IDanno, long IDdisciplina)
         {
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -189,7 +189,7 @@ namespace Cattedre
 
             DataTable dt = new DataTable();
 
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -246,7 +246,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -335,7 +335,7 @@ namespace Cattedre
             DateTime dal = anno.DataInizio;
             DateTime al = anno.DataFine;
 
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             try
             {
                 conn.Open();
@@ -433,6 +433,95 @@ namespace Cattedre
             }
 
             return lista;
+        }
+        #endregion
+        #region Popolamenti specifici
+        public static List<ClsAssegnareDL> PopolaAssegnazioniAnnoScolasticoDipartimento(long IDdipartimento, long IDannoScolastico)
+        {
+            List<ClsAssegnareDL> ass = new List<ClsAssegnareDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT DISTINCT a.ID, a.oreSpeciali, a.IDannoscolastico, a.IDutente, a.IDdisciplina, a.IDclasse " +
+                         "FROM assegnare a " +
+                         "JOIN Gestire g ON a.IDdisciplina = g.IDdisciplina " +
+                         "WHERE a.IDannoscolastico = @IDannoScolastico AND g.IDdipartimento = @IDdipartimento " +
+                         "AND (a.IDclasse IS NOT NULL OR (a.IDclasse IS NULL AND a.oreSpeciali > 0))";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                    }
+                }
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsAssegnareDL assegnare = new ClsAssegnareDL();
+                    assegnare.ID = Convert.ToInt32(row["ID"]);
+                    assegnare.OreSpeciali = Convert.ToInt32(row["oreSpeciali"]);
+                    // Campi che permettono NULL nel DB 
+                    assegnare.IDAnnoScolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDannoscolastico"]);
+                    assegnare.IDUtente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDutente"]);
+                    assegnare.IDDisciplina = (row["IDdisciplina"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplina"]);
+                    assegnare.IDClasse = (row["IDclasse"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDclasse"]);
+                    ass.Add(assegnare);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return ass;
+        }
+        internal static List<ClsAssegnareDL> PopolaAssegnazioniAnnoScolasticoDipartimentoPotenziamento(long IDannoScolastico, long IDdipartimento)
+        {
+            List<ClsAssegnareDL> ass = new List<ClsAssegnareDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT DISTINCT a.ID, a.oreSpeciali, a.IDannoscolastico, a.IDutente, a.IDdisciplina, a.IDclasse " +
+                                 "FROM assegnare a " +
+                                 "JOIN Gestire g ON a.IDdisciplina = g.IDdisciplina " +
+                                 "WHERE a.IDannoscolastico = @IDannoScolastico AND g.IDdipartimento = @IDdipartimento " +
+                                 "AND a.IDclasse IS NULL AND a.oreSpeciali > 0";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                    }
+                }
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsAssegnareDL assegnare = new ClsAssegnareDL();
+                    assegnare.ID = Convert.ToInt32(row["ID"]);
+                    assegnare.OreSpeciali = Convert.ToInt32(row["oreSpeciali"]);
+                    assegnare.IDAnnoScolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDannoscolastico"]);
+                    assegnare.IDUtente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDutente"]);
+                    assegnare.IDDisciplina = (row["IDdisciplina"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplina"]);
+                    assegnare.IDClasse = (row["IDclasse"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDclasse"]);
+                    ass.Add(assegnare);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return ass;
         }
         #endregion
         #region Codice vecchio

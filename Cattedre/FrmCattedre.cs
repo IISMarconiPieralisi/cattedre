@@ -990,7 +990,7 @@ namespace Cattedre
                     {
                         x = 20 + colonna * 170; // fallback
                     }
-                    y = 72 + riga * 100;
+                    y = 90 + riga * 100;
                     uc.Location = new Point(x, y);
 
                     //NON FUNZIONA IL TAB
@@ -1040,7 +1040,7 @@ namespace Cattedre
 
             // Discipline uniche nel pnlDisciplina
             int x = 10;
-            int y = 10;
+            int y = 7;
 
             ToolTip toolTipDiscipline = new ToolTip();
             toolTipDiscipline.ShowAlways = true;
@@ -1076,7 +1076,7 @@ namespace Cattedre
             classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, Idannoscolastico);
 
             int x = 10;
-            int y = 72;
+            int y = 95;
             for (int i = 0; i < classi.Count; i++)
             {
                 UcClasse ucClasse = new UcClasse(classi[i]);

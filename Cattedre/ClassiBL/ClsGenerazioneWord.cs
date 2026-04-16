@@ -54,7 +54,7 @@ namespace Cattedre
                     {
                         ClsDotareDL dotazione = listDotare
                             .FirstOrDefault(d => d.IdClasseDiConcorso == cdc.ID);
-                        InserisciIntestazioneCDC(doc, cdc, dotazione);
+                        InserisciIntestazioneCDC(doc, cdc, dotazione, annoScolastico);
 
                         var DocentiFiltrati = ClsRichiedereBL.RilevaUtentiCDC(cdc.ID); //metodi per trovare gli utanti con quella  CDC
 
@@ -205,7 +205,7 @@ namespace Cattedre
             ImpostaRigaTotale(tabella.Rows[numRighe - 1], $"{OreEffettive}/{monteOre}");
             doc.InsertParagraph().SpacingAfter(4);
         }
-        private static void InserisciIntestazioneCDC(DocX doc, ClsClasseDiConcorsoDL cdc, ClsDotareDL dotazione)
+        private static void InserisciIntestazioneCDC(DocX doc, ClsClasseDiConcorsoDL cdc, ClsDotareDL dotazione,ClsAnnoScolasticoDL anno)
         {
             Paragraph p = doc.InsertParagraph();
             p.Alignment = Alignment.center;
@@ -231,7 +231,7 @@ namespace Cattedre
             if (dotazione != null)
             {
                 p.AppendLine();
-                p.Append($"{dotazione.NumcattedreDiritto} cattedre + h residue")
+                p.Append($"{dotazione.NumcattedreDiritto} cattedre + {ClsClasseDiConcorsoBL.OreResidueCDC(cdc.ID,anno.ID)} h residue")
                  .Bold()
                  .Font(FontName)
                  .FontSize(FontSize)

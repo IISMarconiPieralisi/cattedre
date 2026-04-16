@@ -11,6 +11,7 @@ namespace Cattedre
 {
     public static class ClsClasseDiConcorsoBL
     {
+        #region CRUD
         public static List<ClsClasseDiConcorsoDL> CaricaCdcs()
         {
 
@@ -138,6 +139,8 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
+        #region ricerca/filtra
         public static List<(ClsClasseDiConcorsoDL cdc, string nomeDisciplina)> CaricaCDCperDisciplina(long IDdipartimento)
         {
             DataTable dt = new DataTable();
@@ -220,6 +223,63 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
             return cdcs;
+        }
+        #endregion
+        public static int OreResidueCDC (long IDCdC,long IDannoScolastico)
+        {
+            int OreResidue = 0;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    string sql = @"SELECT
+                                   ( 
+                                            SELECT
+                                            CASE 
+                                                WHEN cdc.livello LIKE 'A%' THEN SUM(d.oreTeoria + d.oreLaboratorio)
+                                                WHEN cdc.livello LIKE 'B%' THEN SUM(d.oreLaboratorio)
+                                            ELSE 0
+                                            END                                            
+                                            FROM classi c 
+                                            JOIN indirizzi i ON c.IDindirizzo=i.ID
+                                            JOIN appartenere a ON i.ID=a.IDindirizzo
+                                            JOIN discipline d ON a.IDdisciplina = d.ID
+                                            JOIN richiedere r ON r.IDdisciplina = a.IDdisciplina
+                                            JOIN  classidiconcorso cdc ON  r.IDclasseDiConcorso=cdc.ID
+                                            WHERE c.IDannoScolastico=@IDannoScolastico AND cdc.ID=@IDcdc
+                                    )
+                                    -
+                                    ( 
+                                            SELECT SUM(
+                                                CASE 
+                                                    WHEN u.tipoDocente = 'T'  THEN d.oreTeoria
+                                                    WHEN u.tipoDocente = 'L' THEN d.oreLaboratorio
+                                                ELSE d.oreTeoria + d.oreLaboratorio
+                                                END 
+                                                      )
+                                            FROM utenti u
+                                            JOIN richiedere r ON u.ID= r.IDutente
+                                            JOIN assegnare  a ON u.ID = a.IDutente
+                                            JOIN discipline  d ON a.IDdisciplina = d.ID
+                                            WHERE a.IDannoScolastico = @IDannoScolastico AND r.IDclasseDiConcorso=@IDcdc
+                                            )";
+                    conn.Open();
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                        cmd.Parameters.AddWithValue("@IDcdc", IDCdC);
+                        DataTable dt = new DataTable();
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            OreResidue = Convert.ToInt32(result);
+                    }
+               }
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return OreResidue;
         }
 
     }

@@ -150,7 +150,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT c.*, d.nome AS nomeDisciplina FROM classidiconcorso c
+                    string sql = @"SELECT  c.*, d.nome AS nomeDisciplina FROM classidiconcorso c
                          JOIN richiedere r ON c.ID = r.IDclassediconcorso
                          JOIN discipline d ON r.IDdisciplina = d.ID
                          JOIN gestire g ON d.ID = g.IDdisciplina
@@ -169,9 +169,7 @@ namespace Cattedre
                     cdc.Livello = row["livello"].ToString();
                     cdc.Nome = row["nome"].ToString();
                     cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
-
                     string nomeDisciplina = row["nomeDisciplina"].ToString();
-
                     risultato.Add((cdc, nomeDisciplina));
                 }
             }

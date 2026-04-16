@@ -189,6 +189,7 @@
             this.kryptonPalette1.FormStyles.FormMain.StateCommon.Border.Rounding = 14F;
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Border.Rounding = 14F;
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.ButtonEdgeInset = 10;
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, -1, -1, -1);
             this.kryptonPalette1.UseThemeFormChromeBorderWidth = Krypton.Toolkit.InheritBool.True;

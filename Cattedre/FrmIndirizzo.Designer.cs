@@ -110,7 +110,7 @@
             this.kryptonButton1.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.kryptonButton1.StateTracking.Border.Rounding = 20F;
             this.kryptonButton1.StateTracking.Border.Width = 1;
-            this.kryptonButton1.TabIndex = 48;
+            this.kryptonButton1.TabIndex = 2;
             this.kryptonButton1.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.kryptonButton1.Values.Text = "Annulla";
             this.kryptonButton1.Click += new System.EventHandler(this.btAnnulla_Click);
@@ -179,7 +179,7 @@
             this.btSalva.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btSalva.StateTracking.Border.Rounding = 20F;
             this.btSalva.StateTracking.Border.Width = 1;
-            this.btSalva.TabIndex = 47;
+            this.btSalva.TabIndex = 1;
             this.btSalva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btSalva.Values.Text = "Salva";
             this.btSalva.Click += new System.EventHandler(this.btSalvaIndirizzo_Click);
@@ -202,7 +202,8 @@
             this.tbNome.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbNome.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNome.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbNome.TabIndex = 49;
+            this.tbNome.TabIndex = 0;
+            this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
             // FrmIndirizzo
             // 

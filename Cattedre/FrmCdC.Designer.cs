@@ -91,7 +91,7 @@
             this.rtbAbilitazioni.Margin = new System.Windows.Forms.Padding(2);
             this.rtbAbilitazioni.Name = "rtbAbilitazioni";
             this.rtbAbilitazioni.Size = new System.Drawing.Size(295, 84);
-            this.rtbAbilitazioni.TabIndex = 4;
+            this.rtbAbilitazioni.TabIndex = 5;
             this.rtbAbilitazioni.Text = "";
             this.rtbAbilitazioni.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rtbAbilitazioni_KeyDown);
             // 
@@ -123,7 +123,7 @@
             this.nudNumCattedreDiritto.Location = new System.Drawing.Point(184, 156);
             this.nudNumCattedreDiritto.Name = "nudNumCattedreDiritto";
             this.nudNumCattedreDiritto.Size = new System.Drawing.Size(173, 21);
-            this.nudNumCattedreDiritto.TabIndex = 5;
+            this.nudNumCattedreDiritto.TabIndex = 3;
             this.nudNumCattedreDiritto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudNumCattedreDiritto_KeyDown);
             // 
             // nudNumCattedreFatto
@@ -134,7 +134,7 @@
             this.nudNumCattedreFatto.Location = new System.Drawing.Point(184, 195);
             this.nudNumCattedreFatto.Name = "nudNumCattedreFatto";
             this.nudNumCattedreFatto.Size = new System.Drawing.Size(173, 21);
-            this.nudNumCattedreFatto.TabIndex = 6;
+            this.nudNumCattedreFatto.TabIndex = 4;
             this.nudNumCattedreFatto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudNumCattedreFatto_KeyDown);
             // 
             // label6
@@ -157,7 +157,7 @@
             this.cbAnnoScolastico.Location = new System.Drawing.Point(184, 20);
             this.cbAnnoScolastico.Name = "cbAnnoScolastico";
             this.cbAnnoScolastico.Size = new System.Drawing.Size(173, 24);
-            this.cbAnnoScolastico.TabIndex = 1;
+            this.cbAnnoScolastico.TabIndex = 0;
             this.cbAnnoScolastico.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAnnoScolastico_KeyDown);
             // 
             // panel1
@@ -236,7 +236,7 @@
             this.kryptonButtonLogOut.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.kryptonButtonLogOut.StateTracking.Border.Rounding = 20F;
             this.kryptonButtonLogOut.StateTracking.Border.Width = 1;
-            this.kryptonButtonLogOut.TabIndex = 28;
+            this.kryptonButtonLogOut.TabIndex = 7;
             this.kryptonButtonLogOut.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.kryptonButtonLogOut.Values.Text = "Annulla";
             this.kryptonButtonLogOut.Click += new System.EventHandler(this.btAnnulla_Click);
@@ -305,7 +305,7 @@
             this.btSalva.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btSalva.StateTracking.Border.Rounding = 20F;
             this.btSalva.StateTracking.Border.Width = 1;
-            this.btSalva.TabIndex = 23;
+            this.btSalva.TabIndex = 6;
             this.btSalva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btSalva.Values.Text = "Salva";
             this.btSalva.Click += new System.EventHandler(this.btSava_Click);
@@ -329,7 +329,8 @@
             this.tbLivello.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbLivello.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbLivello.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbLivello.TabIndex = 28;
+            this.tbLivello.TabIndex = 1;
+            this.tbLivello.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbLivello_KeyDown);
             // 
             // tbNome
             // 
@@ -350,7 +351,8 @@
             this.tbNome.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbNome.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNome.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbNome.TabIndex = 29;
+            this.tbNome.TabIndex = 2;
+            this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
             // FrmCdC
             // 

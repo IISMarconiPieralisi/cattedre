@@ -83,7 +83,7 @@
             this.nudAnno.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.nudAnno.Location = new System.Drawing.Point(165, 15);
-            this.nudAnno.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.nudAnno.Margin = new System.Windows.Forms.Padding(4);
             this.nudAnno.Maximum = new decimal(new int[] {
             5,
             0,
@@ -124,7 +124,7 @@
             this.cbCoordinatore.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbCoordinatore.FormattingEnabled = true;
             this.cbCoordinatore.Location = new System.Drawing.Point(165, 428);
-            this.cbCoordinatore.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbCoordinatore.Margin = new System.Windows.Forms.Padding(4);
             this.cbCoordinatore.Name = "cbCoordinatore";
             this.cbCoordinatore.Size = new System.Drawing.Size(221, 25);
             this.cbCoordinatore.TabIndex = 6;
@@ -152,7 +152,7 @@
             this.cbIndirizzo.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbIndirizzo.FormattingEnabled = true;
             this.cbIndirizzo.Location = new System.Drawing.Point(165, 289);
-            this.cbIndirizzo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbIndirizzo.Margin = new System.Windows.Forms.Padding(4);
             this.cbIndirizzo.Name = "cbIndirizzo";
             this.cbIndirizzo.Size = new System.Drawing.Size(221, 25);
             this.cbIndirizzo.TabIndex = 4;
@@ -167,7 +167,7 @@
             this.cbClasseArticolataCon.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbClasseArticolataCon.FormattingEnabled = true;
             this.cbClasseArticolataCon.Location = new System.Drawing.Point(165, 226);
-            this.cbClasseArticolataCon.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbClasseArticolataCon.Margin = new System.Windows.Forms.Padding(4);
             this.cbClasseArticolataCon.Name = "cbClasseArticolataCon";
             this.cbClasseArticolataCon.Size = new System.Drawing.Size(221, 25);
             this.cbClasseArticolataCon.TabIndex = 3;
@@ -203,7 +203,7 @@
             this.cbAnnoScolastico.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbAnnoScolastico.FormattingEnabled = true;
             this.cbAnnoScolastico.Location = new System.Drawing.Point(165, 151);
-            this.cbAnnoScolastico.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbAnnoScolastico.Margin = new System.Windows.Forms.Padding(4);
             this.cbAnnoScolastico.Name = "cbAnnoScolastico";
             this.cbAnnoScolastico.Size = new System.Drawing.Size(221, 25);
             this.cbAnnoScolastico.TabIndex = 2;
@@ -218,7 +218,7 @@
             this.cbDipartimento.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDipartimento.FormattingEnabled = true;
             this.cbDipartimento.Location = new System.Drawing.Point(165, 358);
-            this.cbDipartimento.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbDipartimento.Margin = new System.Windows.Forms.Padding(4);
             this.cbDipartimento.Name = "cbDipartimento";
             this.cbDipartimento.Size = new System.Drawing.Size(221, 25);
             this.cbDipartimento.TabIndex = 5;
@@ -382,6 +382,7 @@
             this.tbSezione.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbSezione.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.tbSezione.TabIndex = 41;
+            this.tbSezione.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSezione_KeyDown);
             // 
             // FrmClasse
             // 

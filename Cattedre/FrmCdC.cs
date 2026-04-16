@@ -103,7 +103,7 @@ namespace Cattedre
                 long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
 
                 if (elapsedMilliseconds < 500) // DOPPIO INVIO RAPIDO
-                    nudNumCattedreDiritto.Focus();
+                    btSalva.Focus();
                 _lastTick = currentTick;
 
             }
@@ -118,7 +118,7 @@ namespace Cattedre
         private void nudNumCattedreFatto_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && nudNumCattedreFatto.Value > 0)
-                btSalva.Focus();
+                rtbAbilitazioni.Focus();
         }
         #endregion
 

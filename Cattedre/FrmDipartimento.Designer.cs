@@ -70,7 +70,7 @@ namespace Cattedre
             this.cbCoordinatore.Location = new System.Drawing.Point(118, 77);
             this.cbCoordinatore.Name = "cbCoordinatore";
             this.cbCoordinatore.Size = new System.Drawing.Size(173, 25);
-            this.cbCoordinatore.TabIndex = 11;
+            this.cbCoordinatore.TabIndex = 1;
             this.cbCoordinatore.SelectionChangeCommitted += new System.EventHandler(this.cbCoordinatore_SelectionChangeCommitted);
             this.cbCoordinatore.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbCoordinatore_KeyDown);
             // 
@@ -150,7 +150,7 @@ namespace Cattedre
             this.btSalvaDipartimento.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btSalvaDipartimento.StateTracking.Border.Rounding = 20F;
             this.btSalvaDipartimento.StateTracking.Border.Width = 1;
-            this.btSalvaDipartimento.TabIndex = 31;
+            this.btSalvaDipartimento.TabIndex = 2;
             this.btSalvaDipartimento.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btSalvaDipartimento.Values.Text = "Salva";
             this.btSalvaDipartimento.Click += new System.EventHandler(this.btSalvaDipartimento_Click);
@@ -219,7 +219,7 @@ namespace Cattedre
             this.kryptonButton1.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.kryptonButton1.StateTracking.Border.Rounding = 20F;
             this.kryptonButton1.StateTracking.Border.Width = 1;
-            this.kryptonButton1.TabIndex = 32;
+            this.kryptonButton1.TabIndex = 3;
             this.kryptonButton1.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.kryptonButton1.Values.Text = "Annulla";
             this.kryptonButton1.Click += new System.EventHandler(this.btAnnulla_Click);
@@ -243,7 +243,8 @@ namespace Cattedre
             this.tbNomeDipartimento.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbNomeDipartimento.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNomeDipartimento.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbNomeDipartimento.TabIndex = 29;
+            this.tbNomeDipartimento.TabIndex = 0;
+            this.tbNomeDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNomeDipartimento_KeyDown);
             // 
             // FrmDipartimento
             // 

@@ -11,7 +11,6 @@ namespace Cattedre
 {
     public static class ClsGestireBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
         public static List<ClsDipartimentoDL> DipartimentiDellaDisciplina(long IDdisciplina)
         {
             List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
@@ -19,7 +18,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.Nome 
@@ -60,7 +59,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.nome, d.anno,d.oreteoria,orelaboratorio,disciplinaspeciale
@@ -105,7 +104,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM gestire WHERE IDdisciplina = @iddisciplina";
@@ -139,7 +138,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "INSERT INTO gestire (IDdipartimento, IDdisciplina) VALUES (@IDdipartimento, @IDdisciplina)";
@@ -161,7 +160,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "DELETE FROM gestire WHERE IDdipartimento = @IDdipartimento AND IDdisciplina = @IDdisciplina";

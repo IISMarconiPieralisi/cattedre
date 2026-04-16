@@ -235,16 +235,23 @@ namespace Cattedre
         private void GeneraFiltriAnnoScolastico()
         {
             tplAnniScolastici.ColumnCount = _anniScolastici.Count;
-            int Sezioni = 0;
-            foreach( var anno in _anniScolastici )
+            tplAnniScolastici.RowCount = 1;
+
+            // Imposta le colonne con larghezza automatica
+            tplAnniScolastici.ColumnStyles.Clear();
+            for (int i = 0; i < _anniScolastici.Count; i++)
+                tplAnniScolastici.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+
+            int sezione = 0;
+            foreach (var anno in _anniScolastici)
             {
                 CheckBox cb = new CheckBox();
                 cb.Name = $"{anno.ID}";
                 cb.Text = anno.Sigla;
                 cb.Dock = DockStyle.Fill;
                 cb.KeyDown += CheckBoxAnno_KeyDown;
-                tplAnniScolastici.Controls.Add(cb, Sezioni, 0);
-                Sezioni++;
+                tplAnniScolastici.Controls.Add(cb, sezione, 0);
+                sezione++;
             }
         }
         private void ControlloSelezionatiAnniScolastici(Dictionary<string, List<string>> filtri)

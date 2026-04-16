@@ -356,7 +356,7 @@ namespace Cattedre
             if (tbRicerca.Text == "cognome nome")
             {
                 tbRicerca.Text = "";
-                tbRicerca.ForeColor = Color.Black;
+                tbRicerca.StateCommon.Content.Color1 = Color.Black;
             }
         }
 
@@ -365,7 +365,7 @@ namespace Cattedre
             if (string.IsNullOrWhiteSpace(tbRicerca.Text))
             {
                 tbRicerca.Text = "cognome nome";
-                tbRicerca.ForeColor = Color.Gray;
+                tbRicerca.StateCommon.Content.Color1 = Color.Gray;
             }
         }
         //private void btRicerca_Click(object sender, EventArgs e)
@@ -450,5 +450,10 @@ namespace Cattedre
                 tbRicerca.Focus();
         }
         #endregion
+
+        private void tbRicerca_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

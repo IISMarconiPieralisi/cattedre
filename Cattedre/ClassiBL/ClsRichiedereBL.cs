@@ -11,7 +11,6 @@ namespace Cattedre
 {
     public static class ClsRichiedereBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
         #region Rilevazioni
         public static List<ClsDisciplinaDL> RilevaDiscipinaCDC(long IDcdc)
         {
@@ -19,7 +18,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.nome,d.anno
@@ -57,7 +56,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.nome,d.cognome,d.TipoDocente,d.TipoUtente 
@@ -96,7 +95,7 @@ namespace Cattedre
             List<ClsClasseDiConcorsoDL> CDCs = new List<ClsClasseDiConcorsoDL>();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT c.id, c.livello, c.nome, c.abilitazioniRichieste
@@ -136,7 +135,7 @@ namespace Cattedre
             DataTable ds = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -178,7 +177,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -224,7 +223,7 @@ namespace Cattedre
         {
             
 
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 try
                 {
@@ -318,7 +317,7 @@ namespace Cattedre
         public static void EliminaRichiesta(long IDrichiedere)
         {
             
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try
             {
@@ -348,7 +347,7 @@ namespace Cattedre
         public static List<ClsRichiedereDL> CaricaClassiRichiedereUtente(long IDutente)
         {
             
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             DataTable ds = new DataTable();
             List<ClsRichiedereDL> richiederes = new List<ClsRichiedereDL>();
             try
@@ -389,7 +388,7 @@ namespace Cattedre
             List<ClsRichiedereDL> Richiederes = new List<ClsRichiedereDL>();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID,IDutente, IDclasseDiConcorso, IDdisciplina 

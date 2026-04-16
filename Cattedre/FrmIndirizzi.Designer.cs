@@ -52,9 +52,9 @@
             this.lvIndirizzi.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvIndirizzi.FullRowSelect = true;
             this.lvIndirizzi.HideSelection = false;
-            this.lvIndirizzi.Location = new System.Drawing.Point(12, 114);
+            this.lvIndirizzi.Location = new System.Drawing.Point(41, 95);
             this.lvIndirizzi.Name = "lvIndirizzi";
-            this.lvIndirizzi.Size = new System.Drawing.Size(673, 314);
+            this.lvIndirizzi.Size = new System.Drawing.Size(807, 314);
             this.lvIndirizzi.TabIndex = 14;
             this.lvIndirizzi.UseCompatibleStateImageBehavior = false;
             this.lvIndirizzi.View = System.Windows.Forms.View.Details;
@@ -73,7 +73,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 68);
+            this.label1.Location = new System.Drawing.Point(46, 49);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 17);
             this.label1.TabIndex = 22;
@@ -83,7 +83,7 @@
             // 
             this.kryptonButtonModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonButtonModifica.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.kryptonButtonModifica.Location = new System.Drawing.Point(706, 172);
+            this.kryptonButtonModifica.Location = new System.Drawing.Point(854, 170);
             this.kryptonButtonModifica.Name = "kryptonButtonModifica";
             this.kryptonButtonModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.kryptonButtonModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -152,7 +152,7 @@
             // 
             this.kryptonButtonElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonButtonElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.kryptonButtonElimina.Location = new System.Drawing.Point(706, 228);
+            this.kryptonButtonElimina.Location = new System.Drawing.Point(854, 221);
             this.kryptonButtonElimina.Name = "kryptonButtonElimina";
             this.kryptonButtonElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.kryptonButtonElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -221,7 +221,7 @@
             // 
             this.kryptonButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.kryptonButton1.Location = new System.Drawing.Point(706, 114);
+            this.kryptonButton1.Location = new System.Drawing.Point(854, 119);
             this.kryptonButton1.Name = "kryptonButton1";
             this.kryptonButton1.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.kryptonButton1.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -290,9 +290,9 @@
             // 
             this.tbRicerca.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbRicerca.Location = new System.Drawing.Point(70, 64);
+            this.tbRicerca.Location = new System.Drawing.Point(104, 45);
             this.tbRicerca.Name = "tbRicerca";
-            this.tbRicerca.Size = new System.Drawing.Size(209, 29);
+            this.tbRicerca.Size = new System.Drawing.Size(357, 29);
             this.tbRicerca.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbRicerca.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbRicerca.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -306,12 +306,13 @@
             this.tbRicerca.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbRicerca.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.tbRicerca.TabIndex = 34;
+            this.tbRicerca.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbRicerca_KeyDown);
             // 
             // btAnnulla
             // 
             this.btAnnulla.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btAnnulla.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btAnnulla.Location = new System.Drawing.Point(392, 61);
+            this.btAnnulla.Location = new System.Drawing.Point(467, 42);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btAnnulla.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -325,7 +326,7 @@
             this.btAnnulla.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btAnnulla.OverrideDefault.Border.Rounding = 20F;
             this.btAnnulla.OverrideDefault.Border.Width = 1;
-            this.btAnnulla.Size = new System.Drawing.Size(97, 32);
+            this.btAnnulla.Size = new System.Drawing.Size(94, 32);
             this.btAnnulla.StateCommon.Back.Color1 = System.Drawing.Color.Red;
             this.btAnnulla.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
             this.btAnnulla.StateCommon.Back.ColorAngle = 45F;
@@ -380,7 +381,7 @@
             // 
             this.btCerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btCerca.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btCerca.Location = new System.Drawing.Point(294, 60);
+            this.btCerca.Location = new System.Drawing.Point(854, 48);
             this.btCerca.Name = "btCerca";
             this.btCerca.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btCerca.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -394,7 +395,7 @@
             this.btCerca.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btCerca.OverrideDefault.Border.Rounding = 20F;
             this.btCerca.OverrideDefault.Border.Width = 1;
-            this.btCerca.Size = new System.Drawing.Size(92, 32);
+            this.btCerca.Size = new System.Drawing.Size(94, 32);
             this.btCerca.StateCommon.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btCerca.StateCommon.Back.Color2 = System.Drawing.Color.RoyalBlue;
             this.btCerca.StateCommon.Back.ColorAngle = 45F;
@@ -443,13 +444,13 @@
             this.btCerca.TabIndex = 36;
             this.btCerca.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btCerca.Values.Text = "Cerca";
-            this.btCerca.Click += new System.EventHandler(this.btCerca_Click_1);
+            this.btCerca.Click += new System.EventHandler(this.btCerca_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(8, 9);
+            this.label2.Location = new System.Drawing.Point(38, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(86, 23);
             this.label2.TabIndex = 37;
@@ -459,7 +460,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(812, 467);
+            this.ClientSize = new System.Drawing.Size(960, 467);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btCerca);
             this.Controls.Add(this.btAnnulla);

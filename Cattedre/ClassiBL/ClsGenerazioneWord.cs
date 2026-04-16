@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -15,16 +15,17 @@ namespace Cattedre
         private const double FontSize = 12;
         public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento,string filePath)
         {
-            List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
             try
-            {
-                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID, anno.ID);
-                List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDisciplina(dipartimento.ID);
+            { 
+                List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
+                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioni();
+                List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL
+                .CaricaCDCperDisciplina(dipartimento.ID)
+                .Select(x => x.cdc)
+                .ToList();
                 List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
                 List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
-                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);
-
-               
+                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);         
                 GenerateFileWord(anno,dipartimento, cdc, Docenti, assegnare, discipline, classi, Dotare, filePath);
             }catch(Exception ex)
             {
@@ -62,10 +63,7 @@ namespace Cattedre
                         //ciclo gli utenti con quella classe di concorso 
                         foreach (ClsUtenteDL docente in DocentiFiltrati)
                         {
-                            List<ClsAssegnareDL> assegnazioni = listAssegnazioni
-                                .Where(a => a.IDUtente == docente.ID)
-                                .ToList();
-                            InserisciDocente(doc, docente, assegnazioni, listDiscipline, listClassi);
+                            InserisciDocente(doc, docente, listAssegnazioni, listDiscipline, listClassi);
                         }
 
                         // Aggiunge il pagebreak solo se NON è l'ultimo elemento

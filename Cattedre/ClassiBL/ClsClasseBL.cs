@@ -11,13 +11,11 @@ namespace Cattedre
 {
     public static class ClsClasseBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
         public static ClsClasseDL CaricaClasse(long id)
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM classi WHERE ID = @id";
@@ -54,7 +52,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT * FROM classi
@@ -99,7 +97,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT IDindirizzo FROM classi WHERE ID = @IDclasse LIMIT 1";
@@ -128,7 +126,7 @@ namespace Cattedre
             string _sigla = "-";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT sigla FROM classi WHERE ID = @id";
@@ -157,7 +155,7 @@ namespace Cattedre
             long _ID = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID FROM classi WHERE sigla = @sigla";
@@ -183,18 +181,19 @@ namespace Cattedre
 
 
         #region popolamenti Specifici
-        public static List<ClsClasseDL> CaricaClassiDipartimento(int IDdipartimento, long IDannoscolastico)
+        public static List<ClsClasseDL> CaricaClassiDipartimento(long IDdipartimento, long IDannoscolastico)
         {
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM classi " +
                                  "WHERE classi.IDdipartimento = @IDdipartimento " +
-                                 "AND classi.IDannoscolastico = @IDannoscolastico";
+                                 "AND classi.IDannoscolastico = @IDannoscolastico " +
+                                 "ORDER BY classi.anno, classi.sezione";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
@@ -233,7 +232,7 @@ namespace Cattedre
             DataTable ds = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = CreaQueryFiltri(conn, Filtri))
@@ -292,7 +291,7 @@ namespace Cattedre
                 {
                     sql += string.Join(" AND ", condizioni);
                 }
-
+                sql += " ORDER BY anno ASC";
                 cmd.CommandText = sql;
                 return cmd;
 
@@ -311,7 +310,7 @@ namespace Cattedre
             DataTable ds = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM classi " +
@@ -350,7 +349,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo,IDdipartimento,IDannoscolastico) 
@@ -382,7 +381,8 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                long idVecchiaCompagnaA = ClasseArticolataConQuale(classe.ID);
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE classi 
@@ -412,7 +412,7 @@ namespace Cattedre
                     }
                     conn.Close();
 
-                    ControllaClassiArticolate(classe);
+                    ControllaClassiArticolate(classe,idVecchiaCompagnaA);
                 }
             }
             catch (Exception ex)
@@ -426,7 +426,7 @@ namespace Cattedre
             try
             {
                 
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "DELETE FROM classi WHERE id = @id";
@@ -447,33 +447,40 @@ namespace Cattedre
         }
         #endregion
         #region gestioni classiArticolate
-        public static void ControllaClassiArticolate(ClsClasseDL classe)
+        public static void ControllaClassiArticolate(ClsClasseDL classe, long idVecchiaCompagnaA = -1)
         {
+            classe.ID = RilevaIDclasse(classe);
+
+            // Usa il valore passato, oppure leggilo (per InsertClasse non serve)
+            if (idVecchiaCompagnaA == -1)
+                idVecchiaCompagnaA = ClasseArticolataConQuale(classe.ID);
+
             if (classe.ClasseArticolataCon > 0)
             {
-                // 1. Recuperiamo l'ID della classe corrente (se non l'abbiamo già)
-                classe.ID = RilevaIDclasse(classe);
+                if (idVecchiaCompagnaA > 0 && idVecchiaCompagnaA != classe.ClasseArticolataCon)
+                    ModificaClasseArticolata(idVecchiaCompagnaA, -1);
 
-                // 2. Troviamo con chi era precedentemente articolata la classe target (B)
-                // per "liberare" la vecchia compagna (C)
-                long idVecchiaCompagnaTarget = ClasseArticolataConQuale(classe.ClasseArticolataCon);
+                long idVecchiaCompagnaC = ClasseArticolataConQuale(classe.ClasseArticolataCon);
+                if (idVecchiaCompagnaC > 0 && idVecchiaCompagnaC != classe.ID)
+                    ModificaClasseArticolata(idVecchiaCompagnaC, -1);
 
-                if (idVecchiaCompagnaTarget > 0 && idVecchiaCompagnaTarget != classe.ID)
-                {
-                    // Cancello il riferimento nella vecchia classe C, portandolo a -1 (o 0)
-                    ModificaClasseArticolata(idVecchiaCompagnaTarget, -1);
-                }
-
-                // 3. Infine, aggiorno la classe target (B) affinché punti alla classe corrente (A)
+                ModificaClasseArticolata(classe.ID, classe.ClasseArticolataCon);
                 ModificaClasseArticolata(classe.ClasseArticolataCon, classe.ID);
             }
+            else
+            {
+                if (idVecchiaCompagnaA > 0)
+                    ModificaClasseArticolata(idVecchiaCompagnaA, -1);
+                ModificaClasseArticolata(classe.ID, -1);
+            }
         }
+
         public static long RilevaIDclasse(ClsClasseDL classe)
         {
             long IDclasse = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM classi 
@@ -513,7 +520,7 @@ namespace Cattedre
             long classeArticolataCon = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT classeArticolataCon 
@@ -542,7 +549,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE classi 

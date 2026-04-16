@@ -51,7 +51,7 @@
             this.Controls.Add(this.lbldisciplina);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "UcDisciplina";
-            this.Size = new System.Drawing.Size(162, 53);
+            this.Size = new System.Drawing.Size(147, 53);
             this.ResumeLayout(false);
             this.PerformLayout();
 

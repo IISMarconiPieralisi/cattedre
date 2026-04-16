@@ -11,9 +11,6 @@ namespace Cattedre
 {
     public static class ClsAnnoScolasticoBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
-
         public static long TrovaIDannoscolastico()
         {
             ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
@@ -21,7 +18,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM anniscolastici 
@@ -57,7 +54,43 @@ namespace Cattedre
                 .OrderBy(a => a.ID)
                 .FirstOrDefault();
         }
+        public static ClsAnnoScolasticoDL CercaAnnoScolastico(long ID)
+        {
+            ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
+            DataTable dt = new DataTable();
 
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT * FROM anniscolastici
+                                   WHERE ID = @ID";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ID);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        conn.Close();
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        anno.ID = Convert.ToInt64(row["ID"]);
+                        anno.Sigla = row["sigla"].ToString();
+                        anno.DataInizio = Convert.ToDateTime(row["datainizio"]);
+                        anno.DataFine = Convert.ToDateTime(row["datafine"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return anno;
+        }
         public static ClsAnnoScolasticoDL CercaAnnoScolastico(string sigla)
         {
             ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
@@ -65,7 +98,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT * FROM anniscolastici
@@ -101,7 +134,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT id,sigla,datainizio,datafine FROM anniscolastici ORDER BY sigla DESC";
@@ -138,7 +171,7 @@ namespace Cattedre
             long IDanno = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM anniscolastici 
@@ -171,7 +204,7 @@ namespace Cattedre
             long IDanno = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM anniscolastici 
@@ -201,7 +234,7 @@ namespace Cattedre
             string Sigla = "-";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT sigla FROM anniscolastici WHERE id=@ID";
@@ -229,7 +262,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "INSERT INTO anniscolastici (sigla, datainizio, datafine) VALUES (@sigla, @datainizio, @datafine)";
@@ -254,7 +287,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE anniscolastici 
@@ -284,7 +317,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "DELETE FROM anniscolastici WHERE id = @ID";

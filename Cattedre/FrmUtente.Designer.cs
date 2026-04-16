@@ -209,6 +209,7 @@
             this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tbPassword.Location = new System.Drawing.Point(133, 194);
             this.tbPassword.Name = "tbPassword";
+            this.tbPassword.PasswordChar = '●';
             this.tbPassword.Size = new System.Drawing.Size(260, 29);
             this.tbPassword.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbPassword.StateCommon.Border.Color1 = System.Drawing.Color.Black;
@@ -223,7 +224,10 @@
             this.tbPassword.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.tbPassword.TabIndex = 40;
+            this.tbPassword.UseSystemPasswordChar = true;
+            this.tbPassword.Enter += new System.EventHandler(this.tbPassword_Enter);
             this.tbPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbPassword_KeyDown);
+            this.tbPassword.Leave += new System.EventHandler(this.tbPassword_Leave);
             // 
             // tbEmail
             // 

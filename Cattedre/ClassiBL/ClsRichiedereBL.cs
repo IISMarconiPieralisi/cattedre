@@ -228,7 +228,7 @@ namespace Cattedre
                 try
                 {
                     conn.Open();
-                    string sql = "INSERT INTO Richiedere (IDclasseDiConcorso, IDutente,IDdisciplina) " +
+                    string sql = "INSERT INTO richiedere (IDclasseDiConcorso, IDutente,IDdisciplina) " +
                                  "VALUES (@IDclasseDiConcorso, @IDutente, @IDdisciplina)";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))

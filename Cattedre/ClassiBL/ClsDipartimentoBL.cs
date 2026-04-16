@@ -122,7 +122,10 @@ namespace Cattedre
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
                     cmd.Parameters.AddWithValue("@nome", dipartimento.Nome);
-                    cmd.Parameters.AddWithValue("@IDutente", dipartimento.IDutente);
+                    if (dipartimento.IDutente > 0)
+                        cmd.Parameters.AddWithValue("@IDutente", dipartimento.IDutente);
+                    else
+                        cmd.Parameters.AddWithValue("@IDutente", DBNull.Value);
                     cmd.Parameters.AddWithValue("id", dipartimento.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
                     if (righeCoinvolte < 0)

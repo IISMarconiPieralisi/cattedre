@@ -302,9 +302,9 @@ namespace Cattedre
             // Rimuove solo i controlli dinamici (ucOreDoc e label totali),
             // lasciando intatte le label header del designer
             var daRimuovere = pnlOreDoc.Controls
-    .Cast<Control>()
-    .Where(c => c.Tag?.ToString() != "header")
-    .ToList();
+            .Cast<Control>()
+            .Where(c => c.Tag?.ToString() != "header")
+            .ToList();
 
             foreach (var c in daRimuovere)
             {
@@ -371,7 +371,7 @@ namespace Cattedre
             Label lblTotaleTeorici = null;
             Label lblTotalePratici = null;
 
-            // ── BLOCCO TEORICI ──────────────────────────────────────────
+            // BLOCCO TEORICI
             if (docentiTeorici.Any())
             {
                 // Ricavo la CDC del primo teorico per l'header
@@ -422,7 +422,7 @@ namespace Cattedre
                 lblTotPotTeorici.Font = new Font(lblTotPotTeorici.Font, FontStyle.Bold);
                 lblTotPotTeorici.Text = "0";
                 lblTotPotTeorici.Name = "lblTotalePotTeorici";
-                lblTotPotTeorici.Location = new Point(305, y + 5);
+                lblTotPotTeorici.Location = new Point(298, y + 5);
                 pnlOreDoc.Controls.Add(lblTotPotTeorici);
 
                 Label lblTotLabelTeorici = new Label();
@@ -435,7 +435,7 @@ namespace Cattedre
                 y += lblTotaleTeorici.Height + 15;
             }
 
-            // ── BLOCCO PRATICI ──────────────────────────────────────────
+            // BLOCCO PRATICI
             if (docentiPratici.Any())
             {
                 y += 10; // spazio extra tra i due gruppi
@@ -485,7 +485,7 @@ namespace Cattedre
                 lblTotPotPratici.Font = new Font(lblTotPotPratici.Font, FontStyle.Bold);
                 lblTotPotPratici.Text = "0";
                 lblTotPotPratici.Name = "lblTotalePotPratici";
-                lblTotPotPratici.Location = new Point(305, y + 5);
+                lblTotPotPratici.Location = new Point(298, y + 5);
                 pnlOreDoc.Controls.Add(lblTotPotPratici);
 
                 Label lblTotLabelPratici = new Label();
@@ -534,17 +534,61 @@ namespace Cattedre
             cdcPotenziamento.Any(cdcPot => cdcPot.ID == cdcDoc.ID)
             );
 
+            if (docenteAbilitatoAlPotenziamento)
+            {
+                ClsClasseDiConcorsoDL cdcPotDocente = cdcDocente
+                    .FirstOrDefault(cdcDoc => cdcPotenziamento.Any(cdcPot => cdcPot.ID == cdcDoc.ID));
+
+                if (cdcPotDocente != null)
+                {
+                    int oreMaxNud = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                        IDdipartimento, cdcPotDocente.ID);
+                    uc.nudOrePot.Maximum = oreMaxNud;
+                }
+            }
+
             // Disabilita modifica per Preside o Admin
             if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || !docenteAbilitatoAlPotenziamento)
                 uc.nudOrePot.Enabled = false;
 
             // Evento aggiornamento ore potenziamento
             int valorePrec = orePot;
+            bool isResetting = false;  // flag anti-rientranza
 
             uc.nudOrePot.ValueChanged += (s, e) =>
             {
-                int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimento(IDdipartimento);
-                int orePotTotaliInserite = dictDocenti.Values.Sum(u => (int)u.nudOrePot.Value);
+                if (isResetting) return;  // ignora l'evento causato dal ripristino
+
+                List<ClsClasseDiConcorsoDL> cdcPot = ClsClasseDiConcorsoBL
+                    .CaricaCDCperDisciplina(IDdipartimento)
+                    .Where(x => x.nomeDisciplina.Contains("otenziamento"))
+                    .Select(x => x.cdc)
+                    .ToList();
+
+                ClsClasseDiConcorsoDL cdcDocCorrente = cdcDocente
+                    .FirstOrDefault(cdcDoc => cdcPot.Any(cdcP => cdcP.ID == cdcDoc.ID));
+
+                if (cdcDocCorrente == null)
+                    return;
+
+                int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                    IDdipartimento, cdcDocCorrente.ID);
+
+                long idDocenteCorrente = doc.ID;
+
+                int orePotAltriDocenti = dictDocenti
+                    .Where(kvp =>
+                    {
+                        if (kvp.Key == idDocenteCorrente) return false;
+                        var cdcDocenteKvp = cacheCDC.ContainsKey(kvp.Key)
+                            ? cacheCDC[kvp.Key]
+                            : ClsRichiedereBL.RilevaCDCDocente(kvp.Key);
+                        return cdcDocenteKvp.Any(c => c.ID == cdcDocCorrente.ID);
+                    })
+                    .Sum(kvp => (int)kvp.Value.nudOrePot.Value);
+
+                int nuovoValore = (int)uc.nudOrePot.Value;
+                int orePotTotaliInserite = orePotAltriDocenti + nuovoValore;
 
                 if (orePotTotaliInserite > oreMax)
                 {
@@ -552,7 +596,9 @@ namespace Cattedre
                         "Superato il limite di ore di potenziamento consentite: " + oreMax,
                         "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    uc.nudOrePot.Value = valorePrec; // ripristino
+                    isResetting = true;           // attiva flag prima del ripristino
+                    uc.nudOrePot.Value = valorePrec;
+                    isResetting = false;          // disattiva flag dopo il ripristino
                 }
                 else
                 {
@@ -566,14 +612,33 @@ namespace Cattedre
 
         private void ControllaOrePotenzamentoTotali()
         {
-            int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimento(IDdipartimento);
+            List<ClsClasseDiConcorsoDL> cdcPotTutte = ClsClasseDiConcorsoBL
+                .CaricaCDCperDisciplina(IDdipartimento)
+                .Where(x => x.nomeDisciplina.Contains("otenziamento"))
+                .Select(x => x.cdc)
+                .GroupBy(c => c.ID)
+                .Select(g => g.First())
+                .ToList();
 
-            int orePotTotaliInserite = dictDocenti.Values
-                .Sum(uc => (int)uc.nudOrePot.Value);
-
-            if (orePotTotaliInserite > oreMax)
+            foreach (var cdcPot in cdcPotTutte)
             {
-                MessageBox.Show("Superato il limite di ore di potenziamento consentite - " + oreMax, "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                    IDdipartimento, cdcPot.ID);
+
+                int orePotTotali = dictDocenti
+                    .Where(kvp =>
+                    {
+                        var cdcDoc = ClsRichiedereBL.RilevaCDCDocente(kvp.Key);
+                        return cdcDoc.Any(c => c.ID == cdcPot.ID);
+                    })
+                    .Sum(kvp => (int)kvp.Value.nudOrePot.Value);
+
+                if (orePotTotali > oreMax)
+                {
+                    MessageBox.Show(
+                        $"Superato il limite ore potenziamento per CDC {cdcPot.Livello}: {oreMax}",
+                        "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -660,6 +725,7 @@ namespace Cattedre
             {
                 int totTeorici = 0, totPratici = 0;
                 int totPotTeorici = 0, totPotPratici = 0;
+                int oreMaxTeorici = 0, oreMaxPratici = 0;
 
                 foreach (var kvp in dictDocenti)
                 {
@@ -673,19 +739,54 @@ namespace Cattedre
                     {
                         totTeorici += tot;
                         totPotTeorici += pot;
-                    }
 
+                        // calcola oreMax solo una volta (prendo la CDC di potenziamento del docente)
+                        if (oreMaxTeorici == 0)
+                        {
+                            List<ClsClasseDiConcorsoDL> cdcPot = ClsClasseDiConcorsoBL
+                                .CaricaCDCperDisciplina(IDdipartimento)
+                                .Where(x => x.nomeDisciplina.Contains("otenziamento"))
+                                .Select(x => x.cdc)
+                                .ToList();
+
+                            ClsClasseDiConcorsoDL cdcPotDocente = cdcs
+                                .FirstOrDefault(c => cdcPot.Any(p => p.ID == c.ID));
+
+                            if (cdcPotDocente != null)
+                                oreMaxTeorici = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                                    IDdipartimento, cdcPotDocente.ID);
+                        }
+                    }
                     else
                     {
                         totPratici += tot;
                         totPotPratici += pot;
+
+                        if (oreMaxPratici == 0)
+                        {
+                            List<ClsClasseDiConcorsoDL> cdcPot = ClsClasseDiConcorsoBL
+                                .CaricaCDCperDisciplina(IDdipartimento)
+                                .Where(x => x.nomeDisciplina.Contains("otenziamento"))
+                                .Select(x => x.cdc)
+                                .ToList();
+
+                            ClsClasseDiConcorsoDL cdcPotDocente = cdcs
+                                .FirstOrDefault(c => cdcPot.Any(p => p.ID == c.ID));
+
+                            if (cdcPotDocente != null)
+                                oreMaxPratici = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                                    IDdipartimento, cdcPotDocente.ID);
+                        }
                     }
                 }
 
                 if (lblTotTeo != null) lblTotTeo.Text = $"{totTeorici}";
                 if (lblTotPra != null) lblTotPra.Text = $"{totPratici}";
-                if (lblTotPotTeo != null) lblTotPotTeo.Text = $"{totPotTeorici}";
-                if (lblTotPotPra != null) lblTotPotPra.Text = $"{totPotPratici}";
+
+                if (lblTotPotTeo != null)
+                    lblTotPotTeo.Text = oreMaxTeorici > 0 ? $"{totPotTeorici}/{oreMaxTeorici}" : $"{totPotTeorici}";
+                if (lblTotPotPra != null)
+                    lblTotPotPra.Text = oreMaxPratici > 0 ? $"{totPotPratici}/{oreMaxPratici}" : $"{totPotPratici}";
             }
         }
 

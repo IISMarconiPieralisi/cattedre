@@ -30,9 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDisciplina));
-            this.btSalva = new System.Windows.Forms.Button();
-            this.btAnnulla = new System.Windows.Forms.Button();
-            this.tbNome = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -52,92 +49,61 @@
             this.label9 = new System.Windows.Forms.Label();
             this.clbDipartimenti = new System.Windows.Forms.CheckedListBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.tbDisciplinaSpeciale = new System.Windows.Forms.TextBox();
             this.lblAnnoSuc = new System.Windows.Forms.Label();
-            this.frmDisciplinaBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label6 = new System.Windows.Forms.Label();
             this.clbCdcs = new System.Windows.Forms.CheckedListBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btAnnulla = new Krypton.Toolkit.KryptonButton();
+            this.btSalva = new Krypton.Toolkit.KryptonButton();
+            this.tbNome = new Krypton.Toolkit.KryptonTextBox();
+            this.tbDisciplinaSpeciale = new Krypton.Toolkit.KryptonTextBox();
+            this.cbDisciplinaSpeciale = new Krypton.Toolkit.KryptonCheckBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.frmDisciplinaBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.nudOreTeoria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudOreLab)).BeginInit();
             this.pnRB.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).BeginInit();
             this.SuspendLayout();
-            // 
-            // btSalva
-            // 
-            this.btSalva.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btSalva.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btSalva.Location = new System.Drawing.Point(200, 2);
-            this.btSalva.Margin = new System.Windows.Forms.Padding(2);
-            this.btSalva.Name = "btSalva";
-            this.btSalva.Size = new System.Drawing.Size(146, 31);
-            this.btSalva.TabIndex = 11;
-            this.btSalva.Text = "Salva";
-            this.btSalva.UseVisualStyleBackColor = true;
-            this.btSalva.Click += new System.EventHandler(this.btSalva_Click);
-            // 
-            // btAnnulla
-            // 
-            this.btAnnulla.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.btAnnulla.Location = new System.Drawing.Point(2, 2);
-            this.btAnnulla.Margin = new System.Windows.Forms.Padding(2);
-            this.btAnnulla.Name = "btAnnulla";
-            this.btAnnulla.Size = new System.Drawing.Size(146, 31);
-            this.btAnnulla.TabIndex = 0;
-            this.btAnnulla.Text = "Annulla";
-            this.btAnnulla.UseVisualStyleBackColor = true;
-            this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
-            // 
-            // tbNome
-            // 
-            this.tbNome.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbNome.Location = new System.Drawing.Point(186, 27);
-            this.tbNome.Margin = new System.Windows.Forms.Padding(2);
-            this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(182, 20);
-            this.tbNome.TabIndex = 1;
-            this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(31, 140);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(12, 226);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
+            this.label4.Size = new System.Drawing.Size(46, 16);
             this.label4.TabIndex = 13;
             this.label4.Text = "Anno:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(31, 99);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(12, 165);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(79, 13);
+            this.label3.Size = new System.Drawing.Size(113, 16);
             this.label3.TabIndex = 12;
             this.label3.Text = "Ore laboratorio:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(31, 67);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(15, 126);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.Size = new System.Drawing.Size(78, 16);
             this.label2.TabIndex = 11;
             this.label2.Text = "Ore teoria:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 34);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(12, 57);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.Size = new System.Drawing.Size(50, 16);
             this.label1.TabIndex = 10;
             this.label1.Text = "Nome:";
             // 
@@ -145,9 +111,11 @@
             // 
             this.nudOreTeoria.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.nudOreTeoria.Location = new System.Drawing.Point(186, 62);
+            this.nudOreTeoria.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudOreTeoria.Location = new System.Drawing.Point(205, 124);
+            this.nudOreTeoria.Margin = new System.Windows.Forms.Padding(4);
             this.nudOreTeoria.Name = "nudOreTeoria";
-            this.nudOreTeoria.Size = new System.Drawing.Size(182, 20);
+            this.nudOreTeoria.Size = new System.Drawing.Size(243, 23);
             this.nudOreTeoria.TabIndex = 2;
             this.nudOreTeoria.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudOreTeoria_KeyDown);
             // 
@@ -155,9 +123,11 @@
             // 
             this.nudOreLab.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.nudOreLab.Location = new System.Drawing.Point(186, 97);
+            this.nudOreLab.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudOreLab.Location = new System.Drawing.Point(205, 163);
+            this.nudOreLab.Margin = new System.Windows.Forms.Padding(4);
             this.nudOreLab.Name = "nudOreLab";
-            this.nudOreLab.Size = new System.Drawing.Size(182, 20);
+            this.nudOreLab.Size = new System.Drawing.Size(243, 23);
             this.nudOreLab.TabIndex = 3;
             this.nudOreLab.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudOreLab_KeyDown);
             // 
@@ -170,18 +140,20 @@
             this.pnRB.Controls.Add(this.rbTerzo);
             this.pnRB.Controls.Add(this.rbSecondo);
             this.pnRB.Controls.Add(this.rbPrimo);
-            this.pnRB.Location = new System.Drawing.Point(117, 132);
+            this.pnRB.Location = new System.Drawing.Point(205, 209);
+            this.pnRB.Margin = new System.Windows.Forms.Padding(4);
             this.pnRB.Name = "pnRB";
-            this.pnRB.Size = new System.Drawing.Size(251, 34);
+            this.pnRB.Size = new System.Drawing.Size(335, 44);
             this.pnRB.TabIndex = 4;
             // 
             // rbQuinto
             // 
             this.rbQuinto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbQuinto.AutoSize = true;
-            this.rbQuinto.Location = new System.Drawing.Point(204, 10);
+            this.rbQuinto.Location = new System.Drawing.Point(279, 13);
+            this.rbQuinto.Margin = new System.Windows.Forms.Padding(4);
             this.rbQuinto.Name = "rbQuinto";
-            this.rbQuinto.Size = new System.Drawing.Size(35, 17);
+            this.rbQuinto.Size = new System.Drawing.Size(38, 21);
             this.rbQuinto.TabIndex = 4;
             this.rbQuinto.TabStop = true;
             this.rbQuinto.Text = "5°";
@@ -193,9 +165,10 @@
             // 
             this.rbQuarto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbQuarto.AutoSize = true;
-            this.rbQuarto.Location = new System.Drawing.Point(155, 10);
+            this.rbQuarto.Location = new System.Drawing.Point(212, 13);
+            this.rbQuarto.Margin = new System.Windows.Forms.Padding(4);
             this.rbQuarto.Name = "rbQuarto";
-            this.rbQuarto.Size = new System.Drawing.Size(35, 17);
+            this.rbQuarto.Size = new System.Drawing.Size(38, 21);
             this.rbQuarto.TabIndex = 3;
             this.rbQuarto.TabStop = true;
             this.rbQuarto.Text = "4°";
@@ -207,9 +180,11 @@
             // 
             this.rbTerzo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.rbTerzo.AutoSize = true;
-            this.rbTerzo.Location = new System.Drawing.Point(106, 10);
+            this.rbTerzo.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbTerzo.Location = new System.Drawing.Point(145, 13);
+            this.rbTerzo.Margin = new System.Windows.Forms.Padding(4);
             this.rbTerzo.Name = "rbTerzo";
-            this.rbTerzo.Size = new System.Drawing.Size(35, 17);
+            this.rbTerzo.Size = new System.Drawing.Size(38, 21);
             this.rbTerzo.TabIndex = 2;
             this.rbTerzo.TabStop = true;
             this.rbTerzo.Text = "3°";
@@ -220,9 +195,10 @@
             // rbSecondo
             // 
             this.rbSecondo.AutoSize = true;
-            this.rbSecondo.Location = new System.Drawing.Point(57, 10);
+            this.rbSecondo.Location = new System.Drawing.Point(78, 13);
+            this.rbSecondo.Margin = new System.Windows.Forms.Padding(4);
             this.rbSecondo.Name = "rbSecondo";
-            this.rbSecondo.Size = new System.Drawing.Size(35, 17);
+            this.rbSecondo.Size = new System.Drawing.Size(38, 21);
             this.rbSecondo.TabIndex = 1;
             this.rbSecondo.TabStop = true;
             this.rbSecondo.Text = "2°";
@@ -233,9 +209,10 @@
             // rbPrimo
             // 
             this.rbPrimo.AutoSize = true;
-            this.rbPrimo.Location = new System.Drawing.Point(8, 10);
+            this.rbPrimo.Location = new System.Drawing.Point(11, 13);
+            this.rbPrimo.Margin = new System.Windows.Forms.Padding(4);
             this.rbPrimo.Name = "rbPrimo";
-            this.rbPrimo.Size = new System.Drawing.Size(35, 17);
+            this.rbPrimo.Size = new System.Drawing.Size(38, 21);
             this.rbPrimo.TabIndex = 0;
             this.rbPrimo.TabStop = true;
             this.rbPrimo.Text = "1°";
@@ -247,28 +224,34 @@
             // 
             this.clbIndirizzi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.clbIndirizzi.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbIndirizzi.FormattingEnabled = true;
-            this.clbIndirizzi.Location = new System.Drawing.Point(179, 181);
+            this.clbIndirizzi.Location = new System.Drawing.Point(205, 271);
+            this.clbIndirizzi.Margin = new System.Windows.Forms.Padding(4);
             this.clbIndirizzi.Name = "clbIndirizzi";
-            this.clbIndirizzi.Size = new System.Drawing.Size(189, 94);
+            this.clbIndirizzi.Size = new System.Drawing.Size(335, 112);
             this.clbIndirizzi.TabIndex = 5;
             this.clbIndirizzi.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbIndirizzi_KeyDown);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(31, 180);
+            this.label7.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(12, 271);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(44, 13);
+            this.label7.Size = new System.Drawing.Size(62, 16);
             this.label7.TabIndex = 35;
             this.label7.Text = "Indirizzi:";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(31, 511);
+            this.label8.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(12, 679);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(114, 13);
+            this.label8.Size = new System.Drawing.Size(155, 16);
             this.label8.TabIndex = 36;
             this.label8.Text = "Disciplina successiva: ";
             // 
@@ -277,19 +260,23 @@
             this.cbDisciplinaSucessiva.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDisciplinaSucessiva.Enabled = false;
+            this.cbDisciplinaSucessiva.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDisciplinaSucessiva.FormattingEnabled = true;
-            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(179, 508);
+            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(205, 673);
+            this.cbDisciplinaSucessiva.Margin = new System.Windows.Forms.Padding(4);
             this.cbDisciplinaSucessiva.Name = "cbDisciplinaSucessiva";
-            this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(189, 21);
+            this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(243, 25);
             this.cbDisciplinaSucessiva.TabIndex = 8;
             this.cbDisciplinaSucessiva.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDisciplinaSucessiva_KeyDown);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(31, 286);
+            this.label9.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(12, 412);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(65, 13);
+            this.label9.Size = new System.Drawing.Size(92, 16);
             this.label9.TabIndex = 39;
             this.label9.Text = "Dipartimenti:";
             // 
@@ -297,10 +284,12 @@
             // 
             this.clbDipartimenti.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.clbDipartimenti.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbDipartimenti.FormattingEnabled = true;
-            this.clbDipartimenti.Location = new System.Drawing.Point(179, 290);
+            this.clbDipartimenti.Location = new System.Drawing.Point(205, 404);
+            this.clbDipartimenti.Margin = new System.Windows.Forms.Padding(4);
             this.clbDipartimenti.Name = "clbDipartimenti";
-            this.clbDipartimenti.Size = new System.Drawing.Size(189, 94);
+            this.clbDipartimenti.Size = new System.Drawing.Size(335, 112);
             this.clbDipartimenti.TabIndex = 6;
             this.clbDipartimenti.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbDipartimenti_ItemCheck);
             this.clbDipartimenti.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDipartimenti_KeyDown);
@@ -308,44 +297,31 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(31, 547);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(12, 737);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(97, 13);
+            this.label5.Size = new System.Drawing.Size(137, 16);
             this.label5.TabIndex = 21;
             this.label5.Text = "Disciplina speciale:";
-            // 
-            // tbDisciplinaSpeciale
-            // 
-            this.tbDisciplinaSpeciale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(179, 544);
-            this.tbDisciplinaSpeciale.Margin = new System.Windows.Forms.Padding(2);
-            this.tbDisciplinaSpeciale.Name = "tbDisciplinaSpeciale";
-            this.tbDisciplinaSpeciale.Size = new System.Drawing.Size(189, 20);
-            this.tbDisciplinaSpeciale.TabIndex = 9;
-            this.tbDisciplinaSpeciale.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbDisciplinaSpeciale_KeyDown);
             // 
             // lblAnnoSuc
             // 
             this.lblAnnoSuc.AutoSize = true;
-            this.lblAnnoSuc.Location = new System.Drawing.Point(157, 511);
-            this.lblAnnoSuc.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblAnnoSuc.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAnnoSuc.Location = new System.Drawing.Point(178, 679);
             this.lblAnnoSuc.Name = "lblAnnoSuc";
-            this.lblAnnoSuc.Size = new System.Drawing.Size(17, 13);
+            this.lblAnnoSuc.Size = new System.Drawing.Size(20, 17);
             this.lblAnnoSuc.TabIndex = 40;
             this.lblAnnoSuc.Text = "5°";
-            // 
-            // frmDisciplinaBindingSource
-            // 
-            this.frmDisciplinaBindingSource.DataSource = typeof(Cattedre.FrmDisciplina);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(31, 399);
+            this.label6.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(12, 551);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(95, 13);
+            this.label6.Size = new System.Drawing.Size(131, 16);
             this.label6.TabIndex = 42;
             this.label6.Text = "Classi di concorso:";
             // 
@@ -353,10 +329,12 @@
             // 
             this.clbCdcs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.clbCdcs.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbCdcs.FormattingEnabled = true;
-            this.clbCdcs.Location = new System.Drawing.Point(179, 399);
+            this.clbCdcs.Location = new System.Drawing.Point(205, 537);
+            this.clbCdcs.Margin = new System.Windows.Forms.Padding(4);
             this.clbCdcs.Name = "clbCdcs";
-            this.clbCdcs.Size = new System.Drawing.Size(189, 94);
+            this.clbCdcs.Size = new System.Drawing.Size(335, 112);
             this.clbCdcs.TabIndex = 7;
             this.clbCdcs.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCdcs_ItemCheck);
             this.clbCdcs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbCdcs_KeyDown);
@@ -365,18 +343,227 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.btSalva);
             this.panel1.Controls.Add(this.btAnnulla);
-            this.panel1.Location = new System.Drawing.Point(20, 592);
+            this.panel1.Controls.Add(this.btSalva);
+            this.panel1.Location = new System.Drawing.Point(15, 774);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(348, 40);
+            this.panel1.Size = new System.Drawing.Size(525, 52);
             this.panel1.TabIndex = 10;
+            // 
+            // btAnnulla
+            // 
+            this.btAnnulla.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btAnnulla.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btAnnulla.Location = new System.Drawing.Point(3, 11);
+            this.btAnnulla.Name = "btAnnulla";
+            this.btAnnulla.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
+            this.btAnnulla.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
+            this.btAnnulla.OverrideDefault.Back.ColorAngle = 45F;
+            this.btAnnulla.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
+            this.btAnnulla.OverrideDefault.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.btAnnulla.OverrideDefault.Border.ColorAngle = 45F;
+            this.btAnnulla.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btAnnulla.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btAnnulla.OverrideDefault.Border.Rounding = 20F;
+            this.btAnnulla.OverrideDefault.Border.Width = 1;
+            this.btAnnulla.Size = new System.Drawing.Size(152, 32);
+            this.btAnnulla.StateCommon.Back.Color1 = System.Drawing.Color.Red;
+            this.btAnnulla.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btAnnulla.StateCommon.Back.ColorAngle = 45F;
+            this.btAnnulla.StateCommon.Border.Color1 = System.Drawing.Color.Red;
+            this.btAnnulla.StateCommon.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.btAnnulla.StateCommon.Border.ColorAngle = 45F;
+            this.btAnnulla.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btAnnulla.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btAnnulla.StateCommon.Border.Rounding = 20F;
+            this.btAnnulla.StateCommon.Border.Width = 1;
+            this.btAnnulla.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.btAnnulla.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.btAnnulla.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btAnnulla.StateNormal.Back.Color1 = System.Drawing.Color.Red;
+            this.btAnnulla.StateNormal.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btAnnulla.StateNormal.Border.Color1 = System.Drawing.Color.DarkRed;
+            this.btAnnulla.StateNormal.Border.Color2 = System.Drawing.Color.Red;
+            this.btAnnulla.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btAnnulla.StatePressed.Back.Color1 = System.Drawing.Color.Red;
+            this.btAnnulla.StatePressed.Back.Color2 = System.Drawing.Color.Yellow;
+            this.btAnnulla.StatePressed.Back.ColorAngle = 135F;
+            this.btAnnulla.StatePressed.Border.Color1 = System.Drawing.Color.Yellow;
+            this.btAnnulla.StatePressed.Border.Color2 = System.Drawing.Color.Red;
+            this.btAnnulla.StatePressed.Border.ColorAngle = 135F;
+            this.btAnnulla.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btAnnulla.StatePressed.Border.Rounding = 20F;
+            this.btAnnulla.StatePressed.Border.Width = 1;
+            this.btAnnulla.StateTracking.Back.Color1 = System.Drawing.Color.Red;
+            this.btAnnulla.StateTracking.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btAnnulla.StateTracking.Back.ColorAngle = 45F;
+            this.btAnnulla.StateTracking.Border.Color1 = System.Drawing.Color.DarkRed;
+            this.btAnnulla.StateTracking.Border.Color2 = System.Drawing.Color.Red;
+            this.btAnnulla.StateTracking.Border.ColorAngle = 45F;
+            this.btAnnulla.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btAnnulla.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btAnnulla.StateTracking.Border.Rounding = 20F;
+            this.btAnnulla.StateTracking.Border.Width = 1;
+            this.btAnnulla.TabIndex = 46;
+            this.btAnnulla.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.btAnnulla.Values.Text = "Annulla";
+            this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
+            // 
+            // btSalva
+            // 
+            this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btSalva.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btSalva.Location = new System.Drawing.Point(355, 10);
+            this.btSalva.Name = "btSalva";
+            this.btSalva.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
+            this.btSalva.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
+            this.btSalva.OverrideDefault.Back.ColorAngle = 45F;
+            this.btSalva.OverrideDefault.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
+            this.btSalva.OverrideDefault.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
+            this.btSalva.OverrideDefault.Border.ColorAngle = 45F;
+            this.btSalva.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btSalva.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btSalva.OverrideDefault.Border.Rounding = 20F;
+            this.btSalva.OverrideDefault.Border.Width = 1;
+            this.btSalva.Size = new System.Drawing.Size(154, 33);
+            this.btSalva.StateCommon.Back.Color1 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateCommon.Back.Color2 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateCommon.Back.ColorAngle = 45F;
+            this.btSalva.StateCommon.Border.Color1 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateCommon.Border.Color2 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateCommon.Border.ColorAngle = 45F;
+            this.btSalva.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btSalva.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btSalva.StateCommon.Border.Rounding = 20F;
+            this.btSalva.StateCommon.Border.Width = 1;
+            this.btSalva.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.btSalva.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.btSalva.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btSalva.StateNormal.Back.Color1 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateNormal.Back.Color2 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateNormal.Border.Color1 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateNormal.Border.Color2 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btSalva.StatePressed.Back.Color1 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StatePressed.Back.Color2 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StatePressed.Back.ColorAngle = 135F;
+            this.btSalva.StatePressed.Border.Color1 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StatePressed.Border.Color2 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StatePressed.Border.ColorAngle = 135F;
+            this.btSalva.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btSalva.StatePressed.Border.Rounding = 20F;
+            this.btSalva.StatePressed.Border.Width = 1;
+            this.btSalva.StateTracking.Back.Color1 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateTracking.Back.Color2 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateTracking.Back.ColorAngle = 45F;
+            this.btSalva.StateTracking.Border.Color1 = System.Drawing.Color.YellowGreen;
+            this.btSalva.StateTracking.Border.Color2 = System.Drawing.Color.ForestGreen;
+            this.btSalva.StateTracking.Border.ColorAngle = 45F;
+            this.btSalva.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btSalva.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btSalva.StateTracking.Border.Rounding = 20F;
+            this.btSalva.StateTracking.Border.Width = 1;
+            this.btSalva.TabIndex = 45;
+            this.btSalva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.btSalva.Values.Text = "Salva";
+            this.btSalva.Click += new System.EventHandler(this.btSalva_Click);
+            // 
+            // tbNome
+            // 
+            this.tbNome.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbNome.Location = new System.Drawing.Point(205, 57);
+            this.tbNome.Name = "tbNome";
+            this.tbNome.Size = new System.Drawing.Size(243, 29);
+            this.tbNome.StateCommon.Back.Color1 = System.Drawing.Color.White;
+            this.tbNome.StateCommon.Border.Color1 = System.Drawing.Color.Black;
+            this.tbNome.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.tbNome.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.tbNome.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.tbNome.StateCommon.Border.Rounding = 20F;
+            this.tbNome.StateCommon.Border.Width = 1;
+            this.tbNome.StateCommon.Content.Color1 = System.Drawing.Color.Black;
+            this.tbNome.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbNome.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.tbNome.TabIndex = 43;
+            // 
+            // tbDisciplinaSpeciale
+            // 
+            this.tbDisciplinaSpeciale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbDisciplinaSpeciale.Enabled = false;
+            this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 721);
+            this.tbDisciplinaSpeciale.Name = "tbDisciplinaSpeciale";
+            this.tbDisciplinaSpeciale.Size = new System.Drawing.Size(243, 29);
+            this.tbDisciplinaSpeciale.StateCommon.Back.Color1 = System.Drawing.Color.White;
+            this.tbDisciplinaSpeciale.StateCommon.Border.Color1 = System.Drawing.Color.Black;
+            this.tbDisciplinaSpeciale.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.tbDisciplinaSpeciale.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.tbDisciplinaSpeciale.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.tbDisciplinaSpeciale.StateCommon.Border.Rounding = 20F;
+            this.tbDisciplinaSpeciale.StateCommon.Border.Width = 1;
+            this.tbDisciplinaSpeciale.StateCommon.Content.Color1 = System.Drawing.Color.Black;
+            this.tbDisciplinaSpeciale.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbDisciplinaSpeciale.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.tbDisciplinaSpeciale.TabIndex = 44;
+            // 
+            // cbDisciplinaSpeciale
+            // 
+            this.cbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 92);
+            this.cbDisciplinaSpeciale.Name = "cbDisciplinaSpeciale";
+            this.cbDisciplinaSpeciale.Size = new System.Drawing.Size(124, 25);
+            this.cbDisciplinaSpeciale.TabIndex = 45;
+            this.cbDisciplinaSpeciale.Values.Text = "Disciplina Speciale";
+            this.cbDisciplinaSpeciale.CheckedChanged += new System.EventHandler(this.cbDisciplinaSpeciale_CheckedChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(12, 9);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(255, 32);
+            this.label10.TabIndex = 46;
+            this.label10.Text = "Gestisci disciplina:";
+            // 
+            // frmDisciplinaBindingSource
+            // 
+            this.frmDisciplinaBindingSource.DataSource = typeof(Cattedre.FrmDisciplina);
             // 
             // FrmDisciplina
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(416, 644);
+            this.ClientSize = new System.Drawing.Size(555, 842);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.cbDisciplinaSpeciale);
+            this.Controls.Add(this.tbDisciplinaSpeciale);
+            this.Controls.Add(this.tbNome);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.clbCdcs);
@@ -388,17 +575,15 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.clbIndirizzi);
             this.Controls.Add(this.pnRB);
-            this.Controls.Add(this.tbDisciplinaSpeciale);
             this.Controls.Add(this.nudOreLab);
             this.Controls.Add(this.nudOreTeoria);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.tbNome);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FrmDisciplina";
             this.Text = "Disciplina";
             this.Load += new System.EventHandler(this.FrmDisciplina_Load);
@@ -406,18 +591,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudOreLab)).EndInit();
             this.pnRB.ResumeLayout(false);
             this.pnRB.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.frmDisciplinaBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btSalva;
-        private System.Windows.Forms.Button btAnnulla;
-        private System.Windows.Forms.TextBox tbNome;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
@@ -437,11 +618,16 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckedListBox clbDipartimenti;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox tbDisciplinaSpeciale;
         private System.Windows.Forms.Label lblAnnoSuc;
         private System.Windows.Forms.BindingSource frmDisciplinaBindingSource;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckedListBox clbCdcs;
         private System.Windows.Forms.Panel panel1;
+        private Krypton.Toolkit.KryptonTextBox tbNome;
+        private Krypton.Toolkit.KryptonTextBox tbDisciplinaSpeciale;
+        private Krypton.Toolkit.KryptonButton btAnnulla;
+        private Krypton.Toolkit.KryptonButton btSalva;
+        private Krypton.Toolkit.KryptonCheckBox cbDisciplinaSpeciale;
+        private System.Windows.Forms.Label label10;
     }
 }

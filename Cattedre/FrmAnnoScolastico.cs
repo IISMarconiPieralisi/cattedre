@@ -30,6 +30,15 @@ namespace Cattedre
                 if (dtpDataFine.Value.Year - dtpDataInizio.Value.Year != 1)
                     throw new Exception("le date di inizio e fine, non possono coprire un intervallo di due anni.");
 
+                // Controllo sovrapposizione con l'anno precedente
+                ClsAnnoScolasticoDL ultimoAnno = ClsAnnoScolasticoBL.CaricaAnniScolastici()
+                    .Where(a => a.ID != _annoScolastico.ID)
+                    .OrderByDescending(a => a.DataFine)
+                    .FirstOrDefault();
+
+                if (ultimoAnno != null && dtpDataInizio.Value.Month <= ultimoAnno.DataFine.Month)
+                    throw new Exception($"La data di inizio deve essere successiva al {ultimoAnno.DataFine.ToShortDateString()}.");
+
                 _annoScolastico.DataInizio = dtpDataInizio.Value;
                 _annoScolastico.DataFine = dtpDataFine.Value;
                 this.DialogResult = DialogResult.OK;
@@ -42,6 +51,10 @@ namespace Cattedre
 
         private void FrmAnnoScolastico_Load(object sender, EventArgs e)
         {
+            //elimino i controlli per sicurezza adesso
+            dtpDataFine.ValueChanged -= new System.EventHandler(this.dtpDataFine_ValueChanged);
+            dtpDataInizio.ValueChanged -= new System.EventHandler(this.dtpDataInizio_ValueChanged);
+
             if (_annoScolastico != null)
             {
                 mtbSigla.Text = _annoScolastico.Sigla;
@@ -55,6 +68,8 @@ namespace Cattedre
                 dtpDataInizio.Value = DateTime.Today;
                 AggiornaSigla();
             }
+            dtpDataFine.ValueChanged += new System.EventHandler(this.dtpDataFine_ValueChanged);
+            dtpDataInizio.ValueChanged += new System.EventHandler(this.dtpDataInizio_ValueChanged);
         }
 
         private void btAnnulla_Click(object sender, EventArgs e)
@@ -129,8 +144,8 @@ namespace Cattedre
         }
         private void CaricamentoDataFine()
         {
-            dtpDataInizio.Value = (_annoScolastico.DataFine).AddYears(-1);
             dtpDataFine.Value = _annoScolastico.DataFine;
+            dtpDataInizio.Value = (_annoScolastico.DataFine).AddYears(-1);
         }
 
         private void dtpDataInizio_KeyDown(object sender, KeyEventArgs e)
@@ -149,6 +164,11 @@ namespace Cattedre
                 e.SuppressKeyPress = true;
                 btSalva.Focus();
             }
+        }
+
+        private void mtbSigla_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
         }
     }
 }

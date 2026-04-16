@@ -23,11 +23,12 @@ namespace Cattedre
         }
         private void CaricaListView(List<ClsDisciplinaDL> discipline)
         {
+            discipline = discipline.OrderBy(p => p.Anno).ThenBy(p => p.Nome).ToList();
             lvDiscipline.Items.Clear();
             foreach (ClsDisciplinaDL disciplina in discipline)
             {
                 ListViewItem lvi = new ListViewItem(Convert.ToString(disciplina.ID));
-                lvi.SubItems.Add(disciplina.Anno.ToString());
+                lvi.SubItems.Add(disciplina.Anno<=0?"-": disciplina.Anno.ToString());
                 lvi.SubItems.Add(disciplina.Nome);
                 lvi.SubItems.Add(Convert.ToString(disciplina.OreLaboratorio));
                 lvi.SubItems.Add(Convert.ToString(disciplina.OreTeoria));
@@ -216,11 +217,6 @@ namespace Cattedre
             discipline = ClsDisciplinaBL.CaricaDiscipline();
             CaricaListView(discipline);
             btPulisciCb.Enabled = false;
-
-        }
-
-        private void cbDipartimenti_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
         }
         private string CaricaGraficamenteIndirizzi(ClsDisciplinaDL disc)

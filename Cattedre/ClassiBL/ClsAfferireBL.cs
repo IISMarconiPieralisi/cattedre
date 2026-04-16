@@ -11,9 +11,6 @@ namespace Cattedre
 {
     public static class ClsAfferireBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
-
         public static List<ClsAfferireDL> CaricaClassiAfferire(long idUtente)
         {
             List<ClsAfferireDL> afferireDLs = new List<ClsAfferireDL>();
@@ -21,7 +18,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
 
                     conn.Open();
@@ -66,7 +63,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
 
                     conn.Open();
@@ -98,7 +95,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.Nome
@@ -136,7 +133,7 @@ namespace Cattedre
         public static void EliminaAfferenza(ClsAfferireDL aff)
         {
             long ID = aff.ID;
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try
             {

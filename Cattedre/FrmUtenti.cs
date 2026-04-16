@@ -55,7 +55,7 @@ namespace Cattedre
                 lvi.SubItems.Add(utente.Nome);
                 lvi.SubItems.Add(utente.Cognome);
                 lvi.SubItems.Add(utente.Email);
-                string _tipoDocente = (utente.TipoDocente == 'T') ? " teorico" : (utente.TipoDocente == 'L') ? " partico" : string.Empty;
+                string _tipoDocente = (utente.TipoDocente == 'T') ? " teorico" : (utente.TipoDocente == 'L') ? " pratico" : string.Empty;
                 switch (utente.TipoUtente)
                 {
                     case "P":
@@ -68,7 +68,7 @@ namespace Cattedre
                         lvi.SubItems.Add($"docente{_tipoDocente}");
                         break;
                     case "C":
-                        lvi.SubItems.Add($" docente{_tipoDocente} coordinatore dipartimento");
+                        lvi.SubItems.Add($"docente{_tipoDocente} coordinatore dipartimento");
                         break;
                 }
                 if (contratto != null)
@@ -356,7 +356,7 @@ namespace Cattedre
             if (tbRicerca.Text == "cognome nome")
             {
                 tbRicerca.Text = "";
-                tbRicerca.ForeColor = Color.Black;
+                tbRicerca.StateCommon.Content.Color1 = Color.Black;
             }
         }
 
@@ -365,7 +365,7 @@ namespace Cattedre
             if (string.IsNullOrWhiteSpace(tbRicerca.Text))
             {
                 tbRicerca.Text = "cognome nome";
-                tbRicerca.ForeColor = Color.Gray;
+                tbRicerca.StateCommon.Content.Color1 = Color.Gray;
             }
         }
         //private void btRicerca_Click(object sender, EventArgs e)
@@ -450,5 +450,10 @@ namespace Cattedre
                 tbRicerca.Focus();
         }
         #endregion
+
+        private void tbRicerca_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

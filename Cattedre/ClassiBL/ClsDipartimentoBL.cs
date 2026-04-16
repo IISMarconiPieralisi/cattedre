@@ -11,7 +11,6 @@ namespace Cattedre
 {
    public static class ClsDipartimentoBL
    {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
         #region crud
         public static List<ClsDipartimentoDL> CaricaDipartimenti()
          {
@@ -20,7 +19,7 @@ namespace Cattedre
             List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID, nome, IDutente FROM dipartimenti";
@@ -56,7 +55,7 @@ namespace Cattedre
             try
             {
                 CambiaCoordinatoreDipartimento(dip, dip.IDutente);
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "INSERT INTO dipartimenti (nome, IDutente) VALUES (@nome, @IDutente)";
@@ -86,7 +85,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "DELETE FROM dipartimenti WHERE id =@id ";
@@ -110,7 +109,7 @@ namespace Cattedre
         public static void ModificaDipartimento(ClsDipartimentoDL dipartimento)
         {
             
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try
             {
@@ -140,10 +139,10 @@ namespace Cattedre
         #region crud specifiche
         public static void CambiaCoordinatoreDipartimento(ClsDipartimentoDL dipartimento,long IDutente)
         {
-            ClsDipartimentoDL dipartimentoCordinato = UtenteCoordinaDipartimento(IDutente);
-            if (dipartimentoCordinato.ID != dipartimento.ID)
+            ClsDipartimentoDL dipartimentoCoordinato = UtenteCoordinaDipartimento(IDutente);
+            if ( dipartimentoCoordinato!=null && dipartimentoCoordinato.ID != dipartimento.ID)
             {
-                ModificaCoordinatoreDipartimento(dipartimentoCordinato, 0);
+                ModificaCoordinatoreDipartimento(dipartimentoCoordinato, 0);
             }
         }
 
@@ -156,7 +155,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE dipartimenti
@@ -187,7 +186,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -216,7 +215,7 @@ namespace Cattedre
             ClsDipartimentoDL dipartimento = null;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM dipartimenti WHERE IDutente = @IDutente";
@@ -250,7 +249,7 @@ namespace Cattedre
             ClsUtenteDL utente = null;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT u.* 
@@ -329,7 +328,7 @@ namespace Cattedre
             string NomeDipartimento = "-";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT d.nome FROM dipartimenti d WHERE d.ID = @ID";
@@ -351,6 +350,72 @@ namespace Cattedre
                 throw new Exception("Errore durante il rilevamento del nome del dipartimento: " + ex.Message);
             }
             return NomeDipartimento;
+        }
+
+        internal static ClsDipartimentoDL CaricaDipartimento(long ID)
+        {
+            ClsDipartimentoDL dipartimento = null;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT id, nome, IDutente FROM dipartimenti WHERE id = @ID";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ID);
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                dipartimento = new ClsDipartimentoDL
+                                {
+                                    ID = reader.GetInt64(reader.GetOrdinal("id")),
+                                    Nome = reader.GetString(reader.GetOrdinal("nome")),
+                                    IDutente = !reader.IsDBNull(reader.GetOrdinal("IDutente"))
+                                               ? reader.GetInt64(reader.GetOrdinal("IDutente"))
+                                               : 0
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                throw new Exception("Errore durante il rilevamento del dipartimento: " + ex.Message, ex);
+            }
+            return dipartimento;
+        }
+        public static long RilevaIDdipartimento(string dip)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    string sql = "SELECT d.ID FROM dipartimenti d WHERE d.nome = @dip";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@dip", dip);
+                        conn.Open();
+
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            return Convert.ToInt64(result);
+                        }
+                        else
+                        {
+                            return -1;       
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il rilevamento del dipartimento coordinato: " + ex.Message);
+            }
         }
         #endregion
 

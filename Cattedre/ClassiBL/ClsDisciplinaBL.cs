@@ -11,13 +11,12 @@ namespace Cattedre
 {
     public static class ClsDisciplinaBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
         #region rilevamenti specifici
         public static ClsDisciplinaDL CaricaDisciplina(long id)
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM discipline WHERE ID = @id";
@@ -55,7 +54,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT * FROM discipline 
@@ -94,7 +93,7 @@ namespace Cattedre
 
         public static List<ClsDisciplinaDL> CaricaDisciplineDipartimento(int IDdipartimento)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
 
             conn.Open();
@@ -131,31 +130,31 @@ namespace Cattedre
         #endregion
         #region rilevamento parametri specifici
 
-        public static int TrovaIDPotenziamento()
+        public static int TrovaIDPotenziamentoDipartimento(int IDdipartimento)
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT ID FROM discipline 
-                           WHERE nome LIKE '%otenziamento%' 
+                    string sql = @"SELECT d.ID 
+                           FROM discipline d
+                           JOIN gestire g ON g.IDdisciplina = d.ID
+                           WHERE g.IDdipartimento = @IDdipartimento
+                           AND d.nome LIKE '%otenziamento%'
                            LIMIT 1";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        DataTable dt = new DataTable();
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                        if (dt.Rows.Count > 0)
-                            return Convert.ToInt32(dt.Rows[0]["ID"]);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            return Convert.ToInt32(result);
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore durante la ricerca del potenziamento: " + ex.Message);
+                throw new Exception("Errore ricerca potenziamento dipartimento: " + ex.Message);
             }
             return 0;
         }
@@ -240,7 +239,7 @@ namespace Cattedre
             ClsDisciplinaDL _disciplina = null;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM discipline WHERE ID = @ID";
@@ -277,7 +276,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM discipline 
@@ -338,8 +337,7 @@ namespace Cattedre
 
         public static int MostraOreDocentePratico(long IDdocente)
         {
-            int _oreDocentePratico = 0;
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -365,7 +363,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT d.* 
@@ -412,7 +410,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = CreaComandoRicerca(iddipartimento,anno,nome, conn))
@@ -448,33 +446,38 @@ namespace Cattedre
 
         private static MySqlCommand CreaComandoRicerca(long iddipartimento, int anno, string nome, MySqlConnection conn)
         {
-            string sql = @"SELECT d.id,nome,anno,oreteoria,orelaboratorio,disciplinaspeciale,IDdisciplinaSuccessiva FROM discipline d ";
+            string sql = @"SELECT DISTINCT d.id, d.nome, d.anno, d.oreteoria, d.orelaboratorio, 
+                          d.disciplinaspeciale, d.IDdisciplinaSuccessiva 
+                   FROM discipline d";
+
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = conn;
-            string par=string.Empty;
+
             List<string> condizioni = new List<string>();
+
             if (iddipartimento > 0)
             {
-                sql += " JOIN gestire ON d.ID= gestire.IDdisciplina";
-                par = "IDdipartimento=@IDdipartimento";
+                sql += " JOIN gestire ON d.ID = gestire.IDdisciplina";
+                condizioni.Add("gestire.IDdipartimento = @IDdipartimento");
                 cmd.Parameters.AddWithValue("@IDdipartimento", iddipartimento);
-                condizioni.Add(par);
             }
+
             if (anno > 0)
             {
-                par = "anno=@anno";
+                condizioni.Add("d.anno = @anno");
                 cmd.Parameters.AddWithValue("@anno", anno);
-                condizioni.Add(par);
             }
-            if(!string.IsNullOrWhiteSpace(nome))
+
+            if (!string.IsNullOrWhiteSpace(nome))
             {
-                par = "nome Like @nome";
-                cmd.Parameters.AddWithValue("@nome",$"%{nome}%");
-                condizioni.Add(par);
+                condizioni.Add("d.nome LIKE @nome");
+                cmd.Parameters.AddWithValue("@nome", $"%{nome}%");
             }
+
             if (condizioni.Count > 0)
-                    sql += " WHERE " + string.Join(" AND ", condizioni);
-            sql += " ORDER BY anno ASC;";
+                sql += " WHERE " + string.Join(" AND ", condizioni);
+
+            sql += " ORDER BY d.anno ASC;";
             cmd.CommandText = sql;
             return cmd;
         }
@@ -482,7 +485,7 @@ namespace Cattedre
         public static void InserisciDisciplina(ClsDisciplinaDL disciplina)
         {
             
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
 
             try
@@ -523,7 +526,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "DELETE FROM discipline WHERE id = @ID";
@@ -546,8 +549,7 @@ namespace Cattedre
         public static void ModificaDisciplina(ClsDisciplinaDL disciplina)
         {
             FrmDisciplina frmDisciplina = new FrmDisciplina();
-            string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try
             {
@@ -557,7 +559,8 @@ namespace Cattedre
                                anno = @anno, 
                                oreLaboratorio = @oreLaboratorio, 
                                oreTeoria = @oreTeoria, 
-                               disciplinaSpeciale = @disciplinaSpeciale
+                               disciplinaSpeciale = @disciplinaSpeciale,
+                               IDdisciplinaSuccessiva=@IDdisciplinaSuccessiva
                            WHERE id = @id";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
@@ -566,6 +569,10 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
                     cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                     cmd.Parameters.AddWithValue("@disciplinaSpeciale", disciplina.DisciplinaSpeciale);
+                    if (disciplina.IDdisciplinaSuccessiva > 0)
+                        cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", disciplina.IDdisciplinaSuccessiva);
+                    else
+                        cmd.Parameters.AddWithValue("@IDdisciplinaSuccessiva", DBNull.Value);
                     cmd.Parameters.AddWithValue("@id", disciplina.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
 

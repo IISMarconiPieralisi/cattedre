@@ -44,14 +44,14 @@ namespace Cattedre
             this.lblEmail = new System.Windows.Forms.Label();
             this.lblNominativo = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.preferenzeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uTENTIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cLASSIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dISCIPLINEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cDCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dIPARTIMENTIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iNDIRIZZIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.annoScolasticoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dIPARTIMENTIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dISCIPLINEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cLASSIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uTENTIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.preferenzeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -64,6 +64,8 @@ namespace Cattedre
             this.btVaiACattedre2 = new Krypton.Toolkit.KryptonButton();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.btCredits = new System.Windows.Forms.Button();
+            this.panel9 = new System.Windows.Forms.Panel();
             this.panel2.SuspendLayout();
             this.pnCarUtente.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbFotoProfilo)).BeginInit();
@@ -77,6 +79,8 @@ namespace Cattedre
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.panel9);
+            this.panel2.Controls.Add(this.btCredits);
             this.panel2.Controls.Add(this.kryptonButtonLogOut);
             this.panel2.Controls.Add(this.panel8);
             this.panel2.Controls.Add(this.panel7);
@@ -357,6 +361,38 @@ namespace Cattedre
             this.menuStrip1.MenuDeactivate += new System.EventHandler(this.menuStrip1_MenuDeactivate);
             this.menuStrip1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.menuStrip1_KeyDown);
             // 
+            // preferenzeToolStripMenuItem
+            // 
+            this.preferenzeToolStripMenuItem.Enabled = false;
+            this.preferenzeToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.preferenzeToolStripMenuItem.Name = "preferenzeToolStripMenuItem";
+            this.preferenzeToolStripMenuItem.Size = new System.Drawing.Size(103, 25);
+            this.preferenzeToolStripMenuItem.Text = "Preferenze";
+            // 
+            // uTENTIToolStripMenuItem
+            // 
+            this.uTENTIToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uTENTIToolStripMenuItem.Name = "uTENTIToolStripMenuItem";
+            this.uTENTIToolStripMenuItem.Size = new System.Drawing.Size(70, 25);
+            this.uTENTIToolStripMenuItem.Text = "Utenti";
+            this.uTENTIToolStripMenuItem.Click += new System.EventHandler(this.uTENTIToolStripMenuItem_Click);
+            // 
+            // cLASSIToolStripMenuItem
+            // 
+            this.cLASSIToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cLASSIToolStripMenuItem.Name = "cLASSIToolStripMenuItem";
+            this.cLASSIToolStripMenuItem.Size = new System.Drawing.Size(64, 25);
+            this.cLASSIToolStripMenuItem.Text = "Classi";
+            this.cLASSIToolStripMenuItem.Click += new System.EventHandler(this.cLASSIToolStripMenuItem_Click);
+            // 
+            // dISCIPLINEToolStripMenuItem
+            // 
+            this.dISCIPLINEToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dISCIPLINEToolStripMenuItem.Name = "dISCIPLINEToolStripMenuItem";
+            this.dISCIPLINEToolStripMenuItem.Size = new System.Drawing.Size(93, 25);
+            this.dISCIPLINEToolStripMenuItem.Text = "Discipline";
+            this.dISCIPLINEToolStripMenuItem.Click += new System.EventHandler(this.dISCIPLINEToolStripMenuItem_Click);
+            // 
             // cDCToolStripMenuItem
             // 
             this.cDCToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -364,6 +400,14 @@ namespace Cattedre
             this.cDCToolStripMenuItem.Size = new System.Drawing.Size(60, 25);
             this.cDCToolStripMenuItem.Text = "CDC";
             this.cDCToolStripMenuItem.Click += new System.EventHandler(this.cDCToolStripMenuItem_Click);
+            // 
+            // dIPARTIMENTIToolStripMenuItem
+            // 
+            this.dIPARTIMENTIToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dIPARTIMENTIToolStripMenuItem.Name = "dIPARTIMENTIToolStripMenuItem";
+            this.dIPARTIMENTIToolStripMenuItem.Size = new System.Drawing.Size(119, 25);
+            this.dIPARTIMENTIToolStripMenuItem.Text = "Dipartimenti";
+            this.dIPARTIMENTIToolStripMenuItem.Click += new System.EventHandler(this.dIPARTIMENTIToolStripMenuItem_Click);
             // 
             // iNDIRIZZIToolStripMenuItem
             // 
@@ -380,46 +424,6 @@ namespace Cattedre
             this.annoScolasticoToolStripMenuItem.Size = new System.Drawing.Size(147, 25);
             this.annoScolasticoToolStripMenuItem.Text = "Anno Scolastico";
             this.annoScolasticoToolStripMenuItem.Click += new System.EventHandler(this.annoScolasticoToolStripMenuItem_Click);
-            // 
-            // dIPARTIMENTIToolStripMenuItem
-            // 
-            this.dIPARTIMENTIToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dIPARTIMENTIToolStripMenuItem.Name = "dIPARTIMENTIToolStripMenuItem";
-            this.dIPARTIMENTIToolStripMenuItem.Size = new System.Drawing.Size(119, 25);
-            this.dIPARTIMENTIToolStripMenuItem.Text = "Dipartimenti";
-            this.dIPARTIMENTIToolStripMenuItem.Click += new System.EventHandler(this.dIPARTIMENTIToolStripMenuItem_Click);
-            // 
-            // dISCIPLINEToolStripMenuItem
-            // 
-            this.dISCIPLINEToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dISCIPLINEToolStripMenuItem.Name = "dISCIPLINEToolStripMenuItem";
-            this.dISCIPLINEToolStripMenuItem.Size = new System.Drawing.Size(93, 25);
-            this.dISCIPLINEToolStripMenuItem.Text = "Discipline";
-            this.dISCIPLINEToolStripMenuItem.Click += new System.EventHandler(this.dISCIPLINEToolStripMenuItem_Click);
-            // 
-            // cLASSIToolStripMenuItem
-            // 
-            this.cLASSIToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cLASSIToolStripMenuItem.Name = "cLASSIToolStripMenuItem";
-            this.cLASSIToolStripMenuItem.Size = new System.Drawing.Size(64, 25);
-            this.cLASSIToolStripMenuItem.Text = "Classi";
-            this.cLASSIToolStripMenuItem.Click += new System.EventHandler(this.cLASSIToolStripMenuItem_Click);
-            // 
-            // uTENTIToolStripMenuItem
-            // 
-            this.uTENTIToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uTENTIToolStripMenuItem.Name = "uTENTIToolStripMenuItem";
-            this.uTENTIToolStripMenuItem.Size = new System.Drawing.Size(70, 25);
-            this.uTENTIToolStripMenuItem.Text = "Utenti";
-            this.uTENTIToolStripMenuItem.Click += new System.EventHandler(this.uTENTIToolStripMenuItem_Click);
-            // 
-            // preferenzeToolStripMenuItem
-            // 
-            this.preferenzeToolStripMenuItem.Enabled = false;
-            this.preferenzeToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.preferenzeToolStripMenuItem.Name = "preferenzeToolStripMenuItem";
-            this.preferenzeToolStripMenuItem.Size = new System.Drawing.Size(103, 25);
-            this.preferenzeToolStripMenuItem.Text = "Preferenze";
             // 
             // creditsToolStripMenuItem
             // 
@@ -618,6 +622,34 @@ namespace Cattedre
             this.label3.TabIndex = 0;
             this.label3.Text = "Seleziona una sezione";
             // 
+            // btCredits
+            // 
+            this.btCredits.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btCredits.FlatAppearance.BorderSize = 0;
+            this.btCredits.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(220)))));
+            this.btCredits.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(225)))), ((int)(((byte)(245)))));
+            this.btCredits.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btCredits.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btCredits.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btCredits.Location = new System.Drawing.Point(0, 407);
+            this.btCredits.Name = "btCredits";
+            this.btCredits.Size = new System.Drawing.Size(300, 57);
+            this.btCredits.TabIndex = 31;
+            this.btCredits.Text = "Credits";
+            this.btCredits.UseVisualStyleBackColor = true;
+            this.btCredits.Click += new System.EventHandler(this.creditToolStripMenuItem_Click);
+            this.btCredits.MouseEnter += new System.EventHandler(this.btCredits_MouseEnter);
+            this.btCredits.MouseLeave += new System.EventHandler(this.btCredits_MouseLeave);
+            // 
+            // panel9
+            // 
+            this.panel9.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.panel9.Location = new System.Drawing.Point(7, 412);
+            this.panel9.Margin = new System.Windows.Forms.Padding(2);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(3, 44);
+            this.panel9.TabIndex = 32;
+            // 
             // FrmHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -691,5 +723,7 @@ namespace Cattedre
         private System.Windows.Forms.PictureBox pictureBox1;
         private Krypton.Toolkit.KryptonButton kryptonButtonLogOut;
         private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.Button btCredits;
     }
 }

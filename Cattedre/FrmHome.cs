@@ -52,6 +52,7 @@ namespace Cattedre
             panel6.Visible = false;
             panel7.Visible = false;
             panel8.Visible = false;
+            panel9.Visible = false;
 
             RenderFotoTonda();
             if (utente.TipoUtente == "A")
@@ -319,6 +320,18 @@ namespace Cattedre
         private void btDiscipline_MouseLeave(object sender, EventArgs e)
         {
             panel8.Visible = false;
+
+        }
+
+        private void btCredits_MouseEnter(object sender, EventArgs e)
+        {
+            panel9.Visible = true;
+
+        }
+
+        private void btCredits_MouseLeave(object sender, EventArgs e)
+        {
+            panel9.Visible = false;
 
         }
 

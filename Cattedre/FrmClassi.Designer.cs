@@ -608,7 +608,7 @@
             this.btClasseSuccessiva.StateTracking.Border.Width = 1;
             this.btClasseSuccessiva.TabIndex = 50;
             this.btClasseSuccessiva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
-            this.btClasseSuccessiva.Values.Text = "Crea classe \r\nsuccessive";
+            this.btClasseSuccessiva.Values.Text = "Crea classi \r\nsuccessive";
             this.btClasseSuccessiva.Click += new System.EventHandler(this.btClasseSuccessiva_Click);
             // 
             // label4

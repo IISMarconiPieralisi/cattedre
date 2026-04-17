@@ -208,6 +208,7 @@
             // 
             this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tbPassword.Location = new System.Drawing.Point(133, 194);
+            this.tbPassword.MaxLength = 32;
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '●';
             this.tbPassword.Size = new System.Drawing.Size(260, 29);
@@ -233,6 +234,7 @@
             // 
             this.tbEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tbEmail.Location = new System.Drawing.Point(133, 129);
+            this.tbEmail.MaxLength = 120;
             this.tbEmail.Name = "tbEmail";
             this.tbEmail.Size = new System.Drawing.Size(260, 29);
             this.tbEmail.StateCommon.Back.Color1 = System.Drawing.Color.White;
@@ -254,6 +256,7 @@
             // 
             this.tbCognome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tbCognome.Location = new System.Drawing.Point(133, 81);
+            this.tbCognome.MaxLength = 50;
             this.tbCognome.Name = "tbCognome";
             this.tbCognome.Size = new System.Drawing.Size(260, 29);
             this.tbCognome.StateCommon.Back.Color1 = System.Drawing.Color.White;
@@ -276,6 +279,7 @@
             // 
             this.tbNome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tbNome.Location = new System.Drawing.Point(133, 33);
+            this.tbNome.MaxLength = 50;
             this.tbNome.Name = "tbNome";
             this.tbNome.Size = new System.Drawing.Size(260, 29);
             this.tbNome.StateCommon.Back.Color1 = System.Drawing.Color.White;

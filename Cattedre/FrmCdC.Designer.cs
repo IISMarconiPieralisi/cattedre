@@ -156,7 +156,7 @@
             this.cbAnnoScolastico.FormattingEnabled = true;
             this.cbAnnoScolastico.Location = new System.Drawing.Point(184, 20);
             this.cbAnnoScolastico.Name = "cbAnnoScolastico";
-            this.cbAnnoScolastico.Size = new System.Drawing.Size(173, 24);
+            this.cbAnnoScolastico.Size = new System.Drawing.Size(292, 24);
             this.cbAnnoScolastico.TabIndex = 0;
             this.cbAnnoScolastico.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAnnoScolastico_KeyDown);
             // 
@@ -316,7 +316,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbLivello.Location = new System.Drawing.Point(184, 62);
             this.tbLivello.Name = "tbLivello";
-            this.tbLivello.Size = new System.Drawing.Size(173, 29);
+            this.tbLivello.Size = new System.Drawing.Size(292, 29);
             this.tbLivello.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbLivello.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbLivello.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -337,8 +337,9 @@
             this.tbNome.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbNome.Location = new System.Drawing.Point(184, 109);
+            this.tbNome.MaxLength = 150;
             this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(173, 29);
+            this.tbNome.Size = new System.Drawing.Size(292, 29);
             this.tbNome.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbNome.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbNome.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));

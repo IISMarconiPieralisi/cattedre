@@ -187,7 +187,8 @@ namespace Cattedre
             {
                 MySqlConnection conn = new MySqlConnection(Program.connectionString);
                 conn.Open();
-                string sql = @"SELECT DISTINCT * FROM classidiconcorso c
+                string sql =@"SELECT DISTINCT c.ID, c.livello, c.nome, c.abilitazioniRichieste
+                             FROM classidiconcorso c
                              JOIN richiedere r ON c.ID=r.IDclassediconcorso 
                              JOIN discipline d ON r.IDdisciplina = d.ID
                              JOIN gestire g ON d.ID= g.IDdisciplina

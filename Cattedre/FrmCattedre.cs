@@ -305,21 +305,23 @@ namespace Cattedre
         {
             // Rimuove solo i controlli dinamici (ucOreDoc e label totali),
             // lasciando intatte le label header del designer
-            var daRimuovere = pnlOreDoc.Controls
-            .Cast<Control>()
-            .Where(c => c.Tag?.ToString() != "header")
-            .ToList();
-
-            foreach (var c in daRimuovere)
+            if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "P")
             {
-                pnlOreDoc.Controls.Remove(c);
-                c.Dispose();
+                var daRimuovere = pnlOreDoc.Controls
+                .Cast<Control>()
+                .Where(c => c.Tag?.ToString() != "header")
+                .ToList();
+
+                foreach (var c in daRimuovere)
+                {
+                    pnlOreDoc.Controls.Remove(c);
+                    c.Dispose();
+                }
             }
+                dictDocenti.Clear();
 
-            dictDocenti.Clear();
-
-            if (dtDocentiAssegnazioni == null || dtDocentiAssegnazioni.Rows.Count == 0)
-                return;
+                if (dtDocentiAssegnazioni == null || dtDocentiAssegnazioni.Rows.Count == 0)
+                    return;
 
             int y = 45;
 
@@ -1094,21 +1096,23 @@ namespace Cattedre
         }
 
         private void PulisciDipartimento()
-        {
-            // Svuoto pannelli
-            //pnlDipartimento.Controls.Clear();
-            //pnlClassi.Controls.Clear();
-            //pnlInfoNumCattedre.Controls.Clear();
-            pnlOreDoc.Controls.Clear();
+        {            
+            var daRimuovere = pnlOreDoc.Controls
+            .Cast<Control>()
+            .Where(c => c.Tag?.ToString() != "header")
+            .ToList();
 
-            // Svuoto liste
+            foreach (var c in daRimuovere)
+            {
+                pnlOreDoc.Controls.Remove(c);
+                c.Dispose();
+            }
+
             disciplineUniche.Clear();
             docentiTeoriciUsati.Clear();
             docentiPraticiUsati.Clear();
             classi.Clear();
             discipline.Clear();
-
-            // Svuoto dizionario
             dictDocenti.Clear();
         }
 

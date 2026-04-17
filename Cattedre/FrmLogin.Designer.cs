@@ -73,7 +73,7 @@
             this.tbPassword.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbPassword.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.TabIndex = 11;
-            this.tbPassword.Text = "Pigini";
+            this.tbPassword.Text = "vitalf00!";
             this.tbPassword.Click += new System.EventHandler(this.tbPassword_Click);
             // 
             // tbNomeUtente
@@ -87,7 +87,7 @@
             this.tbNomeUtente.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbNomeUtente.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNomeUtente.TabIndex = 10;
-            this.tbNomeUtente.Text = "marcello.pigini@iismarconipieralisi.it";
+            this.tbNomeUtente.Text = "vittorio.alfieri@iismarconipieralisi.it";
             this.tbNomeUtente.Click += new System.EventHandler(this.tbNomeUtente_Click);
             // 
             // panel1
@@ -189,6 +189,7 @@
             this.kryptonPalette1.FormStyles.FormMain.StateCommon.Border.Rounding = 14F;
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Border.Rounding = 14F;
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.ButtonEdgeInset = 10;
             this.kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, -1, -1, -1);
             this.kryptonPalette1.UseThemeFormChromeBorderWidth = Krypton.Toolkit.InheritBool.True;

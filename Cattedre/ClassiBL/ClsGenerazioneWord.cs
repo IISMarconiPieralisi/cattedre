@@ -18,10 +18,8 @@ namespace Cattedre
             try
             { 
                 List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
-                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID,anno.ID);
-                List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDisciplina(dipartimento.ID)
-                .Select(x => x.cdc)
-                .ToList();
+                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioni();
+                List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDipartimento(dipartimento.ID);
                 List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
                 List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
                 List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);         

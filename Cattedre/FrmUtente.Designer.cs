@@ -159,7 +159,7 @@
             this.cbTipoUtente.Location = new System.Drawing.Point(129, 242);
             this.cbTipoUtente.Name = "cbTipoUtente";
             this.cbTipoUtente.Size = new System.Drawing.Size(264, 21);
-            this.cbTipoUtente.TabIndex = 10;
+            this.cbTipoUtente.TabIndex = 5;
             this.cbTipoUtente.SelectedIndexChanged += new System.EventHandler(this.cbTipoUtente_SelectedIndexChanged);
             this.cbTipoUtente.Enter += new System.EventHandler(this.cbTipoUtente_Enter);
             this.cbTipoUtente.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbTipoUtente_KeyDown);
@@ -209,6 +209,7 @@
             this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tbPassword.Location = new System.Drawing.Point(133, 194);
             this.tbPassword.Name = "tbPassword";
+            this.tbPassword.PasswordChar = '●';
             this.tbPassword.Size = new System.Drawing.Size(260, 29);
             this.tbPassword.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbPassword.StateCommon.Border.Color1 = System.Drawing.Color.Black;
@@ -222,8 +223,11 @@
             this.tbPassword.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbPassword.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbPassword.TabIndex = 40;
+            this.tbPassword.TabIndex = 4;
+            this.tbPassword.UseSystemPasswordChar = true;
+            this.tbPassword.Enter += new System.EventHandler(this.tbPassword_Enter);
             this.tbPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbPassword_KeyDown);
+            this.tbPassword.Leave += new System.EventHandler(this.tbPassword_Leave);
             // 
             // tbEmail
             // 
@@ -243,7 +247,7 @@
             this.tbEmail.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbEmail.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbEmail.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbEmail.TabIndex = 39;
+            this.tbEmail.TabIndex = 2;
             this.tbEmail.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbEmail_KeyDown);
             // 
             // tbCognome
@@ -264,9 +268,9 @@
             this.tbCognome.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbCognome.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbCognome.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbCognome.TabIndex = 38;
+            this.tbCognome.TabIndex = 1;
             this.tbCognome.TextChanged += new System.EventHandler(this.tbNomativi_TextChanged);
-            this.tbCognome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
+            this.tbCognome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbCognome_KeyDown);
             // 
             // tbNome
             // 
@@ -286,7 +290,7 @@
             this.tbNome.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbNome.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNome.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbNome.TabIndex = 38;
+            this.tbNome.TabIndex = 0;
             this.tbNome.TextChanged += new System.EventHandler(this.tbNomativi_TextChanged);
             this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
@@ -307,7 +311,7 @@
             this.rbLaboratorio.Location = new System.Drawing.Point(131, 4);
             this.rbLaboratorio.Name = "rbLaboratorio";
             this.rbLaboratorio.Size = new System.Drawing.Size(102, 21);
-            this.rbLaboratorio.TabIndex = 1;
+            this.rbLaboratorio.TabIndex = 7;
             this.rbLaboratorio.TabStop = true;
             this.rbLaboratorio.Text = "Laboratorio";
             this.rbLaboratorio.UseVisualStyleBackColor = true;
@@ -320,7 +324,7 @@
             this.rbTeorico.Location = new System.Drawing.Point(4, 4);
             this.rbTeorico.Name = "rbTeorico";
             this.rbTeorico.Size = new System.Drawing.Size(72, 21);
-            this.rbTeorico.TabIndex = 0;
+            this.rbTeorico.TabIndex = 6;
             this.rbTeorico.TabStop = true;
             this.rbTeorico.Text = "Teorico";
             this.rbTeorico.UseVisualStyleBackColor = true;
@@ -352,7 +356,7 @@
             this.cbAutoEmail.Location = new System.Drawing.Point(133, 164);
             this.cbAutoEmail.Name = "cbAutoEmail";
             this.cbAutoEmail.Size = new System.Drawing.Size(133, 21);
-            this.cbAutoEmail.TabIndex = 18;
+            this.cbAutoEmail.TabIndex = 3;
             this.cbAutoEmail.Text = "Email Automatica";
             this.cbAutoEmail.UseVisualStyleBackColor = true;
             this.cbAutoEmail.CheckedChanged += new System.EventHandler(this.cbAutoEmail_CheckedChanged);
@@ -434,7 +438,7 @@
             this.kryptonButton1.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.kryptonButton1.StateTracking.Border.Rounding = 20F;
             this.kryptonButton1.StateTracking.Border.Width = 1;
-            this.kryptonButton1.TabIndex = 34;
+            this.kryptonButton1.TabIndex = 19;
             this.kryptonButton1.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.kryptonButton1.Values.Text = "Annulla";
             this.kryptonButton1.Click += new System.EventHandler(this.btAnnulla_Click);
@@ -503,7 +507,7 @@
             this.btSalva.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btSalva.StateTracking.Border.Rounding = 20F;
             this.btSalva.StateTracking.Border.Width = 1;
-            this.btSalva.TabIndex = 33;
+            this.btSalva.TabIndex = 18;
             this.btSalva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btSalva.Values.Text = "Salva";
             this.btSalva.Click += new System.EventHandler(this.BtSalva_Click);
@@ -514,10 +518,11 @@
             this.btColore.Location = new System.Drawing.Point(129, 337);
             this.btColore.Name = "btColore";
             this.btColore.Size = new System.Drawing.Size(89, 23);
-            this.btColore.TabIndex = 22;
+            this.btColore.TabIndex = 8;
             this.btColore.Text = "seleziona";
             this.btColore.UseVisualStyleBackColor = true;
             this.btColore.Click += new System.EventHandler(this.btColore_Click);
+            this.btColore.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btColore_KeyDown);
             // 
             // pnCDC
             // 
@@ -542,7 +547,7 @@
             this.clbCLasseDiConcorso.Location = new System.Drawing.Point(6, 40);
             this.clbCLasseDiConcorso.Name = "clbCLasseDiConcorso";
             this.clbCLasseDiConcorso.Size = new System.Drawing.Size(299, 174);
-            this.clbCLasseDiConcorso.TabIndex = 18;
+            this.clbCLasseDiConcorso.TabIndex = 9;
             this.clbCLasseDiConcorso.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCLasseDiConcorso_ItemCheck);
             this.clbCLasseDiConcorso.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbCLasseDiConcorso_KeyDown);
             // 
@@ -554,7 +559,7 @@
             this.clbDisciplina.Location = new System.Drawing.Point(6, 250);
             this.clbDisciplina.Name = "clbDisciplina";
             this.clbDisciplina.Size = new System.Drawing.Size(299, 208);
-            this.clbDisciplina.TabIndex = 20;
+            this.clbDisciplina.TabIndex = 10;
             this.clbDisciplina.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDisciplina_KeyDown);
             // 
             // label14
@@ -624,7 +629,7 @@
             this.rbDeterminato.Location = new System.Drawing.Point(0, 0);
             this.rbDeterminato.Name = "rbDeterminato";
             this.rbDeterminato.Size = new System.Drawing.Size(107, 41);
-            this.rbDeterminato.TabIndex = 14;
+            this.rbDeterminato.TabIndex = 13;
             this.rbDeterminato.TabStop = true;
             this.rbDeterminato.Text = "determinato";
             this.rbDeterminato.UseVisualStyleBackColor = true;
@@ -638,7 +643,7 @@
             this.rbIndeterminato.Location = new System.Drawing.Point(131, 0);
             this.rbIndeterminato.Name = "rbIndeterminato";
             this.rbIndeterminato.Size = new System.Drawing.Size(118, 41);
-            this.rbIndeterminato.TabIndex = 15;
+            this.rbIndeterminato.TabIndex = 14;
             this.rbIndeterminato.TabStop = true;
             this.rbIndeterminato.Text = "indeterminato";
             this.rbIndeterminato.UseVisualStyleBackColor = true;
@@ -651,7 +656,7 @@
             this.dtpDataFine.Location = new System.Drawing.Point(109, 186);
             this.dtpDataFine.Name = "dtpDataFine";
             this.dtpDataFine.Size = new System.Drawing.Size(234, 22);
-            this.dtpDataFine.TabIndex = 21;
+            this.dtpDataFine.TabIndex = 17;
             this.dtpDataFine.ValueChanged += new System.EventHandler(this.dtpDataFine_ValueChanged);
             this.dtpDataFine.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataFine_KeyDown);
             // 
@@ -661,7 +666,7 @@
             this.dtpDataInizio.Location = new System.Drawing.Point(109, 139);
             this.dtpDataInizio.Name = "dtpDataInizio";
             this.dtpDataInizio.Size = new System.Drawing.Size(234, 22);
-            this.dtpDataInizio.TabIndex = 20;
+            this.dtpDataInizio.TabIndex = 16;
             this.dtpDataInizio.ValueChanged += new System.EventHandler(this.dtpDataInizio_ValueChanged);
             this.dtpDataInizio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpDataInizio_KeyDown);
             // 
@@ -691,7 +696,7 @@
             this.nudMonteOre.Location = new System.Drawing.Point(109, 92);
             this.nudMonteOre.Name = "nudMonteOre";
             this.nudMonteOre.Size = new System.Drawing.Size(210, 22);
-            this.nudMonteOre.TabIndex = 17;
+            this.nudMonteOre.TabIndex = 15;
             this.nudMonteOre.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudMonteOre_KeyDown);
             // 
             // label12
@@ -743,7 +748,8 @@
             this.clbDipartimento.Location = new System.Drawing.Point(5, 33);
             this.clbDipartimento.Name = "clbDipartimento";
             this.clbDipartimento.Size = new System.Drawing.Size(338, 140);
-            this.clbDipartimento.TabIndex = 26;
+            this.clbDipartimento.TabIndex = 11;
+            this.clbDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDipartimento_KeyDown);
             // 
             // cbDipartimentoCoordinato
             // 
@@ -753,7 +759,7 @@
             this.cbDipartimentoCoordinato.Location = new System.Drawing.Point(109, 187);
             this.cbDipartimentoCoordinato.Name = "cbDipartimentoCoordinato";
             this.cbDipartimentoCoordinato.Size = new System.Drawing.Size(210, 25);
-            this.cbDipartimentoCoordinato.TabIndex = 27;
+            this.cbDipartimentoCoordinato.TabIndex = 12;
             this.cbDipartimentoCoordinato.Visible = false;
             this.cbDipartimentoCoordinato.SelectedIndexChanged += new System.EventHandler(this.cbDipartimentoCoordinato_SelectedIndexChanged);
             this.cbDipartimentoCoordinato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDipartimentoCoordinato_KeyDown);

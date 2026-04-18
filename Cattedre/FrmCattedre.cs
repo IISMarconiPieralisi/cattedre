@@ -35,6 +35,12 @@ namespace Cattedre
         string annoscolasticoselezionato = "";
         DataTable dtDocentiAssegnazioni;
 
+        //location colonne header
+        const int COL_DOCENTE = 6;
+        const int COL_ORECATTEDRA = 105;
+        const int COL_OREEFF = 208;
+        const int COL_OREPOT = 286;
+
         //private ToolTip toolTipDiscipline;
 
         public string Annoscolasticoselezionato { get => annoscolasticoselezionato; set => annoscolasticoselezionato = value; }
@@ -219,14 +225,12 @@ namespace Cattedre
                 statoColore = Color.OrangeRed;
             }
 
-            int offsetSinistro = 12; // ← indentazione verso destra
+            int offsetSinistro = 0;
 
             Panel pnl = new Panel
             {
                 Height = 26,
-                Width = (pnlOreDoc.ClientSize.Width > offsetSinistro + 10
-                                  ? pnlOreDoc.ClientSize.Width - offsetSinistro - 6
-                                  : 330),
+                Width = pnlOreDoc.ClientSize.Width - 2,
                 BackColor = Color.FromArgb(230, 235, 245), // sfondo leggermente azzurrino per distinguerlo
                 BorderStyle = BorderStyle.None               // gestiamo il bordo con Paint
             };
@@ -253,7 +257,7 @@ namespace Cattedre
                 AutoSize = false,
                 Width = 75,
                 Height = 22,
-                Location = new Point(6, 2),
+                Location = new Point(COL_DOCENTE, 2),
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
@@ -263,7 +267,7 @@ namespace Cattedre
                 AutoSize = false,
                 Width = 65,
                 Height = 22,
-                Location = new Point(83, 2),
+                Location = new Point(COL_ORECATTEDRA + 25, 2),
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
@@ -273,7 +277,7 @@ namespace Cattedre
                 AutoSize = false,
                 Width = 75,
                 Height = 22,
-                Location = new Point(150, 2),
+                Location = new Point(COL_OREEFF, 2),
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
@@ -285,7 +289,7 @@ namespace Cattedre
                 AutoSize = false,
                 Width = 110,
                 Height = 22,
-                Location = new Point(227, 2),
+                Location = new Point(COL_OREPOT, 2),
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
@@ -301,21 +305,23 @@ namespace Cattedre
         {
             // Rimuove solo i controlli dinamici (ucOreDoc e label totali),
             // lasciando intatte le label header del designer
-            var daRimuovere = pnlOreDoc.Controls
-            .Cast<Control>()
-            .Where(c => c.Tag?.ToString() != "header")
-            .ToList();
-
-            foreach (var c in daRimuovere)
+            if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "P")
             {
-                pnlOreDoc.Controls.Remove(c);
-                c.Dispose();
+                var daRimuovere = pnlOreDoc.Controls
+                .Cast<Control>()
+                .Where(c => c.Tag?.ToString() != "header")
+                .ToList();
+
+                foreach (var c in daRimuovere)
+                {
+                    pnlOreDoc.Controls.Remove(c);
+                    c.Dispose();
+                }
             }
+                dictDocenti.Clear();
 
-            dictDocenti.Clear();
-
-            if (dtDocentiAssegnazioni == null || dtDocentiAssegnazioni.Rows.Count == 0)
-                return;
+                if (dtDocentiAssegnazioni == null || dtDocentiAssegnazioni.Rows.Count == 0)
+                    return;
 
             int y = 45;
 
@@ -381,7 +387,7 @@ namespace Cattedre
                 {
                     Panel headerTeorici = CreaPanelHeaderCDC(cdcTeorici, IDannoscolastico);
                     int offset = headerTeorici.Tag is int o ? o : 0;
-                    headerTeorici.Location = new Point(offset, y);  // ← spostato a destra
+                    headerTeorici.Location = new Point(0, y);
                     pnlOreDoc.Controls.Add(headerTeorici);
                     y += headerTeorici.Height + 4;
                 }
@@ -446,7 +452,7 @@ namespace Cattedre
                 {
                     Panel headerTeorici = CreaPanelHeaderCDC(cdcPratici, IDannoscolastico);
                     int offset = headerTeorici.Tag is int o ? o : 0;
-                    headerTeorici.Location = new Point(offset, y);
+                    headerTeorici.Location = new Point(0, y);
                     pnlOreDoc.Controls.Add(headerTeorici);
                     y += headerTeorici.Height + 4;
                 }
@@ -990,7 +996,7 @@ namespace Cattedre
                     {
                         x = 20 + colonna * 170; // fallback
                     }
-                    y = 72 + riga * 100;
+                    y = 90 + riga * 100;
                     uc.Location = new Point(x, y);
 
                     //NON FUNZIONA IL TAB
@@ -1040,7 +1046,7 @@ namespace Cattedre
 
             // Discipline uniche nel pnlDisciplina
             int x = 10;
-            int y = 10;
+            int y = 7;
 
             ToolTip toolTipDiscipline = new ToolTip();
             toolTipDiscipline.ShowAlways = true;
@@ -1076,7 +1082,7 @@ namespace Cattedre
             classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, Idannoscolastico);
 
             int x = 10;
-            int y = 72;
+            int y = 95;
             for (int i = 0; i < classi.Count; i++)
             {
                 UcClasse ucClasse = new UcClasse(classi[i]);
@@ -1090,21 +1096,23 @@ namespace Cattedre
         }
 
         private void PulisciDipartimento()
-        {
-            // Svuoto pannelli
-            //pnlDipartimento.Controls.Clear();
-            //pnlClassi.Controls.Clear();
-            //pnlInfoNumCattedre.Controls.Clear();
-            pnlOreDoc.Controls.Clear();
+        {            
+            var daRimuovere = pnlOreDoc.Controls
+            .Cast<Control>()
+            .Where(c => c.Tag?.ToString() != "header")
+            .ToList();
 
-            // Svuoto liste
+            foreach (var c in daRimuovere)
+            {
+                pnlOreDoc.Controls.Remove(c);
+                c.Dispose();
+            }
+
             disciplineUniche.Clear();
             docentiTeoriciUsati.Clear();
             docentiPraticiUsati.Clear();
             classi.Clear();
             discipline.Clear();
-
-            // Svuoto dizionario
             dictDocenti.Clear();
         }
 

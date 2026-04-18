@@ -386,11 +386,18 @@ namespace Cattedre
         }
         #endregion
         #region gestisci richiedere
+        private string CreaCDCAbbreviata(ClsClasseDiConcorsoDL cdc)
+        {
+            // Tronco il nome se è troppo lungo, come in FrmUtente
+            string nome = cdc.Nome.Length > 30 ? cdc.Nome.Substring(0, 30) + "..." : cdc.Nome;
+            return $"{cdc.Livello} | {nome}";
+        }
+
         private void clbCdcs_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             _richiederes.Clear();
             long IDdis = (_disciplina.ID <= 0) ? 0 : _disciplina.ID;
-            // Cicliamo tutti gli elementi attualmente "checkati" nella UI
+
             for (int i = 0; i < clbCdcs.Items.Count; i++)
             {
                 bool isChecked;
@@ -398,24 +405,42 @@ namespace Cattedre
                     isChecked = (e.NewValue == CheckState.Checked);
                 else
                     isChecked = clbCdcs.GetItemChecked(i);
-                // Troviamo l'oggetto dipartimento corrispondente al nome spuntato
 
                 if (isChecked)
                 {
-                    string nome = clbCdcs.Items[i].ToString();
-                    ClsClasseDiConcorsoDL cdc = _cdcs.Find(d => d.Nome == nome);
+                    string itemFormattato = clbCdcs.Items[i].ToString();
+                    // Estraggo il Livello dalla stringa formattata "Livello | Nome"
+                    string livello = DividiClasseConcorso(itemFormattato);
+
+                    // Cerco la CDC usando il Livello (come in FrmUtente)
+                    ClsClasseDiConcorsoDL cdc = _cdcs.Find(d => d.Livello == livello);
                     if (cdc != null)
-                        _richiederes.Add(new ClsRichiedereDL(cdc.ID,IDdis));
+                    {
+                        _richiederes.Add(new ClsRichiedereDL(cdc.ID, IDdis));
+                    }
                 }
             }
             ControlloCbDisciplinaSuccessiva();
         }
+        private string DividiClasseConcorso(string itemFormattato)
+        {
+            string[] vs = itemFormattato.Split('|');
+            return vs[0].Trim(); // Restituisco la parte prima della barra, senza spazi
+        }
+
         void PopolaclbCdcs()
         {
             clbCdcs.Items.Clear();
-            foreach (var cdc in _cdcs)
+
+            // Ordino le CDC per Livello e poi per Nome in ordine crescente
+            var cdcsOrdinati = _cdcs
+                .OrderBy(cdc => cdc.Livello)
+                .ThenBy(cdc => cdc.Nome)
+                .ToList();
+
+            foreach (var cdc in cdcsOrdinati)
             {
-                clbCdcs.Items.Add(cdc.Nome);
+                clbCdcs.Items.Add(CreaCDCAbbreviata(cdc));
             }
         }
         void checkClbCdcs()
@@ -423,10 +448,23 @@ namespace Cattedre
             List<ClsClasseDiConcorsoDL> cdcsDisciplina = ClsRichiedereBL.RilevaCDCDiscipina(_disciplina.ID);
             if (cdcsDisciplina.Count > 0)
             {
+                // Ordino le CDC per Livello e poi per Nome in ordine crescente
+                var cdcsDisciplinaOrdinati = cdcsDisciplina
+                .OrderBy(cdc => cdc.Livello)
+                .ThenBy(cdc => cdc.Nome)
+                .ToList();
+
+                // Creo un HashSet con le stringhe formattate delle CDC della disciplina
+                var cdcDisciplinaFormattate = new HashSet<string>(
+                    cdcsDisciplinaOrdinati.Select(c => CreaCDCAbbreviata(c)),
+                    StringComparer.OrdinalIgnoreCase
+                );
+
                 for (int i = 0; i < clbCdcs.Items.Count; i++)
                 {
-                    string nomeItem = clbCdcs.Items[i].ToString();
-                    bool richiedere = cdcsDisciplina.Any(d => string.Equals(d.Nome, nomeItem, StringComparison.OrdinalIgnoreCase));
+                    string nomeItemFormattato = clbCdcs.Items[i].ToString();
+                    // Confronto con la stringa formattata
+                    bool richiedere = cdcDisciplinaFormattate.Contains(nomeItemFormattato);
                     clbCdcs.SetItemChecked(i, richiedere);
                 }
                 _richiederes.Clear();
@@ -539,9 +577,10 @@ namespace Cattedre
                     if (cbDisciplinaSpeciale.Checked) tbDisciplinaSpeciale.Focus();
                     else cbDisciplinaSucessiva.Focus();
                 }
-                else                    // Al primo colpo fa solo il check
+                else
                 {
-                    int index = clbDipartimenti.SelectedIndex;
+                    // Al primo colpo fa solo il check - CORREZIONE: usare clbCdcs invece di clbDipartimenti
+                    int index = clbCdcs.SelectedIndex;
                     if (index != -1) clbCdcs.SetItemChecked(index, !clbCdcs.GetItemChecked(index));
                 }
                 _lastTick = currentTick;

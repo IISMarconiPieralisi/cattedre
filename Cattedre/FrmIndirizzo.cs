@@ -42,5 +42,14 @@ namespace Cattedre
         {
             this.Close();
         }
+
+        private void tbNome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btSalva.Focus();
+            }
+        }
     }
 }

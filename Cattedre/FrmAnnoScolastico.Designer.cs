@@ -163,7 +163,7 @@
             this.btAnnulla.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btAnnulla.StateTracking.Border.Rounding = 20F;
             this.btAnnulla.StateTracking.Border.Width = 1;
-            this.btAnnulla.TabIndex = 30;
+            this.btAnnulla.TabIndex = 4;
             this.btAnnulla.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btAnnulla.Values.Text = "Annulla";
             this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
@@ -232,7 +232,7 @@
             this.btSalva.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btSalva.StateTracking.Border.Rounding = 20F;
             this.btSalva.StateTracking.Border.Width = 1;
-            this.btSalva.TabIndex = 29;
+            this.btSalva.TabIndex = 3;
             this.btSalva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btSalva.Values.Text = "Salva";
             this.btSalva.Click += new System.EventHandler(this.btSalva_Click);

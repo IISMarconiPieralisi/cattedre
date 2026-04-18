@@ -116,7 +116,7 @@
             this.nudOreTeoria.Margin = new System.Windows.Forms.Padding(4);
             this.nudOreTeoria.Name = "nudOreTeoria";
             this.nudOreTeoria.Size = new System.Drawing.Size(243, 23);
-            this.nudOreTeoria.TabIndex = 2;
+            this.nudOreTeoria.TabIndex = 1;
             this.nudOreTeoria.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudOreTeoria_KeyDown);
             // 
             // nudOreLab
@@ -128,7 +128,7 @@
             this.nudOreLab.Margin = new System.Windows.Forms.Padding(4);
             this.nudOreLab.Name = "nudOreLab";
             this.nudOreLab.Size = new System.Drawing.Size(243, 23);
-            this.nudOreLab.TabIndex = 3;
+            this.nudOreLab.TabIndex = 2;
             this.nudOreLab.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudOreLab_KeyDown);
             // 
             // pnRB
@@ -154,7 +154,7 @@
             this.rbQuinto.Margin = new System.Windows.Forms.Padding(4);
             this.rbQuinto.Name = "rbQuinto";
             this.rbQuinto.Size = new System.Drawing.Size(38, 21);
-            this.rbQuinto.TabIndex = 4;
+            this.rbQuinto.TabIndex = 7;
             this.rbQuinto.TabStop = true;
             this.rbQuinto.Text = "5°";
             this.rbQuinto.UseVisualStyleBackColor = true;
@@ -169,7 +169,7 @@
             this.rbQuarto.Margin = new System.Windows.Forms.Padding(4);
             this.rbQuarto.Name = "rbQuarto";
             this.rbQuarto.Size = new System.Drawing.Size(38, 21);
-            this.rbQuarto.TabIndex = 3;
+            this.rbQuarto.TabIndex = 6;
             this.rbQuarto.TabStop = true;
             this.rbQuarto.Text = "4°";
             this.rbQuarto.UseVisualStyleBackColor = true;
@@ -185,7 +185,7 @@
             this.rbTerzo.Margin = new System.Windows.Forms.Padding(4);
             this.rbTerzo.Name = "rbTerzo";
             this.rbTerzo.Size = new System.Drawing.Size(38, 21);
-            this.rbTerzo.TabIndex = 2;
+            this.rbTerzo.TabIndex = 5;
             this.rbTerzo.TabStop = true;
             this.rbTerzo.Text = "3°";
             this.rbTerzo.UseVisualStyleBackColor = true;
@@ -199,7 +199,7 @@
             this.rbSecondo.Margin = new System.Windows.Forms.Padding(4);
             this.rbSecondo.Name = "rbSecondo";
             this.rbSecondo.Size = new System.Drawing.Size(38, 21);
-            this.rbSecondo.TabIndex = 1;
+            this.rbSecondo.TabIndex = 4;
             this.rbSecondo.TabStop = true;
             this.rbSecondo.Text = "2°";
             this.rbSecondo.UseVisualStyleBackColor = true;
@@ -213,7 +213,7 @@
             this.rbPrimo.Margin = new System.Windows.Forms.Padding(4);
             this.rbPrimo.Name = "rbPrimo";
             this.rbPrimo.Size = new System.Drawing.Size(38, 21);
-            this.rbPrimo.TabIndex = 0;
+            this.rbPrimo.TabIndex = 3;
             this.rbPrimo.TabStop = true;
             this.rbPrimo.Text = "1°";
             this.rbPrimo.UseVisualStyleBackColor = true;
@@ -230,7 +230,7 @@
             this.clbIndirizzi.Margin = new System.Windows.Forms.Padding(4);
             this.clbIndirizzi.Name = "clbIndirizzi";
             this.clbIndirizzi.Size = new System.Drawing.Size(335, 112);
-            this.clbIndirizzi.TabIndex = 5;
+            this.clbIndirizzi.TabIndex = 8;
             this.clbIndirizzi.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbIndirizzi_KeyDown);
             // 
             // label7
@@ -266,7 +266,7 @@
             this.cbDisciplinaSucessiva.Margin = new System.Windows.Forms.Padding(4);
             this.cbDisciplinaSucessiva.Name = "cbDisciplinaSucessiva";
             this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(243, 25);
-            this.cbDisciplinaSucessiva.TabIndex = 8;
+            this.cbDisciplinaSucessiva.TabIndex = 11;
             this.cbDisciplinaSucessiva.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDisciplinaSucessiva_KeyDown);
             // 
             // label9
@@ -290,7 +290,7 @@
             this.clbDipartimenti.Margin = new System.Windows.Forms.Padding(4);
             this.clbDipartimenti.Name = "clbDipartimenti";
             this.clbDipartimenti.Size = new System.Drawing.Size(335, 112);
-            this.clbDipartimenti.TabIndex = 6;
+            this.clbDipartimenti.TabIndex = 9;
             this.clbDipartimenti.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbDipartimenti_ItemCheck);
             this.clbDipartimenti.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDipartimenti_KeyDown);
             // 
@@ -335,7 +335,7 @@
             this.clbCdcs.Margin = new System.Windows.Forms.Padding(4);
             this.clbCdcs.Name = "clbCdcs";
             this.clbCdcs.Size = new System.Drawing.Size(335, 112);
-            this.clbCdcs.TabIndex = 7;
+            this.clbCdcs.TabIndex = 10;
             this.clbCdcs.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCdcs_ItemCheck);
             this.clbCdcs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbCdcs_KeyDown);
             // 
@@ -415,7 +415,7 @@
             this.btAnnulla.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btAnnulla.StateTracking.Border.Rounding = 20F;
             this.btAnnulla.StateTracking.Border.Width = 1;
-            this.btAnnulla.TabIndex = 46;
+            this.btAnnulla.TabIndex = 14;
             this.btAnnulla.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btAnnulla.Values.Text = "Annulla";
             this.btAnnulla.Click += new System.EventHandler(this.btAnnulla_Click);
@@ -484,7 +484,7 @@
             this.btSalva.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btSalva.StateTracking.Border.Rounding = 20F;
             this.btSalva.StateTracking.Border.Width = 1;
-            this.btSalva.TabIndex = 45;
+            this.btSalva.TabIndex = 13;
             this.btSalva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btSalva.Values.Text = "Salva";
             this.btSalva.Click += new System.EventHandler(this.btSalva_Click);
@@ -508,7 +508,8 @@
             this.tbNome.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbNome.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNome.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbNome.TabIndex = 43;
+            this.tbNome.TabIndex = 0;
+            this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
             // tbDisciplinaSpeciale
             // 
@@ -530,7 +531,8 @@
             this.tbDisciplinaSpeciale.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbDisciplinaSpeciale.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbDisciplinaSpeciale.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbDisciplinaSpeciale.TabIndex = 44;
+            this.tbDisciplinaSpeciale.TabIndex = 12;
+            this.tbDisciplinaSpeciale.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbDisciplinaSpeciale_KeyDown);
             // 
             // cbDisciplinaSpeciale
             // 

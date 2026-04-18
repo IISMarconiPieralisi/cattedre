@@ -14,6 +14,9 @@ namespace Cattedre
     {
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
         List<ClsDotareDL> dots = new List<ClsDotareDL>();
+        //variabili globali 
+        string NomeCdc = string.Empty;
+        string LivelloCDC = string.Empty;
         public int indiceDaModificare = 0;
 
         public FrmCdCs()
@@ -23,7 +26,7 @@ namespace Cattedre
 
         private void CaricaListView()
         {
-            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs(LivelloCDC,NomeCdc);
             dots = ClsDotareBL.CaricaDotare();
             lvCdCs.Items.Clear();
             for(int i = 0; i < cdcs.Count; i++)
@@ -97,7 +100,24 @@ namespace Cattedre
                 CaricaListView();
             }
         }
-
+        #region ricerca/filtra
+        private void btCerca_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(mtbSigla.Text) && string.IsNullOrEmpty(tbNome.Text)) return;
+            NomeCdc= tbNome.Text.Trim();
+            LivelloCDC = mtbSigla.Text.Trim();
+            CaricaListView();
+        }
+        private void btPulisciCb_Click(object sender, EventArgs e)
+        {
+            NomeCdc = string.Empty;
+            LivelloCDC = string.Empty;
+            tbNome.Text = string.Empty;
+            mtbSigla.Text = string.Empty;
+            CaricaListView();
+        }
+        #endregion
+        #region Controlli enter
         private void lvCdCs_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && lvCdCs.SelectedIndices.Count == 1)
@@ -109,6 +129,29 @@ namespace Cattedre
             {
                 e.SuppressKeyPress = true;
                 btElimina_Click(null, null);
+            }
+        }
+
+        #endregion
+
+        private void tbNome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && tbNome.Text.Length>2) //se si preme enter simula il click del pulsante
+            {
+                btCerca_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                btPulisciCb_Click(null, null);
+            }
+        }
+
+        private void mtbSigla_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode==Keys.Enter && mtbSigla.Text.Length>=1)
+            {
+                e.SuppressKeyPress = true;
+                tbNome.Focus();
             }
         }
     }

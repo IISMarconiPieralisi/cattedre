@@ -38,7 +38,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(2, 0);
+            this.label1.Location = new System.Drawing.Point(2, 4);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(62, 19);
@@ -60,7 +60,7 @@
             // 
             this.lblClasse.AutoSize = true;
             this.lblClasse.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblClasse.Location = new System.Drawing.Point(13, 19);
+            this.lblClasse.Location = new System.Drawing.Point(13, 25);
             this.lblClasse.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblClasse.Name = "lblClasse";
             this.lblClasse.Size = new System.Drawing.Size(20, 17);
@@ -82,6 +82,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Gainsboro;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.lblcoordinatore);
             this.Controls.Add(this.lblClasse);
@@ -89,7 +90,7 @@
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "UcClasse";
-            this.Size = new System.Drawing.Size(129, 94);
+            this.Size = new System.Drawing.Size(155, 94);
             this.ResumeLayout(false);
             this.PerformLayout();
 

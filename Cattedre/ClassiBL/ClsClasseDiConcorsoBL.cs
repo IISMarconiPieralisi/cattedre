@@ -145,7 +145,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT c.*, d.nome AS nomeDisciplina FROM classidiconcorso c
+                    string sql = @"SELECT  c.*, d.nome AS nomeDisciplina FROM classidiconcorso c
                          JOIN richiedere r ON c.ID = r.IDclassediconcorso
                          JOIN discipline d ON r.IDdisciplina = d.ID
                          JOIN gestire g ON d.ID = g.IDdisciplina
@@ -164,9 +164,7 @@ namespace Cattedre
                     cdc.Livello = row["livello"].ToString();
                     cdc.Nome = row["nome"].ToString();
                     cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
-
                     string nomeDisciplina = row["nomeDisciplina"].ToString();
-
                     risultato.Add((cdc, nomeDisciplina));
                 }
             }
@@ -175,6 +173,45 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
             return risultato;
+        }
+        public static List<ClsClasseDiConcorsoDL> CaricaCDCperDipartimento(long IDdiparitimento)
+        {
+            DataTable dt = new DataTable();
+            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(Program.connectionString);
+                conn.Open();
+                string sql =@"SELECT DISTINCT c.ID, c.livello, c.nome, c.abilitazioniRichieste
+                             FROM classidiconcorso c
+                             JOIN richiedere r ON c.ID=r.IDclassediconcorso 
+                             JOIN discipline d ON r.IDdisciplina = d.ID
+                             JOIN gestire g ON d.ID= g.IDdisciplina
+                             WHERE g.IDdipartimento =@IDdipartimento";
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdiparitimento);
+                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                    {
+                        dr.Fill(dt);
+                    }
+                    conn.Close();
+                }
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
+                    cdc.ID = Convert.ToInt32(row["id"]);
+                    cdc.Livello = row["livello"].ToString();
+                    cdc.Nome = row["nome"].ToString();
+                    cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
+                    cdcs.Add(cdc);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return cdcs;
         }
         public static List<ClsClasseDiConcorsoDL> RicercaPerNome(string _ricerca)
         {
@@ -220,8 +257,7 @@ namespace Cattedre
             return cdcs;
         }
         #endregion
-        #region Filtra
-
+        #region filtri
         private static MySqlCommand CreaComandoRicerca(string livello, string nome, MySqlConnection conn)
         {
             MySqlCommand cmd = new MySqlCommand();
@@ -250,5 +286,63 @@ namespace Cattedre
             return cmd;
         }
         #endregion
+        #region OreResidue
+        public static int OreResidueCDC (long IDCdC,long IDannoScolastico)
+        {
+            int OreResidue = 0;
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    string sql = @"SELECT
+                                   ( 
+                                            SELECT
+                                            CASE 
+                                                WHEN cdc.livello LIKE 'A%' THEN SUM(d.oreTeoria + d.oreLaboratorio)
+                                                WHEN cdc.livello LIKE 'B%' THEN SUM(d.oreLaboratorio)
+                                            ELSE 0
+                                            END                                            
+                                            FROM classi c 
+                                            JOIN indirizzi i ON c.IDindirizzo=i.ID
+                                            JOIN appartenere a ON i.ID=a.IDindirizzo
+                                            JOIN discipline d ON a.IDdisciplina = d.ID
+                                            JOIN richiedere r ON r.IDdisciplina = a.IDdisciplina
+                                            JOIN  classidiconcorso cdc ON  r.IDclasseDiConcorso=cdc.ID
+                                            WHERE c.IDannoScolastico=@IDannoScolastico AND cdc.ID=@IDcdc
+                                    )
+                                    -
+                                    ( 
+                                            SELECT SUM(
+                                                CASE 
+                                                    WHEN u.tipoDocente = 'T'  THEN d.oreTeoria
+                                                    WHEN u.tipoDocente = 'L' THEN d.oreLaboratorio
+                                                ELSE d.oreTeoria + d.oreLaboratorio
+                                                END 
+                                                      )
+                                            FROM utenti u
+                                            JOIN richiedere r ON u.ID= r.IDutente
+                                            JOIN assegnare  a ON u.ID = a.IDutente
+                                            JOIN discipline  d ON a.IDdisciplina = d.ID
+                                            WHERE a.IDannoScolastico = @IDannoScolastico AND r.IDclasseDiConcorso=@IDcdc
+                                            )";
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                        cmd.Parameters.AddWithValue("@IDcdc", IDCdC);
+                        DataTable dt = new DataTable();
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            OreResidue = Convert.ToInt32(result);
+                    }
+               }
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return OreResidue;
+        }
+        #endregion
+
     }
 }

@@ -76,7 +76,8 @@ namespace Cattedre
         public long Idutente
         {
             get => _idutente;
-            set => _idutente = value > 0 ? value : throw new ArgumentException("ID Utente non valido.");
+            set => _idutente = value;
+                // > 0 ? value : throw new ArgumentException("ID Utente non valido.")
         }
 
         public long Idindirizzo

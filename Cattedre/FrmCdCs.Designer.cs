@@ -68,8 +68,7 @@ namespace Cattedre
             this.lvCdCs.Location = new System.Drawing.Point(50, 86);
             this.lvCdCs.Margin = new System.Windows.Forms.Padding(2);
             this.lvCdCs.Name = "lvCdCs";
-            this.lvCdCs.Size = new System.Drawing.Size(1380, 494);
-            this.lvCdCs.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.lvCdCs.Size = new System.Drawing.Size(1380, 465);
             this.lvCdCs.TabIndex = 1;
             this.lvCdCs.UseCompatibleStateImageBehavior = false;
             this.lvCdCs.View = System.Windows.Forms.View.Details;

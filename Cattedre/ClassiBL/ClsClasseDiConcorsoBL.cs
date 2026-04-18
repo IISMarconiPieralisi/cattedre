@@ -257,8 +257,36 @@ namespace Cattedre
             return cdcs;
         }
         #endregion
-        #region Filtra
+        #region filtri
+        private static MySqlCommand CreaComandoRicerca(string livello, string nome, MySqlConnection conn)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conn;
+            string sql = "SELECT * FROM classidiconcorso";
+            List<string> condizioni = new List<string>();
+
+            if (!string.IsNullOrEmpty(livello))
+            {
+                condizioni.Add("livello LIKE @livello");
+                cmd.Parameters.AddWithValue("@livello", $"%{livello}%");
+            }
+            if (!string.IsNullOrEmpty(nome))
+            {
+                condizioni.Add("nome LIKE @nome");
+                cmd.Parameters.AddWithValue("@nome", $"%{nome}%");
+            }
+            if (condizioni.Count > 0)
+            {
+                sql += " WHERE " + string.Join(" AND ", condizioni);
+            }
+
+            sql += " ORDER BY livello";
+
+            cmd.CommandText = sql;
+            return cmd;
+        }
         #endregion
+        #region OreResidue
         public static int OreResidueCDC (long IDCdC,long IDannoScolastico)
         {
             int OreResidue = 0;
@@ -298,35 +326,6 @@ namespace Cattedre
                                             WHERE a.IDannoScolastico = @IDannoScolastico AND r.IDclasseDiConcorso=@IDcdc
                                             )";
                     conn.Open();
-
-        private static MySqlCommand CreaComandoRicerca(string livello, string nome, MySqlConnection conn)
-        {
-            MySqlCommand cmd = new MySqlCommand();
-            cmd.Connection = conn;
-            string sql = "SELECT * FROM classidiconcorso";
-            List<string> condizioni = new List<string>();
-
-            if (!string.IsNullOrEmpty(livello))
-            {
-                condizioni.Add("livello LIKE @livello");
-                cmd.Parameters.AddWithValue("@livello", $"%{livello}%");
-            }
-            if (!string.IsNullOrEmpty(nome))
-            {
-                condizioni.Add("nome LIKE @nome");
-                cmd.Parameters.AddWithValue("@nome", $"%{nome}%");
-            }
-            if (condizioni.Count > 0)
-            {
-                sql += " WHERE " + string.Join(" AND ", condizioni);
-            }
-
-            sql += " ORDER BY livello";
-
-            cmd.CommandText = sql;
-            return cmd;
-        }
-        #endregion
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
@@ -343,6 +342,7 @@ namespace Cattedre
             }
             return OreResidue;
         }
+        #endregion
 
     }
 }

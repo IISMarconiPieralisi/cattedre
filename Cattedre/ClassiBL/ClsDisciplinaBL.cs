@@ -100,7 +100,8 @@ namespace Cattedre
             string sql = "SELECT * FROM discipline d " +
                 "JOIN gestire g ON g.IDdisciplina = d.ID " +
                 "WHERE g.IDdipartimento = @IDdipartimento " +
-                "AND d.nome NOT LIKE '%Potenziamento%'";
+                "AND d.nome NOT LIKE '%Potenziamento%' " +
+                "ORDER BY d.anno";
             //DataAdapter, DataSet e DataTable su dispensa ADO.Net
             MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
             da.SelectCommand.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);

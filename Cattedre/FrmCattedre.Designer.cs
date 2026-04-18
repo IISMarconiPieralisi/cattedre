@@ -30,8 +30,6 @@ namespace Cattedre
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCattedre));
             this.pnlClassi = new System.Windows.Forms.Panel();
-            this.btGeneraWord = new System.Windows.Forms.Button();
-            this.btGeneraASsucc = new System.Windows.Forms.Button();
             this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
             this.cbDipartimenti = new System.Windows.Forms.ComboBox();
             this.pnlDipartimento = new System.Windows.Forms.Panel();
@@ -42,6 +40,8 @@ namespace Cattedre
             this.lblOreTot = new System.Windows.Forms.Label();
             this.lblOrePot = new System.Windows.Forms.Label();
             this.lblOreCattedra = new System.Windows.Forms.Label();
+            this.btGeneraASsucc = new Krypton.Toolkit.KryptonButton();
+            this.btGeneraWord = new Krypton.Toolkit.KryptonButton();
             this.pnlClassi.SuspendLayout();
             this.pnlDipartimento.SuspendLayout();
             this.pnlOreDoc.SuspendLayout();
@@ -59,44 +59,26 @@ namespace Cattedre
             this.pnlClassi.Size = new System.Drawing.Size(169, 687);
             this.pnlClassi.TabIndex = 0;
             // 
-            // btGeneraWord
-            // 
-            this.btGeneraWord.Location = new System.Drawing.Point(133, 37);
-            this.btGeneraWord.Name = "btGeneraWord";
-            this.btGeneraWord.Size = new System.Drawing.Size(23, 22);
-            this.btGeneraWord.TabIndex = 6;
-            this.btGeneraWord.Text = ".";
-            this.btGeneraWord.UseVisualStyleBackColor = true;
-            this.btGeneraWord.Click += new System.EventHandler(this.btGeneraWord_Click);
-            // 
-            // btGeneraASsucc
-            // 
-            this.btGeneraASsucc.Location = new System.Drawing.Point(3, 30);
-            this.btGeneraASsucc.Name = "btGeneraASsucc";
-            this.btGeneraASsucc.Size = new System.Drawing.Size(51, 23);
-            this.btGeneraASsucc.TabIndex = 3;
-            this.btGeneraASsucc.Text = "Genera";
-            this.btGeneraASsucc.UseVisualStyleBackColor = true;
-            this.btGeneraASsucc.Click += new System.EventHandler(this.btGeneraASsucc_Click);
-            // 
             // cbAnniScolastici
             // 
             this.cbAnniScolastici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAnniScolastici.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbAnniScolastici.FormattingEnabled = true;
-            this.cbAnniScolastici.Location = new System.Drawing.Point(104, 4);
+            this.cbAnniScolastici.Location = new System.Drawing.Point(111, 5);
             this.cbAnniScolastici.Name = "cbAnniScolastici";
-            this.cbAnniScolastici.Size = new System.Drawing.Size(59, 21);
+            this.cbAnniScolastici.Size = new System.Drawing.Size(54, 24);
             this.cbAnniScolastici.TabIndex = 2;
             this.cbAnniScolastici.SelectedIndexChanged += new System.EventHandler(this.cbAnniScolastici_SelectedIndexChanged);
             // 
             // cbDipartimenti
             // 
             this.cbDipartimenti.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDipartimenti.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDipartimenti.FormattingEnabled = true;
-            this.cbDipartimenti.Location = new System.Drawing.Point(0, 4);
+            this.cbDipartimenti.Location = new System.Drawing.Point(6, 5);
             this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2);
             this.cbDipartimenti.Name = "cbDipartimenti";
-            this.cbDipartimenti.Size = new System.Drawing.Size(100, 21);
+            this.cbDipartimenti.Size = new System.Drawing.Size(100, 24);
             this.cbDipartimenti.TabIndex = 1;
             this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.btCaricaDipartimento_Click_1);
             // 
@@ -116,9 +98,9 @@ namespace Cattedre
             // 
             this.splitter1.BackColor = System.Drawing.Color.Black;
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(533, 0);
+            this.splitter1.Location = new System.Drawing.Point(534, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 687);
+            this.splitter1.Size = new System.Drawing.Size(2, 687);
             this.splitter1.TabIndex = 5;
             this.splitter1.TabStop = false;
             // 
@@ -200,10 +182,151 @@ namespace Cattedre
             this.lblOreCattedra.Tag = "header";
             this.lblOreCattedra.Text = "Ore Cattedra";
             // 
+            // btGeneraASsucc
+            // 
+            this.btGeneraASsucc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btGeneraASsucc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btGeneraASsucc.Location = new System.Drawing.Point(6, 34);
+            this.btGeneraASsucc.Name = "btGeneraASsucc";
+            this.btGeneraASsucc.OverrideDefault.Back.Color1 = System.Drawing.Color.Purple;
+            this.btGeneraASsucc.OverrideDefault.Back.Color2 = System.Drawing.Color.BlueViolet;
+            this.btGeneraASsucc.OverrideDefault.Back.ColorAngle = 45F;
+            this.btGeneraASsucc.OverrideDefault.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
+            this.btGeneraASsucc.OverrideDefault.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
+            this.btGeneraASsucc.OverrideDefault.Border.ColorAngle = 45F;
+            this.btGeneraASsucc.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btGeneraASsucc.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btGeneraASsucc.OverrideDefault.Border.Rounding = 20F;
+            this.btGeneraASsucc.OverrideDefault.Border.Width = 1;
+            this.btGeneraASsucc.Size = new System.Drawing.Size(79, 44);
+            this.btGeneraASsucc.StateCommon.Back.Color1 = System.Drawing.Color.Purple;
+            this.btGeneraASsucc.StateCommon.Back.Color2 = System.Drawing.Color.Fuchsia;
+            this.btGeneraASsucc.StateCommon.Back.ColorAngle = 45F;
+            this.btGeneraASsucc.StateCommon.Border.Color1 = System.Drawing.Color.MediumPurple;
+            this.btGeneraASsucc.StateCommon.Border.Color2 = System.Drawing.Color.Plum;
+            this.btGeneraASsucc.StateCommon.Border.ColorAngle = 45F;
+            this.btGeneraASsucc.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btGeneraASsucc.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btGeneraASsucc.StateCommon.Border.Rounding = 20F;
+            this.btGeneraASsucc.StateCommon.Border.Width = 1;
+            this.btGeneraASsucc.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.btGeneraASsucc.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.btGeneraASsucc.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btGeneraASsucc.StateNormal.Back.Color1 = System.Drawing.Color.DarkOrchid;
+            this.btGeneraASsucc.StateNormal.Back.Color2 = System.Drawing.Color.Violet;
+            this.btGeneraASsucc.StateNormal.Border.Color1 = System.Drawing.Color.Orchid;
+            this.btGeneraASsucc.StateNormal.Border.Color2 = System.Drawing.Color.BlueViolet;
+            this.btGeneraASsucc.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btGeneraASsucc.StatePressed.Back.Color1 = System.Drawing.Color.Purple;
+            this.btGeneraASsucc.StatePressed.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btGeneraASsucc.StatePressed.Back.ColorAngle = 135F;
+            this.btGeneraASsucc.StatePressed.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btGeneraASsucc.StatePressed.Border.Color2 = System.Drawing.Color.Purple;
+            this.btGeneraASsucc.StatePressed.Border.ColorAngle = 135F;
+            this.btGeneraASsucc.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btGeneraASsucc.StatePressed.Border.Rounding = 20F;
+            this.btGeneraASsucc.StatePressed.Border.Width = 1;
+            this.btGeneraASsucc.StateTracking.Back.Color1 = System.Drawing.Color.BlueViolet;
+            this.btGeneraASsucc.StateTracking.Back.Color2 = System.Drawing.Color.Violet;
+            this.btGeneraASsucc.StateTracking.Back.ColorAngle = 45F;
+            this.btGeneraASsucc.StateTracking.Border.Color1 = System.Drawing.Color.MediumOrchid;
+            this.btGeneraASsucc.StateTracking.Border.Color2 = System.Drawing.Color.Violet;
+            this.btGeneraASsucc.StateTracking.Border.ColorAngle = 45F;
+            this.btGeneraASsucc.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btGeneraASsucc.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btGeneraASsucc.StateTracking.Border.Rounding = 20F;
+            this.btGeneraASsucc.StateTracking.Border.Width = 1;
+            this.btGeneraASsucc.TabIndex = 51;
+            this.btGeneraASsucc.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.btGeneraASsucc.Values.Text = "  Genera\r\nann. succ.\r\n";
+            this.btGeneraASsucc.Click += new System.EventHandler(this.btGeneraASsucc_Click);
+            // 
+            // btGeneraWord
+            // 
+            this.btGeneraWord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btGeneraWord.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btGeneraWord.Location = new System.Drawing.Point(91, 35);
+            this.btGeneraWord.Name = "btGeneraWord";
+            this.btGeneraWord.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btGeneraWord.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
+            this.btGeneraWord.OverrideDefault.Back.ColorAngle = 45F;
+            this.btGeneraWord.OverrideDefault.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btGeneraWord.OverrideDefault.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btGeneraWord.OverrideDefault.Border.ColorAngle = 45F;
+            this.btGeneraWord.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btGeneraWord.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btGeneraWord.OverrideDefault.Border.Rounding = 20F;
+            this.btGeneraWord.OverrideDefault.Border.Width = 1;
+            this.btGeneraWord.Size = new System.Drawing.Size(74, 43);
+            this.btGeneraWord.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btGeneraWord.StateCommon.Back.Color2 = System.Drawing.Color.DarkGoldenrod;
+            this.btGeneraWord.StateCommon.Back.ColorAngle = 45F;
+            this.btGeneraWord.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btGeneraWord.StateCommon.Border.Color2 = System.Drawing.Color.DarkGoldenrod;
+            this.btGeneraWord.StateCommon.Border.ColorAngle = 45F;
+            this.btGeneraWord.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btGeneraWord.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btGeneraWord.StateCommon.Border.Rounding = 20F;
+            this.btGeneraWord.StateCommon.Border.Width = 1;
+            this.btGeneraWord.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.btGeneraWord.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.btGeneraWord.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btGeneraWord.StateCommon.Content.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
+            this.btGeneraWord.StateCommon.Content.ShortText.TextV = Krypton.Toolkit.PaletteRelativeAlign.Center;
+            this.btGeneraWord.StateNormal.Back.Color1 = System.Drawing.Color.Orange;
+            this.btGeneraWord.StateNormal.Back.Color2 = System.Drawing.Color.DarkGoldenrod;
+            this.btGeneraWord.StateNormal.Border.Color1 = System.Drawing.Color.Orange;
+            this.btGeneraWord.StateNormal.Border.Color2 = System.Drawing.Color.DarkOrange;
+            this.btGeneraWord.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btGeneraWord.StatePressed.Back.Color1 = System.Drawing.Color.Orange;
+            this.btGeneraWord.StatePressed.Back.Color2 = System.Drawing.Color.Yellow;
+            this.btGeneraWord.StatePressed.Back.ColorAngle = 135F;
+            this.btGeneraWord.StatePressed.Border.Color1 = System.Drawing.Color.Yellow;
+            this.btGeneraWord.StatePressed.Border.Color2 = System.Drawing.Color.DarkOrange;
+            this.btGeneraWord.StatePressed.Border.ColorAngle = 135F;
+            this.btGeneraWord.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btGeneraWord.StatePressed.Border.Rounding = 20F;
+            this.btGeneraWord.StatePressed.Border.Width = 1;
+            this.btGeneraWord.StateTracking.Back.Color1 = System.Drawing.Color.Orange;
+            this.btGeneraWord.StateTracking.Back.Color2 = System.Drawing.Color.DarkOrange;
+            this.btGeneraWord.StateTracking.Back.ColorAngle = 45F;
+            this.btGeneraWord.StateTracking.Border.Color1 = System.Drawing.Color.DarkOrange;
+            this.btGeneraWord.StateTracking.Border.Color2 = System.Drawing.Color.Orange;
+            this.btGeneraWord.StateTracking.Border.ColorAngle = 45F;
+            this.btGeneraWord.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btGeneraWord.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btGeneraWord.StateTracking.Border.Rounding = 20F;
+            this.btGeneraWord.StateTracking.Border.Width = 1;
+            this.btGeneraWord.TabIndex = 52;
+            this.btGeneraWord.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.btGeneraWord.Values.Text = "Stampa\r\n  Word";
+            this.btGeneraWord.Click += new System.EventHandler(this.btGeneraWord_Click);
+            // 
             // FrmCattedre
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1155, 687);
             this.Controls.Add(this.pnlDipartimento);
             this.Controls.Add(this.pnlClassi);
@@ -230,12 +353,12 @@ namespace Cattedre
         private System.Windows.Forms.Panel pnlOreDoc;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ComboBox cbAnniScolastici;
-        private System.Windows.Forms.Button btGeneraASsucc;
         private System.Windows.Forms.Label lblOreTot;
         private System.Windows.Forms.Label lblOrePot;
         private System.Windows.Forms.Label lblOreEff;
         private System.Windows.Forms.Label lblOreCattedra;
         private System.Windows.Forms.Label lblDocente;
-        private System.Windows.Forms.Button btGeneraWord;
+        private Krypton.Toolkit.KryptonButton btGeneraASsucc;
+        private Krypton.Toolkit.KryptonButton btGeneraWord;
     }
 }

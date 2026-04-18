@@ -29,7 +29,7 @@ namespace Cattedre
                 {
                     _cdc.Livello = tbLivello.Text;
                     _cdc.AbilitazioniRichieste = rtbAbilitazioni.Text;
-                    _cdc.Nome = tbNome.Text;
+                    _cdc.Nome = tbNome.Text.Trim();
                     _dot.NumcattedreDiritto = Convert.ToInt32(nudNumCattedreDiritto.Value);
                     _dot.NumcattedreFatto = Convert.ToInt32(nudNumCattedreFatto.Value);
                     _dot.IdAnnoscolastico = ClsAnnoScolasticoBL.RilevaIDanno(cbAnnoScolastico.SelectedItem.ToString());

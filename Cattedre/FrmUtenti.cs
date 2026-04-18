@@ -397,18 +397,7 @@ namespace Cattedre
 
         #endregion
 
-        private void tbRicerca_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter) //se si preme enter simula il click del pulsante
-            {
-                btFiltro_Click(null, null);
-            }
-            else if (e.KeyCode == Keys.Escape)
-            {
-                btAnnullaFiltra_Click(null, null);
-                tbRicerca_Enter(null, null);
-            }
-        }
+
         #region mappattura tasti
         private void lvUtenti_KeyDown(object sender, KeyEventArgs e)
         {
@@ -423,7 +412,18 @@ namespace Cattedre
                 btElimina_Click(null, null);
             }
         }
-
+        private void tbRicerca_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) //se si preme enter simula il click del pulsante
+            {
+                btFiltro_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                btAnnullaFiltra_Click(null, null);
+                tbRicerca_Enter(null, null);
+            }
+        }
         private void GenericCheckBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -451,9 +451,5 @@ namespace Cattedre
         }
         #endregion
 
-        private void tbRicerca_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

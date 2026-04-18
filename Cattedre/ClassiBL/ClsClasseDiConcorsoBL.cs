@@ -12,19 +12,14 @@ namespace Cattedre
     public static class ClsClasseDiConcorsoBL
     {
         #region CRUD
-        public static List<ClsClasseDiConcorsoDL> CaricaCdcs()
+        public static List<ClsClasseDiConcorsoDL> CaricaCdcs(string livello="", string nome = "")
         {
-
-            
             DataTable dt = new DataTable();
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
             try
             {
                 MySqlConnection conn = new MySqlConnection(Program.connectionString);
-                conn.Open();
-                string sql = "SELECT * FROM classidiconcorso";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                using (MySqlCommand cmd = CreaComandoRicerca(livello, nome, conn))
                 {
                     using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                     {
@@ -140,7 +135,7 @@ namespace Cattedre
             }
         }
         #endregion
-        #region ricerca/filtra
+        #region Caricamenti specifici
         public static List<(ClsClasseDiConcorsoDL cdc, string nomeDisciplina)> CaricaCDCperDisciplina(long IDdipartimento)
         {
             DataTable dt = new DataTable();
@@ -262,6 +257,36 @@ namespace Cattedre
             return cdcs;
         }
         #endregion
+        #region filtri
+        private static MySqlCommand CreaComandoRicerca(string livello, string nome, MySqlConnection conn)
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conn;
+            string sql = "SELECT * FROM classidiconcorso";
+            List<string> condizioni = new List<string>();
+
+            if (!string.IsNullOrEmpty(livello))
+            {
+                condizioni.Add("livello LIKE @livello");
+                cmd.Parameters.AddWithValue("@livello", $"%{livello}%");
+            }
+            if (!string.IsNullOrEmpty(nome))
+            {
+                condizioni.Add("nome LIKE @nome");
+                cmd.Parameters.AddWithValue("@nome", $"%{nome}%");
+            }
+            if (condizioni.Count > 0)
+            {
+                sql += " WHERE " + string.Join(" AND ", condizioni);
+            }
+
+            sql += " ORDER BY livello";
+
+            cmd.CommandText = sql;
+            return cmd;
+        }
+        #endregion
+        #region OreResidue
         public static int OreResidueCDC (long IDCdC,long IDannoScolastico)
         {
             int OreResidue = 0;
@@ -301,7 +326,6 @@ namespace Cattedre
                                             WHERE a.IDannoScolastico = @IDannoScolastico AND r.IDclasseDiConcorso=@IDcdc
                                             )";
                     conn.Open();
-
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
@@ -318,6 +342,7 @@ namespace Cattedre
             }
             return OreResidue;
         }
+        #endregion
 
     }
 }

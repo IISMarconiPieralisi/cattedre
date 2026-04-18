@@ -44,7 +44,7 @@
             // label2
             // 
             this.label2.LabelStyle = Krypton.Toolkit.LabelStyle.NormalControl;
-            this.label2.Location = new System.Drawing.Point(255, 194);
+            this.label2.Location = new System.Drawing.Point(283, 194);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 24);
             this.label2.StateCommon.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -54,7 +54,7 @@
             // label1
             // 
             this.label1.LabelStyle = Krypton.Toolkit.LabelStyle.NormalControl;
-            this.label1.Location = new System.Drawing.Point(255, 129);
+            this.label1.Location = new System.Drawing.Point(283, 122);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 24);
             this.label1.StateCommon.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

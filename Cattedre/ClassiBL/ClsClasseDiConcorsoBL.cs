@@ -21,7 +21,8 @@ namespace Cattedre
             {
                 MySqlConnection conn = new MySqlConnection(Program.connectionString);
                 conn.Open();
-                string sql = "SELECT * FROM classidiconcorso";
+                string sql = "SELECT * FROM classidiconcorso " +
+                    "ORDER BY livello, nome";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {

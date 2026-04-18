@@ -709,7 +709,7 @@ namespace Cattedre
             if (e.KeyCode==Keys.Enter)
             {
                 if (GetTipoUtente() == "P") this.ActiveControl = btSalva;
-                else this.ActiveControl = clbDipartimento;
+                else this.ActiveControl = btColore;
             }
         }
 
@@ -746,7 +746,7 @@ namespace Cattedre
                 {
                     _lastTick = 0;
                     // Passa al prossimo controllo
-                    if (GetTipoUtente()=="D") clbCLasseDiConcorso.Focus();
+                    if (GetTipoUtente()=="D") rbDeterminato.Focus();
                     else cbDipartimentoCoordinato.Focus();
                 }else
                 {
@@ -765,7 +765,7 @@ namespace Cattedre
                 e.SuppressKeyPress = true; 
 
                 if (GetTipoUtente() == "A" || (GetTipoUtente() == "C" && cbDipartimentoCoordinato.SelectedIndex != -1))
-                    clbCLasseDiConcorso.Focus(); 
+                    rbDeterminato.Focus(); 
             }
 
         }
@@ -807,7 +807,7 @@ namespace Cattedre
                 {
                     _lastTick = 0;
                     // Passa al prossimo controllo
-                    rbDeterminato.Focus();
+                    clbDipartimento.Focus();
                 }
                 else
                 {
@@ -868,7 +868,11 @@ namespace Cattedre
             }
         }
 
-       
+        private void btColore_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                clbCLasseDiConcorso.Focus();
+        }
     }
     #endregion
 

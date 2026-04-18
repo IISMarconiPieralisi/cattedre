@@ -277,7 +277,7 @@ namespace Cattedre
 
         private void cbClasseArticolataCon_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && cbClasseArticolataCon.SelectedIndex != -1)
+            if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
                 cbIndirizzo.Focus();

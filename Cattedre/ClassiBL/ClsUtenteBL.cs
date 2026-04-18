@@ -603,7 +603,6 @@ namespace Cattedre
         public static List<ClsUtenteDL> FiltraUtenti(Dictionary<string, List<string>> Filtri)
         {
             
-
             DataTable ds = new DataTable();
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             try

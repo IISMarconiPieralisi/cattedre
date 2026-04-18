@@ -1,4 +1,4 @@
-﻿namespace Cattedre
+namespace Cattedre
 {
     partial class FrmCdC
     {
@@ -136,6 +136,29 @@
             this.nudNumCattedreFatto.Size = new System.Drawing.Size(173, 21);
             this.nudNumCattedreFatto.TabIndex = 4;
             this.nudNumCattedreFatto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudNumCattedreFatto_KeyDown);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(14, 22);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(33, 17);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "A.S.:";
+            // 
+            // cbAnnoScolastico
+            // 
+            this.cbAnnoScolastico.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbAnnoScolastico.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAnnoScolastico.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbAnnoScolastico.FormattingEnabled = true;
+            this.cbAnnoScolastico.Location = new System.Drawing.Point(184, 20);
+            this.cbAnnoScolastico.Name = "cbAnnoScolastico";
+            this.cbAnnoScolastico.Size = new System.Drawing.Size(292, 24);
+            this.cbAnnoScolastico.TabIndex = 0;
+            this.cbAnnoScolastico.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAnnoScolastico_KeyDown);
             // 
             // panel1
             // 
@@ -294,7 +317,7 @@
             this.tbLivello.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.tbLivello.Location = new System.Drawing.Point(184, 62);
             this.tbLivello.Name = "tbLivello";
-            this.tbLivello.Size = new System.Drawing.Size(173, 29);
+            this.tbLivello.Size = new System.Drawing.Size(292, 29);
             this.tbLivello.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbLivello.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbLivello.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -315,8 +338,9 @@
             this.tbNome.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbNome.Location = new System.Drawing.Point(184, 109);
+            this.tbNome.MaxLength = 150;
             this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(173, 29);
+            this.tbNome.Size = new System.Drawing.Size(292, 29);
             this.tbNome.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbNome.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbNome.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));

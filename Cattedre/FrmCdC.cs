@@ -29,7 +29,7 @@ namespace Cattedre
                 {
                     _cdc.Livello = tbLivello.Text;
                     _cdc.AbilitazioniRichieste = rtbAbilitazioni.Text;
-                    _cdc.Nome = tbNome.Text;
+                    _cdc.Nome = tbNome.Text.Trim();
                     _dot.NumcattedreDiritto = Convert.ToInt32(nudNumCattedreDiritto.Value);
                     _dot.NumcattedreFatto = Convert.ToInt32(nudNumCattedreFatto.Value);
                     _dot.IdAnnoscolastico = ClsAnnoScolasticoBL.RilevaIDanno(cbAnnoScolastico.SelectedItem.ToString());
@@ -103,7 +103,7 @@ namespace Cattedre
                 long elapsedMilliseconds = (currentTick - _lastTick) / TimeSpan.TicksPerMillisecond;
 
                 if (elapsedMilliseconds < 500) // DOPPIO INVIO RAPIDO
-                    nudNumCattedreDiritto.Focus();
+                    btSalva.Focus();
                 _lastTick = currentTick;
 
             }
@@ -118,7 +118,7 @@ namespace Cattedre
         private void nudNumCattedreFatto_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && nudNumCattedreFatto.Value > 0)
-                btSalva.Focus();
+                rtbAbilitazioni.Focus();
         }
         #endregion
 

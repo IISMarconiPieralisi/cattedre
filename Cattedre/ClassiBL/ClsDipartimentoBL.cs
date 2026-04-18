@@ -122,7 +122,10 @@ namespace Cattedre
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
                     cmd.Parameters.AddWithValue("@nome", dipartimento.Nome);
-                    cmd.Parameters.AddWithValue("@IDutente", dipartimento.IDutente);
+                    if (dipartimento.IDutente > 0)
+                        cmd.Parameters.AddWithValue("@IDutente", dipartimento.IDutente);
+                    else
+                        cmd.Parameters.AddWithValue("@IDutente", DBNull.Value);
                     cmd.Parameters.AddWithValue("id", dipartimento.ID);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
                     if (righeCoinvolte < 0)
@@ -355,36 +358,45 @@ namespace Cattedre
         internal static ClsDipartimentoDL CaricaDipartimento(long ID)
         {
             ClsDipartimentoDL dipartimento = null;
+
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT id, nome, IDutente FROM dipartimenti WHERE id = @ID";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", ID);
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            if (reader.Read())
+                            da.Fill(dt);
+                        }
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            DataRow row = dt.Rows[0];
+
+                            dipartimento = new ClsDipartimentoDL
                             {
-                                dipartimento = new ClsDipartimentoDL
-                                {
-                                    ID = reader.GetInt64(reader.GetOrdinal("id")),
-                                    Nome = reader.GetString(reader.GetOrdinal("nome")),
-                                    IDutente = !reader.IsDBNull(reader.GetOrdinal("IDutente"))
-                                               ? reader.GetInt64(reader.GetOrdinal("IDutente"))
-                                               : 0
-                                };
-                            }
+                                ID = Convert.ToInt64(row["id"]),
+                                Nome = row["nome"].ToString(),
+                                IDutente = row["IDutente"] != DBNull.Value
+                                            ? Convert.ToInt64(row["IDutente"])
+                                            : 0
+                            };
                         }
                     }
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 throw new Exception("Errore durante il rilevamento del dipartimento: " + ex.Message, ex);
             }
+
             return dipartimento;
         }
         public static long RilevaIDdipartimento(string dip)
@@ -394,20 +406,25 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     string sql = "SELECT d.ID FROM dipartimenti d WHERE d.nome = @dip";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@dip", dip);
                         conn.Open();
 
-                        object result = cmd.ExecuteScalar();
-
-                        if (result != null && result != DBNull.Value)
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
-                            return Convert.ToInt64(result);
+                            da.Fill(dt);
+                        }
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            return Convert.ToInt64(dt.Rows[0]["ID"]);
                         }
                         else
                         {
-                            return -1;       
+                            return -1;
                         }
                     }
                 }

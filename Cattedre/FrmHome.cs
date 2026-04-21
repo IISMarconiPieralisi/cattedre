@@ -20,7 +20,7 @@ namespace Cattedre
         FrmUtenti frmUtenti;
         FrmAnniScolastici FrmAnniScolastici;
         FrmCredits frmCredits;
-
+        FrmDotazioni frmDotazioni;
 
         private ClsUtenteDL utente;
 
@@ -324,7 +324,11 @@ namespace Cattedre
 
         private void cattedreAssegnateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            pnlBenvenuto.Visible = false;
+            pnlCentrale.Visible = false;
+            if (Application.OpenForms["FrmDotazioni"] == null)
+                frmDotazioni = new FrmDotazioni();
+            MostraFormMDI(frmDotazioni);
         }
 
 

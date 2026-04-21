@@ -174,7 +174,7 @@ namespace Cattedre
             return lista;
         }
 
-        public static void InserisciDotare(ClsDotareDL d, long idCdc)
+        public static void InserisciDotare(ClsDotareDL d)
         {
             try
             {
@@ -189,7 +189,7 @@ namespace Cattedre
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@anno", d.IdAnnoscolastico);
-                        cmd.Parameters.AddWithValue("@cdc", idCdc);
+                        cmd.Parameters.AddWithValue("@cdc", d.IdClasseDiConcorso);
                         cmd.Parameters.AddWithValue("@fatto", d.NumcattedreFatto);
                         cmd.Parameters.AddWithValue("@diritto", d.NumcattedreDiritto);
 
@@ -284,8 +284,9 @@ namespace Cattedre
             UPDATE dotare
             SET numcattedrediritto = @cattedreDiritto,
                 numcattedrefatto = @cattedreFatto,
-                IDannoscolastico = @IDannoscolastico
-            WHERE IDclassediconcorso = @IDclasseDiConcorso;";
+                IDannoscolastico = @IDannoscolastico,
+                IDclassediconcorso = @IDclassediconcorso
+            WHERE ID = @id;";
 
                 using (MySqlCommand cmd = new MySqlCommand(updateSql, conn))
                 {
@@ -293,6 +294,7 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@IDannoscolastico", dot.IdAnnoscolastico);
                     cmd.Parameters.AddWithValue("@cattedreDiritto", dot.NumcattedreDiritto);
                     cmd.Parameters.AddWithValue("@cattedreFatto", dot.NumcattedreFatto);
+                    cmd.Parameters.AddWithValue("@id", dot.Id);
 
                     int righe = cmd.ExecuteNonQuery();
                     if (righe <= 0)

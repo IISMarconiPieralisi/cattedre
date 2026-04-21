@@ -1133,7 +1133,6 @@ namespace Cattedre
         private async void btCaricaDipartimento_Click_1(object sender, EventArgs e) //evento SelectedIndexChanged di cbDipartimenti
         {
             //IDdipartimento = cbDipartimenti.SelectedIndex + 1;
-
             //LoadClassi(IDdipartimento);
             //LoadDiscipline(IDdipartimento);
             //LoadAssegnazioni(IDdipartimento);
@@ -1145,8 +1144,6 @@ namespace Cattedre
                 {
                     this.UseWaitCursor = true;
                     Application.DoEvents();
-
-
                     IDdipartimento = cbDipartimenti.SelectedIndex + 1;
                     //IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
 
@@ -1154,7 +1151,8 @@ namespace Cattedre
 
                     await Task.Run(() =>
                     {
-                        IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+                        if(IDannoscolastico<=0)
+                            IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
                         classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
                         discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
                     });
@@ -1163,9 +1161,13 @@ namespace Cattedre
                     LoadDiscipline(IDdipartimento);
                     LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
                     LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
-
-                    string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
-                    cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
+                    //carico solo se era vuoto altrimenti era gia popolato quindi giusto
+                    if(cbAnniScolastici.SelectedIndex<=-1)
+                    {
+                        string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
+                        cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
+                    }
+                   
                 }
             }
             catch (Exception ex)
@@ -1234,8 +1236,9 @@ namespace Cattedre
 
         private void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //IDdipartimento = cbDipartimenti.SelectedIndex + 1;
-            //IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
+            if(cbAnniScolastici.SelectedIndex>-1)
+                IDannoscolastico = ClsAnnoScolasticoBL.RilevaIDanno(cbAnniScolastici.Text);
+           //  = cbAnniScolastici.SelectedIndex;
 
             Annoscolasticoselezionato = cbAnniScolastici.SelectedItem.ToString();
             ClsAnnoScolasticoDL annoscolastico = new ClsAnnoScolasticoDL();

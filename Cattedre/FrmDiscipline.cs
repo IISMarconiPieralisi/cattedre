@@ -283,5 +283,11 @@ namespace Cattedre
                 tbDisciplina.Focus(); 
             }
         }
+
+        private void cbDipartimenti_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbDipartimenti.SelectedIndex > -1)
+                btCerca_Click(null, null);
+        }
     }
 }

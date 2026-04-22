@@ -20,7 +20,7 @@ namespace Cattedre
         {
             InitializeComponent();
         }
-
+        #region Crud
         private void btInserisci_Click(object sender, EventArgs e)
         {
             FrmDotazione frmDotazione = new FrmDotazione();
@@ -34,32 +34,6 @@ namespace Cattedre
                 CaricaListView();
             }
         }
-
-        private void CaricaListView()
-        {
-            dots = ClsDotareBL.CaricaDotare(Filtri);
-            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
-            lvDotazioni.Items.Clear();
-            for (int i = 0; i < dots.Count; i++)
-            {
-                ListViewItem lvi = new ListViewItem(dots[i].Id.ToString());
-                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
-                lvi.SubItems.Add(ClsClasseDiConcorsoBL.TrovaCodiceDaID(dots[i].IdClasseDiConcorso));
-                lvi.SubItems.Add(dots[i].NumcattedreFatto.ToString());
-                lvi.SubItems.Add(dots[i].NumcattedreDiritto.ToString());
-                lvi.Tag = cdcs[i].ID;
-                lvDotazioni.Items.Add(lvi);
-            }
-        }
-
-        private void FrmDotazioni_Load(object sender, EventArgs e)
-        {
-            //popolamento controlli filtri
-            GeneraFiltriAnnoScolastico();
-            PopolaCDC();
-            CaricaListView();
-        }
-
         private void btModifica_Click(object sender, EventArgs e)
         {
             if (lvDotazioni.SelectedIndices.Count == 1)
@@ -93,6 +67,32 @@ namespace Cattedre
                 CaricaListView();
             }
         }
+       
+
+        private void CaricaListView()
+        {
+            dots = ClsDotareBL.CaricaDotare(Filtri);
+            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+            lvDotazioni.Items.Clear();
+            for (int i = 0; i < dots.Count; i++)
+            {
+                ListViewItem lvi = new ListViewItem(dots[i].Id.ToString());
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
+                lvi.SubItems.Add(ClsClasseDiConcorsoBL.TrovaCodiceDaID(dots[i].IdClasseDiConcorso));
+                lvi.SubItems.Add(dots[i].NumcattedreFatto.ToString());
+                lvi.SubItems.Add(dots[i].NumcattedreDiritto.ToString());
+                lvi.Tag = cdcs[i].ID;
+                lvDotazioni.Items.Add(lvi);
+            }
+        }
+        #endregion
+        private void FrmDotazioni_Load(object sender, EventArgs e)
+        {
+            //popolamento controlli filtri
+            GeneraFiltriAnnoScolastico();
+            PopolaCDC();
+            CaricaListView();
+        }    
         #region filtra
         private void GeneraFiltriAnnoScolastico()
         {
@@ -180,16 +180,36 @@ namespace Cattedre
                 e.Value = $"{item.Livello} | {nome}";
             }
         }
-
-
-        #endregion
-
         private void btPulisciCb_Click(object sender, EventArgs e)
         {
             cbCDC.SelectedIndex = -1;
-            Filtri = null;
+            Filtri.Clear();
             CaricaListView();
             DeselezionaCheckBox(tplAnniScolastici);
         }
+        #endregion
+        #region controlli tastiera
+        private void lvDotazioni_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && lvDotazioni.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete && lvDotazioni.SelectedIndices.Count == 1)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
+            }
+        }
+
+        private void cbCDC_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbCDC.SelectedIndex >= 0)
+                btCerca_Click(null, null);
+            else
+                btPulisciCb_Click(null, null);
+        }
+        #endregion
     }
 }

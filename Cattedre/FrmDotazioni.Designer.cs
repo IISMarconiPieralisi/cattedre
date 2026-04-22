@@ -110,7 +110,7 @@
             this.btModifica.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btModifica.StateTracking.Border.Rounding = 20F;
             this.btModifica.StateTracking.Border.Width = 1;
-            this.btModifica.TabIndex = 55;
+            this.btModifica.TabIndex = 2;
             this.btModifica.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btModifica.Values.Text = "Modifica";
             this.btModifica.Click += new System.EventHandler(this.btModifica_Click);
@@ -189,7 +189,7 @@
             this.btElimina.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btElimina.StateTracking.Border.Rounding = 20F;
             this.btElimina.StateTracking.Border.Width = 1;
-            this.btElimina.TabIndex = 53;
+            this.btElimina.TabIndex = 3;
             this.btElimina.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btElimina.Values.Text = "Elimina";
             this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
@@ -258,7 +258,7 @@
             this.btInserisci.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btInserisci.StateTracking.Border.Rounding = 20F;
             this.btInserisci.StateTracking.Border.Width = 1;
-            this.btInserisci.TabIndex = 52;
+            this.btInserisci.TabIndex = 1;
             this.btInserisci.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btInserisci.Values.Text = "Inserisci";
             this.btInserisci.Click += new System.EventHandler(this.btInserisci_Click);
@@ -281,9 +281,10 @@
             this.lvDotazioni.Margin = new System.Windows.Forms.Padding(2);
             this.lvDotazioni.Name = "lvDotazioni";
             this.lvDotazioni.Size = new System.Drawing.Size(1040, 450);
-            this.lvDotazioni.TabIndex = 51;
+            this.lvDotazioni.TabIndex = 0;
             this.lvDotazioni.UseCompatibleStateImageBehavior = false;
             this.lvDotazioni.View = System.Windows.Forms.View.Details;
+            this.lvDotazioni.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvDotazioni_KeyDown);
             // 
             // chID
             // 
@@ -383,7 +384,7 @@
             this.btCerca.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btCerca.StateTracking.Border.Rounding = 20F;
             this.btCerca.StateTracking.Border.Width = 1;
-            this.btCerca.TabIndex = 59;
+            this.btCerca.TabIndex = 7;
             this.btCerca.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btCerca.Values.Text = "Cerca";
             this.btCerca.Click += new System.EventHandler(this.btCerca_Click);
@@ -452,7 +453,7 @@
             this.btPulisciCb.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btPulisciCb.StateTracking.Border.Rounding = 20F;
             this.btPulisciCb.StateTracking.Border.Width = 1;
-            this.btPulisciCb.TabIndex = 58;
+            this.btPulisciCb.TabIndex = 8;
             this.btPulisciCb.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btPulisciCb.Values.Text = "Annulla";
             this.btPulisciCb.Click += new System.EventHandler(this.btPulisciCb_Click);
@@ -480,7 +481,7 @@
             this.tplAnniScolastici.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tplAnniScolastici.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tplAnniScolastici.Size = new System.Drawing.Size(252, 36);
-            this.tplAnniScolastici.TabIndex = 62;
+            this.tplAnniScolastici.TabIndex = 5;
             // 
             // cbCDC
             // 
@@ -490,7 +491,8 @@
             this.cbCDC.Location = new System.Drawing.Point(133, 61);
             this.cbCDC.Name = "cbCDC";
             this.cbCDC.Size = new System.Drawing.Size(222, 25);
-            this.cbCDC.TabIndex = 63;
+            this.cbCDC.TabIndex = 4;
+            this.cbCDC.SelectedIndexChanged += new System.EventHandler(this.cbCDC_SelectedIndexChanged);
             this.cbCDC.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.cbCDC_Format);
             // 
             // FrmDotazioni

@@ -131,7 +131,7 @@ namespace Cattedre
             return cattedre;
         }
 
-        public static List<ClsDotareDL> CaricaDotare()
+        public static List<ClsDotareDL> CaricaDotare(Dictionary<string, List<string>> Filtri = null)
         {
             List<ClsDotareDL> lista = new List<ClsDotareDL>();
             DataTable dt = new DataTable();

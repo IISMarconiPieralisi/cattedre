@@ -57,18 +57,20 @@
             // 
             // cbAnnoScolastico
             // 
+            this.cbAnnoScolastico.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbAnnoScolastico.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAnnoScolastico.FormattingEnabled = true;
             this.cbAnnoScolastico.Location = new System.Drawing.Point(173, 29);
             this.cbAnnoScolastico.Name = "cbAnnoScolastico";
-            this.cbAnnoScolastico.Size = new System.Drawing.Size(121, 21);
+            this.cbAnnoScolastico.Size = new System.Drawing.Size(238, 21);
             this.cbAnnoScolastico.TabIndex = 13;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 134);
+            this.label1.Location = new System.Drawing.Point(12, 124);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(142, 17);
@@ -79,7 +81,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 172);
+            this.label3.Location = new System.Drawing.Point(12, 174);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(148, 17);
@@ -88,16 +90,20 @@
             // 
             // nudCattedreDiFatto
             // 
-            this.nudCattedreDiFatto.Location = new System.Drawing.Point(174, 134);
+            this.nudCattedreDiFatto.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nudCattedreDiFatto.Location = new System.Drawing.Point(174, 125);
             this.nudCattedreDiFatto.Name = "nudCattedreDiFatto";
-            this.nudCattedreDiFatto.Size = new System.Drawing.Size(120, 20);
+            this.nudCattedreDiFatto.Size = new System.Drawing.Size(131, 20);
             this.nudCattedreDiFatto.TabIndex = 16;
             // 
             // nudCattedreDiDiritto
             // 
+            this.nudCattedreDiDiritto.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.nudCattedreDiDiritto.Location = new System.Drawing.Point(174, 172);
             this.nudCattedreDiDiritto.Name = "nudCattedreDiDiritto";
-            this.nudCattedreDiDiritto.Size = new System.Drawing.Size(120, 20);
+            this.nudCattedreDiDiritto.Size = new System.Drawing.Size(131, 20);
             this.nudCattedreDiDiritto.TabIndex = 17;
             // 
             // panel1
@@ -106,9 +112,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.btAnnulla);
             this.panel1.Controls.Add(this.btSalva);
-            this.panel1.Location = new System.Drawing.Point(14, 228);
+            this.panel1.Location = new System.Drawing.Point(14, 205);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(467, 57);
+            this.panel1.Size = new System.Drawing.Size(397, 57);
             this.panel1.TabIndex = 28;
             // 
             // btAnnulla
@@ -116,7 +122,7 @@
             this.btAnnulla.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.btAnnulla.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btAnnulla.Location = new System.Drawing.Point(5, 13);
+            this.btAnnulla.Location = new System.Drawing.Point(3, 14);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btAnnulla.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -130,7 +136,7 @@
             this.btAnnulla.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btAnnulla.OverrideDefault.Border.Rounding = 20F;
             this.btAnnulla.OverrideDefault.Border.Width = 1;
-            this.btAnnulla.Size = new System.Drawing.Size(152, 32);
+            this.btAnnulla.Size = new System.Drawing.Size(110, 32);
             this.btAnnulla.StateCommon.Back.Color1 = System.Drawing.Color.Red;
             this.btAnnulla.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
             this.btAnnulla.StateCommon.Back.ColorAngle = 45F;
@@ -185,7 +191,7 @@
             // 
             this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btSalva.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btSalva.Location = new System.Drawing.Point(310, 12);
+            this.btSalva.Location = new System.Drawing.Point(277, 13);
             this.btSalva.Name = "btSalva";
             this.btSalva.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btSalva.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -199,7 +205,7 @@
             this.btSalva.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btSalva.OverrideDefault.Border.Rounding = 20F;
             this.btSalva.OverrideDefault.Border.Width = 1;
-            this.btSalva.Size = new System.Drawing.Size(154, 33);
+            this.btSalva.Size = new System.Drawing.Size(117, 33);
             this.btSalva.StateCommon.Back.Color1 = System.Drawing.Color.ForestGreen;
             this.btSalva.StateCommon.Back.Color2 = System.Drawing.Color.YellowGreen;
             this.btSalva.StateCommon.Back.ColorAngle = 45F;
@@ -254,7 +260,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(11, 87);
+            this.label4.Location = new System.Drawing.Point(11, 77);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(122, 17);
@@ -263,18 +269,20 @@
             // 
             // cbCDC
             // 
+            this.cbCDC.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbCDC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCDC.FormattingEnabled = true;
-            this.cbCDC.Location = new System.Drawing.Point(173, 86);
+            this.cbCDC.Location = new System.Drawing.Point(173, 77);
             this.cbCDC.Name = "cbCDC";
-            this.cbCDC.Size = new System.Drawing.Size(121, 21);
+            this.cbCDC.Size = new System.Drawing.Size(238, 21);
             this.cbCDC.TabIndex = 30;
             // 
             // FrmDotazione
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(503, 324);
+            this.ClientSize = new System.Drawing.Size(427, 274);
             this.Controls.Add(this.cbCDC);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.panel1);

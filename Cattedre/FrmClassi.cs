@@ -207,7 +207,7 @@ namespace Cattedre
                 {
                     Filtri.Add("IDindirizzo", new List<string> { $"'{cbIndirizzi.SelectedValue}'" });
                 }
-                ControlloSelezionatiAnniScolastici(Filtri);
+                ControlloSelezionatiAnniScolastici();
 
                 if (Filtri.Count<=0)
                     throw new Exception("Inserire almeno un criterio di ricerca");
@@ -254,7 +254,7 @@ namespace Cattedre
                 sezione++;
             }
         }
-        private void ControlloSelezionatiAnniScolastici(Dictionary<string, List<string>> filtri)
+        private void ControlloSelezionatiAnniScolastici()
         {
             if(tplAnniScolastici.Controls.OfType<CheckBox>().Any(cb=>cb.Checked))
             {
@@ -262,7 +262,7 @@ namespace Cattedre
 
                 if (!selezionati.Any()) return;
 
-                filtri.Add ( "IDannoScolastico", selezionati);
+                Filtri.Add ( "IDannoScolastico", selezionati);
             }
         }
         private void DeselezionaCheckBox(Control parent)

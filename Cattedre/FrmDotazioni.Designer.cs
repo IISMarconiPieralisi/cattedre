@@ -392,7 +392,7 @@
             // 
             this.btPulisciCb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btPulisciCb.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btPulisciCb.Location = new System.Drawing.Point(917, 56);
+            this.btPulisciCb.Location = new System.Drawing.Point(754, 54);
             this.btPulisciCb.Name = "btPulisciCb";
             this.btPulisciCb.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btPulisciCb.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -455,6 +455,7 @@
             this.btPulisciCb.TabIndex = 58;
             this.btPulisciCb.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btPulisciCb.Values.Text = "Annulla";
+            this.btPulisciCb.Click += new System.EventHandler(this.btPulisciCb_Click);
             // 
             // label2
             // 
@@ -478,7 +479,7 @@
             this.tplAnniScolastici.RowCount = 1;
             this.tplAnniScolastici.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tplAnniScolastici.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tplAnniScolastici.Size = new System.Drawing.Size(415, 36);
+            this.tplAnniScolastici.Size = new System.Drawing.Size(252, 36);
             this.tplAnniScolastici.TabIndex = 62;
             // 
             // cbCDC
@@ -490,6 +491,7 @@
             this.cbCDC.Name = "cbCDC";
             this.cbCDC.Size = new System.Drawing.Size(222, 25);
             this.cbCDC.TabIndex = 63;
+            this.cbCDC.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.cbCDC_Format);
             // 
             // FrmDotazioni
             // 

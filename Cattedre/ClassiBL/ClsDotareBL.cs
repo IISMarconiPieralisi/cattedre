@@ -141,17 +141,13 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-
-                    string sql = @"SELECT *
-                               FROM dotare
-                               ORDER BY IDannoScolastico";
-
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    using (MySqlCommand cmd = CreaComandoRicerca(Filtri, conn))
                     {
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
-                            da.Fill(dt);
+                            dr.Fill(dt);
                         }
+                        conn.Close();
                     }
                 }
 
@@ -172,6 +168,39 @@ namespace Cattedre
             }
 
             return lista;
+        }
+
+        private static MySqlCommand CreaComandoRicerca(Dictionary<string, List<string>> filtri, MySqlConnection conn)
+        {
+            string sql = @"SELECT ID, numcattedrediritto, numcattedrefatto, IDannoscolastico, IDclassediconcorso FROM dotare";
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conn;
+            List<string> condizioni = new List<string>();
+
+            foreach (var filtro in filtri)
+            {
+                string colonna = filtro.Key;  
+                List<string> valori = filtro.Value;
+
+                if (valori == null || valori.Count == 0)
+                    continue;
+
+                List<string> orConditions = new List<string>();
+                foreach (var valore in valori)
+                {
+                    orConditions.Add($"{colonna} = {valore}");  // colonna diretta, valore parametrizzato
+                }
+
+                condizioni.Add("(" + string.Join(" OR ", orConditions) + ")");
+            }
+
+            if (condizioni.Count > 0)
+            {
+                sql += " WHERE " + string.Join(" AND ", condizioni);
+            }
+
+            cmd.CommandText = sql;
+            return cmd;
         }
 
         public static void InserisciDotare(ClsDotareDL d)

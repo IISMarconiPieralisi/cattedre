@@ -56,7 +56,7 @@ namespace Cattedre
         {
             //popolamento controlli filtri
             GeneraFiltriAnnoScolastico();
-
+            PopolaCDC();
             CaricaListView();
         }
 
@@ -169,8 +169,27 @@ namespace Cattedre
                 Filtri.Add("IDannoScolastico", selezionati);
             }
         }
+        private void cbCDC_Format(object sender, ListControlConvertEventArgs e)
+        {
+            if (e.ListItem is ClsClasseDiConcorsoDL item)
+            {
+                string nome = item.Nome.Length > 27
+                    ? item.Nome.Substring(0, 25) + ".."
+                    : item.Nome;
+
+                e.Value = $"{item.Livello} | {nome}";
+            }
+        }
+
+
         #endregion
 
-
+        private void btPulisciCb_Click(object sender, EventArgs e)
+        {
+            cbCDC.SelectedIndex = -1;
+            Filtri = null;
+            CaricaListView();
+            DeselezionaCheckBox(tplAnniScolastici);
+        }
     }
 }

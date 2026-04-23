@@ -45,16 +45,16 @@ namespace Cattedre
                     _richiederes = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(_disciplina.ID);
 
                 // --- Controllo Duplicati in Archivio ---
-                if (_disciplina.ID <= 0)
-                {
-                    if (_discipline.Any(p => p.Nome == tbNome.Text.Trim() && p.Anno == anno))
-                        throw new Exception("Disciplina già presente per questo anno.");
-                }
-                else
-                {
-                    if (_discipline.Any(p => p.Nome == tbNome.Text.Trim() && p.Anno == anno && p.ID != _disciplina.ID))
-                        throw new Exception("Disciplina già presente per questo anno.");
-                }
+                //if (_disciplina.ID <= 0)
+                //{
+                //    if (_discipline.Any(p => p.Nome == tbNome.Text.Trim() && p.Anno == anno))
+                //        throw new Exception("Disciplina già presente per questo anno.");
+                //}
+                //else
+                //{
+                //    if (_discipline.Any(p => p.Nome == tbNome.Text.Trim() && p.Anno == anno && p.ID != _disciplina.ID))
+                //        throw new Exception("Disciplina già presente per questo anno.");
+                //}
                 if (_gestires.Count <= 0)
                     throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina.");
                 if (_richiederes.Count <= 0)

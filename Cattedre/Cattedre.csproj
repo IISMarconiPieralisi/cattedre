@@ -281,6 +281,18 @@
     <Compile Include="FrmDipartimenti.Designer.cs">
       <DependentUpon>FrmDipartimenti.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmDotazione.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDotazione.Designer.cs">
+      <DependentUpon>FrmDotazione.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmDotazioni.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDotazioni.Designer.cs">
+      <DependentUpon>FrmDotazioni.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmHome.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -378,6 +390,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmDipartimenti.resx">
       <DependentUpon>FrmDipartimenti.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDotazione.resx">
+      <DependentUpon>FrmDotazione.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDotazioni.resx">
+      <DependentUpon>FrmDotazioni.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmHome.resx">
       <DependentUpon>FrmHome.cs</DependentUpon>

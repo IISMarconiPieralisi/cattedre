@@ -322,7 +322,7 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = @"DELETE FROM Richiedere" +
+                string sql = @"DELETE FROM richiedere" +
                              " WHERE ID = @ID ";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))

@@ -39,7 +39,7 @@ namespace Cattedre
         const int COL_DOCENTE = 6;
         const int COL_ORECATTEDRA = 105;
         const int COL_OREEFF = 208;
-        const int COL_OREPOT = 286;
+        const int COL_OREPOT = 284;
 
         //private ToolTip toolTipDiscipline;
 
@@ -363,6 +363,7 @@ namespace Cattedre
                     return cdcs.Any(c => c.AbilitazioniRichieste != null &&
                                          c.AbilitazioniRichieste.ToLower().Contains("laurea"));
                 })
+                .OrderBy(d => d.Cognome)
                 .ToList();
 
             List<ClsUtenteDL> docentiPratici = docenti
@@ -372,6 +373,7 @@ namespace Cattedre
                     return !cdcs.Any(c => c.AbilitazioniRichieste != null &&
                                           c.AbilitazioniRichieste.ToLower().Contains("laurea"));
                 })
+                .OrderBy(d => d.Cognome)
                 .ToList();
 
             Label lblTotaleTeorici = null;
@@ -421,14 +423,16 @@ namespace Cattedre
                 lblTotaleTeorici.Name = "lblTotaleTeorici";
                 lblTotaleTeorici.Location = new Point(367, y + 5);
                 pnlOreDoc.Controls.Add(lblTotaleTeorici);
-                
+
 
                 Label lblTotPotTeorici = new Label();
-                lblTotPotTeorici.AutoSize = true;
+                lblTotPotTeorici.AutoSize = false;
+                lblTotPotTeorici.Width = 60;
                 lblTotPotTeorici.Font = new Font(lblTotPotTeorici.Font, FontStyle.Bold);
                 lblTotPotTeorici.Text = "0";
                 lblTotPotTeorici.Name = "lblTotalePotTeorici";
-                lblTotPotTeorici.Location = new Point(298, y + 5);
+                lblTotPotTeorici.TextAlign = ContentAlignment.MiddleCenter;
+                lblTotPotTeorici.Location = new Point(COL_OREPOT, y);
                 pnlOreDoc.Controls.Add(lblTotPotTeorici);
 
                 Label lblTotLabelTeorici = new Label();
@@ -487,11 +491,13 @@ namespace Cattedre
                 pnlOreDoc.Controls.Add(lblTotalePratici);
 
                 Label lblTotPotPratici = new Label();
-                lblTotPotPratici.AutoSize = true;
+                lblTotPotPratici.AutoSize = false;
+                lblTotPotPratici.Width = 60;
                 lblTotPotPratici.Font = new Font(lblTotPotPratici.Font, FontStyle.Bold);
                 lblTotPotPratici.Text = "0";
                 lblTotPotPratici.Name = "lblTotalePotPratici";
-                lblTotPotPratici.Location = new Point(298, y + 5);
+                lblTotPotPratici.TextAlign = ContentAlignment.MiddleCenter;
+                lblTotPotPratici.Location = new Point(COL_OREPOT, y);
                 pnlOreDoc.Controls.Add(lblTotPotPratici);
 
                 Label lblTotLabelPratici = new Label();
@@ -511,7 +517,7 @@ namespace Cattedre
         {
             ucOreDoc uc = new ucOreDoc();
 
-            uc.lblDocente.Text = $"{doc.Nome} {doc.Cognome}";
+            uc.lblDocente.Text = doc.DisplayText;
             uc.lblOreDiCattedra.Text = ClsContrattoBL.RilevaOreContrattoDoc(doc.ID).ToString();
 
             int orePot = dtDocentiAssegnazioni.AsEnumerable()
@@ -816,7 +822,11 @@ namespace Cattedre
 
             for (int i = 0; i < dipartimenti.Count; i++)
             {
-                cbDipartimenti.Items.Add(dipartimenti[i].Nome);
+                string nome = dipartimenti[i].Nome;
+                string nomeVisualizzato = nome?.Length > 13
+                    ? nome.Substring(0, 13) + "."
+                    : nome;
+                cbDipartimenti.Items.Add(nomeVisualizzato);
             }
         }
 
@@ -1133,7 +1143,6 @@ namespace Cattedre
         private async void btCaricaDipartimento_Click_1(object sender, EventArgs e) //evento SelectedIndexChanged di cbDipartimenti
         {
             //IDdipartimento = cbDipartimenti.SelectedIndex + 1;
-
             //LoadClassi(IDdipartimento);
             //LoadDiscipline(IDdipartimento);
             //LoadAssegnazioni(IDdipartimento);
@@ -1145,8 +1154,6 @@ namespace Cattedre
                 {
                     this.UseWaitCursor = true;
                     Application.DoEvents();
-
-
                     IDdipartimento = cbDipartimenti.SelectedIndex + 1;
                     //IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
 
@@ -1154,7 +1161,8 @@ namespace Cattedre
 
                     await Task.Run(() =>
                     {
-                        IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+                        if(IDannoscolastico<=0)
+                            IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
                         classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
                         discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
                     });
@@ -1163,9 +1171,13 @@ namespace Cattedre
                     LoadDiscipline(IDdipartimento);
                     LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
                     LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
-
-                    string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
-                    cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
+                    //carico solo se era vuoto altrimenti era gia popolato quindi giusto
+                    if(cbAnniScolastici.SelectedIndex<=-1)
+                    {
+                        string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
+                        cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
+                    }
+                   
                 }
             }
             catch (Exception ex)
@@ -1234,8 +1246,9 @@ namespace Cattedre
 
         private void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //IDdipartimento = cbDipartimenti.SelectedIndex + 1;
-            //IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
+            if(cbAnniScolastici.SelectedIndex>-1)
+                IDannoscolastico = ClsAnnoScolasticoBL.RilevaIDanno(cbAnniScolastici.Text);
+           //  = cbAnniScolastici.SelectedIndex;
 
             Annoscolasticoselezionato = cbAnniScolastici.SelectedItem.ToString();
             ClsAnnoScolasticoDL annoscolastico = new ClsAnnoScolasticoDL();

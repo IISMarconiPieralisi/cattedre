@@ -1,4 +1,4 @@
-﻿namespace Cattedre
+namespace Cattedre
 {
     partial class FrmClasse
     {
@@ -44,17 +44,17 @@
             this.cbDipartimento = new System.Windows.Forms.ComboBox();
             this.btSalva = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton1 = new Krypton.Toolkit.KryptonButton();
-            this.tbSezione = new Krypton.Toolkit.KryptonTextBox();
+            this.mtbSezione = new Krypton.Toolkit.KryptonMaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudAnno)).BeginInit();
             this.SuspendLayout();
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(12, 206);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(151, 16);
+            this.label4.Size = new System.Drawing.Size(150, 17);
             this.label4.TabIndex = 26;
             this.label4.Text = "Classe articolata con:";
             // 
@@ -108,11 +108,11 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(12, 395);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(98, 16);
+            this.label5.Size = new System.Drawing.Size(100, 17);
             this.label5.TabIndex = 34;
             this.label5.Text = "Coordinatore:";
             // 
@@ -362,36 +362,24 @@
             this.kryptonButton1.Values.Text = "Annulla";
             this.kryptonButton1.Click += new System.EventHandler(this.btAnnulla_Click);
             // 
-            // tbSezione
+            // mtbSezione
             // 
-            this.tbSezione.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSezione.Location = new System.Drawing.Point(165, 74);
-            this.tbSezione.Name = "tbSezione";
-            this.tbSezione.Size = new System.Drawing.Size(221, 29);
-            this.tbSezione.StateCommon.Back.Color1 = System.Drawing.Color.White;
-            this.tbSezione.StateCommon.Border.Color1 = System.Drawing.Color.Black;
-            this.tbSezione.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.tbSezione.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.tbSezione.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.tbSezione.StateCommon.Border.Rounding = 20F;
-            this.tbSezione.StateCommon.Border.Width = 1;
-            this.tbSezione.StateCommon.Content.Color1 = System.Drawing.Color.Black;
-            this.tbSezione.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSezione.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbSezione.TabIndex = 41;
-            this.tbSezione.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSezione_KeyDown);
+            this.mtbSezione.Location = new System.Drawing.Point(165, 73);
+            this.mtbSezione.Mask = "AA";
+            this.mtbSezione.Name = "mtbSezione";
+            this.mtbSezione.Size = new System.Drawing.Size(221, 24);
+            this.mtbSezione.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mtbSezione.TabIndex = 44;
+            this.mtbSezione.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mtbSezione_KeyDown);
             // 
             // FrmClasse
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(399, 492);
+            this.Controls.Add(this.mtbSezione);
             this.Controls.Add(this.btSalva);
             this.Controls.Add(this.kryptonButton1);
-            this.Controls.Add(this.tbSezione);
             this.Controls.Add(this.cbDipartimento);
             this.Controls.Add(this.cbAnnoScolastico);
             this.Controls.Add(this.label7);
@@ -433,6 +421,6 @@
         private System.Windows.Forms.ComboBox cbDipartimento;
         private Krypton.Toolkit.KryptonButton btSalva;
         private Krypton.Toolkit.KryptonButton kryptonButton1;
-        private Krypton.Toolkit.KryptonTextBox tbSezione;
+        private Krypton.Toolkit.KryptonMaskedTextBox mtbSezione;
     }
 }

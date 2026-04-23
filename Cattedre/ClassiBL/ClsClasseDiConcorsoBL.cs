@@ -319,6 +319,34 @@ namespace Cattedre
             return cdcs;
         }
         #endregion
+        #region valori specifici
+        public static int ContCattedrePotenziamentoCDC(long IDcdc)
+        {
+                int cattedre = 0;
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    string sql = @"
+                SELECT COUNT(DISTINCT r.IDdisciplina)
+                FROM (
+                    SELECT DISTINCT IDdisciplina, IDclasseDiConcorso
+                    FROM richiedere
+                ) r
+                JOIN discipline d ON r.IDdisciplina = d.ID
+                WHERE r.IDclasseDiConcorso = @IDcdc
+                  AND d.disciplinaSpeciale LIKE '%pot%'";
+
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDcdc", IDcdc);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            cattedre = Convert.ToInt32(result);
+                    }
+                }
+                return cattedre;
+        }
+        #endregion
         #region filtri
         private static MySqlCommand CreaComandoRicerca(string livello, string nome, MySqlConnection conn)
         {
@@ -349,60 +377,93 @@ namespace Cattedre
         }
         #endregion
         #region OreResidue
-        public static int OreResidueCDC (long IDCdC,long IDannoScolastico)
+        /// <summary>
+        /// Query 1 — ore totali previste dal piano studi per la classe di concorso
+        /// (teorie + laboratorio in base al livello A/B)
+        /// </summary>
+        private static int OreTeoriaLaboratorio(ClsClasseDiConcorsoDL CdC, ClsAnnoScolasticoDL annoScolastico)
         {
-            int OreResidue = 0;
+            int ore = 0;
+            string campoOre = CdC.Livello.Contains("A")
+            ? "SUM(d.oreTeoria)"
+            : "SUM(d.oreLaboratorio)";
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                string sql = $@"
+                    SELECT {campoOre}
+                    FROM (
+                        SELECT DISTINCT IDdisciplina, IDclasseDiConcorso
+                        FROM richiedere
+                    ) r
+                    JOIN discipline d ON r.IDdisciplina = d.ID
+                    WHERE r.IDclasseDiConcorso = @IDcdc
+                      AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '')";
+
+                conn.Open();
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDannoScolastico", annoScolastico.ID);
+                    cmd.Parameters.AddWithValue("@IDcdc", CdC.ID);
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                        ore = Convert.ToInt32(result);
+                }
+            }
+            return ore;
+        }
+
+        /// <summary>
+        /// Query 2 — ore già assegnate ai docenti per la classe di concorso
+        /// (distinte per tipo docente: T = teoria, L = laboratorio, altro = entrambe)
+        /// </summary>
+        private static int OreTotaleAssegnate(long IDCdC, long IDannoScolastico)
+        {
+            int ore = 0;
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                string sql = @"
+                SELECT SUM(
+                    CASE 
+                        WHEN u.tipoDocente = 'T' THEN d.oreTeoria
+                        WHEN u.tipoDocente = 'L' THEN d.oreLaboratorio
+                        ELSE d.oreTeoria + d.oreLaboratorio
+                    END
+                )
+                FROM utenti          u
+                JOIN richiedere  r ON u.ID            = r.IDutente
+                JOIN assegnare   a ON u.ID            = a.IDutente
+                JOIN discipline  d ON a.IDdisciplina  = d.ID
+                WHERE a.IDannoScolastico    = @IDannoScolastico
+                  AND r.IDclasseDiConcorso  = @IDcdc";
+
+                conn.Open();
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                    cmd.Parameters.AddWithValue("@IDcdc", IDCdC);
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                        ore = Convert.ToInt32(result);
+                }
+            }
+            return ore;
+        }
+
+        /// <summary>
+        /// Calcola le ore residue = ore previste - ore già assegnate
+        /// </summary>
+        public static int OreResidueCDC(ClsClasseDiConcorsoDL cdc,ClsAnnoScolasticoDL annoScolastico)
+        {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-                {
-                    string sql = @"SELECT
-                                   ( 
-                                            SELECT
-                                            CASE 
-                                                WHEN cdc.livello LIKE 'A%' THEN SUM(d.oreTeoria + d.oreLaboratorio)
-                                                WHEN cdc.livello LIKE 'B%' THEN SUM(d.oreLaboratorio)
-                                            ELSE 0
-                                            END                                            
-                                            FROM classi c 
-                                            JOIN indirizzi i ON c.IDindirizzo=i.ID
-                                            JOIN appartenere a ON i.ID=a.IDindirizzo
-                                            JOIN discipline d ON a.IDdisciplina = d.ID
-                                            JOIN richiedere r ON r.IDdisciplina = a.IDdisciplina
-                                            JOIN  classidiconcorso cdc ON  r.IDclasseDiConcorso=cdc.ID
-                                            WHERE c.IDannoScolastico=@IDannoScolastico AND cdc.ID=@IDcdc
-                                    )
-                                    -
-                                    ( 
-                                            SELECT SUM(
-                                                CASE 
-                                                    WHEN u.tipoDocente = 'T'  THEN d.oreTeoria
-                                                    WHEN u.tipoDocente = 'L' THEN d.oreLaboratorio
-                                                ELSE d.oreTeoria + d.oreLaboratorio
-                                                END 
-                                                      )
-                                            FROM utenti u
-                                            JOIN richiedere r ON u.ID= r.IDutente
-                                            JOIN assegnare  a ON u.ID = a.IDutente
-                                            JOIN discipline  d ON a.IDdisciplina = d.ID
-                                            WHERE a.IDannoScolastico = @IDannoScolastico AND r.IDclasseDiConcorso=@IDcdc
-                                            )";
-                    conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
-                        cmd.Parameters.AddWithValue("@IDcdc", IDCdC);
-                        DataTable dt = new DataTable();
-                        object result = cmd.ExecuteScalar();
-                        if (result != null && result != DBNull.Value)
-                            OreResidue = Convert.ToInt32(result);
-                    }
-               }
-            }catch(Exception ex)
+                int oreTeoria = OreTeoriaLaboratorio(cdc, annoScolastico);
+                int oreAssegnate = OreTotaleAssegnate(cdc.ID, annoScolastico.ID);
+                return oreTeoria - oreAssegnate;
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            return OreResidue;
         }
         #endregion
 

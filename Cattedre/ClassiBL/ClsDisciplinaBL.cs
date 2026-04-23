@@ -284,21 +284,22 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM discipline 
-                           WHERE nome = @nome 
-                           AND anno = @anno";
+                   WHERE nome = @nome 
+                   AND anno = @anno
+                   AND oreLaboratorio = @oreLaboratorio
+                   AND oreTeoria = @oreTeoria";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", disciplina.Nome);
                         cmd.Parameters.AddWithValue("@anno", disciplina.Anno);
+                        cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
+                        cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             da.Fill(dt);
                         }
-                        if (dt.Rows.Count > 0)
-                            return Convert.ToInt32(dt.Rows[0]["ID"]);
-                        else
-                            throw new Exception("Nessuna disciplina trovata con i parametri inseriti.");
+                        return dt.Rows.Count > 0 ? Convert.ToInt32(dt.Rows[0]["ID"]) : -1;
                     }
                 }
             }

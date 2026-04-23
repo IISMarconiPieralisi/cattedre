@@ -64,11 +64,7 @@ namespace Cattedre
                 //  GESTIONE COORDINATORE 
                 if (!string.IsNullOrWhiteSpace(cbCoordinatore.Text))
                 {
-                    string[] parts = cbCoordinatore.Text.Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
-                    if (parts.Length == 2)
-                    {
-                        _classe.Idutente = ClsUtenteBL.RilevaIDutente(parts[0], parts[1]);
-                    }
+                    _classe.Idutente = Convert.ToInt64(cbCoordinatore.SelectedValue);
                 }
                 //gestione classe articolata
                 if(cbClasseArticolataCon.SelectedIndex>-1)
@@ -236,7 +232,7 @@ namespace Cattedre
         private void cbCoordinatore_Format(object sender, ListControlConvertEventArgs e)
         {
             var coordinatore = (ClsUtenteDL)e.ListItem;
-            e.Value = $"{coordinatore.Nome} {coordinatore.Cognome}";
+            e.Value = $"{coordinatore.Cognome} {coordinatore.Nome}";
         }
 
         private void cbAnnoScolastico_SelectedIndexChanged(object sender, EventArgs e)

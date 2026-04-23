@@ -133,6 +133,8 @@ namespace Cattedre
 
         public static List<ClsDotareDL> CaricaDotare(Dictionary<string, List<string>> Filtri = null)
         {
+            if (Filtri == null)
+                Filtri = new Dictionary<string, List<string>>();
             List<ClsDotareDL> lista = new List<ClsDotareDL>();
             DataTable dt = new DataTable();
 

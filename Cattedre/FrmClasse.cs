@@ -35,7 +35,7 @@ namespace Cattedre
             {
                 // 1. VALIDAZIONE INPUT IMMEDIATA
                 // Controlliamo i campi obbligatori prima di creare oggetti o fare query
-                if (string.IsNullOrWhiteSpace(tbSezione.Text))
+                if (string.IsNullOrWhiteSpace(mtbSezione.Text))
                     throw new Exception("Inserire la sezione della classe.");
 
                 if (cbDipartimento.SelectedIndex == -1)
@@ -53,7 +53,7 @@ namespace Cattedre
 
                 // ASSEGNAZIONE VALORI BASE
                 _classe.Anno = Convert.ToInt32(nudAnno.Value);
-                _classe.Sezione = tbSezione.Text.Trim().ToUpper(); 
+                _classe.Sezione = mtbSezione.Text.Trim().ToUpper(); 
                 _classe.Sigla = _classe.Anno.ToString() + _classe.Sezione;
 
 
@@ -64,11 +64,7 @@ namespace Cattedre
                 //  GESTIONE COORDINATORE 
                 if (!string.IsNullOrWhiteSpace(cbCoordinatore.Text))
                 {
-                    string[] parts = cbCoordinatore.Text.Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
-                    if (parts.Length == 2)
-                    {
-                        _classe.Idutente = ClsUtenteBL.RilevaIDutente(parts[0], parts[1]);
-                    }
+                    _classe.Idutente = Convert.ToInt64(cbCoordinatore.SelectedValue);
                 }
                 //gestione classe articolata
                 if(cbClasseArticolataCon.SelectedIndex>-1)
@@ -126,7 +122,7 @@ namespace Cattedre
             {
                 _modifica = true;
                 nudAnno.Value = _classe.Anno;
-                tbSezione.Text = _classe.Sezione;
+                mtbSezione.Text = _classe.Sezione;
                 nudAnno_ValueChanged(null, null);
                 //popolamento FK
                 cbIndirizzo.SelectedValue = (_classe.Idindirizzo > 0) ? _classe.Idindirizzo : -1;
@@ -236,7 +232,7 @@ namespace Cattedre
         private void cbCoordinatore_Format(object sender, ListControlConvertEventArgs e)
         {
             var coordinatore = (ClsUtenteDL)e.ListItem;
-            e.Value = $"{coordinatore.Nome} {coordinatore.Cognome}";
+            e.Value = $"{coordinatore.Cognome} {coordinatore.Nome}";
         }
 
         private void cbAnnoScolastico_SelectedIndexChanged(object sender, EventArgs e)
@@ -253,13 +249,13 @@ namespace Cattedre
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                tbSezione.Focus();
+                mtbSezione.Focus();
             }
         }
 
-        private void tbSezione_KeyDown(object sender, KeyEventArgs e)
+        private void mtbSezione_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && tbSezione.Text.Length >= 2)
+            if (e.KeyCode == Keys.Enter && mtbSezione.Text.Length >= 2)
             {
                 e.SuppressKeyPress = true;
                 cbAnnoScolastico.Focus();
@@ -281,6 +277,10 @@ namespace Cattedre
             {
                 e.SuppressKeyPress = true;
                 cbIndirizzo.Focus();
+            }else if(e.KeyCode==Keys.Cancel || e.KeyCode==Keys.Escape)
+            {
+                e.SuppressKeyPress = true;
+                cbClasseArticolataCon.SelectedIndex = -1;
             }
         }
 
@@ -310,5 +310,7 @@ namespace Cattedre
                 btSalva.Focus();
             }
         }
+
+
     }
 }

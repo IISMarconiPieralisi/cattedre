@@ -142,7 +142,8 @@ namespace Cattedre
                     string sql = @"SELECT d.ID, d.nome,d.anno
                                     FROM discipline d
                                     JOIN richiedere r ON d.ID = r.IDdisciplina
-                                    WHERE r.IDutente = @IdUtente";
+                                    WHERE r.IDutente = @IdUtente
+                                    ORDER BY anno,nome";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {

@@ -36,25 +36,12 @@ namespace Cattedre
                     _disciplina = new ClsDisciplinaDL();
 
                 _disciplina.Anno = anno;
-
                 if (_disciplina.Anno == 0 && !cbDisciplinaSpeciale.Checked)
                     throw new Exception("inserire un anno valido");
                 if (_disciplina.ID > 0 && _gestires.Count == 0)
                     _gestires = ClsGestireBL.CaricaGestioneDisciplina(_disciplina.ID);
                 if (_disciplina.ID > 0 && _richiederes.Count == 0)
                     _richiederes = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(_disciplina.ID);
-
-                // --- Controllo Duplicati in Archivio ---
-                //if (_disciplina.ID <= 0)
-                //{
-                //    if (_discipline.Any(p => p.Nome == tbNome.Text.Trim() && p.Anno == anno))
-                //        throw new Exception("Disciplina già presente per questo anno.");
-                //}
-                //else
-                //{
-                //    if (_discipline.Any(p => p.Nome == tbNome.Text.Trim() && p.Anno == anno && p.ID != _disciplina.ID))
-                //        throw new Exception("Disciplina già presente per questo anno.");
-                //}
                 if (_gestires.Count <= 0)
                     throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina.");
                 if (_richiederes.Count <= 0)
@@ -73,6 +60,17 @@ namespace Cattedre
                 {
                     if (string.IsNullOrEmpty(tbDisciplinaSpeciale.Text)) throw new Exception("Inserire la descrizione della disciplina speciale");
                     _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text.Trim().ToLower();
+                }
+                //controllo doppioni
+                if (_disciplina.ID <= 0)
+                {
+                    if (ClsDisciplinaBL.CercaIdDisciplina(_disciplina) > 0)
+                        throw new Exception("Disciplina già presente per questo anno.");
+                }
+                else
+                {
+                    if (ClsDisciplinaBL.CercaIdDisciplina(_disciplina) != _disciplina.ID)
+                        throw new Exception("Disciplina già presente per questo anno.");
                 }
 
                 //Gestione Liste Collegate (ClsAppartenere) -

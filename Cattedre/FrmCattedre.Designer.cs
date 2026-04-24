@@ -144,7 +144,6 @@ namespace Cattedre
             // 
             // pnlCentrale
             // 
-            this.pnlCentrale.AutoScroll = true;
             this.pnlCentrale.Controls.Add(this.pnlDipartimento);
             this.pnlCentrale.Controls.Add(this.pnlClassi);
             this.pnlCentrale.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -155,6 +154,7 @@ namespace Cattedre
             // 
             // pnlDipartimento
             // 
+            this.pnlDipartimento.AutoScroll = true;
             this.pnlDipartimento.BackColor = System.Drawing.Color.Transparent;
             this.pnlDipartimento.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlDipartimento.Location = new System.Drawing.Point(169, 0);

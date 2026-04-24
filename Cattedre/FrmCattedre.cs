@@ -42,6 +42,7 @@ namespace Cattedre
         const int COL_OREPOT = 284;
 
         //private ToolTip toolTipDiscipline;
+        HScrollBar hScrollOrizzontale;
 
         public string Annoscolasticoselezionato { get => annoscolasticoselezionato; set => annoscolasticoselezionato = value; }
 
@@ -49,8 +50,12 @@ namespace Cattedre
         {
             InitializeComponent();
             utenteLoggato = utente;
+        }
 
-            //toolTipDiscipline = new ToolTip();
+        private void HScrollOrizzontale_Scroll(object sender, ScrollEventArgs e)
+        {
+            pnlDiscipline.AutoScrollPosition = new Point(e.NewValue, 0);
+            pnlDipartimento.AutoScrollPosition = new Point(e.NewValue, 0);
         }
 
         private void FrmCattedre_Load(object sender, EventArgs e)
@@ -60,7 +65,13 @@ namespace Cattedre
             //pnlDipartimento.VerticalScroll.Enabled = false;
             //pnlDipartimento.TabStop = true;
             //pnlDipartimento.TabIndex = 4;
-
+            hScrollOrizzontale = new HScrollBar();
+            hScrollOrizzontale.Height = 17;
+            hScrollOrizzontale.Left = pnlDiscipline.Left;
+            hScrollOrizzontale.Top = pnlDiscipline.Bottom;
+            hScrollOrizzontale.Width = pnlDiscipline.Width;
+            hScrollOrizzontale.Scroll += HScrollOrizzontale_Scroll;
+            pnlLeft.Controls.Add(hScrollOrizzontale);
             if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "C")
             {
                 // Preside: può selezionare tutti i dipartimenti, ma non modificare le combobox
@@ -99,6 +110,7 @@ namespace Cattedre
                 LoadDiscipline(IDdipartimento);
                 LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
                 LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+                SincronizzaScroll();
 
                 this.Cursor = Cursors.Default;
             }
@@ -992,21 +1004,34 @@ namespace Cattedre
                             ClsAssegnareBL.SalvaCattedra(classe.ID, IDannoscolastico, disciplina.ID, u.ID, 'L');
                     };
 
-                    UcDisciplina ucDisciplinaRif = pnlDipartimento.Controls
+                    UcDisciplina ucDisciplinaRif = pnlDiscipline.Controls
                     .OfType<UcDisciplina>()
                     .ElementAtOrDefault(colonna);
+
+                    UcClasse ucClasseRif = pnlClassi.Controls
+                    .OfType<UcClasse>()
+                    .ElementAtOrDefault(riga);
 
                     int x, y;
                     if (ucDisciplinaRif != null)
                     {
-                        // Centra la UcAssegnazioni rispetto alla UcDisciplina corrispondente
                         x = ucDisciplinaRif.Left + (ucDisciplinaRif.Width - uc.Width) / 2;
                     }
                     else
                     {
                         x = 20 + colonna * 170; // fallback
                     }
-                    y = 90 + riga * 100;
+
+                    if (ucClasseRif != null)
+                    {
+                        int offsetVerticale = pnlClassi.Top - pnlDipartimento.Top;
+                        y = ucClasseRif.Top + (ucClasseRif.Height - uc.Height) / 2 + offsetVerticale;
+                    }
+                    else
+                    {
+                        y = 10 + riga * 100; // fallback
+                    }
+
                     uc.Location = new Point(x, y);
 
                     //NON FUNZIONA IL TAB
@@ -1033,7 +1058,7 @@ namespace Cattedre
 
         private void LoadDiscipline(int IDdipartimento)
         {
-            foreach (UcDisciplina uc in pnlDipartimento.Controls.OfType<UcDisciplina>().ToList())
+            foreach (UcDisciplina uc in pnlDiscipline.Controls.OfType<UcDisciplina>().ToList())
             {
                 pnlDipartimento.Controls.Remove(uc);
                 uc.Dispose();
@@ -1071,7 +1096,7 @@ namespace Cattedre
 
                 UcDisciplina ucDisciplina = new UcDisciplina(disciplinaDaMostrare, nomeCompleto);
                 ucDisciplina.Location = new Point(x, y);
-                pnlDipartimento.Controls.Add(ucDisciplina);
+                pnlDiscipline.Controls.Add(ucDisciplina);
 
                 x += ucDisciplina.Width + 10;
             }
@@ -1092,7 +1117,7 @@ namespace Cattedre
             classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, Idannoscolastico);
 
             int x = 10;
-            int y = 95;
+            int y = 10;
             for (int i = 0; i < classi.Count; i++)
             {
                 UcClasse ucClasse = new UcClasse(classi[i]);
@@ -1102,6 +1127,42 @@ namespace Cattedre
                 ucClasse.Refresh();
 
                 y += ucClasse.Height + 10;
+            }
+        }
+
+        private void SincronizzaScroll()
+        {
+            int altezzaTotale = classi.Count * 100 + 50;
+
+            pnlClassi.Height = altezzaTotale;
+            pnlDipartimento.Height = altezzaTotale;
+
+            // Solo scroll verticale su pnlCentrale
+            pnlCentrale.AutoScroll = true;
+            pnlCentrale.AutoScrollMinSize = new Size(0, altezzaTotale + 30);
+
+            // Disabilita scroll interno ai panel
+            pnlDipartimento.AutoScroll = false;
+            pnlDiscipline.AutoScroll = false;
+
+            // Calcola larghezza contenuto
+            int larghezzaContenuto = pnlDiscipline.Controls.OfType<UcDisciplina>()
+                .Sum(u => u.Width + 10) + 10;
+
+            int larghezzaVisibile = pnlDipartimento.Width;
+
+            if (larghezzaContenuto > larghezzaVisibile)
+            {
+                hScrollOrizzontale.Minimum = 0;
+                hScrollOrizzontale.Maximum = larghezzaContenuto - larghezzaVisibile + hScrollOrizzontale.LargeChange;
+                hScrollOrizzontale.SmallChange = 20;
+                hScrollOrizzontale.LargeChange = larghezzaVisibile / 2;
+                hScrollOrizzontale.Enabled = true;
+                hScrollOrizzontale.Value = 0;
+            }
+            else
+            {
+                hScrollOrizzontale.Enabled = false;
             }
         }
 
@@ -1171,6 +1232,7 @@ namespace Cattedre
                     LoadDiscipline(IDdipartimento);
                     LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
                     LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+                    SincronizzaScroll();
                     //carico solo se era vuoto altrimenti era gia popolato quindi giusto
                     if(cbAnniScolastici.SelectedIndex<=-1)
                     {
@@ -1256,6 +1318,7 @@ namespace Cattedre
             LoadClassi(IDdipartimento, annoscolastico.ID);
             LoadAssegnazioni(IDdipartimento, annoscolastico.ID, out dtDocentiAssegnazioni);
             LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+            SincronizzaScroll();
         }
 
         private void btGeneraWord_Click(object sender, EventArgs e)

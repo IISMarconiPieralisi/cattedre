@@ -28,6 +28,9 @@ namespace Cattedre
 
         Dictionary<long, ucOreDoc> dictDocenti = new Dictionary<long, ucOreDoc>();
 
+        List<(Control ctrl, int xOriginale)> _posizioniDiscipline = new List<(Control, int)>();
+        List<(UcAssegnazioni ctrl, int xOriginale)> _posizioniAssegnazioni = new List<(UcAssegnazioni, int)>();
+
         ClsUtenteDL utenteLoggato;
 
         int IDdipartimento = 0;
@@ -54,9 +57,15 @@ namespace Cattedre
 
         private void HScrollOrizzontale_Scroll(object sender, ScrollEventArgs e)
         {
-            pnlDiscipline.AutoScrollPosition = new Point(e.NewValue, 0);
-            pnlDipartimento.AutoScrollPosition = new Point(e.NewValue, 0);
+            int offset = e.NewValue;
+
+            foreach (var (ctrl, xOrig) in _posizioniDiscipline)
+                ctrl.Left = xOrig - offset;
+
+            foreach (var (ctrl, xOrig) in _posizioniAssegnazioni)
+                ctrl.Left = xOrig - offset;
         }
+
 
         private void FrmCattedre_Load(object sender, EventArgs e)
         {
@@ -67,11 +76,9 @@ namespace Cattedre
             //pnlDipartimento.TabIndex = 4;
             hScrollOrizzontale = new HScrollBar();
             hScrollOrizzontale.Height = 17;
-            hScrollOrizzontale.Left = pnlDiscipline.Left;
-            hScrollOrizzontale.Top = pnlDiscipline.Bottom;
-            hScrollOrizzontale.Width = pnlDiscipline.Width;
+            hScrollOrizzontale.Dock = DockStyle.Bottom; // si ancora in fondo a pnlCentrale
             hScrollOrizzontale.Scroll += HScrollOrizzontale_Scroll;
-            pnlLeft.Controls.Add(hScrollOrizzontale);
+            pnlCentrale.Controls.Add(hScrollOrizzontale);
             if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "C")
             {
                 // Preside: può selezionare tutti i dipartimenti, ma non modificare le combobox
@@ -1145,18 +1152,25 @@ namespace Cattedre
             pnlDipartimento.AutoScroll = false;
             pnlDiscipline.AutoScroll = false;
 
+            // --- AGGIUNTO: Reset posizione orizzontale all'inizio ---
+            pnlDiscipline.Left = 0;
+            pnlDipartimento.Left = 0;
+            // -------------------------------------------------------
+
             // Calcola larghezza contenuto
             int larghezzaContenuto = pnlDiscipline.Controls.OfType<UcDisciplina>()
                 .Sum(u => u.Width + 10) + 10;
 
-            int larghezzaVisibile = pnlDipartimento.Width;
+            // La larghezza visibile è quella del contenitore che ospita i pannelli
+            int larghezzaVisibile = pnlDiscipline.Parent.ClientSize.Width;
 
             if (larghezzaContenuto > larghezzaVisibile)
             {
+                hScrollOrizzontale.Width = larghezzaVisibile;
                 hScrollOrizzontale.Minimum = 0;
-                hScrollOrizzontale.Maximum = larghezzaContenuto - larghezzaVisibile + hScrollOrizzontale.LargeChange;
+                hScrollOrizzontale.Maximum = larghezzaContenuto;
                 hScrollOrizzontale.SmallChange = 20;
-                hScrollOrizzontale.LargeChange = larghezzaVisibile / 2;
+                hScrollOrizzontale.LargeChange = larghezzaVisibile; // Scorrimento di una "pagina" intera
                 hScrollOrizzontale.Enabled = true;
                 hScrollOrizzontale.Value = 0;
             }
@@ -1164,6 +1178,20 @@ namespace Cattedre
             {
                 hScrollOrizzontale.Enabled = false;
             }
+            SalvaPosizioniOriginali();
+        }
+
+        private void SalvaPosizioniOriginali()
+        {
+            _posizioniDiscipline = pnlDiscipline.Controls
+                .Cast<Control>()
+                .Select(c => (c, c.Left))
+                .ToList();
+
+            _posizioniAssegnazioni = pnlDipartimento.Controls
+                .OfType<UcAssegnazioni>()
+                .Select(c => (c, c.Left))
+                .ToList();
         }
 
         private void PulisciDipartimento()

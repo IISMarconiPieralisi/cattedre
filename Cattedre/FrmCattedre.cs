@@ -79,6 +79,9 @@ namespace Cattedre
             hScrollOrizzontale.Dock = DockStyle.Bottom; // si ancora in fondo a pnlCentrale
             hScrollOrizzontale.Scroll += HScrollOrizzontale_Scroll;
             pnlCentrale.Controls.Add(hScrollOrizzontale);
+
+            pnlCentrale.Resize += (s, ev) => { if (dictDocenti.Count > 0) SincronizzaScroll(); };
+
             if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "C")
             {
                 // Preside: può selezionare tutti i dipartimenti, ma non modificare le combobox
@@ -117,6 +120,7 @@ namespace Cattedre
                 LoadDiscipline(IDdipartimento);
                 LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
                 LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+                SalvaPosizioniOriginali();
                 SincronizzaScroll();
 
                 this.Cursor = Cursors.Default;
@@ -1144,41 +1148,52 @@ namespace Cattedre
             pnlClassi.Height = altezzaTotale;
             pnlDipartimento.Height = altezzaTotale;
 
-            // Solo scroll verticale su pnlCentrale
             pnlCentrale.AutoScroll = true;
             pnlCentrale.AutoScrollMinSize = new Size(0, altezzaTotale + 30);
 
-            // Disabilita scroll interno ai panel
             pnlDipartimento.AutoScroll = false;
             pnlDiscipline.AutoScroll = false;
 
-            // --- AGGIUNTO: Reset posizione orizzontale all'inizio ---
+            // Reset posizione orizzontale
             pnlDiscipline.Left = 0;
             pnlDipartimento.Left = 0;
-            // -------------------------------------------------------
 
-            // Calcola larghezza contenuto
+            // Calcola larghezza contenuto con padding finale
             int larghezzaContenuto = pnlDiscipline.Controls.OfType<UcDisciplina>()
-                .Sum(u => u.Width + 10) + 10;
+                .Sum(u => u.Width + 10) + 55; // +20 di margine finale
 
-            // La larghezza visibile è quella del contenitore che ospita i pannelli
-            int larghezzaVisibile = pnlDiscipline.Parent.ClientSize.Width;
+            // Larghezza visibile è quella del pnlDiscipline stesso (non del Parent)
+            int larghezzaVisibile = pnlDiscipline.ClientSize.Width;
 
             if (larghezzaContenuto > larghezzaVisibile)
             {
-                hScrollOrizzontale.Width = larghezzaVisibile;
+                int scrollRange = larghezzaContenuto - larghezzaVisibile;
+
                 hScrollOrizzontale.Minimum = 0;
-                hScrollOrizzontale.Maximum = larghezzaContenuto;
+                hScrollOrizzontale.Maximum = scrollRange + hScrollOrizzontale.LargeChange - 1; // formula corretta WinForms
                 hScrollOrizzontale.SmallChange = 20;
-                hScrollOrizzontale.LargeChange = larghezzaVisibile; // Scorrimento di una "pagina" intera
+                hScrollOrizzontale.LargeChange = Math.Max(1, larghezzaVisibile / 3);
                 hScrollOrizzontale.Enabled = true;
-                hScrollOrizzontale.Value = 0;
+                hScrollOrizzontale.Value = Math.Max(
+                hScrollOrizzontale.Minimum,
+                Math.Min(hScrollOrizzontale.Value, scrollRange)
+                );
             }
             else
             {
                 hScrollOrizzontale.Enabled = false;
+                hScrollOrizzontale.Value = 0;
+
+                // Riporta tutti i controlli alla posizione originale
+                foreach (var (ctrl, xOrig) in _posizioniDiscipline)
+                    ctrl.Left = xOrig;
+                foreach (var (ctrl, xOrig) in _posizioniAssegnazioni)
+                    ctrl.Left = xOrig;
             }
-            SalvaPosizioniOriginali();
+            HScrollOrizzontale_Scroll(hScrollOrizzontale,
+            new ScrollEventArgs(ScrollEventType.ThumbPosition, hScrollOrizzontale.Value));
+
+            //SalvaPosizioniOriginali();
         }
 
         private void SalvaPosizioniOriginali()
@@ -1346,6 +1361,8 @@ namespace Cattedre
             LoadClassi(IDdipartimento, annoscolastico.ID);
             LoadAssegnazioni(IDdipartimento, annoscolastico.ID, out dtDocentiAssegnazioni);
             LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+            SalvaPosizioniOriginali();
+            SalvaPosizioniOriginali();
             SincronizzaScroll();
         }
 

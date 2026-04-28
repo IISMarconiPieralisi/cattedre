@@ -182,7 +182,7 @@ namespace Cattedre
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(112, 16);
             this.label6.TabIndex = 39;
-            this.label6.Text = "AnnoScolastico:";
+            this.label6.Text = "Anno Scolastico:";
             // 
             // label7
             // 

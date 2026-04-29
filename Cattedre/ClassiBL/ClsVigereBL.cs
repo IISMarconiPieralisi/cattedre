@@ -121,9 +121,9 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"UPDATE vigere 
-                           SET IDdataInizio = @IDdataInizio, 
-                               IDannoscolasticofine = @IDannoscolasticofine, 
-                           WHERE IDdisciplina = @IDdisciplina";
+                                SET IDannoscolasticoinizio = @IDannoscolasticoinizio, 
+                                IDannoscolasticofine = @IDannoscolasticofine
+                                WHERE IDdisciplina = @IDdisciplina";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {

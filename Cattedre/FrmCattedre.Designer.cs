@@ -62,12 +62,11 @@ namespace Cattedre
             this.pnlOreDoc.Controls.Add(this.lblOrePot);
             this.pnlOreDoc.Controls.Add(this.lblOreCattedra);
             this.pnlOreDoc.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlOreDoc.Location = new System.Drawing.Point(1007, 0);
-            this.pnlOreDoc.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.pnlOreDoc.MaximumSize = new System.Drawing.Size(533, 0);
-            this.pnlOreDoc.MinimumSize = new System.Drawing.Size(400, 0);
+            this.pnlOreDoc.Location = new System.Drawing.Point(755, 0);
+            this.pnlOreDoc.MaximumSize = new System.Drawing.Size(400, 0);
+            this.pnlOreDoc.MinimumSize = new System.Drawing.Size(300, 0);
             this.pnlOreDoc.Name = "pnlOreDoc";
-            this.pnlOreDoc.Size = new System.Drawing.Size(533, 846);
+            this.pnlOreDoc.Size = new System.Drawing.Size(400, 687);
             this.pnlOreDoc.TabIndex = 4;
             // 
             // lblOreEff
@@ -76,10 +75,9 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOreEff.AutoSize = true;
             this.lblOreEff.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOreEff.Location = new System.Drawing.Point(277, 11);
-            this.lblOreEff.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOreEff.Location = new System.Drawing.Point(208, 9);
             this.lblOreEff.Name = "lblOreEff";
-            this.lblOreEff.Size = new System.Drawing.Size(63, 19);
+            this.lblOreEff.Size = new System.Drawing.Size(51, 16);
             this.lblOreEff.TabIndex = 12;
             this.lblOreEff.Tag = "header";
             this.lblOreEff.Text = "Ore Eff";
@@ -90,10 +88,9 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDocente.AutoSize = true;
             this.lblDocente.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDocente.Location = new System.Drawing.Point(8, 11);
-            this.lblDocente.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDocente.Location = new System.Drawing.Point(6, 9);
             this.lblDocente.Name = "lblDocente";
-            this.lblDocente.Size = new System.Drawing.Size(79, 19);
+            this.lblDocente.Size = new System.Drawing.Size(61, 16);
             this.lblDocente.TabIndex = 10;
             this.lblDocente.Tag = "header";
             this.lblDocente.Text = "Docente";
@@ -104,10 +101,9 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOreTot.AutoSize = true;
             this.lblOreTot.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOreTot.Location = new System.Drawing.Point(481, 11);
-            this.lblOreTot.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOreTot.Location = new System.Drawing.Point(361, 9);
             this.lblOreTot.Name = "lblOreTot";
-            this.lblOreTot.Size = new System.Drawing.Size(31, 19);
+            this.lblOreTot.Size = new System.Drawing.Size(26, 16);
             this.lblOreTot.TabIndex = 14;
             this.lblOreTot.Tag = "header";
             this.lblOreTot.Text = "Tot";
@@ -118,10 +114,9 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOrePot.AutoSize = true;
             this.lblOrePot.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOrePot.Location = new System.Drawing.Point(381, 11);
-            this.lblOrePot.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOrePot.Location = new System.Drawing.Point(286, 9);
             this.lblOrePot.Name = "lblOrePot";
-            this.lblOrePot.Size = new System.Drawing.Size(69, 19);
+            this.lblOrePot.Size = new System.Drawing.Size(55, 16);
             this.lblOrePot.TabIndex = 13;
             this.lblOrePot.Tag = "header";
             this.lblOrePot.Text = "Ore Pot";
@@ -132,10 +127,9 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOreCattedra.AutoSize = true;
             this.lblOreCattedra.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOreCattedra.Location = new System.Drawing.Point(140, 11);
-            this.lblOreCattedra.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOreCattedra.Location = new System.Drawing.Point(105, 9);
             this.lblOreCattedra.Name = "lblOreCattedra";
-            this.lblOreCattedra.Size = new System.Drawing.Size(114, 19);
+            this.lblOreCattedra.Size = new System.Drawing.Size(94, 16);
             this.lblOreCattedra.TabIndex = 11;
             this.lblOreCattedra.Tag = "header";
             this.lblOreCattedra.Text = "Ore Cattedra";
@@ -146,9 +140,8 @@ namespace Cattedre
             this.pnlLeft.Controls.Add(this.pnlTop);
             this.pnlLeft.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLeft.Location = new System.Drawing.Point(0, 0);
-            this.pnlLeft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pnlLeft.Name = "pnlLeft";
-            this.pnlLeft.Size = new System.Drawing.Size(1007, 846);
+            this.pnlLeft.Size = new System.Drawing.Size(755, 687);
             this.pnlLeft.TabIndex = 5;
             // 
             // pnlCentrale
@@ -156,10 +149,9 @@ namespace Cattedre
             this.pnlCentrale.Controls.Add(this.pnlDipartimento);
             this.pnlCentrale.Controls.Add(this.pnlClassi);
             this.pnlCentrale.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCentrale.Location = new System.Drawing.Point(0, 123);
-            this.pnlCentrale.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlCentrale.Location = new System.Drawing.Point(0, 100);
             this.pnlCentrale.Name = "pnlCentrale";
-            this.pnlCentrale.Size = new System.Drawing.Size(1007, 723);
+            this.pnlCentrale.Size = new System.Drawing.Size(755, 587);
             this.pnlCentrale.TabIndex = 8;
             // 
             // pnlDipartimento
@@ -167,19 +159,17 @@ namespace Cattedre
             this.pnlDipartimento.AutoScroll = true;
             this.pnlDipartimento.BackColor = System.Drawing.Color.Transparent;
             this.pnlDipartimento.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlDipartimento.Location = new System.Drawing.Point(225, 0);
-            this.pnlDipartimento.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlDipartimento.Location = new System.Drawing.Point(169, 0);
             this.pnlDipartimento.Name = "pnlDipartimento";
-            this.pnlDipartimento.Size = new System.Drawing.Size(782, 723);
+            this.pnlDipartimento.Size = new System.Drawing.Size(586, 587);
             this.pnlDipartimento.TabIndex = 2;
             // 
             // pnlClassi
             // 
             this.pnlClassi.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlClassi.Location = new System.Drawing.Point(0, 0);
-            this.pnlClassi.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pnlClassi.Name = "pnlClassi";
-            this.pnlClassi.Size = new System.Drawing.Size(225, 723);
+            this.pnlClassi.Size = new System.Drawing.Size(169, 587);
             this.pnlClassi.TabIndex = 0;
             // 
             // pnlTop
@@ -188,18 +178,16 @@ namespace Cattedre
             this.pnlTop.Controls.Add(this.pnlButtons);
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(0, 0);
-            this.pnlTop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(1007, 123);
+            this.pnlTop.Size = new System.Drawing.Size(755, 100);
             this.pnlTop.TabIndex = 7;
             // 
             // pnlDiscipline
             // 
             this.pnlDiscipline.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlDiscipline.Location = new System.Drawing.Point(225, 0);
-            this.pnlDiscipline.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlDiscipline.Location = new System.Drawing.Point(169, 0);
             this.pnlDiscipline.Name = "pnlDiscipline";
-            this.pnlDiscipline.Size = new System.Drawing.Size(782, 123);
+            this.pnlDiscipline.Size = new System.Drawing.Size(586, 100);
             this.pnlDiscipline.TabIndex = 1;
             // 
             // pnlButtons
@@ -210,17 +198,15 @@ namespace Cattedre
             this.pnlButtons.Controls.Add(this.cbAnniScolastici);
             this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlButtons.Location = new System.Drawing.Point(0, 0);
-            this.pnlButtons.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pnlButtons.Name = "pnlButtons";
-            this.pnlButtons.Size = new System.Drawing.Size(225, 123);
+            this.pnlButtons.Size = new System.Drawing.Size(169, 100);
             this.pnlButtons.TabIndex = 0;
             // 
             // btGeneraWord
             // 
             this.btGeneraWord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btGeneraWord.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btGeneraWord.Location = new System.Drawing.Point(121, 48);
-            this.btGeneraWord.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btGeneraWord.Location = new System.Drawing.Point(91, 39);
             this.btGeneraWord.Name = "btGeneraWord";
             this.btGeneraWord.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btGeneraWord.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
@@ -234,7 +220,7 @@ namespace Cattedre
             this.btGeneraWord.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btGeneraWord.OverrideDefault.Border.Rounding = 20F;
             this.btGeneraWord.OverrideDefault.Border.Width = 1;
-            this.btGeneraWord.Size = new System.Drawing.Size(99, 53);
+            this.btGeneraWord.Size = new System.Drawing.Size(74, 43);
             this.btGeneraWord.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btGeneraWord.StateCommon.Back.Color2 = System.Drawing.Color.DarkGoldenrod;
             this.btGeneraWord.StateCommon.Back.ColorAngle = 45F;
@@ -292,10 +278,10 @@ namespace Cattedre
             this.cbDipartimenti.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDipartimenti.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDipartimenti.FormattingEnabled = true;
-            this.cbDipartimenti.Location = new System.Drawing.Point(8, 11);
-            this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbDipartimenti.Location = new System.Drawing.Point(6, 9);
+            this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbDipartimenti.Name = "cbDipartimenti";
-            this.cbDipartimenti.Size = new System.Drawing.Size(132, 27);
+            this.cbDipartimenti.Size = new System.Drawing.Size(100, 24);
             this.cbDipartimenti.TabIndex = 1;
             this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.btCaricaDipartimento_Click_1);
             // 
@@ -303,8 +289,7 @@ namespace Cattedre
             // 
             this.btGeneraASsucc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btGeneraASsucc.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btGeneraASsucc.Location = new System.Drawing.Point(8, 47);
-            this.btGeneraASsucc.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btGeneraASsucc.Location = new System.Drawing.Point(6, 38);
             this.btGeneraASsucc.Name = "btGeneraASsucc";
             this.btGeneraASsucc.OverrideDefault.Back.Color1 = System.Drawing.Color.Purple;
             this.btGeneraASsucc.OverrideDefault.Back.Color2 = System.Drawing.Color.BlueViolet;
@@ -318,7 +303,7 @@ namespace Cattedre
             this.btGeneraASsucc.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btGeneraASsucc.OverrideDefault.Border.Rounding = 20F;
             this.btGeneraASsucc.OverrideDefault.Border.Width = 1;
-            this.btGeneraASsucc.Size = new System.Drawing.Size(105, 54);
+            this.btGeneraASsucc.Size = new System.Drawing.Size(79, 44);
             this.btGeneraASsucc.StateCommon.Back.Color1 = System.Drawing.Color.Purple;
             this.btGeneraASsucc.StateCommon.Back.Color2 = System.Drawing.Color.Fuchsia;
             this.btGeneraASsucc.StateCommon.Back.ColorAngle = 45F;
@@ -374,10 +359,9 @@ namespace Cattedre
             this.cbAnniScolastici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAnniScolastici.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbAnniScolastici.FormattingEnabled = true;
-            this.cbAnniScolastici.Location = new System.Drawing.Point(148, 11);
-            this.cbAnniScolastici.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbAnniScolastici.Location = new System.Drawing.Point(111, 9);
             this.cbAnniScolastici.Name = "cbAnniScolastici";
-            this.cbAnniScolastici.Size = new System.Drawing.Size(71, 27);
+            this.cbAnniScolastici.Size = new System.Drawing.Size(54, 24);
             this.cbAnniScolastici.TabIndex = 2;
             this.cbAnniScolastici.SelectedIndexChanged += new System.EventHandler(this.cbAnniScolastici_SelectedIndexChanged);
             // 
@@ -385,24 +369,22 @@ namespace Cattedre
             // 
             this.splitter1.BackColor = System.Drawing.Color.Black;
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(1004, 0);
-            this.splitter1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitter1.Location = new System.Drawing.Point(753, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 846);
+            this.splitter1.Size = new System.Drawing.Size(2, 687);
             this.splitter1.TabIndex = 6;
             this.splitter1.TabStop = false;
             // 
             // FrmCattedre
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1540, 846);
+            this.ClientSize = new System.Drawing.Size(1155, 687);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.pnlLeft);
             this.Controls.Add(this.pnlOreDoc);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FrmCattedre";
             this.Tag = "header";
             this.Text = "Cattedre";

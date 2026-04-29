@@ -53,6 +53,7 @@
             this.btSalva = new Krypton.Toolkit.KryptonButton();
             this.btColore = new System.Windows.Forms.Button();
             this.pnCDC = new System.Windows.Forms.Panel();
+            this.cbSelezionaTutti = new Krypton.Toolkit.KryptonCheckBox();
             this.clbCLasseDiConcorso = new System.Windows.Forms.CheckedListBox();
             this.clbDisciplina = new System.Windows.Forms.CheckedListBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -138,7 +139,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(25, 291);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(96, 16);
@@ -191,8 +192,8 @@
             this.PnUtente.Location = new System.Drawing.Point(0, 0);
             this.PnUtente.Name = "PnUtente";
             this.PnUtente.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.PnUtente.Size = new System.Drawing.Size(408, 470);
-            this.PnUtente.TabIndex = 18;
+            this.PnUtente.Size = new System.Drawing.Size(408, 504);
+            this.PnUtente.TabIndex = 1;
             // 
             // label16
             // 
@@ -305,7 +306,7 @@
             this.pnTipoDocente.Location = new System.Drawing.Point(129, 282);
             this.pnTipoDocente.Name = "pnTipoDocente";
             this.pnTipoDocente.Size = new System.Drawing.Size(236, 31);
-            this.pnTipoDocente.TabIndex = 25;
+            this.pnTipoDocente.TabIndex = 6;
             // 
             // rbLaboratorio
             // 
@@ -373,7 +374,7 @@
             this.panel2.Controls.Add(this.kryptonButton1);
             this.panel2.Controls.Add(this.btSalva);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 370);
+            this.panel2.Location = new System.Drawing.Point(0, 404);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(393, 100);
             this.panel2.TabIndex = 26;
@@ -522,7 +523,7 @@
             this.btColore.Location = new System.Drawing.Point(129, 337);
             this.btColore.Name = "btColore";
             this.btColore.Size = new System.Drawing.Size(89, 23);
-            this.btColore.TabIndex = 8;
+            this.btColore.TabIndex = 7;
             this.btColore.Text = "seleziona";
             this.btColore.UseVisualStyleBackColor = true;
             this.btColore.Click += new System.EventHandler(this.btColore_Click);
@@ -531,6 +532,7 @@
             // pnCDC
             // 
             this.pnCDC.AutoSize = true;
+            this.pnCDC.Controls.Add(this.cbSelezionaTutti);
             this.pnCDC.Controls.Add(this.clbCLasseDiConcorso);
             this.pnCDC.Controls.Add(this.clbDisciplina);
             this.pnCDC.Controls.Add(this.label14);
@@ -541,8 +543,17 @@
             this.pnCDC.Margin = new System.Windows.Forms.Padding(3, 3, 8, 6);
             this.pnCDC.Name = "pnCDC";
             this.pnCDC.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.pnCDC.Size = new System.Drawing.Size(318, 470);
-            this.pnCDC.TabIndex = 19;
+            this.pnCDC.Size = new System.Drawing.Size(318, 504);
+            this.pnCDC.TabIndex = 2;
+            // 
+            // cbSelezionaTutti
+            // 
+            this.cbSelezionaTutti.Location = new System.Drawing.Point(6, 464);
+            this.cbSelezionaTutti.Name = "cbSelezionaTutti";
+            this.cbSelezionaTutti.Size = new System.Drawing.Size(105, 25);
+            this.cbSelezionaTutti.TabIndex = 11;
+            this.cbSelezionaTutti.Values.Text = "Seleziona tutto";
+            this.cbSelezionaTutti.CheckedChanged += new System.EventHandler(this.cbSelezionaTutti_CheckedChanged);
             // 
             // clbCLasseDiConcorso
             // 
@@ -600,7 +611,7 @@
             this.PnContratto.Controls.Add(this.label13);
             this.PnContratto.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PnContratto.Enabled = false;
-            this.PnContratto.Location = new System.Drawing.Point(726, 229);
+            this.PnContratto.Location = new System.Drawing.Point(726, 263);
             this.PnContratto.Name = "PnContratto";
             this.PnContratto.Padding = new System.Windows.Forms.Padding(0, 20, 0, 30);
             this.PnContratto.Size = new System.Drawing.Size(396, 241);
@@ -623,7 +634,7 @@
             this.panel1.Location = new System.Drawing.Point(94, 36);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(249, 41);
-            this.panel1.TabIndex = 22;
+            this.panel1.TabIndex = 14;
             // 
             // rbDeterminato
             // 
@@ -740,7 +751,7 @@
             this.pnDipartimento.Name = "pnDipartimento";
             this.pnDipartimento.Padding = new System.Windows.Forms.Padding(0, 0, 0, 4);
             this.pnDipartimento.Size = new System.Drawing.Size(396, 233);
-            this.pnDipartimento.TabIndex = 23;
+            this.pnDipartimento.TabIndex = 3;
             // 
             // clbDipartimento
             // 
@@ -752,7 +763,7 @@
             this.clbDipartimento.Location = new System.Drawing.Point(5, 33);
             this.clbDipartimento.Name = "clbDipartimento";
             this.clbDipartimento.Size = new System.Drawing.Size(338, 140);
-            this.clbDipartimento.TabIndex = 11;
+            this.clbDipartimento.TabIndex = 12;
             this.clbDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDipartimento_KeyDown);
             // 
             // cbDipartimentoCoordinato
@@ -763,7 +774,7 @@
             this.cbDipartimentoCoordinato.Location = new System.Drawing.Point(109, 187);
             this.cbDipartimentoCoordinato.Name = "cbDipartimentoCoordinato";
             this.cbDipartimentoCoordinato.Size = new System.Drawing.Size(210, 25);
-            this.cbDipartimentoCoordinato.TabIndex = 12;
+            this.cbDipartimentoCoordinato.TabIndex = 13;
             this.cbDipartimentoCoordinato.Visible = false;
             this.cbDipartimentoCoordinato.SelectedIndexChanged += new System.EventHandler(this.cbDipartimentoCoordinato_SelectedIndexChanged);
             this.cbDipartimentoCoordinato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDipartimentoCoordinato_KeyDown);
@@ -772,7 +783,7 @@
             // 
             this.lbDcoordinato.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lbDcoordinato.AutoSize = true;
-            this.lbDcoordinato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbDcoordinato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbDcoordinato.Location = new System.Drawing.Point(2, 180);
             this.lbDcoordinato.Name = "lbDcoordinato";
             this.lbDcoordinato.Size = new System.Drawing.Size(96, 32);
@@ -795,7 +806,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1122, 470);
+            this.ClientSize = new System.Drawing.Size(1122, 504);
             this.Controls.Add(this.pnDipartimento);
             this.Controls.Add(this.PnContratto);
             this.Controls.Add(this.pnCDC);
@@ -871,5 +882,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label15;
+        private Krypton.Toolkit.KryptonCheckBox cbSelezionaTutti;
     }
 }

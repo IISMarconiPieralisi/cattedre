@@ -65,11 +65,11 @@
             // 
             this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbPassword.Location = new System.Drawing.Point(286, 217);
+            this.tbPassword.Location = new System.Drawing.Point(290, 213);
             this.tbPassword.Margin = new System.Windows.Forms.Padding(2);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
-            this.tbPassword.Size = new System.Drawing.Size(219, 22);
+            this.tbPassword.Size = new System.Drawing.Size(345, 22);
             this.tbPassword.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbPassword.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.TabIndex = 11;
@@ -80,10 +80,10 @@
             // 
             this.tbNomeUtente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbNomeUtente.Location = new System.Drawing.Point(285, 150);
+            this.tbNomeUtente.Location = new System.Drawing.Point(287, 150);
             this.tbNomeUtente.Margin = new System.Windows.Forms.Padding(2);
             this.tbNomeUtente.Name = "tbNomeUtente";
-            this.tbNomeUtente.Size = new System.Drawing.Size(273, 22);
+            this.tbNomeUtente.Size = new System.Drawing.Size(350, 22);
             this.tbNomeUtente.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbNomeUtente.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNomeUtente.TabIndex = 10;
@@ -97,7 +97,7 @@
             this.panel1.Location = new System.Drawing.Point(287, 168);
             this.panel1.Name = "panel1";
             this.panel1.PanelBackStyle = Krypton.Toolkit.PaletteBackStyle.PanelAlternate;
-            this.panel1.Size = new System.Drawing.Size(222, 2);
+            this.panel1.Size = new System.Drawing.Size(348, 2);
             this.panel1.StateCommon.Color1 = System.Drawing.Color.RoyalBlue;
             this.panel1.StateCommon.Color2 = System.Drawing.Color.RoyalBlue;
             this.panel1.TabIndex = 8;
@@ -109,7 +109,7 @@
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(250, 395);
+            this.pictureBox1.Size = new System.Drawing.Size(277, 395);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
@@ -118,9 +118,9 @@
             // 
             this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(250, 0);
+            this.pictureBox2.Location = new System.Drawing.Point(277, 0);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(309, 116);
+            this.pictureBox2.Size = new System.Drawing.Size(384, 116);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 15;
             this.pictureBox2.TabStop = false;
@@ -153,7 +153,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.Location = new System.Drawing.Point(362, 314);
+            this.label3.Location = new System.Drawing.Point(418, 314);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 20);
             this.label3.StateCommon.ShortText.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -206,7 +206,7 @@
             this.btLogin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btLogin.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btLogin.Location = new System.Drawing.Point(334, 270);
+            this.btLogin.Location = new System.Drawing.Point(364, 270);
             this.btLogin.Name = "btLogin";
             this.btLogin.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btLogin.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -220,7 +220,7 @@
             this.btLogin.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btLogin.OverrideDefault.Border.Rounding = 20F;
             this.btLogin.OverrideDefault.Border.Width = 1;
-            this.btLogin.Size = new System.Drawing.Size(120, 38);
+            this.btLogin.Size = new System.Drawing.Size(172, 38);
             this.btLogin.StateCommon.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btLogin.StateCommon.Back.Color2 = System.Drawing.Color.RoyalBlue;
             this.btLogin.StateCommon.Back.ColorAngle = 45F;
@@ -276,7 +276,7 @@
             this.btLoginGoogle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btLoginGoogle.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btLoginGoogle.Location = new System.Drawing.Point(310, 341);
+            this.btLoginGoogle.Location = new System.Drawing.Point(335, 341);
             this.btLoginGoogle.Name = "btLoginGoogle";
             this.btLoginGoogle.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btLoginGoogle.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -290,7 +290,7 @@
             this.btLoginGoogle.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btLoginGoogle.OverrideDefault.Border.Rounding = 20F;
             this.btLoginGoogle.OverrideDefault.Border.Width = 1;
-            this.btLoginGoogle.Size = new System.Drawing.Size(170, 38);
+            this.btLoginGoogle.Size = new System.Drawing.Size(230, 38);
             this.btLoginGoogle.StateCommon.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btLoginGoogle.StateCommon.Back.Color2 = System.Drawing.Color.RoyalBlue;
             this.btLoginGoogle.StateCommon.Back.ColorAngle = 45F;
@@ -348,7 +348,7 @@
             this.panel2.Location = new System.Drawing.Point(287, 231);
             this.panel2.Name = "panel2";
             this.panel2.PanelBackStyle = Krypton.Toolkit.PaletteBackStyle.PanelAlternate;
-            this.panel2.Size = new System.Drawing.Size(222, 2);
+            this.panel2.Size = new System.Drawing.Size(348, 2);
             this.panel2.StateCommon.Color1 = System.Drawing.Color.RoyalBlue;
             this.panel2.StateCommon.Color2 = System.Drawing.Color.RoyalBlue;
             this.panel2.TabIndex = 23;
@@ -358,7 +358,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
-            this.ClientSize = new System.Drawing.Size(559, 395);
+            this.ClientSize = new System.Drawing.Size(661, 395);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tbNomeUtente);
             this.Controls.Add(this.panel2);

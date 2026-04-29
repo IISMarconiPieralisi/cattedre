@@ -81,7 +81,8 @@ namespace Cattedre
                     _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text.Trim().ToLower();
                 }
                 //gestione classe vigere 
-                
+                _vigere.IDannoInizio = Convert.ToInt32(cbAnnoInizio.SelectedValue);
+                _vigere.IDannoFine = cbAnnoFine.SelectedIndex==-1?0:Convert.ToInt32(cbAnnoFine.SelectedValue);
                 //Gestione Liste Collegate (ClsAppartenere) -
                 foreach (var item in clbIndirizzi.CheckedItems)
                 {
@@ -130,6 +131,10 @@ namespace Cattedre
                 //carico le informazioni del collegamento con indirizzi
                 _apparteneres = ClsAppartenereBL.CaricaClassiAppartenereByDisciplina(_disciplina.ID);
                 LoadclbIndirizzi();
+                //caricamento anno scolastico inizio e fine
+                if(_vigere.IDannoInizio>0) cbAnnoInizio.SelectedValue = _vigere.IDannoInizio;
+                if (_vigere.IDannoFine > 0) cbAnnoFine.SelectedValue = _vigere.IDannoFine;
+
             }
             else
                 _disciplina = new ClsDisciplinaDL();

@@ -92,7 +92,7 @@ namespace Cattedre
                     IDdipartimento = ClsUtenteBL.TrovaIDdipartimento(utenteLoggato.ID);
                     IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
                     classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
-                    discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
+                    discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(IDannoscolastico,IDdipartimento);
                 });
 
                 LoadClassi(IDdipartimento, IDannoscolastico);
@@ -1030,7 +1030,7 @@ namespace Cattedre
             }
             disciplineUniche.Clear();
 
-            discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
+            discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(IDannoscolastico,IDdipartimento);
 
             // Rimuovo le discipline con lo stesso nome, mantengo solo la prima
             List<string> nomiUsati = new List<string>();
@@ -1156,7 +1156,7 @@ namespace Cattedre
                     {
                         IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
                         classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
-                        discipline = ClsDisciplinaBL.CaricaDisciplineDipartimento(IDdipartimento);
+                        discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(IDannoscolastico,IDdipartimento);
                     });
 
                     LoadClassi(IDdipartimento, IDannoscolastico);

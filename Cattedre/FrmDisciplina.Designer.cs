@@ -115,8 +115,6 @@
             // 
             // nudOreTeoria
             // 
-            this.nudOreTeoria.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.nudOreTeoria.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudOreTeoria.Location = new System.Drawing.Point(205, 124);
             this.nudOreTeoria.Margin = new System.Windows.Forms.Padding(4);
@@ -127,8 +125,6 @@
             // 
             // nudOreLab
             // 
-            this.nudOreLab.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.nudOreLab.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudOreLab.Location = new System.Drawing.Point(467, 124);
             this.nudOreLab.Margin = new System.Windows.Forms.Padding(4);

@@ -84,6 +84,10 @@ namespace Cattedre
                         richiedere.IDdisciplina = ID;
                         ClsRichiedereBL.InserisciRichiedere(richiedere);
                     }
+                    //vigere
+                    frmDisciplina._vigere.IDdisciplina = ID;
+                    ClsVigereBL.InserisciVigere(frmDisciplina._vigere);
+
                     this.Cursor = Cursors.Arrow;
 
                 }
@@ -152,6 +156,7 @@ namespace Cattedre
                 // 2. Cerchiamo l'INTERO OGGETTO nella lista 'discipline'
                 // Usiamo .FirstOrDefault() così se non lo trova restituisce null invece di crashare
                 frmDisciplina._disciplina = discipline.FirstOrDefault(d => d.ID == idCercato);
+                frmDisciplina._vigere = ClsVigereBL.RilevaVigereDisciplina(idCercato);
                 DialogResult dr = frmDisciplina.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
@@ -162,6 +167,14 @@ namespace Cattedre
                         ClsAppartenereBL.ModificaAppartenenze(frmDisciplina._disciplina.ID, frmDisciplina._apparteneres);
                         ClsGestireBL.ModificaGestioni(frmDisciplina._disciplina.ID, frmDisciplina._gestires);
                         ClsRichiedereBL.ModificaRichiestaDisciplina(frmDisciplina._disciplina.ID, frmDisciplina._richiederes);
+                        //gestione vigere, se vigere esiste lo modifico altrimenti lo creo, fatto per le discipline già esistenti
+                        if(frmDisciplina._vigere.IDdisciplina>0)
+                            ClsVigereBL.ModificaVigere(frmDisciplina._vigere);
+                        else
+                        {
+                            frmDisciplina._vigere.IDdisciplina = idCercato;
+                            ClsVigereBL.InserisciVigere(frmDisciplina._vigere);
+                        }
                         this.Cursor = Cursors.Arrow;
 
                     }

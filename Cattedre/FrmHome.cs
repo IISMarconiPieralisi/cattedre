@@ -12,6 +12,7 @@ namespace Cattedre
 {
     public partial class FrmHome : Form
     {
+        #region dichiarazione form
         FrmCdCs frmCdcs;
         FrmIndirizzi frmIndirizzi;
         FrmDipartimenti frmDipartimenti;
@@ -19,40 +20,24 @@ namespace Cattedre
         FrmClassi frmClassi;
         FrmUtenti frmUtenti;
         FrmAnniScolastici FrmAnniScolastici;
-        FrmCredits frmCredits;
         FrmDotazioni frmDotazioni;
+        FrmCredits frmCredits;
+        #endregion
 
+        //variabili globali
         private ClsUtenteDL utente;
+        private int _menuMinWidth = 50;
+
+        private readonly Dictionary<Button, (string icona, string testo)> _vociMenu= new Dictionary<Button, (string, string)>();
 
         public Action OnLogout { get; set; }
         public FrmHome(ClsUtenteDL utenteLoggato)
         {
             InitializeComponent();
             utente = utenteLoggato;
-        }
-
-        private void btVaiACattedre_Click(object sender, EventArgs e)
-        {
-            FrmCattedre frmCattedre = new FrmCattedre(utente);
-            frmCattedre.Show();
-        }
-        private void MostraFormMDI(Form frm)
-        {
-            frm.StartPosition = FormStartPosition.CenterParent; // Su MDI non serve
-            frm.MdiParent = this;
-            frm.BringToFront();
-            frm.Show();
-            frm.WindowState = FormWindowState.Normal;
-            frm.WindowState = FormWindowState.Maximized;
-            frm.Refresh();
-        }
+        }        
         private void FrmHomeUpdate_Load(object sender, EventArgs e)
         {
-            panel5.Visible = false;
-            panel6.Visible = false;
-            panel7.Visible = false;
-            panel8.Visible = false;
-
             RenderFotoTonda();
             if (utente.TipoUtente == "A")
             {
@@ -77,7 +62,10 @@ namespace Cattedre
             // AggiornaLabel(lblNominativo.Text, lblNominativo);
             lblEmail.Text = utente.Email;
             // AggiornaLabel(lblEmail.Text, lblEmail);
+            InitSidebar();
         }
+
+        #region immagine profilo
 
         public void ImpostaFotoProfilo(Image foto)
         {
@@ -121,24 +109,44 @@ namespace Cattedre
 
             label1.Left = label1.Parent.Width - label1.Margin.Right - label1.Width;
         }
-
-        private void btLogout_Click(object sender, EventArgs e)
+        #endregion
+        #region gestione e formattazione menù strip
+        private void MostraFormMDI(Form frm)
         {
-            try
+            // 1. Controllo duplicati: Se il form è già visualizzato, non fare nulla
+            if (splHome.Panel2.Controls.Count > 0)
             {
-                if (ClsUtenteBL.TokenEsistente(utente.ID))
-                    FrmLogin.logout();
-
-                foreach (Form figlio in this.MdiChildren.ToList())
-                    figlio.Close();
-
-                OnLogout?.Invoke(); // segnala al Program che è un logout
-                this.Close();
+                if (splHome.Panel2.Controls[0].GetType() == frm.GetType())
+                {
+                    return; // Il form è già aperto, esci dalla funzione
+                }
             }
-            catch (Exception)
+
+            // 2. Pulizia sicura del pannello
+            // Usiamo un ciclo inverso per evitare problemi di indice durante la rimozione
+            for (int i = splHome.Panel2.Controls.Count - 1; i >= 0; i--)
             {
-                MessageBox.Show("Errore Durante il logout, contattare un amministratore", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Control ctrl = splHome.Panel2.Controls[i];
+                if (ctrl is Form oldForm)
+                {
+                    oldForm.Close();
+                    oldForm.Dispose(); // Libera la memoria immediatamente
+                }
             }
+            splHome.Panel2.Controls.Clear();
+
+            // 3. Configurazione del nuovo Form
+            frm.TopLevel = false;
+
+
+            frm.FormBorderStyle = FormBorderStyle.None;
+
+            frm.Dock = DockStyle.Fill;
+
+            // 4. Visualizzazione
+            splHome.Panel2.Controls.Add(frm);
+            frm.Show();
+            frm.BringToFront();
         }
 
         private void cDCToolStripMenuItem_Click(object sender, EventArgs e)
@@ -149,7 +157,12 @@ namespace Cattedre
                 frmCdcs = new FrmCdCs();
             MostraFormMDI(frmCdcs);
         }
+        private void menuStrip1_MenuDeactivate(object sender, EventArgs e)
+        {
 
+            menuStrip1.MenuDeactivate -= menuStrip1_MenuDeactivate;
+            btVaiACattedre.Focus();
+        }
         private void iNDIRIZZIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlBenvenuto.Visible = false;
@@ -198,10 +211,6 @@ namespace Cattedre
 
         }
 
-       
-
-
-
         private void creditToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlBenvenuto.Visible = false;
@@ -222,7 +231,28 @@ namespace Cattedre
                 FrmAnniScolastici = new FrmAnniScolastici();
                 MostraFormMDI(FrmAnniScolastici);
         }
-
+        private void menuStrip1_KeyDown(object sender, KeyEventArgs e)
+        {
+            pnlBenvenuto.Visible = false;
+            pnlCentrale.Visible = false;
+            if (e.KeyCode == Keys.Escape || (e.KeyCode == Keys.Tab && e.Shift))
+            {
+                e.SuppressKeyPress = true;
+                menuStrip1.MenuDeactivate += menuStrip1_MenuDeactivate;
+                //menuStrip1.Enabled = true; // assicurati che sia attivo
+                btVaiACattedre.Focus();
+            }
+        }
+        private void cattedreAssegnateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlBenvenuto.Visible = false;
+            pnlCentrale.Visible = false;
+            if (Application.OpenForms["FrmDotazioni"] == null)
+                frmDotazioni = new FrmDotazioni();
+            MostraFormMDI(frmDotazioni);
+        }
+        #endregion
+        #region bottoni menù laterare
         private void btDiscipline_KeyDown(object sender, KeyEventArgs e)
         {
             pnlBenvenuto.Visible = false;
@@ -235,18 +265,84 @@ namespace Cattedre
                 menuStrip1.Items[0].Select();
             }
         }
-
-        private void menuStrip1_KeyDown(object sender, KeyEventArgs e)
+        private void btVaiACattedre_Click(object sender, EventArgs e)
         {
-            pnlBenvenuto.Visible = false;
-            pnlCentrale.Visible = false;
-            if (e.KeyCode == Keys.Escape || (e.KeyCode == Keys.Tab && e.Shift))
+            FrmCattedre frmCattedre = new FrmCattedre(utente);
+            frmCattedre.Show();
+        }
+
+        private void btLogout_Click(object sender, EventArgs e)
+        {
+            try
             {
-                e.SuppressKeyPress = true;
-                menuStrip1.MenuDeactivate += menuStrip1_MenuDeactivate;
-                //menuStrip1.Enabled = true; // assicurati che sia attivo
-                btVaiACattedre.Focus();
+                if (ClsUtenteBL.TokenEsistente(utente.ID))
+                    FrmLogin.logout();
+
+                foreach (Form figlio in this.MdiChildren.ToList())
+                    figlio.Close();
+
+                OnLogout?.Invoke(); // segnala al Program che è un logout
+                this.Close();
             }
+            catch (Exception)
+            {
+                MessageBox.Show("Errore Durante il logout, contattare un amministratore", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void Panel3_Resize(object sender, EventArgs e)
+        {
+            CentraControlli();
+        }
+
+
+
+        private void btVaiACattedre_MouseEnter(object sender, EventArgs e)
+        {
+            pnlDecCattedre.Visible = true;
+
+        }
+
+        private void btVaiACattedre_MouseLeave(object sender, EventArgs e)
+        {
+            pnlDecCattedre.Visible = false;
+
+        }
+
+
+        private void btUtenti_MouseEnter(object sender, EventArgs e)
+        {
+            pnlDecUtenti.Visible = true;
+
+        }
+
+        private void btUtenti_MouseLeave(object sender, EventArgs e)
+        {
+            pnlDecUtenti.Visible = false;
+
+        }
+
+        private void btClassi_MouseEnter(object sender, EventArgs e)
+        {
+            pnlDecClassi.Visible = true;
+
+        }
+
+        private void btClassi_MouseLeave(object sender, EventArgs e)
+        {
+            pnlDecClassi.Visible = false;
+
+        }
+
+        private void btDiscipline_MouseEnter(object sender, EventArgs e)
+        {
+            pnlDecDiscipline.Visible = true;
+
+        }
+
+        private void btDiscipline_MouseLeave(object sender, EventArgs e)
+        {
+            pnlDecDiscipline.Visible = false;
+
         }
         private void CentraControlli()
         {
@@ -260,86 +356,56 @@ namespace Cattedre
             btVaiACattedre2.Top = label4.Bottom + 10; // 10 pixel di margine sotto la label
         }
 
-        // Aggancia la funzione all'evento Resize del Panel
-        private void Panel3_Resize(object sender, EventArgs e)
+        #endregion
+        #region gestione barra laterale
+        private void InitSidebar()
         {
-            CentraControlli();
+            // Mappa ogni bottone con la sua icona e il testo esteso
+            _vociMenu.Clear();
+
+            if (btVaiACattedre.Visible)
+                _vociMenu[btVaiACattedre] = ("⊞", "⊞  Cattedre");
+            if (btUtenti.Visible)
+                _vociMenu[btUtenti] = ("👤", "👤  Utenti");
+            if (btClassi.Visible)
+                _vociMenu[btClassi] = ("▦", "▦  Classi");
+            if (btDiscipline.Visible)
+                _vociMenu[btDiscipline] = ("≡", "≡  Discipline");
+
+            // Aggancia l'evento SplitterMoved
+            splHome.SplitterMoved += splHome_SplitterMoved;
+
+            // Applica subito lo stato iniziale
+            AggiornaSidebar();
         }
 
-        private void menuStrip1_MenuDeactivate(object sender, EventArgs e)
+        private void splHome_SplitterMoved(object sender, SplitterEventArgs e)
         {
-
-            menuStrip1.MenuDeactivate -= menuStrip1_MenuDeactivate;
-            btVaiACattedre.Focus();
+            AggiornaSidebar();
         }
 
-        private void btVaiACattedre_MouseEnter(object sender, EventArgs e)
+        private void AggiornaSidebar()
         {
-            panel5.Visible = true ;
+            bool compatto = splHome.SplitterDistance <= _menuMinWidth + 20;
 
+            // Nascondi nome, email e logout quando compatto
+            lblNominativo.Visible = !compatto;
+            lblEmail.Visible = !compatto;
+            btLogout.Visible = !compatto;
+
+            foreach (var kvp in _vociMenu)
+            {
+                Button b = kvp.Key;
+                b.Text = compatto ? kvp.Value.icona : kvp.Value.testo;
+                b.TextAlign = compatto
+                    ? ContentAlignment.MiddleCenter
+                    : ContentAlignment.MiddleLeft;
+                b.Padding = compatto
+                    ? new Padding(0)
+                    : new Padding(10, 0, 0, 0);
+            }
         }
 
-        private void btVaiACattedre_MouseLeave(object sender, EventArgs e)
-        {
-            panel5.Visible = false;
-
-        }
-       
-
-        private void btUtenti_MouseEnter(object sender, EventArgs e)
-        {
-            panel6.Visible = true;
-
-        }
-
-        private void btUtenti_MouseLeave(object sender, EventArgs e)
-        {
-            panel6.Visible = false;
-
-        }
-
-        private void btClassi_MouseEnter(object sender, EventArgs e)
-        {
-            panel7.Visible = true;
-
-        }
-
-        private void btClassi_MouseLeave(object sender, EventArgs e)
-        {
-            panel7.Visible = false;
-
-        }
-
-        private void btDiscipline_MouseEnter(object sender, EventArgs e)
-        {
-            panel8.Visible = true;
-
-        }
-
-        private void btDiscipline_MouseLeave(object sender, EventArgs e)
-        {
-            panel8.Visible = false;
-
-        }
-
-        private void cattedreAssegnateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            pnlBenvenuto.Visible = false;
-            pnlCentrale.Visible = false;
-            if (Application.OpenForms["FrmDotazioni"] == null)
-                frmDotazioni = new FrmDotazioni();
-            MostraFormMDI(frmDotazioni);
-        }
-
-
-
-
-        //private void cONTRATTIToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    FrmContratti frmContratti = new FrmContratti();
-        //    frmContratti.Show();
-        //}
-
-
+        #endregion
     }
 }

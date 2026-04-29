@@ -120,7 +120,7 @@ namespace Cattedre
             this.nudOreTeoria.Margin = new System.Windows.Forms.Padding(4);
             this.nudOreTeoria.Name = "nudOreTeoria";
             this.nudOreTeoria.Size = new System.Drawing.Size(112, 23);
-            this.nudOreTeoria.TabIndex = 1;
+            this.nudOreTeoria.TabIndex = 2;
             this.nudOreTeoria.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudOreTeoria_KeyDown);
             // 
             // nudOreLab
@@ -130,7 +130,7 @@ namespace Cattedre
             this.nudOreLab.Margin = new System.Windows.Forms.Padding(4);
             this.nudOreLab.Name = "nudOreLab";
             this.nudOreLab.Size = new System.Drawing.Size(104, 23);
-            this.nudOreLab.TabIndex = 2;
+            this.nudOreLab.TabIndex = 3;
             this.nudOreLab.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nudOreLab_KeyDown);
             // 
             // pnRB
@@ -146,7 +146,7 @@ namespace Cattedre
             this.pnRB.Margin = new System.Windows.Forms.Padding(4);
             this.pnRB.Name = "pnRB";
             this.pnRB.Size = new System.Drawing.Size(366, 44);
-            this.pnRB.TabIndex = 4;
+            this.pnRB.TabIndex = 6;
             // 
             // rbQuinto
             // 
@@ -278,7 +278,7 @@ namespace Cattedre
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(514, 52);
-            this.panel1.TabIndex = 10;
+            this.panel1.TabIndex = 13;
             // 
             // btAnnulla
             // 
@@ -460,6 +460,9 @@ namespace Cattedre
             this.tbDisciplinaSpeciale.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbDisciplinaSpeciale.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbDisciplinaSpeciale.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.tbDisciplinaSpeciale.StateDisabled.Border.Color1 = System.Drawing.Color.LightGray;
+            this.tbDisciplinaSpeciale.StateDisabled.Border.Color2 = System.Drawing.Color.LightGray;
+            this.tbDisciplinaSpeciale.StateDisabled.Content.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.tbDisciplinaSpeciale.TabIndex = 12;
             this.tbDisciplinaSpeciale.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbDisciplinaSpeciale_KeyDown);
             // 
@@ -468,7 +471,7 @@ namespace Cattedre
             this.cbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 92);
             this.cbDisciplinaSpeciale.Name = "cbDisciplinaSpeciale";
             this.cbDisciplinaSpeciale.Size = new System.Drawing.Size(124, 25);
-            this.cbDisciplinaSpeciale.TabIndex = 45;
+            this.cbDisciplinaSpeciale.TabIndex = 1;
             this.cbDisciplinaSpeciale.Values.Text = "Disciplina Speciale";
             this.cbDisciplinaSpeciale.CheckedChanged += new System.EventHandler(this.cbDisciplinaSpeciale_CheckedChanged);
             // 
@@ -524,7 +527,8 @@ namespace Cattedre
             this.cbAnnoFine.Location = new System.Drawing.Point(467, 168);
             this.cbAnnoFine.Name = "cbAnnoFine";
             this.cbAnnoFine.Size = new System.Drawing.Size(104, 25);
-            this.cbAnnoFine.TabIndex = 54;
+            this.cbAnnoFine.TabIndex = 5;
+            this.cbAnnoFine.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAnnoFine_KeyDown);
             // 
             // cbAnnoInizio
             // 
@@ -533,7 +537,8 @@ namespace Cattedre
             this.cbAnnoInizio.Location = new System.Drawing.Point(205, 168);
             this.cbAnnoInizio.Name = "cbAnnoInizio";
             this.cbAnnoInizio.Size = new System.Drawing.Size(112, 25);
-            this.cbAnnoInizio.TabIndex = 53;
+            this.cbAnnoInizio.TabIndex = 4;
+            this.cbAnnoInizio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAnnoInizio_KeyDown);
             // 
             // label11
             // 

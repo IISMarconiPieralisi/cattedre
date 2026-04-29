@@ -512,6 +512,27 @@ namespace Cattedre
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
+                cbAnnoInizio.Focus();
+            }
+        }
+        private void cbAnnoInizio_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbAnnoInizio.SelectedIndex > -1)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoFine.Focus();
+            }
+        }
+        private void cbAnnoFine_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Cancel || e.KeyCode == Keys.Delete || e.KeyCode== Keys.Back)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoFine.SelectedIndex = -1;
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
                 rbPrimo.Focus();
             }
         }
@@ -636,11 +657,11 @@ namespace Cattedre
         {
             if (cbAnnoInizio.SelectedIndex != -1)
             {
-                cbAnnoFine.SelectedIndex=-1;
+                cbAnnoFine.SelectedIndex = -1;
                 ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(Convert.ToInt32(cbAnnoInizio.SelectedValue));
                 cbAnnoFine.DataSource = _anniScolastici
-                     .Where(a => a.DataInizio > anno.DataFine)
-                     .ToList();
+                        .Where(a => a.DataInizio.Year >= anno.DataFine.Year)
+                        .Prepend(anno).OrderByDescending(a => a.Sigla).ToList();
                 cbAnnoFine.ValueMember = "ID";
                 cbAnnoFine.DisplayMember = "sigla";
                 cbAnnoFine.Enabled = (cbAnnoFine.Items.Count > 0);
@@ -650,5 +671,7 @@ namespace Cattedre
             else
                 cbAnnoFine.Enabled = false;
         }
+
+      
     }
 }

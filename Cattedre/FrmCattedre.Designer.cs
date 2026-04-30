@@ -62,9 +62,11 @@ namespace Cattedre
             this.pnlOreDoc.Controls.Add(this.lblOrePot);
             this.pnlOreDoc.Controls.Add(this.lblOreCattedra);
             this.pnlOreDoc.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlOreDoc.Location = new System.Drawing.Point(705, 0);
+            this.pnlOreDoc.Location = new System.Drawing.Point(755, 0);
+            this.pnlOreDoc.MaximumSize = new System.Drawing.Size(400, 0);
+            this.pnlOreDoc.MinimumSize = new System.Drawing.Size(300, 0);
             this.pnlOreDoc.Name = "pnlOreDoc";
-            this.pnlOreDoc.Size = new System.Drawing.Size(450, 687);
+            this.pnlOreDoc.Size = new System.Drawing.Size(400, 687);
             this.pnlOreDoc.TabIndex = 4;
             // 
             // lblOreEff
@@ -139,27 +141,27 @@ namespace Cattedre
             this.pnlLeft.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLeft.Location = new System.Drawing.Point(0, 0);
             this.pnlLeft.Name = "pnlLeft";
-            this.pnlLeft.Size = new System.Drawing.Size(705, 687);
+            this.pnlLeft.Size = new System.Drawing.Size(755, 687);
             this.pnlLeft.TabIndex = 5;
             // 
             // pnlCentrale
             // 
-            this.pnlCentrale.AutoScroll = true;
             this.pnlCentrale.Controls.Add(this.pnlDipartimento);
             this.pnlCentrale.Controls.Add(this.pnlClassi);
             this.pnlCentrale.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCentrale.Location = new System.Drawing.Point(0, 100);
             this.pnlCentrale.Name = "pnlCentrale";
-            this.pnlCentrale.Size = new System.Drawing.Size(705, 587);
+            this.pnlCentrale.Size = new System.Drawing.Size(755, 587);
             this.pnlCentrale.TabIndex = 8;
             // 
             // pnlDipartimento
             // 
+            this.pnlDipartimento.AutoScroll = true;
             this.pnlDipartimento.BackColor = System.Drawing.Color.Transparent;
             this.pnlDipartimento.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlDipartimento.Location = new System.Drawing.Point(169, 0);
             this.pnlDipartimento.Name = "pnlDipartimento";
-            this.pnlDipartimento.Size = new System.Drawing.Size(536, 587);
+            this.pnlDipartimento.Size = new System.Drawing.Size(586, 587);
             this.pnlDipartimento.TabIndex = 2;
             // 
             // pnlClassi
@@ -177,7 +179,7 @@ namespace Cattedre
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(0, 0);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(705, 100);
+            this.pnlTop.Size = new System.Drawing.Size(755, 100);
             this.pnlTop.TabIndex = 7;
             // 
             // pnlDiscipline
@@ -185,7 +187,7 @@ namespace Cattedre
             this.pnlDiscipline.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlDiscipline.Location = new System.Drawing.Point(169, 0);
             this.pnlDiscipline.Name = "pnlDiscipline";
-            this.pnlDiscipline.Size = new System.Drawing.Size(536, 100);
+            this.pnlDiscipline.Size = new System.Drawing.Size(586, 100);
             this.pnlDiscipline.TabIndex = 1;
             // 
             // pnlButtons
@@ -277,7 +279,7 @@ namespace Cattedre
             this.cbDipartimenti.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDipartimenti.FormattingEnabled = true;
             this.cbDipartimenti.Location = new System.Drawing.Point(6, 9);
-            this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2);
+            this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbDipartimenti.Name = "cbDipartimenti";
             this.cbDipartimenti.Size = new System.Drawing.Size(100, 24);
             this.cbDipartimenti.TabIndex = 1;
@@ -367,7 +369,7 @@ namespace Cattedre
             // 
             this.splitter1.BackColor = System.Drawing.Color.Black;
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(703, 0);
+            this.splitter1.Location = new System.Drawing.Point(753, 0);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(2, 687);
             this.splitter1.TabIndex = 6;

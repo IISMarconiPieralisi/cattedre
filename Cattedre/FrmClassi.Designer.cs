@@ -70,9 +70,9 @@
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(41, 58);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 16);
+            this.label1.Size = new System.Drawing.Size(46, 16);
             this.label1.TabIndex = 19;
-            this.label1.Text = "anno:";
+            this.label1.Text = "Anno:";
             // 
             // lvClassi
             // 
@@ -578,7 +578,7 @@
             this.btClasseSuccessiva.StateTracking.Border.Width = 1;
             this.btClasseSuccessiva.TabIndex = 50;
             this.btClasseSuccessiva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
-            this.btClasseSuccessiva.Values.Text = "Crea classe \r\nsuccessive";
+            this.btClasseSuccessiva.Values.Text = "Crea classi \r\nsuccessive";
             this.btClasseSuccessiva.Click += new System.EventHandler(this.btClasseSuccessiva_Click);
             // 
             // label4

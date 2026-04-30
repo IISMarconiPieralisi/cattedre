@@ -360,38 +360,93 @@ namespace Cattedre
         #region gestione barra laterale
         private void InitSidebar()
         {
-            // Mappa ogni bottone con la sua icona e il testo esteso
             _vociMenu.Clear();
+            if (btVaiACattedre.Visible) _vociMenu[btVaiACattedre] = ("⊞", "⊞  Cattedre");
+            if (btUtenti.Visible) _vociMenu[btUtenti] = ("👤", "👤  Utenti");
+            if (btClassi.Visible) _vociMenu[btClassi] = ("▦", "▦  Classi");
+            if (btDiscipline.Visible) _vociMenu[btDiscipline] = ("≡", "≡  Discipline");
 
-            if (btVaiACattedre.Visible)
-                _vociMenu[btVaiACattedre] = ("⊞", "⊞  Cattedre");
-            if (btUtenti.Visible)
-                _vociMenu[btUtenti] = ("👤", "👤  Utenti");
-            if (btClassi.Visible)
-                _vociMenu[btClassi] = ("▦", "▦  Classi");
-            if (btDiscipline.Visible)
-                _vociMenu[btDiscipline] = ("≡", "≡  Discipline");
-
-            // Aggancia l'evento SplitterMoved
-            splHome.SplitterMoved += splHome_SplitterMoved;
-
-            // Applica subito lo stato iniziale
+            // Blocca il pannello sinistro durante il resize della form
+            splHome.FixedPanel = FixedPanel.Panel1;
+            splHome.SplitterMoved += new SplitterEventHandler(splHome_SplitterMoved);
             AggiornaSidebar();
         }
-
         private void splHome_SplitterMoved(object sender, SplitterEventArgs e)
         {
             AggiornaSidebar();
         }
-
         private void AggiornaSidebar()
         {
-            bool compatto = splHome.SplitterDistance <= _menuMinWidth + 20;
+            bool compatto = splHome.SplitterDistance <= _menuMinWidth + 10;
 
-            // Nascondi nome, email e logout quando compatto
             lblNominativo.Visible = !compatto;
             lblEmail.Visible = !compatto;
             btLogout.Visible = !compatto;
+
+            // Gestione pbFotoProfilo: compatto = solo cerchio in cima, espanso = foto grande originale
+            if (compatto)
+            {
+                pbFotoProfilo.Size = new Size(38, 38);
+                pbFotoProfilo.Location = new Point((splHome.Panel1.Width - 38) / 2, 8);
+
+                if (_fotoProfilo != null)
+                {
+                    // Ha la foto — mostrala tonda piccola
+                    pbFotoProfilo.Image = _fotoProfilo;
+                    pbFotoProfilo.SizeMode = PictureBoxSizeMode.Zoom;
+                }
+                else
+                {
+                    // Nessuna foto — disegna cerchio con iniziali
+                    Bitmap bmp = new Bitmap(38, 38);
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
+                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                        g.Clear(Color.Transparent);
+
+                        // Cerchio sfondo
+                        using (SolidBrush br = new SolidBrush(Color.FromArgb(60, 255, 255, 255)))
+                            g.FillEllipse(br, 0, 0, 37, 37);
+
+                        // Bordo
+                        using (Pen pen = new Pen(Color.FromArgb(120, 255, 255, 255), 1.5f))
+                            g.DrawEllipse(pen, 1, 1, 35, 35);
+
+                        // Iniziali
+                        string ini = GetIniziali();
+                        using (Font f = new Font("Segoe UI", 13f, FontStyle.Bold))
+                        using (SolidBrush tb = new SolidBrush(Color.White))
+                        {
+                            SizeF sz = g.MeasureString(ini, f);
+                            g.DrawString(ini, f, tb,
+                                (38 - sz.Width) / 2,
+                                (38 - sz.Height) / 2);
+                        }
+                    }
+                    pbFotoProfilo.Image = bmp;
+                    pbFotoProfilo.SizeMode = PictureBoxSizeMode.Normal;
+                }
+
+                // Forma tonda
+                System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
+                gp.AddEllipse(0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);
+                pbFotoProfilo.Region = new Region(gp);
+            }
+            else
+            {
+                // Ripristina dimensioni originali — adatta i valori alla tua UI
+                pbFotoProfilo.Size = new Size(60, 60);  // ← metti la size originale
+                pbFotoProfilo.Location = new Point(10, 10); // ← metti la location originale
+                pbFotoProfilo.SizeMode = PictureBoxSizeMode.Zoom;
+
+                // Ripristina forma tonda con dimensione originale
+                System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
+                gp.AddEllipse(0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);
+                pbFotoProfilo.Region = new Region(gp);
+
+                if (_fotoProfilo != null)
+                    pbFotoProfilo.Image = _fotoProfilo;
+            }
 
             foreach (var kvp in _vociMenu)
             {
@@ -406,6 +461,16 @@ namespace Cattedre
             }
         }
 
+        private string GetIniziali()
+        {
+            string nome = utente.Nome ?? "";
+            string cognome = utente.Cognome ?? "";
+            string ini = "";
+            if (nome.Length > 0) ini += nome[0];
+            if (cognome.Length > 0) ini += cognome[0];
+            return ini.ToUpper();
+        }
+    
         #endregion
     }
 }

@@ -206,7 +206,7 @@ namespace Cattedre
                 {
                     Filtri.Add("IDindirizzo", new List<string> { $"'{cbIndirizzi.SelectedValue}'" });
                 }
-                ControlloSelezionatiAnniScolastici();
+                ControlloSelezionatiAnniScolastici(ref Filtri);
 
                 if (Filtri.Count<=0)
                     throw new Exception("Inserire almeno un criterio di ricerca");
@@ -225,51 +225,36 @@ namespace Cattedre
             btRipristina.Enabled = false;
             cbAnnoClasse.SelectedIndex = -1;
             cbIndirizzi.SelectedIndex = -1;
+            cbAnniScolastici.Items.Clear();
             Filtri.Clear();
-            DeselezionaCheckBox(tplAnniScolastici);
             GestisciListview();
 
 
         }
         private void GeneraFiltriAnnoScolastico()
         {
-            tplAnniScolastici.ColumnCount = _anniScolastici.Count;
-            tplAnniScolastici.RowCount = 1;
+            //tplAnniScolastici.ColumnCount = _anniScolastici.Count;
+            //tplAnniScolastici.RowCount = 1;
 
             // Imposta le colonne con larghezza automatica
-            tplAnniScolastici.ColumnStyles.Clear();
-            for (int i = 0; i < _anniScolastici.Count; i++)
-                tplAnniScolastici.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            //tplAnniScolastici.ColumnStyles.Clear();
+            //for (int i = 0; i < _anniScolastici.Count; i++)
+                //tplAnniScolastici.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
-            int sezione = 0;
-            foreach (var anno in _anniScolastici)
+            foreach (ClsAnnoScolasticoDL anno in _anniScolastici)
             {
-                CheckBox cb = new CheckBox();
-                cb.Name = $"{anno.ID}";
-                cb.Text = anno.Sigla;
-                cb.Dock = DockStyle.Fill;
-                cb.KeyDown += CheckBoxAnno_KeyDown;
-                tplAnniScolastici.Controls.Add(cb, sezione, 0);
-                sezione++;
+                cbAnniScolastici.Items.Add(anno.Sigla);
             }
         }
-        private void ControlloSelezionatiAnniScolastici()
+        private void ControlloSelezionatiAnniScolastici(ref Dictionary<string, List<string>> filtri)
         {
-            if(tplAnniScolastici.Controls.OfType<CheckBox>().Any(cb=>cb.Checked))
+            if (cbAnniScolastici.SelectedIndex != -1 && cbAnniScolastici.SelectedValue != null)
             {
-                var selezionati = tplAnniScolastici.Controls.OfType<CheckBox>().Where(cb => cb.Checked).Select(cb => cb.Name).ToList();
-
-                if (!selezionati.Any()) return;
-
-                Filtri.Add ( "IDannoScolastico", selezionati);
-            }
-        }
-        private void DeselezionaCheckBox(Control parent)
-        {
-            foreach (Control c in parent.Controls)
-            {
-                if (c is CheckBox cb)
-                    cb.Checked = false;
+                string valore = cbAnniScolastici.SelectedValue.ToString();
+                if (!string.IsNullOrEmpty(valore))
+                {
+                    filtri.Add("IDannoScolastico", new List<string> { valore });
+                }
             }
         }
         #endregion
@@ -302,47 +287,8 @@ namespace Cattedre
             if (e.KeyCode == Keys.Enter && cbIndirizzi.SelectedIndex != -1)
             {
                 e.SuppressKeyPress = true;
-                tplAnniScolastici.Controls.OfType<CheckBox>().FirstOrDefault()?.Focus();
+                cbAnniScolastici.Focus();
             }
-        }
-
-        private DateTime _ultimoClickCheckBox = DateTime.MinValue;
-        private object _ultimoControlloClick = null;
-
-        private void CheckBoxAnno_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                if (sender is CheckBox cb)
-                {
-                    DateTime now = DateTime.Now;
-                    TimeSpan intervallo = now - _ultimoClickCheckBox;
-
-                    // Se è lo stesso controllo e il tempo è inferiore a 800ms (come in FrmUtente)
-                    if (_ultimoControlloClick == sender && intervallo.TotalMilliseconds < 800)
-                    {
-                        // Doppio click rapido -> passa a btCerca
-                        _ultimoControlloClick = null;
-                        _ultimoClickCheckBox = DateTime.MinValue;
-                        btCerca.Focus();
-                    }
-                    else
-                    {
-                        // Click singolo -> cambia lo stato della checkbox
-                        cb.Checked = !cb.Checked;
-                        _ultimoControlloClick = sender;
-                        _ultimoClickCheckBox = now;
-                    }
-                }
-            }
-            else
-            {
-                // Reset se premi altro tasto
-                _ultimoControlloClick = null;
-                _ultimoClickCheckBox = DateTime.MinValue;
-            }
-
         }
         #endregion
         #region gestione Anni

@@ -33,17 +33,16 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lvClassi = new System.Windows.Forms.ListView();
             this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chAnnoScolastico = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chSigla = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chAnno = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chSezione = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chClasseArticolataCon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chNomeCoordinatore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chIndirizzo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chAnnoScolastico = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cbIndirizzi = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.tplAnniScolastici = new System.Windows.Forms.TableLayoutPanel();
             this.btRipristina = new Krypton.Toolkit.KryptonButton();
             this.brModifica = new Krypton.Toolkit.KryptonButton();
             this.btElimina = new Krypton.Toolkit.KryptonButton();
@@ -51,6 +50,7 @@
             this.btCerca = new Krypton.Toolkit.KryptonButton();
             this.btClasseSuccessiva = new Krypton.Toolkit.KryptonButton();
             this.label4 = new System.Windows.Forms.Label();
+            this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // cbAnnoClasse
@@ -93,7 +93,7 @@
             this.lvClassi.HideSelection = false;
             this.lvClassi.Location = new System.Drawing.Point(44, 102);
             this.lvClassi.Name = "lvClassi";
-            this.lvClassi.Size = new System.Drawing.Size(1358, 459);
+            this.lvClassi.Size = new System.Drawing.Size(968, 459);
             this.lvClassi.TabIndex = 0;
             this.lvClassi.UseCompatibleStateImageBehavior = false;
             this.lvClassi.View = System.Windows.Forms.View.Details;
@@ -103,6 +103,11 @@
             // 
             this.chID.Text = "ID";
             this.chID.Width = 28;
+            // 
+            // chAnnoScolastico
+            // 
+            this.chAnnoScolastico.Text = "Anno scolastico";
+            this.chAnnoScolastico.Width = 122;
             // 
             // chSigla
             // 
@@ -130,11 +135,6 @@
             // 
             this.chIndirizzo.Text = "Indirizzo";
             this.chIndirizzo.Width = 102;
-            // 
-            // chAnnoScolastico
-            // 
-            this.chAnnoScolastico.Text = "Anno scolastico";
-            this.chAnnoScolastico.Width = 122;
             // 
             // cbIndirizzi
             // 
@@ -167,26 +167,11 @@
             this.label3.TabIndex = 25;
             this.label3.Text = "Filtra per anno scolastico:";
             // 
-            // tplAnniScolastici
-            // 
-            this.tplAnniScolastici.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tplAnniScolastici.ColumnCount = 2;
-            this.tplAnniScolastici.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.45055F));
-            this.tplAnniScolastici.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.54945F));
-            this.tplAnniScolastici.Location = new System.Drawing.Point(697, 48);
-            this.tplAnniScolastici.Name = "tplAnniScolastici";
-            this.tplAnniScolastici.RowCount = 1;
-            this.tplAnniScolastici.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tplAnniScolastici.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tplAnniScolastici.Size = new System.Drawing.Size(462, 36);
-            this.tplAnniScolastici.TabIndex = 7;
-            // 
             // btRipristina
             // 
             this.btRipristina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btRipristina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btRipristina.Location = new System.Drawing.Point(1180, 50);
+            this.btRipristina.Location = new System.Drawing.Point(790, 50);
             this.btRipristina.Name = "btRipristina";
             this.btRipristina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btRipristina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -255,7 +240,7 @@
             // 
             this.brModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.brModifica.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.brModifica.Location = new System.Drawing.Point(1408, 189);
+            this.brModifica.Location = new System.Drawing.Point(1018, 189);
             this.brModifica.Name = "brModifica";
             this.brModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.brModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
@@ -324,7 +309,7 @@
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btElimina.Location = new System.Drawing.Point(1408, 240);
+            this.btElimina.Location = new System.Drawing.Point(1018, 240);
             this.btElimina.Name = "btElimina";
             this.btElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -393,7 +378,7 @@
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btInserisci.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btInserisci.Location = new System.Drawing.Point(1408, 138);
+            this.btInserisci.Location = new System.Drawing.Point(1018, 138);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btInserisci.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -462,7 +447,7 @@
             // 
             this.btCerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btCerca.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btCerca.Location = new System.Drawing.Point(1408, 50);
+            this.btCerca.Location = new System.Drawing.Point(1018, 50);
             this.btCerca.Name = "btCerca";
             this.btCerca.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btCerca.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -531,7 +516,7 @@
             // 
             this.btClasseSuccessiva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btClasseSuccessiva.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btClasseSuccessiva.Location = new System.Drawing.Point(1408, 292);
+            this.btClasseSuccessiva.Location = new System.Drawing.Point(1018, 292);
             this.btClasseSuccessiva.Name = "btClasseSuccessiva";
             this.btClasseSuccessiva.OverrideDefault.Back.Color1 = System.Drawing.Color.Purple;
             this.btClasseSuccessiva.OverrideDefault.Back.Color2 = System.Drawing.Color.BlueViolet;
@@ -606,11 +591,22 @@
             this.label4.TabIndex = 51;
             this.label4.Text = "Classi:";
             // 
+            // cbAnniScolastici
+            // 
+            this.cbAnniScolastici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAnniScolastici.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbAnniScolastici.FormattingEnabled = true;
+            this.cbAnniScolastici.Location = new System.Drawing.Point(697, 55);
+            this.cbAnniScolastici.Name = "cbAnniScolastici";
+            this.cbAnniScolastici.Size = new System.Drawing.Size(65, 25);
+            this.cbAnniScolastici.TabIndex = 52;
+            // 
             // FrmClassi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1529, 573);
+            this.ClientSize = new System.Drawing.Size(1139, 573);
+            this.Controls.Add(this.cbAnniScolastici);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btClasseSuccessiva);
             this.Controls.Add(this.btCerca);
@@ -618,7 +614,6 @@
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.btInserisci);
             this.Controls.Add(this.btRipristina);
-            this.Controls.Add(this.tplAnniScolastici);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cbIndirizzi);
             this.Controls.Add(this.label2);
@@ -651,7 +646,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ColumnHeader chAnnoScolastico;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TableLayoutPanel tplAnniScolastici;
         private System.Windows.Forms.ColumnHeader chID;
         private Krypton.Toolkit.KryptonButton btRipristina;
         private Krypton.Toolkit.KryptonButton brModifica;
@@ -660,5 +654,6 @@
         private Krypton.Toolkit.KryptonButton btCerca;
         private Krypton.Toolkit.KryptonButton btClasseSuccessiva;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox cbAnniScolastici;
     }
 }

@@ -26,7 +26,10 @@ namespace Cattedre
 
         //variabili globali
         private ClsUtenteDL utente;
-        private int _menuMinWidth = 50;
+        private int _menuFullWidth = 230; // larghezza normale
+        private int _menuMinWidth = 2;  // larghezza minima
+        private double _rapportoSplitter = -1; // -1 = non ancora calcolato
+        private bool _splitterInAggiornamento = false;
 
         private readonly Dictionary<Button, (string icona, string testo)> _vociMenu= new Dictionary<Button, (string, string)>();
 
@@ -63,6 +66,7 @@ namespace Cattedre
             lblEmail.Text = utente.Email;
             // AggiornaLabel(lblEmail.Text, lblEmail);
             InitSidebar();
+            CentraControlli();
         }
 
         #region immagine profilo
@@ -289,13 +293,6 @@ namespace Cattedre
                 MessageBox.Show("Errore Durante il logout, contattare un amministratore", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void Panel3_Resize(object sender, EventArgs e)
-        {
-            CentraControlli();
-        }
-
-
-
         private void btVaiACattedre_MouseEnter(object sender, EventArgs e)
         {
             pnlDecCattedre.Visible = true;
@@ -344,135 +341,6 @@ namespace Cattedre
             pnlDecDiscipline.Visible = false;
 
         }
-        private void CentraControlli()
-        {
-            // 5,3,4 le label 
-            // Esempio per una Label chiamata 'label1' dentro 'panel1'
-            label5.Left = (pnlCentrale.ClientSize.Width - label5.Width) / 2;
-            label5.Top = (pnlCentrale.ClientSize.Height - label5.Height) / 2;
-
-            // Esempio per un Bottone 'button1' posizionato sotto la label
-            btVaiACattedre2.Left = (pnlCentrale.ClientSize.Width - btVaiACattedre2.Width) / 2;
-            btVaiACattedre2.Top = label4.Bottom + 10; // 10 pixel di margine sotto la label
-        }
-
-        #endregion
-        #region gestione barra laterale
-        private void InitSidebar()
-        {
-            _vociMenu.Clear();
-            if (btVaiACattedre.Visible) _vociMenu[btVaiACattedre] = ("⊞", "⊞  Cattedre");
-            if (btUtenti.Visible) _vociMenu[btUtenti] = ("👤", "👤  Utenti");
-            if (btClassi.Visible) _vociMenu[btClassi] = ("▦", "▦  Classi");
-            if (btDiscipline.Visible) _vociMenu[btDiscipline] = ("≡", "≡  Discipline");
-
-            // Blocca il pannello sinistro durante il resize della form
-            splHome.FixedPanel = FixedPanel.Panel1;
-            splHome.SplitterMoved += new SplitterEventHandler(splHome_SplitterMoved);
-            AggiornaSidebar();
-        }
-        private void splHome_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-            AggiornaSidebar();
-        }
-        private void AggiornaSidebar()
-        {
-            bool compatto = splHome.SplitterDistance <= _menuMinWidth + 10;
-
-            lblNominativo.Visible = !compatto;
-            lblEmail.Visible = !compatto;
-            btLogout.Visible = !compatto;
-
-            // Gestione pbFotoProfilo: compatto = solo cerchio in cima, espanso = foto grande originale
-            if (compatto)
-            {
-                pbFotoProfilo.Size = new Size(38, 38);
-                pbFotoProfilo.Location = new Point((splHome.Panel1.Width - 38) / 2, 8);
-
-                if (_fotoProfilo != null)
-                {
-                    // Ha la foto — mostrala tonda piccola
-                    pbFotoProfilo.Image = _fotoProfilo;
-                    pbFotoProfilo.SizeMode = PictureBoxSizeMode.Zoom;
-                }
-                else
-                {
-                    // Nessuna foto — disegna cerchio con iniziali
-                    Bitmap bmp = new Bitmap(38, 38);
-                    using (Graphics g = Graphics.FromImage(bmp))
-                    {
-                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                        g.Clear(Color.Transparent);
-
-                        // Cerchio sfondo
-                        using (SolidBrush br = new SolidBrush(Color.FromArgb(60, 255, 255, 255)))
-                            g.FillEllipse(br, 0, 0, 37, 37);
-
-                        // Bordo
-                        using (Pen pen = new Pen(Color.FromArgb(120, 255, 255, 255), 1.5f))
-                            g.DrawEllipse(pen, 1, 1, 35, 35);
-
-                        // Iniziali
-                        string ini = GetIniziali();
-                        using (Font f = new Font("Segoe UI", 13f, FontStyle.Bold))
-                        using (SolidBrush tb = new SolidBrush(Color.White))
-                        {
-                            SizeF sz = g.MeasureString(ini, f);
-                            g.DrawString(ini, f, tb,
-                                (38 - sz.Width) / 2,
-                                (38 - sz.Height) / 2);
-                        }
-                    }
-                    pbFotoProfilo.Image = bmp;
-                    pbFotoProfilo.SizeMode = PictureBoxSizeMode.Normal;
-                }
-
-                // Forma tonda
-                System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
-                gp.AddEllipse(0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);
-                pbFotoProfilo.Region = new Region(gp);
-            }
-            else
-            {
-                // Ripristina dimensioni originali — adatta i valori alla tua UI
-                pbFotoProfilo.Size = new Size(60, 60);  // ← metti la size originale
-                pbFotoProfilo.Location = new Point(10, 10); // ← metti la location originale
-                pbFotoProfilo.SizeMode = PictureBoxSizeMode.Zoom;
-
-                // Ripristina forma tonda con dimensione originale
-                System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
-                gp.AddEllipse(0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);
-                pbFotoProfilo.Region = new Region(gp);
-
-                if (_fotoProfilo != null)
-                    pbFotoProfilo.Image = _fotoProfilo;
-            }
-
-            foreach (var kvp in _vociMenu)
-            {
-                Button b = kvp.Key;
-                b.Text = compatto ? kvp.Value.icona : kvp.Value.testo;
-                b.TextAlign = compatto
-                    ? ContentAlignment.MiddleCenter
-                    : ContentAlignment.MiddleLeft;
-                b.Padding = compatto
-                    ? new Padding(0)
-                    : new Padding(10, 0, 0, 0);
-            }
-        }
-
-        private string GetIniziali()
-        {
-            string nome = utente.Nome ?? "";
-            string cognome = utente.Cognome ?? "";
-            string ini = "";
-            if (nome.Length > 0) ini += nome[0];
-            if (cognome.Length > 0) ini += cognome[0];
-            return ini.ToUpper();
-        }
-    
-        #endregion
-
         private void btCredits_Click(object sender, EventArgs e)
         {
             pnlBenvenuto.Visible = false;
@@ -490,6 +358,135 @@ namespace Cattedre
         private void btCredits_MouseLeave(object sender, EventArgs e)
         {
             panel1.Visible = false;
+        }
+        private void CentraControlli()
+        {
+            if (pnlCentrale.ClientSize.Width <= 0 || pnlCentrale.ClientSize.Height <= 0)
+                return;
+
+            int cx = pnlCentrale.ClientSize.Width / 2;
+            int startTop = pnlCentrale.ClientSize.Height / 2 - 80; // punto di partenza verticale
+
+            // Ordine corretto dall'alto verso il basso:
+            // 1. "Benvenuto" (label5)
+            label5.Left = cx - label5.Width / 2;
+            label5.Top = startTop;
+
+            // 2. "Seleziona una sezione" (label3)
+            label3.Left = cx - label3.Width / 2;
+            label3.Top = label5.Bottom + 6;
+
+            // 3. "Scegli una voce..." (label4)
+            label4.Left = cx - label4.Width / 2;
+            label4.Top = label3.Bottom + 6;
+
+            // 4. Linea separatore (panel4)
+            panel4.Left = cx - panel4.Width / 2;
+            panel4.Top = label4.Bottom + 8;
+
+            // 5. Bottone "Visualizza le cattedre"
+            btVaiACattedre2.Left = cx - btVaiACattedre2.Width / 2;
+            btVaiACattedre2.Top = panel4.Bottom + 14;
+        }
+
+        #endregion
+        #region gestione barra laterale
+        private void InitSidebar()
+        {
+            _vociMenu.Clear();
+            if (btVaiACattedre.Visible) _vociMenu[btVaiACattedre] = ("⊞", "⊞  Cattedre");
+            if (btUtenti.Visible) _vociMenu[btUtenti] = ("👤", "👤  Utenti");
+            if (btClassi.Visible) _vociMenu[btClassi] = ("▦", "▦  Classi");
+            if (btDiscipline.Visible) _vociMenu[btDiscipline] = ("≡", "≡  Discipline");
+            if (btCredits.Visible) _vociMenu[btCredits] = ("★", "★  Credits");
+
+            splHome.FixedPanel = FixedPanel.None;
+
+            // Rapporto calcolato quando il form è completamente visibile
+            this.Shown += (s, e) =>
+            {
+                if (splHome.Width > 0)
+                    _rapportoSplitter = (double)splHome.SplitterDistance / splHome.Width;
+            };
+
+            this.SizeChanged += FrmHome_SizeChanged;
+            AggiornaSidebar();
+        }
+
+        private void splHome_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            if (_splitterInAggiornamento) return;
+
+            if (splHome.Width > 0)
+                _rapportoSplitter = (double)splHome.SplitterDistance / splHome.Width;
+
+            AggiornaSidebar();
+        }
+
+        private void FrmHome_SizeChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized) return;
+            if (_rapportoSplitter < 0) return;
+            if (splHome.Width <= 0) return;
+
+            int nuova = (int)(splHome.Width * _rapportoSplitter);
+            ImpostaDistanzaSicura(nuova);
+            CentraControlli();
+        }
+
+       private void ImpostaDistanzaSicura(int distanza)
+        {
+            int min = splHome.Panel1MinSize + 1;
+
+            // Il pannello destro deve essere almeno il 50% della larghezza totale
+            int panel2MinCalcolato = (int)(splHome.Width * 0.50);
+            int max = splHome.Width - panel2MinCalcolato - splHome.SplitterWidth - 1;
+
+            // Protezione: se la finestra è troppo piccola blocca tutto
+            if (max <= min) return;
+
+            int valore = Math.Max(min, Math.Min(distanza, max));
+            if (valore == splHome.SplitterDistance) return;
+
+            _splitterInAggiornamento = true;
+            try
+            {
+                splHome.SplitterDistance = valore;
+            }
+            catch (InvalidOperationException) { }
+            finally
+            {
+                _splitterInAggiornamento = false;
+            }
+
+            AggiornaSidebar();
+        }
+
+        private void AggiornaSidebar()
+        {
+            bool compatto = splHome.SplitterDistance < (_menuFullWidth * 0.40);
+
+            lblNominativo.Visible = !compatto;
+            lblEmail.Visible = !compatto;
+            btLogout.Visible = !compatto;
+            pbFotoProfilo.Visible = !compatto;
+            foreach (var kvp in _vociMenu)
+            {
+                Button b = kvp.Key;
+                b.Text = compatto ? kvp.Value.icona : kvp.Value.testo;
+                b.TextAlign = compatto
+                    ? ContentAlignment.MiddleCenter
+                    : ContentAlignment.MiddleLeft;
+                b.Padding = compatto
+                    ? new Padding(0)
+                    : new Padding(10, 0, 0, 0);
+            }
+        }
+        #endregion
+
+        private void pnlDecDiscipline_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

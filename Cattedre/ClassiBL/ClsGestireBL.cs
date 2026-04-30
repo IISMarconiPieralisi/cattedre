@@ -52,51 +52,51 @@ namespace Cattedre
             }
             return dipartimenti;
         }
-        public static List<ClsDisciplinaDL> DisciplineDelDipartimento(long IDdipartimento)
-        {
-            List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-            DataTable dt = new DataTable();
+      //  public static List<ClsDisciplinaDL> DisciplineDelDipartimento(long IDdipartimento)
+        //{
+        //    List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+        //    DataTable dt = new DataTable();
 
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-                {
-                    conn.Open();
-                    string sql = @"SELECT d.ID, d.nome, d.anno,d.oreteoria,orelaboratorio,disciplinaspeciale
-                               FROM discipline d
-                               INNER JOIN gestire g ON d.ID = g.IDdisciplina
-                               WHERE g.IDdipartimento = @IDdipartimento
-                               ORDER BY d.Nome";
+        //    try
+        //    {
+        //        using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+        //        {
+        //            conn.Open();
+        //            string sql = @"SELECT d.ID, d.nome, d.anno,d.oreteoria,orelaboratorio,disciplinaspeciale
+        //                       FROM discipline d
+        //                       INNER JOIN gestire g ON d.ID = g.IDdisciplina
+        //                       WHERE g.IDdipartimento = @IDdipartimento
+        //                       ORDER BY d.Nome";
 
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                    }
-                }
+        //            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+        //            {
+        //                cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+        //                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+        //                {
+        //                    da.Fill(dt);
+        //                }
+        //            }
+        //        }
 
-                foreach (DataRow row in dt.Rows)
-                {
-                    // Assumendo che la tua classe ClsDipartimentoDL abbia ID e Nome
-                    ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
-                    disciplina.ID = Convert.ToInt32(row["id"]);
-                    disciplina.Nome = row["nome"].ToString();
-                    disciplina.Anno = Convert.ToInt32(row["anno"]);
-                    disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
-                    disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
-                    disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
-                    discipline.Add(disciplina);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return discipline;
-        }
+        //        foreach (DataRow row in dt.Rows)
+        //        {
+        //            // Assumendo che la tua classe ClsDipartimentoDL abbia ID e Nome
+        //            ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
+        //            disciplina.ID = Convert.ToInt32(row["id"]);
+        //            disciplina.Nome = row["nome"].ToString();
+        //            disciplina.Anno = Convert.ToInt32(row["anno"]);
+        //            disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
+        //            disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
+        //            disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
+        //            discipline.Add(disciplina);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //    return discipline;
+        //}
         public static List<ClsGestireDL> CaricaGestioneDisciplina(long IDdisciplina)
         {
             List<ClsGestireDL> gestioni = new List<ClsGestireDL>();

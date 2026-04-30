@@ -472,5 +472,24 @@ namespace Cattedre
         }
     
         #endregion
+
+        private void btCredits_Click(object sender, EventArgs e)
+        {
+            pnlBenvenuto.Visible = false;
+            pnlCentrale.Visible = false;
+            if (Application.OpenForms["FrmCredits"] == null)
+                frmCredits = new FrmCredits();
+            MostraFormMDI(frmCredits);
+        }
+
+        private void btCredits_MouseEnter(object sender, EventArgs e)
+        {
+            panel1.Visible = true;
+        }
+
+        private void btCredits_MouseLeave(object sender, EventArgs e)
+        {
+            panel1.Visible = false;
+        }
     }
 }

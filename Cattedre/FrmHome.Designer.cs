@@ -66,6 +66,8 @@ namespace Cattedre
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.splHome = new System.Windows.Forms.SplitContainer();
+            this.btCredits = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.pnlMenu.SuspendLayout();
             this.pnCarUtente.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbFotoProfilo)).BeginInit();
@@ -83,6 +85,8 @@ namespace Cattedre
             // 
             this.pnlMenu.BackColor = System.Drawing.Color.White;
             this.pnlMenu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlMenu.Controls.Add(this.panel1);
+            this.pnlMenu.Controls.Add(this.btCredits);
             this.pnlMenu.Controls.Add(this.btLogout);
             this.pnlMenu.Controls.Add(this.pnlDecDiscipline);
             this.pnlMenu.Controls.Add(this.pnlDecClassi);
@@ -658,6 +662,35 @@ namespace Cattedre
             this.splHome.SplitterDistance = 272;
             this.splHome.TabIndex = 26;
             // 
+            // btCredits
+            // 
+            this.btCredits.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btCredits.FlatAppearance.BorderSize = 0;
+            this.btCredits.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(220)))));
+            this.btCredits.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(225)))), ((int)(((byte)(245)))));
+            this.btCredits.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btCredits.Font = new System.Drawing.Font("Century Gothic", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btCredits.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btCredits.Location = new System.Drawing.Point(0, 407);
+            this.btCredits.Name = "btCredits";
+            this.btCredits.Size = new System.Drawing.Size(196, 57);
+            this.btCredits.TabIndex = 31;
+            this.btCredits.Text = "Credits";
+            this.btCredits.UseVisualStyleBackColor = true;
+            this.btCredits.Click += new System.EventHandler(this.btCredits_Click);
+            this.btCredits.MouseEnter += new System.EventHandler(this.btCredits_MouseEnter);
+            this.btCredits.MouseLeave += new System.EventHandler(this.btCredits_MouseLeave);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.panel1.Location = new System.Drawing.Point(7, 412);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(3, 44);
+            this.panel1.TabIndex = 32;
+            this.panel1.Visible = false;
+            // 
             // FrmHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -735,5 +768,7 @@ namespace Cattedre
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ToolStripMenuItem cattedreAssegnateToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splHome;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btCredits;
     }
 }

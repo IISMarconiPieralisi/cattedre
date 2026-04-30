@@ -9,8 +9,8 @@ namespace Cattedre
 {
     static class Program
     {
-        public static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-        //public static string connectionString = ConfigurationManager.ConnectionStrings["srvcattedre"].ConnectionString;
+        //public static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        public static string connectionString = ConfigurationManager.ConnectionStrings["srvcattedre"].ConnectionString;
 
         /// <summary>
         /// Punto di ingresso principale dell'applicazione.

@@ -13,22 +13,28 @@ namespace Cattedre
         private static readonly Xceed.Drawing.Color GrigioIntestazione = Xceed.Drawing.Color.GrayText;
         private const string FontName = "Calibri";
         private const double FontSize = 12;
-        public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento,string filePath)
+        public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento, string filePath)
         {
             try
-            { 
-                List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
-                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID,anno.ID);
+            {
+                List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID);
+                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID, anno.ID);
                 List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDipartimento(dipartimento.ID);
-                List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
                 List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
-                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);         
-                GenerateFileWord(anno,dipartimento, cdc, Docenti, assegnare, discipline, classi, Dotare, filePath);
-            }catch(Exception ex)
+
+                // Prima le discipline → ottieni gli indirizzi
+                List<ClsDisciplinaDL> discipline = ClsDisciplinaBL
+                    .CaricaDisciplineAnnoScolasticoDipartimento(anno.ID, dipartimento.ID, out List<long> indirizziTrovati);
+
+                // Poi le classi filtrate per indirizzo prevalente
+                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, anno.ID);
+
+                GenerateFileWord(anno, dipartimento, cdc, Docenti, assegnare, discipline, classi, Dotare, filePath);
+            }
+            catch (Exception ex)
             {
                 throw new Exception("Errore Durante il Caricamento del file: " + ex.Message);
             }
-           
         }
 
         public static void GenerateFileWord(ClsAnnoScolasticoDL annoScolastico,ClsDipartimentoDL dipartimento, List<ClsClasseDiConcorsoDL> listClassiConcorso,

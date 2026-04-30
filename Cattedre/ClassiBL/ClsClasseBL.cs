@@ -181,32 +181,40 @@ namespace Cattedre
 
 
         #region popolamenti Specifici
-        public static List<ClsClasseDL> CaricaClassiDipartimento(long IDdipartimento, long IDannoscolastico)
+        public static List<ClsClasseDL> CaricaClassiIndirizzo(List<long> IDindirizzi, long IDannoscolastico)
         {
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
+            if (IDindirizzi == null || IDindirizzi.Count == 0)
+                return classi;
+
             DataTable dt = new DataTable();
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT DISTINCT c.* FROM classi c 
-                                 JOIN appartenere a ON c.IDindirizzo= a.IDindirizzo
-                                 JOIN gestire g ON a.IDdisciplina = g.IDdisciplina
-                                 WHERE g.IDdipartimento = @IDdipartimento 
-                                 AND c.IDannoscolastico = @IDannoscolastico 
-                                 ORDER BY c.anno, c.sezione";
+
+                    // Costruisce i placeholder: @id0, @id1, @id2 ...
+                    string placeholders = string.Join(", ",
+                        IDindirizzi.Select((_, i) => $"@id{i}"));
+
+                    string sql = $@"SELECT DISTINCT c.* FROM classi c 
+                            WHERE c.IDindirizzo IN ({placeholders})
+                            AND c.IDannoscolastico = @IDannoscolastico 
+                            ORDER BY c.anno, c.sezione";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        for (int i = 0; i < IDindirizzi.Count; i++)
+                            cmd.Parameters.AddWithValue($"@id{i}", IDindirizzi[i]);
+
                         cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
                             da.Fill(dt);
-                        }
                     }
-                    conn.Close();
                 }
+
                 foreach (DataRow row in dt.Rows)
                 {
                     ClsClasseDL _classe = new ClsClasseDL();

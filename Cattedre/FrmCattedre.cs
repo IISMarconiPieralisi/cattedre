@@ -111,16 +111,19 @@ namespace Cattedre
             {
                 this.Cursor = Cursors.WaitCursor;
 
+                List<long> indirizziTrovati = new List<long>();
+
                 await Task.Run(() =>
                 {
                     IDdipartimento = ClsUtenteBL.TrovaIDdipartimento(utenteLoggato.ID);
                     IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
-                    classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
-                    discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(IDannoscolastico,IDdipartimento);
+                    discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
+                        IDannoscolastico, IDdipartimento, out indirizziTrovati);
+                    classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
                 });
 
-                LoadClassi(IDdipartimento, IDannoscolastico);
                 LoadDiscipline(IDdipartimento);
+                LoadClassi(indirizziTrovati, IDannoscolastico);
                 LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
                 LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
                 SincronizzaScrollDopoLayout();
@@ -1070,6 +1073,7 @@ namespace Cattedre
                     //uc.cbDocentiTeorici.TabIndex = tabIndex++;
                     //uc.cbDocentiItip.TabIndex = tabIndex++;
                     pnlDipartimento.Controls.Add(uc);
+                    pnlDipartimento.Refresh();
 
                     if (utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "D")
                     {
@@ -1089,16 +1093,14 @@ namespace Cattedre
         {
             foreach (UcDisciplina uc in pnlDiscipline.Controls.OfType<UcDisciplina>().ToList())
             {
-                pnlDipartimento.Controls.Remove(uc);
+                pnlDiscipline.Controls.Remove(uc);
                 uc.Dispose();
             }
             disciplineUniche.Clear();
 
-            discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(IDannoscolastico,IDdipartimento);
+            // discipline è già popolata dal Task.Run, NON richiamare il BL
 
-            // Rimuovo le discipline con lo stesso nome, mantengo solo la prima
             List<string> nomiUsati = new List<string>();
-
             foreach (ClsDisciplinaDL d in discipline)
             {
                 if (!nomiUsati.Contains(d.Nome))
@@ -1108,18 +1110,14 @@ namespace Cattedre
                 }
             }
 
-            // Discipline uniche nel pnlDisciplina
             int x = 10;
             int y = 7;
-
             ToolTip toolTipDiscipline = new ToolTip();
             toolTipDiscipline.ShowAlways = true;
 
             for (int i = 0; i < disciplineUniche.Count; i++)
             {
                 string nomeCompleto = disciplineUniche[i].Nome;
-
-                // nome tagliato
                 string nomeTagliato = nomeCompleto?.Length > 15 ? nomeCompleto.Substring(0, 15) + "." : nomeCompleto;
                 ClsDisciplinaDL disciplinaDaMostrare = new ClsDisciplinaDL(disciplineUniche[i], nomeTagliato);
 
@@ -1129,13 +1127,8 @@ namespace Cattedre
 
                 x += ucDisciplina.Width + 10;
             }
-            //UcOre ucOre = new UcOre();
-            //ucOre.Location = new Point(0, 10);
-            //pnlOre.Controls.Add(ucOre);
-
-            //ucOre.Refresh();
         }
-        private void LoadClassi(int IDdipartimento, long Idannoscolastico)
+        private void LoadClassi(List<long> IDindirizzi, long IDannoscolastico)
         {
             foreach (UcClasse uc in pnlClassi.Controls.OfType<UcClasse>().ToList())
             {
@@ -1143,7 +1136,7 @@ namespace Cattedre
                 uc.Dispose();
             }
 
-            classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, Idannoscolastico);
+            // classi è già popolata dal Task.Run, NON richiamare il BL
 
             int x = 10;
             int y = 10;
@@ -1152,9 +1145,7 @@ namespace Cattedre
                 UcClasse ucClasse = new UcClasse(classi[i]);
                 ucClasse.Location = new Point(x, y);
                 pnlClassi.Controls.Add(ucClasse);
-
                 ucClasse.Refresh();
-
                 y += ucClasse.Height + 10;
             }
         }
@@ -1291,16 +1282,17 @@ namespace Cattedre
 
                     PulisciDipartimento();
 
+                    List<long> indirizziTrovati = new List<long>();
+
                     await Task.Run(() =>
                     {
-                        if(IDannoscolastico<=0)
-                            IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
-                        classi = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, IDannoscolastico);
-                        discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(IDannoscolastico,IDdipartimento);
+                        discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
+                            IDannoscolastico, IDdipartimento, out indirizziTrovati);
+                        classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
                     });
 
-                    LoadClassi(IDdipartimento, IDannoscolastico);
                     LoadDiscipline(IDdipartimento);
+                    LoadClassi(indirizziTrovati, IDannoscolastico);
                     LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
                     LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
                     SincronizzaScrollDopoLayout();
@@ -1339,10 +1331,17 @@ namespace Cattedre
                 return;
             }
 
-            List<ClsClasseDL> classiAnnoSuccessivo = ClsClasseBL.CaricaClassiDipartimento(IDdipartimento, annoSuccessivo.ID);
+            // Prima carica le discipline per ricavare gli indirizzi
+            List<ClsDisciplinaDL> disciplineSuccessivo = ClsDisciplinaBL
+                .CaricaDisciplineAnnoScolasticoDipartimento(annoSuccessivo.ID, IDdipartimento, out List<long> indirizziTrovati);
+
+            // Poi carica le classi per indirizzo
+            List<ClsClasseDL> classiAnnoSuccessivo = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, annoSuccessivo.ID);
+
             if (classiAnnoSuccessivo == null || classiAnnoSuccessivo.Count == 0)
             {
-                MessageBox.Show("Non esistono classi per l'anno scolastico successivo. Impossibile generare le cattedre.", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Non esistono classi per l'anno scolastico successivo. Impossibile generare le cattedre.",
+                                "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -1377,16 +1376,27 @@ namespace Cattedre
             }
         }
 
-        private void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
+        private async void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cbAnniScolastici.SelectedIndex>-1)
+            if (IDdipartimento <= 0) return; // evita chiamate premature
+            if (cbAnniScolastici.SelectedIndex>-1)
                 IDannoscolastico = ClsAnnoScolasticoBL.RilevaIDanno(cbAnniScolastici.Text);
            //  = cbAnniScolastici.SelectedIndex;
 
             Annoscolasticoselezionato = cbAnniScolastici.SelectedItem.ToString();
             ClsAnnoScolasticoDL annoscolastico = new ClsAnnoScolasticoDL();
             annoscolastico = ClsAnnoScolasticoBL.CercaAnnoScolastico(Annoscolasticoselezionato);
-            LoadClassi(IDdipartimento, annoscolastico.ID);
+            List<long> indirizziTrovati = new List<long>();
+
+            await Task.Run(() =>
+            {
+                discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
+                    IDannoscolastico, IDdipartimento, out indirizziTrovati);
+                classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
+            });
+
+            LoadDiscipline(IDdipartimento);
+            LoadClassi(indirizziTrovati, IDannoscolastico);
             LoadAssegnazioni(IDdipartimento, annoscolastico.ID, out dtDocentiAssegnazioni);
             LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
             SincronizzaScrollDopoLayout();

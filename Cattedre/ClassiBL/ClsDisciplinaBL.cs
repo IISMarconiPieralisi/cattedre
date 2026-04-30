@@ -91,46 +91,65 @@ namespace Cattedre
             return null;
         }
 
-        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long IDannoScolastico, long IDdipartimento)
+        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(
+    long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati)
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            Dictionary<long, int> conteggioIndirizzi = new Dictionary<long, int>();
+
             try
             {
                 DataTable dt = new DataTable();
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql =@"SELECT d.ID, d.nome, d.anno, d.oreteoria, d.orelaboratorio, d.disciplinaspeciale, d.IDdisciplinaSuccessiva 
-                                FROM vigere v
-                                JOIN discipline d ON v.IDdisciplina = d.ID
-                                JOIN gestire g ON g.IDdisciplina = d.ID
-                                JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
-                                LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
-                                JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
-                                WHERE g.IDdipartimento = @IDdipartimento
-                                AND aTarget.dataInizio >= aInizio.dataInizio
-                                AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))";
+                    string sql = @"SELECT d.ID, d.nome, d.anno, d.oreteoria, d.orelaboratorio, 
+                                  d.disciplinaspeciale, d.IDdisciplinaSuccessiva,
+                                  ap.IDindirizzo
+                               FROM vigere v
+                               JOIN discipline d ON v.IDdisciplina = d.ID
+                               JOIN gestire g ON g.IDdisciplina = d.ID
+                               JOIN appartenere ap ON ap.IDdisciplina = d.ID
+                               JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
+                               LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
+                               JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
+                               WHERE g.IDdipartimento = @IDdipartimento
+                               AND aTarget.dataInizio >= aInizio.dataInizio
+                               AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))
+                               AND d.nome NOT LIKE '%otenziamento%'
+                               ORDER BY d.anno";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
                             da.Fill(dt);
-                        }
                     }
+
                     foreach (DataRow row in dt.Rows)
                     {
-                        ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
-                        disciplina.ID = Convert.ToInt32(row["id"]);
-                        disciplina.Nome = row["nome"].ToString();
-                        disciplina.Anno = Convert.ToInt32(row["anno"]);
-                        disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
-                        disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
-                        disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
-                        disciplina.IDdisciplinaSuccessiva = (row["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplinaSuccessiva"]);
-                        discipline.Add(disciplina);
+                        long idDisciplina = Convert.ToInt32(row["ID"]);
+                        long idIndirizzo = Convert.ToInt64(row["IDindirizzo"]);
+
+                        // Conteggio indirizzo (per trovare il prevalente)
+                        if (!conteggioIndirizzi.ContainsKey(idIndirizzo))
+                            conteggioIndirizzi[idIndirizzo] = 0;
+                        conteggioIndirizzi[idIndirizzo]++;
+
+                        // Aggiungi disciplina solo se non già presente (righe duplicate per JOIN appartenere)
+                        if (!discipline.Any(d => d.ID == idDisciplina))
+                        {
+                            ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
+                            disciplina.ID = Convert.ToInt32(row["ID"]);
+                            disciplina.Nome = row["nome"].ToString();
+                            disciplina.Anno = Convert.ToInt32(row["anno"]);
+                            disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
+                            disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
+                            disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
+                            disciplina.IDdisciplinaSuccessiva = (row["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplinaSuccessiva"]);
+                            discipline.Add(disciplina);
+                        }
                     }
                 }
             }
@@ -138,6 +157,13 @@ namespace Cattedre
             {
                 throw new Exception(ex.Message);
             }
+
+            // Ordina per frequenza decrescente → il primo è l'indirizzo prevalente
+            IDindirizziTrovati = conteggioIndirizzi
+                .OrderByDescending(kvp => kvp.Value)
+                .Select(kvp => kvp.Key)
+                .ToList();
+
             return discipline;
         }
 

@@ -193,6 +193,7 @@
     <Compile Include="ClassiBL\ClsGestireBL.cs" />
     <Compile Include="ClassiBL\ClsIndirizzoBL.cs" />
     <Compile Include="ClassiBL\ClsUtenteBL.cs" />
+    <Compile Include="ClassiBL\ClsVigereBL.cs" />
     <Compile Include="ClassiDL\ClsAfferireDL.cs" />
     <Compile Include="ClassiDL\ClsAnnoScolasticoDL.cs" />
     <Compile Include="ClassiDL\ClsAppartenereDL.cs" />
@@ -209,6 +210,7 @@
     <Compile Include="ClassiDL\ClsUtenteDL.cs" />
     <Compile Include="ClassiBL\ClsRichiedereBL.cs" />
     <Compile Include="ClassiDL\ClsRichiedereDL.cs" />
+    <Compile Include="ClassiDL\ClsVigereDL.cs" />
     <Compile Include="FrmAnniScolastici.cs">
       <SubType>Form</SubType>
     </Compile>

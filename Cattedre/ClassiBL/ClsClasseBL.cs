@@ -190,10 +190,12 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM classi " +
-                                 "WHERE classi.IDdipartimento = @IDdipartimento " +
-                                 "AND classi.IDannoscolastico = @IDannoscolastico " +
-                                 "ORDER BY classi.anno, classi.sezione";
+                    string sql = @"SELECT DISTINCT c.* FROM classi c 
+                                 JOIN appartenere a ON c.IDindirizzo= a.IDindirizzo
+                                 JOIN gestire g ON a.IDdisciplina = g.IDdisciplina
+                                 WHERE g.IDdipartimento = @IDdipartimento 
+                                 AND c.IDannoscolastico = @IDannoscolastico 
+                                 ORDER BY c.anno, c.sezione";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
@@ -216,7 +218,6 @@ namespace Cattedre
                     _classe.Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
                     _classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
                     _classe.IDannoscolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]);
-                    _classe.IDdipartimento = (row["IDdipartimento"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdipartimento"]);
                     classi.Add(_classe);
                 }
             }
@@ -226,8 +227,10 @@ namespace Cattedre
             }
             return classi;
         }
-        public static List<ClsClasseDL> CaricaClassiFiltrate(Dictionary <string,List<string>> Filtri)
+        public static List<ClsClasseDL> CaricaClassi(Dictionary <string,List<string>> Filtri= null)
         {
+            if (Filtri == null) Filtri = new Dictionary<string, List<string>>();
+
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
             DataTable ds = new DataTable();
             try
@@ -255,7 +258,6 @@ namespace Cattedre
                     classe.Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
                     classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
                     classe.IDannoscolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]);
-                    classe.IDdipartimento = (row["IDdipartimento"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdipartimento"]);
                     classi.Add(classe);
                 }
             }
@@ -269,9 +271,7 @@ namespace Cattedre
         {
             try
             {
-                if (Filtri.Count <= 0)
-                    throw new Exception("non è stato inserito nessun parametro in cui filtrare,riprovare");
-                string sql = "SELECT * FROM classi WHERE ";
+                string sql = "SELECT * FROM classi";
                 MySqlCommand cmd = new MySqlCommand("", conn);
                 List<string> condizioni = new List<string>();
                 foreach (var filtro in Filtri)
@@ -289,7 +289,7 @@ namespace Cattedre
                 }
                 if (condizioni.Count > 0)
                 {
-                    sql += string.Join(" AND ", condizioni);
+                    sql += " WHERE" + string.Join(" AND ", condizioni);
                 }
                 sql += " ORDER BY anno ASC";
                 cmd.CommandText = sql;
@@ -304,47 +304,6 @@ namespace Cattedre
         }
         #endregion
         #region Operazioni Crud
-        public static List<ClsClasseDL> CaricaClassi()
-        {
-            List<ClsClasseDL> classi = new List<ClsClasseDL>();
-            DataTable ds = new DataTable();
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-                {
-                    conn.Open();
-                    string sql = "SELECT * FROM classi " +
-                                 "ORDER BY anno";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
-                        {
-                            dr.Fill(ds);
-                        }
-                        conn.Close();
-                    }
-                }
-                foreach (DataRow row in ds.Rows)
-                {
-                    ClsClasseDL classe = new ClsClasseDL();
-                    classe.ID = Convert.ToInt64(row["ID"]);
-                    classe.Sigla = row["sigla"].ToString();
-                    classe.Anno = Convert.ToInt32(row["anno"]);
-                    classe.Sezione = row["sezione"].ToString();
-                    classe.ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]);
-                    classe.Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
-                    classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
-                    classe.IDannoscolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]);
-                    classe.IDdipartimento = (row["IDdipartimento"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdipartimento"]);
-                    classi.Add(classe);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return classi;
-        }
         public static void InserisciClasse(ClsClasseDL classe)
         {
             try
@@ -352,8 +311,8 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo,IDdipartimento,IDannoscolastico) 
-                       VALUES (@sigla, @anno, @sezione, @classeArticolataCon, @IDutente, @IDindirizzo,@IDdipartimento,@IDannoscolastico)";
+                    string sql = @"INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo, IDannoscolastico) 
+                       VALUES (@sigla, @anno, @sezione, @classeArticolataCon, @IDutente, @IDindirizzo,@IDannoscolastico)";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@sigla", classe.Anno.ToString() + classe.Sezione);
@@ -362,7 +321,6 @@ namespace Cattedre
                         cmd.Parameters.AddWithValue("@IDindirizzo", classe.Idindirizzo);
                         cmd.Parameters.AddWithValue("@classeArticolataCon", classe.ClasseArticolataCon > 0 ? (object)classe.ClasseArticolataCon : DBNull.Value);
                         cmd.Parameters.AddWithValue("@IDutente", classe.Idutente > 0 ? (object)classe.Idutente : DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IDdipartimento", classe.IDdipartimento > 0 ? (object)classe.IDdipartimento : DBNull.Value);
                         cmd.Parameters.AddWithValue("@IDannoscolastico", classe.IDannoscolastico > 0 ? (object)classe.IDannoscolastico : DBNull.Value);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
                         if (righeCoinvolte <= 0)
@@ -392,7 +350,6 @@ namespace Cattedre
                            classeArticolataCon = @classeArticolataCon,
                            IDutente = @IDutente,
                            IDindirizzo = @IDindirizzo,
-                           IDdipartimento = @IDdipartimento,
                            IDannoscolastico = @IDannoscolastico
                        WHERE id = @id";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -403,7 +360,6 @@ namespace Cattedre
                         cmd.Parameters.AddWithValue("@IDindirizzo", classe.Idindirizzo);
                         cmd.Parameters.AddWithValue("@classeArticolataCon", classe.ClasseArticolataCon > 0 ? (object)classe.ClasseArticolataCon : DBNull.Value);
                         cmd.Parameters.AddWithValue("@IDutente", classe.Idutente > 0 ? (object)classe.Idutente : DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IDdipartimento", classe.IDdipartimento > 0 ? (object)classe.IDdipartimento : DBNull.Value);
                         cmd.Parameters.AddWithValue("@IDannoscolastico", classe.IDannoscolastico > 0 ? (object)classe.IDannoscolastico : DBNull.Value);
                         cmd.Parameters.AddWithValue("@id", classe.ID);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
@@ -488,8 +444,7 @@ namespace Cattedre
                           AND sigla = @sigla 
                           AND sezione = @sezione 
                           AND IDannoscolastico = @IDannoscolastico 
-                          AND IDindirizzo = @IDindirizzo 
-                          AND IDdipartimento = @IDdipartimento";
+                          AND IDindirizzo = @IDindirizzo";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@anno", classe.Anno);
@@ -497,7 +452,6 @@ namespace Cattedre
                         cmd.Parameters.AddWithValue("@sezione", classe.Sezione);
                         cmd.Parameters.AddWithValue("@IDannoscolastico", classe.IDannoscolastico > 0 ? (object)classe.IDannoscolastico : DBNull.Value);
                         cmd.Parameters.AddWithValue("@IDindirizzo", classe.Idindirizzo > 0 ? (object)classe.Idindirizzo : DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IDdipartimento", classe.IDdipartimento > 0 ? (object)classe.IDdipartimento : DBNull.Value);
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {

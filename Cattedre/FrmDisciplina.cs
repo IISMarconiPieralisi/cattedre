@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,11 +16,13 @@ namespace Cattedre
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
         List<ClsDisciplinaDL> _discipline = ClsDisciplinaBL.CaricaDiscipline();
         List<ClsClasseDiConcorsoDL> _cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+        List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
         //variabili pubbliche
         public List<ClsAppartenereDL> _apparteneres = new List<ClsAppartenereDL>();
         public List<ClsRichiedereDL> _richiederes = new List<ClsRichiedereDL>();
         public List<ClsGestireDL> _gestires = new List<ClsGestireDL>();
         public ClsDisciplinaDL _disciplina;
+        public ClsVigereDL _vigere= new ClsVigereDL();
         private int anno = 0;
         private long _lastDiscSp=0;
         private long _lastTick;
@@ -44,6 +46,10 @@ namespace Cattedre
                     _richiederes = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(_disciplina.ID);
                 if (_gestires.Count <= 0)
                     throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina.");
+
+                if (cbAnnoInizio.SelectedIndex <= 0)
+                    throw new Exception("Selezionare l'anno di inizio della disciplina.");
+
                 if (_richiederes.Count <= 0)
                     throw new Exception("Selezionare almeno una classe di concorso a cui la disciplina è riferita.");
                 // --- Caricamento ID Classe Collegata ---
@@ -61,6 +67,9 @@ namespace Cattedre
                     if (string.IsNullOrEmpty(tbDisciplinaSpeciale.Text)) throw new Exception("Inserire la descrizione della disciplina speciale");
                     _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text.Trim().ToLower();
                 }
+                //gestione classe vigere 
+                _vigere.IDannoInizio = Convert.ToInt32(cbAnnoInizio.SelectedValue);
+                _vigere.IDannoFine = cbAnnoFine.SelectedIndex==-1?0:Convert.ToInt32(cbAnnoFine.SelectedValue);
                 //controllo doppioni
                 if (_disciplina.ID <= 0)
                 {
@@ -100,6 +109,13 @@ namespace Cattedre
             PopolaclbIndirizzi();
             PopolaClbDipartenti();
             PopolaclbCdcs();
+            //popolamento anno di inizio
+            cbAnnoInizio.DataSource = _anniScolastici;
+            cbAnnoInizio.ValueMember = "ID";
+            cbAnnoInizio.DisplayMember = "sigla";
+            cbAnnoInizio.SelectedIndex = -1;
+            this.cbAnnoInizio.SelectedIndexChanged += new System.EventHandler(this.cbAnnoInizio_SelectedIndexChanged);
+
             if (_disciplina != null)
             {
                 //carico le informazioni della disciplina successiva
@@ -114,6 +130,10 @@ namespace Cattedre
                 //carico le informazioni del collegamento con indirizzi
                 _apparteneres = ClsAppartenereBL.CaricaClassiAppartenereByDisciplina(_disciplina.ID);
                 LoadclbIndirizzi();
+                //caricamento anno scolastico inizio e fine
+                if(_vigere.IDannoInizio>0) cbAnnoInizio.SelectedValue = _vigere.IDannoInizio;
+                if (_vigere.IDannoFine > 0) cbAnnoFine.SelectedValue = _vigere.IDannoFine;
+
             }
             else
                 _disciplina = new ClsDisciplinaDL();
@@ -492,6 +512,27 @@ namespace Cattedre
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
+                cbAnnoInizio.Focus();
+            }
+        }
+        private void cbAnnoInizio_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbAnnoInizio.SelectedIndex > -1)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoFine.Focus();
+            }
+        }
+        private void cbAnnoFine_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Cancel || e.KeyCode == Keys.Delete || e.KeyCode== Keys.Back)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoFine.SelectedIndex = -1;
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
                 rbPrimo.Focus();
             }
         }
@@ -609,8 +650,28 @@ namespace Cattedre
             }
 
         }
+
         #endregion
 
-        
+        private void cbAnnoInizio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbAnnoInizio.SelectedIndex != -1)
+            {
+                cbAnnoFine.SelectedIndex = -1;
+                ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(Convert.ToInt32(cbAnnoInizio.SelectedValue));
+                cbAnnoFine.DataSource = _anniScolastici
+                        .Where(a => a.DataInizio.Year >= anno.DataFine.Year)
+                        .Prepend(anno).OrderByDescending(a => a.Sigla).ToList();
+                cbAnnoFine.ValueMember = "ID";
+                cbAnnoFine.DisplayMember = "sigla";
+                cbAnnoFine.Enabled = (cbAnnoFine.Items.Count > 0);
+                cbAnnoFine.SelectedIndex = -1;
+
+            }
+            else
+                cbAnnoFine.Enabled = false;
+        }
+
+      
     }
 }

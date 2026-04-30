@@ -33,14 +33,13 @@ namespace Cattedre
             foreach (ClsClasseDL classe in classi)
             {
                 ListViewItem lvi = new ListViewItem(classe.ID.ToString());
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(classe.IDannoscolastico));
                 lvi.SubItems.Add(classe.Sigla);
                 lvi.SubItems.Add(classe.Anno.ToString());
                 lvi.SubItems.Add(classe.Sezione);
                 lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(classe.ClasseArticolataCon));
                 lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(classe.Idutente));
                 lvi.SubItems.Add(ClsIndirizzoBL.RilevaNomeIndirizzo(classe.Idindirizzo));
-                lvi.SubItems.Add(ClsDipartimentoBL.RilevaNomeDipartimento(classe.IDdipartimento));
-                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(classe.IDannoscolastico));
                 lvi.Tag = classe.ID;
                 lvClassi.Items.Add(lvi);
             }
@@ -349,7 +348,7 @@ namespace Cattedre
         #region gestione Anni
         private void GestisciListview()
         {
-            if(Filtri.Count>0)classi = ClsClasseBL.CaricaClassiFiltrate(Filtri);
+            if(Filtri.Count>0)classi = ClsClasseBL.CaricaClassi(Filtri);
             else classi = ClsClasseBL.CaricaClassi();
             if (!Filtri.ContainsKey("IDannoScolastico"))
             {

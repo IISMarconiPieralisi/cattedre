@@ -174,6 +174,68 @@ namespace Cattedre
             }
             return risultato;
         }
+
+        public static string TrovaCodiceDaID(long id)
+        {
+            DataTable dt = new DataTable();
+            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+            ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(Program.connectionString);
+                conn.Open();
+                string sql = @"SELECT livello FROM classidiconcorso WHERE ID = @id";
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                    {
+                        dr.Fill(dt);
+                    }
+                    conn.Close();
+                }
+                foreach (DataRow row in dt.Rows)
+                {
+                    cdc.Livello = row["livello"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return cdc.Livello;
+        }
+
+        public static long TrovaIDcdc(string codice)
+        {
+            DataTable dt = new DataTable();
+            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+            ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(Program.connectionString);
+                conn.Open();
+                string sql = @"SELECT ID FROM classidiconcorso WHERE livello = @codice";
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@codice", codice);
+                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                    {
+                        dr.Fill(dt);
+                    }
+                    conn.Close();
+                }
+                foreach (DataRow row in dt.Rows)
+                {
+                    cdc.ID = Convert.ToInt32(row["id"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return cdc.ID;
+        }
         public static List<ClsClasseDiConcorsoDL> CaricaCDCperDipartimento(long IDdiparitimento)
         {
             DataTable dt = new DataTable();

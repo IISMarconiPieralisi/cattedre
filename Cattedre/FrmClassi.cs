@@ -33,14 +33,13 @@ namespace Cattedre
             foreach (ClsClasseDL classe in classi)
             {
                 ListViewItem lvi = new ListViewItem(classe.ID.ToString());
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(classe.IDannoscolastico));
                 lvi.SubItems.Add(classe.Sigla);
                 lvi.SubItems.Add(classe.Anno.ToString());
                 lvi.SubItems.Add(classe.Sezione);
                 lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(classe.ClasseArticolataCon));
                 lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(classe.Idutente));
                 lvi.SubItems.Add(ClsIndirizzoBL.RilevaNomeIndirizzo(classe.Idindirizzo));
-                lvi.SubItems.Add(ClsDipartimentoBL.RilevaNomeDipartimento(classe.IDdipartimento));
-                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(classe.IDannoscolastico));
                 lvi.Tag = classe.ID;
                 lvClassi.Items.Add(lvi);
             }
@@ -207,7 +206,7 @@ namespace Cattedre
                 {
                     Filtri.Add("IDindirizzo", new List<string> { $"'{cbIndirizzi.SelectedValue}'" });
                 }
-                ControlloSelezionatiAnniScolastici(Filtri);
+                ControlloSelezionatiAnniScolastici();
 
                 if (Filtri.Count<=0)
                     throw new Exception("Inserire almeno un criterio di ricerca");
@@ -254,7 +253,7 @@ namespace Cattedre
                 sezione++;
             }
         }
-        private void ControlloSelezionatiAnniScolastici(Dictionary<string, List<string>> filtri)
+        private void ControlloSelezionatiAnniScolastici()
         {
             if(tplAnniScolastici.Controls.OfType<CheckBox>().Any(cb=>cb.Checked))
             {
@@ -262,7 +261,7 @@ namespace Cattedre
 
                 if (!selezionati.Any()) return;
 
-                filtri.Add ( "IDannoScolastico", selezionati);
+                Filtri.Add ( "IDannoScolastico", selezionati);
             }
         }
         private void DeselezionaCheckBox(Control parent)
@@ -349,7 +348,7 @@ namespace Cattedre
         #region gestione Anni
         private void GestisciListview()
         {
-            if(Filtri.Count>0)classi = ClsClasseBL.CaricaClassiFiltrate(Filtri);
+            if(Filtri.Count>0)classi = ClsClasseBL.CaricaClassi(Filtri);
             else classi = ClsClasseBL.CaricaClassi();
             if (!Filtri.ContainsKey("IDannoScolastico"))
             {

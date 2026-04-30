@@ -67,6 +67,7 @@
             this.cbDipartimenti.Name = "cbDipartimenti";
             this.cbDipartimenti.Size = new System.Drawing.Size(233, 25);
             this.cbDipartimenti.TabIndex = 5;
+            this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.cbDipartimenti_SelectedIndexChanged);
             this.cbDipartimenti.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDipartimenti_KeyDown);
             // 
             // label1

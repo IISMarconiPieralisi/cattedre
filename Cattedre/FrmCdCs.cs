@@ -13,7 +13,7 @@ namespace Cattedre
     public partial class FrmCdCs : Form
     {
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
-        List<ClsDotareDL> dots = new List<ClsDotareDL>();
+        //List<ClsDotareDL> dots = new List<ClsDotareDL>();
         //variabili globali 
         string NomeCdc = string.Empty;
         string LivelloCDC = string.Empty;
@@ -27,17 +27,17 @@ namespace Cattedre
         private void CaricaListView()
         {
             cdcs = ClsClasseDiConcorsoBL.CaricaCdcs(LivelloCDC,NomeCdc);
-            dots = ClsDotareBL.CaricaDotare();
+            //dots = ClsDotareBL.CaricaDotare();
             lvCdCs.Items.Clear();
             for(int i = 0; i < cdcs.Count; i++)
             {
                 ListViewItem lvi = new ListViewItem(cdcs[i].ID.ToString());
-                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
+                //lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
                 lvi.SubItems.Add(cdcs[i].Livello);
                 lvi.SubItems.Add(cdcs[i].Nome);
                 lvi.SubItems.Add(cdcs[i].AbilitazioniRichieste);
-                lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiDiritto(cdcs[i].ID, dots[i].IdAnnoscolastico).ToString());
-                lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiFatto(cdcs[i].ID, dots[i].IdAnnoscolastico).ToString());
+                //lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiDiritto(cdcs[i].ID, dots[i].IdAnnoscolastico).ToString());
+                //lvi.SubItems.Add(ClsDotareBL.TrovaNumCattedreDiFatto(cdcs[i].ID, dots[i].IdAnnoscolastico).ToString());
                 
                 lvi.Tag = cdcs[i].ID;
                 lvCdCs.Items.Add(lvi);
@@ -54,7 +54,7 @@ namespace Cattedre
             if (dr == DialogResult.OK)
             {
                 long idCdc = ClsClasseDiConcorsoBL.InserisciCdc(frmCdC._cdc);
-                ClsDotareBL.InserisciDotare(frmCdC._dot, idCdc);
+                //ClsDotareBL.InserisciDotare(frmCdC._dot, idCdc);
                 CaricaListView();
             }
         }
@@ -68,15 +68,15 @@ namespace Cattedre
         {
             if (lvCdCs.SelectedIndices.Count == 1)
             {
-                indiceDaModificare = Convert.ToInt32(lvCdCs.SelectedItems[0].Tag);
+                indiceDaModificare = Convert.ToInt32(lvCdCs.SelectedIndices[0]);
                 FrmCdC frmCdC = new FrmCdC();
-                frmCdC._cdc = cdcs.Find(p => p.ID == indiceDaModificare);
-                frmCdC._dot = dots.Find(p => p.IdClasseDiConcorso == frmCdC._cdc.ID);
+                frmCdC._cdc = cdcs[indiceDaModificare];
+                //frmCdC._dot = dots.Find(p => p.IdClasseDiConcorso == frmCdC._cdc.ID);
                 DialogResult dr = frmCdC.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
                     ClsClasseDiConcorsoBL.ModificaCdc(frmCdC._cdc, indiceDaModificare);
-                    ClsDotareBL.AggiornaDotare(frmCdC._dot);
+                    //ClsDotareBL.AggiornaDotare(frmCdC._dot);
                     CaricaListView();
                 }
             }
@@ -94,7 +94,7 @@ namespace Cattedre
                 if (dr == DialogResult.Yes)
                 {
                     ClsClasseDiConcorsoBL.EliminaCdc(idDaEliminare);
-                    ClsDotareBL.EliminaDotare(idDaEliminare);
+                    //ClsDotareBL.EliminaDotare(idDaEliminare);
                 }
                 
                 CaricaListView();

@@ -52,7 +52,7 @@ namespace Cattedre
             panel6.Visible = false;
             panel7.Visible = false;
             panel8.Visible = false;
-            panel9.Visible = false;
+            //panel9.Visible = false;
 
             RenderFotoTonda();
             if (utente.TipoUtente == "A")
@@ -332,11 +332,12 @@ namespace Cattedre
             MostraFormMDI(frmDotazioni);
         }
 
-        }
+        
 
-        private void btCredits_MouseLeave(object sender, EventArgs e)
-        {
-            panel9.Visible = false;
+    //private void btCredits_MouseLeave(object sender, EventArgs e)
+    //{
+    //    panel9.Visible = false;
+    //}
 
 
         //private void cONTRATTIToolStripMenuItem_Click(object sender, EventArgs e)

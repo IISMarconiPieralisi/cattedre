@@ -60,7 +60,13 @@ namespace Cattedre
             cbIndirizzi.DataSource = _indirizzi;
             cbIndirizzi.DisplayMember = "Nome";
             cbIndirizzi.ValueMember = "ID";
-            cbIndirizzi.SelectedIndex = -1;            
+            cbIndirizzi.SelectedIndex = -1;
+
+            cbAnniScolastici.DataSource = _anniScolastici;
+            cbAnniScolastici.DisplayMember = "Sigla";
+            cbAnniScolastici.ValueMember = "ID";
+            cbAnniScolastici.SelectedIndex = -1;
+
             //popolamento filtri
             GeneraFiltriAnnoScolastico();
         }
@@ -225,7 +231,7 @@ namespace Cattedre
             btRipristina.Enabled = false;
             cbAnnoClasse.SelectedIndex = -1;
             cbIndirizzi.SelectedIndex = -1;
-            cbAnniScolastici.Items.Clear();
+            cbAnniScolastici.SelectedIndex = -1;
             Filtri.Clear();
             GestisciListview();
 
@@ -239,22 +245,19 @@ namespace Cattedre
             // Imposta le colonne con larghezza automatica
             //tplAnniScolastici.ColumnStyles.Clear();
             //for (int i = 0; i < _anniScolastici.Count; i++)
-                //tplAnniScolastici.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            //tplAnniScolastici.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
-            foreach (ClsAnnoScolasticoDL anno in _anniScolastici)
-            {
-                cbAnniScolastici.Items.Add(anno.Sigla);
-            }
+            //cbAnniScolastici.DataSource = _anniScolastici;
+            //cbAnniScolastici.DisplayMember = "Sigla";
+            //cbAnniScolastici.ValueMember = "ID";
+            //cbAnniScolastici.SelectedIndex = -1;
         }
         private void ControlloSelezionatiAnniScolastici(ref Dictionary<string, List<string>> filtri)
         {
-            if (cbAnniScolastici.SelectedIndex != -1 && cbAnniScolastici.SelectedValue != null)
+            if (cbAnniScolastici.SelectedIndex != -1)
             {
                 string valore = cbAnniScolastici.SelectedValue.ToString();
-                if (!string.IsNullOrEmpty(valore))
-                {
-                    filtri.Add("IDannoScolastico", new List<string> { valore });
-                }
+                filtri.Add("IDannoScolastico", new List<string> { valore });
             }
         }
         #endregion

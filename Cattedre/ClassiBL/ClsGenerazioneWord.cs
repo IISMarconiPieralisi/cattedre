@@ -231,7 +231,7 @@ namespace Cattedre
             if (dotazione != null)
             {
                 p.AppendLine();
-                p.Append($"{dotazione.NumcattedreDiritto} cattedre + {ClsClasseDiConcorsoBL.OreResidueCDC(cdc.ID,anno.ID)} h residue")
+                p.Append($"{dotazione.NumcattedreDiritto} cattedre + {ClsClasseDiConcorsoBL.OreResidueCDC(cdc,anno)} h residue")
                  .Bold()
                  .Font(FontName)
                  .FontSize(FontSize)

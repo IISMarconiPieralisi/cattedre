@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -38,25 +38,12 @@ namespace Cattedre
                     _disciplina = new ClsDisciplinaDL();
 
                 _disciplina.Anno = anno;
-
                 if (_disciplina.Anno == 0 && !cbDisciplinaSpeciale.Checked)
                     throw new Exception("inserire un anno valido");
                 if (_disciplina.ID > 0 && _gestires.Count == 0)
                     _gestires = ClsGestireBL.CaricaGestioneDisciplina(_disciplina.ID);
                 if (_disciplina.ID > 0 && _richiederes.Count == 0)
                     _richiederes = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(_disciplina.ID);
-
-                // --- Controllo Duplicati in Archivio ---
-                if (_disciplina.ID <= 0)
-                {
-                    if (_discipline.Any(p => p.Nome == tbNome.Text.Trim() && p.Anno == anno))
-                        throw new Exception("Disciplina già presente per questo anno.");
-                }
-                else
-                {
-                    if (_discipline.Any(p => p.Nome == tbNome.Text.Trim() && p.Anno == anno && p.ID != _disciplina.ID))
-                        throw new Exception("Disciplina già presente per questo anno.");
-                }
                 if (_gestires.Count <= 0)
                     throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina.");
 
@@ -83,6 +70,18 @@ namespace Cattedre
                 //gestione classe vigere 
                 _vigere.IDannoInizio = Convert.ToInt32(cbAnnoInizio.SelectedValue);
                 _vigere.IDannoFine = cbAnnoFine.SelectedIndex==-1?0:Convert.ToInt32(cbAnnoFine.SelectedValue);
+                //controllo doppioni
+                if (_disciplina.ID <= 0)
+                {
+                    if (ClsDisciplinaBL.CercaIdDisciplina(_disciplina) > 0)
+                        throw new Exception("Disciplina già presente per questo anno.");
+                }
+                else
+                {
+                    if (ClsDisciplinaBL.CercaIdDisciplina(_disciplina) != _disciplina.ID)
+                        throw new Exception("Disciplina già presente per questo anno.");
+                }
+
                 //Gestione Liste Collegate (ClsAppartenere) -
                 foreach (var item in clbIndirizzi.CheckedItems)
                 {
@@ -513,6 +512,27 @@ namespace Cattedre
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
+                cbAnnoInizio.Focus();
+            }
+        }
+        private void cbAnnoInizio_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbAnnoInizio.SelectedIndex > -1)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoFine.Focus();
+            }
+        }
+        private void cbAnnoFine_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Cancel || e.KeyCode == Keys.Delete || e.KeyCode== Keys.Back)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoFine.SelectedIndex = -1;
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
                 rbPrimo.Focus();
             }
         }
@@ -637,11 +657,11 @@ namespace Cattedre
         {
             if (cbAnnoInizio.SelectedIndex != -1)
             {
-                cbAnnoFine.SelectedIndex=-1;
+                cbAnnoFine.SelectedIndex = -1;
                 ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(Convert.ToInt32(cbAnnoInizio.SelectedValue));
                 cbAnnoFine.DataSource = _anniScolastici
-                     .Where(a => a.DataInizio > anno.DataFine)
-                     .ToList();
+                        .Where(a => a.DataInizio.Year >= anno.DataFine.Year)
+                        .Prepend(anno).OrderByDescending(a => a.Sigla).ToList();
                 cbAnnoFine.ValueMember = "ID";
                 cbAnnoFine.DisplayMember = "sigla";
                 cbAnnoFine.Enabled = (cbAnnoFine.Items.Count > 0);
@@ -651,5 +671,7 @@ namespace Cattedre
             else
                 cbAnnoFine.Enabled = false;
         }
+
+      
     }
 }

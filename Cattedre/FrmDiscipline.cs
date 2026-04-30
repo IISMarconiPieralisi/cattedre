@@ -14,16 +14,23 @@ namespace Cattedre
     {
         public List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
         public List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
-
         private ClsUtenteDL UtenteLoggato;
+        long iddipartimento = 0;
+        int anno = 0;
+        string nome = string.Empty;
         public FrmDiscipline(ClsUtenteDL utenteLog)
         {
             InitializeComponent();
             UtenteLoggato = utenteLog;
         }
-        private void CaricaListView(List<ClsDisciplinaDL> discipline)
+        private void GestisciListview()
         {
-            discipline = discipline.OrderBy(p => p.Anno).ThenBy(p => p.Nome).ToList();
+                discipline = ClsDisciplinaBL.CaricaDiscipline(iddipartimento, anno, nome);
+            CaricaListView();
+        }
+        private void CaricaListView()
+        {
+           // discipline = discipline.OrderBy(p => p.Anno).ThenBy(p => p.Nome).ToList();
             lvDiscipline.Items.Clear();
             foreach (ClsDisciplinaDL disciplina in discipline)
             {
@@ -90,14 +97,14 @@ namespace Cattedre
                     MessageBox.Show($"Errore: {ex.Message} in riga {ex.Source} /n riprovare", "Errore");
                 }
                 discipline = ClsDisciplinaBL.CaricaDiscipline();
-                CaricaListView(discipline);
+                GestisciListview();
             }
         }
 
         private void FrmDiscipline_Load(object sender, EventArgs e)
         {
             discipline = ClsDisciplinaBL.CaricaDiscipline();
-            CaricaListView(discipline);
+            GestisciListview();
             GestionePermessi();
 
             //popolo combobox filtraggio per dipartimenti
@@ -133,7 +140,7 @@ namespace Cattedre
                     ClsDisciplinaBL.EliminaDisciplina(idDaEliminare);
                 }
                 discipline = ClsDisciplinaBL.CaricaDiscipline();
-                CaricaListView(discipline);
+                GestisciListview();
             }
             else
                 MessageBox.Show("Seleziona una disciplina da cancellare", "domanda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -177,16 +184,16 @@ namespace Cattedre
                         MessageBox.Show($"Errore nella modifica {ex.Message} \nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     discipline = ClsDisciplinaBL.CaricaDiscipline();
-                    CaricaListView(discipline);
+                    GestisciListview();
                 }
             }
         }
 
         private void btCerca_Click(object sender, EventArgs e)
         {
-            long iddipartimento = 0;
-            int anno = 0;
-            string nome = tbDisciplina.Text.Trim();
+             iddipartimento = 0;
+             anno = 0;
+             nome = tbDisciplina.Text.Trim();
             try
             {
                 if (cbDipartimenti.SelectedIndex >= 0)
@@ -201,13 +208,9 @@ namespace Cattedre
                 if (iddipartimento == 0 && anno == 0 && string.IsNullOrWhiteSpace(nome))
                     throw new Exception("Inserisci almeno un criterio di ricerca.");
 
-                List<ClsDisciplinaDL> disciplineFiltrate =
-                    ClsDisciplinaBL.CaricaDiscipline(iddipartimento, anno, nome);
 
-                if (disciplineFiltrate == null || disciplineFiltrate.Count == 0)
-                    throw new Exception("Nessuna disciplina trovata.");
 
-                CaricaListView(disciplineFiltrate);
+                GestisciListview();
                 btPulisciCb.Enabled = true;
             }
             catch (Exception ex)
@@ -227,9 +230,11 @@ namespace Cattedre
             rbAnno3.Checked = false;
             rbAnno4.Checked = false;
             rbAnno5.Checked = false;
-            discipline = ClsDisciplinaBL.CaricaDiscipline();
-            CaricaListView(discipline);
+             iddipartimento = 0;
+             anno = 0;
+             nome = string.Empty;
             btPulisciCb.Enabled = false;
+            GestisciListview();
 
         }
         private string CaricaGraficamenteIndirizzi(ClsDisciplinaDL disc)
@@ -290,6 +295,12 @@ namespace Cattedre
             {
                 tbDisciplina.Focus(); 
             }
+        }
+
+        private void cbDipartimenti_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbDipartimenti.SelectedIndex > -1)
+                btCerca_Click(null, null);
         }
     }
 }

@@ -131,8 +131,10 @@ namespace Cattedre
             return cattedre;
         }
 
-        public static List<ClsDotareDL> CaricaDotare()
+        public static List<ClsDotareDL> CaricaDotare(Dictionary<string, List<string>> Filtri = null)
         {
+            if (Filtri == null)
+                Filtri = new Dictionary<string, List<string>>();
             List<ClsDotareDL> lista = new List<ClsDotareDL>();
             DataTable dt = new DataTable();
 
@@ -141,17 +143,13 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-
-                    string sql = @"SELECT *
-                               FROM dotare
-                               ORDER BY IDannoScolastico";
-
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    using (MySqlCommand cmd = CreaComandoRicerca(Filtri, conn))
                     {
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
-                            da.Fill(dt);
+                            dr.Fill(dt);
                         }
+                        conn.Close();
                     }
                 }
 
@@ -174,7 +172,40 @@ namespace Cattedre
             return lista;
         }
 
-        public static void InserisciDotare(ClsDotareDL d, long idCdc)
+        private static MySqlCommand CreaComandoRicerca(Dictionary<string, List<string>> filtri, MySqlConnection conn)
+        {
+            string sql = @"SELECT ID, numcattedrediritto, numcattedrefatto, IDannoscolastico, IDclassediconcorso FROM dotare";
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conn;
+            List<string> condizioni = new List<string>();
+
+            foreach (var filtro in filtri)
+            {
+                string colonna = filtro.Key;  
+                List<string> valori = filtro.Value;
+
+                if (valori == null || valori.Count == 0)
+                    continue;
+
+                List<string> orConditions = new List<string>();
+                foreach (var valore in valori)
+                {
+                    orConditions.Add($"{colonna} = {valore}");  // colonna diretta, valore parametrizzato
+                }
+
+                condizioni.Add("(" + string.Join(" OR ", orConditions) + ")");
+            }
+
+            if (condizioni.Count > 0)
+            {
+                sql += " WHERE " + string.Join(" AND ", condizioni);
+            }
+
+            cmd.CommandText = sql;
+            return cmd;
+        }
+
+        public static void InserisciDotare(ClsDotareDL d)
         {
             try
             {
@@ -189,7 +220,7 @@ namespace Cattedre
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@anno", d.IdAnnoscolastico);
-                        cmd.Parameters.AddWithValue("@cdc", idCdc);
+                        cmd.Parameters.AddWithValue("@cdc", d.IdClasseDiConcorso);
                         cmd.Parameters.AddWithValue("@fatto", d.NumcattedreFatto);
                         cmd.Parameters.AddWithValue("@diritto", d.NumcattedreDiritto);
 
@@ -284,8 +315,9 @@ namespace Cattedre
             UPDATE dotare
             SET numcattedrediritto = @cattedreDiritto,
                 numcattedrefatto = @cattedreFatto,
-                IDannoscolastico = @IDannoscolastico
-            WHERE IDclassediconcorso = @IDclasseDiConcorso;";
+                IDannoscolastico = @IDannoscolastico,
+                IDclassediconcorso = @IDclassediconcorso
+            WHERE ID = @id;";
 
                 using (MySqlCommand cmd = new MySqlCommand(updateSql, conn))
                 {
@@ -293,6 +325,7 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@IDannoscolastico", dot.IdAnnoscolastico);
                     cmd.Parameters.AddWithValue("@cattedreDiritto", dot.NumcattedreDiritto);
                     cmd.Parameters.AddWithValue("@cattedreFatto", dot.NumcattedreFatto);
+                    cmd.Parameters.AddWithValue("@id", dot.Id);
 
                     int righe = cmd.ExecuteNonQuery();
                     if (righe <= 0)

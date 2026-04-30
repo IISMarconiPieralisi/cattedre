@@ -31,12 +31,9 @@ namespace Cattedre
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmCdCs));
             this.lvCdCs = new System.Windows.Forms.ListView();
             this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chAnnoScolastico = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chCodice = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chNome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chAbilitazioniRichieste = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chNumCattedreDiritto = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chNumCattedreDiFatto = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btInserisci = new Krypton.Toolkit.KryptonButton();
             this.kryptonButtonElimina = new Krypton.Toolkit.KryptonButton();
             this.label1 = new System.Windows.Forms.Label();
@@ -56,19 +53,16 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvCdCs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chID,
-            this.chAnnoScolastico,
             this.chCodice,
             this.chNome,
-            this.chAbilitazioniRichieste,
-            this.chNumCattedreDiritto,
-            this.chNumCattedreDiFatto});
+            this.chAbilitazioniRichieste});
             this.lvCdCs.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvCdCs.FullRowSelect = true;
             this.lvCdCs.HideSelection = false;
-            this.lvCdCs.Location = new System.Drawing.Point(50, 86);
+            this.lvCdCs.Location = new System.Drawing.Point(50, 88);
             this.lvCdCs.Margin = new System.Windows.Forms.Padding(2);
             this.lvCdCs.Name = "lvCdCs";
-            this.lvCdCs.Size = new System.Drawing.Size(1380, 465);
+            this.lvCdCs.Size = new System.Drawing.Size(783, 465);
             this.lvCdCs.TabIndex = 1;
             this.lvCdCs.UseCompatibleStateImageBehavior = false;
             this.lvCdCs.View = System.Windows.Forms.View.Details;
@@ -78,10 +72,6 @@ namespace Cattedre
             // 
             this.chID.Text = "ID";
             this.chID.Width = 50;
-            // 
-            // chAnnoScolastico
-            // 
-            this.chAnnoScolastico.Text = "A.S.";
             // 
             // chCodice
             // 
@@ -98,21 +88,11 @@ namespace Cattedre
             this.chAbilitazioniRichieste.Text = "Abilitazioni Richieste";
             this.chAbilitazioniRichieste.Width = 650;
             // 
-            // chNumCattedreDiritto
-            // 
-            this.chNumCattedreDiritto.Text = "Cattedre Di Diritto";
-            this.chNumCattedreDiritto.Width = 120;
-            // 
-            // chNumCattedreDiFatto
-            // 
-            this.chNumCattedreDiFatto.Text = "Cattedre Di Fatto";
-            this.chNumCattedreDiFatto.Width = 120;
-            // 
             // btInserisci
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btInserisci.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btInserisci.Location = new System.Drawing.Point(1435, 114);
+            this.btInserisci.Location = new System.Drawing.Point(854, 105);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btInserisci.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -181,7 +161,7 @@ namespace Cattedre
             // 
             this.kryptonButtonElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonButtonElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.kryptonButtonElimina.Location = new System.Drawing.Point(1435, 216);
+            this.kryptonButtonElimina.Location = new System.Drawing.Point(854, 207);
             this.kryptonButtonElimina.Name = "kryptonButtonElimina";
             this.kryptonButtonElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.kryptonButtonElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -260,7 +240,7 @@ namespace Cattedre
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btModifica.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btModifica.Location = new System.Drawing.Point(1435, 165);
+            this.btModifica.Location = new System.Drawing.Point(853, 156);
             this.btModifica.Name = "btModifica";
             this.btModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
@@ -329,7 +309,7 @@ namespace Cattedre
             // 
             this.btPulisciCb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btPulisciCb.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btPulisciCb.Location = new System.Drawing.Point(1235, 39);
+            this.btPulisciCb.Location = new System.Drawing.Point(605, 41);
             this.btPulisciCb.Name = "btPulisciCb";
             this.btPulisciCb.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btPulisciCb.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -400,7 +380,7 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbNome.Location = new System.Drawing.Point(243, 41);
             this.tbNome.Name = "tbNome";
-            this.tbNome.Size = new System.Drawing.Size(986, 29);
+            this.tbNome.Size = new System.Drawing.Size(332, 29);
             this.tbNome.StateCommon.Back.Color1 = System.Drawing.Color.White;
             this.tbNome.StateCommon.Border.Color1 = System.Drawing.Color.Black;
             this.tbNome.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -430,7 +410,7 @@ namespace Cattedre
             // 
             this.btCerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btCerca.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btCerca.Location = new System.Drawing.Point(1435, 39);
+            this.btCerca.Location = new System.Drawing.Point(854, 41);
             this.btCerca.Name = "btCerca";
             this.btCerca.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btCerca.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -520,7 +500,7 @@ namespace Cattedre
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1551, 591);
+            this.ClientSize = new System.Drawing.Size(980, 591);
             this.Controls.Add(this.mtbSigla);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btCerca);
@@ -548,9 +528,6 @@ namespace Cattedre
         private System.Windows.Forms.ColumnHeader chCodice;
         private System.Windows.Forms.ColumnHeader chNome;
         private System.Windows.Forms.ColumnHeader chAbilitazioniRichieste;
-        private System.Windows.Forms.ColumnHeader chNumCattedreDiritto;
-        private System.Windows.Forms.ColumnHeader chNumCattedreDiFatto;
-        private System.Windows.Forms.ColumnHeader chAnnoScolastico;
         private System.Windows.Forms.ColumnHeader chID;
         private Krypton.Toolkit.KryptonButton btInserisci;
         private Krypton.Toolkit.KryptonButton kryptonButtonElimina;

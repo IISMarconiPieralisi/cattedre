@@ -215,7 +215,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT ID,email,cognome,nome,tipoUtente,colore,tipoDocente FROM utenti  WHERE tipoUtente ='D' OR tipoUtente='C'";
+                    string sql = "SELECT ID,email,cognome,nome,tipoUtente,colore,tipoDocente FROM utenti  WHERE tipoUtente ='D' OR tipoUtente='C' ORDER BY cognome , nome";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {

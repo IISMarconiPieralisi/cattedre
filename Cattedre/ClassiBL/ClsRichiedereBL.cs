@@ -142,7 +142,8 @@ namespace Cattedre
                     string sql = @"SELECT d.ID, d.nome,d.anno
                                     FROM discipline d
                                     JOIN richiedere r ON d.ID = r.IDdisciplina
-                                    WHERE r.IDutente = @IdUtente";
+                                    WHERE r.IDutente = @IdUtente
+                                    ORDER BY anno,nome";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -322,7 +323,7 @@ namespace Cattedre
             try
             {
                 conn.Open();
-                string sql = @"DELETE FROM Richiedere" +
+                string sql = @"DELETE FROM richiedere" +
                              " WHERE ID = @ID ";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))

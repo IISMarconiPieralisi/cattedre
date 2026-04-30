@@ -76,6 +76,7 @@
             this.cbDipartimentoCoordinato = new System.Windows.Forms.ComboBox();
             this.lbDcoordinato = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.cbAutoPassword = new System.Windows.Forms.CheckBox();
             this.PnUtente.SuspendLayout();
             this.pnTipoDocente.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -130,7 +131,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(22, 268);
+            this.label5.Location = new System.Drawing.Point(22, 287);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(83, 16);
             this.label5.TabIndex = 4;
@@ -140,7 +141,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(22, 316);
+            this.label6.Location = new System.Drawing.Point(22, 335);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(98, 17);
             this.label6.TabIndex = 5;
@@ -157,9 +158,9 @@
             "Amministratore",
             "Docente",
             "Coordinatore di dipartimento"});
-            this.cbTipoUtente.Location = new System.Drawing.Point(126, 267);
+            this.cbTipoUtente.Location = new System.Drawing.Point(145, 286);
             this.cbTipoUtente.Name = "cbTipoUtente";
-            this.cbTipoUtente.Size = new System.Drawing.Size(279, 21);
+            this.cbTipoUtente.Size = new System.Drawing.Size(267, 21);
             this.cbTipoUtente.TabIndex = 5;
             this.cbTipoUtente.SelectedIndexChanged += new System.EventHandler(this.cbTipoUtente_SelectedIndexChanged);
             this.cbTipoUtente.Enter += new System.EventHandler(this.cbTipoUtente_Enter);
@@ -169,6 +170,7 @@
             // PnUtente
             // 
             this.PnUtente.AutoSize = true;
+            this.PnUtente.Controls.Add(this.cbAutoPassword);
             this.PnUtente.Controls.Add(this.label16);
             this.PnUtente.Controls.Add(this.tbPassword);
             this.PnUtente.Controls.Add(this.tbEmail);
@@ -192,14 +194,14 @@
             this.PnUtente.Location = new System.Drawing.Point(0, 0);
             this.PnUtente.Name = "PnUtente";
             this.PnUtente.Padding = new System.Windows.Forms.Padding(0, 0, 15, 0);
-            this.PnUtente.Size = new System.Drawing.Size(423, 663);
+            this.PnUtente.Size = new System.Drawing.Size(430, 550);
             this.PnUtente.TabIndex = 1;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Century Gothic", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(3, 5);
+            this.label16.Location = new System.Drawing.Point(12, 11);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(85, 28);
             this.label16.TabIndex = 24;
@@ -208,7 +210,7 @@
             // tbPassword
             // 
             this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbPassword.Location = new System.Drawing.Point(145, 219);
+            this.tbPassword.Location = new System.Drawing.Point(152, 219);
             this.tbPassword.MaxLength = 32;
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '●';
@@ -234,7 +236,7 @@
             // tbEmail
             // 
             this.tbEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbEmail.Location = new System.Drawing.Point(145, 154);
+            this.tbEmail.Location = new System.Drawing.Point(152, 154);
             this.tbEmail.MaxLength = 120;
             this.tbEmail.Name = "tbEmail";
             this.tbEmail.Size = new System.Drawing.Size(260, 29);
@@ -250,13 +252,16 @@
             this.tbEmail.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbEmail.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbEmail.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.tbEmail.StateDisabled.Border.Color1 = System.Drawing.Color.LightGray;
+            this.tbEmail.StateDisabled.Border.Color2 = System.Drawing.Color.LightGray;
+            this.tbEmail.StateDisabled.Content.Color1 = System.Drawing.Color.Silver;
             this.tbEmail.TabIndex = 2;
             this.tbEmail.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbEmail_KeyDown);
             // 
             // tbCognome
             // 
             this.tbCognome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbCognome.Location = new System.Drawing.Point(145, 106);
+            this.tbCognome.Location = new System.Drawing.Point(152, 106);
             this.tbCognome.MaxLength = 50;
             this.tbCognome.Name = "tbCognome";
             this.tbCognome.Size = new System.Drawing.Size(260, 29);
@@ -279,7 +284,7 @@
             // tbNome
             // 
             this.tbNome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbNome.Location = new System.Drawing.Point(145, 58);
+            this.tbNome.Location = new System.Drawing.Point(152, 58);
             this.tbNome.MaxLength = 50;
             this.tbNome.Name = "tbNome";
             this.tbNome.Size = new System.Drawing.Size(260, 29);
@@ -303,9 +308,9 @@
             // 
             this.pnTipoDocente.Controls.Add(this.rbLaboratorio);
             this.pnTipoDocente.Controls.Add(this.rbTeorico);
-            this.pnTipoDocente.Location = new System.Drawing.Point(126, 307);
+            this.pnTipoDocente.Location = new System.Drawing.Point(145, 321);
             this.pnTipoDocente.Name = "pnTipoDocente";
-            this.pnTipoDocente.Size = new System.Drawing.Size(236, 31);
+            this.pnTipoDocente.Size = new System.Drawing.Size(267, 31);
             this.pnTipoDocente.TabIndex = 6;
             // 
             // rbLaboratorio
@@ -313,7 +318,7 @@
             this.rbLaboratorio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbLaboratorio.AutoSize = true;
             this.rbLaboratorio.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbLaboratorio.Location = new System.Drawing.Point(131, 4);
+            this.rbLaboratorio.Location = new System.Drawing.Point(162, 4);
             this.rbLaboratorio.Name = "rbLaboratorio";
             this.rbLaboratorio.Size = new System.Drawing.Size(102, 21);
             this.rbLaboratorio.TabIndex = 7;
@@ -338,7 +343,7 @@
             // pnColore
             // 
             this.pnColore.BackColor = System.Drawing.Color.White;
-            this.pnColore.Location = new System.Drawing.Point(232, 362);
+            this.pnColore.Location = new System.Drawing.Point(254, 377);
             this.pnColore.Name = "pnColore";
             this.pnColore.Size = new System.Drawing.Size(24, 23);
             this.pnColore.TabIndex = 24;
@@ -346,10 +351,10 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(22, 365);
+            this.label9.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(22, 384);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(55, 16);
+            this.label9.Size = new System.Drawing.Size(56, 17);
             this.label9.TabIndex = 23;
             this.label9.Text = "Colore:";
             // 
@@ -358,7 +363,7 @@
             this.cbAutoEmail.AutoSize = true;
             this.cbAutoEmail.Enabled = false;
             this.cbAutoEmail.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbAutoEmail.Location = new System.Drawing.Point(130, 189);
+            this.cbAutoEmail.Location = new System.Drawing.Point(155, 189);
             this.cbAutoEmail.Name = "cbAutoEmail";
             this.cbAutoEmail.Size = new System.Drawing.Size(133, 21);
             this.cbAutoEmail.TabIndex = 3;
@@ -373,16 +378,17 @@
             // 
             this.panel2.Controls.Add(this.kryptonButton1);
             this.panel2.Controls.Add(this.btSalva);
-            this.panel2.Location = new System.Drawing.Point(12, 467);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 450);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(393, 100);
+            this.panel2.Size = new System.Drawing.Size(415, 100);
             this.panel2.TabIndex = 26;
             // 
             // kryptonButton1
             // 
             this.kryptonButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.kryptonButton1.Location = new System.Drawing.Point(28, 56);
+            this.kryptonButton1.Location = new System.Drawing.Point(25, 56);
             this.kryptonButton1.Name = "kryptonButton1";
             this.kryptonButton1.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.kryptonButton1.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -396,7 +402,7 @@
             this.kryptonButton1.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.kryptonButton1.OverrideDefault.Border.Rounding = 20F;
             this.kryptonButton1.OverrideDefault.Border.Width = 1;
-            this.kryptonButton1.Size = new System.Drawing.Size(337, 32);
+            this.kryptonButton1.Size = new System.Drawing.Size(387, 32);
             this.kryptonButton1.StateCommon.Back.Color1 = System.Drawing.Color.Red;
             this.kryptonButton1.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
             this.kryptonButton1.StateCommon.Back.ColorAngle = 45F;
@@ -451,7 +457,7 @@
             // 
             this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btSalva.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btSalva.Location = new System.Drawing.Point(28, 11);
+            this.btSalva.Location = new System.Drawing.Point(25, 11);
             this.btSalva.Name = "btSalva";
             this.btSalva.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btSalva.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -465,7 +471,7 @@
             this.btSalva.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btSalva.OverrideDefault.Border.Rounding = 20F;
             this.btSalva.OverrideDefault.Border.Width = 1;
-            this.btSalva.Size = new System.Drawing.Size(337, 33);
+            this.btSalva.Size = new System.Drawing.Size(387, 33);
             this.btSalva.StateCommon.Back.Color1 = System.Drawing.Color.ForestGreen;
             this.btSalva.StateCommon.Back.Color2 = System.Drawing.Color.YellowGreen;
             this.btSalva.StateCommon.Back.ColorAngle = 45F;
@@ -519,9 +525,9 @@
             // btColore
             // 
             this.btColore.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btColore.Location = new System.Drawing.Point(126, 362);
+            this.btColore.Location = new System.Drawing.Point(145, 377);
             this.btColore.Name = "btColore";
-            this.btColore.Size = new System.Drawing.Size(89, 23);
+            this.btColore.Size = new System.Drawing.Size(89, 24);
             this.btColore.TabIndex = 7;
             this.btColore.Text = "seleziona";
             this.btColore.UseVisualStyleBackColor = true;
@@ -538,16 +544,16 @@
             this.pnCDC.Controls.Add(this.label7);
             this.pnCDC.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnCDC.Enabled = false;
-            this.pnCDC.Location = new System.Drawing.Point(423, 0);
+            this.pnCDC.Location = new System.Drawing.Point(430, 0);
             this.pnCDC.Margin = new System.Windows.Forms.Padding(3, 3, 8, 6);
             this.pnCDC.Name = "pnCDC";
             this.pnCDC.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.pnCDC.Size = new System.Drawing.Size(325, 663);
+            this.pnCDC.Size = new System.Drawing.Size(318, 550);
             this.pnCDC.TabIndex = 2;
             // 
             // cbSelezionaTutti
             // 
-            this.cbSelezionaTutti.Location = new System.Drawing.Point(11, 615);
+            this.cbSelezionaTutti.Location = new System.Drawing.Point(6, 522);
             this.cbSelezionaTutti.Name = "cbSelezionaTutti";
             this.cbSelezionaTutti.Size = new System.Drawing.Size(105, 25);
             this.cbSelezionaTutti.TabIndex = 11;
@@ -560,7 +566,7 @@
             this.clbCLasseDiConcorso.FormattingEnabled = true;
             this.clbCLasseDiConcorso.Location = new System.Drawing.Point(6, 58);
             this.clbCLasseDiConcorso.Name = "clbCLasseDiConcorso";
-            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(299, 174);
+            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(299, 191);
             this.clbCLasseDiConcorso.TabIndex = 9;
             this.clbCLasseDiConcorso.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCLasseDiConcorso_ItemCheck);
             this.clbCLasseDiConcorso.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbCLasseDiConcorso_KeyDown);
@@ -570,7 +576,7 @@
             this.clbDisciplina.Enabled = false;
             this.clbDisciplina.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbDisciplina.FormattingEnabled = true;
-            this.clbDisciplina.Location = new System.Drawing.Point(13, 372);
+            this.clbDisciplina.Location = new System.Drawing.Point(6, 311);
             this.clbDisciplina.Name = "clbDisciplina";
             this.clbDisciplina.Size = new System.Drawing.Size(299, 208);
             this.clbDisciplina.TabIndex = 10;
@@ -581,7 +587,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.DarkRed;
-            this.label14.Location = new System.Drawing.Point(8, 331);
+            this.label14.Location = new System.Drawing.Point(13, 272);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(115, 25);
             this.label14.TabIndex = 19;
@@ -610,11 +616,12 @@
             this.PnContratto.Controls.Add(this.nudMonteOre);
             this.PnContratto.Controls.Add(this.label12);
             this.PnContratto.Controls.Add(this.label13);
+            this.PnContratto.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PnContratto.Enabled = false;
-            this.PnContratto.Location = new System.Drawing.Point(748, 323);
+            this.PnContratto.Location = new System.Drawing.Point(748, 309);
             this.PnContratto.Name = "PnContratto";
             this.PnContratto.Padding = new System.Windows.Forms.Padding(0, 20, 0, 30);
-            this.PnContratto.Size = new System.Drawing.Size(396, 287);
+            this.PnContratto.Size = new System.Drawing.Size(353, 241);
             this.PnContratto.TabIndex = 21;
             // 
             // label15
@@ -689,10 +696,10 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.Location = new System.Drawing.Point(2, 192);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(71, 16);
+            this.label10.Size = new System.Drawing.Size(72, 17);
             this.label10.TabIndex = 19;
             this.label10.Text = "Data fine:";
             // 
@@ -751,7 +758,7 @@
             this.pnDipartimento.Location = new System.Drawing.Point(748, 0);
             this.pnDipartimento.Name = "pnDipartimento";
             this.pnDipartimento.Padding = new System.Windows.Forms.Padding(0, 0, 0, 4);
-            this.pnDipartimento.Size = new System.Drawing.Size(396, 317);
+            this.pnDipartimento.Size = new System.Drawing.Size(353, 249);
             this.pnDipartimento.TabIndex = 3;
             // 
             // clbDipartimento
@@ -763,7 +770,7 @@
             this.clbDipartimento.FormattingEnabled = true;
             this.clbDipartimento.Location = new System.Drawing.Point(11, 58);
             this.clbDipartimento.Name = "clbDipartimento";
-            this.clbDipartimento.Size = new System.Drawing.Size(338, 174);
+            this.clbDipartimento.Size = new System.Drawing.Size(332, 140);
             this.clbDipartimento.TabIndex = 12;
             this.clbDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDipartimento_KeyDown);
             // 
@@ -772,7 +779,7 @@
             this.cbDipartimentoCoordinato.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbDipartimentoCoordinato.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDipartimentoCoordinato.FormattingEnabled = true;
-            this.cbDipartimentoCoordinato.Location = new System.Drawing.Point(118, 243);
+            this.cbDipartimentoCoordinato.Location = new System.Drawing.Point(116, 217);
             this.cbDipartimentoCoordinato.Name = "cbDipartimentoCoordinato";
             this.cbDipartimentoCoordinato.Size = new System.Drawing.Size(210, 25);
             this.cbDipartimentoCoordinato.TabIndex = 13;
@@ -785,7 +792,7 @@
             this.lbDcoordinato.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lbDcoordinato.AutoSize = true;
             this.lbDcoordinato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbDcoordinato.Location = new System.Drawing.Point(14, 243);
+            this.lbDcoordinato.Location = new System.Drawing.Point(12, 211);
             this.lbDcoordinato.Name = "lbDcoordinato";
             this.lbDcoordinato.Size = new System.Drawing.Size(98, 34);
             this.lbDcoordinato.TabIndex = 28;
@@ -803,12 +810,24 @@
             this.label8.TabIndex = 25;
             this.label8.Text = "Dipartimento:";
             // 
+            // cbAutoPassword
+            // 
+            this.cbAutoPassword.AutoSize = true;
+            this.cbAutoPassword.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbAutoPassword.Location = new System.Drawing.Point(155, 255);
+            this.cbAutoPassword.Name = "cbAutoPassword";
+            this.cbAutoPassword.Size = new System.Drawing.Size(157, 21);
+            this.cbAutoPassword.TabIndex = 27;
+            this.cbAutoPassword.Text = "Password Automatica";
+            this.cbAutoPassword.UseVisualStyleBackColor = true;
+            this.cbAutoPassword.CheckedChanged += new System.EventHandler(this.cbAutoPassword_CheckedChanged_1);
+            // 
             // FrmUtente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1144, 663);
+            this.ClientSize = new System.Drawing.Size(1101, 550);
             this.Controls.Add(this.pnDipartimento);
             this.Controls.Add(this.PnContratto);
             this.Controls.Add(this.pnCDC);
@@ -885,5 +904,6 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label15;
         private Krypton.Toolkit.KryptonCheckBox cbSelezionaTutti;
+        private System.Windows.Forms.CheckBox cbAutoPassword;
     }
 }

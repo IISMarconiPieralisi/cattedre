@@ -867,9 +867,14 @@ namespace Cattedre
         private void tbNomativi_TextChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(tbCognome.Text) && !string.IsNullOrEmpty(tbNome.Text))
+            {
                 cbAutoEmail.Enabled = true;
+                cbAutoPassword.Enabled = true;
+            }
             else
             {
+                cbAutoPassword.Enabled = false;
+                cbAutoPassword.Visible = false;
                 cbAutoEmail.Enabled = false;
                 cbAutoEmail.Checked = false;
             }
@@ -880,8 +885,13 @@ namespace Cattedre
             if (e.KeyCode == Keys.Enter)
                 clbCLasseDiConcorso.Focus();
         }
-
-        
+        private void cbAutoPassword_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (cbAutoPassword.Checked)
+            {
+                tbPassword.Text = $"{ tbNome.Text.ToLower().Trim().Substring(0, 3)}{tbCognome.Text.ToLower().Trim().Substring(0, 3)}00!";
+            }
+        }
     }
     #endregion
 

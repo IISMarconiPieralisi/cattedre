@@ -1263,46 +1263,39 @@ namespace Cattedre
 
         }
 
-        private async void btCaricaDipartimento_Click_1(object sender, EventArgs e) //evento SelectedIndexChanged di cbDipartimenti
+        private async void btCaricaDipartimento_Click_1(object sender, EventArgs e)
         {
-            //IDdipartimento = cbDipartimenti.SelectedIndex + 1;
-            //LoadClassi(IDdipartimento);
-            //LoadDiscipline(IDdipartimento);
-            //LoadAssegnazioni(IDdipartimento);
-            //pnlSceltaDipartimentoCattedre.Visible = false;
-
             try
             {
-                if (cbDipartimenti.SelectedItem == null || utenteLoggato.TipoUtente == "A" || utenteLoggato.TipoUtente == "P")
+                if (cbDipartimenti.SelectedItem == null) return; // niente selezionato, esci
+
+                this.UseWaitCursor = true;
+                Application.DoEvents();
+                IDdipartimento = cbDipartimenti.SelectedIndex + 1;
+
+                PulisciDipartimento();
+
+                List<long> indirizziTrovati = new List<long>();
+
+                await Task.Run(() =>
                 {
-                    this.UseWaitCursor = true;
-                    Application.DoEvents();
-                    IDdipartimento = cbDipartimenti.SelectedIndex + 1;
-                    //IDannoscolastico = cbAnniScolastici.SelectedIndex + 1;
+                    if (IDannoscolastico <= 0)
+                        IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+                    discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
+                        IDannoscolastico, IDdipartimento, out indirizziTrovati);
+                    classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
+                });
 
-                    PulisciDipartimento();
+                LoadDiscipline(IDdipartimento);
+                LoadClassi(indirizziTrovati, IDannoscolastico);
+                LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
+                LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+                SincronizzaScrollDopoLayout();
 
-                    List<long> indirizziTrovati = new List<long>();
-
-                    await Task.Run(() =>
-                    {
-                        discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
-                            IDannoscolastico, IDdipartimento, out indirizziTrovati);
-                        classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
-                    });
-
-                    LoadDiscipline(IDdipartimento);
-                    LoadClassi(indirizziTrovati, IDannoscolastico);
-                    LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
-                    LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
-                    SincronizzaScrollDopoLayout();
-                    //carico solo se era vuoto altrimenti era gia popolato quindi giusto
-                    if (cbAnniScolastici.SelectedIndex<=-1)
-                    {
-                        string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
-                        cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
-                    }
-                   
+                if (cbAnniScolastici.SelectedIndex <= -1)
+                {
+                    string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
+                    cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
                 }
             }
             catch (Exception ex)

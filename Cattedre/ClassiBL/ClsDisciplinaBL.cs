@@ -95,7 +95,7 @@ namespace Cattedre
     long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati)
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-            Dictionary<long, int> conteggioIndirizzi = new Dictionary<long, int>();
+            IDindirizziTrovati = new List<long>(); // inizializza qui
 
             try
             {
@@ -104,20 +104,20 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.nome, d.anno, d.oreteoria, d.orelaboratorio, 
-                                  d.disciplinaspeciale, d.IDdisciplinaSuccessiva,
-                                  ap.IDindirizzo
-                               FROM vigere v
-                               JOIN discipline d ON v.IDdisciplina = d.ID
-                               JOIN gestire g ON g.IDdisciplina = d.ID
-                               JOIN appartenere ap ON ap.IDdisciplina = d.ID
-                               JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
-                               LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
-                               JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
-                               WHERE g.IDdipartimento = @IDdipartimento
-                               AND aTarget.dataInizio >= aInizio.dataInizio
-                               AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))
-                               AND d.nome NOT LIKE '%otenziamento%'
-                               ORDER BY d.anno";
+                          d.disciplinaspeciale, d.IDdisciplinaSuccessiva,
+                          ap.IDindirizzo
+                       FROM vigere v
+                       JOIN discipline d ON v.IDdisciplina = d.ID
+                       JOIN gestire g ON g.IDdisciplina = d.ID
+                       JOIN appartenere ap ON ap.IDdisciplina = d.ID
+                       JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
+                       LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
+                       JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
+                       WHERE g.IDdipartimento = @IDdipartimento
+                       AND aTarget.dataInizio >= aInizio.dataInizio
+                       AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))
+                       AND d.nome NOT LIKE '%otenziamento%'
+                       ORDER BY d.anno";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -127,17 +127,17 @@ namespace Cattedre
                             da.Fill(dt);
                     }
 
+                    Dictionary<long, HashSet<long>> indirizziPerDisciplina = new Dictionary<long, HashSet<long>>();
+
                     foreach (DataRow row in dt.Rows)
                     {
-                        long idDisciplina = Convert.ToInt32(row["ID"]);
+                        long idDisciplina = Convert.ToInt64(row["ID"]);
                         long idIndirizzo = Convert.ToInt64(row["IDindirizzo"]);
 
-                        // Conteggio indirizzo (per trovare il prevalente)
-                        if (!conteggioIndirizzi.ContainsKey(idIndirizzo))
-                            conteggioIndirizzi[idIndirizzo] = 0;
-                        conteggioIndirizzi[idIndirizzo]++;
+                        if (!indirizziPerDisciplina.ContainsKey(idDisciplina))
+                            indirizziPerDisciplina[idDisciplina] = new HashSet<long>();
+                        indirizziPerDisciplina[idDisciplina].Add(idIndirizzo);
 
-                        // Aggiungi disciplina solo se non già presente (righe duplicate per JOIN appartenere)
                         if (!discipline.Any(d => d.ID == idDisciplina))
                         {
                             ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
@@ -151,18 +151,33 @@ namespace Cattedre
                             discipline.Add(disciplina);
                         }
                     }
+
+                    // Prendi solo l'indirizzo più frequente tra le discipline pure (1 solo indirizzo)
+                    Dictionary<long, int> conteggioIndirizziPuri = new Dictionary<long, int>();
+                    foreach (var kvp in indirizziPerDisciplina)
+                    {
+                        if (kvp.Value.Count == 1)
+                        {
+                            long idIndirizzo = kvp.Value.First();
+                            if (!conteggioIndirizziPuri.ContainsKey(idIndirizzo))
+                                conteggioIndirizziPuri[idIndirizzo] = 0;
+                            conteggioIndirizziPuri[idIndirizzo]++;
+                        }
+                    }
+
+                    if (conteggioIndirizziPuri.Count > 0)
+                    {
+                        long indirizzoPrevale = conteggioIndirizziPuri
+                            .OrderByDescending(kvp => kvp.Value)
+                            .First().Key;
+                        IDindirizziTrovati = new List<long> { indirizzoPrevale };
+                    }
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-
-            // Ordina per frequenza decrescente → il primo è l'indirizzo prevalente
-            IDindirizziTrovati = conteggioIndirizzi
-                .OrderByDescending(kvp => kvp.Value)
-                .Select(kvp => kvp.Key)
-                .ToList();
 
             return discipline;
         }

@@ -18,11 +18,8 @@ namespace Cattedre
             try
             { 
                 List<ClsUtenteDL> Docenti = ClsUtenteBL.OttieniUtentiDipartimento(dipartimento.ID)/*metodo prendere utente di quel dipartimento*/;
-                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioni();
-                List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL
-                .CaricaCDCperDisciplina(dipartimento.ID)
-                .Select(x => x.cdc)
-                .ToList();
+                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID,anno.ID);
+                List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDipartimento(dipartimento.ID);
                 List<ClsDisciplinaDL> discipline = ClsGestireBL.DisciplineDelDipartimento(dipartimento.ID);
                 List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
                 List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);         
@@ -54,7 +51,7 @@ namespace Cattedre
                     {
                         ClsDotareDL dotazione = listDotare
                             .FirstOrDefault(d => d.IdClasseDiConcorso == cdc.ID);
-                        InserisciIntestazioneCDC(doc, cdc, dotazione);
+                        InserisciIntestazioneCDC(doc, cdc, dotazione, annoScolastico);
 
                         var DocentiFiltrati = ClsRichiedereBL.RilevaUtentiCDC(cdc.ID); //metodi per trovare gli utanti con quella  CDC
 
@@ -113,7 +110,7 @@ namespace Cattedre
             }
         }
 
-        private static void InserisciDocente(DocX doc,ClsUtenteDL docente,List<ClsAssegnareDL> assegnazioni, List<ClsDisciplinaDL> listDiscipline,
+        private static void InserisciDocente(DocX doc, ClsUtenteDL docente, List<ClsAssegnareDL> assegnazioni, List<ClsDisciplinaDL> listDiscipline,
                                                 List<ClsClasseDL> listClassi)
         {
             // Filtro le liste in modo tale da usare delle liste pulite 
@@ -123,7 +120,7 @@ namespace Cattedre
                                                                         .OrderBy(d => !string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) ? 1 : 0)
                                                                         .ToList();
             List<ClsClasseDL> listClassiDocente = listClassi.Where(c => assegnazioniDocente.Any(r => r.IDClasse == c.ID)).ToList();
-             if (listClassiDocente.Count <= 0) return;
+            if (listClassiDocente.Count <= 0) return;
             // Intestazione docente
             var pNome = doc.InsertParagraph();
             pNome.SpacingBefore(12);
@@ -135,7 +132,7 @@ namespace Cattedre
             InserisciTabella(doc, assegnazioniDocente, listDisciplineDocente, listClassiDocente, docente);
         }
 
-        private static void InserisciNotaFinale( DocX doc, string titolo, List<ClsAssegnareDL> assegnazioni,
+        private static void InserisciNotaFinale(DocX doc, string titolo, List<ClsAssegnareDL> assegnazioni,
             List<ClsDisciplinaDL> listDiscipline,
             List<ClsClasseDL> listClassi
             )
@@ -147,16 +144,18 @@ namespace Cattedre
                    .UnderlineStyle(UnderlineStyle.singleLine)
                    .Font(FontName).FontSize(10);
 
-           //InserisciTabella(doc, assegnazioni, listDiscipline, listClassi, totale);
+            //InserisciTabella(doc, assegnazioni, listDiscipline, listClassi, totale);
         }
 
         private static void InserisciTabella(DocX doc, List<ClsAssegnareDL> assegnazioni, List<ClsDisciplinaDL> listDiscipline,
-       List<ClsClasseDL> listClassi, ClsUtenteDL Docente)
+     List<ClsClasseDL> listClassi, ClsUtenteDL Docente)
         {
             // Monte ore dal contratto
             ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(Docente.ID);
             int monteOre = contratto?.MonteOre ?? 0;
+
             int OreEffettive = 0;
+
             int numRighe = assegnazioni.Count + 2;
             var tabella = doc.InsertTable(numRighe, 3);
             tabella.Design = TableDesign.None;
@@ -205,7 +204,8 @@ namespace Cattedre
             ImpostaRigaTotale(tabella.Rows[numRighe - 1], $"{OreEffettive}/{monteOre}");
             doc.InsertParagraph().SpacingAfter(4);
         }
-        private static void InserisciIntestazioneCDC(DocX doc, ClsClasseDiConcorsoDL cdc, ClsDotareDL dotazione)
+
+        private static void InserisciIntestazioneCDC(DocX doc, ClsClasseDiConcorsoDL cdc, ClsDotareDL dotazione,ClsAnnoScolasticoDL anno)
         {
             Paragraph p = doc.InsertParagraph();
             p.Alignment = Alignment.center;
@@ -231,7 +231,7 @@ namespace Cattedre
             if (dotazione != null)
             {
                 p.AppendLine();
-                p.Append($"{dotazione.NumcattedreDiritto} cattedre + h residue")
+                p.Append($"{dotazione.NumcattedreDiritto} cattedre + {ClsClasseDiConcorsoBL.OreResidueCDC(cdc,anno)} h residue")
                  .Bold()
                  .Font(FontName)
                  .FontSize(FontSize)

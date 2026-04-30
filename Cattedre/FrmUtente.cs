@@ -35,7 +35,6 @@ namespace Cattedre
         public FrmUtente()
         {
             InitializeComponent();
-            cbTipoUtente.SelectionChangeCommitted += cbTipoUtente_SelectionChangeCommitted;
         }
         
         #region Salva annulla e load
@@ -235,15 +234,10 @@ namespace Cattedre
                 loadCDC();
                 PopolaDisciplinePerCDC();
                 clbCLasseDiConcorso.ItemCheck += clbCLasseDiConcorso_ItemCheck;
-                LoadDiscipline();
+                LoadDisciplineUtente();
             }
         }
         #endregion
-
-        private void cbTipoUtente_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-
-        }
         private void rbIndeterminato_CheckedChanged(object sender, EventArgs e)
         {
             if (rbIndeterminato.Checked)
@@ -546,7 +540,7 @@ namespace Cattedre
                 if (cdc != null)
                 {
                     List<ClsDisciplinaDL> discipline = ClsRichiedereBL.RilevaDiscipinaCDC(cdc.ID);
-
+                    
                     foreach (var d in discipline)
                     {
                         if (!disc.Any(esistente => esistente.ID == d.ID))
@@ -558,12 +552,11 @@ namespace Cattedre
             }
             if (disc.Count <= 0)
                 return;
-            foreach(var d in disc.OrderBy(d => d.Nome).ThenBy(d => d.Anno)) // le ordino per  anno e per sezione per comodità
-                clbDisciplina.Items.Add($"{d.Nome} {d.Anno}°");
-
+            foreach (var d in disc.OrderBy(d => d.Anno == 0).ThenBy(d => d.Nome).ThenBy(d => d.Anno))
+                clbDisciplina.Items.Add(d.Anno > 0 ? $"{d.Nome} {d.Anno}°" : d.Nome);
 
         }
-        private void LoadDiscipline()
+        private void LoadDisciplineUtente()
         {
             // Carico tutte le CDC dell'utente
             List<ClsDisciplinaDL> disciplineUtente =
@@ -573,7 +566,9 @@ namespace Cattedre
                 return;
 
             // Creo l'elenco delle CDC dell'utente nel formato "Nome anno°"
-            HashSet<string> disciplinaUtenteScritta = new HashSet<string>(disciplineUtente.Select(c => $"{c.Nome} {c.Anno}°"),StringComparer.OrdinalIgnoreCase);
+            HashSet<string> disciplinaUtenteScritta = new HashSet<string>(
+                disciplineUtente.Select(c => c.Anno != 0 ? $"{c.Nome} {c.Anno}°" : c.Nome),
+                StringComparer.OrdinalIgnoreCase);
 
             // Scorro gli item della CheckedListBox
             for (int i = 0; i < clbDisciplina.Items.Count; i++)
@@ -594,6 +589,18 @@ namespace Cattedre
             anno = Convert.ToInt16(item.Substring(item.Length - 2, 1));
             nome = item.Substring(0, item.Length - 3);
 
+        }
+        private void cbSelezionaTutti_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cbSelezionaTutti.Checked)
+            {
+                for (int i = 0; i < clbDisciplina.Items.Count; i++)
+                {
+                    string nomeItem = clbDisciplina.Items[i].ToString();
+                    if (nomeItem.Length >= 2 && nomeItem.Substring(nomeItem.Length-1,1)=="°")
+                        clbDisciplina.SetItemChecked(i, true);
+                }
+            }
         }
         #endregion
         #region gestione colore utente
@@ -709,7 +716,7 @@ namespace Cattedre
             if (e.KeyCode==Keys.Enter)
             {
                 if (GetTipoUtente() == "P") this.ActiveControl = btSalva;
-                else this.ActiveControl = clbDipartimento;
+                else this.ActiveControl = btColore;
             }
         }
 
@@ -746,7 +753,7 @@ namespace Cattedre
                 {
                     _lastTick = 0;
                     // Passa al prossimo controllo
-                    if (GetTipoUtente()=="D") clbCLasseDiConcorso.Focus();
+                    if (GetTipoUtente()=="D") rbDeterminato.Focus();
                     else cbDipartimentoCoordinato.Focus();
                 }else
                 {
@@ -765,7 +772,7 @@ namespace Cattedre
                 e.SuppressKeyPress = true; 
 
                 if (GetTipoUtente() == "A" || (GetTipoUtente() == "C" && cbDipartimentoCoordinato.SelectedIndex != -1))
-                    clbCLasseDiConcorso.Focus(); 
+                    rbDeterminato.Focus(); 
             }
 
         }
@@ -807,7 +814,7 @@ namespace Cattedre
                 {
                     _lastTick = 0;
                     // Passa al prossimo controllo
-                    rbDeterminato.Focus();
+                    clbDipartimento.Focus();
                 }
                 else
                 {
@@ -868,7 +875,13 @@ namespace Cattedre
             }
         }
 
-       
+        private void btColore_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                clbCLasseDiConcorso.Focus();
+        }
+
+        
     }
     #endregion
 

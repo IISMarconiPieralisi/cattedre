@@ -39,64 +39,63 @@
             // lblOreDiCattedra
             // 
             this.lblOreDiCattedra.AutoSize = true;
-            this.lblOreDiCattedra.Location = new System.Drawing.Point(193, 22);
-            this.lblOreDiCattedra.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOreDiCattedra.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOreDiCattedra.Location = new System.Drawing.Point(145, 9);
             this.lblOreDiCattedra.Name = "lblOreDiCattedra";
-            this.lblOreDiCattedra.Size = new System.Drawing.Size(20, 17);
+            this.lblOreDiCattedra.Size = new System.Drawing.Size(17, 16);
             this.lblOreDiCattedra.TabIndex = 0;
             this.lblOreDiCattedra.Text = "...";
             // 
             // lblOreEffettive
             // 
             this.lblOreEffettive.AutoSize = true;
-            this.lblOreEffettive.Location = new System.Drawing.Point(303, 22);
-            this.lblOreEffettive.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOreEffettive.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOreEffettive.Location = new System.Drawing.Point(227, 9);
             this.lblOreEffettive.Name = "lblOreEffettive";
-            this.lblOreEffettive.Size = new System.Drawing.Size(20, 17);
+            this.lblOreEffettive.Size = new System.Drawing.Size(17, 16);
             this.lblOreEffettive.TabIndex = 1;
             this.lblOreEffettive.Text = "...";
             // 
             // lblOreTotali
             // 
             this.lblOreTotali.AutoSize = true;
-            this.lblOreTotali.Location = new System.Drawing.Point(489, 22);
-            this.lblOreTotali.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOreTotali.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOreTotali.Location = new System.Drawing.Point(367, 9);
             this.lblOreTotali.Name = "lblOreTotali";
-            this.lblOreTotali.Size = new System.Drawing.Size(20, 17);
+            this.lblOreTotali.Size = new System.Drawing.Size(17, 16);
             this.lblOreTotali.TabIndex = 3;
             this.lblOreTotali.Text = "...";
             // 
             // lblDocente
             // 
             this.lblDocente.AutoSize = true;
-            this.lblDocente.Location = new System.Drawing.Point(11, 22);
-            this.lblDocente.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDocente.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDocente.Location = new System.Drawing.Point(8, 9);
             this.lblDocente.Name = "lblDocente";
-            this.lblDocente.Size = new System.Drawing.Size(20, 17);
+            this.lblDocente.Size = new System.Drawing.Size(17, 16);
             this.lblDocente.TabIndex = 4;
             this.lblDocente.Text = "...";
             // 
             // nudOrePot
             // 
-            this.nudOrePot.Location = new System.Drawing.Point(393, 20);
-            this.nudOrePot.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.nudOrePot.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudOrePot.Location = new System.Drawing.Point(295, 7);
             this.nudOrePot.Name = "nudOrePot";
-            this.nudOrePot.Size = new System.Drawing.Size(47, 22);
+            this.nudOrePot.Size = new System.Drawing.Size(35, 21);
             this.nudOrePot.TabIndex = 10;
             this.nudOrePot.ValueChanged += new System.EventHandler(this.nudOrePot_ValueChanged);
             // 
             // ucOreDoc
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.nudOrePot);
             this.Controls.Add(this.lblDocente);
             this.Controls.Add(this.lblOreTotali);
             this.Controls.Add(this.lblOreEffettive);
             this.Controls.Add(this.lblOreDiCattedra);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "ucOreDoc";
-            this.Size = new System.Drawing.Size(552, 60);
+            this.Size = new System.Drawing.Size(414, 33);
             ((System.ComponentModel.ISupportInitialize)(this.nudOrePot)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

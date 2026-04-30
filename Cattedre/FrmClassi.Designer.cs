@@ -39,7 +39,6 @@
             this.chClasseArticolataCon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chNomeCoordinatore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chIndirizzo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.clDipartimento = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chAnnoScolastico = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cbIndirizzi = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -71,9 +70,9 @@
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(41, 58);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 16);
+            this.label1.Size = new System.Drawing.Size(46, 16);
             this.label1.TabIndex = 19;
-            this.label1.Text = "anno:";
+            this.label1.Text = "Anno:";
             // 
             // lvClassi
             // 
@@ -82,14 +81,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvClassi.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chID,
+            this.chAnnoScolastico,
             this.chSigla,
             this.chAnno,
             this.chSezione,
             this.chClasseArticolataCon,
             this.chNomeCoordinatore,
-            this.chIndirizzo,
-            this.clDipartimento,
-            this.chAnnoScolastico});
+            this.chIndirizzo});
             this.lvClassi.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvClassi.FullRowSelect = true;
             this.lvClassi.HideSelection = false;
@@ -108,46 +106,33 @@
             // 
             // chSigla
             // 
-            this.chSigla.DisplayIndex = 2;
             this.chSigla.Text = "Sigla";
             // 
             // chAnno
             // 
-            this.chAnno.DisplayIndex = 3;
             this.chAnno.Text = "Anno";
             // 
             // chSezione
             // 
-            this.chSezione.DisplayIndex = 4;
             this.chSezione.Text = "Sezione";
             // 
             // chClasseArticolataCon
             // 
-            this.chClasseArticolataCon.DisplayIndex = 5;
             this.chClasseArticolataCon.Text = "Articolata Con";
             this.chClasseArticolataCon.Width = 126;
             // 
             // chNomeCoordinatore
             // 
-            this.chNomeCoordinatore.DisplayIndex = 6;
             this.chNomeCoordinatore.Text = "Nome Coordinatore";
             this.chNomeCoordinatore.Width = 171;
             // 
             // chIndirizzo
             // 
-            this.chIndirizzo.DisplayIndex = 7;
             this.chIndirizzo.Text = "Indirizzo";
             this.chIndirizzo.Width = 102;
             // 
-            // clDipartimento
-            // 
-            this.clDipartimento.DisplayIndex = 8;
-            this.clDipartimento.Text = "Dipartimento";
-            this.clDipartimento.Width = 150;
-            // 
             // chAnnoScolastico
             // 
-            this.chAnnoScolastico.DisplayIndex = 1;
             this.chAnnoScolastico.Text = "Anno scolastico";
             this.chAnnoScolastico.Width = 122;
             // 
@@ -664,7 +649,6 @@
         private System.Windows.Forms.ColumnHeader chIndirizzo;
         private System.Windows.Forms.ComboBox cbIndirizzi;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ColumnHeader clDipartimento;
         private System.Windows.Forms.ColumnHeader chAnnoScolastico;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TableLayoutPanel tplAnniScolastici;

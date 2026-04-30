@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,11 +16,13 @@ namespace Cattedre
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
         List<ClsDisciplinaDL> _discipline = ClsDisciplinaBL.CaricaDiscipline();
         List<ClsClasseDiConcorsoDL> _cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+        List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
         //variabili pubbliche
         public List<ClsAppartenereDL> _apparteneres = new List<ClsAppartenereDL>();
         public List<ClsRichiedereDL> _richiederes = new List<ClsRichiedereDL>();
         public List<ClsGestireDL> _gestires = new List<ClsGestireDL>();
         public ClsDisciplinaDL _disciplina;
+        public ClsVigereDL _vigere= new ClsVigereDL();
         private int anno = 0;
         private long _lastDiscSp=0;
         private long _lastTick;
@@ -36,27 +38,18 @@ namespace Cattedre
                     _disciplina = new ClsDisciplinaDL();
 
                 _disciplina.Anno = anno;
-
                 if (_disciplina.Anno == 0 && !cbDisciplinaSpeciale.Checked)
                     throw new Exception("inserire un anno valido");
                 if (_disciplina.ID > 0 && _gestires.Count == 0)
                     _gestires = ClsGestireBL.CaricaGestioneDisciplina(_disciplina.ID);
                 if (_disciplina.ID > 0 && _richiederes.Count == 0)
                     _richiederes = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(_disciplina.ID);
-
-                // --- Controllo Duplicati in Archivio ---
-                if (_disciplina.ID <= 0)
-                {
-                    if (_discipline.Any(p => p.Nome == tbNome.Text.Trim() && p.Anno == anno))
-                        throw new Exception("Disciplina già presente per questo anno.");
-                }
-                else
-                {
-                    if (_discipline.Any(p => p.Nome == tbNome.Text.Trim() && p.Anno == anno && p.ID != _disciplina.ID))
-                        throw new Exception("Disciplina già presente per questo anno.");
-                }
                 if (_gestires.Count <= 0)
                     throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina.");
+
+                if (cbAnnoInizio.SelectedIndex <= 0)
+                    throw new Exception("Selezionare l'anno di inizio della disciplina.");
+
                 if (_richiederes.Count <= 0)
                     throw new Exception("Selezionare almeno una classe di concorso a cui la disciplina è riferita.");
                 // --- Caricamento ID Classe Collegata ---
@@ -73,6 +66,20 @@ namespace Cattedre
                 {
                     if (string.IsNullOrEmpty(tbDisciplinaSpeciale.Text)) throw new Exception("Inserire la descrizione della disciplina speciale");
                     _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text.Trim().ToLower();
+                }
+                //gestione classe vigere 
+                _vigere.IDannoInizio = Convert.ToInt32(cbAnnoInizio.SelectedValue);
+                _vigere.IDannoFine = cbAnnoFine.SelectedIndex==-1?0:Convert.ToInt32(cbAnnoFine.SelectedValue);
+                //controllo doppioni
+                if (_disciplina.ID <= 0)
+                {
+                    if (ClsDisciplinaBL.CercaIdDisciplina(_disciplina) > 0)
+                        throw new Exception("Disciplina già presente per questo anno.");
+                }
+                else
+                {
+                    if (ClsDisciplinaBL.CercaIdDisciplina(_disciplina) != _disciplina.ID)
+                        throw new Exception("Disciplina già presente per questo anno.");
                 }
 
                 //Gestione Liste Collegate (ClsAppartenere) -
@@ -102,6 +109,13 @@ namespace Cattedre
             PopolaclbIndirizzi();
             PopolaClbDipartenti();
             PopolaclbCdcs();
+            //popolamento anno di inizio
+            cbAnnoInizio.DataSource = _anniScolastici;
+            cbAnnoInizio.ValueMember = "ID";
+            cbAnnoInizio.DisplayMember = "sigla";
+            cbAnnoInizio.SelectedIndex = -1;
+            this.cbAnnoInizio.SelectedIndexChanged += new System.EventHandler(this.cbAnnoInizio_SelectedIndexChanged);
+
             if (_disciplina != null)
             {
                 //carico le informazioni della disciplina successiva
@@ -116,6 +130,10 @@ namespace Cattedre
                 //carico le informazioni del collegamento con indirizzi
                 _apparteneres = ClsAppartenereBL.CaricaClassiAppartenereByDisciplina(_disciplina.ID);
                 LoadclbIndirizzi();
+                //caricamento anno scolastico inizio e fine
+                if(_vigere.IDannoInizio>0) cbAnnoInizio.SelectedValue = _vigere.IDannoInizio;
+                if (_vigere.IDannoFine > 0) cbAnnoFine.SelectedValue = _vigere.IDannoFine;
+
             }
             else
                 _disciplina = new ClsDisciplinaDL();
@@ -386,11 +404,18 @@ namespace Cattedre
         }
         #endregion
         #region gestisci richiedere
+        private string CreaCDCAbbreviata(ClsClasseDiConcorsoDL cdc)
+        {
+            // Tronco il nome se è troppo lungo, come in FrmUtente
+            string nome = cdc.Nome.Length > 30 ? cdc.Nome.Substring(0, 30) + "..." : cdc.Nome;
+            return $"{cdc.Livello} | {nome}";
+        }
+
         private void clbCdcs_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             _richiederes.Clear();
             long IDdis = (_disciplina.ID <= 0) ? 0 : _disciplina.ID;
-            // Cicliamo tutti gli elementi attualmente "checkati" nella UI
+
             for (int i = 0; i < clbCdcs.Items.Count; i++)
             {
                 bool isChecked;
@@ -398,24 +423,42 @@ namespace Cattedre
                     isChecked = (e.NewValue == CheckState.Checked);
                 else
                     isChecked = clbCdcs.GetItemChecked(i);
-                // Troviamo l'oggetto dipartimento corrispondente al nome spuntato
 
                 if (isChecked)
                 {
-                    string nome = clbCdcs.Items[i].ToString();
-                    ClsClasseDiConcorsoDL cdc = _cdcs.Find(d => d.Nome == nome);
+                    string itemFormattato = clbCdcs.Items[i].ToString();
+                    // Estraggo il Livello dalla stringa formattata "Livello | Nome"
+                    string livello = DividiClasseConcorso(itemFormattato);
+
+                    // Cerco la CDC usando il Livello (come in FrmUtente)
+                    ClsClasseDiConcorsoDL cdc = _cdcs.Find(d => d.Livello == livello);
                     if (cdc != null)
-                        _richiederes.Add(new ClsRichiedereDL(cdc.ID,IDdis));
+                    {
+                        _richiederes.Add(new ClsRichiedereDL(cdc.ID, IDdis));
+                    }
                 }
             }
             ControlloCbDisciplinaSuccessiva();
         }
+        private string DividiClasseConcorso(string itemFormattato)
+        {
+            string[] vs = itemFormattato.Split('|');
+            return vs[0].Trim(); // Restituisco la parte prima della barra, senza spazi
+        }
+
         void PopolaclbCdcs()
         {
             clbCdcs.Items.Clear();
-            foreach (var cdc in _cdcs)
+
+            // Ordino le CDC per Livello e poi per Nome in ordine crescente
+            var cdcsOrdinati = _cdcs
+                .OrderBy(cdc => cdc.Livello)
+                .ThenBy(cdc => cdc.Nome)
+                .ToList();
+
+            foreach (var cdc in cdcsOrdinati)
             {
-                clbCdcs.Items.Add(cdc.Nome);
+                clbCdcs.Items.Add(CreaCDCAbbreviata(cdc));
             }
         }
         void checkClbCdcs()
@@ -423,10 +466,23 @@ namespace Cattedre
             List<ClsClasseDiConcorsoDL> cdcsDisciplina = ClsRichiedereBL.RilevaCDCDiscipina(_disciplina.ID);
             if (cdcsDisciplina.Count > 0)
             {
+                // Ordino le CDC per Livello e poi per Nome in ordine crescente
+                var cdcsDisciplinaOrdinati = cdcsDisciplina
+                .OrderBy(cdc => cdc.Livello)
+                .ThenBy(cdc => cdc.Nome)
+                .ToList();
+
+                // Creo un HashSet con le stringhe formattate delle CDC della disciplina
+                var cdcDisciplinaFormattate = new HashSet<string>(
+                    cdcsDisciplinaOrdinati.Select(c => CreaCDCAbbreviata(c)),
+                    StringComparer.OrdinalIgnoreCase
+                );
+
                 for (int i = 0; i < clbCdcs.Items.Count; i++)
                 {
-                    string nomeItem = clbCdcs.Items[i].ToString();
-                    bool richiedere = cdcsDisciplina.Any(d => string.Equals(d.Nome, nomeItem, StringComparison.OrdinalIgnoreCase));
+                    string nomeItemFormattato = clbCdcs.Items[i].ToString();
+                    // Confronto con la stringa formattata
+                    bool richiedere = cdcDisciplinaFormattate.Contains(nomeItemFormattato);
                     clbCdcs.SetItemChecked(i, richiedere);
                 }
                 _richiederes.Clear();
@@ -454,6 +510,27 @@ namespace Cattedre
         private void nudOreLab_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoInizio.Focus();
+            }
+        }
+        private void cbAnnoInizio_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && cbAnnoInizio.SelectedIndex > -1)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoFine.Focus();
+            }
+        }
+        private void cbAnnoFine_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Cancel || e.KeyCode == Keys.Delete || e.KeyCode== Keys.Back)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoFine.SelectedIndex = -1;
+            }
+            else if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
                 rbPrimo.Focus();
@@ -539,9 +616,10 @@ namespace Cattedre
                     if (cbDisciplinaSpeciale.Checked) tbDisciplinaSpeciale.Focus();
                     else cbDisciplinaSucessiva.Focus();
                 }
-                else                    // Al primo colpo fa solo il check
+                else
                 {
-                    int index = clbDipartimenti.SelectedIndex;
+                    // Al primo colpo fa solo il check - CORREZIONE: usare clbCdcs invece di clbDipartimenti
+                    int index = clbCdcs.SelectedIndex;
                     if (index != -1) clbCdcs.SetItemChecked(index, !clbCdcs.GetItemChecked(index));
                 }
                 _lastTick = currentTick;
@@ -572,8 +650,28 @@ namespace Cattedre
             }
 
         }
+
         #endregion
 
-        
+        private void cbAnnoInizio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbAnnoInizio.SelectedIndex != -1)
+            {
+                cbAnnoFine.SelectedIndex = -1;
+                ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(Convert.ToInt32(cbAnnoInizio.SelectedValue));
+                cbAnnoFine.DataSource = _anniScolastici
+                        .Where(a => a.DataInizio.Year >= anno.DataFine.Year)
+                        .Prepend(anno).OrderByDescending(a => a.Sigla).ToList();
+                cbAnnoFine.ValueMember = "ID";
+                cbAnnoFine.DisplayMember = "sigla";
+                cbAnnoFine.Enabled = (cbAnnoFine.Items.Count > 0);
+                cbAnnoFine.SelectedIndex = -1;
+
+            }
+            else
+                cbAnnoFine.Enabled = false;
+        }
+
+      
     }
 }

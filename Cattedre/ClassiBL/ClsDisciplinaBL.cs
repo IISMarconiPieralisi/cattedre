@@ -91,42 +91,56 @@ namespace Cattedre
             return null;
         }
 
-        public static List<ClsDisciplinaDL> CaricaDisciplineDipartimento(int IDdipartimento)
+        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long IDannoScolastico, long IDdipartimento)
         {
-            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-
-            conn.Open();
-            string sql = "SELECT * FROM discipline d " +
-                "JOIN gestire g ON g.IDdisciplina = d.ID " +
-                "WHERE g.IDdipartimento = @IDdipartimento " +
-                "AND d.nome NOT LIKE '%Potenziamento%'";
-            //DataAdapter, DataSet e DataTable su dispensa ADO.Net
-            MySqlDataAdapter da = new MySqlDataAdapter(sql, conn);
-            da.SelectCommand.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-            //Cache dati in memoria, oggetto disconnesso
-            DataSet ds = new DataSet("cattedre");
-            da.Fill(ds, "cattedre");
-
-            //Scorro i Record del DataTable per creare la lista
-            DataTable dt = ds.Tables["cattedre"];
-            for (int i = 0; i < dt.Rows.Count; i++)
+            try
             {
-                // Potrei scrivere anche su una sola riga ma cos� � pi� leggibile
-                ClsDisciplinaDL _disciplina = new ClsDisciplinaDL(
-                    Convert.ToInt64(dt.Rows[i]["id"]),
-                    dt.Rows[i]["nome"].ToString(),
-                    Convert.ToInt32(dt.Rows[i]["anno"]),
-                    Convert.ToInt32(dt.Rows[i]["oreLaboratorio"]),
-                    Convert.ToInt32(dt.Rows[i]["oreTeoria"]),
-                    dt.Rows[i]["disciplinaSpeciale"].ToString());
-                _disciplina.IDdisciplinaSuccessiva = (dt.Rows[i]["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(dt.Rows[i]["IDdisciplinaSuccessiva"]);
-                discipline.Add(_disciplina);
-            }
-            conn.Close();
+                DataTable dt = new DataTable();
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql =@"SELECT d.ID, d.nome, d.anno, d.oreteoria, d.orelaboratorio, d.disciplinaspeciale, d.IDdisciplinaSuccessiva 
+                                FROM vigere v
+                                JOIN discipline d ON v.IDdisciplina = d.ID
+                                JOIN gestire g ON g.IDdisciplina = d.ID
+                                JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
+                                LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
+                                JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
+                                WHERE g.IDdipartimento = @IDdipartimento
+                                AND aTarget.dataInizio >= aInizio.dataInizio
+                                AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
 
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
+                        disciplina.ID = Convert.ToInt32(row["id"]);
+                        disciplina.Nome = row["nome"].ToString();
+                        disciplina.Anno = Convert.ToInt32(row["anno"]);
+                        disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
+                        disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
+                        disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
+                        disciplina.IDdisciplinaSuccessiva = (row["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplinaSuccessiva"]);
+                        discipline.Add(disciplina);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
             return discipline;
         }
+
         #endregion
         #region rilevamento parametri specifici
 
@@ -283,21 +297,22 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM discipline 
-                           WHERE nome = @nome 
-                           AND anno = @anno";
+                   WHERE nome = @nome 
+                   AND anno = @anno
+                   AND oreLaboratorio = @oreLaboratorio
+                   AND oreTeoria = @oreTeoria";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nome", disciplina.Nome);
                         cmd.Parameters.AddWithValue("@anno", disciplina.Anno);
+                        cmd.Parameters.AddWithValue("@oreLaboratorio", disciplina.OreLaboratorio);
+                        cmd.Parameters.AddWithValue("@oreTeoria", disciplina.OreTeoria);
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             da.Fill(dt);
                         }
-                        if (dt.Rows.Count > 0)
-                            return Convert.ToInt32(dt.Rows[0]["ID"]);
-                        else
-                            throw new Exception("Nessuna disciplina trovata con i parametri inseriti.");
+                        return dt.Rows.Count > 0 ? Convert.ToInt32(dt.Rows[0]["ID"]) : -1;
                     }
                 }
             }

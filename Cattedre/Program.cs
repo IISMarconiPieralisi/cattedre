@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +9,9 @@ namespace Cattedre
 {
     static class Program
     {
-        public static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        //public static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        public static string connectionString = ConfigurationManager.ConnectionStrings["srvcattedre"].ConnectionString;
+
         /// <summary>
         /// Punto di ingresso principale dell'applicazione.
         /// </summary>

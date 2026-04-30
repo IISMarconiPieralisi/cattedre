@@ -175,9 +175,15 @@ namespace Cattedre
         // CaricaProfessori chiamata UNA SOLA VOLTA, nel Load
         private void UcAssegnazioni_Load(object sender, EventArgs e)
         {
-            
+            // Disabilita lo scrolling con la rotellina per entrambe le combo box
+            DisabilitaScrollRotella(cbDocentiTeorici);
+            DisabilitaScrollRotella(cbDocentiItip);
         }
 
+        private void DisabilitaScrollRotella(ComboBox cb)
+        {
+            cb.MouseWheel += (s, ev) => ((HandledMouseEventArgs)ev).Handled = true;
+        }
         public void CaricaDocentiColorati(DataTable docenti)
         {
             cbDocentiTeorici.DataSource = null;

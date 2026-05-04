@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -52,6 +52,7 @@ namespace Cattedre
             panel6.Visible = false;
             panel7.Visible = false;
             panel8.Visible = false;
+            //panel9.Visible = false;
 
             RenderFotoTonda();
             if (utente.TipoUtente == "A")
@@ -59,7 +60,7 @@ namespace Cattedre
                 menuStrip1.Enabled = true;
                 //btVaiACattedre.Visible = false;
             }
-            else if(utente.TipoUtente =="C")
+            else if (utente.TipoUtente == "C")
             {
                 menuStrip1.Visible = false;
                 btDiscipline.Visible = true;
@@ -198,7 +199,7 @@ namespace Cattedre
 
         }
 
-       
+
 
 
 
@@ -208,7 +209,7 @@ namespace Cattedre
             pnlCentrale.Visible = false;
             if (Application.OpenForms["FrmCredits"] == null)
             {
-                frmCredits = new FrmCredits();              
+                frmCredits = new FrmCredits();
             }
             MostraFormMDI(frmCredits);
 
@@ -220,7 +221,7 @@ namespace Cattedre
             pnlCentrale.Visible = false;
             if (Application.OpenForms["FrmAnniScolastici"] == null)
                 FrmAnniScolastici = new FrmAnniScolastici();
-                MostraFormMDI(FrmAnniScolastici);
+            MostraFormMDI(FrmAnniScolastici);
         }
 
         private void btDiscipline_KeyDown(object sender, KeyEventArgs e)
@@ -275,7 +276,7 @@ namespace Cattedre
 
         private void btVaiACattedre_MouseEnter(object sender, EventArgs e)
         {
-            panel5.Visible = true ;
+            panel5.Visible = true;
 
         }
 
@@ -284,7 +285,7 @@ namespace Cattedre
             panel5.Visible = false;
 
         }
-       
+
 
         private void btUtenti_MouseEnter(object sender, EventArgs e)
         {
@@ -331,15 +332,17 @@ namespace Cattedre
             MostraFormMDI(frmDotazioni);
         }
 
-
-
-
-        //private void cONTRATTIToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    FrmContratti frmContratti = new FrmContratti();
-        //    frmContratti.Show();
-        //}
-
-
     }
+
+    //private void btCredits_MouseLeave(object sender, EventArgs e)
+    //{
+    //    panel9.Visible = false;
+
+
+    //    //private void cONTRATTIToolStripMenuItem_Click(object sender, EventArgs e)
+    //    //{
+    //    //    FrmContratti frmContratti = new FrmContratti();
+    //    //    frmContratti.Show();
+    //    //}
+    //}
 }

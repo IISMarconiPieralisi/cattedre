@@ -91,46 +91,86 @@ namespace Cattedre
             return null;
         }
 
-        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long IDannoScolastico, long IDdipartimento)
+        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(
+    long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati)
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            IDindirizziTrovati = new List<long>(); // inizializza qui
+
             try
             {
                 DataTable dt = new DataTable();
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql =@"SELECT d.ID, d.nome, d.anno, d.oreteoria, d.orelaboratorio, d.disciplinaspeciale, d.IDdisciplinaSuccessiva 
-                                FROM vigere v
-                                JOIN discipline d ON v.IDdisciplina = d.ID
-                                JOIN gestire g ON g.IDdisciplina = d.ID
-                                JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
-                                LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
-                                JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
-                                WHERE g.IDdipartimento = @IDdipartimento
-                                AND aTarget.dataInizio >= aInizio.dataInizio
-                                AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))";
+                    string sql = @"SELECT d.ID, d.nome, d.anno, d.oreteoria, d.orelaboratorio, 
+                          d.disciplinaspeciale, d.IDdisciplinaSuccessiva,
+                          ap.IDindirizzo
+                       FROM vigere v
+                       JOIN discipline d ON v.IDdisciplina = d.ID
+                       JOIN gestire g ON g.IDdisciplina = d.ID
+                       JOIN appartenere ap ON ap.IDdisciplina = d.ID
+                       JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
+                       LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
+                       JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
+                       WHERE g.IDdipartimento = @IDdipartimento
+                       AND aTarget.dataInizio >= aInizio.dataInizio
+                       AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))
+                       AND d.nome NOT LIKE '%otenziamento%'
+                       ORDER BY d.anno";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
                             da.Fill(dt);
-                        }
                     }
+
+                    Dictionary<long, HashSet<long>> indirizziPerDisciplina = new Dictionary<long, HashSet<long>>();
+
                     foreach (DataRow row in dt.Rows)
                     {
-                        ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
-                        disciplina.ID = Convert.ToInt32(row["id"]);
-                        disciplina.Nome = row["nome"].ToString();
-                        disciplina.Anno = Convert.ToInt32(row["anno"]);
-                        disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
-                        disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
-                        disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
-                        disciplina.IDdisciplinaSuccessiva = (row["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplinaSuccessiva"]);
-                        discipline.Add(disciplina);
+                        long idDisciplina = Convert.ToInt64(row["ID"]);
+                        long idIndirizzo = Convert.ToInt64(row["IDindirizzo"]);
+
+                        if (!indirizziPerDisciplina.ContainsKey(idDisciplina))
+                            indirizziPerDisciplina[idDisciplina] = new HashSet<long>();
+                        indirizziPerDisciplina[idDisciplina].Add(idIndirizzo);
+
+                        if (!discipline.Any(d => d.ID == idDisciplina))
+                        {
+                            ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
+                            disciplina.ID = Convert.ToInt32(row["ID"]);
+                            disciplina.Nome = row["nome"].ToString();
+                            disciplina.Anno = Convert.ToInt32(row["anno"]);
+                            disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
+                            disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
+                            disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
+                            disciplina.IDdisciplinaSuccessiva = (row["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplinaSuccessiva"]);
+                            discipline.Add(disciplina);
+                        }
+                    }
+
+                    // Prendi solo l'indirizzo più frequente tra le discipline pure (1 solo indirizzo)
+                    Dictionary<long, int> conteggioIndirizziPuri = new Dictionary<long, int>();
+                    foreach (var kvp in indirizziPerDisciplina)
+                    {
+                        if (kvp.Value.Count == 1)
+                        {
+                            long idIndirizzo = kvp.Value.First();
+                            if (!conteggioIndirizziPuri.ContainsKey(idIndirizzo))
+                                conteggioIndirizziPuri[idIndirizzo] = 0;
+                            conteggioIndirizziPuri[idIndirizzo]++;
+                        }
+                    }
+
+                    if (conteggioIndirizziPuri.Count > 0)
+                    {
+                        long indirizzoPrevale = conteggioIndirizziPuri
+                            .OrderByDescending(kvp => kvp.Value)
+                            .First().Key;
+                        IDindirizziTrovati = new List<long> { indirizzoPrevale };
                     }
                 }
             }
@@ -138,6 +178,7 @@ namespace Cattedre
             {
                 throw new Exception(ex.Message);
             }
+
             return discipline;
         }
 

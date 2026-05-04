@@ -37,44 +37,44 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(2, 4);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(62, 19);
+            this.label1.Size = new System.Drawing.Size(45, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "Classe:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(2, 47);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(115, 19);
+            this.label2.Size = new System.Drawing.Size(83, 16);
             this.label2.TabIndex = 1;
             this.label2.Text = "Coordinatore:";
             // 
             // lblClasse
             // 
             this.lblClasse.AutoSize = true;
-            this.lblClasse.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblClasse.Location = new System.Drawing.Point(13, 25);
+            this.lblClasse.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblClasse.Location = new System.Drawing.Point(13, 24);
             this.lblClasse.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblClasse.Name = "lblClasse";
-            this.lblClasse.Size = new System.Drawing.Size(20, 17);
+            this.lblClasse.Size = new System.Drawing.Size(21, 19);
             this.lblClasse.TabIndex = 2;
             this.lblClasse.Text = "...";
             // 
             // lblcoordinatore
             // 
             this.lblcoordinatore.AutoSize = true;
-            this.lblcoordinatore.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblcoordinatore.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblcoordinatore.Location = new System.Drawing.Point(13, 66);
             this.lblcoordinatore.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblcoordinatore.Name = "lblcoordinatore";
-            this.lblcoordinatore.Size = new System.Drawing.Size(20, 17);
+            this.lblcoordinatore.Size = new System.Drawing.Size(21, 19);
             this.lblcoordinatore.TabIndex = 3;
             this.lblcoordinatore.Text = "...";
             // 

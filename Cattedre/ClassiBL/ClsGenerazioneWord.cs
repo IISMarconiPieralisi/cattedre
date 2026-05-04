@@ -19,10 +19,10 @@ namespace Cattedre
             { 
                 List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID,anno.ID);
                 List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDipartimento(dipartimento.ID);
-                List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(anno.ID,dipartimento.ID);
+               // List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(anno.ID,dipartimento.ID,null);
                 List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
-                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);         
-                GenerateFileWord(anno,dipartimento, cdc, assegnare, discipline, classi, Dotare, filePath);
+                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassi(dipartimento.ID, anno.ID);         
+                //GenerateFileWord(anno,dipartimento, cdc, assegnare, discipline, classi, Dotare, filePath);
             }catch(Exception ex)
             {
                 throw new Exception("Errore Durante il Caricamento del file: " + ex.Message);

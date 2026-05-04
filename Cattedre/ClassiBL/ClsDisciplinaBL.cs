@@ -91,8 +91,7 @@ namespace Cattedre
             return null;
         }
 
-        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(
-    long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati)
+        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati)
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
             IDindirizziTrovati = new List<long>(); // inizializza qui

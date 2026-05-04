@@ -235,9 +235,8 @@ namespace Cattedre
             }
             return classi;
         }
-        public static List<ClsClasseDL> CaricaClassi(Dictionary <string,List<string>> Filtri= null)
+        public static List<ClsClasseDL> CaricaClassi(long IDindirizzo=0, long IDannoScolastico=0, int annoClasse =0)
         {
-            if (Filtri == null) Filtri = new Dictionary<string, List<string>>();
 
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
             DataTable ds = new DataTable();
@@ -246,7 +245,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = CreaQueryFiltri(conn, Filtri))
+                    using (MySqlCommand cmd = CreaQueryFiltri(conn,IDindirizzo,IDannoScolastico,annoClasse))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
@@ -275,40 +274,41 @@ namespace Cattedre
             }
             return classi;
         }
-        private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, Dictionary<string, List<string>> Filtri)
+        private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, long IDindirizzo = 0, long IDannoscolastico = 0, int annoClasse = 0)
         {
             try
             {
                 string sql = "SELECT * FROM classi";
                 MySqlCommand cmd = new MySqlCommand("", conn);
                 List<string> condizioni = new List<string>();
-                foreach (var filtro in Filtri)
-                {
-                    string Parametro = filtro.Key;
-                    List<string> valori = filtro.Value;
-                    if (valori == null || valori.Count == 0)
-                        continue;
-                    List<string> valoriRicerca = new List<string>();
-                    foreach(string valore in valori)
-                        valoriRicerca.Add($"{Parametro} = {valore}");
 
-                    // Combina valori dello stesso filtro con OR
-                    condizioni.Add("(" + string.Join(" OR ", valoriRicerca) + ")");
-                }
-                if (condizioni.Count > 0)
+                if (annoClasse > 0)
                 {
-                    sql += " WHERE" + string.Join(" AND ", condizioni);
+                    condizioni.Add("anno = @anno");
+                    cmd.Parameters.AddWithValue("@anno", annoClasse);
                 }
+                if (IDindirizzo > 0)
+                {
+                    condizioni.Add("IDindirizzo = @IDindirizzo");
+                    cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
+                }
+                if (IDannoscolastico > 0)
+                {
+                    condizioni.Add("IDannoscolastico = @IDannoscolastico");
+                    cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+                }
+
+                if (condizioni.Count > 0)
+                    sql += " WHERE " + string.Join(" AND ", condizioni);
+
                 sql += " ORDER BY anno ASC";
                 cmd.CommandText = sql;
                 return cmd;
-
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-
         }
         #endregion
         #region Operazioni Crud

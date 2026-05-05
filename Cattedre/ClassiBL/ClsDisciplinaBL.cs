@@ -91,8 +91,7 @@ namespace Cattedre
             return null;
         }
 
-        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(
-    long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati)
+        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati)
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
             IDindirizziTrovati = new List<long>(); // inizializza qui
@@ -185,7 +184,7 @@ namespace Cattedre
         #endregion
         #region rilevamento parametri specifici
 
-        public static int TrovaIDPotenziamentoDipartimentoPerCDC(int IDdipartimento, long IDcdc)
+        public static long TrovaIDPotenziamentoDipartimentoPerCDC(long IDdipartimento, long IDcdc)
         {
             try
             {
@@ -197,7 +196,7 @@ namespace Cattedre
                            JOIN gestire g ON g.IDdisciplina = d.ID
                            JOIN richiedere r ON r.IDdisciplina = d.ID
                            WHERE g.IDdipartimento = @IDdipartimento
-                           AND d.nome LIKE '%otenziamento%'
+                           AND d.disciplinaSpeciale LIKE '%otenziamento%'
                            AND r.IDclassediconcorso = @IDcdc
                            LIMIT 1";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -216,7 +215,6 @@ namespace Cattedre
             }
             return 0;
         }
-
 
         //public static int MostraOreDocenteTeorico(long IDdocente)
         //{

@@ -13,6 +13,8 @@ namespace Cattedre
     public partial class FrmDotazione : Form
     {
         public ClsDotareDL _dot = new ClsDotareDL();
+        List<ClsAnnoScolasticoDL> _anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
+        List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
         public FrmDotazione()
         {
             InitializeComponent();
@@ -22,10 +24,10 @@ namespace Cattedre
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(cbAnnoScolastico.Text) && !string.IsNullOrWhiteSpace(cbCDC.Text))
+                if (cbAnnoScolastico.SelectedIndex>=0 && cbCDC.SelectedIndex >= 0)
                 {
-                    _dot.IdAnnoscolastico = ClsAnnoScolasticoBL.RilevaIDanno(cbAnnoScolastico.SelectedItem.ToString());
-                    _dot.IdClasseDiConcorso = ClsClasseDiConcorsoBL.TrovaIDcdc(cbCDC.SelectedItem.ToString());
+                    _dot.IdAnnoscolastico =Convert.ToInt32( cbAnnoScolastico.SelectedValue);
+                    _dot.IdClasseDiConcorso = Convert.ToInt32(cbCDC.SelectedValue);
                     _dot.NumcattedreFatto = Convert.ToInt32(nudCattedreDiFatto.Value);
                     _dot.NumcattedreDiritto = Convert.ToInt32(nudCattedreDiDiritto.Value);
 
@@ -44,22 +46,23 @@ namespace Cattedre
         private void FrmDotazione_Load(object sender, EventArgs e)
         {
             cbAnnoScolastico.Focus();
-            FrmCdCs frmCdCs = new FrmCdCs();
-            List<ClsAnnoScolasticoDL> _anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
-            List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
-            foreach (ClsAnnoScolasticoDL _as in _anniscolastici)
-            {
-                cbAnnoScolastico.Items.Add(_as.Sigla);
-            }
-            foreach (ClsClasseDiConcorsoDL _cdc in cdcs)
-            {
-                cbCDC.Items.Add(_cdc.Livello);
-            }
+
+            // Binding DataSource per Anno Scolastico
+            cbAnnoScolastico.DataSource = _anniscolastici;
+            cbAnnoScolastico.DisplayMember = "Sigla";
+            cbAnnoScolastico.ValueMember = "ID";
+            cbAnnoScolastico.SelectedIndex = -1;
+
+            // Binding DataSource per Classe di Concorso
+            cbCDC.DataSource = cdcs;
+            cbCDC.DisplayMember = "Livello";
+            cbCDC.ValueMember = "ID";
+            cbCDC.SelectedIndex = -1;
 
             if (_dot != null)
             {
-                cbAnnoScolastico.SelectedItem = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(_dot.IdAnnoscolastico);
-                cbCDC.Text = ClsClasseDiConcorsoBL.TrovaCodiceDaID(_dot.IdClasseDiConcorso);
+                cbAnnoScolastico.SelectedValue = _dot.IdAnnoscolastico;
+                cbCDC.SelectedValue = _dot.IdClasseDiConcorso;
                 nudCattedreDiDiritto.Value = _dot.NumcattedreDiritto;
                 nudCattedreDiFatto.Value = _dot.NumcattedreFatto;
             }
@@ -68,6 +71,19 @@ namespace Cattedre
         private void btAnnulla_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void cbCDC_Format(object sender, ListControlConvertEventArgs e)
+        {
+            var cdc = (ClsClasseDiConcorsoDL)e.ListItem;
+
+            const int maxLength = 27;
+            string nome = cdc.Nome;
+
+            if (nome.Length > maxLength)
+                nome = nome.Substring(0, maxLength) + "..";
+
+            e.Value = $"{cdc.Livello} | {nome}";
         }
     }
 }

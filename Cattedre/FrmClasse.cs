@@ -209,7 +209,6 @@ namespace Cattedre
                 }
             }
         }
-
         private void cbCoordinatore_DropDown(object sender, EventArgs e)
         {
             if (cbCoordinatore.SelectedValue != null)
@@ -232,7 +231,7 @@ namespace Cattedre
             else
                 cbClasseArticolataCon.Enabled = false;
         }
-
+        #region controlli
         private void nudAnno_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -266,7 +265,7 @@ namespace Cattedre
             {
                 e.SuppressKeyPress = true;
                 cbIndirizzo.Focus();
-            }else if(e.KeyCode==Keys.Cancel || e.KeyCode==Keys.Escape)
+            }else if(e.KeyCode==Keys.Cancel || e.KeyCode==Keys.Back)
             {
                 e.SuppressKeyPress = true;
                 cbClasseArticolataCon.SelectedIndex = -1;
@@ -289,9 +288,13 @@ namespace Cattedre
             {
                 e.SuppressKeyPress = true;
                 btSalva.Focus();
+            }else if (e.KeyCode==Keys.Back || e.KeyCode==Keys.Cancel)
+            {
+                e.SuppressKeyPress = true;
+                cbCoordinatore.SelectedIndex = -1;
             }
         }
-
+        #endregion
 
     }
 }

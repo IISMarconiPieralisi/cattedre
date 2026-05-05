@@ -13,21 +13,20 @@ namespace Cattedre
         private static readonly Xceed.Drawing.Color GrigioIntestazione = Xceed.Drawing.Color.GrayText;
         private const string FontName = "Calibri";
         private const double FontSize = 12;
-        public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento,string filePath)
+        public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento, string filePath)
         {
             try
             { 
                 List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID,anno.ID);
                 List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDipartimento(dipartimento.ID);
-                List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(anno.ID,dipartimento.ID);
+               // List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(anno.ID,dipartimento.ID,null);
                 List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
-                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassiDipartimento(dipartimento.ID, anno.ID);         
-                GenerateFileWord(anno,dipartimento, cdc, assegnare, discipline, classi, Dotare, filePath);
+                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassi(dipartimento.ID, anno.ID);         
+                //GenerateFileWord(anno,dipartimento, cdc, assegnare, discipline, classi, Dotare, filePath);
             }catch(Exception ex)
             {
                 throw new Exception("Errore Durante il Caricamento del file: " + ex.Message);
             }
-           
         }
 
         public static void GenerateFileWord(ClsAnnoScolasticoDL annoScolastico,ClsDipartimentoDL dipartimento, List<ClsClasseDiConcorsoDL> listClassiConcorso,

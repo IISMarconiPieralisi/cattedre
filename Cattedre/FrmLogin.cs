@@ -282,10 +282,5 @@ namespace Cattedre
             else
                 MessageBox.Show("La cartella {0} non esiste", credPath);
         }
-
-        private void FrmLogin_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

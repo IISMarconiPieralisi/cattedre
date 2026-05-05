@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -47,7 +47,7 @@ namespace Cattedre
                 menuStrip1.Enabled = true;
                 //btVaiACattedre.Visible = false;
             }
-            else if(utente.TipoUtente =="C")
+            else if (utente.TipoUtente == "C")
             {
                 menuStrip1.Visible = false;
                 btDiscipline.Visible = true;
@@ -221,7 +221,7 @@ namespace Cattedre
             pnlCentrale.Visible = false;
             if (Application.OpenForms["FrmCredits"] == null)
             {
-                frmCredits = new FrmCredits();              
+                frmCredits = new FrmCredits();
             }
             MostraFormMDI(frmCredits);
 
@@ -233,7 +233,7 @@ namespace Cattedre
             pnlCentrale.Visible = false;
             if (Application.OpenForms["FrmAnniScolastici"] == null)
                 FrmAnniScolastici = new FrmAnniScolastici();
-                MostraFormMDI(FrmAnniScolastici);
+            MostraFormMDI(FrmAnniScolastici);
         }
         private void menuStrip1_KeyDown(object sender, KeyEventArgs e)
         {

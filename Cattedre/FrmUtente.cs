@@ -171,7 +171,7 @@ namespace Cattedre
         {
             InitializeControls();
 
-            if (HasValidUser())
+            if (ModificaUtente())
             {
                 LoadDatiUtente();
                 LoadContratto();
@@ -190,7 +190,7 @@ namespace Cattedre
             cldColori.Color = Color.White;
         }
 
-        private bool HasValidUser() => _utente != null && _utente.ID > 0;
+        private bool ModificaUtente() => _utente != null && _utente.ID > 0;
 
         #endregion
         #region Caricamento Utente
@@ -284,10 +284,9 @@ namespace Cattedre
         /// </summary>
         private void ConfiguraPannelloCDC()
         {
-            bool cdcAbilitata = _utente != null
-                && new[] { "A", "D", "C" }.Contains(_utente.TipoUtente);
+            bool cdcAbilitata = _utente != null&& new[] { "A", "D", "C" }.Contains(_utente.TipoUtente);
 
-            pnCDCeDisc.Visible = cdcAbilitata;   // oppure .Enabled se vuoi tenerlo visibile
+            pnCDCeDisc.Enabled = cdcAbilitata;   // oppure .Enabled se vuoi tenerlo visibile
         }
 
 
@@ -386,7 +385,7 @@ namespace Cattedre
                     pnTipoDocente.Enabled = true;
                     break;
                 default:
-                    pnCDCeDisc.Visible = false;
+                    pnCDCeDisc.Enabled = false;
                     pnDipartimento.Enabled = false;
                     PnContratto.Enabled = false;
                     lbDcoordinato.Visible = false;

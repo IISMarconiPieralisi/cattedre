@@ -47,7 +47,7 @@ namespace Cattedre
                 if (_gestires.Count <= 0)
                     throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina.");
 
-                if (cbAnnoInizio.SelectedIndex <= 0)
+                if (cbAnnoInizio.SelectedIndex <= -1)
                     throw new Exception("Selezionare l'anno di inizio della disciplina.");
 
                 if (_richiederes.Count <= 0)
@@ -78,7 +78,8 @@ namespace Cattedre
                 }
                 else
                 {
-                    if (ClsDisciplinaBL.CercaIdDisciplina(_disciplina) != _disciplina.ID)
+                    long IDdisciplinaTrovata = ClsDisciplinaBL.CercaIdDisciplina(_disciplina);
+                    if (IDdisciplinaTrovata>=0 && IDdisciplinaTrovata != _disciplina.ID)
                         throw new Exception("Disciplina già presente per questo anno.");
                 }
 

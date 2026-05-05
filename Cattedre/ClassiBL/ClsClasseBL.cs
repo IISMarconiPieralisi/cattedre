@@ -181,32 +181,40 @@ namespace Cattedre
 
 
         #region popolamenti Specifici
-        public static List<ClsClasseDL> CaricaClassiDipartimento(long IDdipartimento, long IDannoscolastico)
+        public static List<ClsClasseDL> CaricaClassiIndirizzo(List<long> IDindirizzi, long IDannoscolastico)
         {
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
+            if (IDindirizzi == null || IDindirizzi.Count == 0)
+                return classi;
+
             DataTable dt = new DataTable();
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT DISTINCT c.* FROM classi c 
-                                 JOIN appartenere a ON c.IDindirizzo= a.IDindirizzo
-                                 JOIN gestire g ON a.IDdisciplina = g.IDdisciplina
-                                 WHERE g.IDdipartimento = @IDdipartimento 
-                                 AND c.IDannoscolastico = @IDannoscolastico 
-                                 ORDER BY c.anno, c.sezione";
+
+                    // Costruisce i placeholder: @id0, @id1, @id2 ...
+                    string placeholders = string.Join(", ",
+                        IDindirizzi.Select((_, i) => $"@id{i}"));
+
+                    string sql = $@"SELECT DISTINCT c.* FROM classi c 
+                            WHERE c.IDindirizzo IN ({placeholders})
+                            AND c.IDannoscolastico = @IDannoscolastico 
+                            ORDER BY c.anno, c.sezione";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        for (int i = 0; i < IDindirizzi.Count; i++)
+                            cmd.Parameters.AddWithValue($"@id{i}", IDindirizzi[i]);
+
                         cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
                             da.Fill(dt);
-                        }
                     }
-                    conn.Close();
                 }
+
                 foreach (DataRow row in dt.Rows)
                 {
                     ClsClasseDL _classe = new ClsClasseDL();
@@ -227,9 +235,8 @@ namespace Cattedre
             }
             return classi;
         }
-        public static List<ClsClasseDL> CaricaClassi(Dictionary <string,List<string>> Filtri= null)
+        public static List<ClsClasseDL> CaricaClassi(long IDindirizzo=0, long IDannoScolastico=0, int annoClasse =0)
         {
-            if (Filtri == null) Filtri = new Dictionary<string, List<string>>();
 
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
             DataTable ds = new DataTable();
@@ -238,7 +245,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = CreaQueryFiltri(conn, Filtri))
+                    using (MySqlCommand cmd = CreaQueryFiltri(conn,IDindirizzo,IDannoScolastico,annoClasse))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
@@ -267,40 +274,41 @@ namespace Cattedre
             }
             return classi;
         }
-        private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, Dictionary<string, List<string>> Filtri)
+        private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, long IDindirizzo = 0, long IDannoscolastico = 0, int annoClasse = 0)
         {
             try
             {
                 string sql = "SELECT * FROM classi";
                 MySqlCommand cmd = new MySqlCommand("", conn);
                 List<string> condizioni = new List<string>();
-                foreach (var filtro in Filtri)
-                {
-                    string Parametro = filtro.Key;
-                    List<string> valori = filtro.Value;
-                    if (valori == null || valori.Count == 0)
-                        continue;
-                    List<string> valoriRicerca = new List<string>();
-                    foreach(string valore in valori)
-                        valoriRicerca.Add($"{Parametro} = {valore}");
 
-                    // Combina valori dello stesso filtro con OR
-                    condizioni.Add("(" + string.Join(" OR ", valoriRicerca) + ")");
-                }
-                if (condizioni.Count > 0)
+                if (annoClasse > 0)
                 {
-                    sql += " WHERE" + string.Join(" AND ", condizioni);
+                    condizioni.Add("anno = @anno");
+                    cmd.Parameters.AddWithValue("@anno", annoClasse);
                 }
+                if (IDindirizzo > 0)
+                {
+                    condizioni.Add("IDindirizzo = @IDindirizzo");
+                    cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
+                }
+                if (IDannoscolastico > 0)
+                {
+                    condizioni.Add("IDannoscolastico = @IDannoscolastico");
+                    cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+                }
+
+                if (condizioni.Count > 0)
+                    sql += " WHERE " + string.Join(" AND ", condizioni);
+
                 sql += " ORDER BY anno ASC";
                 cmd.CommandText = sql;
                 return cmd;
-
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-
         }
         #endregion
         #region Operazioni Crud

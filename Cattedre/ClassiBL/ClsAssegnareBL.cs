@@ -328,7 +328,7 @@ namespace Cattedre
             }
         }
 
-        public static void SalvaOrePot(int oreSpeciali, int IDutente, long IDannoscolastico, int IDdisciplina)
+        public static void SalvaOrePot(int oreSpeciali, long IDutente, long IDannoscolastico, long IDdisciplina)
         {
             string sigla = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
             ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(sigla);

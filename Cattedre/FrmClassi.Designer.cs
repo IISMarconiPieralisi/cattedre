@@ -35,8 +35,6 @@
             this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chAnnoScolastico = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chSigla = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chAnno = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chSezione = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chClasseArticolataCon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chNomeCoordinatore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chIndirizzo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -58,6 +56,12 @@
             this.cbAnnoClasse.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAnnoClasse.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbAnnoClasse.FormattingEnabled = true;
+            this.cbAnnoClasse.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"});
             this.cbAnnoClasse.Location = new System.Drawing.Point(92, 54);
             this.cbAnnoClasse.Name = "cbAnnoClasse";
             this.cbAnnoClasse.Size = new System.Drawing.Size(63, 25);
@@ -83,8 +87,6 @@
             this.chID,
             this.chAnnoScolastico,
             this.chSigla,
-            this.chAnno,
-            this.chSezione,
             this.chClasseArticolataCon,
             this.chNomeCoordinatore,
             this.chIndirizzo});
@@ -112,14 +114,6 @@
             // chSigla
             // 
             this.chSigla.Text = "Sigla";
-            // 
-            // chAnno
-            // 
-            this.chAnno.Text = "Anno";
-            // 
-            // chSezione
-            // 
-            this.chSezione.Text = "Sezione";
             // 
             // chClasseArticolataCon
             // 
@@ -637,8 +631,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListView lvClassi;
         private System.Windows.Forms.ColumnHeader chSigla;
-        private System.Windows.Forms.ColumnHeader chAnno;
-        private System.Windows.Forms.ColumnHeader chSezione;
         private System.Windows.Forms.ColumnHeader chClasseArticolataCon;
         private System.Windows.Forms.ColumnHeader chNomeCoordinatore;
         private System.Windows.Forms.ColumnHeader chIndirizzo;

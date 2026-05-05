@@ -49,7 +49,7 @@ namespace Cattedre
             if (cdcPotDocente == null)
                 return;
 
-            int IDdisciplina = ClsDisciplinaBL.TrovaIDPotenziamentoDipartimentoPerCDC(IDdipartimento, cdcPotDocente.ID);
+            long IDdisciplina = ClsDisciplinaBL.TrovaIDPotenziamentoDipartimentoPerCDC(IDdipartimento, cdcPotDocente.ID);
 
             if (IDdisciplina == 0)
                 return;

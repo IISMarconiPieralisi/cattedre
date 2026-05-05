@@ -34,8 +34,8 @@ namespace Cattedre
         ClsUtenteDL utenteLoggato;
 
         int IDdipartimento = 0;
-        long IDannoscolastico = 0;
-        string annoscolasticoselezionato = "";
+        public long IDannoscolastico { get; set; } = 0;
+        public string annoscolasticoselezionato = "";
         DataTable dtDocentiAssegnazioni;
 
         //location colonne header

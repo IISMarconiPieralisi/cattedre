@@ -38,8 +38,6 @@ namespace Cattedre
                 ListViewItem lvi = new ListViewItem(classe.ID.ToString());
                 lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(classe.IDannoscolastico));
                 lvi.SubItems.Add(classe.Sigla);
-                lvi.SubItems.Add(classe.Anno.ToString());
-                lvi.SubItems.Add(classe.Sezione);
                 lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(classe.ClasseArticolataCon));
                 lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(classe.Idutente));
                 lvi.SubItems.Add(ClsIndirizzoBL.RilevaNomeIndirizzo(classe.Idindirizzo));
@@ -51,12 +49,6 @@ namespace Cattedre
         private void FrmClassi_Load(object sender, EventArgs e)
         {
             GestionePermessi();
-            //popolo combobox filtraggio
-            foreach (ClsClasseDL classe in classi)
-            {
-                if (!cbAnnoClasse.Items.Contains(classe.Anno))
-                    cbAnnoClasse.Items.Add(classe.Anno);
-            }
             //popol combobox filtraggio Indirizzi
             cbIndirizzi.DataSource = _indirizzi;
             cbIndirizzi.DisplayMember = "Nome";

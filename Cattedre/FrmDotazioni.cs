@@ -69,19 +69,18 @@ namespace Cattedre
         }
        
 
-        private void CaricaListView()
+       private void CaricaListView()
         {
             dots = ClsDotareBL.CaricaDotare(Filtri);
-            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
             lvDotazioni.Items.Clear();
-            for (int i = 0; i < dots.Count; i++)
+            foreach (ClsDotareDL dot in dots)
             {
-                ListViewItem lvi = new ListViewItem(dots[i].Id.ToString());
-                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
-                lvi.SubItems.Add(ClsClasseDiConcorsoBL.TrovaCodiceDaID(dots[i].IdClasseDiConcorso));
-                lvi.SubItems.Add(dots[i].NumcattedreFatto.ToString());
-                lvi.SubItems.Add(dots[i].NumcattedreDiritto.ToString());
-                lvi.Tag = cdcs[i].ID;
+                ListViewItem lvi = new ListViewItem(dot.Id.ToString());
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dot.IdAnnoscolastico));
+                lvi.SubItems.Add(ClsClasseDiConcorsoBL.TrovaCodiceDaID(dot.IdClasseDiConcorso));
+                lvi.SubItems.Add(dot.NumcattedreFatto.ToString());
+                lvi.SubItems.Add(dot.NumcattedreDiritto.ToString());
+                lvi.Tag = dot.Id;
                 lvDotazioni.Items.Add(lvi);
             }
         }

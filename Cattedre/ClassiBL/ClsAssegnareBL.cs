@@ -34,7 +34,7 @@ namespace Cattedre
 
         
 
-        public static void GeneraCattedreAnnoSuccessivo(int IDdipartimento, int IDannoCorrente, int IDannoSuccessivo)
+        public static void GeneraCattedreAnnoSuccessivo(long IDdipartimento, long IDannoCorrente, long IDannoSuccessivo)
         {
             DataTable assegnazioni = CaricaDocentiConAssegnazioni(IDdipartimento, IDannoCorrente);
 
@@ -184,7 +184,7 @@ namespace Cattedre
             }
         }
         // Query unica
-        public static DataTable CaricaDocentiConAssegnazioni(int IDdipartimento, long IDannoScolastico)
+        public static DataTable CaricaDocentiConAssegnazioni(long IDdipartimento, long IDannoScolastico)
         {
 
             DataTable dt = new DataTable();
@@ -302,9 +302,8 @@ namespace Cattedre
                     }
                     else
                     {
-                        // Non esiste -> INSERT nuova riga
-                        string sigla = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
-                        ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(sigla);
+
+                        ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(IDannoscolastico);
 
                         string sqlInsert = @"INSERT INTO assegnare 
                                      (IDclasse, IDannoscolastico, IDdisciplina, IDutente, oreSpeciali, dal, al)
@@ -330,8 +329,7 @@ namespace Cattedre
 
         public static void SalvaOrePot(int oreSpeciali, long IDutente, long IDannoscolastico, long IDdisciplina)
         {
-            string sigla = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
-            ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(sigla);
+            ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(IDannoscolastico);
             DateTime dal = anno.DataInizio;
             DateTime al = anno.DataFine;
 

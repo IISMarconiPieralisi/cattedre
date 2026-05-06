@@ -45,16 +45,24 @@ namespace Cattedre
 
         public static string RilevaNomeUtente(long id)
         {
-            string risultato = null;
+            string risultato = "";
+            ClsUtenteDL utente =CaricaUtente(id);
+            risultato = $"{utente.Cognome} {utente.Nome}".Trim();
+            return !string.IsNullOrEmpty(risultato) ? risultato : "-";
+
+        }
+        public static ClsUtenteDL CaricaUtente(long ID)
+        {
+            ClsUtenteDL utente = new ClsUtenteDL();
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT u.nome, u.cognome FROM utenti u WHERE u.ID = @ID";
+                    string sql = "SELECT u.ID, u.nome, u.cognome, u.email, u.tipoUtente, u.colore, u.tipoDocente FROM utenti u WHERE u.ID = @ID";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.Parameters.AddWithValue("@ID", ID); // CORRETTO: usa ID, non id
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
@@ -62,10 +70,14 @@ namespace Cattedre
                         }
                         if (dt.Rows.Count > 0)
                         {
-                            DataRow row = dt.Rows[0];
-                            string nome = row["nome"] != DBNull.Value ? row["nome"].ToString() : "";
-                            string cognome = row["cognome"] != DBNull.Value ? row["cognome"].ToString() : "";
-                            risultato = $"{cognome} {nome}".Trim();
+                            DataRow row = dt.Rows[0]; 
+                            utente.ID = Convert.ToInt64(row["ID"]);
+                            utente.Email = row["email"].ToString();
+                            utente.Cognome = row["cognome"].ToString();
+                            utente.Nome = row["nome"].ToString();
+                            utente.TipoUtente = row["tipoUtente"].ToString();
+                            utente.Colore = row["colore"].ToString();
+                            utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
                         }
                     }
                 }
@@ -74,9 +86,8 @@ namespace Cattedre
             {
                 throw new Exception("Errore nella query: " + ex.Message);
             }
-            return !string.IsNullOrEmpty(risultato) ? risultato : "-";
+            return utente;
         }
-
         public static int TrovaIDdipartimento(long IDutente)
         {
             int risultato = 0;

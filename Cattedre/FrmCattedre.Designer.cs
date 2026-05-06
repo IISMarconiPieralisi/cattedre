@@ -279,11 +279,12 @@ namespace Cattedre
             this.cbDipartimenti.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDipartimenti.FormattingEnabled = true;
             this.cbDipartimenti.Location = new System.Drawing.Point(6, 9);
-            this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2);
             this.cbDipartimenti.Name = "cbDipartimenti";
             this.cbDipartimenti.Size = new System.Drawing.Size(100, 24);
             this.cbDipartimenti.TabIndex = 1;
-            this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.btCaricaDipartimento_Click_1);
+            this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.btCaricaDipartimento_SelectedIndexChanged);
+            this.cbDipartimenti.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.cbDipartimenti_Format);
             // 
             // btGeneraASsucc
             // 

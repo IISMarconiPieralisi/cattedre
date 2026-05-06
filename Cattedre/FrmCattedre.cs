@@ -15,8 +15,9 @@ namespace Cattedre
 {
     public partial class FrmCattedre : Form
     {
+        #region liste & dizionari
         List<ClsClasseDL> classi = new List<ClsClasseDL>();
-        List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
+        List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
         List<ClsAnnoScolasticoDL> anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
         List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
         List<ClsUtenteDL> docentiDipartimento = new List<ClsUtenteDL>();
@@ -30,12 +31,11 @@ namespace Cattedre
 
         List<(Control ctrl, int xOriginale)> _posizioniDiscipline = new List<(Control, int)>();
         List<(UcAssegnazioni ctrl, int xOriginale)> _posizioniAssegnazioni = new List<(UcAssegnazioni, int)>();
-
+        #endregion
+        //variabili globali
         ClsUtenteDL utenteLoggato;
-
         int IDdipartimento = 0;
         public long IDannoscolastico { get; set; } = 0;
-        public string annoscolasticoselezionato = "";
         DataTable dtDocentiAssegnazioni;
 
         //location colonne header
@@ -47,26 +47,13 @@ namespace Cattedre
         //private ToolTip toolTipDiscipline;
         HScrollBar hScrollOrizzontale;
 
-        public string Annoscolasticoselezionato { get => annoscolasticoselezionato; set => annoscolasticoselezionato = value; }
-
         public FrmCattedre(ClsUtenteDL utente)
         {
             InitializeComponent();
             utenteLoggato = utente;
         }
 
-        private void HScrollOrizzontale_Scroll(object sender, ScrollEventArgs e)
-        {
-            int offset = e.NewValue;
-
-            foreach (var (ctrl, xOrig) in _posizioniDiscipline)
-                ctrl.Left = xOrig - offset;
-
-            foreach (var (ctrl, xOrig) in _posizioniAssegnazioni)
-                ctrl.Left = xOrig - offset;
-        }
-
-
+        #region Load Show e complilamento form
         private void FrmCattedre_Load(object sender, EventArgs e)
         {
             //pnlDipartimento.AutoScroll = true;
@@ -104,59 +91,37 @@ namespace Cattedre
 
             LoadAnniScolastici();
         }
-
-        private async void FrmCattedre_Shown(object sender, EventArgs e)
+        private void FrmCattedre_Shown(object sender, EventArgs e)
         {
             if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "D") //|| utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A")
             {
-                this.Cursor = Cursors.WaitCursor;
-
-                List<long> indirizziTrovati = new List<long>();
-
-                await Task.Run(() =>
-                {
-                    IDdipartimento = ClsUtenteBL.TrovaIDdipartimento(utenteLoggato.ID);
-                    discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
-                        IDannoscolastico, IDdipartimento, out indirizziTrovati);
-                    classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
-                });
-
-                LoadDiscipline(IDdipartimento);
-                LoadClassi(indirizziTrovati, IDannoscolastico);
-                LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
-                LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
-                SincronizzaScrollDopoLayout();
-
-                this.Cursor = Cursors.Default;
-            }
-            if (utenteLoggato.TipoUtente == "C" || utenteLoggato.TipoUtente == "D")
-            {
-                cbDipartimenti.SelectedIndex = IDdipartimento - 1;
+                PopolaControlliGrafici();
                 cbDipartimenti.Enabled = false;
             }
             if (utenteLoggato.TipoUtente == "A")
                 btGeneraASsucc.Enabled = false;
-
-            string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
-            cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
         }
-
-        private void PnlOrizzontale_MouseWheel(object sender, MouseEventArgs e)
+        private async void PopolaControlliGrafici()
         {
-            if (ModifierKeys == Keys.Shift && hScrollOrizzontale.Enabled)
+            List<long> indirizziTrovati = new List<long>();
+            this.Cursor = Cursors.WaitCursor;
+            await Task.Run(() =>
             {
-                // blocca lo scroll verticale
-                ((HandledMouseEventArgs)e).Handled = true;
+                IDdipartimento = ClsUtenteBL.TrovaIDdipartimento(utenteLoggato.ID);
+                discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
+                IDannoscolastico, IDdipartimento, out indirizziTrovati);
+                classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
+            });
 
-                int nuovoValore = hScrollOrizzontale.Value - e.Delta / 3;
-                nuovoValore = Math.Max(hScrollOrizzontale.Minimum,
-                              Math.Min(nuovoValore, hScrollOrizzontale.Maximum - hScrollOrizzontale.LargeChange + 1));
-                hScrollOrizzontale.Value = nuovoValore;
-                HScrollOrizzontale_Scroll(hScrollOrizzontale,
-                    new ScrollEventArgs(ScrollEventType.ThumbPosition, nuovoValore));
-            }
+            LoadDiscipline(IDdipartimento);
+            LoadClassi(indirizziTrovati, IDannoscolastico);
+            LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
+            LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
+            SincronizzaScrollDopoLayout();
+
+            this.Cursor = Cursors.Default;
         }
-
+        #endregion
         private void LoadInfoNumCattedre(long idDip, DataTable docenti)
         {
             //pnlInfoNumCattedre.Controls.Clear();
@@ -859,23 +824,70 @@ namespace Cattedre
 
         //    ucOreTotali.Refresh();
         //}
+        #region SelectedIndex Selettori grafici
+        private void cbDipartimenti_Format(object sender, ListControlConvertEventArgs e)
+        {
+            var Dipartimento = (ClsDipartimentoDL)e.ListItem;
+
+            const int maxLength = 15;
+            string nome = Dipartimento.Nome;
+
+            if (nome.Length > maxLength)
+                nome = nome.Substring(0, maxLength) + ".";
+
+            e.Value = nome;
+        }
+
+        private void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (IDdipartimento <= 0) return; // evita chiamate premature
+            if (cbAnniScolastici.SelectedIndex > -1)
+                IDannoscolastico = Convert.ToInt32(cbAnniScolastici.SelectedValue);
+            PopolaControlliGrafici();
+        }
+        private void btCaricaDipartimento_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cbDipartimenti.SelectedIndex <= 0) return; // niente selezionato, esci
+
+
+                Application.DoEvents();
+                IDdipartimento = Convert.ToInt32(cbDipartimenti.SelectedValue);
+
+                PulisciDipartimento();
+                PopolaControlliGrafici();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Errore:{ex.Message}. \nRiprovare!", "riprovare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+        #region load e SelectedIndex Selettori Dipartimento & Anni
+
 
         private void LoadDipartimenti()
         {
-            dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
+            this.cbDipartimenti.SelectedIndexChanged -= new System.EventHandler(this.btCaricaDipartimento_SelectedIndexChanged);
 
-            for (int i = 0; i < dipartimenti.Count; i++)
-            {
-                string nome = dipartimenti[i].Nome;
-                string nomeVisualizzato = nome?.Length > 13
-                    ? nome.Substring(0, 13) + "."
-                    : nome;
-                cbDipartimenti.Items.Add(nomeVisualizzato);
-            }
+            cbDipartimenti.DataSource = dipartimenti;
+            cbDipartimenti.DisplayMember = "Nome";
+            cbDipartimenti.ValueMember = "ID";
+
+            long IDdipartimentoCordinatoUtente=ClsDipartimentoBL.UtenteCoordinaDipartimento(utenteLoggato.ID).ID;
+            if (IDdipartimentoCordinatoUtente > 0)
+                cbDipartimenti.SelectedValue = IDdipartimentoCordinatoUtente;
+            else
+                cbDipartimenti.SelectedIndex = -1;
+
+            this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.btCaricaDipartimento_SelectedIndexChanged);
+
         }
 
         private void LoadAnniScolastici()
         {
+            this.cbAnniScolastici.SelectedIndexChanged -= new System.EventHandler(this.cbAnniScolastici_SelectedIndexChanged);
 
             cbAnniScolastici.DataSource = anniscolastici;
             cbAnniScolastici.DisplayMember = "Sigla";
@@ -885,8 +897,11 @@ namespace Cattedre
                 cbAnniScolastici.SelectedValue = IDannoscolastico;
             else
                 cbAnniScolastici.SelectedIndex = -1;
-        }
 
+            this.cbAnniScolastici.SelectedIndexChanged += new System.EventHandler(this.cbAnniScolastici_SelectedIndexChanged);
+
+        }
+        #endregion
         private void LoadAssegnazioni(int IDdipartimento, long IDannoscolastico, out DataTable docenti)
         {
             pnlDipartimento.Controls
@@ -1242,7 +1257,7 @@ namespace Cattedre
             discipline.Clear();
             dictDocenti.Clear();
         }
-
+        #region Gestione Scroll
         private void SincronizzaScrollDopoLayout()
         {
             EventHandler handler = null;
@@ -1254,150 +1269,85 @@ namespace Cattedre
             };
             Application.Idle += handler;
         }
-
-        private void btSalva_Click(object sender, EventArgs e)
+        private void HScrollOrizzontale_Scroll(object sender, ScrollEventArgs e)
         {
-            DialogResult dr = MessageBox.Show("Sei sicuro di voler salvare?", "SALVATAGGIO", MessageBoxButtons.YesNo);
+            int offset = e.NewValue;
 
-            if (dr == DialogResult.Yes)
-                this.Close();
+            foreach (var (ctrl, xOrig) in _posizioniDiscipline)
+                ctrl.Left = xOrig - offset;
+
+            foreach (var (ctrl, xOrig) in _posizioniAssegnazioni)
+                ctrl.Left = xOrig - offset;
         }
-
-        private void btAnnulla_Click(object sender, EventArgs e)
+        private void PnlOrizzontale_MouseWheel(object sender, MouseEventArgs e)
         {
+            if (ModifierKeys == Keys.Shift && hScrollOrizzontale.Enabled)
+            {
+                // blocca lo scroll verticale
+                ((HandledMouseEventArgs)e).Handled = true;
 
+                int nuovoValore = hScrollOrizzontale.Value - e.Delta / 3;
+                nuovoValore = Math.Max(hScrollOrizzontale.Minimum,
+                              Math.Min(nuovoValore, hScrollOrizzontale.Maximum - hScrollOrizzontale.LargeChange + 1));
+                hScrollOrizzontale.Value = nuovoValore;
+                HScrollOrizzontale_Scroll(hScrollOrizzontale,
+                    new ScrollEventArgs(ScrollEventType.ThumbPosition, nuovoValore));
+            }
         }
-
-        private async void btCaricaDipartimento_Click_1(object sender, EventArgs e)
+        #endregion
+        #region BtGenera Anno successivo & generaFileWord
+        private void btGeneraASsucc_Click(object sender, EventArgs e)
         {
             try
             {
-                if (cbDipartimenti.SelectedItem == null) return; // niente selezionato, esci
+                ClsAnnoScolasticoDL annoSuccessivo = ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(IDannoscolastico);
 
-                this.UseWaitCursor = true;
-                Application.DoEvents();
-                IDdipartimento = cbDipartimenti.SelectedIndex + 1;
+                if (annoSuccessivo == null)
+                   throw new Exception("Anno successivo non trovato");
 
-                PulisciDipartimento();
+                // Prima carica le discipline per ricavare gli indirizzi
+                List<ClsDisciplinaDL> disciplineSuccessivo = ClsDisciplinaBL
+                    .CaricaDisciplineAnnoScolasticoDipartimento(annoSuccessivo.ID, IDdipartimento, out List<long> indirizziTrovati);
 
-                List<long> indirizziTrovati = new List<long>();
+                // Poi carica le classi per indirizzo
+                List<ClsClasseDL> classiAnnoSuccessivo = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, annoSuccessivo.ID);
 
-                await Task.Run(() =>
+                if (classiAnnoSuccessivo == null || classiAnnoSuccessivo.Count == 0)
+                    throw new Exception("Non esistono classi per l'anno scolastico successivo");
+
+                bool esistonoAssegnazioniAnnoSuccessivo = ClsAssegnareBL.EsistonoAssegnazioniAnnoSuccessivo(annoSuccessivo.ID);
+
+                if (utenteLoggato.TipoUtente == "C" && !esistonoAssegnazioniAnnoSuccessivo)
                 {
-                    if (IDannoscolastico <= 0)
-                        IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
-                    discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
-                        IDannoscolastico, IDdipartimento, out indirizziTrovati);
-                    classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
-                });
+                    DialogResult dr = MessageBox.Show(
+                        "Vuoi generare le cattedre per l'anno successivo?",
+                        "Generazione",
+                        MessageBoxButtons.YesNo);
 
-                LoadDiscipline(IDdipartimento);
-                LoadClassi(indirizziTrovati, IDannoscolastico);
-                LoadAssegnazioni(IDdipartimento, IDannoscolastico, out dtDocentiAssegnazioni);
-                LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
-                SincronizzaScrollDopoLayout();
+                    if (dr != DialogResult.Yes)
+                        return;
 
-                if (cbAnniScolastici.SelectedIndex <= -1)
+                    if (IDannoscolastico == annoSuccessivo.ID)
+                       throw new Exception("Anno non valido"); 
+                    
+
+                    ClsAssegnareBL.GeneraCattedreAnnoSuccessivo(IDdipartimento, IDannoscolastico, annoSuccessivo.ID);
+                    //messaggio di sucesso
+                    MessageBox.Show("Cattedre generate con successo", "GENERAZIONE RIUSCITA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
                 {
-                    string _siglaAnnoScolasticoCorrente = ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(IDannoscolastico);
-                    cbAnniScolastici.SelectedItem = _siglaAnnoScolasticoCorrente.ToString();
+                    throw new Exception("Cattedre per anno successivo già generate"); //eccezione attenzione
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                MessageBox.Show($"Errore:{ex.Message}. \nRiprovare!", "riprovare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message+".", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
             }
-            finally
-            {
-                this.UseWaitCursor = false;
-            }
+
         }
 
-        private void btGeneraASsucc_Click(object sender, EventArgs e)
-        {
-            string siglaAnno = cbAnniScolastici.SelectedItem.ToString();
-
-            ClsAnnoScolasticoDL annoCorrente =
-                ClsAnnoScolasticoBL.CercaAnnoScolastico(siglaAnno);
-
-            ClsAnnoScolasticoDL annoSuccessivo =
-                ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(annoCorrente.ID);
-
-            if (annoSuccessivo == null)
-            {
-                MessageBox.Show("Anno successivo non trovato", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Prima carica le discipline per ricavare gli indirizzi
-            List<ClsDisciplinaDL> disciplineSuccessivo = ClsDisciplinaBL
-                .CaricaDisciplineAnnoScolasticoDipartimento(annoSuccessivo.ID, IDdipartimento, out List<long> indirizziTrovati);
-
-            // Poi carica le classi per indirizzo
-            List<ClsClasseDL> classiAnnoSuccessivo = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, annoSuccessivo.ID);
-
-            if (classiAnnoSuccessivo == null || classiAnnoSuccessivo.Count == 0)
-            {
-                MessageBox.Show("Non esistono classi per l'anno scolastico successivo. Impossibile generare le cattedre.",
-                                "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            bool esistonoAssegnazioniAnnoSuccessivo = ClsAssegnareBL.EsistonoAssegnazioniAnnoSuccessivo(annoSuccessivo.ID);
-
-            if (utenteLoggato.TipoUtente == "C" && !esistonoAssegnazioniAnnoSuccessivo)
-            {
-                DialogResult dr = MessageBox.Show(
-                    "Vuoi generare le cattedre per l'anno successivo?",
-                    "Generazione",
-                    MessageBoxButtons.YesNo);
-
-                if (dr != DialogResult.Yes)
-                    return;
-
-                if (annoCorrente.ID == annoSuccessivo.ID)
-                {
-                    MessageBox.Show("Anno non valido", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                ClsAssegnareBL.GeneraCattedreAnnoSuccessivo(
-                    IDdipartimento,
-                    (int)annoCorrente.ID,
-                    (int)annoSuccessivo.ID);
-
-                MessageBox.Show("Cattedre generate con successo", "GENERAZIONE RIUSCITA", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Cattedre per anno successivo già generate", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private async void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (IDdipartimento <= 0) return; // evita chiamate premature
-            if (cbAnniScolastici.SelectedIndex>-1)
-                IDannoscolastico =Convert.ToInt32( cbAnniScolastici.SelectedValue);
-
-            Annoscolasticoselezionato = cbAnniScolastici.SelectedItem.ToString();
-            ClsAnnoScolasticoDL annoscolastico = new ClsAnnoScolasticoDL();
-            annoscolastico = ClsAnnoScolasticoBL.CercaAnnoScolastico(Annoscolasticoselezionato);
-            List<long> indirizziTrovati = new List<long>();
-
-            await Task.Run(() =>
-            {
-                discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
-                    IDannoscolastico, IDdipartimento, out indirizziTrovati);
-                classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
-            });
-
-            LoadDiscipline(IDdipartimento);
-            LoadClassi(indirizziTrovati, IDannoscolastico);
-            LoadAssegnazioni(IDdipartimento, annoscolastico.ID, out dtDocentiAssegnazioni);
-            LoadInfoNumCattedre(IDdipartimento, dtDocentiAssegnazioni);
-            SincronizzaScrollDopoLayout();
-        }
 
         private void btGeneraWord_Click(object sender, EventArgs e)
         {
@@ -1438,5 +1388,8 @@ namespace Cattedre
             }
             
         }
+        #endregion
+
+       
     }
 }

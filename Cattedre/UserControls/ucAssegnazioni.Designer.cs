@@ -221,7 +221,7 @@
 
         public System.Windows.Forms.ComboBox cbDocentiTeorici;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.Label label2;
         public System.Windows.Forms.ComboBox cbDocentiItip;
         public System.Windows.Forms.Label lblOreTeoria;
         public System.Windows.Forms.Label lblOreLaboratorio;
@@ -230,7 +230,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiCopia;
         private System.Windows.Forms.ToolStripMenuItem tsmiIncolla;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.Label label4;
         public System.Windows.Forms.Label lblDocentiNonDiRuoloTEORICI;
         public System.Windows.Forms.Label lblDocentiNonDiRuoloITP;
     }

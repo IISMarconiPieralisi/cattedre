@@ -213,7 +213,7 @@ namespace Cattedre
             {
                 throw new Exception("Errore ricerca potenziamento dipartimento per CDC: " + ex.Message);
             }
-            return 0;
+            return -1;
         }
 
         //public static int MostraOreDocenteTeorico(long IDdocente)

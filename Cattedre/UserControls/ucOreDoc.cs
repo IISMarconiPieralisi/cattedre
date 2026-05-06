@@ -12,8 +12,16 @@ namespace Cattedre
 {
     public partial class ucOreDoc : UserControl
     {
+        //liste di appoggio
+        List<ClsClasseDiConcorsoDL> cdcDocente = new List<ClsClasseDiConcorsoDL>();
+        //valori globali
         int _idassegnare = 0;
-
+        //variabili interne (senza costruttori)
+        long IDutente = 0;
+        long IDdisciplina = 0;
+        FrmCattedre frmCattedre;
+         long IDannoScolastico = 0;
+        ClsClasseDiConcorsoDL cdcPotDocente = new ClsClasseDiConcorsoDL();
         public int IDassegnare
         {
             get
@@ -33,28 +41,44 @@ namespace Cattedre
 
         private void nudOrePot_ValueChanged(object sender, EventArgs e)
         {
-            if (this.Tag == null)
+            if (this.Tag == null || cdcPotDocente == null || IDdisciplina == 0)
                 return;
 
-            int IDutente = Convert.ToInt32(this.Tag);
-            FrmCattedre frmCattedre = (FrmCattedre)this.ParentForm;
-            string siglaannoscolastico = frmCattedre.Annoscolasticoselezionato;
-            ClsAnnoScolasticoDL annoCorrente = ClsAnnoScolasticoBL.CercaAnnoScolastico(siglaannoscolastico);
             int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
+            ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, IDannoScolastico, IDdisciplina);
+        }
 
-            List<ClsClasseDiConcorsoDL> cdcDocente = ClsRichiedereBL.RilevaCDCDocente(IDutente);
-            ClsClasseDiConcorsoDL cdcPotDocente = cdcDocente
+        public void Inizializza(long idAnnoScolastico)
+        {
+            if (this.Tag == null) return;
+
+            IDutente = Convert.ToInt64(this.Tag); 
+
+            if (CDCPotenziamento == null || CDCPotenziamento.Count == 0)
+                return;
+            IDannoScolastico = idAnnoScolastico;
+            cdcDocente = ClsRichiedereBL.RilevaCDCDocente(IDutente);
+            if (ClsUtenteBL.CaricaUtente(IDutente).TipoDocente=='T')
+                cdcDocente = cdcDocente.Where(cdc => cdc.Livello.StartsWith("A")).ToList();
+            else
+                cdcDocente = cdcDocente.Where(cdc => cdc.Livello.StartsWith("B")).ToList();
+
+            cdcPotDocente = cdcDocente
                 .FirstOrDefault(cdcDoc => CDCPotenziamento.Any(cdcPot => cdcPot.ID == cdcDoc.ID));
 
-            if (cdcPotDocente == null)
+            if (cdcPotDocente == null)  // docente senza CDC di potenziamento
+            {
+                nudOrePot.Enabled = false;
                 return;
+            }
 
-            long IDdisciplina = ClsDisciplinaBL.TrovaIDPotenziamentoDipartimentoPerCDC(IDdipartimento, cdcPotDocente.ID);
+            long trovato = ClsDisciplinaBL.TrovaIDPotenziamentoDipartimentoPerCDC(
+                IDdipartimento, cdcPotDocente.ID);
 
-            if (IDdisciplina == 0)
-                return;
-
-            ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, annoCorrente.ID, IDdisciplina);
+            if (trovato > 0)  // controllo corretto: 0 = non trovato, -1 = errore
+                IDdisciplina = trovato;
+            else
+                nudOrePot.Enabled = false;
         }
     }
 }

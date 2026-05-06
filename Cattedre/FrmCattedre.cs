@@ -17,7 +17,7 @@ namespace Cattedre
     {
         List<ClsClasseDL> classi = new List<ClsClasseDL>();
         List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
-        List<ClsAnnoScolasticoDL> anniscolastici = new List<ClsAnnoScolasticoDL>();
+        List<ClsAnnoScolasticoDL> anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
         List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
         List<ClsUtenteDL> docentiDipartimento = new List<ClsUtenteDL>();
         List<ClsDisciplinaDL> disciplinerilevate = new List<ClsDisciplinaDL>();
@@ -116,7 +116,6 @@ namespace Cattedre
                 await Task.Run(() =>
                 {
                     IDdipartimento = ClsUtenteBL.TrovaIDdipartimento(utenteLoggato.ID);
-                    IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
                     discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
                         IDannoscolastico, IDdipartimento, out indirizziTrovati);
                     classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
@@ -570,19 +569,20 @@ namespace Cattedre
                             r["IDannoscolastico"] != DBNull.Value &&
                             Convert.ToInt64(r["IDannoscolastico"]) == IDannoscolastico)
                 .Sum(r => r["oreSpeciali"] == DBNull.Value ? 0 : Convert.ToInt32(r["oreSpeciali"]));
-
+            List<ClsClasseDiConcorsoDL> cdcPotenziamento = ClsClasseDiConcorsoBL
+             .CaricaCDCperDisciplina(IDdipartimento)
+             .Where(x => x.nomeDisciplina.Contains("otenziamento"))
+             .Select(x => x.cdc)
+             .ToList();
+            uc.CDCPotenziamento = cdcPotenziamento;
             uc.nudOrePot.Value = orePot;
             uc.lblOreEffettive.Text = "0";
             uc.lblOreTotali.Text = "0";
             uc.Tag = doc.ID;
             uc.IDdipartimento = IDdipartimento;
+            uc.Inizializza(IDannoscolastico);
 
-            List<ClsClasseDiConcorsoDL> cdcPotenziamento = ClsClasseDiConcorsoBL
-            .CaricaCDCperDisciplina(IDdipartimento)
-            .Where(x => x.nomeDisciplina.Contains("otenziamento"))
-            .Select(x => x.cdc)
-            .ToList();
-            uc.CDCPotenziamento = cdcPotenziamento;
+ 
 
             List<ClsClasseDiConcorsoDL> cdcDocente = cacheCDC[doc.ID];
 
@@ -876,10 +876,15 @@ namespace Cattedre
 
         private void LoadAnniScolastici()
         {
-            anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
 
-            for (int i = 0; i < anniscolastici.Count; i++)
-                cbAnniScolastici.Items.Add(anniscolastici[i].Sigla);
+            cbAnniScolastici.DataSource = anniscolastici;
+            cbAnniScolastici.DisplayMember = "Sigla";
+            cbAnniScolastici.ValueMember = "ID";
+            IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+            if (IDannoscolastico >= 0)
+                cbAnniScolastici.SelectedValue = IDannoscolastico;
+            else
+                cbAnniScolastici.SelectedIndex = -1;
         }
 
         private void LoadAssegnazioni(int IDdipartimento, long IDannoscolastico, out DataTable docenti)
@@ -1373,8 +1378,7 @@ namespace Cattedre
         {
             if (IDdipartimento <= 0) return; // evita chiamate premature
             if (cbAnniScolastici.SelectedIndex>-1)
-                IDannoscolastico = ClsAnnoScolasticoBL.RilevaIDanno(cbAnniScolastici.Text);
-           //  = cbAnniScolastici.SelectedIndex;
+                IDannoscolastico =Convert.ToInt32( cbAnniScolastici.SelectedValue);
 
             Annoscolasticoselezionato = cbAnniScolastici.SelectedItem.ToString();
             ClsAnnoScolasticoDL annoscolastico = new ClsAnnoScolasticoDL();

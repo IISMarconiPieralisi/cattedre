@@ -416,7 +416,7 @@ namespace Cattedre
 
             return 0;
         }
-        public static int RilevaOrePotenziamentoDipartimentoPerCDC(int IDdipartimento, long IDcdc)
+        public static int RilevaOrePotenziamentoDipartimentoPerCDC(long IDdipartimento, long IDcdc)
         {
             try
             {

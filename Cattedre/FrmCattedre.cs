@@ -465,7 +465,7 @@ namespace Cattedre
             //    y += 40;  // ampio spazio prima del blocco CDC successivo
             //}
         }
-
+        
         private void LoadAssegnazioni(long IDdipartimento, long IDannoscolastico, out DataTable docenti)
         {
             pnlDipartimento.Controls
@@ -548,6 +548,17 @@ namespace Cattedre
                         .Select(g => g.First())
                         .ToList());
 
+                    // Docenti esterni abilitati per questa disciplina specifica
+                    List<ClsUtenteDL> utentiEsterni = ClsRichiedereBL.RilevaUtentiDisciplina(disciplina.ID);
+
+                    foreach (var esterno in utentiEsterni)
+                    {
+                        // Evita duplicati (potrebbe già essere nel dipartimento)
+                        if (esterno.TipoDocente == 'T' && !teorici.Any(d => d.ID == esterno.ID))
+                            teorici.Add(esterno);
+                        else if (esterno.TipoDocente == 'L' && !pratici.Any(d => d.ID == esterno.ID))
+                            pratici.Add(esterno);
+                    }
 
                     uc.cbDocentiTeorici.DataSource = teorici;
                     uc.cbDocentiTeorici.DisplayMember = "DisplayText";
@@ -656,6 +667,7 @@ namespace Cattedre
                     //uc.cbDocentiItip.TabStop = true;
                     //uc.cbDocentiTeorici.TabIndex = tabIndex++;
                     //uc.cbDocentiItip.TabIndex = tabIndex++;
+                    CollegaScrollComboBox(uc);
                     pnlDipartimento.Controls.Add(uc);
                     pnlDipartimento.Refresh();
 
@@ -1186,7 +1198,40 @@ namespace Cattedre
                 .Select(c => (c, c.Left))
                 .ToList();
         }
+        private void CollegaScrollComboBox(UcAssegnazioni uc)
+        {
+            foreach (Control ctrl in uc.Controls)
+            {
+                if (ctrl is ComboBox cb)
+                {
+                    cb.MouseWheel += (s, e) =>
+                    {
+                        ((HandledMouseEventArgs)e).Handled = true;
 
+                        if (ModifierKeys == Keys.Shift && hScrollOrizzontale.Enabled)
+                        {
+                            // Scroll orizzontale
+                            int nuovoValore = hScrollOrizzontale.Value - e.Delta / 3;
+                            nuovoValore = Math.Max(hScrollOrizzontale.Minimum,
+                                          Math.Min(nuovoValore, hScrollOrizzontale.Maximum - hScrollOrizzontale.LargeChange + 1));
+                            hScrollOrizzontale.Value = nuovoValore;
+                            HScrollOrizzontale_Scroll(hScrollOrizzontale,
+                                new ScrollEventArgs(ScrollEventType.ThumbPosition, nuovoValore));
+                        }
+                        else
+                        {
+                            // Scroll verticale
+                            int delta = -e.Delta;
+                            int nuovoScroll = pnlCentrale.VerticalScroll.Value + delta;
+                            nuovoScroll = Math.Max(pnlCentrale.VerticalScroll.Minimum,
+                                          Math.Min(nuovoScroll, pnlCentrale.VerticalScroll.Maximum));
+                            pnlCentrale.VerticalScroll.Value = nuovoScroll;
+                            pnlCentrale.PerformLayout();
+                        }
+                    };
+                }
+            }
+        }
         private void HScrollOrizzontale_Scroll(object sender, ScrollEventArgs e)
         {
             int offset = e.NewValue;

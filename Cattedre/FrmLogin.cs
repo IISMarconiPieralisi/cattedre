@@ -24,29 +24,6 @@ namespace Cattedre
             InitializeComponent();
             this.AcceptButton = btLogin;
             rbDBufficiale.Checked = true;
-            // Impostazione DB scelto
-            if (rbDBufficiale.Checked)
-            {
-                // Connessione DB ufficiale
-                Program.connectionString = ConfigurationManager.ConnectionStrings["srvcattedre"].ConnectionString;
-            }
-            else if (rbDBprova.Checked)
-            {
-                // Connessione DB prova
-                Program.connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-            }
-
-            // Controllo selezione DB
-            if (!rbDBufficiale.Checked && !rbDBprova.Checked)
-            {
-                MessageBox.Show(
-                    "Seleziona un database prima di effettuare il login.",
-                    "Attenzione",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
         }
 
         public ClsUtenteDL UtenteLoggato { get; private set; }
@@ -315,6 +292,16 @@ namespace Cattedre
             tbPassword.Clear();
             tbNomeUtente.Text = "stefano.bartoloni@iismarconipieralisi.it";
             tbPassword.Text = "Bartoloni";
+        }
+
+        private void rbDBufficiale_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.connectionString = ConfigurationManager.ConnectionStrings["srvcattedre"].ConnectionString;
+        }
+
+        private void rbDBprova_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
         }
     }
     

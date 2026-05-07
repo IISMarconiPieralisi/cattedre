@@ -113,7 +113,7 @@ namespace Cattedre
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(218, 461);
+            this.pictureBox1.Size = new System.Drawing.Size(218, 395);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
@@ -124,7 +124,7 @@ namespace Cattedre
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
             this.pictureBox2.Location = new System.Drawing.Point(218, 0);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(336, 116);
+            this.pictureBox2.Size = new System.Drawing.Size(366, 116);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 15;
             this.pictureBox2.TabStop = false;
@@ -386,6 +386,7 @@ namespace Cattedre
             this.rbDBprova.TabStop = true;
             this.rbDBprova.Text = "DB prova";
             this.rbDBprova.UseVisualStyleBackColor = true;
+            this.rbDBprova.CheckedChanged += new System.EventHandler(this.rbDBprova_CheckedChanged);
             // 
             // rbDBufficiale
             // 
@@ -397,16 +398,16 @@ namespace Cattedre
             this.rbDBufficiale.TabStop = true;
             this.rbDBufficiale.Text = "DB ufficiale";
             this.rbDBufficiale.UseVisualStyleBackColor = true;
+            this.rbDBufficiale.CheckedChanged += new System.EventHandler(this.rbDBufficiale_CheckedChanged);
             // 
             // FrmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
-            this.ClientSize = new System.Drawing.Size(554, 461);
+            this.ClientSize = new System.Drawing.Size(584, 395);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btTest1);
-            this.ClientSize = new System.Drawing.Size(584, 395);
             this.Controls.Add(this.rbDBufficiale);
             this.Controls.Add(this.rbDBprova);
             this.Controls.Add(this.panel1);

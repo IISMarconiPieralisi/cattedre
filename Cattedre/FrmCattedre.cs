@@ -590,7 +590,10 @@ namespace Cattedre
 
                     if (disciplina.OreLaboratorio == 0)
                     {
-                        uc.cbDocentiItip.Enabled = false;
+                        uc.cbDocentiItip.Visible = false;
+                        uc.label2.Visible = false;
+                        uc.label4.Visible = false;
+                        uc.lblOreLaboratorio.Visible = false;
                         uc.cbDocentiItip.SelectedIndex = 0;
                     }
                     else

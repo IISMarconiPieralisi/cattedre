@@ -12,6 +12,17 @@ namespace Cattedre
 {
     public partial class ucOreDoc : UserControl
     {
+        //varuabuku gobali
+        public Dictionary<long, ucOreDoc> DictDocenti { get; set; }
+        public Dictionary<long, List<ClsClasseDiConcorsoDL>> CacheCDC { get; set; }
+        // Evento per notificare il chiamante (es. per AggiornaOreEffettive)
+        public event EventHandler OrePotValide;
+
+        // Sostituisce il lambda in CreaUcOreDoc
+        private int valorePrec = 0;
+        private bool isResetting = false;
+
+        public void ImpostaValorePrec(int valore) => valorePrec = valore;
         //liste di appoggio
         List<ClsClasseDiConcorsoDL> cdcDocente = new List<ClsClasseDiConcorsoDL>();
         //valori globali
@@ -41,11 +52,45 @@ namespace Cattedre
 
         private void nudOrePot_ValueChanged(object sender, EventArgs e)
         {
-            if (this.Tag == null || cdcPotDocente == null || IDdisciplina == 0)
-                return;
+            try
+            {
+                if (this.Tag == null || cdcPotDocente == null || IDdisciplina == 0)
+                    return;
+                if (isResetting) return;
 
-            int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
-            ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, IDannoScolastico, IDdisciplina);
+                // Validazione ore massime
+                if (DictDocenti != null && CacheCDC != null)
+                {
+                    int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                        IDdipartimento, cdcPotDocente.ID);
+
+                    long idDocenteCorrente = IDutente;
+
+                    int orePotAltriDocenti = DictDocenti
+                        .Where(kvp =>
+                        {
+                            if (kvp.Key == idDocenteCorrente) return false;
+                            var cdcDocenteKvp = CacheCDC.ContainsKey(kvp.Key)
+                                ? CacheCDC[kvp.Key]
+                                : ClsRichiedereBL.RilevaCDCDocente(kvp.Key);
+                            return cdcDocenteKvp.Any(c => c.ID == cdcPotDocente.ID);
+                        })
+                        .Sum(kvp => (int)kvp.Value.nudOrePot.Value);
+
+                    int nuovoValore = (int)nudOrePot.Value;
+
+                    if (orePotAltriDocenti + nuovoValore > oreMax)
+                        throw new Exception("Superato il limite di ore di potenziamento consentite: " + oreMax);
+                    
+                    valorePrec = nuovoValore;
+                    OrePotValide?.Invoke(this, EventArgs.Empty);
+                }
+                int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
+                ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, IDannoScolastico, IDdisciplina);
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public void Inizializza(long idAnnoScolastico)

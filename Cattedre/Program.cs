@@ -9,7 +9,7 @@ namespace Cattedre
 {
     static class Program
     {
-        public static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+        public static string connectionString;
         //public static string connectionString = ConfigurationManager.ConnectionStrings["srvcattedre"].ConnectionString;
 
         /// <summary>

@@ -35,6 +35,8 @@
             this.btLogin = new Krypton.Toolkit.KryptonButton();
             this.btLoginGoogle = new Krypton.Toolkit.KryptonButton();
             this.panel2 = new Krypton.Toolkit.KryptonPanel();
+            this.rbDBprova = new System.Windows.Forms.RadioButton();
+            this.rbDBufficiale = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.panel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -353,12 +355,36 @@
             this.panel2.StateCommon.Color2 = System.Drawing.Color.RoyalBlue;
             this.panel2.TabIndex = 23;
             // 
+            // rbDBprova
+            // 
+            this.rbDBprova.AutoSize = true;
+            this.rbDBprova.Location = new System.Drawing.Point(472, 270);
+            this.rbDBprova.Name = "rbDBprova";
+            this.rbDBprova.Size = new System.Drawing.Size(70, 17);
+            this.rbDBprova.TabIndex = 24;
+            this.rbDBprova.TabStop = true;
+            this.rbDBprova.Text = "DB prova";
+            this.rbDBprova.UseVisualStyleBackColor = true;
+            // 
+            // rbDBufficiale
+            // 
+            this.rbDBufficiale.AutoSize = true;
+            this.rbDBufficiale.Location = new System.Drawing.Point(472, 293);
+            this.rbDBufficiale.Name = "rbDBufficiale";
+            this.rbDBufficiale.Size = new System.Drawing.Size(79, 17);
+            this.rbDBufficiale.TabIndex = 25;
+            this.rbDBufficiale.TabStop = true;
+            this.rbDBufficiale.Text = "DB ufficiale";
+            this.rbDBufficiale.UseVisualStyleBackColor = true;
+            // 
             // FrmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.ClientSize = new System.Drawing.Size(584, 395);
+            this.Controls.Add(this.rbDBufficiale);
+            this.Controls.Add(this.rbDBprova);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tbNomeUtente);
             this.Controls.Add(this.panel2);
@@ -405,5 +431,7 @@
         private Krypton.Toolkit.KryptonButton btLogin;
         private Krypton.Toolkit.KryptonButton btLoginGoogle;
         private Krypton.Toolkit.KryptonPanel panel2;
+        private System.Windows.Forms.RadioButton rbDBprova;
+        private System.Windows.Forms.RadioButton rbDBufficiale;
     }
 }

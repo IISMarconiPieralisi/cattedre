@@ -110,6 +110,18 @@ namespace Cattedre
                 discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
                 IDannoscolastico, IDdipartimento, out indirizziTrovati);
                 classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
+
+                // Aggiungi le classi di altri indirizzi che fanno discipline di questo dipartimento
+                List<ClsClasseDL> classiEsterne = ClsClasseBL
+                    .CaricaClassiEsterneCheFannoDisciplineDipartimento(IDdipartimento, IDannoscolastico);
+
+                foreach (var classe in classiEsterne)
+                {
+                    if (!classi.Any(c => c.ID == classe.ID))
+                        classi.Add(classe);
+                }
+
+                classi = classi.OrderBy(c => c.Sigla).ToList();
             });
 
             LoadDiscipline(IDdipartimento);
@@ -339,7 +351,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Errore:{ex.Message}. \nRiprovare!", "riprovare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Errore:{ex.Message}. \nRiprovare!", "Riprovare", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion
@@ -480,6 +492,11 @@ namespace Cattedre
             // QUERY UNICA x recuperare tutti i docenti del dipartimento
             docenti = ClsAssegnareBL
                 .CaricaDocentiConAssegnazioni(IDdipartimento, IDannoscolastico);
+
+            // Aggiunti i docenti esterni già assegnati
+            DataTable esterniAssegnati = ClsAssegnareBL.CaricaDocentiEsterniAssegnati(IDdipartimento, IDannoscolastico);
+            foreach (DataRow row in esterniAssegnati.Rows)
+                docenti.ImportRow(row);
 
             //int tabIndex = 5;
             int oreTotaliGenerali = 0;
@@ -745,7 +762,7 @@ namespace Cattedre
                 y += ucClasse.Height + 10;
             }
         }
-        private Panel LoadPanelkHeaderCDC(ClsClasseDiConcorsoDL cdc, long IDannoscolastico)
+        private Panel LoadPanelHeaderCDC(ClsClasseDiConcorsoDL cdc, long IDannoscolastico)
         {
             int numCattedreDiFatto = ClsDotareBL.TrovaNumCattedreDiFatto(cdc.ID, IDannoscolastico);
             int numCattedreDiDiritto = ClsDotareBL.TrovaNumCattedreDiDiritto(cdc.ID, IDannoscolastico);
@@ -937,7 +954,7 @@ namespace Cattedre
 
                 if (cdcTeorici != null)
                 {
-                    Panel headerTeorici = LoadPanelkHeaderCDC(cdcTeorici, IDannoscolastico);
+                    Panel headerTeorici = LoadPanelHeaderCDC(cdcTeorici, IDannoscolastico);
                     int offset = headerTeorici.Tag is int o ? o : 0;
                     headerTeorici.Location = new Point(0, y);
                     pnlOreDoc.Controls.Add(headerTeorici);
@@ -1004,7 +1021,7 @@ namespace Cattedre
 
                 if (cdcPratici != null)
                 {
-                    Panel headerTeorici = LoadPanelkHeaderCDC(cdcPratici, IDannoscolastico);
+                    Panel headerTeorici = LoadPanelHeaderCDC(cdcPratici, IDannoscolastico);
                     int offset = headerTeorici.Tag is int o ? o : 0;
                     headerTeorici.Location = new Point(0, y);
                     pnlOreDoc.Controls.Add(headerTeorici);
@@ -1066,110 +1083,50 @@ namespace Cattedre
         private ucOreDoc CreaUcOreDoc(ClsUtenteDL doc, long IDannoscolastico, Dictionary<long, List<ClsClasseDiConcorsoDL>> cacheCDC)
         {
             ucOreDoc uc = new ucOreDoc();
-
-            uc.lblDocente.Text = doc.DisplayText;
-            uc.lblOreDiCattedra.Text = ClsContrattoBL.RilevaOreContrattoDoc(doc.ID).ToString();
-
-            int orePot = dtDocentiAssegnazioni.AsEnumerable()
-                .Where(r => r["IDutente"] != DBNull.Value &&
-                            Convert.ToInt64(r["IDutente"]) == doc.ID &&
-                            r["IDannoscolastico"] != DBNull.Value &&
-                            Convert.ToInt64(r["IDannoscolastico"]) == IDannoscolastico)
-                .Sum(r => r["oreSpeciali"] == DBNull.Value ? 0 : Convert.ToInt32(r["oreSpeciali"]));
-            List<ClsClasseDiConcorsoDL> cdcPotenziamento = ClsClasseDiConcorsoBL
-             .CaricaCDCperDisciplina(IDdipartimento)
-             .Where(x => x.nomeDisciplina.Contains("otenziamento"))
-             .Select(x => x.cdc)
-             .ToList();
-            uc.CDCPotenziamento = cdcPotenziamento;
-            uc.nudOrePot.Value = orePot;
-            uc.lblOreEffettive.Text = "0";
-            uc.lblOreTotali.Text = "0";
-            uc.Tag = doc.ID;
-            uc.IDdipartimento = IDdipartimento;
-            uc.Inizializza(IDannoscolastico);
-
-
-
-            List<ClsClasseDiConcorsoDL> cdcDocente = cacheCDC[doc.ID];
-
-            bool docenteAbilitatoAlPotenziamento = cdcDocente.Any(cdcDoc =>
-            cdcPotenziamento.Any(cdcPot => cdcPot.ID == cdcDoc.ID)
-            );
-
-            if (docenteAbilitatoAlPotenziamento)
+            try
             {
-                ClsClasseDiConcorsoDL cdcPotDocente = cdcDocente
-                    .FirstOrDefault(cdcDoc => cdcPotenziamento.Any(cdcPot => cdcPot.ID == cdcDoc.ID));
+                uc.lblDocente.Text = doc.DisplayText;
+                uc.lblOreDiCattedra.Text = ClsContrattoBL.RilevaOreContrattoDoc(doc.ID).ToString();
+                int orePot = ClsAssegnareBL.RilevaOrePotDocente(doc.ID, IDannoscolastico);
+                List<ClsClasseDiConcorsoDL> cdcPotenziamento = ClsClasseDiConcorsoBL.RilevaIDCDCPotenziamentoDipartimento(IDdipartimento);
+                uc.CDCPotenziamento = cdcPotenziamento;
+                uc.nudOrePot.Value = orePot;
+                uc.lblOreEffettive.Text = "0";
+                uc.lblOreTotali.Text = "0";
+                uc.Tag = doc.ID;
+                uc.IDdipartimento = IDdipartimento;
+                uc.Inizializza(IDannoscolastico);
 
-                if (cdcPotDocente != null)
+                List<ClsClasseDiConcorsoDL> cdcDocente = cacheCDC[doc.ID];
+
+                bool docenteAbilitatoAlPotenziamento = cdcDocente.Any(cdcDoc =>cdcPotenziamento.Any(cdcPot => cdcPot.ID == cdcDoc.ID));
+
+                if (docenteAbilitatoAlPotenziamento)
                 {
-                    int oreMaxNud = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
-                        IDdipartimento, cdcPotDocente.ID);
-                    uc.nudOrePot.Maximum = oreMaxNud;
-                }
-            }
+                    ClsClasseDiConcorsoDL cdcPotDocente = cdcDocente
+                        .FirstOrDefault(cdcDoc => cdcPotenziamento.Any(cdcPot => cdcPot.ID == cdcDoc.ID));
 
-            // Disabilita modifica per Preside o Admin
-            if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || !docenteAbilitatoAlPotenziamento)
-                uc.nudOrePot.Enabled = false;
-
-            // Evento aggiornamento ore potenziamento
-            int valorePrec = orePot;
-            bool isResetting = false;  // flag anti-rientranza
-
-            uc.nudOrePot.ValueChanged += (s, e) =>
-            {
-                if (isResetting) return;  // ignora l'evento causato dal ripristino
-
-                List<ClsClasseDiConcorsoDL> cdcPot = ClsClasseDiConcorsoBL
-                    .CaricaCDCperDisciplina(IDdipartimento)
-                    .Where(x => x.nomeDisciplina.Contains("otenziamento"))
-                    .Select(x => x.cdc)
-                    .ToList();
-
-                ClsClasseDiConcorsoDL cdcDocCorrente = cdcDocente
-                    .FirstOrDefault(cdcDoc => cdcPot.Any(cdcP => cdcP.ID == cdcDoc.ID));
-
-                if (cdcDocCorrente == null)
-                    return;
-
-                int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
-                    IDdipartimento, cdcDocCorrente.ID);
-
-                long idDocenteCorrente = doc.ID;
-
-                int orePotAltriDocenti = dictDocenti
-                    .Where(kvp =>
+                    if (cdcPotDocente != null)
                     {
-                        if (kvp.Key == idDocenteCorrente) return false;
-                        var cdcDocenteKvp = cacheCDC.ContainsKey(kvp.Key)
-                            ? cacheCDC[kvp.Key]
-                            : ClsRichiedereBL.RilevaCDCDocente(kvp.Key);
-                        return cdcDocenteKvp.Any(c => c.ID == cdcDocCorrente.ID);
-                    })
-                    .Sum(kvp => (int)kvp.Value.nudOrePot.Value);
-
-                int nuovoValore = (int)uc.nudOrePot.Value;
-                int orePotTotaliInserite = orePotAltriDocenti + nuovoValore;
-
-                if (orePotTotaliInserite > oreMax)
-                {
-                    MessageBox.Show(
-                        "Superato il limite di ore di potenziamento consentite: " + oreMax,
-                        "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    isResetting = true;           // attiva flag prima del ripristino
-                    uc.nudOrePot.Value = valorePrec;
-                    isResetting = false;          // disattiva flag dopo il ripristino
+                        int oreMaxNud = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                            IDdipartimento, cdcPotDocente.ID);
+                        uc.nudOrePot.Maximum = oreMaxNud;
+                    }
                 }
-                else
-                {
-                    valorePrec = (int)uc.nudOrePot.Value;
-                    AggiornaOreEffettive();
-                }
-            };
 
+                // Disabilita modifica per Preside o Admin
+                if (utenteLoggato.TipoUtente == "P" || utenteLoggato.TipoUtente == "A" || !docenteAbilitatoAlPotenziamento)
+                    uc.nudOrePot.Enabled = false;
+
+                // Evento aggiornamento ore potenziamento
+                uc.DictDocenti = dictDocenti;
+                uc.CacheCDC = cacheCDC;
+                uc.ImpostaValorePrec(orePot);
+                uc.OrePotValide += (s, e) => AggiornaOreEffettive();
+            }catch(Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}. \nRiprovare!", "Riprovare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             return uc;
         }
 

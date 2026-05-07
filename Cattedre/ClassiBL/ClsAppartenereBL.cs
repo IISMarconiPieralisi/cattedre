@@ -125,8 +125,6 @@ namespace Cattedre
                 throw new Exception($"errore nella query: {ex.Message}", ex);
             }
         }
-
-
         public static List<ClsDisciplinaDL> disciplinaAppartenuta(long IDindirizzo)
         {
             List<ClsDisciplinaDL> disc = new List<ClsDisciplinaDL>();

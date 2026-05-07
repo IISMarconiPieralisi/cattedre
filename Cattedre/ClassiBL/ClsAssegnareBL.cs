@@ -240,6 +240,49 @@ namespace Cattedre
 
             return dt;
         }
+
+        public static DataTable CaricaDocentiEsterniAssegnati(long IDdipartimento, long IDannoScolastico)
+        {
+            DataTable dt = new DataTable();
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                conn.Open();
+                string sql = @"SELECT
+                        u.ID AS IDutente,
+                        u.nome,
+                        u.cognome,
+                        u.tipoDocente,
+                        u.colore,
+                        a.IDclasse,
+                        a.IDdisciplina,
+                        a.oreSpeciali,
+                        a.IDannoscolastico,
+                        c.tipoContratto
+                    FROM utenti u
+                    JOIN assegnare a
+                        ON a.IDutente = u.ID
+                        AND a.IDannoscolastico = @IDannoScolastico
+                    JOIN richiedere r
+                        ON r.IDutente = u.ID
+                        AND r.IDdisciplina = a.IDdisciplina
+                    LEFT JOIN contratti c
+                        ON c.IDutente = u.ID
+                    WHERE u.tipoUtente IN ('D','C','A')
+                    AND NOT EXISTS (
+                        SELECT 1 FROM afferire af
+                        WHERE af.IDutente = u.ID
+                        AND af.IDdipartimento = @IDdipartimento
+                    )";
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                    cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        da.Fill(dt);
+                }
+            }
+            return dt;
+        }
         #endregion
         #region Ore e cattedre
         public static void SalvaCattedra(long IDclasse, long IDannoscolastico, long IDdisciplina, long IDutente, char tipoDocente)
@@ -407,6 +450,7 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
+
         #endregion
         #region gestioneCombobox
         public static List<UcAssegnazioni.ProfessoreItem> FiltraDocentiPerComboBox(DataTable docenti, string tipoDocente)
@@ -480,6 +524,34 @@ namespace Cattedre
             }
 
             return ass;
+        }
+        public static int RilevaOrePotDocente(long IDutente, long IDannoScolastico)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT IFNULL(SUM(oreSpeciali), 0) 
+                                    FROM assegnare 
+                                    WHERE IDutente = @IDutente 
+                                    AND IDannoscolastico = @IDannoScolastico";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoScolastico);
+
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            return Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore ricerca potenziamento dipartimento per CDC: " + ex.Message);
+            }
+            return 0;
         }
         #endregion
         #region Codice vecchio

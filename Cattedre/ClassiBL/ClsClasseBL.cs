@@ -274,6 +274,49 @@ namespace Cattedre
             }
             return classi;
         }
+        public static List<ClsClasseDL> CaricaClassiEsterneCheFannoDisciplineDipartimento(long IDdipartimento, long IDannoscolastico)
+        {
+            List<ClsClasseDL> classi = new List<ClsClasseDL>();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT DISTINCT classi.ID, classi.sigla, classi.anno, classi.IDindirizzo
+                           FROM gestire
+                           JOIN discipline ON discipline.ID = gestire.IDdisciplina
+                           JOIN appartenere ON appartenere.IDdisciplina = discipline.ID
+                           JOIN indirizzi ON indirizzi.ID = appartenere.IDindirizzo
+                           JOIN classi ON classi.IDindirizzo = indirizzi.ID
+                           WHERE gestire.IDdipartimento = @IDdipartimento
+                           AND classi.IDannoscolastico = @IDannoscolastico
+                           ORDER BY classi.sigla";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                            da.Fill(dt);
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            classi.Add(new ClsClasseDL
+                            {
+                                ID = Convert.ToInt64(row["ID"]),
+                                Sigla = row["sigla"].ToString(),
+                                Anno = Convert.ToInt16(row["anno"]),
+                                Idindirizzo = Convert.ToInt64(row["IDindirizzo"])
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore CaricaClassiCheFannoDisciplineDipartimento: " + ex.Message);
+            }
+            return classi;
+        }
         private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, long IDindirizzo = 0, long IDannoscolastico = 0, int annoClasse = 0)
         {
             try

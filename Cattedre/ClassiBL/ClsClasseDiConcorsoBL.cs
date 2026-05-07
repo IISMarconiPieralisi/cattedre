@@ -297,7 +297,6 @@ namespace Cattedre
                         {
                             dr.Fill(dt);
                         }
-                        conn.Close();
                     }
                     foreach (DataRow row in dt.Rows)
                     {
@@ -318,8 +317,43 @@ namespace Cattedre
             }
             return cdcs;
         }
+        public static List<ClsClasseDiConcorsoDL> RilevaIDCDCPotenziamentoDipartimento(long IDdipartimento)
+        {
+            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+            DataTable dt = new DataTable();
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                string sql = @"SELECT DISTINCT c.ID, c.livello, c.nome, c.abilitazioniRichieste
+                                FROM gestire g
+                                JOIN discipline d ON g.IDdisciplina = d.ID
+                                JOIN richiedere r ON r.IDdisciplina = d.ID
+                                JOIN classidiconcorso c ON r.IDclasseDiConcorso = c.ID
+                                WHERE g.IDdipartimento = @IDdipartimento
+                                AND d.disciplinaSpeciale LIKE '%pot%'";
+                conn.Open();
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+            foreach (DataRow row in dt.Rows)
+            {
+                ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
+                cdc.ID = Convert.ToInt32(row["ID"]);
+                cdc.Livello = row["livello"].ToString();
+                cdc.Nome = row["nome"].ToString();
+                cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
+                cdcs.Add(cdc);
+            }
+            return cdcs;
+        }
         #endregion
         #region valori specifici
+
         public static int ContCattedrePotenziamentoCDC(long IDcdc)
         {
                 int cattedre = 0;

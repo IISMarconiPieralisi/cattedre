@@ -110,6 +110,18 @@ namespace Cattedre
                 discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(
                 IDannoscolastico, IDdipartimento, out indirizziTrovati);
                 classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
+
+                // Aggiungi le classi di altri indirizzi che fanno discipline di questo dipartimento
+                List<ClsClasseDL> classiEsterne = ClsClasseBL
+                    .CaricaClassiEsterneCheFannoDisciplineDipartimento(IDdipartimento, IDannoscolastico);
+
+                foreach (var classe in classiEsterne)
+                {
+                    if (!classi.Any(c => c.ID == classe.ID))
+                        classi.Add(classe);
+                }
+
+                classi = classi.OrderBy(c => c.Sigla).ToList();
             });
 
             LoadDiscipline(IDdipartimento);
@@ -480,6 +492,11 @@ namespace Cattedre
             // QUERY UNICA x recuperare tutti i docenti del dipartimento
             docenti = ClsAssegnareBL
                 .CaricaDocentiConAssegnazioni(IDdipartimento, IDannoscolastico);
+
+            // Aggiunti i docenti esterni già assegnati
+            DataTable esterniAssegnati = ClsAssegnareBL.CaricaDocentiEsterniAssegnati(IDdipartimento, IDannoscolastico);
+            foreach (DataRow row in esterniAssegnati.Rows)
+                docenti.ImportRow(row);
 
             //int tabIndex = 5;
             int oreTotaliGenerali = 0;

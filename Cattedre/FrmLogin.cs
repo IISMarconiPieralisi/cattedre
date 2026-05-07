@@ -102,7 +102,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"errore",MessageBoxButtons.RetryCancel,MessageBoxIcon.Exclamation);
+                MessageBox.Show(ex.Message, "errore", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -129,7 +129,7 @@ namespace Cattedre
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message+"\nRiprovare!","errore",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message + "\nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private Oauth2Service GetService(UserCredential credential)
@@ -195,11 +195,12 @@ namespace Cattedre
                     else
                         throw new Exception("Utente, non trovato nel database");
                 }
-            }catch (Exception ex)
-            {
-                throw new Exception("errore Nel login:\n "+ex.Message);
             }
-            
+            catch (Exception ex)
+            {
+                throw new Exception("errore Nel login:\n " + ex.Message);
+            }
+
         }
 
         private Image ScaricaFotoProfilo(string url)
@@ -273,7 +274,7 @@ namespace Cattedre
                 {
                     string credPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
                     credPath = Path.Combine(credPath, ".credentials/", System.Reflection.Assembly.GetExecutingAssembly().GetName().Name);
-                    var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets,scopes,
+                    var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, scopes,
                                                                           userName,
                                                                           CancellationToken.None,
                                                                           new FileDataStore(credPath, true)).Result;
@@ -282,13 +283,13 @@ namespace Cattedre
                     return credential;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception("Get user credentials failed.", ex);
 
             }
         }
-        public  static void logout()
+        public static void logout()
         {
             string credPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             credPath = Path.Combine(credPath, ".credentials"); // Recupero il file dalla cartella documenti dove ho memorizzato l'utente loggato //, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name);
@@ -307,5 +308,14 @@ namespace Cattedre
             else
                 MessageBox.Show("La cartella {0} non esiste", credPath);
         }
+
+        private void btTest1_Click(object sender, EventArgs e)
+        {
+            tbNomeUtente.Clear();
+            tbPassword.Clear();
+            tbNomeUtente.Text = "stefano.bartoloni@iismarconipieralisi.it";
+            tbPassword.Text = "Bartoloni";
+        }
     }
+    
 }

@@ -23,6 +23,30 @@ namespace Cattedre
         {
             InitializeComponent();
             this.AcceptButton = btLogin;
+            rbDBufficiale.Checked = true;
+            // Impostazione DB scelto
+            if (rbDBufficiale.Checked)
+            {
+                // Connessione DB ufficiale
+                Program.connectionString = ConfigurationManager.ConnectionStrings["srvcattedre"].ConnectionString;
+            }
+            else if (rbDBprova.Checked)
+            {
+                // Connessione DB prova
+                Program.connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            }
+
+            // Controllo selezione DB
+            if (!rbDBufficiale.Checked && !rbDBprova.Checked)
+            {
+                MessageBox.Show(
+                    "Seleziona un database prima di effettuare il login.",
+                    "Attenzione",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
         }
 
         public ClsUtenteDL UtenteLoggato { get; private set; }
@@ -58,7 +82,7 @@ namespace Cattedre
                 string email = tbNomeUtente.Text.Trim();
                 string password = tbPassword.Text.Trim();
 
-                if (ClsUtenteBL.Login(email, password))
+                if (ClsUtenteBL.Login(email, password) && (rbDBufficiale.Checked || rbDBprova.Checked))
                 {
                     ClsUtenteDL utenteLoggato = null;
                     utenteLoggato = ClsUtenteBL.caricautenteByEmail(email);
@@ -100,7 +124,8 @@ namespace Cattedre
         {
             try
             {
-                login();
+                if (rbDBprova.Checked || rbDBufficiale.Checked)
+                    login();
             }
             catch (Exception ex)
             {
@@ -304,6 +329,14 @@ namespace Cattedre
                 tbNomeUtente.Text = "stefano.bartoloni@iismarconipieralisi.it";
                 tbPassword.Text = "Bartoloni";
             }
+        }
+
+        private void btTest1_Click(object sender, EventArgs e)
+        {
+            tbNomeUtente.Clear();
+            tbPassword.Clear();
+            tbNomeUtente.Text = "stefano.bartoloni@iismarconipieralisi.it";
+            tbPassword.Text = "Bartoloni";
         }
     }
     

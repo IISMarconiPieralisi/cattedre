@@ -288,7 +288,10 @@ namespace Cattedre
                            JOIN appartenere ON appartenere.IDdisciplina = discipline.ID
                            JOIN indirizzi ON indirizzi.ID = appartenere.IDindirizzo
                            JOIN classi ON classi.IDindirizzo = indirizzi.ID
+                           JOIN vigere ON vigere.IDdisciplina = discipline.ID
+                           JOIN anniscolastici ON anniscolastici.ID = classi.IDannoscolastico
                            WHERE gestire.IDdipartimento = @IDdipartimento
+                           AND CURDATE() 
                            AND classi.IDannoscolastico = @IDannoscolastico
                            ORDER BY classi.sigla";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))

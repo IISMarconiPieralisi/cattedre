@@ -23,7 +23,7 @@ namespace Cattedre
         {
             InitializeComponent();
             this.AcceptButton = btLogin;
-            rbDBufficiale.Checked = true;
+           
         }
 
         public ClsUtenteDL UtenteLoggato { get; private set; }
@@ -289,6 +289,7 @@ namespace Cattedre
         private void FrmLogin_Load(object sender, EventArgs e)
         {
             rbTest1.Checked = true;
+            rbDBufficiale.Checked = true;
         }
 
         private void rbTest1_CheckedChanged(object sender, EventArgs e)
@@ -308,13 +309,7 @@ namespace Cattedre
             }
         }
 
-        private void btTest1_Click(object sender, EventArgs e)
-        {
-            tbNomeUtente.Clear();
-            tbPassword.Clear();
-            tbNomeUtente.Text = "stefano.bartoloni@iismarconipieralisi.it";
-            tbPassword.Text = "Bartoloni";
-        }
+      
 
         private void rbDBufficiale_CheckedChanged(object sender, EventArgs e)
         {

@@ -35,14 +35,18 @@ namespace Cattedre
             this.btLogin = new Krypton.Toolkit.KryptonButton();
             this.btLoginGoogle = new Krypton.Toolkit.KryptonButton();
             this.panel2 = new Krypton.Toolkit.KryptonPanel();
-            this.btTest1 = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
             this.rbDBprova = new System.Windows.Forms.RadioButton();
             this.rbDBufficiale = new System.Windows.Forms.RadioButton();
+            this.rbTest1 = new System.Windows.Forms.RadioButton();
+            this.rbTest2 = new System.Windows.Forms.RadioButton();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.panel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panel2)).BeginInit();
+            this.panel3.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // label2
@@ -113,7 +117,7 @@ namespace Cattedre
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(218, 395);
+            this.pictureBox1.Size = new System.Drawing.Size(218, 461);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
@@ -157,7 +161,7 @@ namespace Cattedre
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.Location = new System.Drawing.Point(332, 327);
+            this.label3.Location = new System.Drawing.Point(361, 393);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 20);
             this.label3.StateCommon.ShortText.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -210,7 +214,7 @@ namespace Cattedre
             this.btLogin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btLogin.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btLogin.Location = new System.Drawing.Point(312, 283);
+            this.btLogin.Location = new System.Drawing.Point(341, 349);
             this.btLogin.Name = "btLogin";
             this.btLogin.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btLogin.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -280,7 +284,7 @@ namespace Cattedre
             this.btLoginGoogle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btLoginGoogle.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btLoginGoogle.Location = new System.Drawing.Point(279, 353);
+            this.btLoginGoogle.Location = new System.Drawing.Point(308, 419);
             this.btLoginGoogle.Name = "btLoginGoogle";
             this.btLoginGoogle.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btLoginGoogle.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -357,29 +361,10 @@ namespace Cattedre
             this.panel2.StateCommon.Color2 = System.Drawing.Color.RoyalBlue;
             this.panel2.TabIndex = 23;
             // 
-            // btTest1
-            // 
-            this.btTest1.Location = new System.Drawing.Point(312, 408);
-            this.btTest1.Name = "btTest1";
-            this.btTest1.Size = new System.Drawing.Size(111, 48);
-            this.btTest1.TabIndex = 24;
-            this.btTest1.Text = "Passa da:\r\nalfieri a bartoloni";
-            this.btTest1.UseVisualStyleBackColor = true;
-            this.btTest1.Click += new System.EventHandler(this.btTest1_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(240, 417);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(66, 26);
-            this.label4.TabIndex = 25;
-            this.label4.Text = "Bottone \r\nper il testing ";
-            // 
             // rbDBprova
             // 
             this.rbDBprova.AutoSize = true;
-            this.rbDBprova.Location = new System.Drawing.Point(472, 270);
+            this.rbDBprova.Location = new System.Drawing.Point(3, 5);
             this.rbDBprova.Name = "rbDBprova";
             this.rbDBprova.Size = new System.Drawing.Size(70, 17);
             this.rbDBprova.TabIndex = 24;
@@ -391,7 +376,7 @@ namespace Cattedre
             // rbDBufficiale
             // 
             this.rbDBufficiale.AutoSize = true;
-            this.rbDBufficiale.Location = new System.Drawing.Point(472, 293);
+            this.rbDBufficiale.Location = new System.Drawing.Point(3, 29);
             this.rbDBufficiale.Name = "rbDBufficiale";
             this.rbDBufficiale.Size = new System.Drawing.Size(79, 17);
             this.rbDBufficiale.TabIndex = 25;
@@ -400,16 +385,55 @@ namespace Cattedre
             this.rbDBufficiale.UseVisualStyleBackColor = true;
             this.rbDBufficiale.CheckedChanged += new System.EventHandler(this.rbDBufficiale_CheckedChanged);
             // 
+            // rbTest1
+            // 
+            this.rbTest1.AutoSize = true;
+            this.rbTest1.Location = new System.Drawing.Point(3, 3);
+            this.rbTest1.Name = "rbTest1";
+            this.rbTest1.Size = new System.Drawing.Size(85, 17);
+            this.rbTest1.TabIndex = 26;
+            this.rbTest1.TabStop = true;
+            this.rbTest1.Text = "Vittorio Alfieri";
+            this.rbTest1.UseVisualStyleBackColor = true;
+            this.rbTest1.CheckedChanged += new System.EventHandler(this.rbTest1_CheckedChanged);
+            // 
+            // rbTest2
+            // 
+            this.rbTest2.AutoSize = true;
+            this.rbTest2.Location = new System.Drawing.Point(3, 26);
+            this.rbTest2.Name = "rbTest2";
+            this.rbTest2.Size = new System.Drawing.Size(106, 17);
+            this.rbTest2.TabIndex = 27;
+            this.rbTest2.TabStop = true;
+            this.rbTest2.Text = "Stefano Bartoloni";
+            this.rbTest2.UseVisualStyleBackColor = true;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.rbTest1);
+            this.panel3.Controls.Add(this.rbTest2);
+            this.panel3.Location = new System.Drawing.Point(246, 283);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(120, 49);
+            this.panel3.TabIndex = 28;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.rbDBufficiale);
+            this.panel4.Controls.Add(this.rbDBprova);
+            this.panel4.Location = new System.Drawing.Point(434, 283);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(95, 49);
+            this.panel4.TabIndex = 29;
+            // 
             // FrmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
-            this.ClientSize = new System.Drawing.Size(584, 395);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.btTest1);
-            this.Controls.Add(this.rbDBufficiale);
-            this.Controls.Add(this.rbDBprova);
+            this.ClientSize = new System.Drawing.Size(584, 461);
+            this.Controls.Add(this.panel4);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tbNomeUtente);
             this.Controls.Add(this.panel2);
@@ -435,6 +459,10 @@ namespace Cattedre
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panel2)).EndInit();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -457,9 +485,11 @@ namespace Cattedre
         private Krypton.Toolkit.KryptonButton btLogin;
         private Krypton.Toolkit.KryptonButton btLoginGoogle;
         private Krypton.Toolkit.KryptonPanel panel2;
-        private System.Windows.Forms.Button btTest1;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RadioButton rbDBprova;
         private System.Windows.Forms.RadioButton rbDBufficiale;
+        private System.Windows.Forms.RadioButton rbTest1;
+        private System.Windows.Forms.RadioButton rbTest2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel4;
     }
 }

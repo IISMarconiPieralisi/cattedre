@@ -535,35 +535,37 @@ namespace Cattedre
                     List<ClsUtenteDL> teorici = new List<ClsUtenteDL>();
                     teorici.Add(new ClsUtenteDL { ID = 0, Cognome = "", Nome = "", Colore = "" });
                     teorici.AddRange(docenti.AsEnumerable()
-                        .Where(r => r["tipoDocente"].ToString() == "T")
-                        .Select(r => new ClsUtenteDL
-                        {
-                            ID = Convert.ToInt64(r["IDutente"]),
-                            Nome = r.Field<string>("nome"),
-                            Cognome = r.Field<string>("cognome"),
-                            TipoDocente = 'T',
-                            Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
-                        })
-                        .GroupBy(_x => _x.ID)
-                        .Select(g => g.First())
-                        .ToList());
+                    .Where(r => r["tipoDocente"].ToString() == "T"
+                             && Convert.ToInt32(r["isInterno"]) == 1)
+                    .Select(r => new ClsUtenteDL
+                    {
+                        ID = Convert.ToInt64(r["IDutente"]),
+                        Nome = r.Field<string>("nome"),
+                        Cognome = r.Field<string>("cognome"),
+                        TipoDocente = 'T',
+                        Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
+                    })
+                    .GroupBy(_x => _x.ID)
+                    .Select(g => g.First())
+                    .ToList());
 
                     // docenti pratici
                     List<ClsUtenteDL> pratici = new List<ClsUtenteDL>();
                     pratici.Add(new ClsUtenteDL { ID = 0, Cognome = "", Nome = "", Colore = "" }); // item vuoto
                     pratici.AddRange(docenti.AsEnumerable()
-                        .Where(r => r["tipoDocente"].ToString() == "L")
-                        .Select(r => new ClsUtenteDL
-                        {
-                            ID = Convert.ToInt64(r["IDutente"]),
-                            Nome = r.Field<string>("nome"),
-                            Cognome = r.Field<string>("cognome"),
-                            TipoDocente = 'L',
-                            Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
-                        })
-                        .GroupBy(_x => _x.ID)
-                        .Select(g => g.First())
-                        .ToList());
+                    .Where(r => r["tipoDocente"].ToString() == "L"
+                             && Convert.ToInt32(r["isInterno"]) == 1)
+                    .Select(r => new ClsUtenteDL
+                    {
+                        ID = Convert.ToInt64(r["IDutente"]),
+                        Nome = r.Field<string>("nome"),
+                        Cognome = r.Field<string>("cognome"),
+                        TipoDocente = 'L',
+                        Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
+                    })
+                    .GroupBy(_x => _x.ID)
+                    .Select(g => g.First())
+                    .ToList());
 
                     // Docenti esterni abilitati per questa disciplina specifica
                     List<ClsUtenteDL> utentiEsterni = ClsRichiedereBL.RilevaUtentiDisciplina(disciplina.ID);
@@ -1219,7 +1221,7 @@ namespace Cattedre
         }
         private void SincronizzaScroll()
         {
-            int altezzaTotale = classi.Count * 100 + 50;
+            int altezzaTotale = classi.Count * 100 + 80;
 
             pnlClassi.Height = altezzaTotale;
             pnlDipartimento.Height = altezzaTotale;

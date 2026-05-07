@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -282,18 +282,23 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT DISTINCT classi.ID, classi.sigla, classi.anno, classi.IDindirizzo
-                           FROM gestire
-                           JOIN discipline ON discipline.ID = gestire.IDdisciplina
-                           JOIN appartenere ON appartenere.IDdisciplina = discipline.ID
-                           JOIN indirizzi ON indirizzi.ID = appartenere.IDindirizzo
-                           JOIN classi ON classi.IDindirizzo = indirizzi.ID
-                           JOIN vigere ON vigere.IDdisciplina = discipline.ID
-                           JOIN anniscolastici ON anniscolastici.ID = classi.IDannoscolastico
-                           WHERE gestire.IDdipartimento = @IDdipartimento
-                           AND CURDATE() 
-                           AND classi.IDannoscolastico = @IDannoscolastico
-                           ORDER BY classi.sigla";
+                    string sql = @"SELECT DISTINCT classi.ID, classi.sigla, classi.anno, classi.sezione,
+                                  classi.classeArticolataCon, classi.IDutente,
+                                  classi.IDannoscolastico, classi.IDindirizzo
+                                FROM gestire
+                                JOIN discipline ON discipline.ID = gestire.IDdisciplina
+                                JOIN appartenere ON appartenere.IDdisciplina = discipline.ID
+                                JOIN indirizzi ON indirizzi.ID = appartenere.IDindirizzo
+                                JOIN classi ON classi.IDindirizzo = indirizzi.ID
+                                JOIN vigere ON vigere.IDdisciplina = discipline.ID
+                                JOIN anniscolastici ON anniscolastici.ID = classi.IDannoscolastico
+                                WHERE gestire.IDdipartimento = @IDdipartimento
+                                AND classi.IDannoscolastico = @IDannoscolastico
+                                AND classi.anno = discipline.anno
+                                AND vigere.IDannoscolasticoinizio <= @IDannoscolastico
+                                AND (vigere.IDannoscolasticofine IS NULL
+                                    OR vigere.IDannoscolasticofine >= @IDannoscolastico)
+                                ORDER BY classi.sigla";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
@@ -307,7 +312,11 @@ namespace Cattedre
                             {
                                 ID = Convert.ToInt64(row["ID"]),
                                 Sigla = row["sigla"].ToString(),
-                                Anno = Convert.ToInt16(row["anno"]),
+                                Anno = Convert.ToInt32(row["anno"]),
+                                Sezione = row["sezione"].ToString(),
+                                ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]),
+                                Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]),
+                                IDannoscolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]),
                                 Idindirizzo = Convert.ToInt64(row["IDindirizzo"])
                             });
                         }

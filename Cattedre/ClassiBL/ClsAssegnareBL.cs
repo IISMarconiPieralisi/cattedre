@@ -450,6 +450,7 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
+
         #endregion
         #region gestioneCombobox
         public static List<UcAssegnazioni.ProfessoreItem> FiltraDocentiPerComboBox(DataTable docenti, string tipoDocente)
@@ -523,6 +524,34 @@ namespace Cattedre
             }
 
             return ass;
+        }
+        public static int RilevaOrePotDocente(long IDutente, long IDannoScolastico)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT IFNULL(SUM(oreSpeciali), 0) 
+                                    FROM assegnare 
+                                    WHERE IDutente = @IDutente 
+                                    AND IDannoscolastico = @IDannoScolastico";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoScolastico);
+
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            return Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore ricerca potenziamento dipartimento per CDC: " + ex.Message);
+            }
+            return 0;
         }
         #endregion
         #region Codice vecchio

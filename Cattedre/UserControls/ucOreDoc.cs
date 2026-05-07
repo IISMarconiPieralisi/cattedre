@@ -30,7 +30,7 @@ namespace Cattedre
             }
         }
 
-        public int IDdipartimento { get; set; }
+        public long IDdipartimento { get; set; }
 
         public List<ClsClasseDiConcorsoDL> CDCPotenziamento { get; set; }
 

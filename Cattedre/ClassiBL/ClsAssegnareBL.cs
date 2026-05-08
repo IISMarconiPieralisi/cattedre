@@ -203,7 +203,8 @@ namespace Cattedre
                                 a.IDdisciplina,
                                 a.oreSpeciali,
                                 a.IDannoscolastico,
-                                c.tipoContratto
+                                c.tipoContratto,
+                                1 AS isInterno
 
                             FROM utenti u
 
@@ -238,6 +239,54 @@ namespace Cattedre
                 }
             }
 
+            return dt;
+        }
+
+        public static DataTable CaricaDocentiEsterniAssegnati(long IDdipartimento, long IDannoScolastico)
+        {
+            DataTable dt = new DataTable();
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                conn.Open();
+                string sql = @"SELECT
+                    u.ID AS IDutente,
+                    u.nome,
+                    u.cognome,
+                    u.tipoDocente,
+                    u.colore,
+                    a.IDclasse,
+                    a.IDdisciplina,
+                    a.oreSpeciali,
+                    a.IDannoscolastico,
+                    c.tipoContratto,
+                    0 AS isInterno
+
+                FROM utenti u
+                JOIN assegnare a
+                    ON a.IDutente = u.ID
+                    AND a.IDannoscolastico = @IDannoScolastico
+                JOIN richiedere r
+                    ON r.IDutente = u.ID
+                    AND r.IDdisciplina = a.IDdisciplina
+                JOIN gestire g
+                    ON g.IDdisciplina = a.IDdisciplina
+                    AND g.IDdipartimento = @IDdipartimento
+                LEFT JOIN contratti c
+                    ON c.IDutente = u.ID
+                WHERE u.tipoUtente IN ('D','C','A')
+                AND NOT EXISTS (
+                    SELECT 1 FROM afferire af
+                    WHERE af.IDutente = u.ID
+                    AND af.IDdipartimento = @IDdipartimento
+                )";
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                    cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        da.Fill(dt);
+                }
+            }
             return dt;
         }
         #endregion

@@ -113,6 +113,12 @@ namespace Cattedre
                     if (dr == DialogResult.OK)
                     {
                         ClsClasseBL.ModificaClasse(frmClasse._classe);
+                        //controllo se è stato cambiato il dipartimento di quella classe
+                        if(frmClasse._classe.Idindirizzo!=classeSelezionata.Idindirizzo)
+                        {
+                            //cancello i record di quella classe nelle assegnazioni
+                            ClsAssegnareBL.EliminaAssegnazione(frmClasse._classe.ID,"IDclasse");
+                        }
                         CaricaListView();
                     }
                 }

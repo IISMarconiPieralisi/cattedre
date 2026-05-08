@@ -136,26 +136,66 @@ namespace Cattedre
         public static void InserisciAssegnazione(long IDclasse,long IDannoscolastico, long IDdisciplina,long IDutente,
             int oreSpeciali,DateTime dal,DateTime al)
         {
-            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            try
             {
-                conn.Open();
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                  
+                    conn.Open();
 
-                string sql = @"INSERT INTO assegnare
+                    string sql = @"INSERT INTO assegnare
                        (IDclasse, IDannoscolastico, IDdisciplina, IDutente, oreSpeciali, dal, al)
                        VALUES
                        (@classe, @anno, @disciplina, @utente, @oreSpeciali, @dal, @al)";
 
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
 
-                cmd.Parameters.AddWithValue("@classe", IDclasse);
-                cmd.Parameters.AddWithValue("@anno", IDannoscolastico);
-                cmd.Parameters.AddWithValue("@disciplina", IDdisciplina);
-                cmd.Parameters.AddWithValue("@utente", IDutente);
-                cmd.Parameters.AddWithValue("@oreSpeciali", oreSpeciali);
-                cmd.Parameters.AddWithValue("@dal", dal);
-                cmd.Parameters.AddWithValue("@al", al);
+                    cmd.Parameters.AddWithValue("@classe", IDclasse);
+                    cmd.Parameters.AddWithValue("@anno", IDannoscolastico);
+                    cmd.Parameters.AddWithValue("@disciplina", IDdisciplina);
+                    cmd.Parameters.AddWithValue("@utente", IDutente);
+                    cmd.Parameters.AddWithValue("@oreSpeciali", oreSpeciali);
+                    cmd.Parameters.AddWithValue("@dal", dal);
+                    cmd.Parameters.AddWithValue("@al", al);
+                    int righeCoinvolte = cmd.ExecuteNonQuery();
+                    if (righeCoinvolte <= 0)
+                        throw new InvalidOperationException("Errore nell'inserimento della classe: nessuna riga interessata.");
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public static void EliminaAssegnazione(long ID, string IDdaCancellare)
+        {
+            try
+            {
+                List<string> idValidi = new List<string> { "IDclasse", "IDannoscolastico", "IDdisciplina", "IDutente" };
 
-                cmd.ExecuteNonQuery();
+                if (!idValidi.Contains(IDdaCancellare))
+                    throw new ArgumentException($"IDdaCancellare '{IDdaCancellare}' non è valido. Valori accettati: {string.Join(", ", idValidi)}");
+
+                string par = $"@{IDdaCancellare}";
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+
+                    string sql = $@"DELETE FROM assegnare WHERE {IDdaCancellare}={par} ";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue(par, ID);
+
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        if (righeCoinvolte <= 0)
+                            throw new InvalidOperationException("Errore nell'inserimento della classe: nessuna riga interessata.");
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+
             }
         }
         #endregion

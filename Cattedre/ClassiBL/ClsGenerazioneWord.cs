@@ -20,8 +20,8 @@ namespace Cattedre
                 List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID,anno.ID);
                 List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDipartimento(dipartimento.ID);
                List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(anno.ID,dipartimento.ID);
-                List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
-                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassi(dipartimento.ID, anno.ID);         
+                List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare(anno.ID);
+                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassi(0, anno.ID);         
                 GenerateFileWord(anno,dipartimento, cdc, assegnare, discipline, classi, Dotare, filePath);
             }catch(Exception ex)
             {
@@ -49,12 +49,15 @@ namespace Cattedre
                     {
                         ClsDotareDL dotazione = listDotare
                             .FirstOrDefault(d => d.IdClasseDiConcorso == cdc.ID);
-                        InserisciIntestazioneCDC(doc, cdc, dotazione, annoScolastico);
 
                         var DocentiFiltrati = ClsRichiedereBL.RilevaUtentiCDC(cdc.ID); //metodi per trovare gli utanti con quella  CDC
 
-                        if (DocentiFiltrati.Count <= 0){    i++;    continue;
-                        }
+                        if (DocentiFiltrati.Count <= 0)
+                        { i++; continue; }
+                        else
+                            InserisciIntestazioneCDC(doc, cdc, dotazione, annoScolastico);
+
+                       
                         //ciclo gli utenti con quella classe di concorso 
                         foreach (ClsUtenteDL docente in DocentiFiltrati)
                         {

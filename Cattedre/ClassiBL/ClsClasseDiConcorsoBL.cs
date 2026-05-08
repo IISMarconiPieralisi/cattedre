@@ -175,6 +175,47 @@ namespace Cattedre
             return risultato;
         }
 
+        // In ClsRichiedereBL oppure ClsClasseDiConcorsoBL
+        public static List<ClsClasseDiConcorsoDL> RilevaCDCDisciplina(long IDdisciplina)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"
+                SELECT c.* FROM classidiconcorso c
+                JOIN richiedere r ON c.ID = r.IDclassediconcorso
+                WHERE r.IDdisciplina = @IDdisciplina";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                            da.Fill(dt);
+
+                        List<ClsClasseDiConcorsoDL> result = new List<ClsClasseDiConcorsoDL>();
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            result.Add(new ClsClasseDiConcorsoDL
+                            {
+                                ID = Convert.ToInt64(row["id"]),
+                                Livello = row["livello"].ToString(),
+                                Nome = row["nome"].ToString(),
+                                AbilitazioniRichieste = row["abilitazioniRichieste"].ToString()
+                            });
+                        }
+                        return result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nel recupero CDC per disciplina: " + ex.Message);
+            }
+        }
+
         public static string TrovaCodiceDaID(long id)
         {
             DataTable dt = new DataTable();

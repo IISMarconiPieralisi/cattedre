@@ -185,7 +185,7 @@ namespace Cattedre
                 uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Regular);
             }
 
-            // calcolo ore effettive
+            // calcolo ore effettive dal dipartimento CORRENTE
             foreach (UcAssegnazioni ucAss in pnlDipartimento.Controls.OfType<UcAssegnazioni>())
             {
                 if (ucAss.cbDocentiTeorici.SelectedItem is ClsUtenteDL dt)
@@ -206,6 +206,24 @@ namespace Cattedre
                         int attuali = int.Parse(ucDoc.lblOreEffettive.Text);
                         ucDoc.lblOreEffettive.Text = (attuali + ore).ToString();
                     }
+                }
+            }
+
+            // calcolo ore effettive da ALTRI dipartimenti per i docenti presenti nel pannello
+            foreach (var kvp in dictDocenti)
+            {
+                long idDocente = kvp.Key;
+                ucOreDoc ucDoc = kvp.Value;
+                List<ClsClasseDiConcorsoDL> cdcDocente = ClsRichiedereBL.RilevaCDCDocente(idDocente);
+
+                int oreAltriDip = ClsAssegnareBL.RilevaOreDocenteInAltriDipartimenti(
+                    idDocente, IDdipartimento, IDannoscolastico, cdcDocente);
+
+
+                if (oreAltriDip > 0)
+                {
+                    int attuali = int.Parse(ucDoc.lblOreEffettive.Text);
+                    ucDoc.lblOreEffettive.Text = (attuali + oreAltriDip).ToString();
                 }
             }
 
@@ -240,6 +258,7 @@ namespace Cattedre
                     uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Bold);
                 }
             }
+
             Label lblTotTeo = pnlOreDoc.Controls.Find("lblTotaleTeorici", false).FirstOrDefault() as Label;
             Label lblTotPra = pnlOreDoc.Controls.Find("lblTotalePratici", false).FirstOrDefault() as Label;
             Label lblTotPotTeo = pnlOreDoc.Controls.Find("lblTotalePotTeorici", false).FirstOrDefault() as Label;
@@ -262,44 +281,43 @@ namespace Cattedre
                     if (richiedeLaurea)
                     {
                         totTeorici += tot;
-                        totPotTeorici += pot;
 
-                        // calcola oreMax solo una volta (prendo la CDC di potenziamento del docente)
-                        if (oreMaxTeorici == 0)
+                        ClsClasseDiConcorsoDL cdcTeorica = cdcs
+                            .FirstOrDefault(c => c.AbilitazioniRichieste != null &&
+                                                  c.AbilitazioniRichieste.ToLower().Contains("laurea"));
+
+                        if (cdcTeorica != null)
                         {
-                            List<ClsClasseDiConcorsoDL> cdcPot = ClsClasseDiConcorsoBL
-                                .CaricaCDCperDisciplina(IDdipartimento)
-                                .Where(x => x.nomeDisciplina.Contains("otenziamento"))
-                                .Select(x => x.cdc)
-                                .ToList();
+                            int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                                IDdipartimento, cdcTeorica.ID);
 
-                            ClsClasseDiConcorsoDL cdcPotDocente = cdcs
-                                .FirstOrDefault(c => cdcPot.Any(p => p.ID == c.ID));
-
-                            if (cdcPotDocente != null)
-                                oreMaxTeorici = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
-                                    IDdipartimento, cdcPotDocente.ID);
+                            if (oreMax > 0)
+                            {
+                                totPotTeorici += pot;
+                                if (oreMaxTeorici == 0)
+                                    oreMaxTeorici = oreMax;
+                            }
                         }
                     }
                     else
                     {
                         totPratici += tot;
-                        totPotPratici += pot;
 
-                        if (oreMaxPratici == 0)
+                        ClsClasseDiConcorsoDL cdcPratica = cdcs
+                            .FirstOrDefault(c => c.AbilitazioniRichieste == null ||
+                                                  !c.AbilitazioniRichieste.ToLower().Contains("laurea"));
+
+                        if (cdcPratica != null)
                         {
-                            List<ClsClasseDiConcorsoDL> cdcPot = ClsClasseDiConcorsoBL
-                                .CaricaCDCperDisciplina(IDdipartimento)
-                                .Where(x => x.nomeDisciplina.Contains("otenziamento"))
-                                .Select(x => x.cdc)
-                                .ToList();
+                            int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                                IDdipartimento, cdcPratica.ID);
 
-                            ClsClasseDiConcorsoDL cdcPotDocente = cdcs
-                                .FirstOrDefault(c => cdcPot.Any(p => p.ID == c.ID));
-
-                            if (cdcPotDocente != null)
-                                oreMaxPratici = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
-                                    IDdipartimento, cdcPotDocente.ID);
+                            if (oreMax > 0)
+                            {
+                                totPotPratici += pot;
+                                if (oreMaxPratici == 0)
+                                    oreMaxPratici = oreMax;
+                            }
                         }
                     }
                 }

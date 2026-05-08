@@ -90,7 +90,12 @@ namespace Cattedre
             }
             return null;
         }
-
+        //metodo overload per rimuovoere l'out di IDindirizzi trovati
+        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long annoId, long dipartimentoId)
+        {
+            // Chiama l'altro overload con una lista vuota
+            return CaricaDisciplineAnnoScolasticoDipartimento(annoId, dipartimentoId, out List<long> _);
+        }
         public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati)
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();

@@ -217,7 +217,7 @@ namespace Cattedre
                 List<ClsClasseDiConcorsoDL> cdcDocente = ClsRichiedereBL.RilevaCDCDocente(idDocente);
 
                 int oreAltriDip = ClsAssegnareBL.RilevaOreDocenteInAltriDipartimenti(
-                    idDocente, IDdipartimento, IDannoscolastico, cdcDocente);
+                    idDocente, IDdipartimento, IDannoscolastico);
 
 
                 if (oreAltriDip > 0)
@@ -515,6 +515,12 @@ namespace Cattedre
             DataTable esterniAssegnati = ClsAssegnareBL.CaricaDocentiEsterniAssegnati(IDdipartimento, IDannoscolastico);
             foreach (DataRow row in esterniAssegnati.Rows)
                 docenti.ImportRow(row);
+
+            var duplicateID = classi.GroupBy(c => c.ID).Where(g => g.Count() > 1).ToList();
+            MessageBox.Show($"Classi duplicate per ID: {duplicateID.Count}");
+
+            var duplicateSigla = classi.GroupBy(c => c.Sigla).Where(g => g.Count() > 1).ToList();
+            MessageBox.Show($"Classi con stessa sigla: {string.Join(", ", duplicateSigla.Select(g => g.Key))}");
 
             //int tabIndex = 5;
             int oreTotaliGenerali = 0;

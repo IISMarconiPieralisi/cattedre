@@ -460,8 +460,7 @@ namespace Cattedre
         public static int RilevaOreDocenteInAltriDipartimenti(
     long IDdocente,
     long IDdipartimentoCorrente,
-    long IDannoscolastico,
-    List<ClsClasseDiConcorsoDL> cdcDocente)
+    long IDannoscolastico)
         {
             try
             {
@@ -469,13 +468,15 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"
-                SELECT DISTINCT d.ID, d.oreTeoria, d.oreLaboratorio
-                FROM assegnare a
-                JOIN discipline d ON d.ID = a.IDdisciplina
-                JOIN gestire g ON g.IDdisciplina = d.ID
-                WHERE a.IDutente = @IDdocente
-                  AND a.IDannoscolastico = @IDannoscolastico
-                  AND g.IDdipartimento <> @IDdipartimentoCorrente";
+                SELECT DISTINCT a.IDclasse, a.IDdisciplina, u.tipoDocente,
+       d.oreTeoria, d.oreLaboratorio
+FROM assegnare a
+JOIN discipline d ON d.ID = a.IDdisciplina
+JOIN gestire g ON g.IDdisciplina = d.ID
+JOIN utenti u ON u.ID = a.IDutente
+WHERE a.IDutente = @IDdocente
+  AND a.IDannoscolastico = @IDannoscolastico
+  AND g.IDdipartimento <> @IDdipartimentoCorrente";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -490,25 +491,11 @@ namespace Cattedre
                         int totale = 0;
                         foreach (DataRow row in dt.Rows)
                         {
-                            long IDdisciplina = Convert.ToInt64(row["ID"]);
-
-                            // Recupera le CDC richieste da questa disciplina
-                            List<ClsClasseDiConcorsoDL> cdcDisciplina =
-                                ClsClasseDiConcorsoBL.RilevaCDCDisciplina(IDdisciplina);
-
-                            // Trova la CDC del docente che matcha questa disciplina
-                            ClsClasseDiConcorsoDL cdcMatch = cdcDocente
-                                .FirstOrDefault(cd => cdcDisciplina.Any(dd => dd.ID == cd.ID));
-
-                            if (cdcMatch == null)
-                                continue;
-
-                            bool isTeoria = cdcMatch.AbilitazioniRichieste != null &&
-                                            cdcMatch.AbilitazioniRichieste.ToLower().Contains("laurea");
-
-                            totale += isTeoria
-                                ? Convert.ToInt32(row["oreTeoria"])
-                                : Convert.ToInt32(row["oreLaboratorio"]);
+                            string tipoDocente = row["tipoDocente"]?.ToString();
+                            if (tipoDocente == "T")
+                                totale += Convert.ToInt32(row["oreTeoria"]);
+                            else if (tipoDocente == "L")
+                                totale += Convert.ToInt32(row["oreLaboratorio"]);
                         }
                         return totale;
                     }

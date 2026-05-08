@@ -44,6 +44,7 @@ namespace Cattedre
 
         private void CaricaListView()
         {
+            _utenti = ClsUtenteBL.CaricaUtenti(filtri);
             lvUtenti.Items.Clear();
 
             foreach (ClsUtenteDL utente in _utenti)
@@ -51,9 +52,9 @@ namespace Cattedre
                 //prendo un metodo che cerca il contratto in base all'id utente
                 ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(utente.ID);
                 ListViewItem lvi = new ListViewItem(utente.ID.ToString());
-
-                lvi.SubItems.Add(utente.Nome);
+                
                 lvi.SubItems.Add(utente.Cognome);
+                lvi.SubItems.Add(utente.Nome);
                 lvi.SubItems.Add(utente.Email);
                 string _tipoDocente = (utente.TipoDocente == 'T') ? " teorico" : (utente.TipoDocente == 'L') ? " pratico" : string.Empty;
                 switch (utente.TipoUtente)
@@ -154,7 +155,7 @@ namespace Cattedre
                     MessageBox.Show($"Errore durante il inserimento:{ex.Message}", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 this.Cursor = Cursors.Arrow;
-                gestisciListview();
+                CaricaListView();
             }
         }
 
@@ -162,15 +163,6 @@ namespace Cattedre
         {
             _utenti = ClsUtenteBL.CaricaUtenti();
             CaricaListView();
-        }
-        private void gestisciListview()
-        {
-            if (filtri.Count != 0)
-                _utenti = ClsUtenteBL.FiltraUtenti(filtri);
-            else
-                _utenti = ClsUtenteBL.CaricaUtenti();
-            CaricaListView();
-
         }
 
         private void btModifica_Click(object sender, EventArgs e)
@@ -228,7 +220,7 @@ namespace Cattedre
                         MessageBox.Show("Errore durante il salvataggio: " + ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     this.Cursor = Cursors.Arrow;
-                    gestisciListview();
+                    CaricaListView();
 
 
                 }
@@ -251,7 +243,7 @@ namespace Cattedre
                     _utenti = ClsUtenteBL.CaricaUtenti();
 
                 }
-                gestisciListview();
+                CaricaListView();
 
             }
         }
@@ -283,7 +275,7 @@ namespace Cattedre
                     CaricaListView();
                 }
 
-                gestisciListview();
+                CaricaListView();
             }
             catch (Exception ex)
             {
@@ -332,7 +324,7 @@ namespace Cattedre
             tbRicerca_Leave(null, null);
             btAnnullaFiltra.Enabled = false;
             //ricamento della listview
-            gestisciListview();
+            CaricaListView();
         }
 
 

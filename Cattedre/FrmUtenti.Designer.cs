@@ -69,8 +69,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvUtenti.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chID,
-            this.chNome,
             this.chCognome,
+            this.chNome,
             this.chEmail,
             this.chTipoUtente,
             this.chTipoContratto,

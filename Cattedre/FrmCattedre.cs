@@ -899,6 +899,9 @@ namespace Cattedre
 
             // Recupero docenti distinti dal DataTable
             List<ClsUtenteDL> docenti = dtDocentiAssegnazioni.AsEnumerable()
+                .Where(r =>
+                    r["isInterno"] != DBNull.Value &&
+                    Convert.ToInt32(r["isInterno"]) == 1)
                 .Select(r => new ClsUtenteDL
                 {
                     ID = Convert.ToInt64(r["IDutente"]),

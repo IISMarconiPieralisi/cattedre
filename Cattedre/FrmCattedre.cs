@@ -216,8 +216,10 @@ namespace Cattedre
                 ucOreDoc ucDoc = kvp.Value;
                 List<ClsClasseDiConcorsoDL> cdcDocente = ClsRichiedereBL.RilevaCDCDocente(idDocente);
 
+                List<long> disciplineGestiteQuiID = discipline.Select(d => d.ID).Distinct().ToList();
+
                 int oreAltriDip = ClsAssegnareBL.RilevaOreDocenteInAltriDipartimenti(
-                    idDocente, IDdipartimento, IDannoscolastico);
+                    idDocente, IDdipartimento, IDannoscolastico, disciplineGestiteQuiID);
 
 
                 if (oreAltriDip > 0)
@@ -595,6 +597,48 @@ namespace Cattedre
                             teorici.Add(esterno);
                         else if (esterno.TipoDocente == 'L' && !pratici.Any(d => d.ID == esterno.ID))
                             pratici.Add(esterno);
+                    }
+
+                    // Docenti di tutti gli altri dipartimenti che gestiscono questa stessa disciplina
+                    List<long> altriDipartimentiGestori = ClsGestireBL
+                        .RilevaAltriDipartimentiGestori(disciplina.ID, IDdipartimento);
+
+                    foreach (long idDipEsterno in altriDipartimentiGestori)
+                    {
+                        DataTable docentiDipEsterno = ClsAssegnareBL
+                            .CaricaDocentiConAssegnazioni(idDipEsterno, IDannoscolastico);
+
+                        var teoriciEsterni = docentiDipEsterno.AsEnumerable()
+                            .Where(r => r["tipoDocente"].ToString() == "T"
+                                     && Convert.ToInt32(r["isInterno"]) == 1)
+                            .Select(r => new ClsUtenteDL
+                            {
+                                ID = Convert.ToInt64(r["IDutente"]),
+                                Nome = r.Field<string>("nome"),
+                                Cognome = r.Field<string>("cognome"),
+                                TipoDocente = 'T',
+                                Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
+                            });
+
+                        var praticiEsterni = docentiDipEsterno.AsEnumerable()
+                            .Where(r => r["tipoDocente"].ToString() == "L"
+                                     && Convert.ToInt32(r["isInterno"]) == 1)
+                            .Select(r => new ClsUtenteDL
+                            {
+                                ID = Convert.ToInt64(r["IDutente"]),
+                                Nome = r.Field<string>("nome"),
+                                Cognome = r.Field<string>("cognome"),
+                                TipoDocente = 'L',
+                                Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
+                            });
+
+                        foreach (var t in teoriciEsterni)
+                            if (!teorici.Any(d => d.ID == t.ID))
+                                teorici.Add(t);
+
+                        foreach (var p in praticiEsterni)
+                            if (!pratici.Any(d => d.ID == p.ID))
+                                pratici.Add(p);
                     }
 
                     uc.cbDocentiTeorici.DataSource = teorici;

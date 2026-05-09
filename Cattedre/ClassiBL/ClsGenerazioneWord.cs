@@ -57,7 +57,6 @@ namespace Cattedre
                         else
                             InserisciIntestazioneCDC(doc, cdc, dotazione, annoScolastico);
 
-                       
                         //ciclo gli utenti con quella classe di concorso 
                         foreach (ClsUtenteDL docente in DocentiFiltrati)
                         {

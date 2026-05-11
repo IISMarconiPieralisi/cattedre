@@ -93,13 +93,13 @@ namespace Cattedre
         //metodo overload per rimuovoere l'out di IDindirizzi trovati
         public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long annoId, long dipartimentoId)
         {
-            // Chiama l'altro overload con una lista vuota
-            return CaricaDisciplineAnnoScolasticoDipartimento(annoId, dipartimentoId, out List<long> _);
+            return CaricaDisciplineAnnoScolasticoDipartimento(annoId, dipartimentoId, out List<long> _,false);
         }
-        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati)
+
+        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati, bool escludiPotenziamento = true)
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
-            IDindirizziTrovati = new List<long>(); // inizializza qui
+            IDindirizziTrovati = new List<long>();
 
             try
             {
@@ -108,21 +108,20 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.nome, d.anno, d.oreteoria, d.orelaboratorio, 
-                          d.disciplinaspeciale, d.IDdisciplinaSuccessiva,
-                          ap.IDindirizzo
-                       FROM vigere v
-                       JOIN discipline d ON v.IDdisciplina = d.ID
-                       JOIN gestire g ON g.IDdisciplina = d.ID
-                       JOIN appartenere ap ON ap.IDdisciplina = d.ID
-                       JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
-                       LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
-                       JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
-                       WHERE g.IDdipartimento = @IDdipartimento
-                       AND aTarget.dataInizio >= aInizio.dataInizio
-                       AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))
-                       AND d.nome NOT LIKE '%otenziamento%'
-                       ORDER BY d.anno";
-
+                  d.disciplinaspeciale, d.IDdisciplinaSuccessiva,
+                  ap.IDindirizzo
+               FROM vigere v
+               JOIN discipline d ON v.IDdisciplina = d.ID
+               JOIN gestire g ON g.IDdisciplina = d.ID
+               JOIN appartenere ap ON ap.IDdisciplina = d.ID
+               JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
+               LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
+               JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
+               WHERE g.IDdipartimento = @IDdipartimento
+               AND aTarget.dataInizio >= aInizio.dataInizio
+               AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))"
+                       + (escludiPotenziamento ? " AND d.nome NOT LIKE '%otenziamento%'" : "")
+                       + " ORDER BY d.anno";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);

@@ -59,10 +59,16 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT d.ID, d.nome,d.cognome,d.TipoDocente,d.TipoUtente 
-                                    FROM utenti d
-                                    JOIN richiedere r ON d.ID = r.IDUtente
-                           WHERE r.IDclasseDiConcorso = @IDclasseDiconcorso";
+                    string sql = @"SELECT d.ID, d.nome, d.cognome, d.TipoDocente, d.TipoUtente 
+                           FROM utenti d
+                           JOIN richiedere r ON d.ID = r.IDUtente
+                           JOIN classidiconcorso cdc ON cdc.ID = r.IDclasseDiConcorso
+                           WHERE r.IDclassediConcorso = @IDclasseDiconcorso
+                           AND (
+                               (cdc.livello LIKE 'A%' AND d.TipoDocente = 'T')
+                               OR
+                               (cdc.livello NOT LIKE 'A%' AND d.TipoDocente = 'L')
+                           )";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDclasseDiconcorso", IDcdc);

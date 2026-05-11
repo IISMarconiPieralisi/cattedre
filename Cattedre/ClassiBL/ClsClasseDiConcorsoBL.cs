@@ -1,10 +1,6 @@
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MySqlConnector;
-using System.Configuration;
 using System.Data;
 
 namespace Cattedre
@@ -12,7 +8,7 @@ namespace Cattedre
     public static class ClsClasseDiConcorsoBL
     {
         #region CRUD
-        public static List<ClsClasseDiConcorsoDL> CaricaCdcs(string livello="", string nome = "")
+        public static List<ClsClasseDiConcorsoDL> CaricaCdcs(string livello = "", string nome = "")
         {
             DataTable dt = new DataTable();
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
@@ -29,13 +25,13 @@ namespace Cattedre
                 }
                 foreach (DataRow row in dt.Rows)
                 {
-                        ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
-                        cdc.ID = Convert.ToInt32(row["id"]);
-                        cdc.Livello = row["livello"].ToString();
-                        cdc.Nome = row["nome"].ToString();
-                        cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
-                        cdcs.Add(cdc);
-      
+                    ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
+                    cdc.ID = Convert.ToInt32(row["id"]);
+                    cdc.Livello = row["livello"].ToString();
+                    cdc.Nome = row["nome"].ToString();
+                    cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
+                    cdcs.Add(cdc);
+
                 }
             }
             catch (Exception ex)
@@ -47,7 +43,7 @@ namespace Cattedre
 
         public static long InserisciCdc(ClsClasseDiConcorsoDL cdc)
         {
-            
+
 
             using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
@@ -81,7 +77,7 @@ namespace Cattedre
 
         public static void ModificaCdc(ClsClasseDiConcorsoDL cdc, int indice)
         {
-            
+
             MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try
@@ -111,7 +107,7 @@ namespace Cattedre
 
         public static void EliminaCdc(int id)
         {
-            
+
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
@@ -120,7 +116,7 @@ namespace Cattedre
                     string sql = "DELETE FROM classidiconcorso WHERE ID = @id ";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@id",id);
+                        cmd.Parameters.AddWithValue("@id", id);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
                         if (righeCoinvolte < 0)
                             throw new DataException("nessuna riga row");
@@ -285,12 +281,29 @@ namespace Cattedre
             {
                 MySqlConnection conn = new MySqlConnection(Program.connectionString);
                 conn.Open();
-                string sql =@"SELECT DISTINCT c.ID, c.livello, c.nome, c.abilitazioniRichieste
-                             FROM classidiconcorso c
-                             JOIN richiedere r ON c.ID=r.IDclassediconcorso 
-                             JOIN discipline d ON r.IDdisciplina = d.ID
-                             JOIN gestire g ON d.ID= g.IDdisciplina
-                             WHERE g.IDdipartimento =@IDdipartimento";
+                string sql = @"SELECT DISTINCT cdc.ID,cdc.livello,cdc.nome,cdc.abilitazioniRichieste FROM classidiconcorso cdc
+                                INNER JOIN richiedere r ON r.IDclasseDiConcorso = cdc.ID
+                                INNER JOIN utenti u ON u.ID = r.IDutente
+                                INNER JOIN afferire aff ON aff.IDutente = u.ID
+                             WHERE aff.IDdipartimento = @IDdipartimento AND 
+                                (
+                                    (cdc.livello LIKE 'A%' AND NOT EXISTS (
+                                        SELECT 1 FROM classidiconcorso cdc2
+                                            INNER JOIN richiedere r2 ON r2.IDclasseDiConcorso = cdc2.ID
+                                            INNER JOIN utenti u2 ON u2.ID = r2.IDutente
+                                            INNER JOIN afferire aff2 ON aff2.IDutente = u2.ID
+                                         WHERE aff2.IDdipartimento = @IDdipartimento AND cdc2.livello LIKE 'A%'
+                                        AND cdc2.ID < cdc.ID
+                                ))OR
+                                  (cdc.livello LIKE 'B%' AND NOT EXISTS (
+                                        SELECT 1 FROM classidiconcorso cdc2
+                                            INNER JOIN richiedere r2 ON r2.IDclasseDiConcorso = cdc2.ID
+                                            INNER JOIN utenti u2 ON u2.ID = r2.IDutente
+                                            INNER JOIN afferire aff2 ON aff2.IDutente = u2.ID
+                                        WHERE aff2.IDdipartimento = @IDdipartimento AND cdc2.livello LIKE 'B%' AND cdc2.ID < cdc.ID
+                                ))
+                                )
+                            ORDER BY cdc.livello";
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@IDdipartimento", IDdiparitimento);
@@ -318,7 +331,7 @@ namespace Cattedre
         }
         public static List<ClsClasseDiConcorsoDL> RicercaPerNome(string _ricerca)
         {
-            
+
             List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
             DataTable dt = new DataTable();
             _ricerca = $"%{_ricerca}%";
@@ -360,47 +373,54 @@ namespace Cattedre
         }
         public static List<ClsClasseDiConcorsoDL> RilevaIDCDCPotenziamentoDipartimento(long IDdipartimento)
         {
-            List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
-            DataTable dt = new DataTable();
-            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            try
             {
-                string sql = @"SELECT DISTINCT c.ID, c.livello, c.nome, c.abilitazioniRichieste
+                List<ClsClasseDiConcorsoDL> cdcs = new List<ClsClasseDiConcorsoDL>();
+                DataTable dt = new DataTable();
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    string sql = @"SELECT DISTINCT c.ID, c.livello, c.nome, c.abilitazioniRichieste
                                 FROM gestire g
                                 JOIN discipline d ON g.IDdisciplina = d.ID
                                 JOIN richiedere r ON r.IDdisciplina = d.ID
                                 JOIN classidiconcorso c ON r.IDclasseDiConcorso = c.ID
                                 WHERE g.IDdipartimento = @IDdipartimento
                                 AND d.disciplinaSpeciale LIKE '%pot%'";
-                conn.Open();
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        da.Fill(dt);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
                     }
                 }
-            }
-            foreach (DataRow row in dt.Rows)
+                foreach (DataRow row in dt.Rows)
+                {
+                    ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
+                    cdc.ID = Convert.ToInt32(row["ID"]);
+                    cdc.Livello = row["livello"].ToString();
+                    cdc.Nome = row["nome"].ToString();
+                    cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
+                    cdcs.Add(cdc);
+                }
+                return cdcs;
+            }catch(Exception ex)
             {
-                ClsClasseDiConcorsoDL cdc = new ClsClasseDiConcorsoDL();
-                cdc.ID = Convert.ToInt32(row["ID"]);
-                cdc.Livello = row["livello"].ToString();
-                cdc.Nome = row["nome"].ToString();
-                cdc.AbilitazioniRichieste = row["abilitazioniRichieste"].ToString();
-                cdcs.Add(cdc);
+                throw new Exception(ex.Message);
             }
-            return cdcs;
+            
         }
         #endregion
         #region valori specifici
 
         public static int ContCattedrePotenziamentoCDC(long IDcdc)
         {
-                int cattedre = 0;
-                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-                {
-                    string sql = @"
+            int cattedre = 0;
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                string sql = @"
                 SELECT COUNT(DISTINCT r.IDdisciplina)
                 FROM (
                     SELECT DISTINCT IDdisciplina, IDclasseDiConcorso
@@ -410,16 +430,16 @@ namespace Cattedre
                 WHERE r.IDclasseDiConcorso = @IDcdc
                   AND d.disciplinaSpeciale LIKE '%pot%'";
 
-                    conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@IDcdc", IDcdc);
-                        object result = cmd.ExecuteScalar();
-                        if (result != null && result != DBNull.Value)
-                            cattedre = Convert.ToInt32(result);
-                    }
+                conn.Open();
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDcdc", IDcdc);
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                        cattedre = Convert.ToInt32(result);
                 }
-                return cattedre;
+            }
+            return cattedre;
         }
         #endregion
         #region filtri
@@ -454,86 +474,94 @@ namespace Cattedre
         #region OreResidue
         /// <summary>
         /// Query 1 — ore totali previste dal piano studi per la classe di concorso
-        /// (teorie + laboratorio in base al livello A/B)
+        /// somma le ore di TUTTE le classi che hanno quella disciplina nell'anno scolastico
         /// </summary>
-        private static int OreTeoriaLaboratorio(ClsClasseDiConcorsoDL CdC, ClsAnnoScolasticoDL annoScolastico)
+        private static int OreTeoriaLaboratorio(ClsClasseDiConcorsoDL cdc, ClsAnnoScolasticoDL annoScolastico)
         {
             int ore = 0;
-            string campoOre = CdC.Livello.Contains("A")
-            ? "SUM(d.oreTeoria)"
-            : "SUM(d.oreLaboratorio)";
-            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-            {
-                string sql = $@"
-                    SELECT {campoOre}
-                    FROM (
-                        SELECT DISTINCT IDdisciplina, IDclasseDiConcorso
-                        FROM richiedere
-                    ) r
-                    JOIN discipline d ON r.IDdisciplina = d.ID
-                    WHERE r.IDclasseDiConcorso = @IDcdc
-                      AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '')";
+            string campoOre = cdc.Livello.Contains("A")
+                ? "d.oreTeoria"
+                : "d.oreLaboratorio";
 
-                conn.Open();
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+            try
+            {
+
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@IDannoScolastico", annoScolastico.ID);
-                    cmd.Parameters.AddWithValue("@IDcdc", CdC.ID);
-                    object result = cmd.ExecuteScalar();
-                    if (result != null && result != DBNull.Value)
-                        ore = Convert.ToInt32(result);
+                    string sql = $@"SELECT SUM({campoOre}) FROM assegnare a
+                                    JOIN discipline d ON a.IDdisciplina = d.ID
+                                    JOIN richiedere r ON r.IDdisciplina = d.ID AND r.IDclasseDiConcorso = @IDcdc
+                                    JOIN classi c ON a.IDclasse = c.ID
+                                    WHERE a.IDannoScolastico = @IDannoScolastico 
+                                    AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '') AND {campoOre} > 0";
+
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", annoScolastico.ID);
+                        cmd.Parameters.AddWithValue("@IDcdc", cdc.ID);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            ore = Convert.ToInt32(result);
+                    }
                 }
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return ore;
+
+
+        }
+
+        /// <summary>
+        /// Query 2 — ore già assegnate ai docenti per la classe di concorso nell'anno scolastico
+        /// </summary>
+        private static int OreTotaleAssegnate(ClsClasseDiConcorsoDL cdc, long IDannoScolastico)
+        {
+            int ore = 0;
+            string campoOre = cdc.Livello.Contains("A")? "d.oreTeoria": "d.oreLaboratorio";
+
+            try
+            { 
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    string sql = $@"SELECT SUM({campoOre})FROM assegnare a
+                                    JOIN utenti u ON a.IDutente = u.ID
+                                    JOIN discipline d ON a.IDdisciplina = d.ID
+                                    JOIN richiedere r ON r.IDutente = u.ID
+                                 AND r.IDclasseDiConcorso = @IDcdc
+                                WHERE a.IDannoScolastico = @IDannoScolastico
+                                    AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '') AND {campoOre} > 0";
+
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                        cmd.Parameters.AddWithValue("@IDcdc", cdc.ID);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            ore = Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
             return ore;
         }
 
         /// <summary>
-        /// Query 2 — ore già assegnate ai docenti per la classe di concorso
-        /// (distinte per tipo docente: T = teoria, L = laboratorio, altro = entrambe)
+        /// Calcola le ore residue = ore previste da piano studi - ore già assegnate
         /// </summary>
-        private static int OreTotaleAssegnate(long IDCdC, long IDannoScolastico)
-        {
-            int ore = 0;
-            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-            {
-                string sql = @"
-                SELECT SUM(
-                    CASE 
-                        WHEN u.tipoDocente = 'T' THEN d.oreTeoria
-                        WHEN u.tipoDocente = 'L' THEN d.oreLaboratorio
-                        ELSE d.oreTeoria + d.oreLaboratorio
-                    END
-                )
-                FROM utenti          u
-                JOIN richiedere  r ON u.ID            = r.IDutente
-                JOIN assegnare   a ON u.ID            = a.IDutente
-                JOIN discipline  d ON a.IDdisciplina  = d.ID
-                WHERE a.IDannoScolastico    = @IDannoScolastico
-                  AND r.IDclasseDiConcorso  = @IDcdc";
-
-                conn.Open();
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
-                    cmd.Parameters.AddWithValue("@IDcdc", IDCdC);
-                    object result = cmd.ExecuteScalar();
-                    if (result != null && result != DBNull.Value)
-                        ore = Convert.ToInt32(result);
-                }
-            }
-            return ore;
-        }
-
-        /// <summary>
-        /// Calcola le ore residue = ore previste - ore già assegnate
-        /// </summary>
-        public static int OreResidueCDC(ClsClasseDiConcorsoDL cdc,ClsAnnoScolasticoDL annoScolastico)
+        public static int OreResidueCDC(ClsClasseDiConcorsoDL cdc, ClsAnnoScolasticoDL annoScolastico)
         {
             try
             {
-                int oreTeoria = OreTeoriaLaboratorio(cdc, annoScolastico);
-                int oreAssegnate = OreTotaleAssegnate(cdc.ID, annoScolastico.ID);
-                return oreTeoria - oreAssegnate;
+                int orePreviste = OreTeoriaLaboratorio(cdc, annoScolastico);
+                int oreAssegnate = OreTotaleAssegnate(cdc, annoScolastico.ID);
+                return orePreviste - oreAssegnate;
             }
             catch (Exception ex)
             {
@@ -541,6 +569,5 @@ namespace Cattedre
             }
         }
         #endregion
-
     }
 }

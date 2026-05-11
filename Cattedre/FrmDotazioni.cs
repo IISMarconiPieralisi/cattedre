@@ -15,7 +15,8 @@ namespace Cattedre
         List<ClsDotareDL> dots = new List<ClsDotareDL>();
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
         List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
-        Dictionary<string, List<string>> Filtri = new Dictionary<string, List<string>>();
+        long IDannoScolastico= ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+        long IDCdc=0;
         public FrmDotazioni()
         {
             InitializeComponent();
@@ -71,7 +72,7 @@ namespace Cattedre
 
        private void CaricaListView()
         {
-            dots = ClsDotareBL.CaricaDotare(Filtri);
+            dots = ClsDotareBL.CaricaDotare(IDannoScolastico,IDCdc);
             lvDotazioni.Items.Clear();
             foreach (ClsDotareDL dot in dots)
             {
@@ -88,33 +89,24 @@ namespace Cattedre
         private void FrmDotazioni_Load(object sender, EventArgs e)
         {
             //popolamento controlli filtri
-            GeneraFiltriAnnoScolastico();
+            PopolaAnnoScolastico();
             PopolaCDC();
             CaricaListView();
-        }    
-        #region filtra
-        private void GeneraFiltriAnnoScolastico()
+        }
+
+        private void PopolaAnnoScolastico()
         {
-            tplAnniScolastici.ColumnCount = _anniScolastici.Count;
-            tplAnniScolastici.RowCount = 1;
 
-            // Imposta le colonne con larghezza automatica
-            tplAnniScolastici.ColumnStyles.Clear();
-            for (int i = 0; i < _anniScolastici.Count; i++)
-                tplAnniScolastici.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-
-            int sezione = 0;
-            foreach (var anno in _anniScolastici)
+            if(_anniScolastici.Count>0)
             {
-                CheckBox cb = new CheckBox();
-                cb.Name = $"{anno.ID}";
-                cb.Text = anno.Sigla;
-                cb.Dock = DockStyle.Fill;
-              //  cb.KeyDown += CheckBoxAnno_KeyDown;
-                tplAnniScolastici.Controls.Add(cb, sezione, 0);
-                sezione++;
+
+                cbAnnoScolastico.DataSource = _anniScolastici;
+                cbAnnoScolastico.DisplayMember = "Sigla";
+                cbAnnoScolastico.ValueMember = "ID";
+                cbAnnoScolastico.SelectedValue = IDannoScolastico;
             }
         }
+        #region filtra
         private void PopolaCDC()
         {
             if(cdcs.Count>0)
@@ -129,45 +121,33 @@ namespace Cattedre
         {
             try
             {
-                Filtri = new Dictionary<string, List<string>>();
-
+                bool ricercaPositiva = false;
+                if (cbAnnoScolastico.SelectedIndex != -1)
+                {
+                    IDannoScolastico = Convert.ToInt32(cbAnnoScolastico.SelectedValue);
+                    ricercaPositiva = true;
+                }
                 if (cbCDC.SelectedIndex != -1)
                 {
-                    Filtri.Add("IDclassediconcorso", new List<string> { $"'{cbCDC.SelectedValue}'" });
+                    var cdcSelezionata = cbCDC.SelectedItem as ClsClasseDiConcorsoDL;
+                    if (cdcSelezionata != null)
+                    {
+                        IDCdc = cdcSelezionata.ID;
+                        ricercaPositiva = true;
+                    }
+
                 }
-                ControlloSelezionatiAnniScolastici();
 
-                if (Filtri.Count <= 0)
+                if (!ricercaPositiva)
                     throw new Exception("Inserire almeno un criterio di ricerca");
-
                 CaricaListView();
-                btPulisciCb.Enabled = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}\nRiprovare!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        private void DeselezionaCheckBox(Control parent)
-        {
-            foreach (Control c in parent.Controls)
-            {
-                if (c is CheckBox cb)
-                    cb.Checked = false;
-            }
-        }
-
-        private void ControlloSelezionatiAnniScolastici()
-        {
-            if (tplAnniScolastici.Controls.OfType<CheckBox>().Any(cb => cb.Checked))
-            {
-                var selezionati = tplAnniScolastici.Controls.OfType<CheckBox>().Where(cb => cb.Checked).Select(cb => cb.Name).ToList();
-
-                if (!selezionati.Any()) return;
-
-                Filtri.Add("IDannoScolastico", selezionati);
-            }
-        }
+       
         private void cbCDC_Format(object sender, ListControlConvertEventArgs e)
         {
             if (e.ListItem is ClsClasseDiConcorsoDL item)
@@ -182,9 +162,8 @@ namespace Cattedre
         private void btPulisciCb_Click(object sender, EventArgs e)
         {
             cbCDC.SelectedIndex = -1;
-            Filtri.Clear();
+            IDannoScolastico = 0; IDCdc = 0;
             CaricaListView();
-            DeselezionaCheckBox(tplAnniScolastici);
         }
         #endregion
         #region controlli tastiera

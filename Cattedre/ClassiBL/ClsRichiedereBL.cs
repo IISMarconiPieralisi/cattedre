@@ -68,7 +68,9 @@ namespace Cattedre
                                (cdc.livello LIKE 'A%' AND d.TipoDocente = 'T')
                                OR
                                (cdc.livello NOT LIKE 'A%' AND d.TipoDocente = 'L')
-                           )";
+                           )
+                            ORDER BY d.cognome, d.nome";
+                            
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDclasseDiconcorso", IDcdc);

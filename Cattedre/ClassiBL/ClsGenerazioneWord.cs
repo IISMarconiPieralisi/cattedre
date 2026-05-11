@@ -73,6 +73,7 @@ namespace Cattedre
                         { i++; continue; }
                         else
                             InserisciIntestazioneCDC(doc, cdc, dotazione, annoScolastico);
+
                         _altezzaCorrente += 70f; // stima intestazione CDC
 
                         //ciclo gli utenti con quella classe di concorso 

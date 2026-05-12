@@ -628,7 +628,16 @@ namespace Cattedre
                     string ricercaspecifica = $"CONCAT(u.cognome,u.nome) LIKE '%{filtro.Value[0]}%' ";
                     condizioni.Add(ricercaspecifica);
 
-                }else
+                }
+                else if (colonna == "IDdipartimento")
+                {
+                    sql = sql.Replace(
+                        "LEFT JOIN contratti c ON u.ID=c.IDutente",
+                        "LEFT JOIN contratti c ON u.ID=c.IDutente JOIN afferire a ON u.ID=a.IDutente"
+                    );
+                    condizioni.Add($"a.IDdipartimento = {filtro.Value[0]}");
+                }
+                else
                 {
                     List<string> orConditions = new List<string>();
 

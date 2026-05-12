@@ -179,7 +179,7 @@ namespace Cattedre
             this.label6.Location = new System.Drawing.Point(12, 205);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(112, 16);
+            this.label6.Size = new System.Drawing.Size(116, 16);
             this.label6.TabIndex = 39;
             this.label6.Text = "Anno Scolastico:";
             // 
@@ -339,7 +339,7 @@ namespace Cattedre
             // mtbSezione
             // 
             this.mtbSezione.Location = new System.Drawing.Point(165, 137);
-            this.mtbSezione.Mask = "AA";
+            this.mtbSezione.Mask = ">AA";
             this.mtbSezione.Name = "mtbSezione";
             this.mtbSezione.Size = new System.Drawing.Size(79, 24);
             this.mtbSezione.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

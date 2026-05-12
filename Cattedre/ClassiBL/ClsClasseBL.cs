@@ -356,7 +356,7 @@ namespace Cattedre
                 if (condizioni.Count > 0)
                     sql += " WHERE " + string.Join(" AND ", condizioni);
 
-                sql += " ORDER BY anno ASC";
+                sql += " ORDER BY anno ASC, sigla ASC";
                 cmd.CommandText = sql;
                 return cmd;
             }

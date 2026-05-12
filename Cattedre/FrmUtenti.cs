@@ -36,10 +36,13 @@ namespace Cattedre
         #endregion
         public List<ClsUtenteDL> _utenti = new List<ClsUtenteDL>();
         Dictionary<string, List<string>> filtri = new Dictionary<string, List<string>>();
-        public FrmUtenti()
+
+        private ClsUtenteDL _utenteLoggato;        
+
+        public FrmUtenti(ClsUtenteDL utenteLoggato = null)
         {
             InitializeComponent();
-
+            _utenteLoggato = utenteLoggato;
         }
 
         private void CaricaListView()
@@ -161,7 +164,24 @@ namespace Cattedre
 
         private void FrmUtenti_Load(object sender, EventArgs e)
         {
-            _utenti = ClsUtenteBL.CaricaUtenti();
+            if (_utenteLoggato?.TipoUtente == "D")
+            {
+                long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
+                if (idDipartimento > 0)
+                    filtri["IDdipartimento"] = new List<string> { idDipartimento.ToString() };
+
+                // Blocca i filtri: il docente non può cambiarli
+                gbTipiUtenti.Enabled = false;
+                gbContratto.Enabled = false;
+                gBtipoDocente.Enabled = false;
+                btCerca.Enabled = false;
+                btAnnullaFiltra.Enabled = false;
+                tbRicerca.Enabled = false;
+                btInserisci.Enabled = false;
+                btModifica.Enabled = false;
+                btElimina.Enabled = false;
+            }
+
             CaricaListView();
         }
 

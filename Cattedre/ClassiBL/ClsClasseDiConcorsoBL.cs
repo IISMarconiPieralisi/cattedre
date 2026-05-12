@@ -480,43 +480,30 @@ namespace Cattedre
         {
             int ore = 0; //livello=sigla
             string campoOre = cdc.Livello.Contains("A")  
-                ? "d.oreTeoria"
-                : "d.oreLaboratorio";
+                ? "di.oreTeoria"
+                : "di.oreLaboratorio";
             try
             {
 
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
-                    //string sql = $@"SELECT SUM({campoOre}) FROM assegnare a
-                    //                JOIN discipline d ON a.IDdisciplina = d.ID
-                    //                JOIN richiedere r ON r.IDdisciplina = d.ID AND r.IDclasseDiConcorso = @IDcdc
-                    //                JOIN classi c ON a.IDclasse = c.ID
-                    //                WHERE a.IDannoScolastico = @IDannoScolastico 
-                    //                AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '') AND {campoOre} > 0";
-                    string sql = $@"
-                SELECT SUM(d_ore.oreUnitarie * classiPerIndirizzo.numClassi)
-FROM (
-    -- Una riga per disciplina, evitando duplicati da appartenere
-    SELECT DISTINCT d.ID as IDdisciplina, {campoOre} as oreUnitarie
-    FROM vigere v
-    JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
-    LEFT JOIN anniscolastici aFine  ON v.IDannoscolasticofine  = aFine.ID
-    JOIN anniscolastici aTarget     ON aTarget.ID = @IDannoScolastico
-    JOIN discipline d               ON v.IDdisciplina = d.ID
-    JOIN richiedere r               ON d.ID = r.IDdisciplina
-    WHERE r.IDclasseDiConcorso = @IDcdc
-    AND aTarget.dataInizio >= aInizio.dataInizio
-    AND (aFine.ID IS NULL OR aTarget.dataFine <= aFine.dataFine)
-    AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '')
-    AND {campoOre} > 0
-) d_ore
-JOIN appartenere a ON d_ore.IDdisciplina = a.IDdisciplina
-JOIN (
-    SELECT IDindirizzo, COUNT(*) AS numClassi
-    FROM classi
-    WHERE IDannoscolastico = @IDannoScolastico
-    GROUP BY IDindirizzo
-) classiPerIndirizzo ON classiPerIndirizzo.IDindirizzo = a.IDindirizzo";
+                    string sql = $@"SELECT SUM(ore) FROM
+                                (
+                                    SELECT DISTINCT(CONCAT(c.sigla, di.nome)) AS classemateria, {campoOre} AS ore
+                                    FROM classi c
+                                    JOIN assegnare a ON a.IDclasse = c.ID
+                                    JOIN discipline di ON di.ID = a.IDdisciplina
+                                    WHERE a.IDdisciplina IN 
+                                    (
+                                        SELECT d.ID FROM vigere v
+                                        JOIN discipline d ON d.ID = v.IDdisciplina
+                                        JOIN richiedere r ON r.IDdisciplina = v.IDdisciplina
+                                        WHERE v.IDannoscolasticoinizio <= @IDannoScolastico
+                                        AND r.IDclasseDiConcorso = @IDcdc 
+                                        AND (v.IDannoscolasticofine >= @IDannoScolastico OR v.IDannoscolasticofine IS NULL)
+                                        AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '') 
+                                    )
+                            ) AS tab;";
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {

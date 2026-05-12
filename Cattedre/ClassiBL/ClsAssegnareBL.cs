@@ -14,21 +14,27 @@ namespace Cattedre
         #region GestioneAnnoSuccessivo
         public static bool EsistonoAssegnazioniAnnoSuccessivo(long IDannosuccessivo)
         {
-            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            try
             {
-                conn.Open();
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
 
-                string sql = @"SELECT COUNT(*)
+                    string sql = @"SELECT COUNT(*)
                        FROM assegnare
                        WHERE IDannoscolastico = @IDannoscolastico";
 
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
 
-                cmd.Parameters.AddWithValue("@IDannoscolastico", IDannosuccessivo);
+                    cmd.Parameters.AddWithValue("@IDannoscolastico", IDannosuccessivo);
 
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
 
-                return count > 0;
+                    return count > 0;
+                }
+            }catch (Exception  ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -36,62 +42,62 @@ namespace Cattedre
 
         public static void GeneraCattedreAnnoSuccessivo(long IDdipartimento, long IDannoCorrente, long IDannoSuccessivo)
         {
-            DataTable assegnazioni = CaricaDocentiConAssegnazioni(IDdipartimento, IDannoCorrente);
+            try
+            { 
+                DataTable assegnazioni = CaricaDocentiConAssegnazioni(IDdipartimento, IDannoCorrente);
 
-            foreach (DataRow r in assegnazioni.Rows)
+                foreach (DataRow r in assegnazioni.Rows)
+                {
+                    if (r["IDclasse"] == DBNull.Value || r["IDdisciplina"] == DBNull.Value)
+                        continue;
+
+                    long idClasse = Convert.ToInt64(r["IDclasse"]);
+                    long idDisciplina = Convert.ToInt64(r["IDdisciplina"]);
+                    long idDocente = Convert.ToInt64(r["IDutente"]);
+
+                    ClsClasseDL classe = ClsClasseBL.CaricaClasse(idClasse);
+                    ClsDisciplinaDL disciplina = ClsDisciplinaBL.CaricaDisciplina(idDisciplina);
+
+                    int annoClasse = classe.Anno;
+                    int annoSuccessivoClasse;
+
+                    if (annoClasse == 1) annoSuccessivoClasse = 2;
+                    else if (annoClasse == 2) annoSuccessivoClasse = 1;
+                    else if (annoClasse == 3) annoSuccessivoClasse = 4;
+                    else if (annoClasse == 4) annoSuccessivoClasse = 5;
+                    else annoSuccessivoClasse = 3;
+
+                    ClsClasseDL nuovaClasse =
+                        ClsClasseBL.TrovaClasse(classe.Sezione, annoSuccessivoClasse, classe.Idindirizzo, IDannoSuccessivo);
+
+                    if (nuovaClasse == null)
+                        continue;
+
+                    ClsDisciplinaDL nuovaDisciplina =
+                        ClsDisciplinaBL.TrovaDisciplinaNomeAnno(disciplina.Nome, annoSuccessivoClasse);
+
+                    if (nuovaDisciplina == null)
+                        continue;
+
+                    if (EsisteAssegnazione(nuovaClasse.ID, IDannoSuccessivo, nuovaDisciplina.ID))
+                        continue;
+
+                    long idDoc = Convert.ToInt64(r["IDutente"]);
+                    int oreSpeciali = Convert.ToInt32(r["oreSpeciali"]);
+
+                    ClsAnnoScolasticoDL annoSucc =
+                        ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(IDannoCorrente);
+
+                    DateTime dal = annoSucc.DataInizio;
+                    DateTime al = annoSucc.DataFine;
+
+                    InserisciAssegnazione(nuovaClasse.ID,IDannoSuccessivo,nuovaDisciplina.ID,idDoc,oreSpeciali,dal,al);
+                }
+            }catch (Exception ex)
             {
-                if (r["IDclasse"] == DBNull.Value || r["IDdisciplina"] == DBNull.Value)
-                    continue;
-
-                long idClasse = Convert.ToInt64(r["IDclasse"]);
-                long idDisciplina = Convert.ToInt64(r["IDdisciplina"]);
-                long idDocente = Convert.ToInt64(r["IDutente"]);
-
-                ClsClasseDL classe = ClsClasseBL.CaricaClasse(idClasse);
-                ClsDisciplinaDL disciplina = ClsDisciplinaBL.CaricaDisciplina(idDisciplina);
-
-                int annoClasse = classe.Anno;
-                int annoSuccessivoClasse;
-
-                if (annoClasse == 1) annoSuccessivoClasse = 2;
-                else if (annoClasse == 2) annoSuccessivoClasse = 1;
-                else if (annoClasse == 3) annoSuccessivoClasse = 4;
-                else if (annoClasse == 4) annoSuccessivoClasse = 5;
-                else annoSuccessivoClasse = 3;
-
-                ClsClasseDL nuovaClasse =
-                    ClsClasseBL.TrovaClasse(classe.Sezione, annoSuccessivoClasse, classe.Idindirizzo, IDannoSuccessivo);
-
-                if (nuovaClasse == null)
-                    continue;
-
-                ClsDisciplinaDL nuovaDisciplina =
-                    ClsDisciplinaBL.TrovaDisciplinaNomeAnno(disciplina.Nome, annoSuccessivoClasse);
-
-                if (nuovaDisciplina == null)
-                    continue;
-
-                if (EsisteAssegnazione(nuovaClasse.ID, IDannoSuccessivo, nuovaDisciplina.ID))
-                    continue;
-
-                long idDoc = Convert.ToInt64(r["IDutente"]);
-                int oreSpeciali = Convert.ToInt32(r["oreSpeciali"]);
-
-                ClsAnnoScolasticoDL annoSucc =
-                    ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(IDannoCorrente);
-
-                DateTime dal = annoSucc.DataInizio;
-                DateTime al = annoSucc.DataFine;
-
-                InserisciAssegnazione(
-                    nuovaClasse.ID,
-                    IDannoSuccessivo,
-                    nuovaDisciplina.ID,
-                    idDoc,
-                    oreSpeciali,
-                    dal,
-                    al);
+                throw new Exception(ex.Message);
             }
+        
         }
         #endregion
         #region Crud
@@ -188,7 +194,7 @@ namespace Cattedre
 
                         int righeCoinvolte = cmd.ExecuteNonQuery();
                         if (righeCoinvolte <= 0)
-                            throw new InvalidOperationException("Errore nell'inserimento della classe: nessuna riga interessata.");
+                            throw new InvalidOperationException("Errore nella cancellazione del record: nessuna riga interessata.");
                     }
                 }
             }
@@ -198,87 +204,106 @@ namespace Cattedre
 
             }
         }
+        public static void EliminaAssegnazione(long IDdisciplina, long IDindirizzo)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+
+                    string sql = $@"DELETE assegnare FROM assegnare 
+                                    JOIN classi c ON assegnare.IDclasse = c.ID
+                                   WHERE assegnare.IDdisciplina = @IDdisciplina AND c.IDindirizzo = @IDindirizzo";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
+
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        //if (righeCoinvolte <= 0)
+                        //    throw new InvalidOperationException("Errore nella cancellazione del record: nessuna riga interessata.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+
+            }
+        }
         #endregion
         #region GestioneAssegnazioni
         public static bool EsisteAssegnazione(long IDclasse, long IDanno, long IDdisciplina)
         {
-            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            try
+            { 
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"SELECT COUNT(*)
+                           FROM assegnare
+                           WHERE IDclasse = @IDclasse
+                           AND IDannoscolastico = @IDanno
+                           AND IDdisciplina = @IDdisciplina";
+
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+                    cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                    cmd.Parameters.AddWithValue("@IDanno", IDanno);
+                    cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    return count > 0;
+                }
+            }
+            catch (Exception ex)
             {
-                conn.Open();
-
-                string sql = @"SELECT COUNT(*)
-                       FROM assegnare
-                       WHERE IDclasse = @IDclasse
-                       AND IDannoscolastico = @IDanno
-                       AND IDdisciplina = @IDdisciplina";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
-                cmd.Parameters.AddWithValue("@IDanno", IDanno);
-                cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
-
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-
-                return count > 0;
+                throw new Exception(ex.Message);
             }
         }
         // Query unica
         public static DataTable CaricaDocentiConAssegnazioni(long IDdipartimento, long IDannoScolastico)
         {
-
+            
             DataTable dt = new DataTable();
-
-            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-            {
-                conn.Open();
-
-                string sql = @"SELECT
-                                u.ID AS IDutente,
-                                u.nome,
-                                u.cognome,
-                                u.tipoDocente,
-                                u.colore,
-                                a.IDclasse,
-                                a.IDdisciplina,
-                                a.oreSpeciali,
-                                a.IDannoscolastico,
-                                c.tipoContratto,
-                                1 AS isInterno
-
-                            FROM utenti u
-
-                            JOIN afferire af
-                                ON af.IDutente = u.ID
-
-                            LEFT JOIN contratti c
-                                ON c.IDutente = u.ID
-
-                            LEFT JOIN assegnare a
-                                ON a.IDutente = u.ID
-                                AND a.IDannoscolastico = @IDannoScolastico
-
-                            LEFT JOIN anniscolastici ans
-                                ON a.IDannoscolastico = ans.ID
-                                AND CURDATE() BETWEEN ans.datainizio AND ans.datafine
-
-                            WHERE af.IDdipartimento = @IDdipartimento
-                                AND u.tipoUtente IN('D','C','A')
-
-                            ORDER BY u.cognome, u.nome";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+            try
+            { 
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-                    cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                    conn.Open();
 
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                    string sql = @"SELECT u.ID AS IDutente,u.nome,u.cognome,u.tipoDocente,u.colore,
+                                          a.IDclasse,a.IDdisciplina,a.oreSpeciali,a.IDannoscolastico,
+                                          c.tipoContratto,1 AS isInterno
+                                FROM utenti u
+                                JOIN afferire af ON af.IDutente = u.ID
+                                LEFT JOIN contratti c ON c.IDutente = u.ID
+                                LEFT JOIN assegnare a ON a.IDutente = u.ID AND a.IDannoscolastico = @IDannoScolastico
+                                LEFT JOIN anniscolastici ans ON a.IDannoscolastico = ans.ID AND CURDATE() BETWEEN ans.datainizio AND ans.datafine
+
+                                WHERE af.IDdipartimento = @IDdipartimento AND u.tipoUtente IN('D','C','A')
+                                ORDER BY u.cognome, u.nome";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        da.Fill(dt);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
                     }
                 }
             }
-
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
             return dt;
         }
 
@@ -288,34 +313,19 @@ namespace Cattedre
             using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
-                string sql = @"SELECT
-                    u.ID AS IDutente,
-                    u.nome,
-                    u.cognome,
-                    u.tipoDocente,
-                    u.colore,
-                    a.IDclasse,
-                    a.IDdisciplina,
-                    a.oreSpeciali,
-                    a.IDannoscolastico,
-                    c.tipoContratto,
-                    0 AS isInterno
-
-                FROM utenti u
-                JOIN assegnare a
-                    ON a.IDutente = u.ID
-                    AND a.IDannoscolastico = @IDannoScolastico
-                JOIN gestire g
-                    ON g.IDdisciplina = a.IDdisciplina
-                    AND g.IDdipartimento = @IDdipartimento
-                LEFT JOIN contratti c
-                    ON c.IDutente = u.ID
-                WHERE u.tipoUtente IN ('D','C','A')
-                AND NOT EXISTS (
-                    SELECT 1 FROM afferire af
-                    WHERE af.IDutente = u.ID
-                    AND af.IDdipartimento = @IDdipartimento
-                )";
+                string sql = @"SELECT u.ID AS IDutente, u.nome, u.cognome, u.tipoDocente, u.colore, 
+                                    a.IDclasse, a.IDdisciplina,a.oreSpeciali,a.IDannoscolastico,
+                                    c.tipoContratto, 0 AS isInterno
+                                FROM utenti u
+                                JOIN assegnare a ON a.IDutente = u.ID AND a.IDannoscolastico = @IDannoScolastico
+                                JOIN gestire g ON g.IDdisciplina = a.IDdisciplina AND g.IDdipartimento = @IDdipartimento
+                                LEFT JOIN contratti c ON c.IDutente = u.ID
+                                WHERE u.tipoUtente IN ('D','C','A')
+                                AND NOT EXISTS (
+                                    SELECT 1 FROM afferire af
+                                    WHERE af.IDutente = u.ID
+                                    AND af.IDdipartimento = @IDdipartimento
+                                )";
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
@@ -494,33 +504,32 @@ namespace Cattedre
             }
         }
 
-        public static int RilevaOreDocenteInAltriDipartimenti(
-    long idDocente, long idDipartimentoCorrente, long idAnnoScolastico,
-    List<long> disciplineEscluse)
+        public static int RilevaOreDocenteInAltriDipartimenti(long idDocente, long idDipartimentoCorrente, long idAnnoScolastico,List<long> disciplineEscluse)
         {
             if (disciplineEscluse == null || disciplineEscluse.Count == 0)
                 disciplineEscluse = new List<long> { -1 }; // valore impossibile per evitare SQL vuoto
-
-            // Costruisci i placeholder: @p0, @p1, @p2 ...
-            var placeholders = string.Join(", ",
-                disciplineEscluse.Select((_, i) => $"@p{i}"));
-
-            string sql = $@"
-        SELECT DISTINCT a.IDclasse, a.IDdisciplina, u.tipoDocente, d.oreTeoria, d.oreLaboratorio
-        FROM assegnare a
-        JOIN discipline d ON d.ID = a.IDdisciplina
-        JOIN gestire g ON g.IDdisciplina = d.ID
-        JOIN utenti u ON u.ID = a.IDutente
-        WHERE a.IDutente = @IDdocente
-          AND a.IDannoscolastico = @IDannoscolastico
-          AND a.IDdisciplina NOT IN ({placeholders})
-          AND g.IDdipartimento <> @IDdipartimentoCorrente";
+                                                           // Costruisci i placeholder: @p0, @p1, @p2 ...
+            var placeholders = string.Join(", ", disciplineEscluse.Select((_, i) => $"@p{i}"));
 
             try
             {
+
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
+
+                        string sql = $@"
+                SELECT DISTINCT a.IDclasse, a.IDdisciplina, u.tipoDocente, d.oreTeoria, d.oreLaboratorio
+                FROM assegnare a
+                JOIN discipline d ON d.ID = a.IDdisciplina
+                JOIN gestire g ON g.IDdisciplina = d.ID
+                JOIN utenti u ON u.ID = a.IDutente
+                WHERE a.IDutente = @IDdocente
+                  AND a.IDannoscolastico = @IDannoscolastico
+                  AND a.IDdisciplina NOT IN ({placeholders})
+                  AND g.IDdipartimento <> @IDdipartimentoCorrente";
+
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdocente", idDocente);

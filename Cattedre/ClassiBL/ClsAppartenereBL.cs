@@ -41,7 +41,7 @@ namespace Cattedre
                 foreach (DataRow row in dt.Rows)
                 {
                     ClsAppartenereDL app = new ClsAppartenereDL();
-                    app.IDdisicplina = Convert.ToInt32(row["IDdisciplina"]);
+                    app.IDdisciplina = Convert.ToInt32(row["IDdisciplina"]);
                     app.IDindirizzo = Convert.ToInt32(row["IDindirizzo"]);
                     apparteneres.Add(app);
                 }
@@ -85,7 +85,7 @@ namespace Cattedre
                 foreach (DataRow row in dt.Rows)
                 {
                     ClsAppartenereDL app = new ClsAppartenereDL();
-                    app.IDdisicplina = Convert.ToInt32(row["IDdisciplina"]);
+                    app.IDdisciplina = Convert.ToInt32(row["IDdisciplina"]);
                     app.IDindirizzo = Convert.ToInt32(row["IDindirizzo"]);
                     apparteneres.Add(app);
                 }
@@ -112,7 +112,7 @@ namespace Cattedre
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDindirizzo", appartenere.IDindirizzo);
-                        cmd.Parameters.AddWithValue("@IDdisciplina", appartenere.IDdisicplina);
+                        cmd.Parameters.AddWithValue("@IDdisciplina", appartenere.IDdisciplina);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
                         if (righeCoinvolte == 0)
                             throw new InvalidOperationException("No rows were inserted.");
@@ -224,7 +224,7 @@ namespace Cattedre
                             WHERE IDdisciplina= @IDdisciplina AND IDindirizzo= @IDindirizzo";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
-                    cmd.Parameters.AddWithValue("@IDdisciplina", app.IDdisicplina);
+                    cmd.Parameters.AddWithValue("@IDdisciplina", app.IDdisciplina);
                     cmd.Parameters.AddWithValue("@IDindirizzo", app.IDindirizzo);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
                     if (righeCoinvolte <= 0)
@@ -250,7 +250,7 @@ namespace Cattedre
             List<ClsAppartenereDL> appartenenenzeDisciplina = CaricaClassiAppartenereByDisciplina(iddisciplina);
             foreach (ClsAppartenereDL  app in appartenenenzeDisciplina)
             {
-                app.IDdisicplina = iddisciplina;
+                app.IDdisciplina = iddisciplina;
                 //controllo se l'appartenenza è presente  nella lista delle afferenze modificate
                 if (!appartenenzaModifica.Any(a => a.IDindirizzo == app.IDindirizzo))
                     EliminaAppartenenza(app);
@@ -259,7 +259,7 @@ namespace Cattedre
             //carico le appartenenze create, cioè quelle aggiunte
             foreach (ClsAppartenereDL app in appartenenzaModifica)
             {
-                app.IDdisicplina = iddisciplina;
+                app.IDdisciplina = iddisciplina;
                 if (!appartenenenzeDisciplina.Any(a => a.IDindirizzo == app.IDindirizzo))
                     InserireAppartenere(app);
             }

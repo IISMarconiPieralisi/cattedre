@@ -109,13 +109,16 @@ namespace Cattedre
         #region filtra
         private void PopolaCDC()
         {
-            if(cdcs.Count>0)
+            this.cbCDC.SelectedIndexChanged -= new System.EventHandler(this.cbCDC_SelectedIndexChanged);
+            if (cdcs.Count>0)
             {
                 cbCDC.DataSource = cdcs;
                 cbCDC.DisplayMember = "Nome";
                 cbCDC.ValueMember = "ID";
                 cbCDC.SelectedIndex = -1;
             }
+            this.cbCDC.SelectedIndexChanged += new System.EventHandler(this.cbCDC_SelectedIndexChanged);
+
         }
         private void btCerca_Click(object sender, EventArgs e)
         {

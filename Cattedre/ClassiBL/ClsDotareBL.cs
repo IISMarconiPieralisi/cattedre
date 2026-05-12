@@ -172,9 +172,10 @@ namespace Cattedre
 
         private static MySqlCommand CreaComandoRicerca(long IDannoScolastico , long IDCDC , MySqlConnection conn)
         {
-            string sql = @"SELECT ID, numcattedrediritto, numcattedrefatto, IDannoscolastico, IDclassediconcorso FROM dotare";
+            string sql = @"SELECT d.ID, d.numcattedrediritto, numcattedrefatto, d.IDannoscolastico, d.IDclassediconcorso FROM dotare d
+                JOIN anniscolastici a ON a.ID = d.IDannoscolastico
+               JOIN classidiconcorso cdc ON cdc.ID = d.IDclassediconcorso ";
             MySqlCommand cmd = new MySqlCommand("", conn);
-            cmd.Connection = conn;
             List<string> condizioni = new List<string>();
 
             if (IDannoScolastico > 0)
@@ -189,7 +190,7 @@ namespace Cattedre
             }
             if (condizioni.Count > 0)
                 sql += " WHERE " + string.Join(" AND ", condizioni);
-            
+            sql += " ORDER BY a.Sigla, cdc.Livello;";
 
             cmd.CommandText = sql;
             return cmd;

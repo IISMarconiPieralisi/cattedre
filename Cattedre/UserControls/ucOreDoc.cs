@@ -12,7 +12,7 @@ namespace Cattedre
 {
     public partial class ucOreDoc : UserControl
     {
-        //varuabuku gobali
+        //variabili globali
         public Dictionary<long, ucOreDoc> DictDocenti { get; set; }
         public Dictionary<long, List<ClsClasseDiConcorsoDL>> CacheCDC { get; set; }
         // Evento per notificare il chiamante (es. per AggiornaOreEffettive)
@@ -79,15 +79,31 @@ namespace Cattedre
 
                     int nuovoValore = (int)nudOrePot.Value;
 
-                    if (orePotAltriDocenti + nuovoValore > oreMax)
-                        throw new Exception("Superato il limite di ore di potenziamento consentite: " + oreMax);
-                    
+                    // Sostituisce il throw: calcola il massimo disponibile e blocca il nud
+                    int oreDisponibili = oreMax - orePotAltriDocenti;
+                    if (oreDisponibili < 0) oreDisponibili = 0;
+
+                    if (nuovoValore > oreDisponibili)
+                    {
+                        isResetting = true;
+                        nudOrePot.Value = oreDisponibili;
+                        isResetting = false;
+                        //MessageBox.Show(
+                        //    $"Puoi assegnare al massimo {oreDisponibili} ore di potenziamento per questa CDC.",
+                        //    "Attenzione",
+                        //    MessageBoxButtons.OK,
+                        //    MessageBoxIcon.Warning);
+                        return;
+                    }
+
                     valorePrec = nuovoValore;
                     OrePotValide?.Invoke(this, EventArgs.Empty);
                 }
+
                 int oreSpeciali = Convert.ToInt32(nudOrePot.Value);
                 ClsAssegnareBL.SalvaOrePot(oreSpeciali, IDutente, IDannoScolastico, IDdisciplina);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

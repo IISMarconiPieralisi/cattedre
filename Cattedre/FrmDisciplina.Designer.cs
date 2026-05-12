@@ -54,6 +54,8 @@ namespace Cattedre
             this.cbDisciplinaSpeciale = new Krypton.Toolkit.KryptonCheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.pnDisciplina = new System.Windows.Forms.Panel();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.cbAnnoFine = new System.Windows.Forms.ComboBox();
             this.cbAnnoInizio = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -65,8 +67,6 @@ namespace Cattedre
             this.clbDipartimenti = new System.Windows.Forms.CheckedListBox();
             this.label7 = new System.Windows.Forms.Label();
             this.frmDisciplinaBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudOreTeoria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudOreLab)).BeginInit();
             this.pnRB.SuspendLayout();
@@ -523,6 +523,26 @@ namespace Cattedre
             this.pnDisciplina.Size = new System.Drawing.Size(596, 833);
             this.pnDisciplina.TabIndex = 47;
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(12, 428);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(50, 16);
+            this.label14.TabIndex = 54;
+            this.label14.Text = "gestire";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(15, 287);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(89, 16);
+            this.label13.TabIndex = 53;
+            this.label13.Text = "appartenere";
+            // 
             // cbAnnoFine
             // 
             this.cbAnnoFine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -641,26 +661,6 @@ namespace Cattedre
             // frmDisciplinaBindingSource
             // 
             this.frmDisciplinaBindingSource.DataSource = typeof(Cattedre.FrmDisciplina);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(15, 287);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(54, 16);
-            this.label13.TabIndex = 53;
-            this.label13.Text = "label13";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(12, 428);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(50, 16);
-            this.label14.TabIndex = 54;
-            this.label14.Text = "gestire";
             // 
             // FrmDisciplina
             // 

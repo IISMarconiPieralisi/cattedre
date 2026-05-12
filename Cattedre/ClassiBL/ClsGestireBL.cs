@@ -134,6 +134,32 @@ namespace Cattedre
             return gestioni;
         }
 
+        public static List<long> RilevaAltriDipartimentiGestori(long idDisciplina, long idDipartimentoCorrente)
+        {
+            List<long> result = new List<long>();
+            string query = @"
+        SELECT IDdipartimento 
+        FROM gestire 
+        WHERE IDdisciplina = @idDisciplina 
+          AND IDdipartimento <> @idDip";
+
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                conn.Open();
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@idDisciplina", idDisciplina);
+                    cmd.Parameters.AddWithValue("@idDip", idDipartimentoCorrente);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                            result.Add(reader.GetInt64(0));
+                    }
+                }
+            }
+            return result;
+        }
+
         public static void InserireGestione(ClsGestireDL gestione)
         {
             try

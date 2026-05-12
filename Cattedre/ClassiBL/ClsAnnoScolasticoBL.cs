@@ -13,7 +13,6 @@ namespace Cattedre
     {
         public static long TrovaIDannoscolastico()
         {
-            ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
             DataTable dt = new DataTable();
 
             try
@@ -34,7 +33,7 @@ namespace Cattedre
                     }
                     foreach (DataRow row in dt.Rows)
                     {
-                        anno.ID = Convert.ToInt64(row["ID"]);
+                        return Convert.ToInt64(row["ID"]);
                     }
                 }
             }
@@ -42,7 +41,7 @@ namespace Cattedre
             {
                 throw new Exception(ex.Message);
             }
-            return anno.ID;
+            return 0;
         }
 
         public static ClsAnnoScolasticoDL TrovaAnnoSuccessivo(long IDanno)

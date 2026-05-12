@@ -13,16 +13,32 @@ namespace Cattedre
         private static readonly Xceed.Drawing.Color GrigioIntestazione = Xceed.Drawing.Color.GrayText;
         private const string FontName = "Calibri";
         private const double FontSize = 12;
+        //gestione spaziature e altezze
+        private static float _altezzaCorrente = 0f;
+        // Costanti
+        private const float AltezzaPagina = 842f;
+        private const float MargineTop = 36f;
+        private const float MargineBottom = 36f;
+        private const float MargineLeft= 36f;
+        private const float MargineRight= 36f;
+
+        private const float AltezzaHeader = 40f;
+        private const float AltezzaRigaTabella = 20f;
+        private const float AltezzaNomeDocente = 30f;
+        private const float AltezzaIntestTabella = 20f;
+        private const float AltezzaRigaTotale = 20f;
+        private static readonly float SpazioUtile = AltezzaPagina - MargineTop - MargineBottom - AltezzaHeader;
+
         public static void PreparazioneCreazioneFile(ClsAnnoScolasticoDL anno, ClsDipartimentoDL dipartimento, string filePath)
         {
             try
             { 
                 List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID,anno.ID);
                 List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDipartimento(dipartimento.ID);
-               // List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(anno.ID,dipartimento.ID,null);
-                List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare();
-                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassi(dipartimento.ID, anno.ID);         
-                //GenerateFileWord(anno,dipartimento, cdc, assegnare, discipline, classi, Dotare, filePath);
+               List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(anno.ID,dipartimento.ID);
+                List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare(anno.ID);
+                List<ClsClasseDL> classi = ClsClasseBL.CaricaClassi(0, anno.ID);         
+                GenerateFileWord(anno,dipartimento, cdc, assegnare, discipline, classi, Dotare, filePath);
             }catch(Exception ex)
             {
                 throw new Exception("Errore Durante il Caricamento del file: " + ex.Message);
@@ -39,22 +55,27 @@ namespace Cattedre
                 {
                     doc.PageWidth = 595f;
                     doc.PageHeight = 842f;
-                    doc.MarginTop = 36f;
-                    doc.MarginBottom = 36f;
-                    doc.MarginLeft = 36f;
-                    doc.MarginRight = 36f;
+                    doc.MarginTop = MargineTop;
+                    doc.MarginBottom = MargineBottom;
+                    doc.MarginLeft = MargineLeft;
+                    doc.MarginRight = MargineRight;
                     //conto le righe, per gesitire al meglio le spaziature alla fine di ogni classe di concorso
                     int i = 0;
                     foreach (ClsClasseDiConcorsoDL cdc in listClassiConcorso)
                     {
+                        _altezzaCorrente = 0f; // reset ad ogni nuova pagina/CDC
                         ClsDotareDL dotazione = listDotare
                             .FirstOrDefault(d => d.IdClasseDiConcorso == cdc.ID);
-                        InserisciIntestazioneCDC(doc, cdc, dotazione, annoScolastico);
 
                         var DocentiFiltrati = ClsRichiedereBL.RilevaUtentiCDC(cdc.ID); //metodi per trovare gli utanti con quella  CDC
 
-                        if (DocentiFiltrati.Count <= 0){    i++;    continue;
-                        }
+                        if (DocentiFiltrati.Count <= 0)
+                        { i++; continue; }
+                        else
+                            InserisciIntestazioneCDC(doc, cdc, dotazione, annoScolastico);
+
+                        _altezzaCorrente += 70f; // stima intestazione CDC
+
                         //ciclo gli utenti con quella classe di concorso 
                         foreach (ClsUtenteDL docente in DocentiFiltrati)
                         {
@@ -66,6 +87,8 @@ namespace Cattedre
                         {
                             Paragraph pageBreak = doc.InsertParagraph();
                             pageBreak.InsertPageBreakAfterSelf();
+                            _altezzaCorrente = 0f; // reset dopo page break
+
                         }
                         i++;
                     }
@@ -111,14 +134,42 @@ namespace Cattedre
         private static void InserisciDocente(DocX doc, ClsUtenteDL docente, List<ClsAssegnareDL> assegnazioni, List<ClsDisciplinaDL> listDiscipline,
                                                 List<ClsClasseDL> listClassi)
         {
-            // Filtro le liste in modo tale da usare delle liste pulite 
             List<ClsAssegnareDL> assegnazioniDocente = assegnazioni.Where(a => a.IDUtente == docente.ID).ToList();
-            List<ClsRichiedereDL> richiesteDocente = ClsRichiedereBL.CaricaClassiRichiedereUtente(docente.ID);
             List<ClsDisciplinaDL> listDisciplineDocente = listDiscipline.Where(d => d != null && assegnazioniDocente.Any(r => r.IDDisciplina == d.ID))
                                                                         .OrderBy(d => !string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) ? 1 : 0)
                                                                         .ToList();
             List<ClsClasseDL> listClassiDocente = listClassi.Where(c => assegnazioniDocente.Any(r => r.IDClasse == c.ID)).ToList();
             if (listClassiDocente.Count <= 0) return;
+
+            // Conta righe valide
+            int righeValide = assegnazioniDocente.Count(a => {
+                var d = listDiscipline.FirstOrDefault(d2 =>
+                    d2 != null &&
+                    d2.ID == a.IDDisciplina &&
+                    (!string.IsNullOrWhiteSpace(d2.DisciplinaSpeciale) || a.IDClasse > 0) &&
+                    (d2.OreLaboratorio + d2.OreTeoria > 0 || a.OreSpeciali > 0));
+                return d != null;
+            });
+
+            if (righeValide == 0) return;
+
+            // Altezza che occuperà questo docente
+            float altezzaDocente = AltezzaNomeDocente
+                                 + AltezzaIntestTabella
+                                 + (righeValide * AltezzaRigaTabella)
+                                 + AltezzaRigaTotale;
+
+            // Se non ci entra, salta pagina
+            if (_altezzaCorrente + altezzaDocente > SpazioUtile)
+            {
+                Paragraph pb = doc.InsertParagraph();
+                pb.InsertPageBreakAfterSelf();
+                _altezzaCorrente = 8f;
+            }
+
+            // Aggiorna contatore
+            _altezzaCorrente += altezzaDocente + 8f; // +12f per SpacingBefore del nome
+
             // Intestazione docente
             var pNome = doc.InsertParagraph();
             pNome.SpacingBefore(12);
@@ -127,6 +178,7 @@ namespace Cattedre
                  .UnderlineStyle(UnderlineStyle.singleLine)
                  .Font(FontName).FontSize(FontSize).Color(Xceed.Drawing.Color.Red);
             pNome.SpacingAfter(4);
+
             InserisciTabella(doc, assegnazioniDocente, listDisciplineDocente, listClassiDocente, docente);
         }
 
@@ -156,8 +208,14 @@ namespace Cattedre
             // Pre-ordina per disciplina speciale (in fondo)
             assegnazioni = assegnazioni
                 .Where(a => a != null)
-                .OrderBy(a => !string.IsNullOrWhiteSpace(
+                .OrderBy(a => {
+                    var sigla = listClassi.FirstOrDefault(c => c != null && c.ID == a.IDClasse)?.Sigla ?? "";
+                    return sigla.Length > 0 ? sigla[0] : '9';
+                })
+                .ThenBy(a => !string.IsNullOrWhiteSpace(
                     listDiscipline.FirstOrDefault(d => d != null && d.ID == a.IDDisciplina)?.DisciplinaSpeciale) ? 1 : 0)
+                .ThenBy(a => listDiscipline.FirstOrDefault(d => d != null && d.ID == a.IDDisciplina)?.Nome ?? "")
+                .ThenBy(a => listClassi.FirstOrDefault(c => c != null && c.ID == a.IDClasse)?.Sigla ?? "")
                 .ToList();
 
             // Pre-filtra le assegnazioni valide PRIMA di creare la tabella
@@ -168,7 +226,7 @@ namespace Cattedre
                         d2 != null &&
                         d2.ID == a.IDDisciplina &&
                         (!string.IsNullOrWhiteSpace(d2.DisciplinaSpeciale) || a.IDClasse > 0) &&
-                        d2.OreLaboratorio + d2.OreTeoria > 0);
+                        (d2.OreLaboratorio + d2.OreTeoria > 0 || a.OreSpeciali > 0));
                     return d != null;
                 })
                 .ToList();
@@ -198,8 +256,8 @@ namespace Cattedre
                 ClsDisciplinaDL disciplina = listDiscipline.FirstOrDefault(d =>
                     d != null &&
                     d.ID == assegnazione.IDDisciplina &&
-                    (!string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) || assegnazione.IDClasse > 0) &&
-                    d.OreLaboratorio + d.OreTeoria > 0);
+     (!string.IsNullOrWhiteSpace(d.DisciplinaSpeciale) || assegnazione.IDClasse > 0) &&
+     (d.OreLaboratorio + d.OreTeoria > 0 || assegnazione.OreSpeciali > 0));  // ← fix
 
                 // Non necessario come guardia, ma lasciato per sicurezza
                 if (disciplina == null) continue;

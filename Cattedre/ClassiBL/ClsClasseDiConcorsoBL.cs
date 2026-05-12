@@ -171,6 +171,47 @@ namespace Cattedre
             return risultato;
         }
 
+        // In ClsRichiedereBL oppure ClsClasseDiConcorsoBL
+        public static List<ClsClasseDiConcorsoDL> RilevaCDCDisciplina(long IDdisciplina)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"
+                SELECT c.* FROM classidiconcorso c
+                JOIN richiedere r ON c.ID = r.IDclassediconcorso
+                WHERE r.IDdisciplina = @IDdisciplina";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                            da.Fill(dt);
+
+                        List<ClsClasseDiConcorsoDL> result = new List<ClsClasseDiConcorsoDL>();
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            result.Add(new ClsClasseDiConcorsoDL
+                            {
+                                ID = Convert.ToInt64(row["id"]),
+                                Livello = row["livello"].ToString(),
+                                Nome = row["nome"].ToString(),
+                                AbilitazioniRichieste = row["abilitazioniRichieste"].ToString()
+                            });
+                        }
+                        return result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nel recupero CDC per disciplina: " + ex.Message);
+            }
+        }
+
         public static string TrovaCodiceDaID(long id)
         {
             DataTable dt = new DataTable();
@@ -437,23 +478,45 @@ namespace Cattedre
         /// </summary>
         private static int OreTeoriaLaboratorio(ClsClasseDiConcorsoDL cdc, ClsAnnoScolasticoDL annoScolastico)
         {
-            int ore = 0;
-            string campoOre = cdc.Livello.Contains("A")
+            int ore = 0; //livello=sigla
+            string campoOre = cdc.Livello.Contains("A")  
                 ? "d.oreTeoria"
                 : "d.oreLaboratorio";
-
             try
             {
 
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
-                    string sql = $@"SELECT SUM({campoOre}) FROM assegnare a
-                                    JOIN discipline d ON a.IDdisciplina = d.ID
-                                    JOIN richiedere r ON r.IDdisciplina = d.ID AND r.IDclasseDiConcorso = @IDcdc
-                                    JOIN classi c ON a.IDclasse = c.ID
-                                    WHERE a.IDannoScolastico = @IDannoScolastico 
-                                    AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '') AND {campoOre} > 0";
-
+                    //string sql = $@"SELECT SUM({campoOre}) FROM assegnare a
+                    //                JOIN discipline d ON a.IDdisciplina = d.ID
+                    //                JOIN richiedere r ON r.IDdisciplina = d.ID AND r.IDclasseDiConcorso = @IDcdc
+                    //                JOIN classi c ON a.IDclasse = c.ID
+                    //                WHERE a.IDannoScolastico = @IDannoScolastico 
+                    //                AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '') AND {campoOre} > 0";
+                    string sql = $@"
+                SELECT SUM(d_ore.oreUnitarie * classiPerIndirizzo.numClassi)
+FROM (
+    -- Una riga per disciplina, evitando duplicati da appartenere
+    SELECT DISTINCT d.ID as IDdisciplina, {campoOre} as oreUnitarie
+    FROM vigere v
+    JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
+    LEFT JOIN anniscolastici aFine  ON v.IDannoscolasticofine  = aFine.ID
+    JOIN anniscolastici aTarget     ON aTarget.ID = @IDannoScolastico
+    JOIN discipline d               ON v.IDdisciplina = d.ID
+    JOIN richiedere r               ON d.ID = r.IDdisciplina
+    WHERE r.IDclasseDiConcorso = @IDcdc
+    AND aTarget.dataInizio >= aInizio.dataInizio
+    AND (aFine.ID IS NULL OR aTarget.dataFine <= aFine.dataFine)
+    AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '')
+    AND {campoOre} > 0
+) d_ore
+JOIN appartenere a ON d_ore.IDdisciplina = a.IDdisciplina
+JOIN (
+    SELECT IDindirizzo, COUNT(*) AS numClassi
+    FROM classi
+    WHERE IDannoscolastico = @IDannoScolastico
+    GROUP BY IDindirizzo
+) classiPerIndirizzo ON classiPerIndirizzo.IDindirizzo = a.IDindirizzo";
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -485,7 +548,8 @@ namespace Cattedre
             { 
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
-                    string sql = $@"SELECT SUM({campoOre})FROM assegnare a
+                    string sql = $@"SELECT SUM({campoOre})
+                                  FROM assegnare a
                                     JOIN utenti u ON a.IDutente = u.ID
                                     JOIN discipline d ON a.IDdisciplina = d.ID
                                     JOIN richiedere r ON r.IDutente = u.ID

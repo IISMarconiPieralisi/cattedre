@@ -185,7 +185,7 @@ namespace Cattedre
                 uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Regular);
             }
 
-            // calcolo ore effettive
+            // calcolo ore effettive dal dipartimento CORRENTE
             foreach (UcAssegnazioni ucAss in pnlDipartimento.Controls.OfType<UcAssegnazioni>())
             {
                 if (ucAss.cbDocentiTeorici.SelectedItem is ClsUtenteDL dt)
@@ -206,6 +206,26 @@ namespace Cattedre
                         int attuali = int.Parse(ucDoc.lblOreEffettive.Text);
                         ucDoc.lblOreEffettive.Text = (attuali + ore).ToString();
                     }
+                }
+            }
+
+            // calcolo ore effettive da ALTRI dipartimenti per i docenti presenti nel pannello
+            foreach (var kvp in dictDocenti)
+            {
+                long idDocente = kvp.Key;
+                ucOreDoc ucDoc = kvp.Value;
+                List<ClsClasseDiConcorsoDL> cdcDocente = ClsRichiedereBL.RilevaCDCDocente(idDocente);
+
+                List<long> disciplineGestiteQuiID = discipline.Select(d => d.ID).Distinct().ToList();
+
+                int oreAltriDip = ClsAssegnareBL.RilevaOreDocenteInAltriDipartimenti(
+                    idDocente, IDdipartimento, IDannoscolastico, disciplineGestiteQuiID);
+
+
+                if (oreAltriDip > 0)
+                {
+                    int attuali = int.Parse(ucDoc.lblOreEffettive.Text);
+                    ucDoc.lblOreEffettive.Text = (attuali + oreAltriDip).ToString();
                 }
             }
 
@@ -240,6 +260,7 @@ namespace Cattedre
                     uc.lblOreTotali.Font = new Font(uc.lblOreTotali.Font, FontStyle.Bold);
                 }
             }
+
             Label lblTotTeo = pnlOreDoc.Controls.Find("lblTotaleTeorici", false).FirstOrDefault() as Label;
             Label lblTotPra = pnlOreDoc.Controls.Find("lblTotalePratici", false).FirstOrDefault() as Label;
             Label lblTotPotTeo = pnlOreDoc.Controls.Find("lblTotalePotTeorici", false).FirstOrDefault() as Label;
@@ -262,44 +283,43 @@ namespace Cattedre
                     if (richiedeLaurea)
                     {
                         totTeorici += tot;
-                        totPotTeorici += pot;
 
-                        // calcola oreMax solo una volta (prendo la CDC di potenziamento del docente)
-                        if (oreMaxTeorici == 0)
+                        ClsClasseDiConcorsoDL cdcTeorica = cdcs
+                            .FirstOrDefault(c => c.AbilitazioniRichieste != null &&
+                                                  c.AbilitazioniRichieste.ToLower().Contains("laurea"));
+
+                        if (cdcTeorica != null)
                         {
-                            List<ClsClasseDiConcorsoDL> cdcPot = ClsClasseDiConcorsoBL
-                                .CaricaCDCperDisciplina(IDdipartimento)
-                                .Where(x => x.nomeDisciplina.Contains("otenziamento"))
-                                .Select(x => x.cdc)
-                                .ToList();
+                            int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                                IDdipartimento, cdcTeorica.ID);
 
-                            ClsClasseDiConcorsoDL cdcPotDocente = cdcs
-                                .FirstOrDefault(c => cdcPot.Any(p => p.ID == c.ID));
-
-                            if (cdcPotDocente != null)
-                                oreMaxTeorici = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
-                                    IDdipartimento, cdcPotDocente.ID);
+                            if (oreMax > 0)
+                            {
+                                totPotTeorici += pot;
+                                if (oreMaxTeorici == 0)
+                                    oreMaxTeorici = oreMax;
+                            }
                         }
                     }
                     else
                     {
                         totPratici += tot;
-                        totPotPratici += pot;
 
-                        if (oreMaxPratici == 0)
+                        ClsClasseDiConcorsoDL cdcPratica = cdcs
+                            .FirstOrDefault(c => c.AbilitazioniRichieste == null ||
+                                                  !c.AbilitazioniRichieste.ToLower().Contains("laurea"));
+
+                        if (cdcPratica != null)
                         {
-                            List<ClsClasseDiConcorsoDL> cdcPot = ClsClasseDiConcorsoBL
-                                .CaricaCDCperDisciplina(IDdipartimento)
-                                .Where(x => x.nomeDisciplina.Contains("otenziamento"))
-                                .Select(x => x.cdc)
-                                .ToList();
+                            int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
+                                IDdipartimento, cdcPratica.ID);
 
-                            ClsClasseDiConcorsoDL cdcPotDocente = cdcs
-                                .FirstOrDefault(c => cdcPot.Any(p => p.ID == c.ID));
-
-                            if (cdcPotDocente != null)
-                                oreMaxPratici = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(
-                                    IDdipartimento, cdcPotDocente.ID);
+                            if (oreMax > 0)
+                            {
+                                totPotPratici += pot;
+                                if (oreMaxPratici == 0)
+                                    oreMaxPratici = oreMax;
+                            }
                         }
                     }
                 }
@@ -577,6 +597,48 @@ namespace Cattedre
                             teorici.Add(esterno);
                         else if (esterno.TipoDocente == 'L' && !pratici.Any(d => d.ID == esterno.ID))
                             pratici.Add(esterno);
+                    }
+
+                    // Docenti di tutti gli altri dipartimenti che gestiscono questa stessa disciplina
+                    List<long> altriDipartimentiGestori = ClsGestireBL
+                        .RilevaAltriDipartimentiGestori(disciplina.ID, IDdipartimento);
+
+                    foreach (long idDipEsterno in altriDipartimentiGestori)
+                    {
+                        DataTable docentiDipEsterno = ClsAssegnareBL
+                            .CaricaDocentiConAssegnazioni(idDipEsterno, IDannoscolastico);
+
+                        var teoriciEsterni = docentiDipEsterno.AsEnumerable()
+                            .Where(r => r["tipoDocente"].ToString() == "T"
+                                     && Convert.ToInt32(r["isInterno"]) == 1)
+                            .Select(r => new ClsUtenteDL
+                            {
+                                ID = Convert.ToInt64(r["IDutente"]),
+                                Nome = r.Field<string>("nome"),
+                                Cognome = r.Field<string>("cognome"),
+                                TipoDocente = 'T',
+                                Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
+                            });
+
+                        var praticiEsterni = docentiDipEsterno.AsEnumerable()
+                            .Where(r => r["tipoDocente"].ToString() == "L"
+                                     && Convert.ToInt32(r["isInterno"]) == 1)
+                            .Select(r => new ClsUtenteDL
+                            {
+                                ID = Convert.ToInt64(r["IDutente"]),
+                                Nome = r.Field<string>("nome"),
+                                Cognome = r.Field<string>("cognome"),
+                                TipoDocente = 'L',
+                                Colore = r["colore"] == DBNull.Value ? "" : r["colore"].ToString()
+                            });
+
+                        foreach (var t in teoriciEsterni)
+                            if (!teorici.Any(d => d.ID == t.ID))
+                                teorici.Add(t);
+
+                        foreach (var p in praticiEsterni)
+                            if (!pratici.Any(d => d.ID == p.ID))
+                                pratici.Add(p);
                     }
 
                     uc.cbDocentiTeorici.DataSource = teorici;
@@ -899,6 +961,9 @@ namespace Cattedre
 
             // Recupero docenti distinti dal DataTable
             List<ClsUtenteDL> docenti = dtDocentiAssegnazioni.AsEnumerable()
+                .Where(r =>
+                    r["isInterno"] != DBNull.Value &&
+                    Convert.ToInt32(r["isInterno"]) == 1)
                 .Select(r => new ClsUtenteDL
                 {
                     ID = Convert.ToInt64(r["IDutente"]),

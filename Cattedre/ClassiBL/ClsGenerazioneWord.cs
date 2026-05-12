@@ -64,8 +64,9 @@ namespace Cattedre
                     foreach (ClsClasseDiConcorsoDL cdc in listClassiConcorso)
                     {
                         _altezzaCorrente = 0f; // reset ad ogni nuova pagina/CDC
-                        ClsDotareDL dotazione = listDotare
-                            .FirstOrDefault(d => d.IdClasseDiConcorso == cdc.ID);
+                        //ClsDotareDL dotazione = listDotare
+                        //    .FirstOrDefault(d => d.IdClasseDiConcorso == cdc.ID);
+                        ClsDotareDL dotazione = ClsDotareBL.CaricaDotare(annoScolastico.ID,cdc.ID).FirstOrDefault();
 
                         var DocentiFiltrati = ClsRichiedereBL.RilevaUtentiCDC(cdc.ID); //metodi per trovare gli utanti con quella  CDC
 
@@ -73,6 +74,7 @@ namespace Cattedre
                         { i++; continue; }
                         else
                             InserisciIntestazioneCDC(doc, cdc, dotazione, annoScolastico);
+
                         _altezzaCorrente += 70f; // stima intestazione CDC
 
                         //ciclo gli utenti con quella classe di concorso 

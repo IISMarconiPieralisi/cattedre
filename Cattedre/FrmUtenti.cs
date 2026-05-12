@@ -443,5 +443,22 @@ namespace Cattedre
         }
         #endregion
 
+        private void btCattedreUtente_Click(object sender, EventArgs e)
+        {
+            if (lvUtenti.SelectedIndices.Count == 1)
+            {
+
+                int indiceDaModificare = lvUtenti.SelectedIndices[0];
+                FrmCattedreUtente frmCattedreUtente = new FrmCattedreUtente();
+                frmCattedreUtente._utente = _utenti[indiceDaModificare];
+                frmCattedreUtente._utente.ID = _utenti[indiceDaModificare].ID; //mi assicuro che l'ID rimanga lo stesso
+
+                DialogResult dr = frmCattedreUtente.ShowDialog();
+
+
+            }
+            else
+                MessageBox.Show("non è stato selezionato nessun utente, riprovare.", "Modifica", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
     }
 }

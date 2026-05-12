@@ -31,8 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmUtenti));
             this.lvUtenti = new System.Windows.Forms.ListView();
             this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chNome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chCognome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chNome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chEmail = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chTipoUtente = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chTipoContratto = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -57,6 +57,7 @@
             this.kryptonButton3 = new Krypton.Toolkit.KryptonButton();
             this.btCerca = new Krypton.Toolkit.KryptonButton();
             this.label1 = new System.Windows.Forms.Label();
+            this.btCattedreUtente = new System.Windows.Forms.Button();
             this.gbContratto.SuspendLayout();
             this.gBtipoDocente.SuspendLayout();
             this.gbTipiUtenti.SuspendLayout();
@@ -93,15 +94,15 @@
             this.chID.Text = "ID";
             this.chID.Width = 50;
             // 
-            // chNome
-            // 
-            this.chNome.Text = "Nome";
-            this.chNome.Width = 100;
-            // 
             // chCognome
             // 
             this.chCognome.Text = "Cognome";
             this.chCognome.Width = 100;
+            // 
+            // chNome
+            // 
+            this.chNome.Text = "Nome";
+            this.chNome.Width = 100;
             // 
             // chEmail
             // 
@@ -657,11 +658,23 @@
             this.label1.TabIndex = 43;
             this.label1.Text = "Utenti:";
             // 
+            // btCattedreUtente
+            // 
+            this.btCattedreUtente.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btCattedreUtente.Location = new System.Drawing.Point(1233, 306);
+            this.btCattedreUtente.Name = "btCattedreUtente";
+            this.btCattedreUtente.Size = new System.Drawing.Size(109, 30);
+            this.btCattedreUtente.TabIndex = 44;
+            this.btCattedreUtente.Text = "Cattedre";
+            this.btCattedreUtente.UseVisualStyleBackColor = true;
+            this.btCattedreUtente.Click += new System.EventHandler(this.btCattedreUtente_Click);
+            // 
             // FrmUtenti
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1360, 745);
+            this.Controls.Add(this.btCattedreUtente);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.gbContratto);
             this.Controls.Add(this.btCerca);
@@ -719,5 +732,6 @@
         private Krypton.Toolkit.KryptonButton kryptonButton3;
         private Krypton.Toolkit.KryptonButton btCerca;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btCattedreUtente;
     }
 }

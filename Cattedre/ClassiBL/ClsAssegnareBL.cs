@@ -629,6 +629,54 @@ namespace Cattedre
 
             return ass;
         }
+
+        public static List<ClsAssegnareDL> PopolaAssegnazioniUtenteAnnoScolastico(long IDutente, long IDannoScolastico)
+        {
+            List<ClsAssegnareDL> ass = new List<ClsAssegnareDL>();
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+
+                    string sql = "SELECT DISTINCT a.ID, a.oreSpeciali, a.IDannoscolastico, a.IDdisciplina, a.IDclasse " +
+                                 "FROM assegnare a " +
+                                 "JOIN gestire g ON a.IDdisciplina = g.IDdisciplina " +
+                                 "WHERE a.IDannoscolastico = @IDannoScolastico AND a.IDutente = @IDutente " +
+                                 "AND (a.IDclasse IS NOT NULL OR (a.IDclasse IS NULL AND a.oreSpeciali > 0))";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(dt);
+                        }
+                    }
+                }
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    ass.Add(new ClsAssegnareDL
+                    {
+                        ID = Convert.ToInt32(row["ID"]),
+                        OreSpeciali = Convert.ToInt32(row["oreSpeciali"]),
+                        
+                        IDDisciplina = row["IDdisciplina"] == DBNull.Value ? 0 : Convert.ToInt32(row["IDdisciplina"]),
+                        IDClasse = row["IDclasse"] == DBNull.Value ? 0 : Convert.ToInt32(row["IDclasse"])
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return ass;
+        }
+
         public static int RilevaOrePotDocente(long IDutente, long IDannoScolastico)
         {
             try

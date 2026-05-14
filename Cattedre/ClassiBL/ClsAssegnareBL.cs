@@ -363,6 +363,73 @@ namespace Cattedre
         }
         #endregion
         #region Ore e cattedre
+        public static int CalcolaOreEffettiveDocente(long idDocente, long idDipartimento, long idAnnoScolastico)
+        {
+            // Ore assegnate nel dipartimento specificato
+            int oreEffettive = ClsAssegnareBL.RilevaOreDipartimentoDocente(
+                idDocente, idDipartimento, idAnnoScolastico);
+
+            // Ore in altri dipartimenti (metodo già esistente)
+            List<long> disciplineGestiteQuiID = ClsDisciplinaBL
+                .CaricaDisciplineAnnoScolasticoDipartimento(idAnnoScolastico, idDipartimento, out _)
+                .Select(d => d.ID)
+                .Distinct()
+                .ToList();
+
+            int oreAltriDip = ClsAssegnareBL.RilevaOreDocenteInAltriDipartimenti(
+                idDocente, idDipartimento, idAnnoScolastico, disciplineGestiteQuiID);
+
+            return oreEffettive + oreAltriDip;
+        }
+
+        public static int RilevaOreDipartimentoDocente(long idDocente, long idDipartimento, long idAnnoScolastico)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"
+                SELECT a.IDclasse, u.tipoDocente, d.oreTeoria, d.oreLaboratorio
+                FROM assegnare a
+                JOIN discipline d ON d.ID = a.IDdisciplina
+                JOIN gestire g ON g.IDdisciplina = d.ID
+                JOIN utenti u ON u.ID = a.IDutente
+                WHERE a.IDutente = @IDdocente
+                  AND a.IDannoscolastico = @IDannoscolastico
+                  AND a.IDclasse IS NOT NULL
+                  AND g.IDdipartimento = @IDdipartimento";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdocente", idDocente);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", idAnnoScolastico);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", idDipartimento);
+
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                            da.Fill(dt);
+
+                        int totale = 0;
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            string tipoDocente = row["tipoDocente"]?.ToString();
+                            if (tipoDocente == "T")
+                                totale += Convert.ToInt32(row["oreTeoria"]);
+                            else if (tipoDocente == "L")
+                                totale += Convert.ToInt32(row["oreLaboratorio"]);
+                        }
+                        return totale;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore nel recupero ore docente nel dipartimento: " + ex.Message);
+            }
+        }
+
         public static void SalvaCattedra(long IDclasse, long IDannoscolastico, long IDdisciplina, long IDutente, char tipoDocente)
         {
             try

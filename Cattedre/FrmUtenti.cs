@@ -479,7 +479,6 @@ namespace Cattedre
         {
             if (lvUtenti.SelectedIndices.Count == 1)
             {
-
                 int indiceDaModificare = lvUtenti.SelectedIndices[0];
                 FrmCattedreUtente frmCattedreUtente = new FrmCattedreUtente();
                 frmCattedreUtente._utente = _utenti[indiceDaModificare];

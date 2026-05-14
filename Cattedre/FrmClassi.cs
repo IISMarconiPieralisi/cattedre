@@ -117,7 +117,7 @@ namespace Cattedre
                         if(frmClasse._classe.Idindirizzo!=classeSelezionata.Idindirizzo)
                         {
                             //cancello i record di quella classe nelle assegnazioni
-                            ClsAssegnareBL.EliminaAssegnazione(frmClasse._classe.ID,"IDclasse");
+                            ClsAssegnareBL.EliminaAssegnazioneGenerica(frmClasse._classe.ID,"IDclasse");
                         }
                         CaricaListView();
                     }

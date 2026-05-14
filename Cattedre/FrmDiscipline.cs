@@ -156,6 +156,7 @@ namespace Cattedre
                 frmDisciplina._disciplina = discipline.FirstOrDefault(d => d.ID == idCercato);
                 //carico una copia delle discipline appartenere attuale
                 List<ClsAppartenereDL> appartenerePrima = ClsAppartenereBL.CaricaClassiAppartenereByDisciplina(idCercato);
+                List<ClsRichiedereDL> richiederePrima = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(idCercato);
                 frmDisciplina._vigere = ClsVigereBL.RilevaVigereDisciplina(idCercato);
                 DialogResult dr = frmDisciplina.ShowDialog();
                 if (dr == DialogResult.OK)
@@ -181,7 +182,16 @@ namespace Cattedre
                         .Any(dopo => dopo.IDindirizzo == prima.IDindirizzo)).ToList();
 
                         foreach (var app in _indirizziRimossi)
-                            ClsAssegnareBL.EliminaAssegnazione(app.IDdisciplina, app.IDindirizzo);
+                            ClsAssegnareBL.EliminaAssegnazioneDiscIndirizzo(app.IDdisciplina, app.IDindirizzo);
+                        //controllo la differenza fra le richiedere attuali e quelle vecchie
+                        //se c'è un cdc in meno cancelllo da assegnare le assegnazioni con IDdisciplina attuale e IDdisciplina cancellando quelle con 
+                // (eliminato) anche più di uno
+                        List<ClsRichiedereDL> _cdcRimosse = richiederePrima.Where(prima => !frmDisciplina._richiederes
+                        .Any(dopo => dopo.IDclassediconcorso == prima.IDclassediconcorso)).ToList();
+
+                        foreach (var ric in _cdcRimosse)
+                            ClsAssegnareBL.EliminaAssegnazioneDiscConcorso(ric.IDdisciplina,ric.IDclassediconcorso);
+
                         this.Cursor = Cursors.Arrow;
 
                     }

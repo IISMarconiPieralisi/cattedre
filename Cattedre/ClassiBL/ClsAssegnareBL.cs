@@ -233,6 +233,31 @@ namespace Cattedre
 
             }
         }
+
+        public static void EliminaAssegnazioniDocente(long IDutente, long IDclasseDiConcorso)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"DELETE assegnare FROM assegnare
+                           JOIN richiedere r ON r.IDdisciplina = assegnare.IDdisciplina
+                           WHERE assegnare.IDutente = @IDutente
+                             AND r.IDclasseDiConcorso = @IDclasseDiConcorso";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDutente", IDutente);
+                        cmd.Parameters.AddWithValue("@IDclasseDiConcorso", IDclasseDiConcorso);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion
         #region GestioneAssegnazioni
         public static bool EsisteAssegnazione(long IDclasse, long IDanno, long IDdisciplina)

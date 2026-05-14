@@ -208,6 +208,9 @@ namespace Cattedre
                 ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(_utenti[indiceDaModificare].ID); //se non esiste restituirà null
                 if (contratto != null)
                     frmUtente._contratto = contratto;
+                List<ClsRichiedereDL> richiestePrima = ClsRichiedereBL
+                .CaricaClassiRichiedereUtente(_utenti[indiceDaModificare].ID)
+                ?? new List<ClsRichiedereDL>();
 
 
                 DialogResult dr = frmUtente.ShowDialog();
@@ -231,6 +234,15 @@ namespace Cattedre
                                 //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
                                 ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, frmUtente._utente.ID);
                             }
+
+                            List<ClsRichiedereDL> cdcRimosse = richiestePrima
+                            .Where(prima => prima.IDclassediconcorso > 0 &&
+                               !(frmUtente._richieste ?? new List<ClsRichiedereDL>())
+                               .Any(dopo => dopo.IDclassediconcorso == prima.IDclassediconcorso))
+                            .ToList();
+
+                            foreach (var cdc in cdcRimosse)
+                                ClsAssegnareBL.EliminaAssegnazioniDocente(frmUtente._utente.ID, cdc.IDclassediconcorso);
 
                         }
                     }

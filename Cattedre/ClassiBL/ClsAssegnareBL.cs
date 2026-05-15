@@ -234,6 +234,34 @@ namespace Cattedre
             }
         }
 
+        public static void EliminaAssegnazioneID(long ID)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+
+                    string sql = $@"DELETE assegnare FROM assegnare 
+                                   WHERE assegnare.ID = @ID";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ID);
+
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        //if (righeCoinvolte <= 0)
+                        //    throw new InvalidOperationException("Errore nella cancellazione del record: nessuna riga interessata.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+
+            }
+        }
+
         public static void EliminaAssegnazioniDocente(long IDutente, long IDclasseDiConcorso)
         {
             try

@@ -15,7 +15,6 @@ namespace Cattedre
         public ClsUtenteDL _utente;
         private List<ClsAssegnareDL> _assegnazioni = new List<ClsAssegnareDL>();
         private List<ClsAnnoScolasticoDL> _anniscolastici = new List<ClsAnnoScolasticoDL>();
-        private FrmCattedre frmCattedre;
         public FrmCattedreUtente()
         {
             InitializeComponent();
@@ -32,7 +31,8 @@ namespace Cattedre
 
             foreach (ClsAssegnareDL ass in _assegnazioni)
             {
-                ListViewItem lvi = new ListViewItem(ClsClasseBL.RilevaSiglaClasse(ass.IDClasse));
+                ListViewItem lvi = new ListViewItem(ass.ID.ToString());
+                lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(ass.IDClasse));
                 lvi.SubItems.Add(ClsDisciplinaBL.RilevaDisciplina(ass.IDDisciplina).Nome);
                 lvi.SubItems.Add(ass.OreSpeciali.ToString());
                 lvi.SubItems.Add(oreEffettive.ToString()); // ore effettive totali del docente
@@ -41,22 +41,56 @@ namespace Cattedre
             }
         }
 
-        private void CaricaCB()
+        private void CaricaCB(out List<ClsAnnoScolasticoDL> anniscolastici)
         {
-            _anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
+            anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
             for (int i = 0; i < _anniscolastici.Count; i++)
                 cbAnniScolastici.Items.Add(_anniscolastici[i].Sigla);
         }
 
         private void FrmCattedreUtente_Load(object sender, EventArgs e)
         {
-            CaricaCB();
+            CaricaCB(out _anniscolastici);
+            DateTime oggi = DateTime.Today;
+            int annoInizio;
+
+            if (oggi.Month >= 9)
+                annoInizio = oggi.Year % 100;
+            else
+                annoInizio = (oggi.Year - 1) % 100;
+
+            int annoFine = annoInizio + 1;
+            string sigla = $"{annoInizio:D2}-{annoFine:D2}";
+
+            foreach (string item in cbAnniScolastici.Items)
+            {
+                if (item == sigla)
+                {
+                    cbAnniScolastici.SelectedItem = item;
+                    break;
+                }
+            }
         }
 
         private void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
         {
             string anno = cbAnniScolastici.SelectedItem.ToString();
             CaricaListView(ClsAnnoScolasticoBL.RilevaIDanno(anno));
+        }
+
+        private void btElimina_Click(object sender, EventArgs e)
+        {
+            if (lvCattedreUtente.SelectedIndices.Count == 1)
+            {
+                int indiceDaEliminare = lvCattedreUtente.SelectedIndices[0];
+                int idDaEliminare = Convert.ToInt32(lvCattedreUtente.Items[indiceDaEliminare].Tag);
+                DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
+                if (dr == DialogResult.Yes)
+                {
+                    ClsAssegnareBL.EliminaAssegnazioneID(Convert.ToInt64(lvCattedreUtente.Items[indiceDaEliminare].SubItems[0].ToString()));
+                    CaricaListView(ClsAnnoScolasticoBL.RilevaIDanno(cbAnniScolastici.SelectedItem.ToString()));
+                }
+            }
         }
     }
 }

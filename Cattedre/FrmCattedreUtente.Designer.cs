@@ -32,25 +32,28 @@
             this.chClasse = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDisciplina = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chOreSpeciali = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chOreEff = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chOreTot = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btElimina = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
-            this.chOreEff = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chOreTot = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvCattedreUtente
             // 
             this.lvCattedreUtente.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chID,
             this.chClasse,
             this.chDisciplina,
             this.chOreSpeciali,
             this.chOreEff,
             this.chOreTot});
+            this.lvCattedreUtente.FullRowSelect = true;
             this.lvCattedreUtente.HideSelection = false;
             this.lvCattedreUtente.Location = new System.Drawing.Point(28, 95);
             this.lvCattedreUtente.Name = "lvCattedreUtente";
-            this.lvCattedreUtente.Size = new System.Drawing.Size(371, 237);
+            this.lvCattedreUtente.Size = new System.Drawing.Size(406, 237);
             this.lvCattedreUtente.TabIndex = 0;
             this.lvCattedreUtente.UseCompatibleStateImageBehavior = false;
             this.lvCattedreUtente.View = System.Windows.Forms.View.Details;
@@ -69,14 +72,24 @@
             this.chOreSpeciali.Text = "Ore Speciali";
             this.chOreSpeciali.Width = 71;
             // 
+            // chOreEff
+            // 
+            this.chOreEff.Text = "Ore Effettive";
+            this.chOreEff.Width = 73;
+            // 
+            // chOreTot
+            // 
+            this.chOreTot.Text = "Ore Tot";
+            // 
             // btElimina
             // 
-            this.btElimina.Location = new System.Drawing.Point(415, 95);
+            this.btElimina.Location = new System.Drawing.Point(450, 95);
             this.btElimina.Name = "btElimina";
             this.btElimina.Size = new System.Drawing.Size(75, 23);
             this.btElimina.TabIndex = 1;
             this.btElimina.Text = "Elimina";
             this.btElimina.UseVisualStyleBackColor = true;
+            this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
             // 
             // label1
             // 
@@ -93,24 +106,20 @@
             this.cbAnniScolastici.FormattingEnabled = true;
             this.cbAnniScolastici.Location = new System.Drawing.Point(118, 41);
             this.cbAnniScolastici.Name = "cbAnniScolastici";
-            this.cbAnniScolastici.Size = new System.Drawing.Size(136, 21);
+            this.cbAnniScolastici.Size = new System.Drawing.Size(60, 21);
             this.cbAnniScolastici.TabIndex = 3;
             this.cbAnniScolastici.SelectedIndexChanged += new System.EventHandler(this.cbAnniScolastici_SelectedIndexChanged);
             // 
-            // chOreEff
+            // chID
             // 
-            this.chOreEff.Text = "Ore Effettive";
-            this.chOreEff.Width = 73;
-            // 
-            // chOreTot
-            // 
-            this.chOreTot.Text = "Ore Tot";
+            this.chID.Text = "ID";
+            this.chID.Width = 36;
             // 
             // FrmCattedreUtente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(502, 374);
+            this.ClientSize = new System.Drawing.Size(550, 374);
             this.Controls.Add(this.cbAnniScolastici);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btElimina);
@@ -134,5 +143,6 @@
         private System.Windows.Forms.ComboBox cbAnniScolastici;
         private System.Windows.Forms.ColumnHeader chOreEff;
         private System.Windows.Forms.ColumnHeader chOreTot;
+        private System.Windows.Forms.ColumnHeader chID;
     }
 }

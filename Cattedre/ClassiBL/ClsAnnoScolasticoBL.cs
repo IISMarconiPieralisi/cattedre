@@ -174,10 +174,11 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM anniscolastici 
-                          WHERE TIMESTAMPDIFF(YEAR,(
-                                SELECT datainizio FROM anniscolastici 
-                                WHERE ID=@ID),datainizio
-                          )=1 LIMIT 1";
+                    WHERE datainizio > (
+                        SELECT datainizio FROM anniscolastici WHERE ID = @ID
+                    )
+                    ORDER BY datainizio ASC
+                    LIMIT 1";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", IDannoScolastico);

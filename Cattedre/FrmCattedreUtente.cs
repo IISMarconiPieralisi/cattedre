@@ -22,7 +22,11 @@ namespace Cattedre
 
         private void CaricaListView(long idanno)
         {
-            _assegnazioni = ClsAssegnareBL.PopolaAssegnazioniUtenteAnnoScolastico(_utente.ID, idanno);
+            _assegnazioni = ClsAssegnareBL
+                .PopolaAssegnazioniUtenteAnnoScolastico(_utente.ID, idanno)
+                .OrderBy(a => ClsClasseBL.RilevaSiglaClasse(a.IDClasse))
+                .ThenBy(a => ClsDisciplinaBL.RilevaDisciplina(a.IDDisciplina).Nome)
+                .ToList();
             lvCattedreUtente.Items.Clear();
 
             // Calcolo ore effettive una volta sola, non per ogni riga
@@ -87,7 +91,7 @@ namespace Cattedre
                 DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
                 if (dr == DialogResult.Yes)
                 {
-                    ClsAssegnareBL.EliminaAssegnazioneID(Convert.ToInt64(lvCattedreUtente.Items[indiceDaEliminare].SubItems[0].ToString()));
+                    ClsAssegnareBL.EliminaAssegnazioneID(Convert.ToInt64(lvCattedreUtente.Items[indiceDaEliminare].SubItems[0].Text));
                     CaricaListView(ClsAnnoScolasticoBL.RilevaIDanno(cbAnniScolastici.SelectedItem.ToString()));
                 }
             }

@@ -480,7 +480,7 @@ namespace Cattedre
             if (lvUtenti.SelectedIndices.Count == 1)
             {
                 int indiceDaModificare = lvUtenti.SelectedIndices[0];
-                FrmCattedreUtente frmCattedreUtente = new FrmCattedreUtente();
+                FrmCattedreUtente frmCattedreUtente = new FrmCattedreUtente(_utenteLoggato);
                 frmCattedreUtente._utente = _utenti[indiceDaModificare];
                 frmCattedreUtente._utente.ID = _utenti[indiceDaModificare].ID; //mi assicuro che l'ID rimanga lo stesso
 

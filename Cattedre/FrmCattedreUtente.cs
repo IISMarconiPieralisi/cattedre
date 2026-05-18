@@ -13,11 +13,13 @@ namespace Cattedre
     public partial class FrmCattedreUtente : Form
     {
         public ClsUtenteDL _utente;
+        ClsUtenteDL utenteLoggato;
         private List<ClsAssegnareDL> _assegnazioni = new List<ClsAssegnareDL>();
         private List<ClsAnnoScolasticoDL> _anniscolastici = new List<ClsAnnoScolasticoDL>();
-        public FrmCattedreUtente()
+        public FrmCattedreUtente(ClsUtenteDL utente)
         {
             InitializeComponent();
+            utenteLoggato = utente;
         }
 
         private void CaricaListView(long idanno)
@@ -54,6 +56,8 @@ namespace Cattedre
 
         private void FrmCattedreUtente_Load(object sender, EventArgs e)
         {
+            if (utenteLoggato.TipoUtente != "C" && utenteLoggato.TipoUtente != "A")
+                btElimina.Visible = false;
             CaricaCB(out _anniscolastici);
             DateTime oggi = DateTime.Today;
             int annoInizio;

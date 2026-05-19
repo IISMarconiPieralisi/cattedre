@@ -153,6 +153,7 @@ namespace Cattedre
 
 
             frm.FormBorderStyle = FormBorderStyle.None;
+            frm.WindowState = FormWindowState.Maximized;
 
             frm.Dock = DockStyle.Fill;
 

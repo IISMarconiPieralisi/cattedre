@@ -306,10 +306,7 @@ namespace Cattedre
 
                         if (cdcTeorica != null)
                         {
-                            int oreMax = ClsDisciplinaBL
-                                .RilevaOrePotenziamentoDipartimentoPerCDC(
-                                    IDdipartimento,
-                                    cdcTeorica.ID);
+                            int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(IDdipartimento, cdcTeorica.ID);
 
                             if (oreMax > 0)
                             {
@@ -330,10 +327,7 @@ namespace Cattedre
 
                         if (cdcPratica != null)
                         {
-                            int oreMax = ClsDisciplinaBL
-                                .RilevaOrePotenziamentoDipartimentoPerCDC(
-                                    IDdipartimento,
-                                    cdcPratica.ID);
+                            int oreMax = ClsDisciplinaBL.RilevaOrePotenziamentoDipartimentoPerCDC(IDdipartimento, cdcPratica.ID);
 
                             if (oreMax > 0)
                             {

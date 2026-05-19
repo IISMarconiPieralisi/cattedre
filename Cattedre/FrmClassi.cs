@@ -44,6 +44,8 @@ namespace Cattedre
                 lvi.Tag = classe.ID;
                 lvClassi.Items.Add(lvi);
             }
+            tbNumRecord.Text = classi.Count().ToString();
+
         }
 
         private void FrmClassi_Load(object sender, EventArgs e)
@@ -117,7 +119,7 @@ namespace Cattedre
                         if(frmClasse._classe.Idindirizzo!=classeSelezionata.Idindirizzo)
                         {
                             //cancello i record di quella classe nelle assegnazioni
-                            ClsAssegnareBL.EliminaAssegnazione(frmClasse._classe.ID,"IDclasse");
+                            ClsAssegnareBL.EliminaAssegnazioneGenerica(frmClasse._classe.ID,"IDclasse");
                         }
                         CaricaListView();
                     }

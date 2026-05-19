@@ -204,7 +204,7 @@ namespace Cattedre
                 throw new Exception(ex.Message);
             }
         }
-        public static void EliminaAssegnazione(long ID, string IDdaCancellare)
+        public static void EliminaAssegnazioneGenerica(long ID, string IDdaCancellare)
         {
             try
             {
@@ -236,7 +236,53 @@ namespace Cattedre
 
             }
         }
-        public static void EliminaAssegnazione(long IDdisciplina, long IDindirizzo)
+        public static void EliminaAssegnazioneDiscConcorso(long IDdisciplina, long IDcdc)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+
+                    string sql = $@"DELETE FROM assegnare
+WHERE IDdisciplina = @IDdisciplina
+AND IDutente IN (
+    SELECT IDutente FROM assegnare a2
+    WHERE a2.IDdisciplina = @IDdisciplina
+    AND NOT EXISTS (
+        SELECT 1 FROM richiedere r
+        WHERE r.IDutente = a2.IDutente
+        AND r.IDdisciplina = @IDdisciplina
+        AND r.IDclasseDiConcorso IS NULL
+    )
+    AND NOT EXISTS (
+        SELECT 1 FROM richiedere r_doc
+        JOIN richiedere r_cdc ON r_cdc.IDclasseDiConcorso = r_doc.IDclasseDiConcorso
+        WHERE r_doc.IDutente = a2.IDutente
+        AND r_doc.IDclasseDiConcorso IS NOT NULL
+        AND r_cdc.IDdisciplina = @IDdisciplina
+        AND r_cdc.IDclasseDiConcorso != @IDclasseDiConcorso
+    )
+);";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        cmd.Parameters.AddWithValue("@IDclasseDiConcorso", IDcdc);
+
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+                        //if (righeCoinvolte <= 0)
+                        //    throw new InvalidOperationException("Errore nella cancellazione del record: nessuna riga interessata.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+
+            }
+        }
+        public static void EliminaAssegnazioneDiscIndirizzo(long IDdisciplina, long IDindirizzo)
         {
             try
             {

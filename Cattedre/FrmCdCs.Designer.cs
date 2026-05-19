@@ -44,6 +44,8 @@ namespace Cattedre
             this.btCerca = new Krypton.Toolkit.KryptonButton();
             this.label3 = new System.Windows.Forms.Label();
             this.mtbSigla = new Krypton.Toolkit.KryptonMaskedTextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tbNumRecord = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // lvCdCs
@@ -62,7 +64,7 @@ namespace Cattedre
             this.lvCdCs.Location = new System.Drawing.Point(50, 88);
             this.lvCdCs.Margin = new System.Windows.Forms.Padding(2);
             this.lvCdCs.Name = "lvCdCs";
-            this.lvCdCs.Size = new System.Drawing.Size(783, 465);
+            this.lvCdCs.Size = new System.Drawing.Size(783, 492);
             this.lvCdCs.TabIndex = 1;
             this.lvCdCs.UseCompatibleStateImageBehavior = false;
             this.lvCdCs.View = System.Windows.Forms.View.Details;
@@ -496,11 +498,35 @@ namespace Cattedre
             this.mtbSigla.TabIndex = 50;
             this.mtbSigla.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mtbSigla_KeyDown);
             // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(851, 550);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(51, 16);
+            this.label4.TabIndex = 52;
+            this.label4.Text = "Trovati:";
+            // 
+            // tbNumRecord
+            // 
+            this.tbNumRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbNumRecord.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbNumRecord.Location = new System.Drawing.Point(911, 545);
+            this.tbNumRecord.Name = "tbNumRecord";
+            this.tbNumRecord.ReadOnly = true;
+            this.tbNumRecord.ShortcutsEnabled = false;
+            this.tbNumRecord.Size = new System.Drawing.Size(39, 27);
+            this.tbNumRecord.TabIndex = 51;
+            // 
             // FrmCdCs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(980, 591);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.tbNumRecord);
             this.Controls.Add(this.mtbSigla);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btCerca);
@@ -539,5 +565,7 @@ namespace Cattedre
         private Krypton.Toolkit.KryptonButton btCerca;
         private System.Windows.Forms.Label label3;
         private Krypton.Toolkit.KryptonMaskedTextBox mtbSigla;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox tbNumRecord;
     }
 }

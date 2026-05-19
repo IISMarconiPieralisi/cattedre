@@ -412,6 +412,30 @@ namespace Cattedre
             }
             
         }
+        public static int contaDisciplinePotenziamentoCDC(long IDcdc)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT COUNT(d.ID) FROM discipline d
+                        JOIN richiedere r ON d.ID = r.IDdisciplina
+                        WHERE r.IDclasseDiConcorso = @IDcdc AND d.disciplinaSpeciale LIKE '%otenziamento%'";
+
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDcdc", IDcdc);
+                        object result = cmd.ExecuteScalar();
+                        return (result != null && result != DBNull.Value) ? Convert.ToInt32(result) : 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion
         #region valori specifici
 
@@ -500,7 +524,8 @@ namespace Cattedre
                                         JOIN richiedere r ON r.IDdisciplina = v.IDdisciplina
                                         WHERE v.IDannoscolasticoinizio <= @IDannoScolastico
                                         AND r.IDclasseDiConcorso = @IDcdc 
-                                        AND (v.IDannoscolasticofine >= @IDannoScolastico OR v.IDannoscolasticofine IS NULL)
+                                        AND (v.IDannoscolasticofine >= @IDannoScolastico OR v.IDannoscolasticofine IS NULL) 
+                                        AND c.IDannoscolastico = @IDannoScolastico
                                         AND (d.disciplinaSpeciale IS NULL OR d.disciplinaSpeciale = '') 
                                     )
                             ) AS tab;";

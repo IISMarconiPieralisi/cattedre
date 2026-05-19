@@ -239,13 +239,16 @@ namespace Cattedre
             int numRighe = assegnazioniValide.Count + 2;
             var tabella = doc.InsertTable(numRighe, 3);
             tabella.Design = TableDesign.None;
-            tabella.AutoFit = AutoFit.Window;
+            tabella.AutoFit = AutoFit.Fixed;
 
             foreach (var row in tabella.Rows)
             {
                 row.Cells[0].Width = 10f;
-                row.Cells[1].Width = 72f;
-                row.Cells[2].Width = 18f;
+                row.Cells[1].Width = 80f;
+                row.Cells[2].Width = 10f;
+                row.Cells[0].Paragraphs[0].Alignment = Alignment.center;
+                row.Cells[2].Paragraphs[0].Alignment = Alignment.center;
+
             }
 
             ImpostaRigaIntestazione(tabella.Rows[0]);
@@ -307,12 +310,18 @@ namespace Cattedre
             // Cattedre + ore residue – rosso
             if (dotazione != null)
             {
+                int OreResidue = ClsClasseDiConcorsoBL.OreResidueCDC(cdc, anno);
+                int NumCattedrePotenziamento = ClsClasseDiConcorsoBL.contaDisciplinePotenziamentoCDC(cdc.ID);
                 p.AppendLine();
-                p.Append($"{dotazione.NumcattedreDiritto} cattedre + {ClsClasseDiConcorsoBL.OreResidueCDC(cdc,anno)} h residue")
-                 .Bold()
-                 .Font(FontName)
-                 .FontSize(FontSize)
-                 .Color(Xceed.Drawing.Color.Red);
+                p.Append(
+                    $"{dotazione.NumcattedreDiritto} cattedre" +
+                    (NumCattedrePotenziamento > 0 ? $" (di cui {NumCattedrePotenziamento} di potenziamento)" : "") +
+                    (OreResidue > 0 ? $" + {OreResidue} h residue" : "")
+                )
+                .Bold()
+                .Font(FontName)
+                .FontSize(FontSize)
+                .Color(Xceed.Drawing.Color.Red);
             }
 
             // Nessuna spaziatura
@@ -332,6 +341,7 @@ namespace Cattedre
                      .Append(testi[c])
                      .Bold().Italic()
                      .Font(FontName).FontSize(FontSize);
+                
             }
         }
 

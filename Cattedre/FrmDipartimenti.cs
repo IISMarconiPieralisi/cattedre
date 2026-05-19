@@ -35,6 +35,7 @@ namespace Cattedre
                 lvDipartimenti.Items.Add(lvi);
 
             }
+            tbNumRecord.Text = dipartimenti.Count().ToString();
         }
 
         private void btInserisci_Click(object sender, EventArgs e)

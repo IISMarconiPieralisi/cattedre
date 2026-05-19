@@ -40,11 +40,14 @@
             this.btAnnulla = new Krypton.Toolkit.KryptonButton();
             this.btCerca = new Krypton.Toolkit.KryptonButton();
             this.label2 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tbNumRecord = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // lvIndirizzi
             // 
-            this.lvIndirizzi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvIndirizzi.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvIndirizzi.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chID,
@@ -54,7 +57,7 @@
             this.lvIndirizzi.HideSelection = false;
             this.lvIndirizzi.Location = new System.Drawing.Point(41, 95);
             this.lvIndirizzi.Name = "lvIndirizzi";
-            this.lvIndirizzi.Size = new System.Drawing.Size(807, 314);
+            this.lvIndirizzi.Size = new System.Drawing.Size(807, 360);
             this.lvIndirizzi.TabIndex = 14;
             this.lvIndirizzi.UseCompatibleStateImageBehavior = false;
             this.lvIndirizzi.View = System.Windows.Forms.View.Details;
@@ -456,11 +459,35 @@
             this.label2.TabIndex = 37;
             this.label2.Text = "Indirizzi:";
             // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(851, 424);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(51, 16);
+            this.label5.TabIndex = 56;
+            this.label5.Text = "Trovati:";
+            // 
+            // tbNumRecord
+            // 
+            this.tbNumRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbNumRecord.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbNumRecord.Location = new System.Drawing.Point(911, 419);
+            this.tbNumRecord.Name = "tbNumRecord";
+            this.tbNumRecord.ReadOnly = true;
+            this.tbNumRecord.ShortcutsEnabled = false;
+            this.tbNumRecord.Size = new System.Drawing.Size(39, 27);
+            this.tbNumRecord.TabIndex = 55;
+            // 
             // FrmIndirizzi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(960, 467);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.tbNumRecord);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btCerca);
             this.Controls.Add(this.btAnnulla);
@@ -493,5 +520,7 @@
         private Krypton.Toolkit.KryptonButton btAnnulla;
         private Krypton.Toolkit.KryptonButton btCerca;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox tbNumRecord;
     }
 }

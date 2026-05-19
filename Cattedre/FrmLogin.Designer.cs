@@ -366,10 +366,10 @@ namespace Cattedre
             this.rbDBprova.AutoSize = true;
             this.rbDBprova.Location = new System.Drawing.Point(3, 5);
             this.rbDBprova.Name = "rbDBprova";
-            this.rbDBprova.Size = new System.Drawing.Size(70, 17);
+            this.rbDBprova.Size = new System.Drawing.Size(71, 17);
             this.rbDBprova.TabIndex = 24;
             this.rbDBprova.TabStop = true;
-            this.rbDBprova.Text = "DB prova";
+            this.rbDBprova.Text = "DB locale";
             this.rbDBprova.UseVisualStyleBackColor = true;
             this.rbDBprova.CheckedChanged += new System.EventHandler(this.rbDBprova_CheckedChanged);
             // 

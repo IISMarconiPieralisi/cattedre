@@ -44,6 +44,8 @@ namespace Cattedre
                 lvi.Tag = classe.ID;
                 lvClassi.Items.Add(lvi);
             }
+            tbNumRecord.Text = classi.Count().ToString();
+
         }
 
         private void FrmClassi_Load(object sender, EventArgs e)

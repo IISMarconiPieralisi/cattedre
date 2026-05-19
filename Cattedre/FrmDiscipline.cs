@@ -53,6 +53,7 @@ namespace Cattedre
                 lvi.Tag = disciplina.ID;
                 lvDiscipline.Items.Add(lvi);
             }
+            tbNumRecord.Text = discipline.Count().ToString();
         }
 
         private void btInserisci_Click(object sender, EventArgs e)

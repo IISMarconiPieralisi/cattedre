@@ -38,6 +38,8 @@
             this.btElimina = new Krypton.Toolkit.KryptonButton();
             this.btInserisci = new Krypton.Toolkit.KryptonButton();
             this.label1 = new System.Windows.Forms.Label();
+            this.tbNumRecord = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lvAnniScolastici
@@ -55,7 +57,7 @@
             this.lvAnniScolastici.HideSelection = false;
             this.lvAnniScolastici.Location = new System.Drawing.Point(37, 46);
             this.lvAnniScolastici.Name = "lvAnniScolastici";
-            this.lvAnniScolastici.Size = new System.Drawing.Size(388, 300);
+            this.lvAnniScolastici.Size = new System.Drawing.Size(388, 314);
             this.lvAnniScolastici.TabIndex = 0;
             this.lvAnniScolastici.UseCompatibleStateImageBehavior = false;
             this.lvAnniScolastici.View = System.Windows.Forms.View.Details;
@@ -84,7 +86,7 @@
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btModifica.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btModifica.Location = new System.Drawing.Point(431, 114);
+            this.btModifica.Location = new System.Drawing.Point(433, 114);
             this.btModifica.Name = "btModifica";
             this.btModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
@@ -153,7 +155,7 @@
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btElimina.Location = new System.Drawing.Point(431, 167);
+            this.btElimina.Location = new System.Drawing.Point(433, 167);
             this.btElimina.Name = "btElimina";
             this.btElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -222,7 +224,7 @@
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btInserisci.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btInserisci.Location = new System.Drawing.Point(431, 64);
+            this.btInserisci.Location = new System.Drawing.Point(433, 64);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btInserisci.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -297,11 +299,35 @@
             this.label1.TabIndex = 34;
             this.label1.Text = "Anni Scolastici:";
             // 
+            // tbNumRecord
+            // 
+            this.tbNumRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbNumRecord.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbNumRecord.Location = new System.Drawing.Point(490, 328);
+            this.tbNumRecord.Name = "tbNumRecord";
+            this.tbNumRecord.ReadOnly = true;
+            this.tbNumRecord.ShortcutsEnabled = false;
+            this.tbNumRecord.Size = new System.Drawing.Size(39, 27);
+            this.tbNumRecord.TabIndex = 35;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(430, 333);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 16);
+            this.label2.TabIndex = 36;
+            this.label2.Text = "Trovati:";
+            // 
             // FrmAnniScolastici
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(552, 372);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.tbNumRecord);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btModifica);
             this.Controls.Add(this.btElimina);
@@ -328,5 +354,7 @@
         private Krypton.Toolkit.KryptonButton btElimina;
         private Krypton.Toolkit.KryptonButton btInserisci;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tbNumRecord;
+        private System.Windows.Forms.Label label2;
     }
 }

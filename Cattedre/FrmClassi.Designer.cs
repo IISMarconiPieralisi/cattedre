@@ -49,6 +49,8 @@
             this.btClasseSuccessiva = new Krypton.Toolkit.KryptonButton();
             this.label4 = new System.Windows.Forms.Label();
             this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tbNumRecord = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // cbAnnoClasse
@@ -595,11 +597,35 @@
             this.cbAnniScolastici.Size = new System.Drawing.Size(65, 25);
             this.cbAnniScolastici.TabIndex = 52;
             // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(1018, 535);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(51, 16);
+            this.label5.TabIndex = 54;
+            this.label5.Text = "Trovati:";
+            // 
+            // tbNumRecord
+            // 
+            this.tbNumRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbNumRecord.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbNumRecord.Location = new System.Drawing.Point(1078, 530);
+            this.tbNumRecord.Name = "tbNumRecord";
+            this.tbNumRecord.ReadOnly = true;
+            this.tbNumRecord.ShortcutsEnabled = false;
+            this.tbNumRecord.Size = new System.Drawing.Size(39, 27);
+            this.tbNumRecord.TabIndex = 53;
+            // 
             // FrmClassi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1139, 573);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.tbNumRecord);
             this.Controls.Add(this.cbAnniScolastici);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btClasseSuccessiva);
@@ -647,5 +673,7 @@
         private Krypton.Toolkit.KryptonButton btClasseSuccessiva;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cbAnniScolastici;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox tbNumRecord;
     }
 }

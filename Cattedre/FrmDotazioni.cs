@@ -84,6 +84,8 @@ namespace Cattedre
                 lvi.Tag = dot.Id;
                 lvDotazioni.Items.Add(lvi);
             }
+            tbNumRecord.Text = dots.Count().ToString();
+
         }
         #endregion
         private void FrmDotazioni_Load(object sender, EventArgs e)

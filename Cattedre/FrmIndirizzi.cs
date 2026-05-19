@@ -30,6 +30,7 @@ namespace Cattedre
                 lvi.Tag = indirizzo.ID;
                 lvIndirizzi.Items.Add(lvi);
             }
+            tbNumRecord.Text = indirizzi.Count().ToString();
         }
 
 

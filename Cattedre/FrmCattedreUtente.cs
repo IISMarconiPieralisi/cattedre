@@ -50,23 +50,44 @@ namespace Cattedre
         private void CaricaCB(out List<ClsAnnoScolasticoDL> anniscolastici)
         {
             anniscolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
-            for (int i = 0; i < _anniscolastici.Count; i++)
-                cbAnniScolastici.Items.Add(_anniscolastici[i].Sigla);
+
+            DateTime oggi = DateTime.Today;
+            int annoInizio;
+            if (oggi.Month >= 9)
+                annoInizio = oggi.Year % 100;
+            else
+                annoInizio = (oggi.Year - 1) % 100;
+
+            for (int i = 0; i < anniscolastici.Count; i++)
+            {
+                // Per utenti normali, mostra solo anni correnti e passati
+                if (utenteLoggato.TipoUtente != "C" && utenteLoggato.TipoUtente != "A")
+                {
+                    // Estrai l'anno di inizio dalla sigla (es. "23-24" -> 23)
+                    string sigla = anniscolastici[i].Sigla;
+                    if (int.TryParse(sigla.Substring(0, 2), out int annoInizioSigla))
+                    {
+                        if (annoInizioSigla > annoInizio)
+                            continue; // Salta gli anni futuri
+                    }
+                }
+                cbAnniScolastici.Items.Add(anniscolastici[i].Sigla);
+            }
         }
 
         private void FrmCattedreUtente_Load(object sender, EventArgs e)
         {
             if (utenteLoggato.TipoUtente != "C" && utenteLoggato.TipoUtente != "A")
                 btElimina.Visible = false;
+
             CaricaCB(out _anniscolastici);
+
             DateTime oggi = DateTime.Today;
             int annoInizio;
-
             if (oggi.Month >= 9)
                 annoInizio = oggi.Year % 100;
             else
                 annoInizio = (oggi.Year - 1) % 100;
-
             int annoFine = annoInizio + 1;
             string sigla = $"{annoInizio:D2}-{annoFine:D2}";
 

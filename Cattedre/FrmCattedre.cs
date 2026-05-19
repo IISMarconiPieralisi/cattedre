@@ -619,6 +619,7 @@ namespace Cattedre
 
                     // Docenti esterni abilitati per questa disciplina specifica
                     List<ClsUtenteDL> utentiEsterni = ClsRichiedereBL.RilevaUtentiDisciplina(disciplina.ID);
+                    //List<ClsUtenteDL> utentiEsterni = ClsRichiedereBL.RilevaUtentiPerClasseDiConcorsoDisciplina(disciplina.ID);
 
                     foreach (var esterno in utentiEsterni)
                     {
@@ -696,26 +697,40 @@ namespace Cattedre
                     }
 
                     // docente già assegnato (in memoria)
-                    var assegnazioni = docenti.AsEnumerable()
-                    .Where(r =>
-                        r["IDclasse"] != DBNull.Value &&
-                        r["IDdisciplina"] != DBNull.Value &&
-                        Convert.ToInt64(r["IDclasse"]) == classe.ID &&
-                        Convert.ToInt64(r["IDdisciplina"]) == disciplina.ID
-                    ).ToList();
+                    DataTable assegnazioniDirette = ClsAssegnareBL
+    .CaricaAssegnazioniClasseDisciplina(classe.ID, disciplina.ID, IDannoscolastico);
 
-                    if (assegnazioni.Any())
+                    if (assegnazioniDirette.Rows.Count > 0)
                     {
-                        foreach (var assegnazione in assegnazioni)
+                        foreach (DataRow assegnazione in assegnazioniDirette.Rows)
                         {
                             long idDoc = Convert.ToInt64(assegnazione["IDutente"]);
                             string tipoString = assegnazione["tipoDocente"]?.ToString();
                             char tipo = string.IsNullOrEmpty(tipoString) ? ' ' : tipoString[0];
 
                             if (tipo == 'T')
-                                uc.cbDocentiTeorici.SelectedValue = idDoc;
+                            {
+                                // Cerca manualmente per ID invece di usare SelectedValue
+                                for (int i = 0; i < uc.cbDocentiTeorici.Items.Count; i++)
+                                {
+                                    if (uc.cbDocentiTeorici.Items[i] is ClsUtenteDL u && u.ID == idDoc)
+                                    {
+                                        uc.cbDocentiTeorici.SelectedIndex = i;
+                                        break;
+                                    }
+                                }
+                            }
                             else if (tipo == 'L')
-                                uc.cbDocentiItip.SelectedValue = idDoc;
+                            {
+                                for (int i = 0; i < uc.cbDocentiItip.Items.Count; i++)
+                                {
+                                    if (uc.cbDocentiItip.Items[i] is ClsUtenteDL u && u.ID == idDoc)
+                                    {
+                                        uc.cbDocentiItip.SelectedIndex = i;
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                     else
@@ -1399,21 +1414,36 @@ namespace Cattedre
                 ClsAnnoScolasticoDL annoSuccessivo = ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(IDannoscolastico);
 
                 if (annoSuccessivo == null)
-                   throw new Exception("Anno successivo non trovato");
+                    throw new Exception("Anno successivo non trovato");
 
-                // Prima carica le discipline per ricavare gli indirizzi
                 List<ClsDisciplinaDL> disciplineSuccessivo = ClsDisciplinaBL
                     .CaricaDisciplineAnnoScolasticoDipartimento(annoSuccessivo.ID, IDdipartimento, out List<long> indirizziTrovati);
 
-                // Poi carica le classi per indirizzo
                 List<ClsClasseDL> classiAnnoSuccessivo = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, annoSuccessivo.ID);
 
                 if (classiAnnoSuccessivo == null || classiAnnoSuccessivo.Count == 0)
                     throw new Exception("Non esistono classi per l'anno scolastico successivo");
 
-                bool esistonoAssegnazioniAnnoSuccessivo = ClsAssegnareBL.EsistonoAssegnazioniAnnoSuccessivo(annoSuccessivo.ID);
+                if (utenteLoggato.TipoUtente != "C")
+                    throw new Exception("Non hai i permessi per generare le cattedre");
 
-                if (utenteLoggato.TipoUtente == "C" && !esistonoAssegnazioniAnnoSuccessivo)
+                bool esistonoAssegnazioni = ClsAssegnareBL.EsistonoAssegnazioniAnnoSuccessivo(annoSuccessivo.ID);
+
+                if (esistonoAssegnazioni)
+                {
+                    DialogResult dr = MessageBox.Show(
+                        "Le cattedre per l'anno successivo esistono già.\nVuoi sovrascriverle?",
+                        "Sovrascrittura",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
+                    if (dr != DialogResult.Yes)
+                        return;
+
+                    // Elimina le assegnazioni esistenti del dipartimento per l'anno successivo
+                    ClsAssegnareBL.EliminaAssegnazioniDipartimentoAnno(IDdipartimento, annoSuccessivo.ID);
+                }
+                else
                 {
                     DialogResult dr = MessageBox.Show(
                         "Vuoi generare le cattedre per l'anno successivo?",
@@ -1422,24 +1452,17 @@ namespace Cattedre
 
                     if (dr != DialogResult.Yes)
                         return;
-
-                    if (IDannoscolastico == annoSuccessivo.ID)
-                       throw new Exception("Anno non valido"); 
-                    
-
-                    ClsAssegnareBL.GeneraCattedreAnnoSuccessivo(IDdipartimento, IDannoscolastico, annoSuccessivo.ID);
-                    //messaggio di sucesso
-                    MessageBox.Show("Cattedre generate con successo", "GENERAZIONE RIUSCITA", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else
-                {
-                    throw new Exception("Cattedre per anno successivo già generate"); //eccezione attenzione
-                }
+
+                if (IDannoscolastico == annoSuccessivo.ID)
+                    throw new Exception("Anno non valido");
+
+                ClsAssegnareBL.GeneraCattedreAnnoSuccessivo(IDdipartimento, IDannoscolastico, annoSuccessivo.ID);
+                MessageBox.Show("Cattedre generate con successo", "GENERAZIONE RIUSCITA", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex.Message+".", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                MessageBox.Show(ex.Message + ".", "ATTENZIONE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }

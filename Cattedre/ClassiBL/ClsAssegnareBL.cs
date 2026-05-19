@@ -139,6 +139,38 @@ namespace Cattedre
 
                 return ass;
         }
+
+        public static DataTable CaricaAssegnazioniClasseDisciplina(long IDclasse, long IDdisciplina, long IDannoscolastico)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT a.IDutente, u.tipoDocente
+                           FROM assegnare a
+                           JOIN utenti u ON u.ID = a.IDutente
+                           WHERE a.IDclasse = @IDclasse
+                             AND a.IDdisciplina = @IDdisciplina
+                             AND a.IDannoscolastico = @IDannoscolastico";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                            da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore CaricaAssegnazioniClasseDisciplina: " + ex.Message);
+            }
+            return dt;
+        }
+
         public static void InserisciAssegnazione(long IDclasse,long IDannoscolastico, long IDdisciplina,long IDutente,
             int oreSpeciali,DateTime dal,DateTime al)
         {
@@ -231,6 +263,31 @@ namespace Cattedre
             {
                 throw new Exception(ex.Message);
 
+            }
+        }
+
+        public static void EliminaAssegnazioniDipartimentoAnno(long IDdipartimento, long IDannoscolastico)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"DELETE a FROM assegnare a
+                           JOIN gestire g ON g.IDdisciplina = a.IDdisciplina
+                           WHERE a.IDannoscolastico = @IDannoscolastico
+                             AND g.IDdipartimento = @IDdipartimento";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore eliminazione assegnazioni dipartimento: " + ex.Message);
             }
         }
 

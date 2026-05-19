@@ -53,6 +53,7 @@ namespace Cattedre
                 lvi.Tag = disciplina.ID;
                 lvDiscipline.Items.Add(lvi);
             }
+            tbNumRecord.Text = discipline.Count().ToString();
         }
 
         private void btInserisci_Click(object sender, EventArgs e)
@@ -71,7 +72,7 @@ namespace Cattedre
                     int ID = ClsDisciplinaBL.CercaIdDisciplina(frmDisciplina._disciplina);
                     foreach (var appartenere in frmDisciplina._apparteneres)
                     {
-                        appartenere.IDdisicplina = ID;
+                        appartenere.IDdisciplina = ID;
                         ClsAppartenereBL.InserireAppartenere(appartenere);
                     }
                     foreach (var gestire in frmDisciplina._gestires)
@@ -153,9 +154,10 @@ namespace Cattedre
                 int indiceDaModificare = lvDiscipline.SelectedIndices[0];
                 FrmDisciplina frmDisciplina = new FrmDisciplina();
                 int idCercato = Convert.ToInt32(lvDiscipline.Items[indiceDaModificare].Tag);
-                // 2. Cerchiamo l'INTERO OGGETTO nella lista 'discipline'
-                // Usiamo .FirstOrDefault() così se non lo trova restituisce null invece di crashare
                 frmDisciplina._disciplina = discipline.FirstOrDefault(d => d.ID == idCercato);
+                //carico una copia delle discipline appartenere attuale
+                List<ClsAppartenereDL> appartenerePrima = ClsAppartenereBL.CaricaClassiAppartenereByDisciplina(idCercato);
+                List<ClsRichiedereDL> richiederePrima = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(idCercato);
                 frmDisciplina._vigere = ClsVigereBL.RilevaVigereDisciplina(idCercato);
                 DialogResult dr = frmDisciplina.ShowDialog();
                 if (dr == DialogResult.OK)
@@ -175,6 +177,22 @@ namespace Cattedre
                             frmDisciplina._vigere.IDdisciplina = idCercato;
                             ClsVigereBL.InserisciVigere(frmDisciplina._vigere);
                         }
+                        //controllo la differenza fra le appartenenze attuali e quelle vecchie
+                        //se c'è un INdirizzo in meno cancelllo da assegnare le assegnazioni con IDdisciplina attuale e IDindirizzo (eliminato) anche più di uno
+                        List<ClsAppartenereDL> _indirizziRimossi = appartenerePrima.Where(prima => !frmDisciplina._apparteneres
+                        .Any(dopo => dopo.IDindirizzo == prima.IDindirizzo)).ToList();
+
+                        foreach (var app in _indirizziRimossi)
+                            ClsAssegnareBL.EliminaAssegnazioneDiscIndirizzo(app.IDdisciplina, app.IDindirizzo);
+                        //controllo la differenza fra le richiedere attuali e quelle vecchie
+                        //se c'è un cdc in meno cancelllo da assegnare le assegnazioni con IDdisciplina attuale e IDdisciplina cancellando quelle con 
+                // (eliminato) anche più di uno
+                        List<ClsRichiedereDL> _cdcRimosse = richiederePrima.Where(prima => !frmDisciplina._richiederes
+                        .Any(dopo => dopo.IDclassediconcorso == prima.IDclassediconcorso)).ToList();
+
+                        foreach (var ric in _cdcRimosse)
+                            ClsAssegnareBL.EliminaAssegnazioneDiscConcorso(ric.IDdisciplina,ric.IDclassediconcorso);
+
                         this.Cursor = Cursors.Arrow;
 
                     }

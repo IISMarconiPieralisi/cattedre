@@ -55,6 +55,15 @@ namespace Cattedre
                 btClassi.Visible = true;
                 btVaiACattedre.Visible = true;
             }
+            else if (utente.TipoUtente == "D")
+            {
+                menuStrip1.Visible = false;
+                btVaiACattedre.Visible = false;
+                btVaiACattedre2.Visible = false;
+                btClassi.Visible = false;
+                btDiscipline.Visible = false;
+                btUtenti.Visible = true;
+            }
             else
             {
                 menuStrip1.Visible = false;
@@ -144,6 +153,7 @@ namespace Cattedre
 
 
             frm.FormBorderStyle = FormBorderStyle.None;
+            frm.WindowState = FormWindowState.Maximized;
 
             frm.Dock = DockStyle.Fill;
 
@@ -209,7 +219,7 @@ namespace Cattedre
             pnlCentrale.Visible = false;
             if (Application.OpenForms["FrmUtenti"] == null)
             {
-                frmUtenti = new FrmUtenti();
+                frmUtenti = new FrmUtenti(utente);
             }
             MostraFormMDI(frmUtenti);
 

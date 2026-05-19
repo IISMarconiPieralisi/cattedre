@@ -59,10 +59,18 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT d.ID, d.nome,d.cognome,d.TipoDocente,d.TipoUtente 
-                                    FROM utenti d
-                                    JOIN richiedere r ON d.ID = r.IDUtente
-                           WHERE r.IDclasseDiConcorso = @IDclasseDiconcorso";
+                    string sql = @"SELECT d.ID, d.nome, d.cognome, d.TipoDocente, d.TipoUtente 
+                           FROM utenti d
+                           JOIN richiedere r ON d.ID = r.IDUtente
+                           JOIN classidiconcorso cdc ON cdc.ID = r.IDclasseDiConcorso
+                           WHERE r.IDclassediConcorso = @IDclasseDiconcorso
+                           AND (
+                               (cdc.livello LIKE 'A%' AND d.TipoDocente = 'T')
+                               OR
+                               (cdc.livello NOT LIKE 'A%' AND d.TipoDocente = 'L')
+                           )
+                            ORDER BY d.cognome, d.nome";
+                            
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDclasseDiconcorso", IDcdc);
@@ -218,6 +226,100 @@ namespace Cattedre
 
             return CDCs;
         }
+
+        public static List<ClsUtenteDL> RilevaUtentiDisciplina(long IDdisciplina)
+        {
+            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT DISTINCT u.ID, u.nome, u.cognome, u.tipoDocente, u.colore
+                           FROM utenti u
+                           JOIN richiedere r ON u.ID = r.IDutente
+                           WHERE 
+                               -- abilitazione diretta sulla disciplina
+                               r.IDdisciplina = @IDdisciplina
+                               OR
+                               -- abilitazione tramite classe di concorso
+                               r.IDclasseDiConcorso IN (
+                                   SELECT IDclasseDiConcorso 
+                                   FROM richiedere 
+                                   WHERE IDdisciplina = @IDdisciplina
+                                     AND IDclasseDiConcorso IS NOT NULL
+                               )";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                            da.Fill(dt);
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            utenti.Add(new ClsUtenteDL
+                            {
+                                ID = Convert.ToInt64(row["ID"]),
+                                Nome = row["nome"].ToString(),
+                                Cognome = row["cognome"].ToString(),
+                                TipoDocente = row["tipoDocente"] != DBNull.Value
+                                                ? row["tipoDocente"].ToString()[0] : ' ',
+                                Colore = row["colore"] == DBNull.Value ? "" : row["colore"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore RilevaUtentiDisciplina: " + ex.Message);
+            }
+            return utenti;
+        }
+
+        //public static List<ClsUtenteDL> RilevaUtentiPerClasseDiConcorsoDisciplina(long IDdisciplina)
+        //{
+        //    List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
+        //    try
+        //    {
+        //        using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+        //        {
+        //            conn.Open();
+        //            string sql = @"SELECT DISTINCT u.ID, u.nome, u.cognome, u.tipoDocente, u.colore
+        //                   FROM utenti u
+        //                   JOIN richiedere r ON u.ID = r.IDutente
+        //                   WHERE r.IDclasseDiConcorso IN (
+        //                       SELECT IDclasseDiConcorso 
+        //                       FROM richiedere 
+        //                       WHERE IDdisciplina = @IDdisciplina
+        //                   )";
+        //            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+        //            {
+        //                cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+        //                DataTable dt = new DataTable();
+        //                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+        //                    da.Fill(dt);
+        //                foreach (DataRow row in dt.Rows)
+        //                {
+        //                    utenti.Add(new ClsUtenteDL
+        //                    {
+        //                        ID = Convert.ToInt64(row["ID"]),
+        //                        Nome = row["nome"].ToString(),
+        //                        Cognome = row["cognome"].ToString(),
+        //                        TipoDocente = row["tipoDocente"] != DBNull.Value
+        //                                        ? row["tipoDocente"].ToString()[0] : ' ',
+        //                        Colore = row["colore"] == DBNull.Value ? "" : row["colore"].ToString()
+        //                    });
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Errore RilevaUtentiPerClasseDiConcorsoDisciplina: " + ex.Message);
+        //    }
+        //    return utenti;
+        //}
         #endregion
         #region crud
         public static void InserisciRichiedere(ClsRichiedereDL Richiedere)

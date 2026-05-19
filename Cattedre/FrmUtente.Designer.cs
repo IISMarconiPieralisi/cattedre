@@ -571,7 +571,7 @@
             // 
             this.cbSelezionaTutti.Location = new System.Drawing.Point(6, 522);
             this.cbSelezionaTutti.Name = "cbSelezionaTutti";
-            this.cbSelezionaTutti.Size = new System.Drawing.Size(105, 25);
+            this.cbSelezionaTutti.Size = new System.Drawing.Size(130, 25);
             this.cbSelezionaTutti.TabIndex = 11;
             this.cbSelezionaTutti.Values.Text = "Seleziona tutto";
             this.cbSelezionaTutti.CheckedChanged += new System.EventHandler(this.cbSelezionaTutti_CheckedChanged);
@@ -582,7 +582,7 @@
             this.clbCLasseDiConcorso.FormattingEnabled = true;
             this.clbCLasseDiConcorso.Location = new System.Drawing.Point(6, 58);
             this.clbCLasseDiConcorso.Name = "clbCLasseDiConcorso";
-            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(299, 191);
+            this.clbCLasseDiConcorso.Size = new System.Drawing.Size(299, 174);
             this.clbCLasseDiConcorso.TabIndex = 9;
             this.clbCLasseDiConcorso.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCLasseDiConcorso_ItemCheck);
             this.clbCLasseDiConcorso.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbCLasseDiConcorso_KeyDown);
@@ -594,7 +594,7 @@
             this.clbDisciplina.FormattingEnabled = true;
             this.clbDisciplina.Location = new System.Drawing.Point(6, 311);
             this.clbDisciplina.Name = "clbDisciplina";
-            this.clbDisciplina.Size = new System.Drawing.Size(299, 208);
+            this.clbDisciplina.Size = new System.Drawing.Size(299, 191);
             this.clbDisciplina.TabIndex = 10;
             this.clbDisciplina.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDisciplina_KeyDown);
             // 
@@ -603,7 +603,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.DarkRed;
-            this.label14.Location = new System.Drawing.Point(13, 272);
+            this.label14.Location = new System.Drawing.Point(1, 273);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(115, 25);
             this.label14.TabIndex = 19;
@@ -786,7 +786,7 @@
             this.clbDipartimento.FormattingEnabled = true;
             this.clbDipartimento.Location = new System.Drawing.Point(11, 58);
             this.clbDipartimento.Name = "clbDipartimento";
-            this.clbDipartimento.Size = new System.Drawing.Size(329, 191);
+            this.clbDipartimento.Size = new System.Drawing.Size(328, 174);
             this.clbDipartimento.TabIndex = 12;
             this.clbDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.clbDipartimento_KeyDown);
             // 

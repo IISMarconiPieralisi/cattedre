@@ -153,7 +153,7 @@ namespace Cattedre
                             throw new Exception($"Colore occupato nel dipartimento: {nomeDip}");
                     }
                 }
-
+                
                 // Se arrivi qui, tutto è valido
                 this.DialogResult = DialogResult.OK;
             }

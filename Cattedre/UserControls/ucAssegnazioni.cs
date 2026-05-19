@@ -92,14 +92,32 @@ namespace Cattedre
             {
                 StringFormat sf = new StringFormat { LineAlignment = StringAlignment.Center };
 
-                string nomeCorto = string.IsNullOrEmpty(utente.Nome) ? "" :
-                                  (utente.Nome.Length > 3 ? utente.Nome.Substring(0, 3) + "." : utente.Nome);
-                string testoDaMostrare = $"{utente.Cognome} {nomeCorto}";
+                string testoCompleto = $"{utente.Cognome} {utente.Nome}".Trim();
+                string testoDaMostrare = TroncastestaPerCombo(testoCompleto, cb);
 
                 e.Graphics.DrawString(testoDaMostrare, e.Font, brushTesto, e.Bounds, sf);
             }
         }
+        //
+        private static string TroncastestaPerCombo(string testo, ComboBox cb)
+        {
+            int larghezzaDisponibile = cb.DropDownWidth > 0 ? cb.DropDownWidth : cb.Width;
+            larghezzaDisponibile -= 25; // margine interno
 
+            Size dimensioneTotale = TextRenderer.MeasureText(testo, cb.Font);
+            if (dimensioneTotale.Width <= larghezzaDisponibile)
+                return testo; // entra tutto, niente punto
+
+            // taglia carattere per carattere finché entra
+            for (int i = testo.Length - 1; i > 0; i--)
+            {
+                string tentativo = testo.Substring(0, i) + ".";
+                if (TextRenderer.MeasureText(tentativo, cb.Font).Width <= larghezzaDisponibile)
+                    return tentativo;
+            }
+
+            return ".";
+        }
 
 
         // Converte il campo colore del DB (es. "000000064" oppure "#FF5733") in Color

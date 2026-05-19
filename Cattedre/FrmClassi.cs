@@ -44,6 +44,8 @@ namespace Cattedre
                 lvi.Tag = classe.ID;
                 lvClassi.Items.Add(lvi);
             }
+            tbNumRecord.Text = classi.Count().ToString();
+
         }
 
         private void FrmClassi_Load(object sender, EventArgs e)
@@ -113,6 +115,12 @@ namespace Cattedre
                     if (dr == DialogResult.OK)
                     {
                         ClsClasseBL.ModificaClasse(frmClasse._classe);
+                        //controllo se è stato cambiato il dipartimento di quella classe
+                        if(frmClasse._classe.Idindirizzo!=classeSelezionata.Idindirizzo)
+                        {
+                            //cancello i record di quella classe nelle assegnazioni
+                            ClsAssegnareBL.EliminaAssegnazioneGenerica(frmClasse._classe.ID,"IDclasse");
+                        }
                         CaricaListView();
                     }
                 }

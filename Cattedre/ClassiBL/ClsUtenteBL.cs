@@ -45,16 +45,24 @@ namespace Cattedre
 
         public static string RilevaNomeUtente(long id)
         {
-            string risultato = null;
+            string risultato = "";
+            ClsUtenteDL utente =CaricaUtente(id);
+            risultato = $"{utente.Cognome} {utente.Nome}".Trim();
+            return !string.IsNullOrEmpty(risultato) ? risultato : "-";
+
+        }
+        public static ClsUtenteDL CaricaUtente(long ID)
+        {
+            ClsUtenteDL utente = new ClsUtenteDL();
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT u.nome, u.cognome FROM utenti u WHERE u.ID = @ID";
+                    string sql = "SELECT u.ID, u.nome, u.cognome, u.email, u.tipoUtente, u.colore, u.tipoDocente FROM utenti u WHERE u.ID = @ID";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@ID", id);
+                        cmd.Parameters.AddWithValue("@ID", ID); // CORRETTO: usa ID, non id
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
@@ -62,10 +70,14 @@ namespace Cattedre
                         }
                         if (dt.Rows.Count > 0)
                         {
-                            DataRow row = dt.Rows[0];
-                            string nome = row["nome"] != DBNull.Value ? row["nome"].ToString() : "";
-                            string cognome = row["cognome"] != DBNull.Value ? row["cognome"].ToString() : "";
-                            risultato = $"{cognome} {nome}".Trim();
+                            DataRow row = dt.Rows[0]; 
+                            utente.ID = Convert.ToInt64(row["ID"]);
+                            utente.Email = row["email"].ToString();
+                            utente.Cognome = row["cognome"].ToString();
+                            utente.Nome = row["nome"].ToString();
+                            utente.TipoUtente = row["tipoUtente"].ToString();
+                            utente.Colore = row["colore"].ToString();
+                            utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
                         }
                     }
                 }
@@ -74,9 +86,8 @@ namespace Cattedre
             {
                 throw new Exception("Errore nella query: " + ex.Message);
             }
-            return !string.IsNullOrEmpty(risultato) ? risultato : "-";
+            return utente;
         }
-
         public static int TrovaIDdipartimento(long IDutente)
         {
             int risultato = 0;
@@ -330,24 +341,25 @@ namespace Cattedre
         #endregion
         #region OperazioniCRUD
 
-        public static List<ClsUtenteDL> CaricaUtenti()
+        public static List<ClsUtenteDL> CaricaUtenti(Dictionary<string, List<string>> Filtri = null)
         {
-            
-            MySqlConnection conn = new MySqlConnection(Program.connectionString);
+            if (Filtri == null) Filtri = new Dictionary<string, List<string>>();
+
             DataTable ds = new DataTable();
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             try
             {
-                conn.Open();
-                string sql = "SELECT ID, nome, cognome, email, password, tipoutente, tipodocente, colore FROM utenti ";
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
-                    using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                    conn.Open();
+                    using (MySqlCommand cmd = CreaComandoRicerca(Filtri, conn))
                     {
-                        dr.Fill(ds);
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
+                        {
+                            dr.Fill(ds);
+                        }
+                        conn.Close();
                     }
-                    conn.Close();
                 }
                 foreach (DataRow row in ds.Rows)
                 {
@@ -599,46 +611,6 @@ namespace Cattedre
 
         #endregion
         #region filtri
-        public static List<ClsUtenteDL> FiltraUtenti(Dictionary<string, List<string>> Filtri)
-        {
-            
-            DataTable ds = new DataTable();
-            List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-                {
-                    conn.Open();
-                    using (MySqlCommand cmd = CreaComandoRicerca(Filtri, conn))
-                    {
-                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
-                        {
-                            dr.Fill(ds);
-                        }
-                        conn.Close();
-                    }
-                }
-                foreach (DataRow row in ds.Rows)
-                {
-                    ClsUtenteDL utente = new ClsUtenteDL();
-                    utente.ID = Convert.ToInt64(row["ID"]);
-                    utente.Email = row["email"].ToString();
-                    //anche se la query non restituisce la password, la proprietà non la userà e non ha senso inizarlizzarla,  essendo un dato sensibile
-                    utente.Cognome = row["cognome"].ToString();
-                    utente.Nome = row["nome"].ToString();
-                    utente.TipoUtente = row["tipoUtente"].ToString();
-                    utente.Colore = row["colore"].ToString();
-                    utente.TipoDocente = row["tipoDocente"] != DBNull.Value ? Convert.ToChar(row["tipoDocente"]) : '\0';
-                    utenti.Add(utente);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return utenti;
-        }
         public static MySqlCommand CreaComandoRicerca(Dictionary<string, List<string>> filtri, MySqlConnection conn)
         {
             string sql = "SELECT u.ID, u.nome, u.cognome, email, password, tipoutente, tipodocente, colore FROM utenti u LEFT JOIN contratti c ON u.ID=c.IDutente";
@@ -656,7 +628,16 @@ namespace Cattedre
                     string ricercaspecifica = $"CONCAT(u.cognome,u.nome) LIKE '%{filtro.Value[0]}%' ";
                     condizioni.Add(ricercaspecifica);
 
-                }else
+                }
+                else if (colonna == "IDdipartimento")
+                {
+                    sql = sql.Replace(
+                        "LEFT JOIN contratti c ON u.ID=c.IDutente",
+                        "LEFT JOIN contratti c ON u.ID=c.IDutente JOIN afferire a ON u.ID=a.IDutente"
+                    );
+                    condizioni.Add($"a.IDdipartimento = {filtro.Value[0]}");
+                }
+                else
                 {
                     List<string> orConditions = new List<string>();
 
@@ -675,7 +656,7 @@ namespace Cattedre
                     sql = sql.Replace("LEFT JOIN", "JOIN");
                 sql += " WHERE " + string.Join(" AND ", condizioni);
             }
-
+            sql += " ORDER BY cognome,nome";
             cmd.CommandText = sql;
             return cmd;
         }

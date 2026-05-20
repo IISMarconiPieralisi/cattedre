@@ -30,10 +30,12 @@ namespace Cattedre
         bool _bloccoEvdipCoord = false;
         string _imputEmail;
         string _colore = string.Empty;
+        ClsUtenteDL _utenteLoggato;
         //tenuti fuori in modo tale che  all'occorrenza non si deve riaprire ogni volta una connessione al db
         #endregion
-        public FrmUtente()
+        public FrmUtente(ClsUtenteDL utenteloggato)
         {
+            _utenteLoggato = utenteloggato;
             InitializeComponent();
         }
         
@@ -177,8 +179,25 @@ namespace Cattedre
                 LoadContratto();
                 LoadAfferenze();
                 LoadClassiDiConcorso();
+                GestisciPermessi();
             }
             ConfiguraPannelloCDC();
+        }
+
+        private void GestisciPermessi()
+        {
+            if (_utente.TipoDocente == 'A') return;
+            //se è un coordinatore in modifica non permette la modifica della password
+            tbNome.Enabled = false;
+            tbCognome.Enabled = false;
+            tbPassword.Enabled = false;
+            cbAutoEmail.Enabled = false;
+            tbEmail.Enabled = false;
+            cbAutoPassword.Enabled = false;
+            cbTipoUtente.Enabled = false;
+            pnTipoDocente.Enabled = false;
+            //colore può essere modificato
+
         }
 
         #region Inizializzazione

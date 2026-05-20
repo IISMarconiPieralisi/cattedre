@@ -170,7 +170,16 @@ namespace Cattedre
             int caratteriStretti = testo.Count(c => "il1jrtf,.|!".Contains(c));
             return caratteriStretti >= 2 ? 13 : 11;
         }
+        public static bool UtenteAdmin(ClsUtenteDL ut)
+        {
+            return ut.TipoUtente == "A";
+        }
+        public static bool UtenteCRUD(ClsUtenteDL ut)
+        {
+            return ut.TipoUtente == "A" || ut.TipoUtente == "C";
+        }
         #endregion
+
 
     }
 }

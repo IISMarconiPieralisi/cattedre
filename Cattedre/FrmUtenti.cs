@@ -44,6 +44,28 @@ namespace Cattedre
             InitializeComponent();
             _utenteLoggato = utenteLoggato;
         }
+        private void FrmUtenti_Load(object sender, EventArgs e)
+        {
+            if (_utenteLoggato?.TipoUtente == "D")
+            {
+                long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
+                if (idDipartimento > 0)
+                    filtri["IDdipartimento"] = new List<string> { idDipartimento.ToString() };
+
+                // Blocca i filtri: il docente non può cambiarli
+                gbTipiUtenti.Enabled = false;
+                gbContratto.Enabled = false;
+                gBtipoDocente.Enabled = false;
+                btCerca.Enabled = false;
+                btAnnullaFiltra.Enabled = false;
+                tbRicerca.Enabled = false;
+                btInserisci.Enabled = false;
+                btModifica.Enabled = false;
+                btElimina.Enabled = false;
+            }
+
+            CaricaListView();
+        }
 
         private void CaricaListView()
         {
@@ -112,108 +134,103 @@ namespace Cattedre
 
         }
 
-        private void btInserisci_Click(object sender, EventArgs e)
+        private async void btInserisci_Click(object sender, EventArgs e)
         {
-            FrmUtente frmUtente = new FrmUtente();
+            //controllo utente se ha i permessi necessari
+            if (!ClsUtenteDL.UtenteCRUD(_utenteLoggato)) return;
+            FrmUtente frmUtente = new FrmUtente(_utenteLoggato);
             DialogResult dr = frmUtente.ShowDialog();
             if (dr == DialogResult.OK)
             {
                 try
                 {
+
                     this.Cursor = Cursors.WaitCursor;
+
                     ClsUtenteBL.InserisciUtente(frmUtente._utente); //l'utente che mando non ha un ID che creo quando lo inzializzo nel server
                     ClsUtenteDL utente = ClsUtenteBL.caricautenteByEmail(frmUtente._utente.Email); //essendo che l'email è univoca riesco a risalire anche all'id del utente in questo modo
-                    if (frmUtente._afferenze != null && frmUtente._afferenze.Count > 0)
-                    {
-                        foreach (ClsAfferireDL afferire in frmUtente._afferenze)
-                        {
-                            afferire.IDutente = utente.ID;
-                            ClsAfferireBL.InserisciAfferire(afferire);
-                        }
+                    await Task.WhenAll(
+                         Task.Run(() =>
+                         {
+                             if (frmUtente._afferenze != null && frmUtente._afferenze.Count > 0)
+                             {
+                                 foreach (ClsAfferireDL afferire in frmUtente._afferenze)
+                                 {
+                                     afferire.IDutente = utente.ID;
+                                     ClsAfferireBL.InserisciAfferire(afferire);
+                                 }
 
-                    }
-                    if (frmUtente._richieste != null && frmUtente._richieste.Count > 0)
-                    {
-                        foreach (ClsRichiedereDL richiedere in frmUtente._richieste)
-                        {
-                            richiedere.IDutente = utente.ID;
-                            ClsRichiedereBL.InserisciRichiedere(richiedere);
-                        }
+                             }
+                         }),
+                         Task.Run(() =>
+                          {
+                              if (frmUtente._richieste != null && frmUtente._richieste.Count > 0)
+                              {
+                                  foreach (ClsRichiedereDL richiedere in frmUtente._richieste)
+                                  {
+                                      richiedere.IDutente = utente.ID;
+                                      ClsRichiedereBL.InserisciRichiedere(richiedere);
+                                  }
 
-                    }
+                              }
+                          }),
+                         Task.Run(() =>
+                         {
+                             if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C" || frmUtente._utente.TipoUtente == "A")
+                             {
+                                 frmUtente._contratto.IDutente = utente.ID;
+                                 ClsContrattoBL.InserisciContratto(frmUtente._contratto, utente.ID);
+                                 if (frmUtente._utente.TipoUtente == "C")
+                                 {
+                                     //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
+                                     ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, utente.ID);
 
-                    if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C" || frmUtente._utente.TipoUtente == "A")
-                    {
-                        frmUtente._contratto.IDutente = utente.ID;
-                        ClsContrattoBL.InserisciContratto(frmUtente._contratto, utente.ID);
-                        if (frmUtente._utente.TipoUtente == "C")
-                        {
-                            //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
-                            ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, utente.ID);
-
-                        }
-                    }
+                                 }
+                             }
+                         })
+                    );
                 }
                 catch (Exception ex)
                 {
                     this.Cursor = Cursors.Arrow;
                     MessageBox.Show($"Errore durante il inserimento:{ex.Message}", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }finally
+                {
+                    this.Cursor = Cursors.Arrow;
                 }
-                this.Cursor = Cursors.Arrow;
                 CaricaListView();
             }
         }
-
-        private void FrmUtenti_Load(object sender, EventArgs e)
-        {
-            if (_utenteLoggato?.TipoUtente == "D")
-            {
-                long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
-                if (idDipartimento > 0)
-                    filtri["IDdipartimento"] = new List<string> { idDipartimento.ToString() };
-
-                // Blocca i filtri: il docente non può cambiarli
-                gbTipiUtenti.Enabled = false;
-                gbContratto.Enabled = false;
-                gBtipoDocente.Enabled = false;
-                btCerca.Enabled = false;
-                btAnnullaFiltra.Enabled = false;
-                tbRicerca.Enabled = false;
-                btInserisci.Enabled = false;
-                btModifica.Enabled = false;
-                btElimina.Enabled = false;
-            }
-
-            CaricaListView();
-        }
-
-        private void btModifica_Click(object sender, EventArgs e)
+        private async void btModifica_Click(object sender, EventArgs e)
         {
             if (lvUtenti.SelectedIndices.Count == 1)
             {
+                if (!ClsUtenteDL.UtenteCRUD(_utenteLoggato)) return;
 
                 int indiceDaModificare = lvUtenti.SelectedIndices[0];
-                FrmUtente frmUtente = new FrmUtente();
-                //passo la classe afferirenza e il contratto solo se l'utente è un docente
+                FrmUtente frmUtente = new FrmUtente(_utenteLoggato);
                 frmUtente._utente = _utenti[indiceDaModificare];
-                //creo un appoggio di utente che mi servirà in futuro
-                //ClsUtenteBL u = frmUtente._utente;
-                frmUtente._utente.ID = _utenti[indiceDaModificare].ID; //mi assicuro che l'ID rimanga lo stesso
+                frmUtente._utente.ID = _utenti[indiceDaModificare].ID;
 
-                List<ClsAfferireDL> afferire = ClsAfferireBL.CaricaClassiAfferire(_utenti[indiceDaModificare].ID);
-                if (afferire != null && afferire.Count > 0) //se non esiste restituirà null e quindi non restituirà la lista
-                    frmUtente._afferenze = afferire;
+                // caricamento dati in background prima di aprire il form
+                List<ClsRichiedereDL> richiestePrima = new List<ClsRichiedereDL>();
+                await Task.Run(() =>
+                {
+                    List<ClsAfferireDL> afferire = ClsAfferireBL.CaricaClassiAfferire(_utenti[indiceDaModificare].ID);
+                    if (afferire != null && afferire.Count > 0)
+                        frmUtente._afferenze = afferire;
 
-                List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedereUtente(_utenti[indiceDaModificare].ID);
-                if (richiedere != null && richiedere.Count > 0)
-                    frmUtente._richieste = richiedere;
-                ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(_utenti[indiceDaModificare].ID); //se non esiste restituirà null
-                if (contratto != null)
-                    frmUtente._contratto = contratto;
-                List<ClsRichiedereDL> richiestePrima = ClsRichiedereBL
-                .CaricaClassiRichiedereUtente(_utenti[indiceDaModificare].ID)
-                ?? new List<ClsRichiedereDL>();
+                    List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedereUtente(_utenti[indiceDaModificare].ID);
+                    if (richiedere != null && richiedere.Count > 0)
+                        frmUtente._richieste = richiedere;
 
+                    ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(_utenti[indiceDaModificare].ID);
+                    if (contratto != null)
+                        frmUtente._contratto = contratto;
+
+                    richiestePrima = ClsRichiedereBL.CaricaClassiRichiedereUtente(_utenti[indiceDaModificare].ID)
+                        ?? new List<ClsRichiedereDL>();
+                });
 
                 DialogResult dr = frmUtente.ShowDialog();
                 if (dr == DialogResult.OK)
@@ -221,52 +238,55 @@ namespace Cattedre
                     try
                     {
                         this.Cursor = Cursors.WaitCursor;
-                        ClsUtenteBL.ModificaUtente(frmUtente._utente, frmUtente._utente.ID);
+
+                        // sequenziale — deve finire prima degli altri
+                        await Task.Run(() => ClsUtenteBL.ModificaUtente(frmUtente._utente, frmUtente._utente.ID));
 
                         if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C" || frmUtente._utente.TipoUtente == "A")
                         {
-
-                            //modifica contratto, afferenze e richieste
-                            ClsAfferireBL.ModificaAfferenze(frmUtente._utente.ID, frmUtente._afferenze);
-                            ClsRichiedereBL.ModificaRichiestaUtente(frmUtente._utente.ID, frmUtente._richieste);
-                            ClsContrattoBL.ModificaContratto(frmUtente._contratto, frmUtente._utente.ID);
-                            //controllo e inserimento coordinatore di dipartimento
-                            if (frmUtente._utente.TipoUtente == "C")
-                            {
-                                //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
-                                ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, frmUtente._utente.ID);
-                            }
-
-                            List<ClsRichiedereDL> cdcRimosse = richiestePrima
-                            .Where(prima => prima.IDclassediconcorso > 0 &&
-                               !(frmUtente._richieste ?? new List<ClsRichiedereDL>())
-                               .Any(dopo => dopo.IDclassediconcorso == prima.IDclassediconcorso))
-                            .ToList();
-
-                            foreach (var cdc in cdcRimosse)
-                                ClsAssegnareBL.EliminaAssegnazioniDocente(frmUtente._utente.ID, cdc.IDclassediconcorso);
-
+                            await Task.WhenAll(
+                                Task.Run(() => ClsAfferireBL.ModificaAfferenze(frmUtente._utente.ID, frmUtente._afferenze)),
+                                Task.Run(() => ClsRichiedereBL.ModificaRichiestaUtente(frmUtente._utente.ID, frmUtente._richieste)),
+                                Task.Run(() =>
+                                {
+                                    ClsContrattoBL.ModificaContratto(frmUtente._contratto, frmUtente._utente.ID);
+                                    if (frmUtente._utente.TipoUtente == "C")
+                                        ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, frmUtente._utente.ID);
+                                }),
+                                Task.Run(() =>
+                                {
+                                    List<ClsRichiedereDL> cdcRimosse = richiestePrima
+                                        .Where(prima => prima.IDclassediconcorso > 0 &&
+                                            !(frmUtente._richieste ?? new List<ClsRichiedereDL>())
+                                            .Any(dopo => dopo.IDclassediconcorso == prima.IDclassediconcorso))
+                                        .ToList();
+                                    foreach (var cdc in cdcRimosse)
+                                        ClsAssegnareBL.EliminaAssegnazioniDocente(frmUtente._utente.ID, cdc.IDclassediconcorso);
+                                })
+                            );
                         }
                     }
                     catch (Exception ex)
                     {
-                        this.Cursor = Cursors.Arrow;
                         MessageBox.Show("Errore durante il salvataggio: " + ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    this.Cursor = Cursors.Arrow;
+                    finally
+                    {
+                        this.Cursor = Cursors.Arrow;
+                    }
                     CaricaListView();
-
-
                 }
             }
             else
                 MessageBox.Show("non è stato selezionato nessun utente, riprovare.", "Modifica", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
-
         private void btElimina_Click(object sender, EventArgs e)
         {
             if (lvUtenti.SelectedIndices.Count == 1)
             {
+                //controllo utente se ha i permessi necessari
+                if (!ClsUtenteDL.UtenteCRUD(_utenteLoggato)) return;
+
                 int indiceDaEliminare = lvUtenti.SelectedIndices[0];
                 int idDaEliminare = Convert.ToInt32(lvUtenti.Items[indiceDaEliminare].Tag);
                 DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);

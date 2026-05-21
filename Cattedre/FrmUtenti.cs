@@ -46,24 +46,11 @@ namespace Cattedre
         }
         private void FrmUtenti_Load(object sender, EventArgs e)
         {
-            if (_utenteLoggato?.TipoUtente == "D")
-            {
-                long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
-                if (idDipartimento > 0)
-                    filtri["IDdipartimento"] = new List<string> { idDipartimento.ToString() };
-
-                // Blocca i filtri: il docente non può cambiarli
-                gbTipiUtenti.Enabled = false;
-                gbContratto.Enabled = false;
-                gBtipoDocente.Enabled = false;
-                btCerca.Enabled = false;
-                btAnnullaFiltra.Enabled = false;
-                tbRicerca.Enabled = false;
-                btInserisci.Enabled = false;
-                btModifica.Enabled = false;
-                btElimina.Enabled = false;
-            }
-
+            cbDipartimento.DataSource = ClsDipartimentoBL.CaricaDipartimenti();
+            cbDipartimento.ValueMember = "ID";
+            cbDipartimento.DisplayMember = "Nome";
+            cbDipartimento.SelectedIndex = -1;
+            GestisciPermessi();
             CaricaListView();
         }
 
@@ -301,19 +288,19 @@ namespace Cattedre
 
             }
         }
+
         #region filtri
 
         private void btFiltro_Click(object sender, EventArgs e)
         {
             try
             {
-                filtri = new Dictionary<string, List<string>>();
+                filtri.Clear();
                 btAnnullaFiltra.Enabled = true;
 
                 bool parametroSelezionato = false;
 
                 parametroSelezionato |= AggiungiFiltro(filtri, "tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
-                parametroSelezionato |= AggiungiFiltro(filtri, "tipoContratto", CaricaElementiSelezionati(gbContratto, typeof(RadioButton)), mappaContratto);
                 parametroSelezionato |= AggiungiFiltro(filtri, "tipoDocente", CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)), mappaTipoDocente);
 
                 string NomeCognome = (tbRicerca.Text != "cognome nome" && !string.IsNullOrWhiteSpace(tbRicerca.Text)) ? tbRicerca.Text.Trim() : string.Empty;
@@ -323,13 +310,16 @@ namespace Cattedre
                     filtri.Add("CONCAT(cognome,nome)", new List<string> { NomeCognomeFiltrati });
                     parametroSelezionato = true;
                 }
-                if (!parametroSelezionato)
+                if(cbDipartimento.SelectedIndex>-1)
                 {
-                    _utenti = ClsUtenteBL.CaricaUtenti();
-                    CaricaListView();
+                    filtri.Add("IDdipartimento", new List<string> { cbDipartimento.SelectedValue.ToString() });
+                    parametroSelezionato = true;
                 }
-
-                CaricaListView();
+                if (parametroSelezionato)
+                    CaricaListView();
+                else
+                    throw new Exception("Seleziona un parametro per la ricerca.");
+               
             }
             catch (Exception ex)
             {
@@ -369,16 +359,16 @@ namespace Cattedre
 
         private void btAnnullaFiltra_Click(object sender, EventArgs e)
         {
-            PulisciGroubBox(gbContratto);
-            PulisciGroubBox(gbTipiUtenti);
             PulisciGroubBox(gBtipoDocente);
-            filtri = new Dictionary<string, List<string>>();
             //gestione tbricerca
+            if (_utenteLoggato.TipoUtente != "C")
+            {
+                cbDipartimento.SelectedIndex = -1;
+                PulisciGroubBox(gbTipiUtenti);
+            }
             tbRicerca.Text = string.Empty;
-            tbRicerca_Leave(null, null);
             btAnnullaFiltra.Enabled = false;
-            //ricamento della listview
-            CaricaListView();
+            btFiltro_Click(null, null);
         }
 
 
@@ -414,20 +404,6 @@ namespace Cattedre
                 tbRicerca.StateCommon.Content.Color1 = Color.Gray;
             }
         }
-        //private void btRicerca_Click(object sender, EventArgs e)
-        //{
-        //    if (!string.IsNullOrWhiteSpace(tbRicerca.Text) && tbRicerca.Text != "cognome nome")
-        //    {
-        //        //cancello il filtra in modo che non mi dia problemi
-        //        filtri = new Dictionary<string, List<string>>();
-        //        _parametroRicerca = tbRicerca.Text.Replace(" ", "").ToLower();
-        //        _utenti = ClsUtenteBL.RicercaPerNomeCognome(_parametroRicerca);
-        //        CaricaListView();
-        //    }
-        //    else
-        //        MessageBox.Show("Inserire Input valido per la ricerca", "attenzione", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //}
-
 
         private void cbDocenteCordinatore_CheckedChanged(object sender, EventArgs e)
         {
@@ -442,8 +418,22 @@ namespace Cattedre
 
 
         #endregion
-
-
+        #region permessi
+        public void GestisciPermessi()
+        {
+            if (_utenteLoggato?.TipoUtente == "C")
+            {
+                long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
+                if (idDipartimento > 0)
+                    filtri["IDdipartimento"] = new List<string> { idDipartimento.ToString() };
+                cbDipartimento.SelectedValue = idDipartimento; 
+                cbDipartimento.Enabled = false;
+                cbDocente.Checked=true;
+                gbTipiUtenti.Enabled = false;
+                btCattedreUtente.Enabled = false;
+            }
+        }
+        #endregion
         #region mappattura tasti
         private void lvUtenti_KeyDown(object sender, KeyEventArgs e)
         {
@@ -484,17 +474,24 @@ namespace Cattedre
                 }
             }
         }
+        private void cbDipartimento_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Evita il "beep"
+                tbRicerca.Focus();
+            }
+            if (_utenteLoggato.TipoUtente != "C" && e.KeyCode == Keys.Cancel || e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+                cbDipartimento.SelectedIndex = -1;
+
+        }
 
         private void rbTipoDocente_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
-                rbIndireterminato.Focus();
+                cbDipartimento.Focus();
         }
-        private void rbTipoContratto_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-                tbRicerca.Focus();
-        }
+
         #endregion
 
         private void btCattedreUtente_Click(object sender, EventArgs e)
@@ -513,5 +510,7 @@ namespace Cattedre
             else
                 MessageBox.Show("non è stato selezionato nessun utente, riprovare.", "Modifica", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
+
+       
     }
 }

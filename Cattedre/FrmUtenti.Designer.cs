@@ -39,9 +39,6 @@
             this.chMonteOre = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDataInzio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDataFine = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.gbContratto = new System.Windows.Forms.GroupBox();
-            this.rbIndireterminato = new System.Windows.Forms.RadioButton();
-            this.rbDeterminato = new System.Windows.Forms.RadioButton();
             this.gBtipoDocente = new System.Windows.Forms.GroupBox();
             this.rbPratico = new System.Windows.Forms.RadioButton();
             this.rdTeorico = new System.Windows.Forms.RadioButton();
@@ -60,7 +57,8 @@
             this.btCattedreUtente = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.tbNumRecord = new System.Windows.Forms.TextBox();
-            this.gbContratto.SuspendLayout();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cbDipartimento = new System.Windows.Forms.ComboBox();
             this.gBtipoDocente.SuspendLayout();
             this.gbTipiUtenti.SuspendLayout();
             this.SuspendLayout();
@@ -136,44 +134,6 @@
             this.chDataFine.Text = "Data Fine";
             this.chDataFine.Width = 90;
             // 
-            // gbContratto
-            // 
-            this.gbContratto.Controls.Add(this.rbIndireterminato);
-            this.gbContratto.Controls.Add(this.rbDeterminato);
-            this.gbContratto.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbContratto.Location = new System.Drawing.Point(650, 55);
-            this.gbContratto.Name = "gbContratto";
-            this.gbContratto.Size = new System.Drawing.Size(258, 47);
-            this.gbContratto.TabIndex = 6;
-            this.gbContratto.TabStop = false;
-            this.gbContratto.Text = "Contratto";
-            // 
-            // rbIndireterminato
-            // 
-            this.rbIndireterminato.AutoSize = true;
-            this.rbIndireterminato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbIndireterminato.Location = new System.Drawing.Point(134, 19);
-            this.rbIndireterminato.Name = "rbIndireterminato";
-            this.rbIndireterminato.Size = new System.Drawing.Size(118, 21);
-            this.rbIndireterminato.TabIndex = 1;
-            this.rbIndireterminato.TabStop = true;
-            this.rbIndireterminato.Text = "Indeterminato";
-            this.rbIndireterminato.UseVisualStyleBackColor = true;
-            this.rbIndireterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbTipoContratto_KeyDown);
-            // 
-            // rbDeterminato
-            // 
-            this.rbDeterminato.AutoSize = true;
-            this.rbDeterminato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbDeterminato.Location = new System.Drawing.Point(7, 20);
-            this.rbDeterminato.Name = "rbDeterminato";
-            this.rbDeterminato.Size = new System.Drawing.Size(108, 21);
-            this.rbDeterminato.TabIndex = 0;
-            this.rbDeterminato.TabStop = true;
-            this.rbDeterminato.Text = "Determinato";
-            this.rbDeterminato.UseVisualStyleBackColor = true;
-            this.rbDeterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbTipoContratto_KeyDown);
-            // 
             // gBtipoDocente
             // 
             this.gBtipoDocente.Controls.Add(this.rbPratico);
@@ -182,7 +142,7 @@
             this.gBtipoDocente.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gBtipoDocente.Location = new System.Drawing.Point(440, 55);
             this.gBtipoDocente.Name = "gBtipoDocente";
-            this.gBtipoDocente.Size = new System.Drawing.Size(210, 47);
+            this.gBtipoDocente.Size = new System.Drawing.Size(186, 47);
             this.gBtipoDocente.TabIndex = 5;
             this.gBtipoDocente.TabStop = false;
             this.gBtipoDocente.Text = "Docente";
@@ -192,7 +152,7 @@
             this.rbPratico.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbPratico.AutoSize = true;
             this.rbPratico.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbPratico.Location = new System.Drawing.Point(102, 19);
+            this.rbPratico.Location = new System.Drawing.Point(78, 19);
             this.rbPratico.Name = "rbPratico";
             this.rbPratico.Size = new System.Drawing.Size(102, 21);
             this.rbPratico.TabIndex = 1;
@@ -283,7 +243,7 @@
             // 
             this.tbRicerca.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbRicerca.Location = new System.Drawing.Point(914, 63);
+            this.tbRicerca.Location = new System.Drawing.Point(914, 69);
             this.tbRicerca.Name = "tbRicerca";
             this.tbRicerca.Size = new System.Drawing.Size(198, 31);
             this.tbRicerca.StateCommon.Back.Color1 = System.Drawing.Color.White;
@@ -296,7 +256,7 @@
             this.tbRicerca.StateCommon.Border.Rounding = 20F;
             this.tbRicerca.StateCommon.Border.Width = 1;
             this.tbRicerca.StateCommon.Content.Color1 = System.Drawing.Color.Gray;
-            this.tbRicerca.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbRicerca.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.tbRicerca.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.tbRicerca.StateNormal.Content.Color1 = System.Drawing.Color.Gray;
             this.tbRicerca.TabIndex = 30;
@@ -309,7 +269,7 @@
             // 
             this.btAnnullaFiltra.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btAnnullaFiltra.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btAnnullaFiltra.Location = new System.Drawing.Point(1118, 63);
+            this.btAnnullaFiltra.Location = new System.Drawing.Point(1118, 68);
             this.btAnnullaFiltra.Name = "btAnnullaFiltra";
             this.btAnnullaFiltra.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btAnnullaFiltra.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -585,7 +545,7 @@
             // 
             this.btCerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btCerca.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btCerca.Location = new System.Drawing.Point(1233, 63);
+            this.btCerca.Location = new System.Drawing.Point(1233, 68);
             this.btCerca.Name = "btCerca";
             this.btCerca.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btCerca.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -693,16 +653,37 @@
             this.tbNumRecord.Size = new System.Drawing.Size(39, 27);
             this.tbNumRecord.TabIndex = 55;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.label2.Location = new System.Drawing.Point(632, 79);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(90, 17);
+            this.label2.TabIndex = 57;
+            this.label2.Text = "Dipartimento:";
+            // 
+            // cbDipartimento
+            // 
+            this.cbDipartimento.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbDipartimento.FormattingEnabled = true;
+            this.cbDipartimento.Location = new System.Drawing.Point(722, 73);
+            this.cbDipartimento.Name = "cbDipartimento";
+            this.cbDipartimento.Size = new System.Drawing.Size(180, 25);
+            this.cbDipartimento.TabIndex = 58;
+            this.cbDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDipartimento_KeyDown);
+            // 
             // FrmUtenti
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1360, 745);
+            this.Controls.Add(this.cbDipartimento);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.tbNumRecord);
             this.Controls.Add(this.btCattedreUtente);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.gbContratto);
             this.Controls.Add(this.btCerca);
             this.Controls.Add(this.btModifica);
             this.Controls.Add(this.btElimina);
@@ -717,8 +698,6 @@
             this.ShowInTaskbar = false;
             this.Text = "Utenti";
             this.Load += new System.EventHandler(this.FrmUtenti_Load);
-            this.gbContratto.ResumeLayout(false);
-            this.gbContratto.PerformLayout();
             this.gBtipoDocente.ResumeLayout(false);
             this.gBtipoDocente.PerformLayout();
             this.gbTipiUtenti.ResumeLayout(false);
@@ -739,9 +718,6 @@
         private System.Windows.Forms.ColumnHeader chMonteOre;
         private System.Windows.Forms.ColumnHeader chDataInzio;
         private System.Windows.Forms.ColumnHeader chDataFine;
-        private System.Windows.Forms.GroupBox gbContratto;
-        private System.Windows.Forms.RadioButton rbIndireterminato;
-        private System.Windows.Forms.RadioButton rbDeterminato;
         private System.Windows.Forms.GroupBox gBtipoDocente;
         private System.Windows.Forms.RadioButton rbPratico;
         private System.Windows.Forms.RadioButton rdTeorico;
@@ -761,5 +737,7 @@
         private System.Windows.Forms.Button btCattedreUtente;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbNumRecord;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbDipartimento;
     }
 }

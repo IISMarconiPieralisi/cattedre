@@ -186,7 +186,7 @@ namespace Cattedre
 
         private void GestisciPermessi()
         {
-            if (_utente.TipoDocente == 'A') return;
+            if (_utente.TipoDocente == 'A' || _utente.ID==_utenteLoggato.ID) return;
             //se è un coordinatore in modifica non permette la modifica della password
             tbNome.Enabled = false;
             tbCognome.Enabled = false;
@@ -197,7 +197,6 @@ namespace Cattedre
             cbTipoUtente.Enabled = false;
             pnTipoDocente.Enabled = false;
             //colore può essere modificato
-
         }
 
         #region Inizializzazione

@@ -613,7 +613,7 @@ namespace Cattedre
         #region filtri
         public static MySqlCommand CreaComandoRicerca(Dictionary<string, List<string>> filtri, MySqlConnection conn)
         {
-            string sql = "SELECT u.ID, u.nome, u.cognome, email, password, tipoutente, tipodocente, colore FROM utenti u LEFT JOIN contratti c ON u.ID=c.IDutente";
+            string sql = "SELECT u.ID, u.nome, u.cognome, email, password, tipoutente, tipodocente, colore FROM utenti u ";
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = conn;
             List<string> condizioni = new List<string>();
@@ -631,10 +631,7 @@ namespace Cattedre
                 }
                 else if (colonna == "IDdipartimento")
                 {
-                    sql = sql.Replace(
-                        "LEFT JOIN contratti c ON u.ID=c.IDutente",
-                        "LEFT JOIN contratti c ON u.ID=c.IDutente JOIN afferire a ON u.ID=a.IDutente"
-                    );
+                    sql +=  " JOIN afferire a ON u.ID=a.IDutente";
                     condizioni.Add($"a.IDdipartimento = {filtro.Value[0]}");
                 }
                 else

@@ -49,16 +49,7 @@ namespace Cattedre
                 foreach (DataRow r in assegnazioni.Rows)
                 {
                     if (r["IDclasse"] == DBNull.Value || r["IDdisciplina"] == DBNull.Value)
-                    {
-                        long idDoc = Convert.ToInt64(r["IDutente"]);
-                        int oreSpeciali = Convert.ToInt32(r["oreSpeciali"]);
-                        ClsAnnoScolasticoDL annoSucc = ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(IDannoCorrente);
-
-                        if (!EsisteAssegnazione(0, IDannoSuccessivo, 0))
-                            InserisciAssegnazione(0, IDannoSuccessivo, 0, idDoc, oreSpeciali, annoSucc.DataInizio, annoSucc.DataFine);
-
                         continue;
-                    }
 
                     long idClasse = Convert.ToInt64(r["IDclasse"]);
                     long idDisciplina = Convert.ToInt64(r["IDdisciplina"]);

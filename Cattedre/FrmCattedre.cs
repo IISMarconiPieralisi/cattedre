@@ -534,8 +534,7 @@ namespace Cattedre
             docentiPraticiUsati.Clear();
 
             // QUERY UNICA x recuperare tutti i docenti del dipartimento
-            docenti = ClsAssegnareBL
-                .CaricaDocentiConAssegnazioni(IDdipartimento, IDannoscolastico);
+            docenti = ClsAssegnareBL.CaricaDocentiConAssegnazioni(IDdipartimento, IDannoscolastico);
 
             // Aggiunti i docenti esterni già assegnati
             DataTable esterniAssegnati = ClsAssegnareBL.CaricaDocentiEsterniAssegnati(IDdipartimento, IDannoscolastico);

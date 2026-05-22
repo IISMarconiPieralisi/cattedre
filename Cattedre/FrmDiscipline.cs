@@ -14,14 +14,14 @@ namespace Cattedre
     {
         public List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
         public List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
-        private ClsUtenteDL UtenteLoggato;
+        private ClsUtenteDL _utenteLoggato;
         long iddipartimento = 0;
         int anno = 0;
         string nome = string.Empty;
         public FrmDiscipline(ClsUtenteDL utenteLog)
         {
             InitializeComponent();
-            UtenteLoggato = utenteLog;
+            _utenteLoggato = utenteLog;
         }
         private void GestisciListview()
         {
@@ -105,7 +105,6 @@ namespace Cattedre
         private void FrmDiscipline_Load(object sender, EventArgs e)
         {
             discipline = ClsDisciplinaBL.CaricaDiscipline();
-            GestisciListview();
             GestionePermessi();
 
             //popolo combobox filtraggio per dipartimenti
@@ -114,20 +113,34 @@ namespace Cattedre
                 if (!cbDipartimenti.Items.Contains(dipartimento.Nome))
                     cbDipartimenti.Items.Add(dipartimento.Nome);
             }
+            GestisciListview();
+
+
         }
         private void GestionePermessi()
         {
-            if (UtenteLoggato != null && !(UtenteLoggato.TipoUtente == "A" || UtenteLoggato.TipoUtente == "C"))
+            if (_utenteLoggato == null) return;
+
+            if (!(_utenteLoggato.TipoUtente == "A" || _utenteLoggato.TipoUtente == "C"))
             {
                 btElimina.Visible = false;
                 btInserisci.Visible = false;
                 btModifica.Visible = false;
                 lvDiscipline.Width = this.ClientSize.Width - (lvDiscipline.Left * 2);
-
                 lvDiscipline.Height = this.ClientSize.Height - lvDiscipline.Top - 50;
                 lvDiscipline.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             }
+            else if (_utenteLoggato.TipoUtente == "C")
+            {
+                iddipartimento = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
+                if (iddipartimento > 0)
+                {
+                    cbDipartimenti.Enabled = false;
+                    cbDipartimenti.SelectedItem = cbDipartimenti.Items.Cast<ClsDipartimentoDL>().FirstOrDefault(d => d.ID == iddipartimento);
+                }
+            }
         }
+
         private void btElimina_Click(object sender, EventArgs e)
         {
             if (lvDiscipline.SelectedIndices.Count == 1)
@@ -142,6 +155,7 @@ namespace Cattedre
                 }
                 discipline = ClsDisciplinaBL.CaricaDiscipline();
                 GestisciListview();
+
             }
             else
                 MessageBox.Show("Seleziona una disciplina da cancellare", "domanda", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -226,8 +240,6 @@ namespace Cattedre
                 if (iddipartimento == 0 && anno == 0 && string.IsNullOrWhiteSpace(nome))
                     throw new Exception("Inserisci almeno un criterio di ricerca.");
 
-
-
                 GestisciListview();
                 btPulisciCb.Enabled = true;
             }
@@ -241,14 +253,17 @@ namespace Cattedre
         {
             cbDipartimenti.Text = "";
             cbDipartimenti.SelectedText = "";
-            cbDipartimenti.SelectedItem = null;
             tbDisciplina.Text = "";
             rbAnno1.Checked = false;
             rbAnno2.Checked = false;
             rbAnno3.Checked = false;
             rbAnno4.Checked = false;
             rbAnno5.Checked = false;
-             iddipartimento = 0;
+            if(_utenteLoggato.TipoUtente!="C")
+            {
+                cbDipartimenti.SelectedItem = null;
+                iddipartimento = 0;
+            }
              anno = 0;
              nome = string.Empty;
             btPulisciCb.Enabled = false;
@@ -305,6 +320,10 @@ namespace Cattedre
             {
                 e.SuppressKeyPress = true;
                 rbAnno1.Focus();
+            }else if (e.KeyCode == Keys.Back && ClsUtenteDL.UtenteAdmin(_utenteLoggato))
+            {
+                e.SuppressKeyPress = true;
+                cbDipartimenti.SelectedIndex = -1;
             }
         }
         private void rbAnni_KeyDown(object sender, KeyEventArgs e)

@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.lvCattedreUtente = new System.Windows.Forms.ListView();
+            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chClasse = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDisciplina = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chOreSpeciali = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chOreEff = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chOre = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chOreTot = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btElimina = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
-            this.chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvCattedreUtente
@@ -47,7 +47,7 @@
             this.chClasse,
             this.chDisciplina,
             this.chOreSpeciali,
-            this.chOreEff,
+            this.chOre,
             this.chOreTot});
             this.lvCattedreUtente.FullRowSelect = true;
             this.lvCattedreUtente.HideSelection = false;
@@ -57,6 +57,11 @@
             this.lvCattedreUtente.TabIndex = 0;
             this.lvCattedreUtente.UseCompatibleStateImageBehavior = false;
             this.lvCattedreUtente.View = System.Windows.Forms.View.Details;
+            // 
+            // chID
+            // 
+            this.chID.Text = "ID";
+            this.chID.Width = 36;
             // 
             // chClasse
             // 
@@ -72,10 +77,10 @@
             this.chOreSpeciali.Text = "Ore Speciali";
             this.chOreSpeciali.Width = 71;
             // 
-            // chOreEff
+            // chOre
             // 
-            this.chOreEff.Text = "Ore Effettive";
-            this.chOreEff.Width = 73;
+            this.chOre.Text = "Ore";
+            this.chOre.Width = 73;
             // 
             // chOreTot
             // 
@@ -110,11 +115,6 @@
             this.cbAnniScolastici.TabIndex = 3;
             this.cbAnniScolastici.SelectedIndexChanged += new System.EventHandler(this.cbAnniScolastici_SelectedIndexChanged);
             // 
-            // chID
-            // 
-            this.chID.Text = "ID";
-            this.chID.Width = 36;
-            // 
             // FrmCattedreUtente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -141,7 +141,7 @@
         private System.Windows.Forms.Button btElimina;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbAnniScolastici;
-        private System.Windows.Forms.ColumnHeader chOreEff;
+        private System.Windows.Forms.ColumnHeader chOre;
         private System.Windows.Forms.ColumnHeader chOreTot;
         private System.Windows.Forms.ColumnHeader chID;
     }

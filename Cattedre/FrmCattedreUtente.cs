@@ -29,22 +29,58 @@ namespace Cattedre
                 .OrderBy(a => ClsClasseBL.RilevaSiglaClasse(a.IDClasse))
                 .ThenBy(a => ClsDisciplinaBL.RilevaDisciplina(a.IDDisciplina).Nome)
                 .ToList();
+
             lvCattedreUtente.Items.Clear();
 
-            // Calcolo ore effettive una volta sola, non per ogni riga
             long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utente.ID);
             int oreEffettive = ClsAssegnareBL.CalcolaOreEffettiveDocente(_utente.ID, idDipartimento, idanno);
 
+            int totaleOreSpeciali = 0;
+
             foreach (ClsAssegnareDL ass in _assegnazioni)
             {
+                totaleOreSpeciali += ass.OreSpeciali;
+
                 ListViewItem lvi = new ListViewItem(ass.ID.ToString());
                 lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(ass.IDClasse));
                 lvi.SubItems.Add(ClsDisciplinaBL.RilevaDisciplina(ass.IDDisciplina).Nome);
                 lvi.SubItems.Add(ass.OreSpeciali.ToString());
-                lvi.SubItems.Add(oreEffettive.ToString()); // ore effettive totali del docente
-                lvi.SubItems.Add((oreEffettive + ass.OreSpeciali).ToString());
+
+                if (_utente.TipoDocente == 'L')
+                {
+                    int ore = ClsDisciplinaBL.RilevaOreDocentePratico(
+                        ass.IDUtente,
+                        ass.IDDisciplina,
+                        ass.IDClasse);
+
+                    lvi.SubItems.Add(ore.ToString());
+                    lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
+                }
+                else if (_utente.TipoDocente == 'T')
+                {
+                    int ore = ClsDisciplinaBL.RilevaOreDocenteTeorico(
+                        ass.IDUtente,
+                        ass.IDDisciplina,
+                        ass.IDClasse);
+
+                    lvi.SubItems.Add(ore.ToString());
+                    lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
+                }
+
                 lvCattedreUtente.Items.Add(lvi);
             }
+
+            // Riga finale totale
+            int totaleFinale = oreEffettive + totaleOreSpeciali;
+
+            ListViewItem totaleItem = new ListViewItem("");
+            totaleItem.SubItems.Add("");
+            totaleItem.SubItems.Add("");
+            totaleItem.SubItems.Add("");
+            totaleItem.SubItems.Add("Totale:");
+            totaleItem.SubItems.Add(totaleFinale.ToString());
+
+            lvCattedreUtente.Items.Add(totaleItem);
         }
 
         private void CaricaCB(out List<ClsAnnoScolasticoDL> anniscolastici)

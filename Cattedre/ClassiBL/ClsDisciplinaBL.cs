@@ -420,6 +420,54 @@ namespace Cattedre
 
             return 0;
         }
+
+        public static int RilevaOreDocentePratico(long IDdocente, long IDdisciplina, long IDclasse)
+        {
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT oreLaboratorio 
+                       FROM discipline
+                       JOIN assegnare ON discipline.ID = assegnare.IDdisciplina";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDdocente", IDdocente);
+                    cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                    cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                        return Convert.ToInt32(result);
+                }
+            }
+            return 0;
+        }
+
+        public static int RilevaOreDocenteTeorico(long IDdocente, long IDdisciplina, long IDclasse)
+        {
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT oreTeoria 
+                       FROM discipline
+                       JOIN assegnare ON discipline.ID = assegnare.IDdisciplina";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDdocente", IDdocente);
+                    cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                    cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                    DataTable dt = new DataTable();
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                        return Convert.ToInt32(result);
+                }
+            }
+            return 0;
+        }
+
         public static int RilevaOrePotenziamentoDipartimentoPerCDC(long IDdipartimento, long IDcdc)
         {
             try

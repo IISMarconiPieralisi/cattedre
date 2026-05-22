@@ -512,6 +512,7 @@
             // 
             this.btClasseSuccessiva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btClasseSuccessiva.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btClasseSuccessiva.Enabled = false;
             this.btClasseSuccessiva.Location = new System.Drawing.Point(1018, 292);
             this.btClasseSuccessiva.Name = "btClasseSuccessiva";
             this.btClasseSuccessiva.OverrideDefault.Back.Color1 = System.Drawing.Color.Purple;
@@ -575,6 +576,7 @@
             this.btClasseSuccessiva.TabIndex = 50;
             this.btClasseSuccessiva.Values.DropDownArrowColor = System.Drawing.Color.Empty;
             this.btClasseSuccessiva.Values.Text = "Crea classi \r\nsuccessive";
+            this.btClasseSuccessiva.Visible = false;
             this.btClasseSuccessiva.Click += new System.EventHandler(this.btClasseSuccessiva_Click);
             // 
             // label4

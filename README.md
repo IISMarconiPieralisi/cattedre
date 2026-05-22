@@ -137,7 +137,7 @@ Questo è un progetto personale e **non accetta contributi esterni**. Il reposit
 ---
 
 ## 3. Spiegazione dell'Utilizzo
-**FrmLogin – Accesso al Sistema**
+**Login (FrmLogin)**
 All'avvio dell'applicazione viene presentata la schermata di login. L'utente può accedere in due modi:
 
 Login manuale: inserendo email e password nei rispettivi campi di testo e premendo il pulsante Login (oppure Invio, essendo impostato come pulsante predefinito). Se uno dei campi è vuoto, il campo in questione viene evidenziato in rosso con un messaggio di avviso.
@@ -146,7 +146,7 @@ Login con Google: premendo il pulsante Login con Google, il sistema apre il brow
 In base al tipo di utente che si è loggato (Admin, Coordinatore del dip., Doc, Preside) i permessi saranno diversi.
 Dopo un login riuscito, il token precedente dell'utente viene cancellato e viene aperta la schermata principale (FrmHome).
 
-**FrmHome – Schermata Principale**
+**Home (FrmHome)**
 La schermata principale è un contenitore MDI con una barra laterale sinistra e un pannello centrale di navigazione.
 Barra laterale: mostra nome, cognome, email e foto profilo (tonda, con bordo) dell'utente loggato. 
 I pulsanti di navigazione visibili variano in base al ruolo:
@@ -162,7 +162,7 @@ Il pulsante Logout esegue la disconnessione, cancella il token Google salvato su
 
 
 
-**FrmCattedre – Gestione Cattedre (form principale)**
+**Gestione Cattedre (FrmCattedre)**
 È la schermata operativa centrale del software, accessibile da Coordinatore, Amministratore e Preside. 
 Il layout è una griglia dinamica con:
 - Asse orizzontale (ucDisciplina): una colonna per ogni disciplina del dipartimento selezionato.
@@ -186,14 +186,16 @@ I docenti sono raggruppati per tipologia (Teorici / Pratici) con un'intestazione
 
 Salvataggio: ogni modifica a una ComboBox di assegnazione viene salvata immediatamente nel database senza necessità di premere un pulsante di salvataggio esplicito.
 
-Pulsante Genera Anno Successivo: disponibile solo per il Coordinatore. Se non esistono ancora assegnazioni per l'anno successivo, dopo conferma copia le assegnazioni dell'anno corrente come base di partenza per l'anno seguente.
+Pulsante Genera Anno Successivo: disponibile solo per il Coordinatore. Prima di procedere assicurarsi che:
+- esista l'anno scolastico per l'anno successivo
+- esistano le classi per l'anno successivo.
+Se non esistono ancora assegnazioni per l'anno successivo, dopo la conferma, verranno copiate le assegnazioni dell'anno corrente come base di partenza per l'anno seguente.
+Se esistono già, verrà chiesto se si vogliono sovrascrivere le assegnazioni.
 
 Pulsante Genera Word: disponibile per il Coordinatore. Chiede un percorso di salvataggio e genera un file .docx con il quadro completo delle cattedre del dipartimento per l'anno selezionato, nel formato previsto per la dirigenza. Al termine viene proposta l'apertura automatica del file.
 Scroll: la griglia supporta scorrimento verticale tramite rotellina e scorrimento orizzontale tenendo premuto Shift + rotellina, oppure tramite la barra di scorrimento orizzontale in fondo.
 
-
-
-**FrmUtenti – Elenco Utenti**
+**Elenco Utenti (FrmUtenti)**
 Accessibile da Amministratore e Coordinatore (con accesso limitato per il Coordinatore al proprio dipartimento). 
 Mostra una ListView degli utenti con: ID, Cognome, Nome, Email, Ruolo, Tipo Contratto, Monte Ore, Data Inizio Contratto, Data Fine Contratto.
 
@@ -211,7 +213,7 @@ Operazioni:
 - Elimina: rimuove l'utente e lo dissocia dal dipartimento se era coordinatore.
 - Cattedre Utente: apre FrmCattedreUtente per visualizzare le cattedre assegnate all'utente selezionato.
 
-**FrmUtente – Dettaglio Utente**
+**Dettaglio Utente (FrmUtente)**
 Form articolata per la gestione completa di un utente. 
 
 Sezioni principali:
@@ -222,7 +224,7 @@ Sezioni principali:
 
 I campi obbligatori vengono validati prima del salvataggio. La form si comporta in modo adattivo: per Preside e Amministratore alcuni campi (contratto, CDC, dipartimento) vengono nascosti o disabilitati.
 
-**FrmCattedreUtente – Cattedre Assegnate a un Utente**
+**Cattedre Assegnate a un Utente (FrmCattedreUtente)**
 Aperta da FrmUtenti premendo Cattedre Utente. 
 Mostra in una ListView le assegnazioni del docente selezionato per un dato anno scolastico, con le colonne: ID assegnazione, Classe, Disciplina, Ore Speciali, Ore Effettive, Totale.
 
@@ -231,20 +233,22 @@ Il pulsante Elimina (visibile solo per Coordinatore e Amministratore) rimuove l'
 
 
 
-**FrmClassi – Elenco Classi**
+**Elenco Classi (FrmClassi)**
 Accessibile da Amministratore e Coordinatore. 
 Mostra le classi scolastiche con sigla, anno, indirizzo e anno scolastico. Operazioni standard: Inserisci, Modifica, Elimina.
+Un'altra operazione è Genera classe anno successivo, dove una volta selezionata una classe dalla listview e aver cliccato il bottone in questione, verrà creata la stessa classe con l'anno incrementato di uno (es. da 1BM a 2BM) e in riferimento all'anno scolastico successivo.
+Se si vogliono generare più classi contemporaneamente, è possibile farlo selezionando dalla listview il primo elemento, tenere premuto Ctrl + Shift e selezionare l'ultimo elemento. Dopodiché cliccare il bottone Genera. (ATTENZIONE: non selezionare le classi 5 perché non esisteranno più nell'anno successivo)
 
-**FrmClasse – Dettaglio Classe**
+**Dettaglio Classe (FrmClasse)**
 Permette di definire una classe specificando: sigla (es. 3AI), numero d'anno (1–5), indirizzo di appartenenza e anno scolastico. Sono presenti controlli di validazione per evitare duplicati o valori mancanti.
 
 
 
-**FrmDiscipline – Elenco Discipline**
+**Elenco Discipline (FrmDiscipline)**
 Accessibile da Amministratore e Coordinatore.
 Mostra le discipline con nome, ore di teoria, ore di laboratorio, anno scolastico e indirizzo di appartenenza. Supporta filtri per anno e indirizzo. Operazioni standard: Inserisci, Modifica, Elimina.
 
-**FrmDisciplina – Dettaglio Disciplina**
+**Dettaglio Disciplina (FrmDisciplina)**
 Form per creare o modificare una disciplina. 
 I campi principali sono:
 - Nome della disciplina.
@@ -257,7 +261,7 @@ La form valida che la somma delle ore sia coerente con il monte ore previsto.
 
 
 
-**FrmCdCs – Elenco Classi di Concorso**
+**Elenco Classi di Concorso (FrmCdCs)**
 Accessibile dall'Amministratore. 
 Mostra una ListView con le classi di concorso registrate (ID, Livello, Nome, Abilitazioni richieste).
 
@@ -265,41 +269,41 @@ Inserisci / Modifica / Elimina funzionano con lo stesso schema degli altri form 
 È presente una barra di ricerca per filtrare per sigla (campo mascherato) e/o per nome. Il pulsante Pulisci azzera i filtri.
 I tasti Invio e Canc sulla ListView attivano rispettivamente Modifica ed Elimina.
 
-**FrmCdC – Dettaglio Classe di Concorso**
+**Dettaglio Classe di Concorso (FrmCdC)**
 Form di dettaglio per una classe di concorso. 
 Contiene:
 - Livello: sigla della classe di concorso (es. A-41).
 - Nome: denominazione estesa.
 - Abilitazioni Richieste: campo di testo libero (RichTextBox) per descrivere i titoli necessari (es. Laurea in Informatica). Il doppio Invio rapido sposta il fuoco al pulsante Salva.
 
-**FrmDotazioni – Dotazione Organica per Classe di Concorso**
+**Dotazione Organica per Classe di Concorso (FrmDotazioni)**
 Accessibile dall'Amministratore. 
 Mostra la dotazione organica (numero di cattedre di diritto e di fatto) per ogni classe di concorso e anno scolastico. Operazioni standard: Inserisci, Modifica, Elimina.
 
-**FrmDotazione – Dettaglio Dotazione**
+**Dettaglio Dotazione (FrmDotazione)**
 Permette di specificare, per una combinazione Classe di Concorso + Anno Scolastico, il numero di cattedre di diritto (organico previsto) e di fatto (docenti effettivamente assegnati). Questi valori vengono usati in FrmCattedre per segnalare lo stato di copertura delle cattedre.
 
 
 
-**FrmDipartimenti – Elenco Dipartimenti**
+**Elenco Dipartimenti (FrmDipartimenti)**
 Accessibile da Amministratore.
 Mostra la lista dei dipartimenti con ID, nome e coordinatore. Operazioni standard: Inserisci, Modifica, Elimina con conferma. Tasti Invio e Canc attivi sulla ListView.
 
-**FrmDipartimento – Dettaglio Dipartimento**
+**Dettaglio Dipartimento (FrmDipartimento)**
 Permette di inserire o modificare il nome di un dipartimento. Il coordinatore viene assegnato separatamente tramite FrmUtente.
 
 
 
-**FrmIndirizzi – Elenco Indirizzi**
+**Elenco Indirizzi (FrmIndirizzi)**
 Accessibile da Amministratore.
 Gestione degli indirizzi di studio (es. Informatica e Telecomunicazioni, Elettronica). ListView con ID e nome. Operazioni standard: Inserisci, Modifica, Elimina.
 
-**FrmIndirizzo – Dettaglio Indirizzo**
+**Dettaglio Indirizzo (FrmIndirizzo)**
 Form minimale con un campo testo per il nome dell'indirizzo. Salva o annulla.
 
 
 
-**FrmAnniScolastici – Elenco Anni Scolastici**
+**Elenco Anni Scolastici (FrmAnniScolastici)**
 Accessibile dall'Amministratore tramite il menu strip. 
 Mostra una ListView con tutti gli anni scolastici registrati, con le colonne: ID, Sigla (es. 24-25), Data Inizio, Data Fine.
 
@@ -308,7 +312,7 @@ Modifica: apre FrmAnnoScolastico precompilato con i dati dell'anno selezionato. 
 Elimina: chiede conferma e rimuove l'anno scolastico selezionato.
 I tasti Invio e Canc sulla ListView simulano rispettivamente Modifica ed Elimina.
 
-**FrmAnnoScolastico – Dettaglio Anno Scolastico**
+**Dettaglio Anno Scolastico (FrmAnnoScolastico)**
 Form di dettaglio per inserire o modificare un anno scolastico. Contiene:
 
 Sigla: campo mascherato (es. 24-25), aggiornata automaticamente al variare delle date.
@@ -318,5 +322,5 @@ Salva / Annulla: confermano o annullano l'operazione. La navigazione tra campi �
 
 
 
-**FrmCredits – Crediti**
+**Crediti (FrmAnnoScolastico)**
 Schermata informativa che mostra i nomi degli autori del progetto e le tecnologie utilizzate. Non contiene funzionalità operative.

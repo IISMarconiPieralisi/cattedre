@@ -56,25 +56,18 @@ namespace Cattedre
                     long idDocente = Convert.ToInt64(r["IDutente"]);
 
                     ClsClasseDL classe = ClsClasseBL.CaricaClasse(idClasse);
-                    ClsDisciplinaDL disciplina = ClsDisciplinaBL.CaricaDisciplina(idDisciplina);
 
                     int annoClasse = classe.Anno;
-                    int annoSuccessivoClasse;
+                    if (annoClasse >= 5) annoClasse = 3;
+                    else if (annoClasse == 2) annoClasse = 1;
+                    else annoClasse++;
 
-                    if (annoClasse == 1) annoSuccessivoClasse = 2;
-                    else if (annoClasse == 2) annoSuccessivoClasse = 1;
-                    else if (annoClasse == 3) annoSuccessivoClasse = 4;
-                    else if (annoClasse == 4) annoSuccessivoClasse = 5;
-                    else annoSuccessivoClasse = 3;
-
-                    ClsClasseDL nuovaClasse =
-                        ClsClasseBL.TrovaClasse(classe.Sezione, annoSuccessivoClasse, classe.Idindirizzo, IDannoSuccessivo);
+                    ClsClasseDL nuovaClasse = ClsClasseBL.TrovaClasse(classe.Sezione, annoClasse, classe.Idindirizzo, IDannoSuccessivo);
 
                     if (nuovaClasse == null)
                         continue;
 
-                    ClsDisciplinaDL nuovaDisciplina =
-                        ClsDisciplinaBL.TrovaDisciplinaNomeAnno(disciplina.Nome, annoSuccessivoClasse);
+                    ClsDisciplinaDL nuovaDisciplina = ClsDisciplinaBL.TrovaDisciplinaSuccessiva(idDisciplina);
 
                     if (nuovaDisciplina == null)
                         continue;
@@ -85,8 +78,7 @@ namespace Cattedre
                     long idDoc = Convert.ToInt64(r["IDutente"]);
                     int oreSpeciali = Convert.ToInt32(r["oreSpeciali"]);
 
-                    ClsAnnoScolasticoDL annoSucc =
-                        ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(IDannoCorrente);
+                    ClsAnnoScolasticoDL annoSucc = ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(IDannoCorrente);
 
                     DateTime dal = annoSucc.DataInizio;
                     DateTime al = annoSucc.DataFine;
@@ -438,10 +430,11 @@ AND IDutente IN (
                                 FROM utenti u
                                 JOIN afferire af ON af.IDutente = u.ID
                                 LEFT JOIN contratti c ON c.IDutente = u.ID
-                                LEFT JOIN assegnare a ON a.IDutente = u.ID AND a.IDannoscolastico = @IDannoScolastico
-                                LEFT JOIN anniscolastici ans ON a.IDannoscolastico = ans.ID AND CURDATE() BETWEEN ans.datainizio AND ans.datafine
-
-                                WHERE af.IDdipartimento = @IDdipartimento AND u.tipoUtente IN('D','C','A')
+                                LEFT JOIN assegnare a ON a.IDutente = u.ID
+                                LEFT JOIN anniscolastici ans ON ans.ID = a.IDannoscolastico
+                                WHERE af.IDdipartimento = @IDdipartimento
+                                  AND a.IDannoscolastico = @IDannoScolastico
+                                  AND u.tipoUtente IN ('D', 'C', 'A')
                                 ORDER BY u.cognome, u.nome";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))

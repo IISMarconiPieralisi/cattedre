@@ -321,6 +321,10 @@ namespace Cattedre
             this.btGeneraASsucc.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
             this.btGeneraASsucc.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
             this.btGeneraASsucc.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btGeneraASsucc.StateDisabled.Back.Color1 = System.Drawing.Color.Plum;
+            this.btGeneraASsucc.StateDisabled.Back.Color2 = System.Drawing.Color.Violet;
+            this.btGeneraASsucc.StateDisabled.Border.Color1 = System.Drawing.Color.Silver;
+            this.btGeneraASsucc.StateDisabled.Border.Color2 = System.Drawing.Color.DarkGray;
             this.btGeneraASsucc.StateNormal.Back.Color1 = System.Drawing.Color.DarkOrchid;
             this.btGeneraASsucc.StateNormal.Back.Color2 = System.Drawing.Color.Violet;
             this.btGeneraASsucc.StateNormal.Border.Color1 = System.Drawing.Color.Orchid;

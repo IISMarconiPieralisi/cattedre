@@ -109,7 +109,7 @@ namespace Cattedre
 
         private void brModifica_Click(object sender, EventArgs e)
         {
-            if (ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
+            if (!ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
             if (lvClassi.SelectedIndices.Count == 1)
             {
 

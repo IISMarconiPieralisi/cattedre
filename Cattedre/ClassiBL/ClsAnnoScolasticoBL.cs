@@ -46,12 +46,44 @@ namespace Cattedre
 
         public static ClsAnnoScolasticoDL TrovaAnnoSuccessivo(long IDanno)
         {
-            List<ClsAnnoScolasticoDL> anni = CaricaAnniScolastici();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT * FROM anniscolastici 
+                           WHERE YEAR(datainizio) - (SELECT YEAR(datainizio) FROM anniscolastici WHERE ID = @IDanno) = 1
+                           AND YEAR(datafine) - (SELECT YEAR(datafine) FROM anniscolastici WHERE ID = @IDanno) = 1
+                           LIMIT 1";
 
-            return anni
-                .Where(a => a.ID > IDanno)
-                .OrderBy(a => a.ID)
-                .FirstOrDefault();
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDanno", IDanno);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+
+                            if (dt.Rows.Count > 0)
+                            {
+                                DataRow row = dt.Rows[0];
+                                return new ClsAnnoScolasticoDL
+                                {
+                                    ID = Convert.ToInt64(row["ID"]),
+                                    DataInizio = Convert.ToDateTime(row["datainizio"]),
+                                    DataFine = Convert.ToDateTime(row["datafine"])
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return null;
         }
         public static ClsAnnoScolasticoDL CercaAnnoScolastico(long ID)
         {

@@ -50,7 +50,7 @@ namespace Cattedre
             return null;
         }
 
-        public static ClsDisciplinaDL TrovaDisciplinaNomeAnno(string nome, int anno)
+        public static ClsDisciplinaDL TrovaDisciplinaSuccessiva(long IDdisciplina)
         {
             try
             {
@@ -58,12 +58,10 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT * FROM discipline 
-                           WHERE nome = @nome 
-                           AND anno = @anno";
+                           WHERE IDdisciplinaSuccessiva = @IDdisciplina";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@nome", nome);
-                        cmd.Parameters.AddWithValue("@anno", anno);
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {

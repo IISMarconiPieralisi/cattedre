@@ -35,9 +35,9 @@
             this.chOreSpeciali = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chOre = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chOreTot = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.btElimina = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
+            this.btElimina = new Krypton.Toolkit.KryptonButton();
             this.SuspendLayout();
             // 
             // lvCattedreUtente
@@ -49,9 +49,10 @@
             this.chOreSpeciali,
             this.chOre,
             this.chOreTot});
+            this.lvCattedreUtente.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvCattedreUtente.FullRowSelect = true;
             this.lvCattedreUtente.HideSelection = false;
-            this.lvCattedreUtente.Location = new System.Drawing.Point(28, 95);
+            this.lvCattedreUtente.Location = new System.Drawing.Point(12, 85);
             this.lvCattedreUtente.Name = "lvCattedreUtente";
             this.lvCattedreUtente.Size = new System.Drawing.Size(406, 237);
             this.lvCattedreUtente.TabIndex = 0;
@@ -86,43 +87,104 @@
             // 
             this.chOreTot.Text = "Ore Tot";
             // 
-            // btElimina
-            // 
-            this.btElimina.Location = new System.Drawing.Point(450, 95);
-            this.btElimina.Name = "btElimina";
-            this.btElimina.Size = new System.Drawing.Size(75, 23);
-            this.btElimina.TabIndex = 1;
-            this.btElimina.Text = "Elimina";
-            this.btElimina.UseVisualStyleBackColor = true;
-            this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(25, 44);
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(9, 29);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(87, 13);
+            this.label1.Size = new System.Drawing.Size(105, 16);
             this.label1.TabIndex = 2;
             this.label1.Text = "Anno Scolastico:";
             // 
             // cbAnniScolastici
             // 
             this.cbAnniScolastici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAnniScolastici.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbAnniScolastici.FormattingEnabled = true;
-            this.cbAnniScolastici.Location = new System.Drawing.Point(118, 41);
+            this.cbAnniScolastici.Location = new System.Drawing.Point(120, 26);
             this.cbAnniScolastici.Name = "cbAnniScolastici";
-            this.cbAnniScolastici.Size = new System.Drawing.Size(60, 21);
+            this.cbAnniScolastici.Size = new System.Drawing.Size(60, 25);
             this.cbAnniScolastici.TabIndex = 3;
             this.cbAnniScolastici.SelectedIndexChanged += new System.EventHandler(this.cbAnniScolastici_SelectedIndexChanged);
+            // 
+            // btElimina
+            // 
+            this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btElimina.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btElimina.Location = new System.Drawing.Point(429, 85);
+            this.btElimina.Name = "btElimina";
+            this.btElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
+            this.btElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
+            this.btElimina.OverrideDefault.Back.ColorAngle = 45F;
+            this.btElimina.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
+            this.btElimina.OverrideDefault.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.btElimina.OverrideDefault.Border.ColorAngle = 45F;
+            this.btElimina.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btElimina.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btElimina.OverrideDefault.Border.Rounding = 20F;
+            this.btElimina.OverrideDefault.Border.Width = 1;
+            this.btElimina.Size = new System.Drawing.Size(109, 36);
+            this.btElimina.StateCommon.Back.Color1 = System.Drawing.Color.Red;
+            this.btElimina.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btElimina.StateCommon.Back.ColorAngle = 45F;
+            this.btElimina.StateCommon.Border.Color1 = System.Drawing.Color.Red;
+            this.btElimina.StateCommon.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.btElimina.StateCommon.Border.ColorAngle = 45F;
+            this.btElimina.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btElimina.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btElimina.StateCommon.Border.Rounding = 20F;
+            this.btElimina.StateCommon.Border.Width = 1;
+            this.btElimina.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.btElimina.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.btElimina.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btElimina.StateNormal.Back.Color1 = System.Drawing.Color.Red;
+            this.btElimina.StateNormal.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btElimina.StateNormal.Border.Color1 = System.Drawing.Color.DarkRed;
+            this.btElimina.StateNormal.Border.Color2 = System.Drawing.Color.Red;
+            this.btElimina.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btElimina.StatePressed.Back.Color1 = System.Drawing.Color.Red;
+            this.btElimina.StatePressed.Back.Color2 = System.Drawing.Color.Yellow;
+            this.btElimina.StatePressed.Back.ColorAngle = 135F;
+            this.btElimina.StatePressed.Border.Color1 = System.Drawing.Color.Yellow;
+            this.btElimina.StatePressed.Border.Color2 = System.Drawing.Color.Red;
+            this.btElimina.StatePressed.Border.ColorAngle = 135F;
+            this.btElimina.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btElimina.StatePressed.Border.Rounding = 20F;
+            this.btElimina.StatePressed.Border.Width = 1;
+            this.btElimina.StateTracking.Back.Color1 = System.Drawing.Color.Red;
+            this.btElimina.StateTracking.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btElimina.StateTracking.Back.ColorAngle = 45F;
+            this.btElimina.StateTracking.Border.Color1 = System.Drawing.Color.DarkRed;
+            this.btElimina.StateTracking.Border.Color2 = System.Drawing.Color.Red;
+            this.btElimina.StateTracking.Border.ColorAngle = 45F;
+            this.btElimina.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btElimina.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btElimina.StateTracking.Border.Rounding = 20F;
+            this.btElimina.StateTracking.Border.Width = 1;
+            this.btElimina.TabIndex = 41;
+            this.btElimina.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.btElimina.Values.Text = "Elimina";
+            this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
             // 
             // FrmCattedreUtente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(550, 374);
+            this.Controls.Add(this.btElimina);
             this.Controls.Add(this.cbAnniScolastici);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.btElimina);
             this.Controls.Add(this.lvCattedreUtente);
             this.Name = "FrmCattedreUtente";
             this.Text = "Cattedre Utente";
@@ -138,11 +200,11 @@
         private System.Windows.Forms.ColumnHeader chClasse;
         private System.Windows.Forms.ColumnHeader chDisciplina;
         private System.Windows.Forms.ColumnHeader chOreSpeciali;
-        private System.Windows.Forms.Button btElimina;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbAnniScolastici;
         private System.Windows.Forms.ColumnHeader chOre;
         private System.Windows.Forms.ColumnHeader chOreTot;
         private System.Windows.Forms.ColumnHeader chID;
+        private Krypton.Toolkit.KryptonButton btElimina;
     }
 }

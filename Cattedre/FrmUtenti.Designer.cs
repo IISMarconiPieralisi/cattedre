@@ -54,11 +54,11 @@
             this.btInserisci = new Krypton.Toolkit.KryptonButton();
             this.btCerca = new Krypton.Toolkit.KryptonButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.btCattedreUtente = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.tbNumRecord = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cbDipartimento = new System.Windows.Forms.ComboBox();
+            this.btCattedreUtente = new Krypton.Toolkit.KryptonButton();
             this.gBtipoDocente.SuspendLayout();
             this.gbTipiUtenti.SuspendLayout();
             this.SuspendLayout();
@@ -620,17 +620,6 @@
             this.label1.TabIndex = 43;
             this.label1.Text = "Utenti:";
             // 
-            // btCattedreUtente
-            // 
-            this.btCattedreUtente.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btCattedreUtente.Location = new System.Drawing.Point(1233, 306);
-            this.btCattedreUtente.Name = "btCattedreUtente";
-            this.btCattedreUtente.Size = new System.Drawing.Size(109, 30);
-            this.btCattedreUtente.TabIndex = 44;
-            this.btCattedreUtente.Text = "Cattedre";
-            this.btCattedreUtente.UseVisualStyleBackColor = true;
-            this.btCattedreUtente.Click += new System.EventHandler(this.btCattedreUtente_Click);
-            // 
             // label5
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -673,16 +662,89 @@
             this.cbDipartimento.TabIndex = 58;
             this.cbDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDipartimento_KeyDown);
             // 
+            // btCattedreUtente
+            // 
+            this.btCattedreUtente.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btCattedreUtente.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btCattedreUtente.Location = new System.Drawing.Point(1236, 308);
+            this.btCattedreUtente.Name = "btCattedreUtente";
+            this.btCattedreUtente.OverrideDefault.Back.Color1 = System.Drawing.Color.Purple;
+            this.btCattedreUtente.OverrideDefault.Back.Color2 = System.Drawing.Color.BlueViolet;
+            this.btCattedreUtente.OverrideDefault.Back.ColorAngle = 45F;
+            this.btCattedreUtente.OverrideDefault.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
+            this.btCattedreUtente.OverrideDefault.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
+            this.btCattedreUtente.OverrideDefault.Border.ColorAngle = 45F;
+            this.btCattedreUtente.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btCattedreUtente.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btCattedreUtente.OverrideDefault.Border.Rounding = 20F;
+            this.btCattedreUtente.OverrideDefault.Border.Width = 1;
+            this.btCattedreUtente.Size = new System.Drawing.Size(106, 44);
+            this.btCattedreUtente.StateCommon.Back.Color1 = System.Drawing.Color.Purple;
+            this.btCattedreUtente.StateCommon.Back.Color2 = System.Drawing.Color.Fuchsia;
+            this.btCattedreUtente.StateCommon.Back.ColorAngle = 45F;
+            this.btCattedreUtente.StateCommon.Border.Color1 = System.Drawing.Color.MediumPurple;
+            this.btCattedreUtente.StateCommon.Border.Color2 = System.Drawing.Color.Plum;
+            this.btCattedreUtente.StateCommon.Border.ColorAngle = 45F;
+            this.btCattedreUtente.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btCattedreUtente.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btCattedreUtente.StateCommon.Border.Rounding = 20F;
+            this.btCattedreUtente.StateCommon.Border.Width = 1;
+            this.btCattedreUtente.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.btCattedreUtente.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.btCattedreUtente.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btCattedreUtente.StateDisabled.Back.Color1 = System.Drawing.Color.Plum;
+            this.btCattedreUtente.StateDisabled.Back.Color2 = System.Drawing.Color.Violet;
+            this.btCattedreUtente.StateDisabled.Border.Color1 = System.Drawing.Color.Silver;
+            this.btCattedreUtente.StateDisabled.Border.Color2 = System.Drawing.Color.DarkGray;
+            this.btCattedreUtente.StateNormal.Back.Color1 = System.Drawing.Color.DarkOrchid;
+            this.btCattedreUtente.StateNormal.Back.Color2 = System.Drawing.Color.Violet;
+            this.btCattedreUtente.StateNormal.Border.Color1 = System.Drawing.Color.Orchid;
+            this.btCattedreUtente.StateNormal.Border.Color2 = System.Drawing.Color.BlueViolet;
+            this.btCattedreUtente.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btCattedreUtente.StatePressed.Back.Color1 = System.Drawing.Color.Purple;
+            this.btCattedreUtente.StatePressed.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btCattedreUtente.StatePressed.Back.ColorAngle = 135F;
+            this.btCattedreUtente.StatePressed.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btCattedreUtente.StatePressed.Border.Color2 = System.Drawing.Color.Purple;
+            this.btCattedreUtente.StatePressed.Border.ColorAngle = 135F;
+            this.btCattedreUtente.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btCattedreUtente.StatePressed.Border.Rounding = 20F;
+            this.btCattedreUtente.StatePressed.Border.Width = 1;
+            this.btCattedreUtente.StateTracking.Back.Color1 = System.Drawing.Color.BlueViolet;
+            this.btCattedreUtente.StateTracking.Back.Color2 = System.Drawing.Color.Violet;
+            this.btCattedreUtente.StateTracking.Back.ColorAngle = 45F;
+            this.btCattedreUtente.StateTracking.Border.Color1 = System.Drawing.Color.MediumOrchid;
+            this.btCattedreUtente.StateTracking.Border.Color2 = System.Drawing.Color.Violet;
+            this.btCattedreUtente.StateTracking.Border.ColorAngle = 45F;
+            this.btCattedreUtente.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btCattedreUtente.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btCattedreUtente.StateTracking.Border.Rounding = 20F;
+            this.btCattedreUtente.StateTracking.Border.Width = 1;
+            this.btCattedreUtente.TabIndex = 59;
+            this.btCattedreUtente.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.btCattedreUtente.Values.Text = "Cattedre";
+            this.btCattedreUtente.Click += new System.EventHandler(this.btCattedreUtente_Click);
+            // 
             // FrmUtenti
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1360, 745);
+            this.Controls.Add(this.btCattedreUtente);
             this.Controls.Add(this.cbDipartimento);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.tbNumRecord);
-            this.Controls.Add(this.btCattedreUtente);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btCerca);
             this.Controls.Add(this.btModifica);
@@ -734,10 +796,10 @@
         private Krypton.Toolkit.KryptonButton btInserisci;
         private Krypton.Toolkit.KryptonButton btCerca;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btCattedreUtente;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbNumRecord;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbDipartimento;
+        private Krypton.Toolkit.KryptonButton btCattedreUtente;
     }
 }

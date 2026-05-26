@@ -344,6 +344,7 @@ namespace Cattedre
             // 
             this.pbFotoProfilo.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.pbFotoProfilo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pbFotoProfilo.Image = global::Cattedre.Properties.Resources.user;
             this.pbFotoProfilo.Location = new System.Drawing.Point(12, 14);
             this.pbFotoProfilo.Margin = new System.Windows.Forms.Padding(2);
             this.pbFotoProfilo.Name = "pbFotoProfilo";

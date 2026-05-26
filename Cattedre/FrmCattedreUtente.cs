@@ -32,9 +32,6 @@ namespace Cattedre
 
             lvCattedreUtente.Items.Clear();
 
-            long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utente.ID);
-            int oreEffettive = ClsAssegnareBL.CalcolaOreEffettiveDocente(_utente.ID, idDipartimento, idanno);
-
             int totaleOreSpeciali = 0;
 
             foreach (ClsAssegnareDL ass in _assegnazioni)
@@ -69,18 +66,6 @@ namespace Cattedre
 
                 lvCattedreUtente.Items.Add(lvi);
             }
-
-            // Riga finale totale
-            int totaleFinale = oreEffettive + totaleOreSpeciali;
-
-            ListViewItem totaleItem = new ListViewItem("");
-            totaleItem.SubItems.Add("");
-            totaleItem.SubItems.Add("");
-            totaleItem.SubItems.Add("");
-            totaleItem.SubItems.Add("Totale:");
-            totaleItem.SubItems.Add(totaleFinale.ToString());
-
-            lvCattedreUtente.Items.Add(totaleItem);
         }
 
         private void CaricaCB(out List<ClsAnnoScolasticoDL> anniscolastici)
@@ -116,6 +101,8 @@ namespace Cattedre
             if (utenteLoggato.TipoUtente != "C" && utenteLoggato.TipoUtente != "A")
                 btElimina.Visible = false;
 
+            lblDocente.Text = _utente.Cognome + " " + _utente.Nome;
+
             CaricaCB(out _anniscolastici);
 
             DateTime oggi = DateTime.Today;
@@ -135,11 +122,19 @@ namespace Cattedre
                     break;
                 }
             }
+
+            //long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utente.ID);
+            //string anno = cbAnniScolastici.SelectedItem.ToString();
+            //int oreEffettive = ClsAssegnareBL.CalcolaOreEffettiveDocente(_utente.ID, idDipartimento, ClsAnnoScolasticoBL.RilevaIDanno(anno));
+            //lblOreTot.Text = oreEffettive.ToString();
         }
 
         private void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
         {
+            long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utente.ID);
             string anno = cbAnniScolastici.SelectedItem.ToString();
+            int oreEffettive = ClsAssegnareBL.CalcolaOreEffettiveDocente(_utente.ID, idDipartimento, ClsAnnoScolasticoBL.RilevaIDanno(anno));
+            lblOreTot.Text = oreEffettive.ToString();
             CaricaListView(ClsAnnoScolasticoBL.RilevaIDanno(anno));
         }
 

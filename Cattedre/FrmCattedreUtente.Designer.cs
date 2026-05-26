@@ -38,6 +38,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cbAnniScolastici = new System.Windows.Forms.ComboBox();
             this.btElimina = new Krypton.Toolkit.KryptonButton();
+            this.lblDocente = new System.Windows.Forms.Label();
+            this.lblTotaleOre = new System.Windows.Forms.Label();
+            this.lblOreTot = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lvCattedreUtente
@@ -90,10 +93,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 29);
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(12, 29);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(105, 16);
+            this.label1.Size = new System.Drawing.Size(116, 16);
             this.label1.TabIndex = 2;
             this.label1.Text = "Anno Scolastico:";
             // 
@@ -102,7 +105,7 @@
             this.cbAnniScolastici.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAnniScolastici.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbAnniScolastici.FormattingEnabled = true;
-            this.cbAnniScolastici.Location = new System.Drawing.Point(120, 26);
+            this.cbAnniScolastici.Location = new System.Drawing.Point(131, 26);
             this.cbAnniScolastici.Name = "cbAnniScolastici";
             this.cbAnniScolastici.Size = new System.Drawing.Size(60, 25);
             this.cbAnniScolastici.TabIndex = 3;
@@ -112,7 +115,7 @@
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btElimina.Location = new System.Drawing.Point(429, 85);
+            this.btElimina.Location = new System.Drawing.Point(428, 85);
             this.btElimina.Name = "btElimina";
             this.btElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -177,15 +180,52 @@
             this.btElimina.Values.Text = "Elimina";
             this.btElimina.Click += new System.EventHandler(this.btElimina_Click);
             // 
+            // lblDocente
+            // 
+            this.lblDocente.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDocente.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDocente.Location = new System.Drawing.Point(227, 29);
+            this.lblDocente.Name = "lblDocente";
+            this.lblDocente.Size = new System.Drawing.Size(190, 23);
+            this.lblDocente.TabIndex = 42;
+            this.lblDocente.Text = "label2";
+            this.lblDocente.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblTotaleOre
+            // 
+            this.lblTotaleOre.AutoSize = true;
+            this.lblTotaleOre.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotaleOre.Location = new System.Drawing.Point(297, 332);
+            this.lblTotaleOre.Name = "lblTotaleOre";
+            this.lblTotaleOre.Size = new System.Drawing.Size(95, 20);
+            this.lblTotaleOre.TabIndex = 43;
+            this.lblTotaleOre.Text = "Totale ore:";
+            // 
+            // lblOreTot
+            // 
+            this.lblOreTot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblOreTot.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOreTot.Location = new System.Drawing.Point(387, 335);
+            this.lblOreTot.Name = "lblOreTot";
+            this.lblOreTot.Size = new System.Drawing.Size(30, 20);
+            this.lblOreTot.TabIndex = 44;
+            this.lblOreTot.Text = "00";
+            this.lblOreTot.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // FrmCattedreUtente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(550, 374);
+            this.ClientSize = new System.Drawing.Size(549, 361);
+            this.Controls.Add(this.lblOreTot);
+            this.Controls.Add(this.lblTotaleOre);
+            this.Controls.Add(this.lblDocente);
             this.Controls.Add(this.btElimina);
             this.Controls.Add(this.cbAnniScolastici);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lvCattedreUtente);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(565, 400);
             this.Name = "FrmCattedreUtente";
             this.Text = "Cattedre Utente";
             this.Load += new System.EventHandler(this.FrmCattedreUtente_Load);
@@ -206,5 +246,8 @@
         private System.Windows.Forms.ColumnHeader chOreTot;
         private System.Windows.Forms.ColumnHeader chID;
         private Krypton.Toolkit.KryptonButton btElimina;
+        private System.Windows.Forms.Label lblDocente;
+        private System.Windows.Forms.Label lblTotaleOre;
+        private System.Windows.Forms.Label lblOreTot;
     }
 }

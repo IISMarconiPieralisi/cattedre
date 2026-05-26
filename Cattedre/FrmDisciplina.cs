@@ -234,17 +234,22 @@ namespace Cattedre
         #region gestisci Disciplina successiva
         private void CambiaAnnoDisciplinaSuccessivaPotenziale()
         {
-            if (anno < 5 && anno >0)
+            if (anno>=1 && anno<=4)
             {
                 lblAnnoSuc.Visible = true;
                 lblAnnoSuc.Text = (anno + 1).ToString() + "°";
+            }
+            else if(anno==5)
+            {
+                lblAnnoSuc.Visible = true;
+                lblAnnoSuc.Text = ("3°");
             }
             else
                 lblAnnoSuc.Visible = false;
         }
         private void ControlloCbDisciplinaSuccessiva()
         {
-            if (_gestires.Count != 0 &&_richiederes.Count!=0 && anno < 5 && anno != 0)
+            if (_gestires.Count != 0 && _richiederes.Count != 0 && anno != 0)
             {
                 cbDisciplinaSucessiva.Enabled = true;
                 popolaCbDisciplinaSuccessiva();
@@ -258,46 +263,44 @@ namespace Cattedre
         }
         private void popolaCbDisciplinaSuccessiva()
         {
-                // Se non ci sono dipartimenti selezionati, non ha senso cercare discipline successive
-                if (_gestires.Count == 0|| _richiederes.Count == 0 || anno >= 5 || anno == 0)
-                {
-                    cbDisciplinaSucessiva.DataSource = null;
-                    cbDisciplinaSucessiva.Enabled = false;
-                    return;
-                }
+            if (_gestires.Count == 0 || _richiederes.Count == 0 || anno == 0)
+            {
+                cbDisciplinaSucessiva.DataSource = null;
+                cbDisciplinaSucessiva.Enabled = false;
+                return;
+            }
+            else
+                cbDisciplinaSucessiva.Enabled = true;
 
-                // 1. Prendiamo le discipline dell'anno successivo che non sono già occupate
-                var potenzialiSuccessive = _discipline.Where(p =>
-                    p.Anno == anno + 1 &&
+            int annoSuccessivo = anno >= 5 ? 3 : anno + 1;
+
+            var potenzialiSuccessive = _discipline.Where(p =>
+                    p.Anno == annoSuccessivo &&
                     !_discipline.Any(d => d.IDdisciplinaSuccessiva == p.ID && d.ID != _disciplina.ID)
                 ).ToList();
-
-                List<ClsDisciplinaDL> ListaDisciplineFiltrate = new List<ClsDisciplinaDL>();
-
-                // 2. Per ogni disciplina potenziale, controlliamo se appartiene a uno dei nostri dipartimenti
-                foreach (var disc in potenzialiSuccessive)
+            List<ClsDisciplinaDL> ListaDisciplineFiltrate = new List<ClsDisciplinaDL>();
+            // 2. Per ogni disciplina potenziale, controlliamo se appartiene a uno dei nostri dipartimenti
+            foreach (var disc in potenzialiSuccessive)
+            {
+                // Chiediamo alla BL quali dipartimenti gestiscono questa specifica disciplina 'disc'
+                List<ClsGestireDL> gestioniDisc = ClsGestireBL.CaricaGestioneDisciplina(disc.ID);
+                // Se esiste un'intersezione tra i dipartimenti di 'disc' e i dipartimenti in '_gestires' 
+                if (gestioniDisc.Any(gd => _gestires.Any(g => g.IDdipartimento == gd.IDdipartimento)) &&
+                    gestioniDisc.Any(r => _richiederes.Any(ric => ric.IDclassediconcorso == ric.IDclassediconcorso)))
                 {
-                    // Chiediamo alla BL quali dipartimenti gestiscono questa specifica disciplina 'disc'
-                    List<ClsGestireDL> gestioniDisc = ClsGestireBL.CaricaGestioneDisciplina(disc.ID);
-
-                    // Se esiste un'intersezione tra i dipartimenti di 'disc' e i dipartimenti in '_gestires' 
-                    if (gestioniDisc.Any(gd => _gestires.Any(g => g.IDdipartimento == gd.IDdipartimento)) &&
-                        gestioniDisc.Any(r=>_richiederes.Any(ric=>ric.IDclassediconcorso== ric.IDclassediconcorso)))
-                    {
-                        ListaDisciplineFiltrate.Add(disc);
-                    }
+                    ListaDisciplineFiltrate.Add(disc);
                 }
+            }
+            // 3. Popolamento della ComboBox
+            cbDisciplinaSucessiva.DataSource = null;
+            cbDisciplinaSucessiva.DataSource = ListaDisciplineFiltrate;
+            cbDisciplinaSucessiva.DisplayMember = "Nome";
+            cbDisciplinaSucessiva.ValueMember = "ID";
 
-                // 3. Popolamento della ComboBox
-                cbDisciplinaSucessiva.DataSource = null;
-                cbDisciplinaSucessiva.DataSource = ListaDisciplineFiltrate;
-                cbDisciplinaSucessiva.DisplayMember = "Nome";
-                cbDisciplinaSucessiva.ValueMember = "ID";
-            
         }
         /// <summary>
-        /// metodo che aggiunge un evento a ogni RadioBotom presente nel codice, in modo tale da prendere l'anno di quel oggetto
-        /// </summary>
+                 /// metodo che aggiunge un evento a ogni RadioBotom presente nel codice, in modo tale da prendere l'anno di quel oggetto
+                 /// </summary>
         private void controlloRadioBottom()
         {
             // Cicla solo i controlli dentro il tuo pannello specifico
@@ -320,16 +323,16 @@ namespace Cattedre
         }
         private void RiempiCbDisciplinaSuccessiva(int _anno, long _IDdiscSuccessiva)
         {
-            if (_anno < 5 && _anno > 0)
+            if (_anno <= 5 && _anno > 0)
             {
                 this.anno = _anno;
 
                 if (_disciplina != null && _disciplina.ID > 0 && (_gestires == null || _gestires.Count == 0))
                     _gestires = ClsGestireBL.CaricaGestioneDisciplina(_disciplina.ID);
 
-                // Carica i richiederes dal DB se non sono già in memoria
                 if (_disciplina != null && _disciplina.ID > 0 && (_richiederes == null || _richiederes.Count == 0))
                     _richiederes = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(_disciplina.ID);
+
                 popolaCbDisciplinaSuccessiva();
 
                 if (_IDdiscSuccessiva > 0)
@@ -337,7 +340,7 @@ namespace Cattedre
                 else
                     cbDisciplinaSucessiva.SelectedIndex = -1;
 
-                cbDisciplinaSucessiva.Enabled = (cbDisciplinaSucessiva.Items.Count > 0);
+                // non sovrascrivere Enabled: è già gestito da popolaCbDisciplinaSuccessiva
             }
             else
             {

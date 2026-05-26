@@ -93,33 +93,33 @@ namespace Cattedre
             return null;
         }
 
-        public static long TrovaIndirizzoClasse(long IDclasse)
-        {
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-                {
-                    conn.Open();
-                    string sql = "SELECT IDindirizzo FROM classi WHERE ID = @IDclasse LIMIT 1";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
-                        DataTable dt = new DataTable();
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                        if (dt.Rows.Count > 0)
-                            return Convert.ToInt64(dt.Rows[0]["IDindirizzo"]);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Errore durante la ricerca dell'indirizzo della classe: " + ex.Message);
-            }
-            return 0;
-        }
+        //public static long TrovaIndirizzoClasse(long IDclasse)
+        //{
+        //    try
+        //    {
+        //        using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+        //        {
+        //            conn.Open();
+        //            string sql = "SELECT IDindirizzo FROM classi WHERE ID = @IDclasse LIMIT 1";
+        //            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+        //            {
+        //                cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+        //                DataTable dt = new DataTable();
+        //                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+        //                {
+        //                    da.Fill(dt);
+        //                }
+        //                if (dt.Rows.Count > 0)
+        //                    return Convert.ToInt64(dt.Rows[0]["IDindirizzo"]);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Errore durante la ricerca dell'indirizzo della classe: " + ex.Message);
+        //    }
+        //    return 0;
+        //}
 
         public static string RilevaSiglaClasse(long id)
         {

@@ -57,19 +57,15 @@ namespace Cattedre
 
                     ClsClasseDL classe = ClsClasseBL.CaricaClasse(idClasse);
 
-                    int annoClasse = classe.Anno;
-                    if (annoClasse >= 5) annoClasse = 3;
-                    else if (annoClasse == 2) annoClasse = 1;
-                    else annoClasse++;
+                    ClsDisciplinaDL nuovaDisciplina = ClsDisciplinaBL.TrovaDisciplinaSuccessiva(idDisciplina);
+                    if (nuovaDisciplina == null)
+                        continue;
+
+                    int annoClasse = nuovaDisciplina.Anno;
 
                     ClsClasseDL nuovaClasse = ClsClasseBL.TrovaClasse(classe.Sezione, annoClasse, classe.Idindirizzo, IDannoSuccessivo);
 
                     if (nuovaClasse == null)
-                        continue;
-
-                    ClsDisciplinaDL nuovaDisciplina = ClsDisciplinaBL.TrovaDisciplinaSuccessiva(idDisciplina);
-
-                    if (nuovaDisciplina == null)
                         continue;
 
                     if (EsisteAssegnazione(nuovaClasse.ID, IDannoSuccessivo, nuovaDisciplina.ID))
@@ -165,7 +161,7 @@ namespace Cattedre
 
         public static void InserisciAssegnazione(long IDclasse,long IDannoscolastico, long IDdisciplina,long IDutente,
             int oreSpeciali,DateTime dal,DateTime al)
-        {
+            {
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))

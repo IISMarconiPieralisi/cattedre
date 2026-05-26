@@ -477,15 +477,12 @@ namespace Cattedre
                         continue;
 
                     // ricavo indirizzo della classe
-                    long IDindirizzoClasse = ClsClasseBL.TrovaIndirizzoClasse(classe.ID);
+                    long IDindirizzoClasse = ClsClasseBL.CaricaClasse(classe.ID).Idindirizzo;
 
                     // controllo appartenenza tra disciplina e indirizzo
-                    bool appartiene = ClsAppartenereBL
-                        .caricaIndirizziDisciplina(disciplina.ID)
-                        .Any(i => i.ID == IDindirizzoClasse);
 
                     // se non appartiene non creo la UC
-                    if (!appartiene)
+                    if (!ClsAppartenereBL.caricaIndirizziDisciplina(disciplina.ID).Any(i => i.ID == IDindirizzoClasse))
                         continue;
 
                     UcAssegnazioni uc = new UcAssegnazioni();
@@ -598,7 +595,7 @@ namespace Cattedre
                         uc.label2.Visible = false;
                         uc.label4.Visible = false;
                         uc.lblOreLaboratorio.Visible = false;
-                        uc.cbDocentiItip.SelectedIndex = 0;
+                       // uc.cbDocentiItip.SelectedIndex = 0;
                     }
                     else
                     {
@@ -606,6 +603,8 @@ namespace Cattedre
                     }
 
                     // docente già assegnato (in memoria)
+                    if (classe.ID == 132)
+                        classe.ID = classe.ID;
                     DataTable assegnazioniDirette = ClsAssegnareBL.CaricaAssegnazioniClasseDisciplina(classe.ID, disciplina.ID, IDannoscolastico);
 
                     if (assegnazioniDirette.Rows.Count > 0)
@@ -613,32 +612,13 @@ namespace Cattedre
                         foreach (DataRow assegnazione in assegnazioniDirette.Rows)
                         {
                             long idDoc = Convert.ToInt64(assegnazione["IDutente"]);
-                            string tipoString = assegnazione["tipoDocente"]?.ToString();
-                            char tipo = string.IsNullOrEmpty(tipoString) ? ' ' : tipoString[0];
+                            char tipo = assegnazione["tipoDocente"]?.ToString().FirstOrDefault() ?? ' ';
 
                             if (tipo == 'T')
-                            {
-                                // Cerca manualmente per ID invece di usare SelectedValue
-                                for (int i = 0; i < uc.cbDocentiTeorici.Items.Count; i++)
-                                {
-                                    if (uc.cbDocentiTeorici.Items[i] is ClsUtenteDL u && u.ID == idDoc)
-                                    {
-                                        uc.cbDocentiTeorici.SelectedIndex = i;
-                                        break;
-                                    }
-                                }
-                            }
+                                uc.cbDocentiTeorici.SelectedValue = idDoc;
                             else if (tipo == 'L')
-                            {
-                                for (int i = 0; i < uc.cbDocentiItip.Items.Count; i++)
-                                {
-                                    if (uc.cbDocentiItip.Items[i] is ClsUtenteDL u && u.ID == idDoc)
-                                    {
-                                        uc.cbDocentiItip.SelectedIndex = i;
-                                        break;
-                                    }
-                                }
-                            }
+                                uc.cbDocentiItip.SelectedValue = idDoc;
+                            
                         }
                     }
                     else

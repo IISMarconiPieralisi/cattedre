@@ -67,7 +67,10 @@ namespace Cattedre
                 cbAnniScolastici.SelectedValue = IDannoscolastico;
 
             if (ClsUtenteDL.UtenteAdmin(UtenteLoggato))
+            {
                 btClasseSuccessiva.Visible = true;
+                btClasseSuccessiva.Enabled = true;
+            }
 
             CaricaListView();
         }

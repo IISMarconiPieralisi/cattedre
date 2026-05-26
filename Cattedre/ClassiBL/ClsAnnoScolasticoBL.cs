@@ -51,10 +51,14 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT * FROM anniscolastici 
-                           WHERE YEAR(datainizio) - (SELECT YEAR(datainizio) FROM anniscolastici WHERE ID = @IDanno) = 1
-                           AND YEAR(datafine) - (SELECT YEAR(datafine) FROM anniscolastici WHERE ID = @IDanno) = 1
-                           LIMIT 1";
+                    string sql = @"SELECT * FROM anniscolastici
+                                WHERE YEAR(datainizio) = (
+                                SELECT YEAR(datainizio) FROM anniscolastici WHERE ID = @IDanno
+                                ) +1
+                                AND YEAR(datafine) = (
+                                SELECT YEAR(datafine) FROM anniscolastici WHERE ID = @IDanno
+                                ) +1
+                                LIMIT 1";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {

@@ -234,18 +234,18 @@ namespace Cattedre
         #region gestisci Disciplina successiva
         private void CambiaAnnoDisciplinaSuccessivaPotenziale()
         {
-            if (anno>=1 && anno<=4)
+            cbAnnoSuccessivo.Items.Remove(anno.ToString() + "°");   
+            if (anno >= 1 && anno <= 4)
             {
-                lblAnnoSuc.Visible = true;
-                lblAnnoSuc.Text = (anno + 1).ToString() + "°";
+                cbAnnoSuccessivo.Enabled = true;
+                cbAnnoSuccessivo.SelectedItem = (anno + 1).ToString() + "°";
             }
-            else if(anno==5)
-            {
-                lblAnnoSuc.Visible = true;
-                lblAnnoSuc.Text = ("3°");
-            }
+            else if (anno == 5)
+                cbAnnoSuccessivo.Enabled = true;
             else
-                lblAnnoSuc.Visible = false;
+            {
+                cbAnnoSuccessivo.Enabled = false;
+            }
         }
         private void ControlloCbDisciplinaSuccessiva()
         {
@@ -263,7 +263,7 @@ namespace Cattedre
         }
         private void popolaCbDisciplinaSuccessiva()
         {
-            if (_gestires.Count == 0 || _richiederes.Count == 0 || anno == 0)
+            if (_gestires.Count == 0 || _richiederes.Count == 0 || anno == 0 || cbAnnoSuccessivo.SelectedIndex==-1)
             {
                 cbDisciplinaSucessiva.DataSource = null;
                 cbDisciplinaSucessiva.Enabled = false;
@@ -272,11 +272,10 @@ namespace Cattedre
             else
                 cbDisciplinaSucessiva.Enabled = true;
 
-            int annoSuccessivo = anno >= 5 ? 3 : anno + 1;
+            int annoSuccessivo = int.Parse(cbAnnoSuccessivo.SelectedItem.ToString().Replace("°", ""));
 
-            var potenzialiSuccessive = _discipline.Where(p =>
-                    p.Anno == annoSuccessivo &&
-                    !_discipline.Any(d => d.IDdisciplinaSuccessiva == p.ID && d.ID != _disciplina.ID)
+            var potenzialiSuccessive = _discipline.Where(p =>p.Anno == annoSuccessivo &&
+            !_discipline.Any(d => d.IDdisciplinaSuccessiva == p.ID && d.ID != _disciplina.ID)
                 ).ToList();
             List<ClsDisciplinaDL> ListaDisciplineFiltrate = new List<ClsDisciplinaDL>();
             // 2. Per ogni disciplina potenziale, controlliamo se appartiene a uno dei nostri dipartimenti
@@ -296,6 +295,7 @@ namespace Cattedre
             cbDisciplinaSucessiva.DataSource = ListaDisciplineFiltrate;
             cbDisciplinaSucessiva.DisplayMember = "Nome";
             cbDisciplinaSucessiva.ValueMember = "ID";
+            cbDisciplinaSucessiva.SelectedIndex = -1;
 
         }
         /// <summary>
@@ -313,7 +313,6 @@ namespace Cattedre
         }
         private void RadioButton_Pannello_Click(object sender, EventArgs e)
         {
-            // 'sender' è esattamente il RadioButton che l'utente ha cliccato
             RadioButton rb = (RadioButton)sender;
             if (rb.Checked)
             {
@@ -361,7 +360,13 @@ namespace Cattedre
 
             return ID;
         }
-
+        private void cbAnnoSuccessivo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbAnnoSuccessivo.SelectedIndex != -1)
+            {
+                popolaCbDisciplinaSuccessiva();
+            }
+        }
         #endregion
         #region gestione anno
         private void rb_CheckedChanged(object sender, EventArgs e)
@@ -556,7 +561,12 @@ namespace Cattedre
             {
                 e.SuppressKeyPress = true;
                 btSalva.Focus();
+            }else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                cbDisciplinaSucessiva.SelectedIndex = -1;
             }
+
         }
 
         private void clbIndirizzi_KeyDown(object sender, KeyEventArgs e)
@@ -635,6 +645,20 @@ namespace Cattedre
             if (e.KeyCode == Keys.Enter && tbDisciplinaSpeciale.Text.Length >= 2)
                 btSalva.Focus();
         }
+        private void cbAnnoSuccessivo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                cbDisciplinaSucessiva.Focus();
+            }
+            else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoSuccessivo.SelectedIndex = -1;
+                popolaCbDisciplinaSuccessiva();
+            }
+        }
         #endregion
         #region gestione DisciplinaSpeciale
         private void cbDisciplinaSpeciale_CheckedChanged(object sender, EventArgs e)
@@ -675,6 +699,8 @@ namespace Cattedre
             else
                 cbAnnoFine.Enabled = false;
         }
+
+
 
       
     }

@@ -338,7 +338,7 @@
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btModifica.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btModifica.Location = new System.Drawing.Point(1233, 204);
+            this.btModifica.Location = new System.Drawing.Point(1233, 220);
             this.btModifica.Name = "btModifica";
             this.btModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
@@ -407,7 +407,7 @@
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btElimina.Location = new System.Drawing.Point(1233, 255);
+            this.btElimina.Location = new System.Drawing.Point(1233, 273);
             this.btElimina.Name = "btElimina";
             this.btElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -476,7 +476,7 @@
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btInserisci.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btInserisci.Location = new System.Drawing.Point(1233, 152);
+            this.btInserisci.Location = new System.Drawing.Point(1233, 161);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btInserisci.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -490,7 +490,7 @@
             this.btInserisci.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btInserisci.OverrideDefault.Border.Rounding = 20F;
             this.btInserisci.OverrideDefault.Border.Width = 1;
-            this.btInserisci.Size = new System.Drawing.Size(109, 36);
+            this.btInserisci.Size = new System.Drawing.Size(109, 40);
             this.btInserisci.StateCommon.Back.Color1 = System.Drawing.Color.ForestGreen;
             this.btInserisci.StateCommon.Back.Color2 = System.Drawing.Color.YellowGreen;
             this.btInserisci.StateCommon.Back.ColorAngle = 45F;
@@ -666,7 +666,7 @@
             // 
             this.btCattedreUtente.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btCattedreUtente.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btCattedreUtente.Location = new System.Drawing.Point(1236, 308);
+            this.btCattedreUtente.Location = new System.Drawing.Point(1233, 331);
             this.btCattedreUtente.Name = "btCattedreUtente";
             this.btCattedreUtente.OverrideDefault.Back.Color1 = System.Drawing.Color.Purple;
             this.btCattedreUtente.OverrideDefault.Back.Color2 = System.Drawing.Color.BlueViolet;
@@ -680,7 +680,7 @@
             this.btCattedreUtente.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btCattedreUtente.OverrideDefault.Border.Rounding = 20F;
             this.btCattedreUtente.OverrideDefault.Border.Width = 1;
-            this.btCattedreUtente.Size = new System.Drawing.Size(106, 44);
+            this.btCattedreUtente.Size = new System.Drawing.Size(109, 39);
             this.btCattedreUtente.StateCommon.Back.Color1 = System.Drawing.Color.Purple;
             this.btCattedreUtente.StateCommon.Back.Color2 = System.Drawing.Color.Fuchsia;
             this.btCattedreUtente.StateCommon.Back.ColorAngle = 45F;

@@ -55,7 +55,6 @@ Applicazione desktop per la **gestione delle cattedre dei docenti** nelle istitu
 
 - **Sistema operativo:** Windows (10 o superiore)
 - **Runtime:** .NET Framework compatibile con Visual Studio 2017 (v15.x)
-- **Database:** SQLite (incluso, nessuna installazione separata necessaria)
 
 ### Installazione tramite Setup
 
@@ -78,10 +77,6 @@ start Cattedre.sln
 ```
 
 L'eseguibile compilato si troverà in `Cattedre/bin/Release/`.
-
-### Primo avvio
-
-All'avvio, l'applicazione crea automaticamente il database SQLite locale (`*.sqlite`) nella directory dell'eseguibile. Non è necessaria alcuna configurazione aggiuntiva.
 
 ---
 
@@ -112,8 +107,7 @@ Al momento non è disponibile una wiki esterna. Il codice sorgente è documentat
 
 ### Licenza
 
-Questo progetto è distribuito sotto licenza **Apache 2.0**.  
-Vedere il file [LICENSE](LICENSE) per i termini completi.
+Questo progetto è distribuito sotto licenza GNU GPL v3 (General Public License)
 
 ```
 Copyright [anno] - Progetto Cattedre
@@ -128,11 +122,6 @@ You may obtain a copy of the License at
 ### Contributi
 
 Questo è un progetto personale e **non accetta contributi esterni**. Il repository è mantenuto privatamente dall'autore.
-
-### Ringraziamenti
-
-- [SQLite](https://www.sqlite.org/) — motore di database embedded
-- [Microsoft .NET / WinForms](https://learn.microsoft.com/en-us/dotnet/desktop/winforms/) — framework applicativo
 
 ---
 
@@ -247,17 +236,22 @@ Permette di definire una classe specificando: sigla (es. 3AI), numero d'anno (1�
 **Elenco Discipline (FrmDiscipline)**
 Accessibile da Amministratore e Coordinatore.
 Mostra le discipline con nome, ore di teoria, ore di laboratorio, anno scolastico e indirizzo di appartenenza. Supporta filtri per anno e indirizzo. Operazioni standard: Inserisci, Modifica, Elimina.
+Se la disciplina da inserire è potenziamento, inserire la disciplina per ogni classe di concorso associata, in modo da poter essere gestita correttamente dentro FrmCattedre. (esempio: Potenziamento A041, Potenziamento B016). E' possibile averne anche più di uno di potenziamento dentro ad un dipartimento.
 
 **Dettaglio Disciplina (FrmDisciplina)**
 Form per creare o modificare una disciplina. 
-I campi principali sono:
+I campi sono:
 - Nome della disciplina.
-- Ore di Teoria e Ore di Laboratorio per ciascun anno scolastico.
+- Checkbox opzione per disciplina speciale (esempio: spuntarla se la disciplina è potenziamento)
+- Ore di Teoria e Ore di Laboratorio per ciascun anno scolastico. (se la disciplina è potenziamento, inserire le ore o su teoria o su laboratorio in base alla classe di concorso di appartenza -> esempio: Potenziamento A041(CDC teoria) - ore teoria, Potenziamento B016(CDC laboratorio) - ore laboratorio).
+- Anno di inizio disciplina (se non presente, selezionare il primo anno suggerito dalla combobox).
+- Anno di fine disciplina (opzionale, in caso di cambi nella gestione delle discipline).
+- Anno della disciplina (esempio: Informatica del 3° anno).
 - Indirizzo di appartenenza (uno o più, tramite lista di selezione).
-- Classi di Concorso associate (teoriche e pratiche), che determinano quali docenti potranno essere assegnati.
-- Ore di Potenziamento configurabili per CDC.
-
-La form valida che la somma delle ore sia coerente con il monte ore previsto.
+- Dipartimento da cui può essere gestita (uno o più, tramite lista di selezione; la disciplina comparirà in FrmCattedre nel/nei dipartimento/i selezionato/i).
+- Classi di Concorso associate (teoriche e pratiche), che determinano quali docenti potranno essere assegnati (uno o più, tramite lista di selezione).
+- Disciplina successiva: inserire quale sarà l'anno e la disciplina successiva, fondamentale per il corretto funzionamento della generazione delle cattedre per l'anno scolastico successivo
+- Disciplina speciale: opzionale (esempio: se la disciplina è potenziamento, allora qui scrivere potenziamento).
 
 
 

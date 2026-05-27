@@ -68,7 +68,10 @@ namespace Cattedre
                     if (nuovaClasse == null)
                         continue;
 
-                    if (EsisteAssegnazione(nuovaClasse.ID, IDannoSuccessivo, nuovaDisciplina.ID))
+
+                    char tipoDocente = r["tipoDocente"]?.ToString().FirstOrDefault() ?? ' ';
+
+                    if (EsisteAssegnazione(nuovaClasse.ID, IDannoSuccessivo, nuovaDisciplina.ID, tipoDocente))
                         continue;
 
                     long idDoc = Convert.ToInt64(r["IDutente"]);
@@ -379,7 +382,7 @@ AND IDutente IN (
         }
         #endregion
         #region GestioneAssegnazioni
-        public static bool EsisteAssegnazione(long IDclasse, long IDanno, long IDdisciplina)
+        public static bool EsisteAssegnazione(long IDclasse, long IDanno, long IDdisciplina, char tipoDocente)
         {
             try
             { 
@@ -389,13 +392,16 @@ AND IDutente IN (
 
                     string sql = @"SELECT COUNT(*)
                            FROM assegnare
+                           JOIN utenti u ON u.ID = assegnare.IDutente
                            WHERE IDclasse = @IDclasse
+                           AND u.tipoDocente = @tipoDocente
                            AND IDannoscolastico = @IDanno
                            AND IDdisciplina = @IDdisciplina";
 
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
 
                     cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                    cmd.Parameters.AddWithValue("@tipoDocente", tipoDocente);
                     cmd.Parameters.AddWithValue("@IDanno", IDanno);
                     cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
 

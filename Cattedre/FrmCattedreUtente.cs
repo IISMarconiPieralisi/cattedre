@@ -46,21 +46,27 @@ namespace Cattedre
                 if (_utente.TipoDocente == 'L')
                 {
                     int ore = ClsDisciplinaBL.RilevaOreDocentePratico(
-                        ass.IDUtente,
-                        ass.IDDisciplina,
-                        ass.IDClasse);
-
-                    lvi.SubItems.Add(ore.ToString());
+                        ass.IDDisciplina);
+                    if (lvi.SubItems[2].Text.Contains("Potenziamento"))
+                    {
+                        lvi.SubItems.Add("-");
+                        ore = 0;
+                    }
+                    else
+                        lvi.SubItems.Add(ore.ToString());
                     lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
                 }
                 else if (_utente.TipoDocente == 'T')
                 {
                     int ore = ClsDisciplinaBL.RilevaOreDocenteTeorico(
-                        ass.IDUtente,
-                        ass.IDDisciplina,
-                        ass.IDClasse);
-
-                    lvi.SubItems.Add(ore.ToString());
+                        ass.IDDisciplina);
+                    if (lvi.SubItems[2].Text.Contains("Potenziamento"))
+                    {
+                        lvi.SubItems.Add("-");
+                        ore = 0;
+                    }
+                    else
+                        lvi.SubItems.Add(ore.ToString());
                     lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
                 }
 
@@ -134,7 +140,8 @@ namespace Cattedre
             long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utente.ID);
             string anno = cbAnniScolastici.SelectedItem.ToString();
             int oreEffettive = ClsAssegnareBL.CalcolaOreEffettiveDocente(_utente.ID, idDipartimento, ClsAnnoScolasticoBL.RilevaIDanno(anno));
-            lblOreTot.Text = oreEffettive.ToString();
+            int oreSpeciali = ClsAssegnareBL.RilevaOrePotDocente(_utente.ID, ClsAnnoScolasticoBL.RilevaIDanno(anno));
+            lblOreTot.Text = (oreEffettive + oreSpeciali).ToString();
             CaricaListView(ClsAnnoScolasticoBL.RilevaIDanno(anno));
         }
 

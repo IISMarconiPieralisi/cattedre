@@ -419,7 +419,7 @@ namespace Cattedre
             return 0;
         }
 
-        public static int RilevaOreDocentePratico(long IDdocente, long IDdisciplina, long IDclasse)
+        public static int RilevaOreDocentePratico(long IDdisciplina)
         {
             using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
@@ -427,13 +427,11 @@ namespace Cattedre
 
                 string sql = @"SELECT oreLaboratorio 
                        FROM discipline
-                       JOIN assegnare ON discipline.ID = assegnare.IDdisciplina";
+                       JOIN assegnare ON discipline.ID = @IDdisciplina";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@IDdocente", IDdocente);
                     cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
-                    cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
                     object result = cmd.ExecuteScalar();
                     if (result != null && result != DBNull.Value)
                         return Convert.ToInt32(result);
@@ -442,7 +440,7 @@ namespace Cattedre
             return 0;
         }
 
-        public static int RilevaOreDocenteTeorico(long IDdocente, long IDdisciplina, long IDclasse)
+        public static int RilevaOreDocenteTeorico(long IDdisciplina)
         {
             using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
@@ -450,13 +448,11 @@ namespace Cattedre
 
                 string sql = @"SELECT oreTeoria 
                        FROM discipline
-                       JOIN assegnare ON discipline.ID = assegnare.IDdisciplina";
+                       JOIN assegnare ON discipline.ID = @IDdisciplina";
 
                 using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@IDdocente", IDdocente);
                     cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
-                    cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
                     DataTable dt = new DataTable();
                     object result = cmd.ExecuteScalar();
                     if (result != null && result != DBNull.Value)

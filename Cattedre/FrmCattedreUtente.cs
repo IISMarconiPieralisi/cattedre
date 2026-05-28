@@ -47,15 +47,11 @@ namespace Cattedre
                 if (!lvi.SubItems[2].Text.Contains("Potenziamento"))
                 {
                     if (_utente.TipoDocente == 'L')
-                    {
                         ore = ClsDisciplinaBL.RilevaOreDocentePratico(ass.IDDisciplina);
-                        lvi.SubItems.Add(ore.ToString());
-                    }
                     else if (_utente.TipoDocente == 'T')
-                    {
                         ore = ClsDisciplinaBL.RilevaOreDocenteTeorico(ass.IDDisciplina);
-                        lvi.SubItems.Add(ore.ToString());
-                    }
+
+                    lvi.SubItems.Add(ore.ToString());
                 }
                 else
                 {

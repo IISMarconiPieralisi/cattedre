@@ -319,6 +319,15 @@ namespace Cattedre
                 tbNomeUtente.Text = "stefano.bartoloni@iismarconipieralisi.it";
                 tbPassword.Text = "Bartoloni";
             }
+            else
+            {
+                rbTest1.Checked = false;
+                rbTest2.Checked = false;
+                tbNomeUtente.Clear();
+                tbPassword.Clear();
+                tbNomeUtente.Text = "marcello.pigini@iismarconipieralisi.it";
+                tbPassword.Text = "Pigini";
+            }
         }
 
       

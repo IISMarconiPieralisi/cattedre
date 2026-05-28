@@ -41,6 +41,7 @@ namespace Cattedre
             this.rbTest2 = new System.Windows.Forms.RadioButton();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.rbTest3 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.panel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -410,11 +411,12 @@ namespace Cattedre
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.rbTest3);
             this.panel3.Controls.Add(this.rbTest1);
             this.panel3.Controls.Add(this.rbTest2);
-            this.panel3.Location = new System.Drawing.Point(246, 283);
+            this.panel3.Location = new System.Drawing.Point(245, 272);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(120, 49);
+            this.panel3.Size = new System.Drawing.Size(120, 71);
             this.panel3.TabIndex = 28;
             // 
             // panel4
@@ -425,6 +427,17 @@ namespace Cattedre
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(95, 49);
             this.panel4.TabIndex = 29;
+            // 
+            // rbTest3
+            // 
+            this.rbTest3.AutoSize = true;
+            this.rbTest3.Location = new System.Drawing.Point(3, 49);
+            this.rbTest3.Name = "rbTest3";
+            this.rbTest3.Size = new System.Drawing.Size(93, 17);
+            this.rbTest3.TabIndex = 28;
+            this.rbTest3.TabStop = true;
+            this.rbTest3.Text = "Marcello Pigini";
+            this.rbTest3.UseVisualStyleBackColor = true;
             // 
             // FrmLogin
             // 
@@ -491,5 +504,6 @@ namespace Cattedre
         private System.Windows.Forms.RadioButton rbTest2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.RadioButton rbTest3;
     }
 }

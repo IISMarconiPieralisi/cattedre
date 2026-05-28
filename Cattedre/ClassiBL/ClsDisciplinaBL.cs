@@ -644,7 +644,6 @@ namespace Cattedre
         }
         public static void ModificaDisciplina(ClsDisciplinaDL disciplina)
         {
-            FrmDisciplina frmDisciplina = new FrmDisciplina();
             MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try

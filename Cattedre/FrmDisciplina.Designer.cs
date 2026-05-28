@@ -49,10 +49,10 @@ namespace Cattedre
             this.btAnnulla = new Krypton.Toolkit.KryptonButton();
             this.btSalva = new Krypton.Toolkit.KryptonButton();
             this.tbNome = new Krypton.Toolkit.KryptonTextBox();
-            this.tbDisciplinaSpeciale = new Krypton.Toolkit.KryptonTextBox();
-            this.cbDisciplinaSpeciale = new Krypton.Toolkit.KryptonCheckBox();
+            this.chbDisciplinaSpeciale = new Krypton.Toolkit.KryptonCheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.pnDisciplina = new System.Windows.Forms.Panel();
+            this.cbDisciplinaSpeciale = new System.Windows.Forms.ComboBox();
             this.cbAnnoSuccessivo = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -247,7 +247,7 @@ namespace Cattedre
             this.cbDisciplinaSucessiva.Margin = new System.Windows.Forms.Padding(4);
             this.cbDisciplinaSucessiva.Name = "cbDisciplinaSucessiva";
             this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(241, 25);
-            this.cbDisciplinaSucessiva.TabIndex = 11;
+            this.cbDisciplinaSucessiva.TabIndex = 12;
             this.cbDisciplinaSucessiva.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDisciplinaSucessiva_KeyDown);
             // 
             // label5
@@ -266,17 +266,17 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.btAnnulla);
             this.panel1.Controls.Add(this.btSalva);
-            this.panel1.Location = new System.Drawing.Point(35, 765);
+            this.panel1.Location = new System.Drawing.Point(15, 765);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(514, 52);
-            this.panel1.TabIndex = 13;
+            this.panel1.Size = new System.Drawing.Size(534, 52);
+            this.panel1.TabIndex = 14;
             // 
             // btAnnulla
             // 
             this.btAnnulla.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btAnnulla.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btAnnulla.Location = new System.Drawing.Point(-2, 11);
+            this.btAnnulla.Location = new System.Drawing.Point(8, 11);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btAnnulla.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -345,7 +345,7 @@ namespace Cattedre
             // 
             this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btSalva.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btSalva.Location = new System.Drawing.Point(344, 10);
+            this.btSalva.Location = new System.Drawing.Point(364, 10);
             this.btSalva.Name = "btSalva";
             this.btSalva.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btSalva.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -432,40 +432,14 @@ namespace Cattedre
             this.tbNome.TabIndex = 0;
             this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
-            // tbDisciplinaSpeciale
+            // chbDisciplinaSpeciale
             // 
-            this.tbDisciplinaSpeciale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDisciplinaSpeciale.Enabled = false;
-            this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 719);
-            this.tbDisciplinaSpeciale.Name = "tbDisciplinaSpeciale";
-            this.tbDisciplinaSpeciale.Size = new System.Drawing.Size(289, 29);
-            this.tbDisciplinaSpeciale.StateCommon.Back.Color1 = System.Drawing.Color.White;
-            this.tbDisciplinaSpeciale.StateCommon.Border.Color1 = System.Drawing.Color.Black;
-            this.tbDisciplinaSpeciale.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.tbDisciplinaSpeciale.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.tbDisciplinaSpeciale.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.tbDisciplinaSpeciale.StateCommon.Border.Rounding = 20F;
-            this.tbDisciplinaSpeciale.StateCommon.Border.Width = 1;
-            this.tbDisciplinaSpeciale.StateCommon.Content.Color1 = System.Drawing.Color.Black;
-            this.tbDisciplinaSpeciale.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDisciplinaSpeciale.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbDisciplinaSpeciale.StateDisabled.Border.Color1 = System.Drawing.Color.LightGray;
-            this.tbDisciplinaSpeciale.StateDisabled.Border.Color2 = System.Drawing.Color.LightGray;
-            this.tbDisciplinaSpeciale.StateDisabled.Content.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.tbDisciplinaSpeciale.TabIndex = 12;
-            this.tbDisciplinaSpeciale.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbDisciplinaSpeciale_KeyDown);
-            // 
-            // cbDisciplinaSpeciale
-            // 
-            this.cbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 92);
-            this.cbDisciplinaSpeciale.Name = "cbDisciplinaSpeciale";
-            this.cbDisciplinaSpeciale.Size = new System.Drawing.Size(153, 25);
-            this.cbDisciplinaSpeciale.TabIndex = 1;
-            this.cbDisciplinaSpeciale.Values.Text = "Disciplina Speciale";
-            this.cbDisciplinaSpeciale.CheckedChanged += new System.EventHandler(this.cbDisciplinaSpeciale_CheckedChanged);
+            this.chbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 92);
+            this.chbDisciplinaSpeciale.Name = "chbDisciplinaSpeciale";
+            this.chbDisciplinaSpeciale.Size = new System.Drawing.Size(153, 25);
+            this.chbDisciplinaSpeciale.TabIndex = 1;
+            this.chbDisciplinaSpeciale.Values.Text = "Disciplina Speciale";
+            this.chbDisciplinaSpeciale.CheckedChanged += new System.EventHandler(this.chbDisciplinaSpeciale_CheckedChanged);
             // 
             // label10
             // 
@@ -479,6 +453,7 @@ namespace Cattedre
             // 
             // pnDisciplina
             // 
+            this.pnDisciplina.Controls.Add(this.cbDisciplinaSpeciale);
             this.pnDisciplina.Controls.Add(this.cbAnnoSuccessivo);
             this.pnDisciplina.Controls.Add(this.label14);
             this.pnDisciplina.Controls.Add(this.label13);
@@ -489,9 +464,8 @@ namespace Cattedre
             this.pnDisciplina.Controls.Add(this.label10);
             this.pnDisciplina.Controls.Add(this.panel1);
             this.pnDisciplina.Controls.Add(this.label1);
-            this.pnDisciplina.Controls.Add(this.cbDisciplinaSpeciale);
+            this.pnDisciplina.Controls.Add(this.chbDisciplinaSpeciale);
             this.pnDisciplina.Controls.Add(this.label2);
-            this.pnDisciplina.Controls.Add(this.tbDisciplinaSpeciale);
             this.pnDisciplina.Controls.Add(this.label3);
             this.pnDisciplina.Controls.Add(this.tbNome);
             this.pnDisciplina.Controls.Add(this.label4);
@@ -513,6 +487,18 @@ namespace Cattedre
             this.pnDisciplina.Size = new System.Drawing.Size(596, 833);
             this.pnDisciplina.TabIndex = 47;
             // 
+            // cbDisciplinaSpeciale
+            // 
+            this.cbDisciplinaSpeciale.FormattingEnabled = true;
+            this.cbDisciplinaSpeciale.Items.AddRange(new object[] {
+            "Potenziamento",
+            "Presidenza"});
+            this.cbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 717);
+            this.cbDisciplinaSpeciale.Name = "cbDisciplinaSpeciale";
+            this.cbDisciplinaSpeciale.Size = new System.Drawing.Size(289, 25);
+            this.cbDisciplinaSpeciale.TabIndex = 13;
+            this.cbDisciplinaSpeciale.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDisciplinaSpeciale_KeyDown);
+            // 
             // cbAnnoSuccessivo
             // 
             this.cbAnnoSuccessivo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -526,7 +512,7 @@ namespace Cattedre
             this.cbAnnoSuccessivo.Location = new System.Drawing.Point(205, 677);
             this.cbAnnoSuccessivo.Name = "cbAnnoSuccessivo";
             this.cbAnnoSuccessivo.Size = new System.Drawing.Size(41, 25);
-            this.cbAnnoSuccessivo.TabIndex = 55;
+            this.cbAnnoSuccessivo.TabIndex = 11;
             this.cbAnnoSuccessivo.SelectedIndexChanged += new System.EventHandler(this.cbAnnoSuccessivo_SelectedIndexChanged);
             this.cbAnnoSuccessivo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAnnoSuccessivo_KeyDown);
             // 
@@ -711,10 +697,9 @@ namespace Cattedre
         private System.Windows.Forms.BindingSource frmDisciplinaBindingSource;
         private System.Windows.Forms.Panel panel1;
         private Krypton.Toolkit.KryptonTextBox tbNome;
-        private Krypton.Toolkit.KryptonTextBox tbDisciplinaSpeciale;
         private Krypton.Toolkit.KryptonButton btAnnulla;
         private Krypton.Toolkit.KryptonButton btSalva;
-        private Krypton.Toolkit.KryptonCheckBox cbDisciplinaSpeciale;
+        private Krypton.Toolkit.KryptonCheckBox chbDisciplinaSpeciale;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Panel pnDisciplina;
         private System.Windows.Forms.ComboBox cbAnnoFine;
@@ -730,5 +715,6 @@ namespace Cattedre
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ComboBox cbAnnoSuccessivo;
+        private System.Windows.Forms.ComboBox cbDisciplinaSpeciale;
     }
 }

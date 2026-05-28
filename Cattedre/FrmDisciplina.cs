@@ -23,12 +23,15 @@ namespace Cattedre
         public List<ClsGestireDL> _gestires = new List<ClsGestireDL>();
         public ClsDisciplinaDL _disciplina;
         public ClsVigereDL _vigere= new ClsVigereDL();
+        //variabili private (da non passare) usate internamente
         private int anno = 0;
         private long _lastDiscSp=0;
         private long _lastTick;
-        public FrmDisciplina()
+        ClsUtenteDL _utenteLoggato;
+        public FrmDisciplina(ClsUtenteDL _utenteloggato)
         {
             InitializeComponent();
+            _utenteLoggato = _utenteloggato;
         }
         private void btSalva_Click(object sender, EventArgs e)
         {
@@ -36,9 +39,11 @@ namespace Cattedre
             {
                 if (_disciplina == null || _disciplina.ID <= 0)
                     _disciplina = new ClsDisciplinaDL();
+                if (!ClsUtenteDL.UtenteCRUD(_utenteLoggato))
+                    throw new Exception("Non hai i permessi necessari per creare una disciplina");
 
                 _disciplina.Anno = anno;
-                if (_disciplina.Anno == 0 && !cbDisciplinaSpeciale.Checked)
+                if (_disciplina.Anno == 0 && !chbDisciplinaSpeciale.Checked)
                     throw new Exception("inserire un anno valido");
                 if (_disciplina.ID > 0 && _gestires.Count == 0)
                     _gestires = ClsGestireBL.CaricaGestioneDisciplina(_disciplina.ID);
@@ -62,10 +67,10 @@ namespace Cattedre
 
                 _disciplina.OreLaboratorio = (int)nudOreLab.Value;
                 _disciplina.OreTeoria = (int)nudOreTeoria.Value;
-                if (cbDisciplinaSpeciale.Checked)
+                if (chbDisciplinaSpeciale.Checked)
                 {
-                    if (string.IsNullOrEmpty(tbDisciplinaSpeciale.Text)) throw new Exception("Inserire la descrizione della disciplina speciale");
-                    _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text.Trim().ToLower();
+                    if (string.IsNullOrEmpty(cbDisciplinaSpeciale.Text)) throw new Exception("Inserire la descrizione della disciplina speciale");
+                    _disciplina.DisciplinaSpeciale = cbDisciplinaSpeciale.Text.Trim().ToLower();
                 }
                 //gestione classe vigere 
                 _vigere.IDannoInizio = Convert.ToInt32(cbAnnoInizio.SelectedValue);
@@ -404,8 +409,8 @@ namespace Cattedre
                     break;
                 default:
                     {
-                        cbDisciplinaSpeciale.Checked=true;
-                        tbDisciplinaSpeciale.Text = _disciplina.DisciplinaSpeciale;
+                        chbDisciplinaSpeciale.Checked=true;
+                        cbDisciplinaSpeciale.Text = _disciplina.DisciplinaSpeciale;
                     }
                     break;
                
@@ -627,7 +632,7 @@ namespace Cattedre
                 {
                     // Passa al prossimo controllo
                     _lastTick = 0;
-                    if (cbDisciplinaSpeciale.Checked) tbDisciplinaSpeciale.Focus();
+                    if (chbDisciplinaSpeciale.Checked) cbDisciplinaSpeciale.Focus();
                     else cbDisciplinaSucessiva.Focus();
                 }
                 else
@@ -640,9 +645,9 @@ namespace Cattedre
             }
         }
 
-        private void tbDisciplinaSpeciale_KeyDown(object sender, KeyEventArgs e)
+        private void cbDisciplinaSpeciale_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && tbDisciplinaSpeciale.Text.Length >= 2)
+            if (e.KeyCode == Keys.Enter && cbDisciplinaSpeciale.Text.Length >= 2)
                 btSalva.Focus();
         }
         private void cbAnnoSuccessivo_KeyDown(object sender, KeyEventArgs e)
@@ -661,20 +666,20 @@ namespace Cattedre
         }
         #endregion
         #region gestione DisciplinaSpeciale
-        private void cbDisciplinaSpeciale_CheckedChanged(object sender, EventArgs e)
+        private void chbDisciplinaSpeciale_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbDisciplinaSpeciale.Checked)
+            if (chbDisciplinaSpeciale.Checked)
             {
                 pnRB.Enabled = false;
                 cbDisciplinaSucessiva.Enabled = false;
+                chbDisciplinaSpeciale.Enabled = true;
                 cbDisciplinaSpeciale.Enabled = true;
-                tbDisciplinaSpeciale.Enabled = true;
             }else
             {
                 pnRB.Enabled = true;
-                cbDisciplinaSpeciale.Enabled = true;
-                tbDisciplinaSpeciale.Enabled = false;
-                tbDisciplinaSpeciale.Text = string.Empty;
+                chbDisciplinaSpeciale.Enabled = true;
+                cbDisciplinaSpeciale.Enabled = false;
+                cbDisciplinaSpeciale.SelectedIndex = -1;
             }
 
         }
@@ -699,9 +704,5 @@ namespace Cattedre
             else
                 cbAnnoFine.Enabled = false;
         }
-
-
-
-      
     }
 }

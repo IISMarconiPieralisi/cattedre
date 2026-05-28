@@ -31,6 +31,7 @@ namespace Cattedre
             cbDipartimenti.DataSource = dipartimenti;
             cbDipartimenti.ValueMember = "ID";
             cbDipartimenti.DisplayMember = "Nome";
+            cbDipartimenti.SelectedIndex = -1;
             this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.cbDipartimenti_SelectedIndexChanged);
             CaricaListView();
 
@@ -69,7 +70,7 @@ namespace Cattedre
         {
             if (!ClsUtenteDL.UtenteCRUD(_utenteLoggato)) return;
 
-            FrmDisciplina frmDisciplina = new FrmDisciplina();
+            FrmDisciplina frmDisciplina = new FrmDisciplina(_utenteLoggato);
             DialogResult dr = frmDisciplina.ShowDialog();
 
             if (frmDisciplina._disciplina.Nome == string.Empty)
@@ -116,7 +117,7 @@ namespace Cattedre
             if (lvDiscipline.SelectedIndices.Count == 1)
             {
                 int indiceDaModificare = lvDiscipline.SelectedIndices[0];
-                FrmDisciplina frmDisciplina = new FrmDisciplina();
+                FrmDisciplina frmDisciplina = new FrmDisciplina(_utenteLoggato);
                 int idCercato = Convert.ToInt32(lvDiscipline.Items[indiceDaModificare].Tag);
                 frmDisciplina._disciplina = discipline.FirstOrDefault(d => d.ID == idCercato);
                 //carico una copia delle discipline appartenere attuale
@@ -205,7 +206,7 @@ namespace Cattedre
             }
             if (_utenteLoggato.TipoUtente == "C")
             {
-                iddipartimento = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
+                iddipartimento =ClsDipartimentoBL.UtenteCoordinaDipartimento(_utenteLoggato.ID).ID;
                 if (iddipartimento > 0)
                 {
                     cbDipartimenti.Enabled = false;

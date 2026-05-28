@@ -138,5 +138,19 @@ namespace Cattedre
                 btCerca_Click(null, null);
             }
         }
+
+        private void lvIndirizzi_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                brModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
+            }
+        }
     }
 }

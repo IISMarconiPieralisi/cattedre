@@ -107,19 +107,7 @@ namespace Cattedre
             this.Cursor = Cursors.WaitCursor;
             await Task.Run(() =>
             {
-                discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(IDannoscolastico, IDdipartimento, out indirizziTrovati);
-                classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
-
-                // Aggiungi le classi di altri indirizzi che fanno discipline di questo dipartimento
-                List<ClsClasseDL> classiEsterne = ClsClasseBL.CaricaClassiEsterneCheFannoDisciplineDipartimento(IDdipartimento, IDannoscolastico);
-                
-                foreach (var classe in classiEsterne)
-                {
-                    if (!classi.Any(c => c.ID == classe.ID))
-                        classi.Add(classe);
-                }
-
-                classi = classi.OrderBy(c => c.Sigla).ToList();
+                ClsClasseBL.CaricaClassiDisciplineDipartimento(IDannoscolastico,IDdipartimento, out discipline,out classi);
             });
 
             LoadDiscipline(IDdipartimento);

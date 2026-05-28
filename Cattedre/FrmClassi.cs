@@ -92,7 +92,7 @@ namespace Cattedre
         }
         private void btInserisci_Click(object sender, EventArgs e)
         {
-            if (ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
+            if (!ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
             try
             {
                 FrmClasse frmClasse = new FrmClasse();
@@ -145,7 +145,7 @@ namespace Cattedre
 
         private void btElimina_Click(object sender, EventArgs e)
         {
-            if (ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
+            if (!ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
             if (lvClassi.SelectedIndices.Count == 1)
             {
                 int indiceDaEliminare = lvClassi.SelectedIndices[0];

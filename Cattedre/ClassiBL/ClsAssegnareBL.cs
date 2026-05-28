@@ -46,6 +46,10 @@ namespace Cattedre
             { 
                 DataTable assegnazioni = CaricaDocentiConAssegnazioni(IDdipartimento, IDannoCorrente);
 
+                DataTable esterniAssegnati = CaricaDocentiEsterniAssegnati(IDdipartimento, IDannoCorrente);
+                foreach (DataRow row in esterniAssegnati.Rows)
+                    assegnazioni.ImportRow(row);
+
                 foreach (DataRow r in assegnazioni.Rows)
                 {
                     if (r["IDclasse"] == DBNull.Value || r["IDdisciplina"] == DBNull.Value)

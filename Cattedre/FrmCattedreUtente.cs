@@ -42,28 +42,24 @@ namespace Cattedre
                 lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(ass.IDClasse));
                 lvi.SubItems.Add(ClsDisciplinaBL.RilevaDisciplina(ass.IDDisciplina).Nome);
                 lvi.SubItems.Add(ass.OreSpeciali.ToString());
+                int ore = 0;
 
-                if (_utente.TipoDocente == 'L')
+                if (!lvi.SubItems[2].Text.Contains("Potenziamento"))
                 {
-                    int ore = ClsDisciplinaBL.RilevaOreDocentePratico(
-                        ass.IDUtente,
-                        ass.IDDisciplina,
-                        ass.IDClasse);
+                    if (_utente.TipoDocente == 'L')
+                        ore = ClsDisciplinaBL.RilevaOreDocentePratico(ass.IDDisciplina);
+                    else if (_utente.TipoDocente == 'T')
+                        ore = ClsDisciplinaBL.RilevaOreDocenteTeorico(ass.IDDisciplina);
 
                     lvi.SubItems.Add(ore.ToString());
-                    lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
                 }
-                else if (_utente.TipoDocente == 'T')
+                else
                 {
-                    int ore = ClsDisciplinaBL.RilevaOreDocenteTeorico(
-                        ass.IDUtente,
-                        ass.IDDisciplina,
-                        ass.IDClasse);
-
-                    lvi.SubItems.Add(ore.ToString());
-                    lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
+                    lvi.SubItems.Add("-");
+                    ore = 0;
                 }
-
+                
+                lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
                 lvCattedreUtente.Items.Add(lvi);
             }
         }
@@ -134,7 +130,8 @@ namespace Cattedre
             long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utente.ID);
             string anno = cbAnniScolastici.SelectedItem.ToString();
             int oreEffettive = ClsAssegnareBL.CalcolaOreEffettiveDocente(_utente.ID, idDipartimento, ClsAnnoScolasticoBL.RilevaIDanno(anno));
-            lblOreTot.Text = oreEffettive.ToString();
+            int oreSpeciali = ClsAssegnareBL.RilevaOrePotDocente(_utente.ID, ClsAnnoScolasticoBL.RilevaIDanno(anno));
+            lblOreTot.Text = (oreEffettive + oreSpeciali).ToString();
             CaricaListView(ClsAnnoScolasticoBL.RilevaIDanno(anno));
         }
 

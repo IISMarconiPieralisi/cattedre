@@ -368,6 +368,10 @@
             this.btModifica.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
             this.btModifica.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
             this.btModifica.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btModifica.StateDisabled.Back.Color1 = System.Drawing.Color.Khaki;
+            this.btModifica.StateDisabled.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btModifica.StateDisabled.Border.Color1 = System.Drawing.Color.White;
+            this.btModifica.StateDisabled.Border.Color2 = System.Drawing.Color.White;
             this.btModifica.StateNormal.Back.Color1 = System.Drawing.Color.Orange;
             this.btModifica.StateNormal.Back.Color2 = System.Drawing.Color.DarkGoldenrod;
             this.btModifica.StateNormal.Border.Color1 = System.Drawing.Color.Orange;
@@ -437,6 +441,10 @@
             this.btElimina.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
             this.btElimina.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
             this.btElimina.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btElimina.StateDisabled.Back.Color1 = System.Drawing.Color.LightCoral;
+            this.btElimina.StateDisabled.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btElimina.StateDisabled.Border.Color1 = System.Drawing.Color.White;
+            this.btElimina.StateDisabled.Border.Color2 = System.Drawing.Color.White;
             this.btElimina.StateNormal.Back.Color1 = System.Drawing.Color.Red;
             this.btElimina.StateNormal.Back.Color2 = System.Drawing.Color.DarkRed;
             this.btElimina.StateNormal.Border.Color1 = System.Drawing.Color.DarkRed;
@@ -506,6 +514,10 @@
             this.btInserisci.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
             this.btInserisci.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
             this.btInserisci.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btInserisci.StateDisabled.Back.Color1 = System.Drawing.Color.LightGreen;
+            this.btInserisci.StateDisabled.Back.Color2 = System.Drawing.Color.PaleGreen;
+            this.btInserisci.StateDisabled.Border.Color1 = System.Drawing.Color.White;
+            this.btInserisci.StateDisabled.Border.Color2 = System.Drawing.Color.White;
             this.btInserisci.StateNormal.Back.Color1 = System.Drawing.Color.ForestGreen;
             this.btInserisci.StateNormal.Back.Color2 = System.Drawing.Color.YellowGreen;
             this.btInserisci.StateNormal.Border.Color1 = System.Drawing.Color.YellowGreen;
@@ -681,8 +693,8 @@
             this.btCattedreUtente.OverrideDefault.Border.Rounding = 20F;
             this.btCattedreUtente.OverrideDefault.Border.Width = 1;
             this.btCattedreUtente.Size = new System.Drawing.Size(109, 39);
-            this.btCattedreUtente.StateCommon.Back.Color1 = System.Drawing.Color.Purple;
-            this.btCattedreUtente.StateCommon.Back.Color2 = System.Drawing.Color.Fuchsia;
+            this.btCattedreUtente.StateCommon.Back.Color1 = System.Drawing.Color.DarkMagenta;
+            this.btCattedreUtente.StateCommon.Back.Color2 = System.Drawing.Color.Purple;
             this.btCattedreUtente.StateCommon.Back.ColorAngle = 45F;
             this.btCattedreUtente.StateCommon.Border.Color1 = System.Drawing.Color.MediumPurple;
             this.btCattedreUtente.StateCommon.Border.Color2 = System.Drawing.Color.Plum;
@@ -700,8 +712,8 @@
             this.btCattedreUtente.StateDisabled.Back.Color2 = System.Drawing.Color.Violet;
             this.btCattedreUtente.StateDisabled.Border.Color1 = System.Drawing.Color.Silver;
             this.btCattedreUtente.StateDisabled.Border.Color2 = System.Drawing.Color.DarkGray;
-            this.btCattedreUtente.StateNormal.Back.Color1 = System.Drawing.Color.DarkOrchid;
-            this.btCattedreUtente.StateNormal.Back.Color2 = System.Drawing.Color.Violet;
+            this.btCattedreUtente.StateNormal.Back.Color1 = System.Drawing.Color.Indigo;
+            this.btCattedreUtente.StateNormal.Back.Color2 = System.Drawing.Color.Purple;
             this.btCattedreUtente.StateNormal.Border.Color1 = System.Drawing.Color.Orchid;
             this.btCattedreUtente.StateNormal.Border.Color2 = System.Drawing.Color.BlueViolet;
             this.btCattedreUtente.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 

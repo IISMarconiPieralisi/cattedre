@@ -60,9 +60,9 @@ namespace Cattedre
                 menuStrip1.Visible = false;
                 btVaiACattedre.Visible = false;
                 btVaiACattedre2.Visible = false;
-                btClassi.Visible = true;
-                btDiscipline.Visible = true;
-                btUtenti.Visible = false;
+                btClassi.Visible = false;
+                btDiscipline.Visible = false;
+                btUtenti.Visible = true;
             }
             else
             {

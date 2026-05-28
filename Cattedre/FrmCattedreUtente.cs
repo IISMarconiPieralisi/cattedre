@@ -42,34 +42,28 @@ namespace Cattedre
                 lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(ass.IDClasse));
                 lvi.SubItems.Add(ClsDisciplinaBL.RilevaDisciplina(ass.IDDisciplina).Nome);
                 lvi.SubItems.Add(ass.OreSpeciali.ToString());
+                int ore = 0;
 
-                if (_utente.TipoDocente == 'L')
+                if (!lvi.SubItems[2].Text.Contains("Potenziamento"))
                 {
-                    int ore = ClsDisciplinaBL.RilevaOreDocentePratico(
-                        ass.IDDisciplina);
-                    if (lvi.SubItems[2].Text.Contains("Potenziamento"))
+                    if (_utente.TipoDocente == 'L')
                     {
-                        lvi.SubItems.Add("-");
-                        ore = 0;
-                    }
-                    else
+                        ore = ClsDisciplinaBL.RilevaOreDocentePratico(ass.IDDisciplina);
                         lvi.SubItems.Add(ore.ToString());
-                    lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
+                    }
+                    else if (_utente.TipoDocente == 'T')
+                    {
+                        ore = ClsDisciplinaBL.RilevaOreDocenteTeorico(ass.IDDisciplina);
+                        lvi.SubItems.Add(ore.ToString());
+                    }
                 }
-                else if (_utente.TipoDocente == 'T')
+                else
                 {
-                    int ore = ClsDisciplinaBL.RilevaOreDocenteTeorico(
-                        ass.IDDisciplina);
-                    if (lvi.SubItems[2].Text.Contains("Potenziamento"))
-                    {
-                        lvi.SubItems.Add("-");
-                        ore = 0;
-                    }
-                    else
-                        lvi.SubItems.Add(ore.ToString());
-                    lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
+                    lvi.SubItems.Add("-");
+                    ore = 0;
                 }
-
+                
+                lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
                 lvCattedreUtente.Items.Add(lvi);
             }
         }

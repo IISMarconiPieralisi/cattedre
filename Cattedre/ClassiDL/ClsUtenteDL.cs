@@ -178,6 +178,10 @@ namespace Cattedre
         {
             return ut.TipoUtente == "A" || ut.TipoUtente == "C";
         }
+        public static bool UtenteDocente(ClsUtenteDL ut)
+        {
+            return ut.TipoUtente == "D";
+        }
         #endregion
 
 

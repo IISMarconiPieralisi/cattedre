@@ -31,7 +31,14 @@ namespace Cattedre
             cbDipartimenti.DataSource = dipartimenti;
             cbDipartimenti.ValueMember = "ID";
             cbDipartimenti.DisplayMember = "Nome";
-            cbDipartimenti.SelectedIndex = -1;
+            if (dipartimenti.Count <= 1)
+            {
+                cbDipartimenti.SelectedIndex = 0;
+                cbDipartimenti.Enabled = false;
+            }
+            else
+                cbDipartimenti.SelectedIndex = -1;
+
             this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.cbDipartimenti_SelectedIndexChanged);
             CaricaListView();
 
@@ -116,6 +123,8 @@ namespace Cattedre
         {
             if (lvDiscipline.SelectedIndices.Count == 1)
             {
+                if (!ClsUtenteDL.UtenteCRUD(_utenteLoggato)) return;
+
                 int indiceDaModificare = lvDiscipline.SelectedIndices[0];
                 FrmDisciplina frmDisciplina = new FrmDisciplina(_utenteLoggato);
                 int idCercato = Convert.ToInt32(lvDiscipline.Items[indiceDaModificare].Tag);
@@ -149,6 +158,7 @@ namespace Cattedre
 
                         foreach (var app in _indirizziRimossi)
                             ClsAssegnareBL.EliminaAssegnazioneDiscIndirizzo(app.IDdisciplina, app.IDindirizzo);
+
                         //controllo la differenza fra le richiedere attuali e quelle vecchie
                         //se c'è un cdc in meno cancelllo da assegnare le assegnazioni con IDdisciplina attuale e IDdisciplina cancellando quelle con 
                         // (eliminato) anche più di uno
@@ -203,6 +213,12 @@ namespace Cattedre
                 lvDiscipline.Width = this.ClientSize.Width - (lvDiscipline.Left * 2);
                 lvDiscipline.Height = this.ClientSize.Height - lvDiscipline.Top - 50;
                 lvDiscipline.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                if(ClsUtenteDL.UtenteDocente(_utenteLoggato))
+                {
+                     dipartimenti = ClsDipartimentoBL.DipartimentiDocenti(_utenteLoggato.ID);
+                    if (dipartimenti.Count > 0)
+                        iddipartimento = dipartimenti[0].ID;
+                }
             }
             if (_utenteLoggato.TipoUtente == "C")
             {
@@ -253,7 +269,7 @@ namespace Cattedre
             rbAnno3.Checked = false;
             rbAnno4.Checked = false;
             rbAnno5.Checked = false;
-            if(_utenteLoggato.TipoUtente!="C")
+            if(ClsUtenteDL.UtenteAdmin(_utenteLoggato))
             {
                 cbDipartimenti.SelectedItem = null;
                 iddipartimento = 0;

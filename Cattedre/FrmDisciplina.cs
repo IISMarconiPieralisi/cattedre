@@ -239,14 +239,11 @@ namespace Cattedre
         #region gestisci Disciplina successiva
         private void CambiaAnnoDisciplinaSuccessivaPotenziale()
         {
-            cbAnnoSuccessivo.Items.Remove(anno.ToString() + "°");   
-            if (anno >= 1 && anno <= 4)
+            if (anno >= 1 && anno <= 5)
             {
                 cbAnnoSuccessivo.Enabled = true;
-                cbAnnoSuccessivo.SelectedItem = (anno + 1).ToString() + "°";
+                cbAnnoSuccessivo.SelectedItem =(anno==5)?"3°":(anno + 1).ToString() + "°";
             }
-            else if (anno == 5)
-                cbAnnoSuccessivo.Enabled = true;
             else
             {
                 cbAnnoSuccessivo.Enabled = false;
@@ -277,11 +274,21 @@ namespace Cattedre
             else
                 cbDisciplinaSucessiva.Enabled = true;
 
-            int annoSuccessivo = int.Parse(cbAnnoSuccessivo.SelectedItem.ToString().Replace("°", ""));
+            int annoDisciplinaSuccessiva = int.Parse(cbAnnoSuccessivo.SelectedItem.ToString().Replace("°", ""));
+            // Se l'anno scelto è lo stesso della disciplina corrente, mostra solo quest'ultima
+            if (annoDisciplinaSuccessiva == anno)
+            {
+                cbDisciplinaSucessiva.DataSource = null;
+                cbDisciplinaSucessiva.DataSource = new List<ClsDisciplinaDL> { _disciplina };
+                cbDisciplinaSucessiva.DisplayMember = "Nome";
+                cbDisciplinaSucessiva.ValueMember = "ID";
+                cbDisciplinaSucessiva.SelectedIndex = 0;
+                return;
+            }
 
-            var potenzialiSuccessive = _discipline.Where(p =>p.Anno == annoSuccessivo &&
-            !_discipline.Any(d => d.IDdisciplinaSuccessiva == p.ID && d.ID != _disciplina.ID)
-                ).ToList();
+
+            var potenzialiSuccessive = _discipline.Where(p => p.Anno == annoDisciplinaSuccessiva).ToList();
+
             List<ClsDisciplinaDL> ListaDisciplineFiltrate = new List<ClsDisciplinaDL>();
             // 2. Per ogni disciplina potenziale, controlliamo se appartiene a uno dei nostri dipartimenti
             foreach (var disc in potenzialiSuccessive)

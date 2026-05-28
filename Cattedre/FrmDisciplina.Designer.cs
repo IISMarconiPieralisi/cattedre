@@ -79,7 +79,7 @@ namespace Cattedre
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 226);
+            this.label4.Location = new System.Drawing.Point(12, 222);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(47, 17);
             this.label4.TabIndex = 13;
@@ -228,7 +228,7 @@ namespace Cattedre
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(12, 681);
+            this.label8.Location = new System.Drawing.Point(12, 643);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(148, 17);
@@ -243,7 +243,7 @@ namespace Cattedre
             this.cbDisciplinaSucessiva.Enabled = false;
             this.cbDisciplinaSucessiva.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDisciplinaSucessiva.FormattingEnabled = true;
-            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(253, 677);
+            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(253, 639);
             this.cbDisciplinaSucessiva.Margin = new System.Windows.Forms.Padding(4);
             this.cbDisciplinaSucessiva.Name = "cbDisciplinaSucessiva";
             this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(241, 25);
@@ -254,7 +254,7 @@ namespace Cattedre
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(12, 725);
+            this.label5.Location = new System.Drawing.Point(12, 687);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(130, 17);
             this.label5.TabIndex = 21;
@@ -266,17 +266,17 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.btAnnulla);
             this.panel1.Controls.Add(this.btSalva);
-            this.panel1.Location = new System.Drawing.Point(15, 765);
+            this.panel1.Location = new System.Drawing.Point(4, 707);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(534, 52);
+            this.panel1.Size = new System.Drawing.Size(579, 52);
             this.panel1.TabIndex = 14;
             // 
             // btAnnulla
             // 
             this.btAnnulla.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btAnnulla.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btAnnulla.Location = new System.Drawing.Point(8, 11);
+            this.btAnnulla.Location = new System.Drawing.Point(11, 11);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btAnnulla.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -345,7 +345,7 @@ namespace Cattedre
             // 
             this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btSalva.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btSalva.Location = new System.Drawing.Point(364, 10);
+            this.btSalva.Location = new System.Drawing.Point(416, 10);
             this.btSalva.Name = "btSalva";
             this.btSalva.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btSalva.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -484,7 +484,7 @@ namespace Cattedre
             this.pnDisciplina.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnDisciplina.Location = new System.Drawing.Point(0, 0);
             this.pnDisciplina.Name = "pnDisciplina";
-            this.pnDisciplina.Size = new System.Drawing.Size(596, 833);
+            this.pnDisciplina.Size = new System.Drawing.Size(596, 763);
             this.pnDisciplina.TabIndex = 47;
             // 
             // cbDisciplinaSpeciale
@@ -493,7 +493,7 @@ namespace Cattedre
             this.cbDisciplinaSpeciale.Items.AddRange(new object[] {
             "Potenziamento",
             "Presidenza"});
-            this.cbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 717);
+            this.cbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 679);
             this.cbDisciplinaSpeciale.Name = "cbDisciplinaSpeciale";
             this.cbDisciplinaSpeciale.Size = new System.Drawing.Size(289, 25);
             this.cbDisciplinaSpeciale.TabIndex = 13;
@@ -509,7 +509,7 @@ namespace Cattedre
             "3°",
             "4°",
             "5°"});
-            this.cbAnnoSuccessivo.Location = new System.Drawing.Point(205, 677);
+            this.cbAnnoSuccessivo.Location = new System.Drawing.Point(205, 639);
             this.cbAnnoSuccessivo.Name = "cbAnnoSuccessivo";
             this.cbAnnoSuccessivo.Size = new System.Drawing.Size(41, 25);
             this.cbAnnoSuccessivo.TabIndex = 11;
@@ -520,7 +520,7 @@ namespace Cattedre
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(12, 428);
+            this.label14.Location = new System.Drawing.Point(12, 405);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(50, 16);
             this.label14.TabIndex = 54;
@@ -530,7 +530,7 @@ namespace Cattedre
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(15, 287);
+            this.label13.Location = new System.Drawing.Point(15, 277);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(89, 16);
             this.label13.TabIndex = 53;
@@ -581,7 +581,7 @@ namespace Cattedre
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(12, 551);
+            this.label6.Location = new System.Drawing.Point(12, 518);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(131, 16);
@@ -594,7 +594,7 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbCdcs.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbCdcs.FormattingEnabled = true;
-            this.clbCdcs.Location = new System.Drawing.Point(205, 537);
+            this.clbCdcs.Location = new System.Drawing.Point(205, 517);
             this.clbCdcs.Margin = new System.Windows.Forms.Padding(4);
             this.clbCdcs.Name = "clbCdcs";
             this.clbCdcs.Size = new System.Drawing.Size(366, 112);
@@ -606,7 +606,7 @@ namespace Cattedre
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(12, 412);
+            this.label9.Location = new System.Drawing.Point(12, 389);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(92, 16);
@@ -619,7 +619,7 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbIndirizzi.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbIndirizzi.FormattingEnabled = true;
-            this.clbIndirizzi.Location = new System.Drawing.Point(205, 271);
+            this.clbIndirizzi.Location = new System.Drawing.Point(205, 261);
             this.clbIndirizzi.Margin = new System.Windows.Forms.Padding(4);
             this.clbIndirizzi.Name = "clbIndirizzi";
             this.clbIndirizzi.Size = new System.Drawing.Size(366, 112);
@@ -632,7 +632,7 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbDipartimenti.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbDipartimenti.FormattingEnabled = true;
-            this.clbDipartimenti.Location = new System.Drawing.Point(205, 404);
+            this.clbDipartimenti.Location = new System.Drawing.Point(205, 389);
             this.clbDipartimenti.Margin = new System.Windows.Forms.Padding(4);
             this.clbDipartimenti.Name = "clbDipartimenti";
             this.clbDipartimenti.Size = new System.Drawing.Size(366, 112);
@@ -644,7 +644,7 @@ namespace Cattedre
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(12, 271);
+            this.label7.Location = new System.Drawing.Point(12, 261);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(62, 16);
@@ -659,7 +659,7 @@ namespace Cattedre
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(596, 833);
+            this.ClientSize = new System.Drawing.Size(596, 763);
             this.Controls.Add(this.pnDisciplina);
             this.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

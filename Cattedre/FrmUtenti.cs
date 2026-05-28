@@ -298,43 +298,33 @@ namespace Cattedre
                 filtri.Clear();
                 btAnnullaFiltra.Enabled = true;
 
-                bool parametroSelezionato = false;
 
-                parametroSelezionato |= AggiungiFiltro(filtri, "tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
-                parametroSelezionato |= AggiungiFiltro(filtri, "tipoDocente", CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)), mappaTipoDocente);
+                AggiungiFiltro(filtri, "tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
+                AggiungiFiltro(filtri, "tipoDocente", CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)), mappaTipoDocente);
 
                 string NomeCognome = (tbRicerca.Text != "cognome nome" && !string.IsNullOrWhiteSpace(tbRicerca.Text)) ? tbRicerca.Text.Trim() : string.Empty;
                 if (NomeCognome != string.Empty)
                 {
                     string NomeCognomeFiltrati = NomeCognome.Replace(" ", "").ToLower();
                     filtri.Add("CONCAT(cognome,nome)", new List<string> { NomeCognomeFiltrati });
-                    parametroSelezionato = true;
                 }
                 if(cbDipartimento.SelectedIndex>-1)
                 {
                     filtri.Add("IDdipartimento", new List<string> { cbDipartimento.SelectedValue.ToString() });
-                    parametroSelezionato = true;
                 }
-                if (parametroSelezionato)
                     CaricaListView();
-                else
-                    throw new Exception("Seleziona un parametro per la ricerca.");
-               
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}\n riprova", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        private bool AggiungiFiltro(Dictionary<string, List<string>> filtri, string chiave, IEnumerable<string> selezionati, Dictionary<string, string> mappa)
+        private void AggiungiFiltro(Dictionary<string, List<string>> filtri, string chiave, IEnumerable<string> selezionati, Dictionary<string, string> mappa)
         {
             var valori = selezionati.Where(item => mappa.ContainsKey(item)).Select(item => mappa[item]).ToList();
             if (valori.Any())
-            {
                 filtri.Add(chiave, valori);
-                return true;
-            }
-            return false;
+            
         }
         private List<string> CaricaElementiSelezionati(GroupBox gb, Type tipoControllo)
         {
@@ -421,16 +411,37 @@ namespace Cattedre
         #region permessi
         public void GestisciPermessi()
         {
-            if (_utenteLoggato?.TipoUtente == "C")
-            {
-                long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
-                if (idDipartimento > 0)
-                    filtri["IDdipartimento"] = new List<string> { idDipartimento.ToString() };
-                cbDipartimento.SelectedValue = idDipartimento; 
+            if(_utenteLoggato?.TipoUtente == "C" || _utenteLoggato?.TipoUtente == "D")
+{
+                List<string> idDipartimenti = new List<string>();
+
+                if (_utenteLoggato.TipoUtente == "C")
+                {
+                    long idDip = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utenteLoggato.ID).ID;
+                    idDipartimenti.Add(idDip.ToString());
+                    cbDipartimento.SelectedValue = idDip;
+                }
+                else // D
+                {
+                    long idDip = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
+                    idDipartimenti.Add(idDip.ToString());
+                    cbDipartimento.SelectedValue = idDip;
+                }
+
+                if (idDipartimenti.Count > 0)
+                    filtri["IDdipartimento"] = idDipartimenti;
+
                 cbDipartimento.Enabled = false;
-                cbDocente.Checked=true;
+                cbDocente.Checked = true;
                 gbTipiUtenti.Enabled = false;
-                btCattedreUtente.Enabled = false;
+            }
+
+                if (_utenteLoggato?.TipoUtente == "D")
+            {
+
+                btInserisci.Enabled = false;
+                btModifica.Enabled = false;
+                btElimina.Enabled = false;
             }
         }
         #endregion

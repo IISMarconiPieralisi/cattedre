@@ -880,22 +880,8 @@ namespace Cattedre
 
             int y = 45;
 
-            // Recupero docenti distinti dal DataTable
-            List<ClsUtenteDL> docenti = dtDocentiAssegnazioni.AsEnumerable()
-                .Where(r =>
-                    r["isInterno"] != DBNull.Value &&
-                    Convert.ToInt32(r["isInterno"]) == 1)
-                .Select(r => new ClsUtenteDL
-                {
-                    ID = Convert.ToInt64(r["IDutente"]),
-                    Nome = r["nome"]?.ToString(),
-                    Cognome = r["cognome"]?.ToString(),
-                    TipoDocente = r["tipoDocente"] != DBNull.Value
-                                    ? r["tipoDocente"].ToString()[0]
-                                    : ' '
-                })
-                .GroupBy(d => d.ID)
-                .Select(g => g.First())
+            // Recupero docenti del dipartimento
+            List<ClsUtenteDL> docenti = ClsUtenteBL.OttieniUtentiDipartimento(IDdipartimento)
                 .OrderBy(d =>
                 {
                     var cdcs = ClsRichiedereBL.RilevaCDCDocente(d.ID);

@@ -36,6 +36,12 @@ namespace Cattedre
                 cbDipartimenti.SelectedIndex = 0;
                 cbDipartimenti.Enabled = false;
             }
+            else if (iddipartimento>0)
+            {
+                cbDipartimenti.SelectedValue = iddipartimento;
+                cbDipartimenti.Enabled = false;
+
+            }
             else
                 cbDipartimenti.SelectedIndex = -1;
 
@@ -223,11 +229,6 @@ namespace Cattedre
             if (_utenteLoggato.TipoUtente == "C")
             {
                 iddipartimento =ClsDipartimentoBL.UtenteCoordinaDipartimento(_utenteLoggato.ID).ID;
-                if (iddipartimento > 0)
-                {
-                    cbDipartimenti.Enabled = false;
-                    cbDipartimenti.SelectedValue = iddipartimento;
-                }
             }
         }
         #region filtri

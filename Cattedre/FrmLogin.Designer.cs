@@ -78,7 +78,7 @@ namespace Cattedre
             this.tbPassword.Margin = new System.Windows.Forms.Padding(2);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
-            this.tbPassword.Size = new System.Drawing.Size(296, 22);
+            this.tbPassword.Size = new System.Drawing.Size(296, 20);
             this.tbPassword.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbPassword.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.TabIndex = 11;
@@ -91,7 +91,7 @@ namespace Cattedre
             this.tbNomeUtente.Location = new System.Drawing.Point(228, 150);
             this.tbNomeUtente.Margin = new System.Windows.Forms.Padding(2);
             this.tbNomeUtente.Name = "tbNomeUtente";
-            this.tbNomeUtente.Size = new System.Drawing.Size(301, 22);
+            this.tbNomeUtente.Size = new System.Drawing.Size(301, 20);
             this.tbNomeUtente.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbNomeUtente.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNomeUtente.TabIndex = 10;
@@ -416,7 +416,6 @@ namespace Cattedre
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(120, 71);
             this.panel3.TabIndex = 28;
-            this.panel3.Visible = false;
             // 
             // rbTest3
             // 

@@ -61,7 +61,7 @@ namespace Cattedre
 
                     ClsClasseDL classe = ClsClasseBL.CaricaClasse(idClasse);
 
-                    ClsDisciplinaDL nuovaDisciplina = ClsDisciplinaBL.TrovaDisciplinaSuccessiva(idDisciplina);
+                    ClsDisciplinaDL nuovaDisciplina = ClsDisciplinaBL.TrovaDisciplinaSuccessiva(idDisciplina,IDannoSuccessivo);
                     if (nuovaDisciplina == null)
                         continue;
 

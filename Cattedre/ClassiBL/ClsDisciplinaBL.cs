@@ -50,18 +50,21 @@ namespace Cattedre
             return null;
         }
 
-        public static ClsDisciplinaDL TrovaDisciplinaSuccessiva(long IDdisciplina)
+        public static ClsDisciplinaDL TrovaDisciplinaSuccessiva(long IDdisciplina, long IDannoscolastico)
         {
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT * FROM discipline 
-                           WHERE IDdisciplinaSuccessiva = @IDdisciplina";
+                    string sql = @"SELECT * FROM discipline d
+                                JOIN vigere v  ON v.IDdisciplina =d.ID 
+                           WHERE d.IDdisciplinaSuccessiva = @IDdisciplina  
+                           AND (v.IDannoscolasticofine >= @IDannoScolastico OR v.IDannoscolasticofine IS NULL)";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {

@@ -489,6 +489,7 @@ namespace Cattedre
             // 
             // cbDisciplinaSpeciale
             // 
+            this.cbDisciplinaSpeciale.Enabled = false;
             this.cbDisciplinaSpeciale.FormattingEnabled = true;
             this.cbDisciplinaSpeciale.Items.AddRange(new object[] {
             "Potenziamento",

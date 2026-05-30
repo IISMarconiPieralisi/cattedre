@@ -124,6 +124,7 @@ namespace Cattedre
 
             if (_disciplina != null)
             {
+                this.cbAnnoSuccessivo.SelectedIndexChanged -= new System.EventHandler(this.cbAnnoInizio_SelectedIndexChanged);
                 //carico le informazioni della disciplina successiva
                 anno = _disciplina.Anno;
                 tbNome.Text = _disciplina.Nome;
@@ -139,11 +140,16 @@ namespace Cattedre
                 //caricamento anno scolastico inizio e fine
                 if(_vigere.IDannoInizio>0) cbAnnoInizio.SelectedValue = _vigere.IDannoInizio;
                 if (_vigere.IDannoFine > 0) cbAnnoFine.SelectedValue = _vigere.IDannoFine;
+                this.cbAnnoSuccessivo.SelectedIndexChanged += new System.EventHandler(this.cbAnnoInizio_SelectedIndexChanged);
+
 
             }
             else
+            {
                 _disciplina = new ClsDisciplinaDL();
-            CambiaAnnoDisciplinaSuccessivaPotenziale();
+                CambiaAnnoDisciplinaSuccessivaPotenziale();
+
+            }
 
 
 
@@ -239,6 +245,7 @@ namespace Cattedre
         #region gestisci Disciplina successiva
         private void CambiaAnnoDisciplinaSuccessivaPotenziale()
         {
+          
             if (anno >= 1 && anno <= 5)
             {
                 cbAnnoSuccessivo.Enabled = true;
@@ -273,7 +280,7 @@ namespace Cattedre
             }
             else
                 cbDisciplinaSucessiva.Enabled = true;
-
+           
             int annoDisciplinaSuccessiva = int.Parse(cbAnnoSuccessivo.SelectedItem.ToString().Replace("°", ""));
             // Se l'anno scelto è lo stesso della disciplina corrente, mostra solo quest'ultima
             if (annoDisciplinaSuccessiva == anno)
@@ -347,11 +354,21 @@ namespace Cattedre
                 popolaCbDisciplinaSuccessiva();
 
                 if (_IDdiscSuccessiva > 0)
-                    cbDisciplinaSucessiva.SelectedValue = _IDdiscSuccessiva;
+                {
+                    var discSucc = ClsDisciplinaBL.CaricaDisciplina(_IDdiscSuccessiva);
+                    if (discSucc != null)
+                    {
+                        cbAnnoSuccessivo.Enabled = true;
+                        cbAnnoSuccessivo.SelectedItem = discSucc.Anno.ToString() + "°";
+                        // Dopo aver cambiato cbAnnoSuccessivo, ripopola con l'anno corretto
+                        popolaCbDisciplinaSuccessiva();
+                        cbDisciplinaSucessiva.SelectedValue = _IDdiscSuccessiva;
+                    }
+                }
                 else
+                {
                     cbDisciplinaSucessiva.SelectedIndex = -1;
-
-                // non sovrascrivere Enabled: è già gestito da popolaCbDisciplinaSuccessiva
+                }
             }
             else
             {

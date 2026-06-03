@@ -1212,7 +1212,7 @@ namespace Cattedre
             int larghezzaContenuto = 10; // padding iniziale (da LoadDiscipline: int x = 10)
             foreach (UcDisciplina u in pnlDiscipline.Controls.OfType<UcDisciplina>())
                 larghezzaContenuto += u.Width + 10;
-            larghezzaContenuto += 75; // margine finale extra
+            larghezzaContenuto += 135; // margine finale extra
 
             // Larghezza visibile
             int larghezzaVisibile = pnlDiscipline.ClientSize.Width;

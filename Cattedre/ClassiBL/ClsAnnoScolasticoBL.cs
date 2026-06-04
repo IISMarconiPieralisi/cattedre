@@ -13,7 +13,6 @@ namespace Cattedre
     {
         public static long TrovaIDannoscolastico()
         {
-            ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
             DataTable dt = new DataTable();
 
             try
@@ -34,7 +33,7 @@ namespace Cattedre
                     }
                     foreach (DataRow row in dt.Rows)
                     {
-                        anno.ID = Convert.ToInt64(row["ID"]);
+                        return Convert.ToInt64(row["ID"]);
                     }
                 }
             }
@@ -42,17 +41,53 @@ namespace Cattedre
             {
                 throw new Exception(ex.Message);
             }
-            return anno.ID;
+            return 0;
         }
 
         public static ClsAnnoScolasticoDL TrovaAnnoSuccessivo(long IDanno)
         {
-            List<ClsAnnoScolasticoDL> anni = CaricaAnniScolastici();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT * FROM anniscolastici
+                                WHERE YEAR(datainizio) = (
+                                SELECT YEAR(datainizio) FROM anniscolastici WHERE ID = @IDanno
+                                ) +1
+                                AND YEAR(datafine) = (
+                                SELECT YEAR(datafine) FROM anniscolastici WHERE ID = @IDanno
+                                ) +1
+                                LIMIT 1";
 
-            return anni
-                .Where(a => a.ID > IDanno)
-                .OrderBy(a => a.ID)
-                .FirstOrDefault();
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDanno", IDanno);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+
+                            if (dt.Rows.Count > 0)
+                            {
+                                DataRow row = dt.Rows[0];
+                                return new ClsAnnoScolasticoDL
+                                {
+                                    ID = Convert.ToInt64(row["ID"]),
+                                    DataInizio = Convert.ToDateTime(row["datainizio"]),
+                                    DataFine = Convert.ToDateTime(row["datafine"])
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return null;
         }
         public static ClsAnnoScolasticoDL CercaAnnoScolastico(long ID)
         {
@@ -91,43 +126,43 @@ namespace Cattedre
             }
             return anno;
         }
-        public static ClsAnnoScolasticoDL CercaAnnoScolastico(string sigla)
-        {
-            ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
-            DataTable dt = new DataTable();
+        //public static ClsAnnoScolasticoDL CercaAnnoScolastico(long  sigla)
+        //{
+        //    ClsAnnoScolasticoDL anno = new ClsAnnoScolasticoDL();
+        //    DataTable dt = new DataTable();
 
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-                {
-                    conn.Open();
-                    string sql = @"SELECT * FROM anniscolastici
-                                   WHERE sigla = @sigla";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@sigla", sigla);
+        //    try
+        //    {
+        //        using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+        //        {
+        //            conn.Open();
+        //            string sql = @"SELECT * FROM anniscolastici
+        //                           WHERE sigla = @sigla";
+        //            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+        //            {
+        //                cmd.Parameters.AddWithValue("@sigla", sigla);
 
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                        conn.Close();
-                    }
-                    foreach (DataRow row in dt.Rows)
-                    {
-                        anno.ID = Convert.ToInt64(row["ID"]);
-                        anno.Sigla = row["sigla"].ToString();
-                        anno.DataInizio = Convert.ToDateTime(row["datainizio"]);
-                        anno.DataFine = Convert.ToDateTime(row["datafine"]);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return anno;
-        }
+        //                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+        //                {
+        //                    da.Fill(dt);
+        //                }
+        //                conn.Close();
+        //            }
+        //            foreach (DataRow row in dt.Rows)
+        //            {
+        //                anno.ID = Convert.ToInt64(row["ID"]);
+        //                anno.Sigla = row["sigla"].ToString();
+        //                anno.DataInizio = Convert.ToDateTime(row["datainizio"]);
+        //                anno.DataFine = Convert.ToDateTime(row["datafine"]);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //    return anno;
+        //}
         public static List<ClsAnnoScolasticoDL> CaricaAnniScolastici()
         {
             List<ClsAnnoScolasticoDL> anniScolastici = new List<ClsAnnoScolasticoDL>();
@@ -175,10 +210,11 @@ namespace Cattedre
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM anniscolastici 
-                          WHERE TIMESTAMPDIFF(YEAR,(
-                                SELECT datainizio FROM anniscolastici 
-                                WHERE ID=@ID),datainizio
-                          )=1 LIMIT 1";
+                    WHERE datainizio > (
+                        SELECT datainizio FROM anniscolastici WHERE ID = @ID
+                    )
+                    ORDER BY datainizio ASC
+                    LIMIT 1";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", IDannoScolastico);

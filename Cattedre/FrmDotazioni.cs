@@ -15,7 +15,8 @@ namespace Cattedre
         List<ClsDotareDL> dots = new List<ClsDotareDL>();
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
         List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
-        Dictionary<string, List<string>> Filtri = new Dictionary<string, List<string>>();
+        long IDannoScolastico= ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+        long IDCdc=0;
         public FrmDotazioni()
         {
             InitializeComponent();
@@ -69,106 +70,89 @@ namespace Cattedre
         }
        
 
-        private void CaricaListView()
+       private void CaricaListView()
         {
-            dots = ClsDotareBL.CaricaDotare(Filtri);
-            cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
+            dots = ClsDotareBL.CaricaDotare(IDannoScolastico,IDCdc);
             lvDotazioni.Items.Clear();
-            for (int i = 0; i < dots.Count; i++)
+            foreach (ClsDotareDL dot in dots)
             {
-                ListViewItem lvi = new ListViewItem(dots[i].Id.ToString());
-                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dots[i].IdAnnoscolastico));
-                lvi.SubItems.Add(ClsClasseDiConcorsoBL.TrovaCodiceDaID(dots[i].IdClasseDiConcorso));
-                lvi.SubItems.Add(dots[i].NumcattedreFatto.ToString());
-                lvi.SubItems.Add(dots[i].NumcattedreDiritto.ToString());
-                lvi.Tag = cdcs[i].ID;
+                ListViewItem lvi = new ListViewItem(dot.Id.ToString());
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(dot.IdAnnoscolastico));
+                lvi.SubItems.Add(ClsClasseDiConcorsoBL.TrovaCodiceDaID(dot.IdClasseDiConcorso));
+                lvi.SubItems.Add(dot.NumcattedreFatto.ToString());
+                lvi.SubItems.Add(dot.NumcattedreDiritto.ToString());
+                lvi.Tag = dot.Id;
                 lvDotazioni.Items.Add(lvi);
             }
+            tbNumRecord.Text = dots.Count().ToString();
+
         }
         #endregion
         private void FrmDotazioni_Load(object sender, EventArgs e)
         {
             //popolamento controlli filtri
-            GeneraFiltriAnnoScolastico();
+            PopolaAnnoScolastico();
             PopolaCDC();
             CaricaListView();
-        }    
-        #region filtra
-        private void GeneraFiltriAnnoScolastico()
+        }
+
+        private void PopolaAnnoScolastico()
         {
-            tplAnniScolastici.ColumnCount = _anniScolastici.Count;
-            tplAnniScolastici.RowCount = 1;
 
-            // Imposta le colonne con larghezza automatica
-            tplAnniScolastici.ColumnStyles.Clear();
-            for (int i = 0; i < _anniScolastici.Count; i++)
-                tplAnniScolastici.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-
-            int sezione = 0;
-            foreach (var anno in _anniScolastici)
+            if(_anniScolastici.Count>0)
             {
-                CheckBox cb = new CheckBox();
-                cb.Name = $"{anno.ID}";
-                cb.Text = anno.Sigla;
-                cb.Dock = DockStyle.Fill;
-              //  cb.KeyDown += CheckBoxAnno_KeyDown;
-                tplAnniScolastici.Controls.Add(cb, sezione, 0);
-                sezione++;
+
+                cbAnnoScolastico.DataSource = _anniScolastici;
+                cbAnnoScolastico.DisplayMember = "Sigla";
+                cbAnnoScolastico.ValueMember = "ID";
+                cbAnnoScolastico.SelectedValue = IDannoScolastico;
             }
         }
+        #region filtra
         private void PopolaCDC()
         {
-            if(cdcs.Count>0)
+            this.cbCDC.SelectedIndexChanged -= new System.EventHandler(this.cbCDC_SelectedIndexChanged);
+            if (cdcs.Count>0)
             {
                 cbCDC.DataSource = cdcs;
                 cbCDC.DisplayMember = "Nome";
                 cbCDC.ValueMember = "ID";
                 cbCDC.SelectedIndex = -1;
             }
+            this.cbCDC.SelectedIndexChanged += new System.EventHandler(this.cbCDC_SelectedIndexChanged);
+
         }
         private void btCerca_Click(object sender, EventArgs e)
         {
             try
             {
-                Filtri = new Dictionary<string, List<string>>();
-
+                bool ricercaPositiva = false;
+                if (cbAnnoScolastico.SelectedIndex != -1)
+                {
+                    IDannoScolastico = Convert.ToInt32(cbAnnoScolastico.SelectedValue);
+                    ricercaPositiva = true;
+                }
                 if (cbCDC.SelectedIndex != -1)
                 {
-                    Filtri.Add("IDclassediconcorso", new List<string> { $"'{cbCDC.SelectedValue}'" });
+                    var cdcSelezionata = cbCDC.SelectedItem as ClsClasseDiConcorsoDL;
+                    if (cdcSelezionata != null)
+                    {
+                        IDCdc = cdcSelezionata.ID;
+                        ricercaPositiva = true;
+                    }
+
                 }
-                ControlloSelezionatiAnniScolastici();
 
-                if (Filtri.Count <= 0)
+                if (!ricercaPositiva)
                     throw new Exception("Inserire almeno un criterio di ricerca");
-
                 CaricaListView();
-                btPulisciCb.Enabled = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}\nRiprovare!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        private void DeselezionaCheckBox(Control parent)
-        {
-            foreach (Control c in parent.Controls)
-            {
-                if (c is CheckBox cb)
-                    cb.Checked = false;
-            }
-        }
-
-        private void ControlloSelezionatiAnniScolastici()
-        {
-            if (tplAnniScolastici.Controls.OfType<CheckBox>().Any(cb => cb.Checked))
-            {
-                var selezionati = tplAnniScolastici.Controls.OfType<CheckBox>().Where(cb => cb.Checked).Select(cb => cb.Name).ToList();
-
-                if (!selezionati.Any()) return;
-
-                Filtri.Add("IDannoScolastico", selezionati);
-            }
-        }
+       
         private void cbCDC_Format(object sender, ListControlConvertEventArgs e)
         {
             if (e.ListItem is ClsClasseDiConcorsoDL item)
@@ -183,9 +167,8 @@ namespace Cattedre
         private void btPulisciCb_Click(object sender, EventArgs e)
         {
             cbCDC.SelectedIndex = -1;
-            Filtri.Clear();
+            IDannoScolastico = 0; IDCdc = 0;
             CaricaListView();
-            DeselezionaCheckBox(tplAnniScolastici);
         }
         #endregion
         #region controlli tastiera

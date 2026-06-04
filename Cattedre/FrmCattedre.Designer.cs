@@ -56,17 +56,18 @@ namespace Cattedre
             // 
             // pnlOreDoc
             // 
+            this.pnlOreDoc.AutoScroll = true;
             this.pnlOreDoc.Controls.Add(this.lblOreEff);
             this.pnlOreDoc.Controls.Add(this.lblDocente);
             this.pnlOreDoc.Controls.Add(this.lblOreTot);
             this.pnlOreDoc.Controls.Add(this.lblOrePot);
             this.pnlOreDoc.Controls.Add(this.lblOreCattedra);
             this.pnlOreDoc.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlOreDoc.Location = new System.Drawing.Point(755, 0);
-            this.pnlOreDoc.MaximumSize = new System.Drawing.Size(400, 0);
+            this.pnlOreDoc.Location = new System.Drawing.Point(735, 0);
+            this.pnlOreDoc.MaximumSize = new System.Drawing.Size(420, 0);
             this.pnlOreDoc.MinimumSize = new System.Drawing.Size(300, 0);
             this.pnlOreDoc.Name = "pnlOreDoc";
-            this.pnlOreDoc.Size = new System.Drawing.Size(400, 687);
+            this.pnlOreDoc.Size = new System.Drawing.Size(420, 687);
             this.pnlOreDoc.TabIndex = 4;
             // 
             // lblOreEff
@@ -141,7 +142,7 @@ namespace Cattedre
             this.pnlLeft.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLeft.Location = new System.Drawing.Point(0, 0);
             this.pnlLeft.Name = "pnlLeft";
-            this.pnlLeft.Size = new System.Drawing.Size(755, 687);
+            this.pnlLeft.Size = new System.Drawing.Size(735, 687);
             this.pnlLeft.TabIndex = 5;
             // 
             // pnlCentrale
@@ -151,7 +152,7 @@ namespace Cattedre
             this.pnlCentrale.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCentrale.Location = new System.Drawing.Point(0, 100);
             this.pnlCentrale.Name = "pnlCentrale";
-            this.pnlCentrale.Size = new System.Drawing.Size(755, 587);
+            this.pnlCentrale.Size = new System.Drawing.Size(735, 587);
             this.pnlCentrale.TabIndex = 8;
             // 
             // pnlDipartimento
@@ -161,7 +162,7 @@ namespace Cattedre
             this.pnlDipartimento.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlDipartimento.Location = new System.Drawing.Point(169, 0);
             this.pnlDipartimento.Name = "pnlDipartimento";
-            this.pnlDipartimento.Size = new System.Drawing.Size(586, 587);
+            this.pnlDipartimento.Size = new System.Drawing.Size(566, 587);
             this.pnlDipartimento.TabIndex = 2;
             // 
             // pnlClassi
@@ -179,7 +180,7 @@ namespace Cattedre
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(0, 0);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(755, 100);
+            this.pnlTop.Size = new System.Drawing.Size(735, 100);
             this.pnlTop.TabIndex = 7;
             // 
             // pnlDiscipline
@@ -187,7 +188,7 @@ namespace Cattedre
             this.pnlDiscipline.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlDiscipline.Location = new System.Drawing.Point(169, 0);
             this.pnlDiscipline.Name = "pnlDiscipline";
-            this.pnlDiscipline.Size = new System.Drawing.Size(586, 100);
+            this.pnlDiscipline.Size = new System.Drawing.Size(566, 100);
             this.pnlDiscipline.TabIndex = 1;
             // 
             // pnlButtons
@@ -279,11 +280,12 @@ namespace Cattedre
             this.cbDipartimenti.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDipartimenti.FormattingEnabled = true;
             this.cbDipartimenti.Location = new System.Drawing.Point(6, 9);
-            this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbDipartimenti.Margin = new System.Windows.Forms.Padding(2);
             this.cbDipartimenti.Name = "cbDipartimenti";
             this.cbDipartimenti.Size = new System.Drawing.Size(100, 24);
             this.cbDipartimenti.TabIndex = 1;
-            this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.btCaricaDipartimento_Click_1);
+            this.cbDipartimenti.SelectedIndexChanged += new System.EventHandler(this.btCaricaDipartimento_SelectedIndexChanged);
+            this.cbDipartimenti.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.cbDipartimenti_Format);
             // 
             // btGeneraASsucc
             // 
@@ -319,6 +321,10 @@ namespace Cattedre
             this.btGeneraASsucc.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
             this.btGeneraASsucc.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
             this.btGeneraASsucc.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btGeneraASsucc.StateDisabled.Back.Color1 = System.Drawing.Color.Plum;
+            this.btGeneraASsucc.StateDisabled.Back.Color2 = System.Drawing.Color.Violet;
+            this.btGeneraASsucc.StateDisabled.Border.Color1 = System.Drawing.Color.Silver;
+            this.btGeneraASsucc.StateDisabled.Border.Color2 = System.Drawing.Color.DarkGray;
             this.btGeneraASsucc.StateNormal.Back.Color1 = System.Drawing.Color.DarkOrchid;
             this.btGeneraASsucc.StateNormal.Back.Color2 = System.Drawing.Color.Violet;
             this.btGeneraASsucc.StateNormal.Border.Color1 = System.Drawing.Color.Orchid;
@@ -369,7 +375,7 @@ namespace Cattedre
             // 
             this.splitter1.BackColor = System.Drawing.Color.Black;
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(753, 0);
+            this.splitter1.Location = new System.Drawing.Point(733, 0);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(2, 687);
             this.splitter1.TabIndex = 6;

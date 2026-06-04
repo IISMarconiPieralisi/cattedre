@@ -36,14 +36,27 @@ namespace Cattedre
         #endregion
         public List<ClsUtenteDL> _utenti = new List<ClsUtenteDL>();
         Dictionary<string, List<string>> filtri = new Dictionary<string, List<string>>();
-        public FrmUtenti()
+
+        private ClsUtenteDL _utenteLoggato;        
+
+        public FrmUtenti(ClsUtenteDL utenteLoggato = null)
         {
             InitializeComponent();
-
+            _utenteLoggato = utenteLoggato;
+        }
+        private void FrmUtenti_Load(object sender, EventArgs e)
+        {
+            cbDipartimento.DataSource = ClsDipartimentoBL.CaricaDipartimenti();
+            cbDipartimento.ValueMember = "ID";
+            cbDipartimento.DisplayMember = "Nome";
+            cbDipartimento.SelectedIndex = -1;
+            GestisciPermessi();
+            CaricaListView();
         }
 
         private void CaricaListView()
         {
+            _utenti = ClsUtenteBL.CaricaUtenti(filtri);
             lvUtenti.Items.Clear();
 
             foreach (ClsUtenteDL utente in _utenti)
@@ -51,9 +64,9 @@ namespace Cattedre
                 //prendo un metodo che cerca il contratto in base all'id utente
                 ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(utente.ID);
                 ListViewItem lvi = new ListViewItem(utente.ID.ToString());
-
-                lvi.SubItems.Add(utente.Nome);
+                
                 lvi.SubItems.Add(utente.Cognome);
+                lvi.SubItems.Add(utente.Nome);
                 lvi.SubItems.Add(utente.Email);
                 string _tipoDocente = (utente.TipoDocente == 'T') ? " teorico" : (utente.TipoDocente == 'L') ? " pratico" : string.Empty;
                 switch (utente.TipoUtente)
@@ -104,99 +117,107 @@ namespace Cattedre
                 lvUtenti.Items.Add(lvi);
 
             }
+            tbNumRecord.Text = _utenti.Count().ToString();
+
         }
 
-        private void btInserisci_Click(object sender, EventArgs e)
+        private async void btInserisci_Click(object sender, EventArgs e)
         {
-            FrmUtente frmUtente = new FrmUtente();
+            //controllo utente se ha i permessi necessari
+            if (!ClsUtenteDL.UtenteCRUD(_utenteLoggato)) return;
+            FrmUtente frmUtente = new FrmUtente(_utenteLoggato);
             DialogResult dr = frmUtente.ShowDialog();
             if (dr == DialogResult.OK)
             {
                 try
                 {
+
                     this.Cursor = Cursors.WaitCursor;
+
                     ClsUtenteBL.InserisciUtente(frmUtente._utente); //l'utente che mando non ha un ID che creo quando lo inzializzo nel server
                     ClsUtenteDL utente = ClsUtenteBL.caricautenteByEmail(frmUtente._utente.Email); //essendo che l'email è univoca riesco a risalire anche all'id del utente in questo modo
-                    if (frmUtente._afferenze != null && frmUtente._afferenze.Count > 0)
-                    {
-                        foreach (ClsAfferireDL afferire in frmUtente._afferenze)
-                        {
-                            afferire.IDutente = utente.ID;
-                            ClsAfferireBL.InserisciAfferire(afferire);
-                        }
+                    await Task.WhenAll(
+                         Task.Run(() =>
+                         {
+                             if (frmUtente._afferenze != null && frmUtente._afferenze.Count > 0)
+                             {
+                                 foreach (ClsAfferireDL afferire in frmUtente._afferenze)
+                                 {
+                                     afferire.IDutente = utente.ID;
+                                     ClsAfferireBL.InserisciAfferire(afferire);
+                                 }
 
-                    }
-                    if (frmUtente._richieste != null && frmUtente._richieste.Count > 0)
-                    {
-                        foreach (ClsRichiedereDL richiedere in frmUtente._richieste)
-                        {
-                            richiedere.IDutente = utente.ID;
-                            ClsRichiedereBL.InserisciRichiedere(richiedere);
-                        }
+                             }
+                         }),
+                         Task.Run(() =>
+                          {
+                              if (frmUtente._richieste != null && frmUtente._richieste.Count > 0)
+                              {
+                                  foreach (ClsRichiedereDL richiedere in frmUtente._richieste)
+                                  {
+                                      richiedere.IDutente = utente.ID;
+                                      ClsRichiedereBL.InserisciRichiedere(richiedere);
+                                  }
 
-                    }
+                              }
+                          }),
+                         Task.Run(() =>
+                         {
+                             if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C" || frmUtente._utente.TipoUtente == "A")
+                             {
+                                 frmUtente._contratto.IDutente = utente.ID;
+                                 ClsContrattoBL.InserisciContratto(frmUtente._contratto, utente.ID);
+                                 if (frmUtente._utente.TipoUtente == "C")
+                                 {
+                                     //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
+                                     ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, utente.ID);
 
-                    if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C" || frmUtente._utente.TipoUtente == "A")
-                    {
-                        frmUtente._contratto.IDutente = utente.ID;
-                        ClsContrattoBL.InserisciContratto(frmUtente._contratto, utente.ID);
-                        if (frmUtente._utente.TipoUtente == "C")
-                        {
-                            //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
-                            ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, utente.ID);
-
-                        }
-                    }
+                                 }
+                             }
+                         })
+                    );
                 }
                 catch (Exception ex)
                 {
                     this.Cursor = Cursors.Arrow;
                     MessageBox.Show($"Errore durante il inserimento:{ex.Message}", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }finally
+                {
+                    this.Cursor = Cursors.Arrow;
                 }
-                this.Cursor = Cursors.Arrow;
-                gestisciListview();
+                CaricaListView();
             }
         }
-
-        private void FrmUtenti_Load(object sender, EventArgs e)
-        {
-            _utenti = ClsUtenteBL.CaricaUtenti();
-            CaricaListView();
-        }
-        private void gestisciListview()
-        {
-            if (filtri.Count != 0)
-                _utenti = ClsUtenteBL.FiltraUtenti(filtri);
-            else
-                _utenti = ClsUtenteBL.CaricaUtenti();
-            CaricaListView();
-
-        }
-
-        private void btModifica_Click(object sender, EventArgs e)
+        private async void btModifica_Click(object sender, EventArgs e)
         {
             if (lvUtenti.SelectedIndices.Count == 1)
             {
+                if (!ClsUtenteDL.UtenteCRUD(_utenteLoggato)) return;
 
                 int indiceDaModificare = lvUtenti.SelectedIndices[0];
-                FrmUtente frmUtente = new FrmUtente();
-                //passo la classe afferirenza e il contratto solo se l'utente è un docente
+                FrmUtente frmUtente = new FrmUtente(_utenteLoggato);
                 frmUtente._utente = _utenti[indiceDaModificare];
-                //creo un appoggio di utente che mi servirà in futuro
-                //ClsUtenteBL u = frmUtente._utente;
-                frmUtente._utente.ID = _utenti[indiceDaModificare].ID; //mi assicuro che l'ID rimanga lo stesso
+                frmUtente._utente.ID = _utenti[indiceDaModificare].ID;
 
-                List<ClsAfferireDL> afferire = ClsAfferireBL.CaricaClassiAfferire(_utenti[indiceDaModificare].ID);
-                if (afferire != null && afferire.Count > 0) //se non esiste restituirà null e quindi non restituirà la lista
-                    frmUtente._afferenze = afferire;
+                // caricamento dati in background prima di aprire il form
+                List<ClsRichiedereDL> richiestePrima = new List<ClsRichiedereDL>();
+                await Task.Run(() =>
+                {
+                    List<ClsAfferireDL> afferire = ClsAfferireBL.CaricaClassiAfferire(_utenti[indiceDaModificare].ID);
+                    if (afferire != null && afferire.Count > 0)
+                        frmUtente._afferenze = afferire;
 
-                List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedereUtente(_utenti[indiceDaModificare].ID);
-                if (richiedere != null && richiedere.Count > 0)
-                    frmUtente._richieste = richiedere;
-                ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(_utenti[indiceDaModificare].ID); //se non esiste restituirà null
-                if (contratto != null)
-                    frmUtente._contratto = contratto;
+                    List<ClsRichiedereDL> richiedere = ClsRichiedereBL.CaricaClassiRichiedereUtente(_utenti[indiceDaModificare].ID);
+                    if (richiedere != null && richiedere.Count > 0)
+                        frmUtente._richieste = richiedere;
 
+                    ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(_utenti[indiceDaModificare].ID);
+                    if (contratto != null)
+                        frmUtente._contratto = contratto;
+
+                    richiestePrima = ClsRichiedereBL.CaricaClassiRichiedereUtente(_utenti[indiceDaModificare].ID)
+                        ?? new List<ClsRichiedereDL>();
+                });
 
                 DialogResult dr = frmUtente.ShowDialog();
                 if (dr == DialogResult.OK)
@@ -204,43 +225,55 @@ namespace Cattedre
                     try
                     {
                         this.Cursor = Cursors.WaitCursor;
-                        ClsUtenteBL.ModificaUtente(frmUtente._utente, frmUtente._utente.ID);
+
+                        // sequenziale — deve finire prima degli altri
+                        await Task.Run(() => ClsUtenteBL.ModificaUtente(frmUtente._utente, frmUtente._utente.ID));
 
                         if (frmUtente._utente.TipoUtente == "D" || frmUtente._utente.TipoUtente == "C" || frmUtente._utente.TipoUtente == "A")
                         {
-
-                            //modifica contratto, afferenze e richieste
-                            ClsAfferireBL.ModificaAfferenze(frmUtente._utente.ID, frmUtente._afferenze);
-                            ClsRichiedereBL.ModificaRichiestaUtente(frmUtente._utente.ID, frmUtente._richieste);
-                            ClsContrattoBL.ModificaContratto(frmUtente._contratto, frmUtente._utente.ID);
-                            //controllo e inserimento coordinatore di dipartimento
-                            if (frmUtente._utente.TipoUtente == "C")
-                            {
-                                //se è un coordinatore di dipartimento devo aggiornare la tabella dipartimenti
-                                ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, frmUtente._utente.ID);
-                            }
-
+                            await Task.WhenAll(
+                                Task.Run(() => ClsAfferireBL.ModificaAfferenze(frmUtente._utente.ID, frmUtente._afferenze)),
+                                Task.Run(() => ClsRichiedereBL.ModificaRichiestaUtente(frmUtente._utente.ID, frmUtente._richieste)),
+                                Task.Run(() =>
+                                {
+                                    ClsContrattoBL.ModificaContratto(frmUtente._contratto, frmUtente._utente.ID);
+                                    if (frmUtente._utente.TipoUtente == "C")
+                                        ClsDipartimentoBL.ModificaCoordinatoreDipartimento(frmUtente._dipartimento, frmUtente._utente.ID);
+                                }),
+                                Task.Run(() =>
+                                {
+                                    List<ClsRichiedereDL> cdcRimosse = richiestePrima
+                                        .Where(prima => prima.IDclassediconcorso > 0 &&
+                                            !(frmUtente._richieste ?? new List<ClsRichiedereDL>())
+                                            .Any(dopo => dopo.IDclassediconcorso == prima.IDclassediconcorso))
+                                        .ToList();
+                                    foreach (var cdc in cdcRimosse)
+                                        ClsAssegnareBL.EliminaAssegnazioniDocente(frmUtente._utente.ID, cdc.IDclassediconcorso);
+                                })
+                            );
                         }
                     }
                     catch (Exception ex)
                     {
-                        this.Cursor = Cursors.Arrow;
                         MessageBox.Show("Errore durante il salvataggio: " + ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    this.Cursor = Cursors.Arrow;
-                    gestisciListview();
-
-
+                    finally
+                    {
+                        this.Cursor = Cursors.Arrow;
+                    }
+                    CaricaListView();
                 }
             }
             else
                 MessageBox.Show("non è stato selezionato nessun utente, riprovare.", "Modifica", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
-
         private void btElimina_Click(object sender, EventArgs e)
         {
             if (lvUtenti.SelectedIndices.Count == 1)
             {
+                //controllo utente se ha i permessi necessari
+                if (!ClsUtenteDL.UtenteCRUD(_utenteLoggato)) return;
+
                 int indiceDaEliminare = lvUtenti.SelectedIndices[0];
                 int idDaEliminare = Convert.ToInt32(lvUtenti.Items[indiceDaEliminare].Tag);
                 DialogResult dr = MessageBox.Show("Sei sicuro?", "CANCELLAZIONE", MessageBoxButtons.YesNo);
@@ -251,54 +284,47 @@ namespace Cattedre
                     _utenti = ClsUtenteBL.CaricaUtenti();
 
                 }
-                gestisciListview();
+                CaricaListView();
 
             }
         }
+
         #region filtri
 
         private void btFiltro_Click(object sender, EventArgs e)
         {
             try
             {
-                filtri = new Dictionary<string, List<string>>();
+                filtri.Clear();
                 btAnnullaFiltra.Enabled = true;
 
-                bool parametroSelezionato = false;
 
-                parametroSelezionato |= AggiungiFiltro(filtri, "tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
-                parametroSelezionato |= AggiungiFiltro(filtri, "tipoContratto", CaricaElementiSelezionati(gbContratto, typeof(RadioButton)), mappaContratto);
-                parametroSelezionato |= AggiungiFiltro(filtri, "tipoDocente", CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)), mappaTipoDocente);
+                AggiungiFiltro(filtri, "tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
+                AggiungiFiltro(filtri, "tipoDocente", CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)), mappaTipoDocente);
 
                 string NomeCognome = (tbRicerca.Text != "cognome nome" && !string.IsNullOrWhiteSpace(tbRicerca.Text)) ? tbRicerca.Text.Trim() : string.Empty;
                 if (NomeCognome != string.Empty)
                 {
                     string NomeCognomeFiltrati = NomeCognome.Replace(" ", "").ToLower();
                     filtri.Add("CONCAT(cognome,nome)", new List<string> { NomeCognomeFiltrati });
-                    parametroSelezionato = true;
                 }
-                if (!parametroSelezionato)
+                if(cbDipartimento.SelectedIndex>-1)
                 {
-                    _utenti = ClsUtenteBL.CaricaUtenti();
-                    CaricaListView();
+                    filtri.Add("IDdipartimento", new List<string> { cbDipartimento.SelectedValue.ToString() });
                 }
-
-                gestisciListview();
+                    CaricaListView();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}\n riprova", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        private bool AggiungiFiltro(Dictionary<string, List<string>> filtri, string chiave, IEnumerable<string> selezionati, Dictionary<string, string> mappa)
+        private void AggiungiFiltro(Dictionary<string, List<string>> filtri, string chiave, IEnumerable<string> selezionati, Dictionary<string, string> mappa)
         {
             var valori = selezionati.Where(item => mappa.ContainsKey(item)).Select(item => mappa[item]).ToList();
             if (valori.Any())
-            {
                 filtri.Add(chiave, valori);
-                return true;
-            }
-            return false;
+            
         }
         private List<string> CaricaElementiSelezionati(GroupBox gb, Type tipoControllo)
         {
@@ -323,16 +349,16 @@ namespace Cattedre
 
         private void btAnnullaFiltra_Click(object sender, EventArgs e)
         {
-            PulisciGroubBox(gbContratto);
-            PulisciGroubBox(gbTipiUtenti);
             PulisciGroubBox(gBtipoDocente);
-            filtri = new Dictionary<string, List<string>>();
             //gestione tbricerca
+            if (_utenteLoggato.TipoUtente != "C")
+            {
+                cbDipartimento.SelectedIndex = -1;
+                PulisciGroubBox(gbTipiUtenti);
+            }
             tbRicerca.Text = string.Empty;
-            tbRicerca_Leave(null, null);
             btAnnullaFiltra.Enabled = false;
-            //ricamento della listview
-            gestisciListview();
+            btFiltro_Click(null, null);
         }
 
 
@@ -368,20 +394,6 @@ namespace Cattedre
                 tbRicerca.StateCommon.Content.Color1 = Color.Gray;
             }
         }
-        //private void btRicerca_Click(object sender, EventArgs e)
-        //{
-        //    if (!string.IsNullOrWhiteSpace(tbRicerca.Text) && tbRicerca.Text != "cognome nome")
-        //    {
-        //        //cancello il filtra in modo che non mi dia problemi
-        //        filtri = new Dictionary<string, List<string>>();
-        //        _parametroRicerca = tbRicerca.Text.Replace(" ", "").ToLower();
-        //        _utenti = ClsUtenteBL.RicercaPerNomeCognome(_parametroRicerca);
-        //        CaricaListView();
-        //    }
-        //    else
-        //        MessageBox.Show("Inserire Input valido per la ricerca", "attenzione", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //}
-
 
         private void cbDocenteCordinatore_CheckedChanged(object sender, EventArgs e)
         {
@@ -396,8 +408,43 @@ namespace Cattedre
 
 
         #endregion
+        #region permessi
+        public void GestisciPermessi()
+        {
+            if(_utenteLoggato?.TipoUtente == "C" || _utenteLoggato?.TipoUtente == "D")
+{
+                List<string> idDipartimenti = new List<string>();
 
+                if (_utenteLoggato.TipoUtente == "C")
+                {
+                    long idDip = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utenteLoggato.ID).ID;
+                    idDipartimenti.Add(idDip.ToString());
+                    cbDipartimento.SelectedValue = idDip;
+                }
+                else // D
+                {
+                    long idDip = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
+                    idDipartimenti.Add(idDip.ToString());
+                    cbDipartimento.SelectedValue = idDip;
+                }
 
+                if (idDipartimenti.Count > 0)
+                    filtri["IDdipartimento"] = idDipartimenti;
+
+                cbDipartimento.Enabled = false;
+                cbDocente.Checked = true;
+                gbTipiUtenti.Enabled = false;
+            }
+
+                if (_utenteLoggato?.TipoUtente == "D")
+            {
+
+                btInserisci.Enabled = false;
+                btModifica.Enabled = false;
+                btElimina.Enabled = false;
+            }
+        }
+        #endregion
         #region mappattura tasti
         private void lvUtenti_KeyDown(object sender, KeyEventArgs e)
         {
@@ -438,18 +485,43 @@ namespace Cattedre
                 }
             }
         }
+        private void cbDipartimento_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Evita il "beep"
+                tbRicerca.Focus();
+            }
+            if (_utenteLoggato.TipoUtente != "C" && e.KeyCode == Keys.Cancel || e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+                cbDipartimento.SelectedIndex = -1;
+
+        }
 
         private void rbTipoDocente_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
-                rbIndireterminato.Focus();
+                cbDipartimento.Focus();
         }
-        private void rbTipoContratto_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-                tbRicerca.Focus();
-        }
+
         #endregion
 
+        private void btCattedreUtente_Click(object sender, EventArgs e)
+        {
+            if (lvUtenti.SelectedIndices.Count == 1)
+            {
+                int indiceDaModificare = lvUtenti.SelectedIndices[0];
+                FrmCattedreUtente frmCattedreUtente = new FrmCattedreUtente(_utenteLoggato);
+                frmCattedreUtente._utente = _utenti[indiceDaModificare];
+                frmCattedreUtente._utente.ID = _utenti[indiceDaModificare].ID; //mi assicuro che l'ID rimanga lo stesso
+
+                DialogResult dr = frmCattedreUtente.ShowDialog();
+
+
+            }
+            else
+                MessageBox.Show("non è stato selezionato nessun utente, riprovare.", "Modifica", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+       
     }
 }

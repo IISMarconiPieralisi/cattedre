@@ -30,6 +30,7 @@ namespace Cattedre
                 lvi.Tag = indirizzo.ID;
                 lvIndirizzi.Items.Add(lvi);
             }
+            tbNumRecord.Text = indirizzi.Count().ToString();
         }
 
 
@@ -135,6 +136,20 @@ namespace Cattedre
                 tbRicerca.Text = string.Empty;
                 btAnnulla_Click(null, null);
                 btCerca_Click(null, null);
+            }
+        }
+
+        private void lvIndirizzi_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                brModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
             }
         }
     }

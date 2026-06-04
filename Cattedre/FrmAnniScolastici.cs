@@ -34,6 +34,7 @@ namespace Cattedre
                 lvi.Tag = annoScolastico.ID;
                 lvAnniScolastici.Items.Add(lvi);
             }
+            tbNumRecord.Text = anniScolastici.Count().ToString();
         }
 
         private void btInserisci_Click(object sender, EventArgs e)

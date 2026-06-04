@@ -87,6 +87,8 @@ namespace Cattedre
         }
         public long IDannoscolastico { get => _idannoscolastico; set => _idannoscolastico = value; }
 
+
+
         #endregion
     }
 }

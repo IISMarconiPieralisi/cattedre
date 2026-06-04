@@ -42,6 +42,7 @@ namespace Cattedre
                 lvi.Tag = cdcs[i].ID;
                 lvCdCs.Items.Add(lvi);
             }
+            tbNumRecord.Text = cdcs.Count().ToString();
         }
 
         private void btInserisci_Click(object sender, EventArgs e)

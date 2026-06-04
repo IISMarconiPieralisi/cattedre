@@ -42,8 +42,10 @@
             this.btCerca = new Krypton.Toolkit.KryptonButton();
             this.btPulisciCb = new Krypton.Toolkit.KryptonButton();
             this.label2 = new System.Windows.Forms.Label();
-            this.tplAnniScolastici = new System.Windows.Forms.TableLayoutPanel();
             this.cbCDC = new System.Windows.Forms.ComboBox();
+            this.cbAnnoScolastico = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tbNumRecord = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btModifica
@@ -468,21 +470,6 @@
             this.label2.TabIndex = 56;
             this.label2.Text = "Anno Scolastico:";
             // 
-            // tplAnniScolastici
-            // 
-            this.tplAnniScolastici.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tplAnniScolastici.ColumnCount = 2;
-            this.tplAnniScolastici.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.45055F));
-            this.tplAnniScolastici.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.54945F));
-            this.tplAnniScolastici.Location = new System.Drawing.Point(496, 56);
-            this.tplAnniScolastici.Name = "tplAnniScolastici";
-            this.tplAnniScolastici.RowCount = 1;
-            this.tplAnniScolastici.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tplAnniScolastici.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tplAnniScolastici.Size = new System.Drawing.Size(252, 36);
-            this.tplAnniScolastici.TabIndex = 5;
-            // 
             // cbCDC
             // 
             this.cbCDC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -495,13 +482,46 @@
             this.cbCDC.SelectedIndexChanged += new System.EventHandler(this.cbCDC_SelectedIndexChanged);
             this.cbCDC.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.cbCDC_Format);
             // 
+            // cbAnnoScolastico
+            // 
+            this.cbAnnoScolastico.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.cbAnnoScolastico.FormattingEnabled = true;
+            this.cbAnnoScolastico.Location = new System.Drawing.Point(496, 61);
+            this.cbAnnoScolastico.Name = "cbAnnoScolastico";
+            this.cbAnnoScolastico.Size = new System.Drawing.Size(121, 25);
+            this.cbAnnoScolastico.TabIndex = 61;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(1097, 540);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(51, 16);
+            this.label5.TabIndex = 63;
+            this.label5.Text = "Trovati:";
+            // 
+            // tbNumRecord
+            // 
+            this.tbNumRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbNumRecord.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbNumRecord.Location = new System.Drawing.Point(1157, 535);
+            this.tbNumRecord.Name = "tbNumRecord";
+            this.tbNumRecord.ReadOnly = true;
+            this.tbNumRecord.ShortcutsEnabled = false;
+            this.tbNumRecord.Size = new System.Drawing.Size(39, 27);
+            this.tbNumRecord.TabIndex = 62;
+            // 
             // FrmDotazioni
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1219, 590);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.tbNumRecord);
+            this.Controls.Add(this.cbAnnoScolastico);
             this.Controls.Add(this.cbCDC);
-            this.Controls.Add(this.tplAnniScolastici);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btCerca);
             this.Controls.Add(this.btPulisciCb);
@@ -534,7 +554,9 @@
         private Krypton.Toolkit.KryptonButton btCerca;
         private Krypton.Toolkit.KryptonButton btPulisciCb;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TableLayoutPanel tplAnniScolastici;
         private System.Windows.Forms.ComboBox cbCDC;
+        private System.Windows.Forms.ComboBox cbAnnoScolastico;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox tbNumRecord;
     }
 }

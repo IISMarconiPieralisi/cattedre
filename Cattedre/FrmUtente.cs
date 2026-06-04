@@ -24,16 +24,18 @@ namespace Cattedre
         #region variabili globali
         //creazione degli array che verranno popolati con le query
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
-        List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
+        List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti().OrderBy(d=>d.Nome).ToList();
         List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDiscipline();
         int _oldValuedipCoord=0;
         bool _bloccoEvdipCoord = false;
         string _imputEmail;
         string _colore = string.Empty;
+        ClsUtenteDL _utenteLoggato;
         //tenuti fuori in modo tale che  all'occorrenza non si deve riaprire ogni volta una connessione al db
         #endregion
-        public FrmUtente()
+        public FrmUtente(ClsUtenteDL utenteloggato)
         {
+            _utenteLoggato = utenteloggato;
             InitializeComponent();
         }
         
@@ -153,7 +155,7 @@ namespace Cattedre
                             throw new Exception($"Colore occupato nel dipartimento: {nomeDip}");
                     }
                 }
-
+                
                 // Se arrivi qui, tutto è valido
                 this.DialogResult = DialogResult.OK;
             }
@@ -169,74 +171,179 @@ namespace Cattedre
         }
         private void FrmUtente_Load(object sender, EventArgs e)
         {
-            //funzione per prendere solo i nomi delle cdc e non l'oggetto intero
-            popolaClbClasseDiConcorso(cdcs);
-            //funzione per popolare sia i dipartimenti coordinati anche se non visibili sia quelli in cui partecipare
-            //ancora non li filtro in base alla cdc selezionata funzione da fare
-            popolaDipartimenti(dipartimenti);
-            cldColori.Color = Color.White;
-            //controllo se l'utente passato ha dei dati da mostrare
-            if (_utente!= null && _utente.ID>0)
-            {
-                tbNome.Text = _utente.Nome;
-                tbCognome.Text = _utente.Cognome;
-                tbEmail.Text = _utente.Email;
-                    tbPassword.Text = "********";
-                //aggiungo il metodo enter e quando l'utente va su utente
-                tbPassword.Enter += tbPassword_Enter;
-                tbPassword.Leave += tbPassword_Leave;
-                cbTipoUtente.SelectedItem = GetNomeTipoUtente(_utente.TipoUtente);
-                if (_utente.TipoDocente == 'T') rbTeorico.Checked = true;
-                else if (_utente.TipoDocente == 'L')    rbLaboratorio.Checked = true;
+            InitializeControls();
 
-                if (_utente.TipoUtente == "C")
+            if (ModificaUtente())
+            {
+                LoadDatiUtente();
+                LoadContratto();
+                LoadAfferenze();
+                LoadClassiDiConcorso();
+                GestisciPermessi();
+            }
+            ConfiguraPannelloCDC();
+            GestisciCoordinatoreDipartimento();
+        }
+
+        private void GestisciCoordinatoreDipartimento()
+        {
+            clbDipartimento.Enabled = true;
+            if (!ClsUtenteDL.UtenteAdmin(_utenteLoggato))
+            {
+                ClsDipartimentoDL dip = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utenteLoggato.ID);
+                if (dip.ID > 0)
                 {
-                    ClsDipartimentoDL dipCoordinato = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utente.ID);
-                    if (dipCoordinato != null)
+                    int indexDipartimento = dipartimenti.FindIndex(d => d.ID == dip.ID);
+                    if (indexDipartimento >= 0)
                     {
-                        loadDipartimentoCoordinato(dipCoordinato);
+                        clbDipartimento.SetItemChecked(indexDipartimento, true);
                     }
-
                 }
-                if(!string.IsNullOrEmpty(_utente.Colore))
-                {
-                    _colore = _utente.Colore;
-                    Color coloreUC = OttieniColore(_utente.Colore);
-                    cldColori.Color=coloreUC;
-                    pnColore.BackColor = coloreUC;
-                }
-            }
-            //controllo se l'utente passato ha un contratto da mostrare
-            if (_contratto != null)
-            {
-                //se il contratto è terminato seleziono il radiobutton corrispondente
-                if (_contratto.TipoContratto == 'D')
-                    rbDeterminato.Checked = true;
-                else
-                    rbIndeterminato.Checked = true;
-                nudMonteOre.Value = Convert.ToDecimal(_contratto.MonteOre);
-                dtpDataInizio.Value = _contratto.DataInizioContratto;
-
-                //se la data di fine contratto non è valorizzata disabilito il controllo (se è indeterminato)
-                if (_contratto.DataFineContratto!=null)
-                    dtpDataFine.Value = _contratto.DataFineContratto.Value;
-                else
-                    dtpDataFine.Enabled = false;
-
-            }
-            //controllo afferanza
-            if(_afferenze!=null && _afferenze.Count>0)
-                loadDipartimenti();
-            //inserimento classe di concorso e discipline
-            if (_richieste != null)
-            {
-                clbCLasseDiConcorso.ItemCheck -= clbCLasseDiConcorso_ItemCheck;
-                loadCDC();
-                PopolaDisciplinePerCDC();
-                clbCLasseDiConcorso.ItemCheck += clbCLasseDiConcorso_ItemCheck;
-                LoadDisciplineUtente();
             }
         }
+
+        private void GestisciPermessi()
+        {
+            if (ClsUtenteDL.UtenteAdmin(_utenteLoggato) || _utente.ID==_utenteLoggato.ID) return;
+            //se è un coordinatore in modifica non permette la modifica della password
+            tbNome.Enabled = false;
+            tbCognome.Enabled = false;
+            tbPassword.Enabled = false;
+            cbAutoEmail.Enabled = false;
+            tbEmail.Enabled = false;
+            cbAutoPassword.Enabled = false;
+            cbTipoUtente.Enabled = false;
+            pnTipoDocente.Enabled = false;
+            //colore può essere modificato
+            //se trova un dipartimento lo im
+           
+
+        }
+
+        #region Inizializzazione
+
+        private void InitializeControls()
+        {
+            popolaClbClasseDiConcorso(cdcs);
+            popolaDipartimenti(dipartimenti);
+            cldColori.Color = Color.White;
+            popolacbTipiUtente();
+        }
+
+        private void popolacbTipiUtente()
+        {
+            cbTipoUtente.Items.Clear();
+            if(ClsUtenteDL.UtenteAdmin(_utenteLoggato))
+            {
+                cbTipoUtente.Items.Add("Preside");
+                cbTipoUtente.Items.Add("Amministratore");
+                cbTipoUtente.Items.Add("Coordinatore di dipartimento");
+                cbTipoUtente.SelectedIndex = -1;
+            }
+            cbTipoUtente.Items.Add("Docente");
+        }
+
+        private bool ModificaUtente() => _utente != null && _utente.ID > 0;
+
+        #endregion
+        #region Caricamento Utente
+
+        private void LoadDatiUtente()
+        {
+            tbNome.Text = _utente.Nome;
+            tbCognome.Text = _utente.Cognome;
+            tbEmail.Text = _utente.Email;
+            tbPassword.Text = "********";
+
+            tbPassword.Enter += tbPassword_Enter;
+            tbPassword.Leave += tbPassword_Leave;
+
+            cbTipoUtente.SelectedItem = GetNomeTipoUtente(_utente.TipoUtente);
+
+            LoadTipoDocente();
+            LoadDipartimentoCoordinato();
+            LoadColoreUtente();
+        }
+
+        private void LoadTipoDocente()
+        {
+            switch (_utente.TipoDocente)
+            {
+                case 'T': rbTeorico.Checked = true; break;
+                case 'L': rbLaboratorio.Checked = true; break;
+            }
+        }
+
+        private void LoadDipartimentoCoordinato()
+        {
+            if (_utente.TipoUtente != "C") return;
+
+            ClsDipartimentoDL dipCoordinato = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utente.ID);
+            if (dipCoordinato != null)
+                loadDipartimentoCoordinato(dipCoordinato);
+        }
+
+        private void LoadColoreUtente()
+        {
+            if (string.IsNullOrEmpty(_utente.Colore)) return;
+
+            _colore = _utente.Colore;
+            Color colore = OttieniColore(_utente.Colore);
+            cldColori.Color = colore;
+            pnColore.BackColor = colore;
+        }
+
+        #endregion
+        #region Caricamento Contratto
+
+        private void LoadContratto()
+        {
+            if (_contratto == null) return;
+
+            rbDeterminato.Checked = _contratto.TipoContratto == 'D';
+            rbIndeterminato.Checked = _contratto.TipoContratto != 'D';
+
+            nudMonteOre.Value = Convert.ToDecimal(_contratto.MonteOre);
+            dtpDataInizio.Value = _contratto.DataInizioContratto;
+
+            if (_contratto.DataFineContratto != null)
+                dtpDataFine.Value = _contratto.DataFineContratto.Value;
+            else
+                dtpDataFine.Enabled = false;
+        }
+
+        #endregion
+        #region Caricamento Afferenze e CDC
+
+        private void LoadAfferenze()
+        {
+            if (_afferenze?.Count > 0)
+                loadDipartimenti();
+        }
+
+        private void LoadClassiDiConcorso()
+        {
+            if (_richieste == null) return;
+
+            clbCLasseDiConcorso.ItemCheck -= clbCLasseDiConcorso_ItemCheck;
+            loadCDC();
+            PopolaDisciplinePerCDC();
+            clbCLasseDiConcorso.ItemCheck += clbCLasseDiConcorso_ItemCheck;
+            LoadDisciplineUtente();
+        }
+
+        /// <summary>
+        /// Il pannello CDC è attivo solo per Admin (A), Docente (D) e Coordinatore (C).
+        /// </summary>
+        private void ConfiguraPannelloCDC()
+        {
+            bool cdcAbilitata = _utente != null&& new[] { "A", "D", "C" }.Contains(_utente.TipoUtente);
+
+            pnCDCeDisc.Enabled = cdcAbilitata;   // oppure .Enabled se vuoi tenerlo visibile
+        }
+
+
+        #endregion
         #endregion
         private void rbIndeterminato_CheckedChanged(object sender, EventArgs e)
         {
@@ -301,11 +408,12 @@ namespace Cattedre
         }
         private void cbTipoUtente_SelectedIndexChanged(object sender, EventArgs e)
         {
+            bool Admin = ClsUtenteDL.UtenteAdmin(_utenteLoggato);
             switch (cbTipoUtente.SelectedItem.ToString())
             {
                 case "Docente":
-                    pnCDC.Enabled = true;
-                    pnDipartimento.Enabled = true;
+                    pnCDCeDisc.Enabled = true;
+                    pnDipartimento.Enabled = Admin;
                     PnContratto.Enabled = true;
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
@@ -314,8 +422,8 @@ namespace Cattedre
                     break;
 
                 case "Coordinatore di dipartimento":
-                    pnCDC.Enabled = true;
-                    pnDipartimento.Enabled = true;
+                    pnCDCeDisc.Enabled = true;
+                    pnDipartimento.Enabled = Admin;
                     PnContratto.Enabled = true;
                     lbDcoordinato.Visible = true;
                     cbDipartimentoCoordinato.Visible = true;
@@ -323,15 +431,15 @@ namespace Cattedre
 
                     break;
                 case "Amministratore":
-                    pnCDC.Visible = true;
-                    pnDipartimento.Enabled = true;
+                    pnCDCeDisc.Visible = true;
+                    pnDipartimento.Enabled = Admin;
                     PnContratto.Enabled = true;
                     lbDcoordinato.Visible = true;
                     cbDipartimentoCoordinato.Visible = true;
                     pnTipoDocente.Enabled = true;
                     break;
                 default:
-                    pnCDC.Visible = false;
+                    pnCDCeDisc.Enabled = false;
                     pnDipartimento.Enabled = false;
                     PnContratto.Enabled = false;
                     lbDcoordinato.Visible = false;
@@ -867,11 +975,14 @@ namespace Cattedre
         private void tbNomativi_TextChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(tbCognome.Text) && !string.IsNullOrEmpty(tbNome.Text))
+            {
                 cbAutoEmail.Enabled = true;
+                cbAutoPassword.Enabled = true;
+            }
             else
             {
+                cbAutoPassword.Enabled = false;
                 cbAutoEmail.Enabled = false;
-                cbAutoEmail.Checked = false;
             }
         }
 
@@ -880,8 +991,18 @@ namespace Cattedre
             if (e.KeyCode == Keys.Enter)
                 clbCLasseDiConcorso.Focus();
         }
-
-        
+        private void cbAutoPassword_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (cbAutoPassword.Checked)
+            {
+                tbPassword.Text = $"{ tbNome.Text.ToLower().Trim().Substring(0, 3)}{tbCognome.Text.ToLower().Trim().Substring(0, 3)}00!";
+                tbPassword.Enabled = false;
+            }
+            else
+            {
+                tbPassword.Enabled = true;
+            }
+        }
     }
     #endregion
 

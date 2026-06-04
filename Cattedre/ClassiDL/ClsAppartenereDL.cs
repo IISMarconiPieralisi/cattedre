@@ -45,7 +45,7 @@ namespace Cattedre
                     throw new Exception("la chiave all'interno di IDindirizzo non può essere 0");
             }
         }
-        public long IDdisicplina
+        public long IDdisciplina
         {
             get => _iddisciplina;
             set

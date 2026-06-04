@@ -23,12 +23,15 @@ namespace Cattedre
         public List<ClsGestireDL> _gestires = new List<ClsGestireDL>();
         public ClsDisciplinaDL _disciplina;
         public ClsVigereDL _vigere= new ClsVigereDL();
+        //variabili private (da non passare) usate internamente
         private int anno = 0;
         private long _lastDiscSp=0;
         private long _lastTick;
-        public FrmDisciplina()
+        ClsUtenteDL _utenteLoggato;
+        public FrmDisciplina(ClsUtenteDL _utenteloggato)
         {
             InitializeComponent();
+            _utenteLoggato = _utenteloggato;
         }
         private void btSalva_Click(object sender, EventArgs e)
         {
@@ -36,9 +39,11 @@ namespace Cattedre
             {
                 if (_disciplina == null || _disciplina.ID <= 0)
                     _disciplina = new ClsDisciplinaDL();
+                if (!ClsUtenteDL.UtenteCRUD(_utenteLoggato))
+                    throw new Exception("Non hai i permessi necessari per creare una disciplina");
 
                 _disciplina.Anno = anno;
-                if (_disciplina.Anno == 0 && !cbDisciplinaSpeciale.Checked)
+                if (_disciplina.Anno == 0 && !chbDisciplinaSpeciale.Checked)
                     throw new Exception("inserire un anno valido");
                 if (_disciplina.ID > 0 && _gestires.Count == 0)
                     _gestires = ClsGestireBL.CaricaGestioneDisciplina(_disciplina.ID);
@@ -47,7 +52,7 @@ namespace Cattedre
                 if (_gestires.Count <= 0)
                     throw new Exception("Selezionare un dipartimento il quale gestisce la disciplina.");
 
-                if (cbAnnoInizio.SelectedIndex <= 0)
+                if (cbAnnoInizio.SelectedIndex <= -1)
                     throw new Exception("Selezionare l'anno di inizio della disciplina.");
 
                 if (_richiederes.Count <= 0)
@@ -62,10 +67,10 @@ namespace Cattedre
 
                 _disciplina.OreLaboratorio = (int)nudOreLab.Value;
                 _disciplina.OreTeoria = (int)nudOreTeoria.Value;
-                if (cbDisciplinaSpeciale.Checked)
+                if (chbDisciplinaSpeciale.Checked)
                 {
-                    if (string.IsNullOrEmpty(tbDisciplinaSpeciale.Text)) throw new Exception("Inserire la descrizione della disciplina speciale");
-                    _disciplina.DisciplinaSpeciale = tbDisciplinaSpeciale.Text.Trim().ToLower();
+                    if (string.IsNullOrEmpty(cbDisciplinaSpeciale.Text)) throw new Exception("Inserire la descrizione della disciplina speciale");
+                    _disciplina.DisciplinaSpeciale = cbDisciplinaSpeciale.Text.Trim().ToLower();
                 }
                 //gestione classe vigere 
                 _vigere.IDannoInizio = Convert.ToInt32(cbAnnoInizio.SelectedValue);
@@ -78,7 +83,8 @@ namespace Cattedre
                 }
                 else
                 {
-                    if (ClsDisciplinaBL.CercaIdDisciplina(_disciplina) != _disciplina.ID)
+                    long IDdisciplinaTrovata = ClsDisciplinaBL.CercaIdDisciplina(_disciplina);
+                    if (IDdisciplinaTrovata>=0 && IDdisciplinaTrovata != _disciplina.ID)
                         throw new Exception("Disciplina già presente per questo anno.");
                 }
 
@@ -118,6 +124,7 @@ namespace Cattedre
 
             if (_disciplina != null)
             {
+                this.cbAnnoSuccessivo.SelectedIndexChanged -= new System.EventHandler(this.cbAnnoInizio_SelectedIndexChanged);
                 //carico le informazioni della disciplina successiva
                 anno = _disciplina.Anno;
                 tbNome.Text = _disciplina.Nome;
@@ -133,11 +140,16 @@ namespace Cattedre
                 //caricamento anno scolastico inizio e fine
                 if(_vigere.IDannoInizio>0) cbAnnoInizio.SelectedValue = _vigere.IDannoInizio;
                 if (_vigere.IDannoFine > 0) cbAnnoFine.SelectedValue = _vigere.IDannoFine;
+                this.cbAnnoSuccessivo.SelectedIndexChanged += new System.EventHandler(this.cbAnnoInizio_SelectedIndexChanged);
+
 
             }
             else
+            {
                 _disciplina = new ClsDisciplinaDL();
-            CambiaAnnoDisciplinaSuccessivaPotenziale();
+                CambiaAnnoDisciplinaSuccessivaPotenziale();
+
+            }
 
 
 
@@ -233,17 +245,20 @@ namespace Cattedre
         #region gestisci Disciplina successiva
         private void CambiaAnnoDisciplinaSuccessivaPotenziale()
         {
-            if (anno < 5 && anno >0)
+          
+            if (anno >= 1 && anno <= 5)
             {
-                lblAnnoSuc.Visible = true;
-                lblAnnoSuc.Text = (anno + 1).ToString() + "°";
+                cbAnnoSuccessivo.Enabled = true;
+                cbAnnoSuccessivo.SelectedItem =(anno==5)?"3°":(anno + 1).ToString() + "°";
             }
             else
-                lblAnnoSuc.Visible = false;
+            {
+                cbAnnoSuccessivo.Enabled = false;
+            }
         }
         private void ControlloCbDisciplinaSuccessiva()
         {
-            if (_gestires.Count != 0 &&_richiederes.Count!=0 && anno < 5 && anno != 0)
+            if (_gestires.Count != 0 && _richiederes.Count != 0 && anno != 0)
             {
                 cbDisciplinaSucessiva.Enabled = true;
                 popolaCbDisciplinaSuccessiva();
@@ -257,46 +272,54 @@ namespace Cattedre
         }
         private void popolaCbDisciplinaSuccessiva()
         {
-                // Se non ci sono dipartimenti selezionati, non ha senso cercare discipline successive
-                if (_gestires.Count == 0|| _richiederes.Count == 0 || anno >= 5 || anno == 0)
-                {
-                    cbDisciplinaSucessiva.DataSource = null;
-                    cbDisciplinaSucessiva.Enabled = false;
-                    return;
-                }
-
-                // 1. Prendiamo le discipline dell'anno successivo che non sono già occupate
-                var potenzialiSuccessive = _discipline.Where(p =>
-                    p.Anno == anno + 1 &&
-                    !_discipline.Any(d => d.IDdisciplinaSuccessiva == p.ID && d.ID != _disciplina.ID)
-                ).ToList();
-
-                List<ClsDisciplinaDL> ListaDisciplineFiltrate = new List<ClsDisciplinaDL>();
-
-                // 2. Per ogni disciplina potenziale, controlliamo se appartiene a uno dei nostri dipartimenti
-                foreach (var disc in potenzialiSuccessive)
-                {
-                    // Chiediamo alla BL quali dipartimenti gestiscono questa specifica disciplina 'disc'
-                    List<ClsGestireDL> gestioniDisc = ClsGestireBL.CaricaGestioneDisciplina(disc.ID);
-
-                    // Se esiste un'intersezione tra i dipartimenti di 'disc' e i dipartimenti in '_gestires' 
-                    if (gestioniDisc.Any(gd => _gestires.Any(g => g.IDdipartimento == gd.IDdipartimento)) &&
-                        gestioniDisc.Any(r=>_richiederes.Any(ric=>ric.IDclassediconcorso== ric.IDclassediconcorso)))
-                    {
-                        ListaDisciplineFiltrate.Add(disc);
-                    }
-                }
-
-                // 3. Popolamento della ComboBox
+            if (_gestires.Count == 0 || _richiederes.Count == 0 || anno == 0 || cbAnnoSuccessivo.SelectedIndex==-1)
+            {
                 cbDisciplinaSucessiva.DataSource = null;
-                cbDisciplinaSucessiva.DataSource = ListaDisciplineFiltrate;
+                cbDisciplinaSucessiva.Enabled = false;
+                return;
+            }
+            else
+                cbDisciplinaSucessiva.Enabled = true;
+           
+            int annoDisciplinaSuccessiva = int.Parse(cbAnnoSuccessivo.SelectedItem.ToString().Replace("°", ""));
+            // Se l'anno scelto è lo stesso della disciplina corrente, mostra solo quest'ultima
+            if (annoDisciplinaSuccessiva == anno)
+            {
+                cbDisciplinaSucessiva.DataSource = null;
+                cbDisciplinaSucessiva.DataSource = new List<ClsDisciplinaDL> { _disciplina };
                 cbDisciplinaSucessiva.DisplayMember = "Nome";
                 cbDisciplinaSucessiva.ValueMember = "ID";
-            
+                cbDisciplinaSucessiva.SelectedIndex = 0;
+                return;
+            }
+
+
+            var potenzialiSuccessive = _discipline.Where(p => p.Anno == annoDisciplinaSuccessiva).ToList();
+
+            List<ClsDisciplinaDL> ListaDisciplineFiltrate = new List<ClsDisciplinaDL>();
+            // 2. Per ogni disciplina potenziale, controlliamo se appartiene a uno dei nostri dipartimenti
+            foreach (var disc in potenzialiSuccessive)
+            {
+                // Chiediamo alla BL quali dipartimenti gestiscono questa specifica disciplina 'disc'
+                List<ClsGestireDL> gestioniDisc = ClsGestireBL.CaricaGestioneDisciplina(disc.ID);
+                // Se esiste un'intersezione tra i dipartimenti di 'disc' e i dipartimenti in '_gestires' 
+                if (gestioniDisc.Any(gd => _gestires.Any(g => g.IDdipartimento == gd.IDdipartimento)) &&
+                    gestioniDisc.Any(r => _richiederes.Any(ric => ric.IDclassediconcorso == ric.IDclassediconcorso)))
+                {
+                    ListaDisciplineFiltrate.Add(disc);
+                }
+            }
+            // 3. Popolamento della ComboBox
+            cbDisciplinaSucessiva.DataSource = null;
+            cbDisciplinaSucessiva.DataSource = ListaDisciplineFiltrate;
+            cbDisciplinaSucessiva.DisplayMember = "Nome";
+            cbDisciplinaSucessiva.ValueMember = "ID";
+            cbDisciplinaSucessiva.SelectedIndex = -1;
+
         }
         /// <summary>
-        /// metodo che aggiunge un evento a ogni RadioBotom presente nel codice, in modo tale da prendere l'anno di quel oggetto
-        /// </summary>
+                 /// metodo che aggiunge un evento a ogni RadioBotom presente nel codice, in modo tale da prendere l'anno di quel oggetto
+                 /// </summary>
         private void controlloRadioBottom()
         {
             // Cicla solo i controlli dentro il tuo pannello specifico
@@ -309,7 +332,6 @@ namespace Cattedre
         }
         private void RadioButton_Pannello_Click(object sender, EventArgs e)
         {
-            // 'sender' è esattamente il RadioButton che l'utente ha cliccato
             RadioButton rb = (RadioButton)sender;
             if (rb.Checked)
             {
@@ -319,24 +341,34 @@ namespace Cattedre
         }
         private void RiempiCbDisciplinaSuccessiva(int _anno, long _IDdiscSuccessiva)
         {
-            if (_anno < 5 && _anno > 0)
+            if (_anno <= 5 && _anno > 0)
             {
                 this.anno = _anno;
 
                 if (_disciplina != null && _disciplina.ID > 0 && (_gestires == null || _gestires.Count == 0))
                     _gestires = ClsGestireBL.CaricaGestioneDisciplina(_disciplina.ID);
 
-                // Carica i richiederes dal DB se non sono già in memoria
                 if (_disciplina != null && _disciplina.ID > 0 && (_richiederes == null || _richiederes.Count == 0))
                     _richiederes = ClsRichiedereBL.CaricaClassiRichiedereConDisciplina(_disciplina.ID);
+
                 popolaCbDisciplinaSuccessiva();
 
                 if (_IDdiscSuccessiva > 0)
-                    cbDisciplinaSucessiva.SelectedValue = _IDdiscSuccessiva;
+                {
+                    var discSucc = ClsDisciplinaBL.CaricaDisciplina(_IDdiscSuccessiva);
+                    if (discSucc != null)
+                    {
+                        cbAnnoSuccessivo.Enabled = true;
+                        cbAnnoSuccessivo.SelectedItem = discSucc.Anno.ToString() + "°";
+                        // Dopo aver cambiato cbAnnoSuccessivo, ripopola con l'anno corretto
+                        popolaCbDisciplinaSuccessiva();
+                        cbDisciplinaSucessiva.SelectedValue = _IDdiscSuccessiva;
+                    }
+                }
                 else
+                {
                     cbDisciplinaSucessiva.SelectedIndex = -1;
-
-                cbDisciplinaSucessiva.Enabled = (cbDisciplinaSucessiva.Items.Count > 0);
+                }
             }
             else
             {
@@ -357,7 +389,13 @@ namespace Cattedre
 
             return ID;
         }
-
+        private void cbAnnoSuccessivo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbAnnoSuccessivo.SelectedIndex != -1)
+            {
+                popolaCbDisciplinaSuccessiva();
+            }
+        }
         #endregion
         #region gestione anno
         private void rb_CheckedChanged(object sender, EventArgs e)
@@ -395,8 +433,8 @@ namespace Cattedre
                     break;
                 default:
                     {
-                        cbDisciplinaSpeciale.Checked=true;
-                        tbDisciplinaSpeciale.Text = _disciplina.DisciplinaSpeciale;
+                        chbDisciplinaSpeciale.Checked=true;
+                        cbDisciplinaSpeciale.Text = _disciplina.DisciplinaSpeciale;
                     }
                     break;
                
@@ -552,7 +590,12 @@ namespace Cattedre
             {
                 e.SuppressKeyPress = true;
                 btSalva.Focus();
+            }else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                cbDisciplinaSucessiva.SelectedIndex = -1;
             }
+
         }
 
         private void clbIndirizzi_KeyDown(object sender, KeyEventArgs e)
@@ -613,7 +656,7 @@ namespace Cattedre
                 {
                     // Passa al prossimo controllo
                     _lastTick = 0;
-                    if (cbDisciplinaSpeciale.Checked) tbDisciplinaSpeciale.Focus();
+                    if (chbDisciplinaSpeciale.Checked) cbDisciplinaSpeciale.Focus();
                     else cbDisciplinaSucessiva.Focus();
                 }
                 else
@@ -626,27 +669,41 @@ namespace Cattedre
             }
         }
 
-        private void tbDisciplinaSpeciale_KeyDown(object sender, KeyEventArgs e)
+        private void cbDisciplinaSpeciale_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && tbDisciplinaSpeciale.Text.Length >= 2)
+            if (e.KeyCode == Keys.Enter && cbDisciplinaSpeciale.Text.Length >= 2)
                 btSalva.Focus();
+        }
+        private void cbAnnoSuccessivo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                cbDisciplinaSucessiva.Focus();
+            }
+            else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                cbAnnoSuccessivo.SelectedIndex = -1;
+                popolaCbDisciplinaSuccessiva();
+            }
         }
         #endregion
         #region gestione DisciplinaSpeciale
-        private void cbDisciplinaSpeciale_CheckedChanged(object sender, EventArgs e)
+        private void chbDisciplinaSpeciale_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbDisciplinaSpeciale.Checked)
+            if (chbDisciplinaSpeciale.Checked)
             {
                 pnRB.Enabled = false;
                 cbDisciplinaSucessiva.Enabled = false;
+                chbDisciplinaSpeciale.Enabled = true;
                 cbDisciplinaSpeciale.Enabled = true;
-                tbDisciplinaSpeciale.Enabled = true;
             }else
             {
                 pnRB.Enabled = true;
-                cbDisciplinaSpeciale.Enabled = true;
-                tbDisciplinaSpeciale.Enabled = false;
-                tbDisciplinaSpeciale.Text = string.Empty;
+                chbDisciplinaSpeciale.Enabled = true;
+                cbDisciplinaSpeciale.Enabled = false;
+                cbDisciplinaSpeciale.SelectedIndex = -1;
             }
 
         }
@@ -671,7 +728,5 @@ namespace Cattedre
             else
                 cbAnnoFine.Enabled = false;
         }
-
-      
     }
 }

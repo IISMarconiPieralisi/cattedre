@@ -241,6 +241,9 @@
             this.tbPassword.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbPassword.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.tbPassword.StateDisabled.Border.Color1 = System.Drawing.Color.LightGray;
+            this.tbPassword.StateDisabled.Border.Color2 = System.Drawing.Color.LightGray;
+            this.tbPassword.StateDisabled.Content.Color1 = System.Drawing.Color.Silver;
             this.tbPassword.TabIndex = 4;
             this.tbPassword.UseSystemPasswordChar = true;
             this.tbPassword.Enter += new System.EventHandler(this.tbPassword_Enter);
@@ -291,6 +294,9 @@
             this.tbCognome.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbCognome.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbCognome.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.tbCognome.StateDisabled.Border.Color1 = System.Drawing.Color.LightGray;
+            this.tbCognome.StateDisabled.Border.Color2 = System.Drawing.Color.LightGray;
+            this.tbCognome.StateDisabled.Content.Color1 = System.Drawing.Color.Silver;
             this.tbCognome.TabIndex = 1;
             this.tbCognome.TextChanged += new System.EventHandler(this.tbNomativi_TextChanged);
             this.tbCognome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbCognome_KeyDown);
@@ -314,6 +320,9 @@
             this.tbNome.StateCommon.Content.Color1 = System.Drawing.Color.Black;
             this.tbNome.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNome.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.tbNome.StateDisabled.Border.Color1 = System.Drawing.Color.LightGray;
+            this.tbNome.StateDisabled.Border.Color2 = System.Drawing.Color.LightGray;
+            this.tbNome.StateDisabled.Content.Color1 = System.Drawing.Color.Silver;
             this.tbNome.TabIndex = 0;
             this.tbNome.TextChanged += new System.EventHandler(this.tbNomativi_TextChanged);
             this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);

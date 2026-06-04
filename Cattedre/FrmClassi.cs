@@ -61,8 +61,17 @@ namespace Cattedre
             cbAnniScolastici.DisplayMember = "Sigla";
             cbAnniScolastici.ValueMember = "ID";
             cbAnniScolastici.SelectedIndex = -1;
+            
             IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
-            cbAnniScolastici.SelectedValue = IDannoscolastico;
+            if(IDannoscolastico>0)
+                cbAnniScolastici.SelectedValue = IDannoscolastico;
+
+            if (ClsUtenteDL.UtenteAdmin(UtenteLoggato))
+            {
+                btClasseSuccessiva.Visible = true;
+                btClasseSuccessiva.Enabled = true;
+            }
+
             CaricaListView();
         }
         private void GestionePermessi()
@@ -83,6 +92,7 @@ namespace Cattedre
         }
         private void btInserisci_Click(object sender, EventArgs e)
         {
+            if (!ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
             try
             {
                 FrmClasse frmClasse = new FrmClasse();
@@ -102,6 +112,7 @@ namespace Cattedre
 
         private void brModifica_Click(object sender, EventArgs e)
         {
+            if (!ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
             if (lvClassi.SelectedIndices.Count == 1)
             {
 
@@ -134,6 +145,7 @@ namespace Cattedre
 
         private void btElimina_Click(object sender, EventArgs e)
         {
+            if (!ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
             if (lvClassi.SelectedIndices.Count == 1)
             {
                 int indiceDaEliminare = lvClassi.SelectedIndices[0];

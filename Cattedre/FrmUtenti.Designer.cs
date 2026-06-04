@@ -39,9 +39,6 @@
             this.chMonteOre = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDataInzio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDataFine = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.gbContratto = new System.Windows.Forms.GroupBox();
-            this.rbIndireterminato = new System.Windows.Forms.RadioButton();
-            this.rbDeterminato = new System.Windows.Forms.RadioButton();
             this.gBtipoDocente = new System.Windows.Forms.GroupBox();
             this.rbPratico = new System.Windows.Forms.RadioButton();
             this.rdTeorico = new System.Windows.Forms.RadioButton();
@@ -57,10 +54,11 @@
             this.btInserisci = new Krypton.Toolkit.KryptonButton();
             this.btCerca = new Krypton.Toolkit.KryptonButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.btCattedreUtente = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.tbNumRecord = new System.Windows.Forms.TextBox();
-            this.gbContratto.SuspendLayout();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cbDipartimento = new System.Windows.Forms.ComboBox();
+            this.btCattedreUtente = new Krypton.Toolkit.KryptonButton();
             this.gBtipoDocente.SuspendLayout();
             this.gbTipiUtenti.SuspendLayout();
             this.SuspendLayout();
@@ -136,44 +134,6 @@
             this.chDataFine.Text = "Data Fine";
             this.chDataFine.Width = 90;
             // 
-            // gbContratto
-            // 
-            this.gbContratto.Controls.Add(this.rbIndireterminato);
-            this.gbContratto.Controls.Add(this.rbDeterminato);
-            this.gbContratto.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbContratto.Location = new System.Drawing.Point(650, 55);
-            this.gbContratto.Name = "gbContratto";
-            this.gbContratto.Size = new System.Drawing.Size(258, 47);
-            this.gbContratto.TabIndex = 6;
-            this.gbContratto.TabStop = false;
-            this.gbContratto.Text = "Contratto";
-            // 
-            // rbIndireterminato
-            // 
-            this.rbIndireterminato.AutoSize = true;
-            this.rbIndireterminato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbIndireterminato.Location = new System.Drawing.Point(134, 19);
-            this.rbIndireterminato.Name = "rbIndireterminato";
-            this.rbIndireterminato.Size = new System.Drawing.Size(118, 21);
-            this.rbIndireterminato.TabIndex = 1;
-            this.rbIndireterminato.TabStop = true;
-            this.rbIndireterminato.Text = "Indeterminato";
-            this.rbIndireterminato.UseVisualStyleBackColor = true;
-            this.rbIndireterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbTipoContratto_KeyDown);
-            // 
-            // rbDeterminato
-            // 
-            this.rbDeterminato.AutoSize = true;
-            this.rbDeterminato.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbDeterminato.Location = new System.Drawing.Point(7, 20);
-            this.rbDeterminato.Name = "rbDeterminato";
-            this.rbDeterminato.Size = new System.Drawing.Size(108, 21);
-            this.rbDeterminato.TabIndex = 0;
-            this.rbDeterminato.TabStop = true;
-            this.rbDeterminato.Text = "Determinato";
-            this.rbDeterminato.UseVisualStyleBackColor = true;
-            this.rbDeterminato.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rbTipoContratto_KeyDown);
-            // 
             // gBtipoDocente
             // 
             this.gBtipoDocente.Controls.Add(this.rbPratico);
@@ -182,7 +142,7 @@
             this.gBtipoDocente.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gBtipoDocente.Location = new System.Drawing.Point(440, 55);
             this.gBtipoDocente.Name = "gBtipoDocente";
-            this.gBtipoDocente.Size = new System.Drawing.Size(210, 47);
+            this.gBtipoDocente.Size = new System.Drawing.Size(186, 47);
             this.gBtipoDocente.TabIndex = 5;
             this.gBtipoDocente.TabStop = false;
             this.gBtipoDocente.Text = "Docente";
@@ -192,7 +152,7 @@
             this.rbPratico.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbPratico.AutoSize = true;
             this.rbPratico.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbPratico.Location = new System.Drawing.Point(102, 19);
+            this.rbPratico.Location = new System.Drawing.Point(78, 19);
             this.rbPratico.Name = "rbPratico";
             this.rbPratico.Size = new System.Drawing.Size(102, 21);
             this.rbPratico.TabIndex = 1;
@@ -283,7 +243,7 @@
             // 
             this.tbRicerca.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbRicerca.Location = new System.Drawing.Point(914, 63);
+            this.tbRicerca.Location = new System.Drawing.Point(914, 69);
             this.tbRicerca.Name = "tbRicerca";
             this.tbRicerca.Size = new System.Drawing.Size(198, 31);
             this.tbRicerca.StateCommon.Back.Color1 = System.Drawing.Color.White;
@@ -296,7 +256,7 @@
             this.tbRicerca.StateCommon.Border.Rounding = 20F;
             this.tbRicerca.StateCommon.Border.Width = 1;
             this.tbRicerca.StateCommon.Content.Color1 = System.Drawing.Color.Gray;
-            this.tbRicerca.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbRicerca.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.tbRicerca.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.tbRicerca.StateNormal.Content.Color1 = System.Drawing.Color.Gray;
             this.tbRicerca.TabIndex = 30;
@@ -309,7 +269,7 @@
             // 
             this.btAnnullaFiltra.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btAnnullaFiltra.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btAnnullaFiltra.Location = new System.Drawing.Point(1118, 63);
+            this.btAnnullaFiltra.Location = new System.Drawing.Point(1118, 68);
             this.btAnnullaFiltra.Name = "btAnnullaFiltra";
             this.btAnnullaFiltra.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btAnnullaFiltra.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -378,7 +338,7 @@
             // 
             this.btModifica.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btModifica.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btModifica.Location = new System.Drawing.Point(1233, 204);
+            this.btModifica.Location = new System.Drawing.Point(1233, 220);
             this.btModifica.Name = "btModifica";
             this.btModifica.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btModifica.OverrideDefault.Back.Color2 = System.Drawing.Color.Yellow;
@@ -408,6 +368,10 @@
             this.btModifica.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
             this.btModifica.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
             this.btModifica.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btModifica.StateDisabled.Back.Color1 = System.Drawing.Color.Khaki;
+            this.btModifica.StateDisabled.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btModifica.StateDisabled.Border.Color1 = System.Drawing.Color.White;
+            this.btModifica.StateDisabled.Border.Color2 = System.Drawing.Color.White;
             this.btModifica.StateNormal.Back.Color1 = System.Drawing.Color.Orange;
             this.btModifica.StateNormal.Back.Color2 = System.Drawing.Color.DarkGoldenrod;
             this.btModifica.StateNormal.Border.Color1 = System.Drawing.Color.Orange;
@@ -447,7 +411,7 @@
             // 
             this.btElimina.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btElimina.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btElimina.Location = new System.Drawing.Point(1233, 255);
+            this.btElimina.Location = new System.Drawing.Point(1233, 273);
             this.btElimina.Name = "btElimina";
             this.btElimina.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btElimina.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -477,6 +441,10 @@
             this.btElimina.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
             this.btElimina.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
             this.btElimina.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btElimina.StateDisabled.Back.Color1 = System.Drawing.Color.LightCoral;
+            this.btElimina.StateDisabled.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btElimina.StateDisabled.Border.Color1 = System.Drawing.Color.White;
+            this.btElimina.StateDisabled.Border.Color2 = System.Drawing.Color.White;
             this.btElimina.StateNormal.Back.Color1 = System.Drawing.Color.Red;
             this.btElimina.StateNormal.Back.Color2 = System.Drawing.Color.DarkRed;
             this.btElimina.StateNormal.Border.Color1 = System.Drawing.Color.DarkRed;
@@ -516,7 +484,7 @@
             // 
             this.btInserisci.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btInserisci.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btInserisci.Location = new System.Drawing.Point(1233, 152);
+            this.btInserisci.Location = new System.Drawing.Point(1233, 161);
             this.btInserisci.Name = "btInserisci";
             this.btInserisci.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btInserisci.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -530,7 +498,7 @@
             this.btInserisci.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btInserisci.OverrideDefault.Border.Rounding = 20F;
             this.btInserisci.OverrideDefault.Border.Width = 1;
-            this.btInserisci.Size = new System.Drawing.Size(109, 36);
+            this.btInserisci.Size = new System.Drawing.Size(109, 40);
             this.btInserisci.StateCommon.Back.Color1 = System.Drawing.Color.ForestGreen;
             this.btInserisci.StateCommon.Back.Color2 = System.Drawing.Color.YellowGreen;
             this.btInserisci.StateCommon.Back.ColorAngle = 45F;
@@ -546,6 +514,10 @@
             this.btInserisci.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
             this.btInserisci.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
             this.btInserisci.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btInserisci.StateDisabled.Back.Color1 = System.Drawing.Color.LightGreen;
+            this.btInserisci.StateDisabled.Back.Color2 = System.Drawing.Color.PaleGreen;
+            this.btInserisci.StateDisabled.Border.Color1 = System.Drawing.Color.White;
+            this.btInserisci.StateDisabled.Border.Color2 = System.Drawing.Color.White;
             this.btInserisci.StateNormal.Back.Color1 = System.Drawing.Color.ForestGreen;
             this.btInserisci.StateNormal.Back.Color2 = System.Drawing.Color.YellowGreen;
             this.btInserisci.StateNormal.Border.Color1 = System.Drawing.Color.YellowGreen;
@@ -585,7 +557,7 @@
             // 
             this.btCerca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btCerca.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btCerca.Location = new System.Drawing.Point(1233, 63);
+            this.btCerca.Location = new System.Drawing.Point(1233, 68);
             this.btCerca.Name = "btCerca";
             this.btCerca.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btCerca.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -660,17 +632,6 @@
             this.label1.TabIndex = 43;
             this.label1.Text = "Utenti:";
             // 
-            // btCattedreUtente
-            // 
-            this.btCattedreUtente.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btCattedreUtente.Location = new System.Drawing.Point(1233, 306);
-            this.btCattedreUtente.Name = "btCattedreUtente";
-            this.btCattedreUtente.Size = new System.Drawing.Size(109, 30);
-            this.btCattedreUtente.TabIndex = 44;
-            this.btCattedreUtente.Text = "Cattedre";
-            this.btCattedreUtente.UseVisualStyleBackColor = true;
-            this.btCattedreUtente.Click += new System.EventHandler(this.btCattedreUtente_Click);
-            // 
             // label5
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -693,16 +654,110 @@
             this.tbNumRecord.Size = new System.Drawing.Size(39, 27);
             this.tbNumRecord.TabIndex = 55;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.label2.Location = new System.Drawing.Point(632, 79);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(90, 17);
+            this.label2.TabIndex = 57;
+            this.label2.Text = "Dipartimento:";
+            // 
+            // cbDipartimento
+            // 
+            this.cbDipartimento.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbDipartimento.FormattingEnabled = true;
+            this.cbDipartimento.Location = new System.Drawing.Point(722, 73);
+            this.cbDipartimento.Name = "cbDipartimento";
+            this.cbDipartimento.Size = new System.Drawing.Size(180, 25);
+            this.cbDipartimento.TabIndex = 58;
+            this.cbDipartimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDipartimento_KeyDown);
+            // 
+            // btCattedreUtente
+            // 
+            this.btCattedreUtente.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btCattedreUtente.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btCattedreUtente.Location = new System.Drawing.Point(1233, 331);
+            this.btCattedreUtente.Name = "btCattedreUtente";
+            this.btCattedreUtente.OverrideDefault.Back.Color1 = System.Drawing.Color.Purple;
+            this.btCattedreUtente.OverrideDefault.Back.Color2 = System.Drawing.Color.BlueViolet;
+            this.btCattedreUtente.OverrideDefault.Back.ColorAngle = 45F;
+            this.btCattedreUtente.OverrideDefault.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
+            this.btCattedreUtente.OverrideDefault.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
+            this.btCattedreUtente.OverrideDefault.Border.ColorAngle = 45F;
+            this.btCattedreUtente.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btCattedreUtente.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btCattedreUtente.OverrideDefault.Border.Rounding = 20F;
+            this.btCattedreUtente.OverrideDefault.Border.Width = 1;
+            this.btCattedreUtente.Size = new System.Drawing.Size(109, 39);
+            this.btCattedreUtente.StateCommon.Back.Color1 = System.Drawing.Color.DarkMagenta;
+            this.btCattedreUtente.StateCommon.Back.Color2 = System.Drawing.Color.Purple;
+            this.btCattedreUtente.StateCommon.Back.ColorAngle = 45F;
+            this.btCattedreUtente.StateCommon.Border.Color1 = System.Drawing.Color.MediumPurple;
+            this.btCattedreUtente.StateCommon.Border.Color2 = System.Drawing.Color.Plum;
+            this.btCattedreUtente.StateCommon.Border.ColorAngle = 45F;
+            this.btCattedreUtente.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btCattedreUtente.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btCattedreUtente.StateCommon.Border.Rounding = 20F;
+            this.btCattedreUtente.StateCommon.Border.Width = 1;
+            this.btCattedreUtente.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.btCattedreUtente.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.btCattedreUtente.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btCattedreUtente.StateDisabled.Back.Color1 = System.Drawing.Color.Plum;
+            this.btCattedreUtente.StateDisabled.Back.Color2 = System.Drawing.Color.Violet;
+            this.btCattedreUtente.StateDisabled.Border.Color1 = System.Drawing.Color.Silver;
+            this.btCattedreUtente.StateDisabled.Border.Color2 = System.Drawing.Color.DarkGray;
+            this.btCattedreUtente.StateNormal.Back.Color1 = System.Drawing.Color.Indigo;
+            this.btCattedreUtente.StateNormal.Back.Color2 = System.Drawing.Color.Purple;
+            this.btCattedreUtente.StateNormal.Border.Color1 = System.Drawing.Color.Orchid;
+            this.btCattedreUtente.StateNormal.Border.Color2 = System.Drawing.Color.BlueViolet;
+            this.btCattedreUtente.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btCattedreUtente.StatePressed.Back.Color1 = System.Drawing.Color.Purple;
+            this.btCattedreUtente.StatePressed.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btCattedreUtente.StatePressed.Back.ColorAngle = 135F;
+            this.btCattedreUtente.StatePressed.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btCattedreUtente.StatePressed.Border.Color2 = System.Drawing.Color.Purple;
+            this.btCattedreUtente.StatePressed.Border.ColorAngle = 135F;
+            this.btCattedreUtente.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btCattedreUtente.StatePressed.Border.Rounding = 20F;
+            this.btCattedreUtente.StatePressed.Border.Width = 1;
+            this.btCattedreUtente.StateTracking.Back.Color1 = System.Drawing.Color.BlueViolet;
+            this.btCattedreUtente.StateTracking.Back.Color2 = System.Drawing.Color.Violet;
+            this.btCattedreUtente.StateTracking.Back.ColorAngle = 45F;
+            this.btCattedreUtente.StateTracking.Border.Color1 = System.Drawing.Color.MediumOrchid;
+            this.btCattedreUtente.StateTracking.Border.Color2 = System.Drawing.Color.Violet;
+            this.btCattedreUtente.StateTracking.Border.ColorAngle = 45F;
+            this.btCattedreUtente.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btCattedreUtente.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btCattedreUtente.StateTracking.Border.Rounding = 20F;
+            this.btCattedreUtente.StateTracking.Border.Width = 1;
+            this.btCattedreUtente.TabIndex = 59;
+            this.btCattedreUtente.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.btCattedreUtente.Values.Text = "Cattedre";
+            this.btCattedreUtente.Click += new System.EventHandler(this.btCattedreUtente_Click);
+            // 
             // FrmUtenti
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1360, 745);
+            this.Controls.Add(this.btCattedreUtente);
+            this.Controls.Add(this.cbDipartimento);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.tbNumRecord);
-            this.Controls.Add(this.btCattedreUtente);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.gbContratto);
             this.Controls.Add(this.btCerca);
             this.Controls.Add(this.btModifica);
             this.Controls.Add(this.btElimina);
@@ -717,8 +772,6 @@
             this.ShowInTaskbar = false;
             this.Text = "Utenti";
             this.Load += new System.EventHandler(this.FrmUtenti_Load);
-            this.gbContratto.ResumeLayout(false);
-            this.gbContratto.PerformLayout();
             this.gBtipoDocente.ResumeLayout(false);
             this.gBtipoDocente.PerformLayout();
             this.gbTipiUtenti.ResumeLayout(false);
@@ -739,9 +792,6 @@
         private System.Windows.Forms.ColumnHeader chMonteOre;
         private System.Windows.Forms.ColumnHeader chDataInzio;
         private System.Windows.Forms.ColumnHeader chDataFine;
-        private System.Windows.Forms.GroupBox gbContratto;
-        private System.Windows.Forms.RadioButton rbIndireterminato;
-        private System.Windows.Forms.RadioButton rbDeterminato;
         private System.Windows.Forms.GroupBox gBtipoDocente;
         private System.Windows.Forms.RadioButton rbPratico;
         private System.Windows.Forms.RadioButton rdTeorico;
@@ -758,8 +808,10 @@
         private Krypton.Toolkit.KryptonButton btInserisci;
         private Krypton.Toolkit.KryptonButton btCerca;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btCattedreUtente;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbNumRecord;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbDipartimento;
+        private Krypton.Toolkit.KryptonButton btCattedreUtente;
     }
 }

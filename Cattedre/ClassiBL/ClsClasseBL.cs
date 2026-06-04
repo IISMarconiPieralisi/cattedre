@@ -93,33 +93,33 @@ namespace Cattedre
             return null;
         }
 
-        public static long TrovaIndirizzoClasse(long IDclasse)
-        {
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
-                {
-                    conn.Open();
-                    string sql = "SELECT IDindirizzo FROM classi WHERE ID = @IDclasse LIMIT 1";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
-                        DataTable dt = new DataTable();
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                        if (dt.Rows.Count > 0)
-                            return Convert.ToInt64(dt.Rows[0]["IDindirizzo"]);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Errore durante la ricerca dell'indirizzo della classe: " + ex.Message);
-            }
-            return 0;
-        }
+        //public static long TrovaIndirizzoClasse(long IDclasse)
+        //{
+        //    try
+        //    {
+        //        using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+        //        {
+        //            conn.Open();
+        //            string sql = "SELECT IDindirizzo FROM classi WHERE ID = @IDclasse LIMIT 1";
+        //            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+        //            {
+        //                cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+        //                DataTable dt = new DataTable();
+        //                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+        //                {
+        //                    da.Fill(dt);
+        //                }
+        //                if (dt.Rows.Count > 0)
+        //                    return Convert.ToInt64(dt.Rows[0]["IDindirizzo"]);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Errore durante la ricerca dell'indirizzo della classe: " + ex.Message);
+        //    }
+        //    return 0;
+        //}
 
         public static string RilevaSiglaClasse(long id)
         {
@@ -181,7 +181,56 @@ namespace Cattedre
 
 
         #region popolamenti Specifici
-        public static List<ClsClasseDL> CaricaClassiIndirizzo(List<long> IDindirizzi, long IDannoscolastico)
+        public static void CaricaClassiDisciplineDipartimento(long IDannoscolastico,long IDdipartimento, out List<ClsDisciplinaDL> discipline, out List<ClsClasseDL> classi)
+        {
+            List<long> indirizziTrovati = new List<long>();
+            discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(IDannoscolastico, IDdipartimento, out indirizziTrovati);
+            classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
+
+            // Aggiungi le classi di altri indirizzi che fanno discipline di questo dipartimento
+            List<ClsClasseDL> classiEsterne = ClsClasseBL.CaricaClassiEsterneCheFannoDisciplineDipartimento(IDdipartimento, IDannoscolastico);
+
+            foreach (var classe in classiEsterne)
+            {
+                if (!classi.Any(c => c.ID == classe.ID))
+                    classi.Add(classe);
+            }
+
+            classi = classi.OrderBy(c => c.Sigla).ToList();
+            classi = classi.Where(c => ClsClasseBL.controllaDisciplinaInsegnataClasse(c.ID, IDdipartimento,IDannoscolastico)).ToList();
+        }
+
+        private static bool controllaDisciplinaInsegnataClasse(long IDclasse, long IDdipartimento, long IDannoscolastico)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT COUNT(*)
+                                    FROM classi cl
+                                    JOIN appartenere app ON app.IDindirizzo = cl.IDindirizzo
+                                    JOIN discipline d ON d.ID = app.IDdisciplina AND d.anno = cl.anno
+                                    JOIN gestire g ON g.IDdisciplina = d.ID AND g.IDdipartimento = @IDdipartimento
+                                    JOIN vigere v ON v.IDdisciplina = d.ID AND v.IDannoscolasticoinizio <= @IDannoscolastico
+                                        AND (v.IDannoscolasticofine >= @IDannoscolastico OR v.IDannoscolasticofine IS NULL)
+                                    WHERE cl.ID = @IDclasse";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+                        return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore ClasseHaDisciplinaDipartimento: " + ex.Message);
+            }
+        }
+
+            public static List<ClsClasseDL> CaricaClassiIndirizzo(List<long> IDindirizzi, long IDannoscolastico)
         {
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
             if (IDindirizzi == null || IDindirizzi.Count == 0)

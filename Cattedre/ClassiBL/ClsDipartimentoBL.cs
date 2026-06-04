@@ -288,6 +288,42 @@ namespace Cattedre
             return utente;
         }
 
+        internal static List<ClsDipartimentoDL> DipartimentiDocenti(long iD)
+        {
+            List<ClsDipartimentoDL> dipartimenti = new List<ClsDipartimentoDL>();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT d.* 
+                           FROM dipartimenti d
+                           JOIN afferire f ON f.IDdipartimento = d.ID
+                           WHERE f.IDutente = @IDdocente";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdocente", iD);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            ClsDipartimentoDL dip = new ClsDipartimentoDL();
+                            dip.ID = Convert.ToInt64(row["ID"]);
+                            dip.Nome = row["Nome"].ToString();
+                            dipartimenti.Add(dip);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore durante il caricamento dei dipartimenti del docente: " + ex.Message);
+            }
+            return dipartimenti;
+        }
         //public static long RilevaIDdipartimento (string nome)
         //{
 

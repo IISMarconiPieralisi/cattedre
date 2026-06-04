@@ -102,7 +102,7 @@ namespace Cattedre
             this.pnlMenu.Location = new System.Drawing.Point(0, 0);
             this.pnlMenu.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMenu.Name = "pnlMenu";
-            this.pnlMenu.Size = new System.Drawing.Size(272, 686);
+            this.pnlMenu.Size = new System.Drawing.Size(314, 686);
             this.pnlMenu.TabIndex = 3;
             // 
             // panel1
@@ -126,7 +126,7 @@ namespace Cattedre
             this.btCredits.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btCredits.Location = new System.Drawing.Point(0, 386);
             this.btCredits.Name = "btCredits";
-            this.btCredits.Size = new System.Drawing.Size(270, 57);
+            this.btCredits.Size = new System.Drawing.Size(312, 57);
             this.btCredits.TabIndex = 31;
             this.btCredits.Text = "Credits";
             this.btCredits.UseVisualStyleBackColor = true;
@@ -152,7 +152,7 @@ namespace Cattedre
             this.btLogout.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             this.btLogout.OverrideDefault.Border.Rounding = 20F;
             this.btLogout.OverrideDefault.Border.Width = 1;
-            this.btLogout.Size = new System.Drawing.Size(270, 43);
+            this.btLogout.Size = new System.Drawing.Size(312, 43);
             this.btLogout.StateCommon.Back.Color1 = System.Drawing.Color.Red;
             this.btLogout.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
             this.btLogout.StateCommon.Back.ColorAngle = 45F;
@@ -255,7 +255,7 @@ namespace Cattedre
             this.btDiscipline.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btDiscipline.Location = new System.Drawing.Point(0, 329);
             this.btDiscipline.Name = "btDiscipline";
-            this.btDiscipline.Size = new System.Drawing.Size(270, 57);
+            this.btDiscipline.Size = new System.Drawing.Size(312, 57);
             this.btDiscipline.TabIndex = 3;
             this.btDiscipline.Text = "Discipline";
             this.btDiscipline.UseVisualStyleBackColor = true;
@@ -275,7 +275,7 @@ namespace Cattedre
             this.btClassi.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btClassi.Location = new System.Drawing.Point(0, 272);
             this.btClassi.Name = "btClassi";
-            this.btClassi.Size = new System.Drawing.Size(270, 57);
+            this.btClassi.Size = new System.Drawing.Size(312, 57);
             this.btClassi.TabIndex = 2;
             this.btClassi.Text = "Classi";
             this.btClassi.UseVisualStyleBackColor = true;
@@ -294,7 +294,7 @@ namespace Cattedre
             this.btUtenti.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btUtenti.Location = new System.Drawing.Point(0, 215);
             this.btUtenti.Name = "btUtenti";
-            this.btUtenti.Size = new System.Drawing.Size(270, 57);
+            this.btUtenti.Size = new System.Drawing.Size(312, 57);
             this.btUtenti.TabIndex = 1;
             this.btUtenti.Text = "Utenti";
             this.btUtenti.UseVisualStyleBackColor = true;
@@ -316,7 +316,7 @@ namespace Cattedre
             this.btVaiACattedre.Location = new System.Drawing.Point(0, 158);
             this.btVaiACattedre.Margin = new System.Windows.Forms.Padding(2);
             this.btVaiACattedre.Name = "btVaiACattedre";
-            this.btVaiACattedre.Size = new System.Drawing.Size(270, 57);
+            this.btVaiACattedre.Size = new System.Drawing.Size(312, 57);
             this.btVaiACattedre.TabIndex = 0;
             this.btVaiACattedre.Text = "Cattedre";
             this.btVaiACattedre.UseVisualStyleBackColor = false;
@@ -337,13 +337,14 @@ namespace Cattedre
             this.pnCarUtente.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
             this.pnCarUtente.Location = new System.Drawing.Point(0, 0);
             this.pnCarUtente.Name = "pnCarUtente";
-            this.pnCarUtente.Size = new System.Drawing.Size(270, 158);
+            this.pnCarUtente.Size = new System.Drawing.Size(312, 158);
             this.pnCarUtente.TabIndex = 29;
             // 
             // pbFotoProfilo
             // 
             this.pbFotoProfilo.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.pbFotoProfilo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pbFotoProfilo.Image = global::Cattedre.Properties.Resources.user;
             this.pbFotoProfilo.Location = new System.Drawing.Point(12, 14);
             this.pbFotoProfilo.Margin = new System.Windows.Forms.Padding(2);
             this.pbFotoProfilo.Name = "pbFotoProfilo";
@@ -494,14 +495,14 @@ namespace Cattedre
             this.pnlBenvenuto.Location = new System.Drawing.Point(0, 0);
             this.pnlBenvenuto.Margin = new System.Windows.Forms.Padding(2);
             this.pnlBenvenuto.Name = "pnlBenvenuto";
-            this.pnlBenvenuto.Size = new System.Drawing.Size(1508, 66);
+            this.pnlBenvenuto.Size = new System.Drawing.Size(1466, 66);
             this.pnlBenvenuto.TabIndex = 6;
             // 
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Right;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(1437, 0);
+            this.pictureBox1.Location = new System.Drawing.Point(1395, 0);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(69, 64);
@@ -544,7 +545,7 @@ namespace Cattedre
             this.pnlCentrale.Location = new System.Drawing.Point(0, 0);
             this.pnlCentrale.Margin = new System.Windows.Forms.Padding(2);
             this.pnlCentrale.Name = "pnlCentrale";
-            this.pnlCentrale.Size = new System.Drawing.Size(1508, 686);
+            this.pnlCentrale.Size = new System.Drawing.Size(1466, 686);
             this.pnlCentrale.TabIndex = 7;
             // 
             // splitter1
@@ -561,7 +562,7 @@ namespace Cattedre
             this.panel4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panel4.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.panel4.Location = new System.Drawing.Point(700, 290);
+            this.panel4.Location = new System.Drawing.Point(679, 290);
             this.panel4.Margin = new System.Windows.Forms.Padding(2);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(163, 2);
@@ -572,7 +573,7 @@ namespace Cattedre
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(733, 166);
+            this.label5.Location = new System.Drawing.Point(712, 166);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(96, 21);
@@ -583,7 +584,7 @@ namespace Cattedre
             // 
             this.btVaiACattedre2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btVaiACattedre2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btVaiACattedre2.Location = new System.Drawing.Point(667, 340);
+            this.btVaiACattedre2.Location = new System.Drawing.Point(646, 340);
             this.btVaiACattedre2.Name = "btVaiACattedre2";
             this.btVaiACattedre2.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btVaiACattedre2.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -653,7 +654,7 @@ namespace Cattedre
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(585, 247);
+            this.label4.Location = new System.Drawing.Point(564, 247);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(393, 19);
@@ -665,7 +666,7 @@ namespace Cattedre
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 22F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(613, 201);
+            this.label3.Location = new System.Drawing.Point(592, 201);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(337, 37);
@@ -689,7 +690,7 @@ namespace Cattedre
             this.splHome.Panel2.Controls.Add(this.pnlCentrale);
             this.splHome.Panel2MinSize = 0;
             this.splHome.Size = new System.Drawing.Size(1784, 686);
-            this.splHome.SplitterDistance = 272;
+            this.splHome.SplitterDistance = 314;
             this.splHome.TabIndex = 26;
             this.splHome.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splHome_SplitterMoved);
             // 

@@ -24,16 +24,18 @@ namespace Cattedre
         #region variabili globali
         //creazione degli array che verranno popolati con le query
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
-        List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
+        List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti().OrderBy(d=>d.Nome).ToList();
         List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDiscipline();
         int _oldValuedipCoord=0;
         bool _bloccoEvdipCoord = false;
         string _imputEmail;
         string _colore = string.Empty;
+        ClsUtenteDL _utenteLoggato;
         //tenuti fuori in modo tale che  all'occorrenza non si deve riaprire ogni volta una connessione al db
         #endregion
-        public FrmUtente()
+        public FrmUtente(ClsUtenteDL utenteloggato)
         {
+            _utenteLoggato = utenteloggato;
             InitializeComponent();
         }
         
@@ -177,8 +179,45 @@ namespace Cattedre
                 LoadContratto();
                 LoadAfferenze();
                 LoadClassiDiConcorso();
+                GestisciPermessi();
             }
             ConfiguraPannelloCDC();
+            GestisciCoordinatoreDipartimento();
+        }
+
+        private void GestisciCoordinatoreDipartimento()
+        {
+            clbDipartimento.Enabled = true;
+            if (!ClsUtenteDL.UtenteAdmin(_utenteLoggato))
+            {
+                ClsDipartimentoDL dip = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utenteLoggato.ID);
+                if (dip.ID > 0)
+                {
+                    int indexDipartimento = dipartimenti.FindIndex(d => d.ID == dip.ID);
+                    if (indexDipartimento >= 0)
+                    {
+                        clbDipartimento.SetItemChecked(indexDipartimento, true);
+                    }
+                }
+            }
+        }
+
+        private void GestisciPermessi()
+        {
+            if (ClsUtenteDL.UtenteAdmin(_utenteLoggato) || _utente.ID==_utenteLoggato.ID) return;
+            //se è un coordinatore in modifica non permette la modifica della password
+            tbNome.Enabled = false;
+            tbCognome.Enabled = false;
+            tbPassword.Enabled = false;
+            cbAutoEmail.Enabled = false;
+            tbEmail.Enabled = false;
+            cbAutoPassword.Enabled = false;
+            cbTipoUtente.Enabled = false;
+            pnTipoDocente.Enabled = false;
+            //colore può essere modificato
+            //se trova un dipartimento lo im
+           
+
         }
 
         #region Inizializzazione
@@ -188,6 +227,20 @@ namespace Cattedre
             popolaClbClasseDiConcorso(cdcs);
             popolaDipartimenti(dipartimenti);
             cldColori.Color = Color.White;
+            popolacbTipiUtente();
+        }
+
+        private void popolacbTipiUtente()
+        {
+            cbTipoUtente.Items.Clear();
+            if(ClsUtenteDL.UtenteAdmin(_utenteLoggato))
+            {
+                cbTipoUtente.Items.Add("Preside");
+                cbTipoUtente.Items.Add("Amministratore");
+                cbTipoUtente.Items.Add("Coordinatore di dipartimento");
+                cbTipoUtente.SelectedIndex = -1;
+            }
+            cbTipoUtente.Items.Add("Docente");
         }
 
         private bool ModificaUtente() => _utente != null && _utente.ID > 0;
@@ -355,11 +408,12 @@ namespace Cattedre
         }
         private void cbTipoUtente_SelectedIndexChanged(object sender, EventArgs e)
         {
+            bool Admin = ClsUtenteDL.UtenteAdmin(_utenteLoggato);
             switch (cbTipoUtente.SelectedItem.ToString())
             {
                 case "Docente":
                     pnCDCeDisc.Enabled = true;
-                    pnDipartimento.Enabled = true;
+                    pnDipartimento.Enabled = Admin;
                     PnContratto.Enabled = true;
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
@@ -369,7 +423,7 @@ namespace Cattedre
 
                 case "Coordinatore di dipartimento":
                     pnCDCeDisc.Enabled = true;
-                    pnDipartimento.Enabled = true;
+                    pnDipartimento.Enabled = Admin;
                     PnContratto.Enabled = true;
                     lbDcoordinato.Visible = true;
                     cbDipartimentoCoordinato.Visible = true;
@@ -378,7 +432,7 @@ namespace Cattedre
                     break;
                 case "Amministratore":
                     pnCDCeDisc.Visible = true;
-                    pnDipartimento.Enabled = true;
+                    pnDipartimento.Enabled = Admin;
                     PnContratto.Enabled = true;
                     lbDcoordinato.Visible = true;
                     cbDipartimentoCoordinato.Visible = true;

@@ -103,9 +103,9 @@
             this.label1.Location = new System.Drawing.Point(2, 3);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 14);
+            this.label1.Size = new System.Drawing.Size(43, 14);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Teorici:";
+            this.label1.Text = "Teorico:";
             // 
             // label2
             // 
@@ -221,7 +221,7 @@
 
         public System.Windows.Forms.ComboBox cbDocentiTeorici;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.Label label2;
         public System.Windows.Forms.ComboBox cbDocentiItip;
         public System.Windows.Forms.Label lblOreTeoria;
         public System.Windows.Forms.Label lblOreLaboratorio;
@@ -230,7 +230,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiCopia;
         private System.Windows.Forms.ToolStripMenuItem tsmiIncolla;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.Label label4;
         public System.Windows.Forms.Label lblDocentiNonDiRuoloTEORICI;
         public System.Windows.Forms.Label lblDocentiNonDiRuoloITP;
     }

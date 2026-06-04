@@ -229,6 +229,12 @@
     <Compile Include="FrmCattedre.Designer.cs">
       <DependentUpon>FrmCattedre.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmCattedreUtente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCattedreUtente.Designer.cs">
+      <DependentUpon>FrmCattedreUtente.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmCdC.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -366,6 +372,9 @@
     <EmbeddedResource Include="FrmCattedre.resx">
       <DependentUpon>FrmCattedre.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmCattedreUtente.resx">
+      <DependentUpon>FrmCattedreUtente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmCdC.resx">
       <DependentUpon>FrmCdC.cs</DependentUpon>
     </EmbeddedResource>
@@ -466,6 +475,7 @@
     <Content Include="Resources\Immagini\vecchie immagini\LoginImg.png" />
     <Content Include="Resources\Immagini\vecchie immagini\Sfondo.png" />
     <Content Include="Resources\Immagini\vecchie immagini\user-account-management-logo-user-icon-11562867145a56rus2zwu.png" />
+    <None Include="Resources\user.png" />
     <None Include="Resources\incolla.png" />
     <None Include="Resources\copia.png" />
     <None Include="Resources\taglia.png" />

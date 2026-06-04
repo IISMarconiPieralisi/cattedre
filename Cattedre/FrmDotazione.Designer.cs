@@ -60,31 +60,32 @@
             this.cbAnnoScolastico.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbAnnoScolastico.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAnnoScolastico.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbAnnoScolastico.FormattingEnabled = true;
             this.cbAnnoScolastico.Location = new System.Drawing.Point(177, 29);
             this.cbAnnoScolastico.Name = "cbAnnoScolastico";
-            this.cbAnnoScolastico.Size = new System.Drawing.Size(231, 21);
+            this.cbAnnoScolastico.Size = new System.Drawing.Size(231, 25);
             this.cbAnnoScolastico.TabIndex = 13;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 124);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(151, 16);
+            this.label1.Size = new System.Drawing.Size(155, 17);
             this.label1.TabIndex = 14;
             this.label1.Text = "Num cattedre di fatto:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(12, 174);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(160, 16);
+            this.label3.Size = new System.Drawing.Size(161, 17);
             this.label3.TabIndex = 15;
             this.label3.Text = "Num cattedre di diritto:";
             // 
@@ -272,11 +273,13 @@
             this.cbCDC.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbCDC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCDC.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbCDC.FormattingEnabled = true;
             this.cbCDC.Location = new System.Drawing.Point(177, 77);
             this.cbCDC.Name = "cbCDC";
-            this.cbCDC.Size = new System.Drawing.Size(231, 21);
+            this.cbCDC.Size = new System.Drawing.Size(231, 25);
             this.cbCDC.TabIndex = 30;
+            this.cbCDC.Format += new System.Windows.Forms.ListControlConvertEventHandler(this.cbCDC_Format);
             // 
             // FrmDotazione
             // 

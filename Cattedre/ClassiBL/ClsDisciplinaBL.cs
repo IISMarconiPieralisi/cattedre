@@ -50,20 +50,21 @@ namespace Cattedre
             return null;
         }
 
-        public static ClsDisciplinaDL TrovaDisciplinaNomeAnno(string nome, int anno)
+        public static ClsDisciplinaDL TrovaDisciplinaSuccessiva(long IDdisciplina, long IDannoscolastico)
         {
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT * FROM discipline 
-                           WHERE nome = @nome 
-                           AND anno = @anno";
+                    string sql = @"SELECT * FROM discipline d
+                                JOIN vigere v  ON v.IDdisciplina =d.ID 
+                           WHERE d.IDdisciplinaSuccessiva = @IDdisciplina  
+                           AND (v.IDannoscolasticofine >= @IDannoScolastico OR v.IDannoscolasticofine IS NULL)";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@nome", nome);
-                        cmd.Parameters.AddWithValue("@anno", anno);
+                        cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
@@ -90,47 +91,90 @@ namespace Cattedre
             }
             return null;
         }
+        //metodo overload per rimuovoere l'out di IDindirizzi trovati
+        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long annoId, long dipartimentoId)
+        {
+            return CaricaDisciplineAnnoScolasticoDipartimento(annoId, dipartimentoId, out List<long> _,false);
+        }
 
-        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long IDannoScolastico, long IDdipartimento)
+        public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long IDannoScolastico, long IDdipartimento, out List<long> IDindirizziTrovati, bool escludiPotenziamento = true)
         {
             List<ClsDisciplinaDL> discipline = new List<ClsDisciplinaDL>();
+            IDindirizziTrovati = new List<long>();
+
             try
             {
                 DataTable dt = new DataTable();
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql =@"SELECT d.ID, d.nome, d.anno, d.oreteoria, d.orelaboratorio, d.disciplinaspeciale, d.IDdisciplinaSuccessiva 
-                                FROM vigere v
-                                JOIN discipline d ON v.IDdisciplina = d.ID
-                                JOIN gestire g ON g.IDdisciplina = d.ID
-                                JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
-                                LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
-                                JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
-                                WHERE g.IDdipartimento = @IDdipartimento
-                                AND aTarget.dataInizio >= aInizio.dataInizio
-                                AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))";
+                    string sql = @"SELECT d.ID, d.nome, d.anno, d.oreteoria, d.orelaboratorio, 
+                  d.disciplinaspeciale, d.IDdisciplinaSuccessiva,
+                  ap.IDindirizzo
+               FROM vigere v
+               JOIN discipline d ON v.IDdisciplina = d.ID
+               JOIN gestire g ON g.IDdisciplina = d.ID
+               JOIN appartenere ap ON ap.IDdisciplina = d.ID
+               JOIN anniscolastici aInizio ON v.IDannoscolasticoinizio = aInizio.ID
+               LEFT JOIN anniscolastici aFine ON v.IDannoscolasticofine = aFine.ID
+               JOIN anniscolastici aTarget ON aTarget.ID = @IDannoScolastico
+               WHERE g.IDdipartimento = @IDdipartimento
+               AND aTarget.dataInizio >= aInizio.dataInizio
+               AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))"
+                       + (escludiPotenziamento ? " AND d.nome NOT LIKE '%otenziamento%'" : "")
+                       + " ORDER BY d.anno";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
-
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
                             da.Fill(dt);
-                        }
                     }
+
+                    Dictionary<long, HashSet<long>> indirizziPerDisciplina = new Dictionary<long, HashSet<long>>();
+
                     foreach (DataRow row in dt.Rows)
                     {
-                        ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
-                        disciplina.ID = Convert.ToInt32(row["id"]);
-                        disciplina.Nome = row["nome"].ToString();
-                        disciplina.Anno = Convert.ToInt32(row["anno"]);
-                        disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
-                        disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
-                        disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
-                        disciplina.IDdisciplinaSuccessiva = (row["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplinaSuccessiva"]);
-                        discipline.Add(disciplina);
+                        long idDisciplina = Convert.ToInt64(row["ID"]);
+                        long idIndirizzo = Convert.ToInt64(row["IDindirizzo"]);
+
+                        if (!indirizziPerDisciplina.ContainsKey(idDisciplina))
+                            indirizziPerDisciplina[idDisciplina] = new HashSet<long>();
+                        indirizziPerDisciplina[idDisciplina].Add(idIndirizzo);
+
+                        if (!discipline.Any(d => d.ID == idDisciplina))
+                        {
+                            ClsDisciplinaDL disciplina = new ClsDisciplinaDL();
+                            disciplina.ID = Convert.ToInt32(row["ID"]);
+                            disciplina.Nome = row["nome"].ToString();
+                            disciplina.Anno = Convert.ToInt32(row["anno"]);
+                            disciplina.OreTeoria = Convert.ToInt32(row["oreteoria"]);
+                            disciplina.OreLaboratorio = Convert.ToInt32(row["orelaboratorio"]);
+                            disciplina.DisciplinaSpeciale = row["disciplinaspeciale"].ToString();
+                            disciplina.IDdisciplinaSuccessiva = (row["IDdisciplinaSuccessiva"] == DBNull.Value) ? 0 : Convert.ToInt32(row["IDdisciplinaSuccessiva"]);
+                            discipline.Add(disciplina);
+                        }
+                    }
+
+                    // Prendi solo l'indirizzo più frequente tra le discipline pure (1 solo indirizzo)
+                    Dictionary<long, int> conteggioIndirizziPuri = new Dictionary<long, int>();
+                    foreach (var kvp in indirizziPerDisciplina)
+                    {
+                        if (kvp.Value.Count == 1)
+                        {
+                            long idIndirizzo = kvp.Value.First();
+                            if (!conteggioIndirizziPuri.ContainsKey(idIndirizzo))
+                                conteggioIndirizziPuri[idIndirizzo] = 0;
+                            conteggioIndirizziPuri[idIndirizzo]++;
+                        }
+                    }
+
+                    if (conteggioIndirizziPuri.Count > 0)
+                    {
+                        long indirizzoPrevale = conteggioIndirizziPuri
+                            .OrderByDescending(kvp => kvp.Value)
+                            .First().Key;
+                        IDindirizziTrovati = new List<long> { indirizzoPrevale };
                     }
                 }
             }
@@ -138,13 +182,14 @@ namespace Cattedre
             {
                 throw new Exception(ex.Message);
             }
+
             return discipline;
         }
 
         #endregion
         #region rilevamento parametri specifici
 
-        public static int TrovaIDPotenziamentoDipartimentoPerCDC(int IDdipartimento, long IDcdc)
+        public static long TrovaIDPotenziamentoDipartimentoPerCDC(long IDdipartimento, long IDcdc)
         {
             try
             {
@@ -156,7 +201,7 @@ namespace Cattedre
                            JOIN gestire g ON g.IDdisciplina = d.ID
                            JOIN richiedere r ON r.IDdisciplina = d.ID
                            WHERE g.IDdipartimento = @IDdipartimento
-                           AND d.nome LIKE '%otenziamento%'
+                           AND d.disciplinaSpeciale LIKE '%otenziamento%'
                            AND r.IDclassediconcorso = @IDcdc
                            LIMIT 1";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -173,9 +218,8 @@ namespace Cattedre
             {
                 throw new Exception("Errore ricerca potenziamento dipartimento per CDC: " + ex.Message);
             }
-            return 0;
+            return -1;
         }
-
 
         //public static int MostraOreDocenteTeorico(long IDdocente)
         //{
@@ -377,7 +421,51 @@ namespace Cattedre
 
             return 0;
         }
-        public static int RilevaOrePotenziamentoDipartimentoPerCDC(int IDdipartimento, long IDcdc)
+
+        public static int RilevaOreDocentePratico(long IDdisciplina)
+        {
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT oreLaboratorio 
+                       FROM discipline
+                       JOIN assegnare ON discipline.ID = @IDdisciplina";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                        return Convert.ToInt32(result);
+                }
+            }
+            return 0;
+        }
+
+        public static int RilevaOreDocenteTeorico(long IDdisciplina)
+        {
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT oreTeoria 
+                       FROM discipline
+                       JOIN assegnare ON discipline.ID = @IDdisciplina";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
+                    DataTable dt = new DataTable();
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                        return Convert.ToInt32(result);
+                }
+            }
+            return 0;
+        }
+
+        public static int RilevaOrePotenziamentoDipartimentoPerCDC(long IDdipartimento, long IDcdc)
         {
             try
             {
@@ -559,7 +647,6 @@ namespace Cattedre
         }
         public static void ModificaDisciplina(ClsDisciplinaDL disciplina)
         {
-            FrmDisciplina frmDisciplina = new FrmDisciplina();
             MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try

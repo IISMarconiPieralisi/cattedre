@@ -45,15 +45,17 @@ namespace Cattedre
             this.label8 = new System.Windows.Forms.Label();
             this.cbDisciplinaSucessiva = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.lblAnnoSuc = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btAnnulla = new Krypton.Toolkit.KryptonButton();
             this.btSalva = new Krypton.Toolkit.KryptonButton();
             this.tbNome = new Krypton.Toolkit.KryptonTextBox();
-            this.tbDisciplinaSpeciale = new Krypton.Toolkit.KryptonTextBox();
-            this.cbDisciplinaSpeciale = new Krypton.Toolkit.KryptonCheckBox();
+            this.chbDisciplinaSpeciale = new Krypton.Toolkit.KryptonCheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.pnDisciplina = new System.Windows.Forms.Panel();
+            this.cbDisciplinaSpeciale = new System.Windows.Forms.ComboBox();
+            this.cbAnnoSuccessivo = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.cbAnnoFine = new System.Windows.Forms.ComboBox();
             this.cbAnnoInizio = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -76,10 +78,10 @@ namespace Cattedre
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 226);
+            this.label4.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(12, 222);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(46, 17);
+            this.label4.Size = new System.Drawing.Size(47, 17);
             this.label4.TabIndex = 13;
             this.label4.Text = "Anno:";
             // 
@@ -226,7 +228,7 @@ namespace Cattedre
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(12, 679);
+            this.label8.Location = new System.Drawing.Point(12, 643);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(148, 17);
@@ -241,32 +243,22 @@ namespace Cattedre
             this.cbDisciplinaSucessiva.Enabled = false;
             this.cbDisciplinaSucessiva.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbDisciplinaSucessiva.FormattingEnabled = true;
-            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(211, 672);
+            this.cbDisciplinaSucessiva.Location = new System.Drawing.Point(253, 639);
             this.cbDisciplinaSucessiva.Margin = new System.Windows.Forms.Padding(4);
             this.cbDisciplinaSucessiva.Name = "cbDisciplinaSucessiva";
             this.cbDisciplinaSucessiva.Size = new System.Drawing.Size(241, 25);
-            this.cbDisciplinaSucessiva.TabIndex = 11;
+            this.cbDisciplinaSucessiva.TabIndex = 12;
             this.cbDisciplinaSucessiva.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDisciplinaSucessiva_KeyDown);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(12, 737);
+            this.label5.Location = new System.Drawing.Point(12, 687);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(130, 17);
             this.label5.TabIndex = 21;
             this.label5.Text = "Disciplina speciale:";
-            // 
-            // lblAnnoSuc
-            // 
-            this.lblAnnoSuc.AutoSize = true;
-            this.lblAnnoSuc.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAnnoSuc.Location = new System.Drawing.Point(184, 678);
-            this.lblAnnoSuc.Name = "lblAnnoSuc";
-            this.lblAnnoSuc.Size = new System.Drawing.Size(20, 17);
-            this.lblAnnoSuc.TabIndex = 40;
-            this.lblAnnoSuc.Text = "5°";
             // 
             // panel1
             // 
@@ -274,17 +266,17 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.btAnnulla);
             this.panel1.Controls.Add(this.btSalva);
-            this.panel1.Location = new System.Drawing.Point(35, 765);
+            this.panel1.Location = new System.Drawing.Point(4, 707);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(514, 52);
-            this.panel1.TabIndex = 13;
+            this.panel1.Size = new System.Drawing.Size(579, 52);
+            this.panel1.TabIndex = 14;
             // 
             // btAnnulla
             // 
             this.btAnnulla.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btAnnulla.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btAnnulla.Location = new System.Drawing.Point(-2, 11);
+            this.btAnnulla.Location = new System.Drawing.Point(11, 11);
             this.btAnnulla.Name = "btAnnulla";
             this.btAnnulla.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
             this.btAnnulla.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
@@ -353,7 +345,7 @@ namespace Cattedre
             // 
             this.btSalva.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btSalva.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btSalva.Location = new System.Drawing.Point(344, 10);
+            this.btSalva.Location = new System.Drawing.Point(416, 10);
             this.btSalva.Name = "btSalva";
             this.btSalva.OverrideDefault.Back.Color1 = System.Drawing.Color.YellowGreen;
             this.btSalva.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -440,40 +432,14 @@ namespace Cattedre
             this.tbNome.TabIndex = 0;
             this.tbNome.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbNome_KeyDown);
             // 
-            // tbDisciplinaSpeciale
+            // chbDisciplinaSpeciale
             // 
-            this.tbDisciplinaSpeciale.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDisciplinaSpeciale.Enabled = false;
-            this.tbDisciplinaSpeciale.Location = new System.Drawing.Point(211, 720);
-            this.tbDisciplinaSpeciale.Name = "tbDisciplinaSpeciale";
-            this.tbDisciplinaSpeciale.Size = new System.Drawing.Size(241, 29);
-            this.tbDisciplinaSpeciale.StateCommon.Back.Color1 = System.Drawing.Color.White;
-            this.tbDisciplinaSpeciale.StateCommon.Border.Color1 = System.Drawing.Color.Black;
-            this.tbDisciplinaSpeciale.StateCommon.Border.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.tbDisciplinaSpeciale.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.tbDisciplinaSpeciale.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.tbDisciplinaSpeciale.StateCommon.Border.Rounding = 20F;
-            this.tbDisciplinaSpeciale.StateCommon.Border.Width = 1;
-            this.tbDisciplinaSpeciale.StateCommon.Content.Color1 = System.Drawing.Color.Black;
-            this.tbDisciplinaSpeciale.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDisciplinaSpeciale.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.tbDisciplinaSpeciale.StateDisabled.Border.Color1 = System.Drawing.Color.LightGray;
-            this.tbDisciplinaSpeciale.StateDisabled.Border.Color2 = System.Drawing.Color.LightGray;
-            this.tbDisciplinaSpeciale.StateDisabled.Content.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.tbDisciplinaSpeciale.TabIndex = 12;
-            this.tbDisciplinaSpeciale.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbDisciplinaSpeciale_KeyDown);
-            // 
-            // cbDisciplinaSpeciale
-            // 
-            this.cbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 92);
-            this.cbDisciplinaSpeciale.Name = "cbDisciplinaSpeciale";
-            this.cbDisciplinaSpeciale.Size = new System.Drawing.Size(124, 25);
-            this.cbDisciplinaSpeciale.TabIndex = 1;
-            this.cbDisciplinaSpeciale.Values.Text = "Disciplina Speciale";
-            this.cbDisciplinaSpeciale.CheckedChanged += new System.EventHandler(this.cbDisciplinaSpeciale_CheckedChanged);
+            this.chbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 92);
+            this.chbDisciplinaSpeciale.Name = "chbDisciplinaSpeciale";
+            this.chbDisciplinaSpeciale.Size = new System.Drawing.Size(153, 25);
+            this.chbDisciplinaSpeciale.TabIndex = 1;
+            this.chbDisciplinaSpeciale.Values.Text = "Disciplina Speciale";
+            this.chbDisciplinaSpeciale.CheckedChanged += new System.EventHandler(this.chbDisciplinaSpeciale_CheckedChanged);
             // 
             // label10
             // 
@@ -487,6 +453,10 @@ namespace Cattedre
             // 
             // pnDisciplina
             // 
+            this.pnDisciplina.Controls.Add(this.cbDisciplinaSpeciale);
+            this.pnDisciplina.Controls.Add(this.cbAnnoSuccessivo);
+            this.pnDisciplina.Controls.Add(this.label14);
+            this.pnDisciplina.Controls.Add(this.label13);
             this.pnDisciplina.Controls.Add(this.cbAnnoFine);
             this.pnDisciplina.Controls.Add(this.cbAnnoInizio);
             this.pnDisciplina.Controls.Add(this.label11);
@@ -494,9 +464,8 @@ namespace Cattedre
             this.pnDisciplina.Controls.Add(this.label10);
             this.pnDisciplina.Controls.Add(this.panel1);
             this.pnDisciplina.Controls.Add(this.label1);
-            this.pnDisciplina.Controls.Add(this.cbDisciplinaSpeciale);
+            this.pnDisciplina.Controls.Add(this.chbDisciplinaSpeciale);
             this.pnDisciplina.Controls.Add(this.label2);
-            this.pnDisciplina.Controls.Add(this.tbDisciplinaSpeciale);
             this.pnDisciplina.Controls.Add(this.label3);
             this.pnDisciplina.Controls.Add(this.tbNome);
             this.pnDisciplina.Controls.Add(this.label4);
@@ -505,7 +474,6 @@ namespace Cattedre
             this.pnDisciplina.Controls.Add(this.nudOreTeoria);
             this.pnDisciplina.Controls.Add(this.clbCdcs);
             this.pnDisciplina.Controls.Add(this.nudOreLab);
-            this.pnDisciplina.Controls.Add(this.lblAnnoSuc);
             this.pnDisciplina.Controls.Add(this.pnRB);
             this.pnDisciplina.Controls.Add(this.label9);
             this.pnDisciplina.Controls.Add(this.clbIndirizzi);
@@ -516,8 +484,58 @@ namespace Cattedre
             this.pnDisciplina.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnDisciplina.Location = new System.Drawing.Point(0, 0);
             this.pnDisciplina.Name = "pnDisciplina";
-            this.pnDisciplina.Size = new System.Drawing.Size(596, 833);
+            this.pnDisciplina.Size = new System.Drawing.Size(596, 763);
             this.pnDisciplina.TabIndex = 47;
+            // 
+            // cbDisciplinaSpeciale
+            // 
+            this.cbDisciplinaSpeciale.Enabled = false;
+            this.cbDisciplinaSpeciale.FormattingEnabled = true;
+            this.cbDisciplinaSpeciale.Items.AddRange(new object[] {
+            "Potenziamento",
+            "Presidenza"});
+            this.cbDisciplinaSpeciale.Location = new System.Drawing.Point(205, 679);
+            this.cbDisciplinaSpeciale.Name = "cbDisciplinaSpeciale";
+            this.cbDisciplinaSpeciale.Size = new System.Drawing.Size(289, 25);
+            this.cbDisciplinaSpeciale.TabIndex = 13;
+            this.cbDisciplinaSpeciale.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbDisciplinaSpeciale_KeyDown);
+            // 
+            // cbAnnoSuccessivo
+            // 
+            this.cbAnnoSuccessivo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAnnoSuccessivo.FormattingEnabled = true;
+            this.cbAnnoSuccessivo.Items.AddRange(new object[] {
+            "1°",
+            "2°",
+            "3°",
+            "4°",
+            "5°"});
+            this.cbAnnoSuccessivo.Location = new System.Drawing.Point(205, 639);
+            this.cbAnnoSuccessivo.Name = "cbAnnoSuccessivo";
+            this.cbAnnoSuccessivo.Size = new System.Drawing.Size(41, 25);
+            this.cbAnnoSuccessivo.TabIndex = 11;
+            this.cbAnnoSuccessivo.SelectedIndexChanged += new System.EventHandler(this.cbAnnoSuccessivo_SelectedIndexChanged);
+            this.cbAnnoSuccessivo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbAnnoSuccessivo_KeyDown);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(12, 405);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(50, 16);
+            this.label14.TabIndex = 54;
+            this.label14.Text = "gestire";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(15, 277);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(89, 16);
+            this.label13.TabIndex = 53;
+            this.label13.Text = "appartenere";
             // 
             // cbAnnoFine
             // 
@@ -564,7 +582,7 @@ namespace Cattedre
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(12, 551);
+            this.label6.Location = new System.Drawing.Point(12, 518);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(131, 16);
@@ -577,7 +595,7 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbCdcs.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbCdcs.FormattingEnabled = true;
-            this.clbCdcs.Location = new System.Drawing.Point(205, 537);
+            this.clbCdcs.Location = new System.Drawing.Point(205, 517);
             this.clbCdcs.Margin = new System.Windows.Forms.Padding(4);
             this.clbCdcs.Name = "clbCdcs";
             this.clbCdcs.Size = new System.Drawing.Size(366, 112);
@@ -589,7 +607,7 @@ namespace Cattedre
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(12, 412);
+            this.label9.Location = new System.Drawing.Point(12, 389);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(92, 16);
@@ -602,7 +620,7 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbIndirizzi.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbIndirizzi.FormattingEnabled = true;
-            this.clbIndirizzi.Location = new System.Drawing.Point(205, 271);
+            this.clbIndirizzi.Location = new System.Drawing.Point(205, 261);
             this.clbIndirizzi.Margin = new System.Windows.Forms.Padding(4);
             this.clbIndirizzi.Name = "clbIndirizzi";
             this.clbIndirizzi.Size = new System.Drawing.Size(366, 112);
@@ -615,7 +633,7 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbDipartimenti.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbDipartimenti.FormattingEnabled = true;
-            this.clbDipartimenti.Location = new System.Drawing.Point(205, 404);
+            this.clbDipartimenti.Location = new System.Drawing.Point(205, 389);
             this.clbDipartimenti.Margin = new System.Windows.Forms.Padding(4);
             this.clbDipartimenti.Name = "clbDipartimenti";
             this.clbDipartimenti.Size = new System.Drawing.Size(366, 112);
@@ -627,7 +645,7 @@ namespace Cattedre
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(12, 271);
+            this.label7.Location = new System.Drawing.Point(12, 261);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(62, 16);
@@ -642,7 +660,7 @@ namespace Cattedre
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(596, 833);
+            this.ClientSize = new System.Drawing.Size(596, 763);
             this.Controls.Add(this.pnDisciplina);
             this.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -677,14 +695,12 @@ namespace Cattedre
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox cbDisciplinaSucessiva;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label lblAnnoSuc;
         private System.Windows.Forms.BindingSource frmDisciplinaBindingSource;
         private System.Windows.Forms.Panel panel1;
         private Krypton.Toolkit.KryptonTextBox tbNome;
-        private Krypton.Toolkit.KryptonTextBox tbDisciplinaSpeciale;
         private Krypton.Toolkit.KryptonButton btAnnulla;
         private Krypton.Toolkit.KryptonButton btSalva;
-        private Krypton.Toolkit.KryptonCheckBox cbDisciplinaSpeciale;
+        private Krypton.Toolkit.KryptonCheckBox chbDisciplinaSpeciale;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Panel pnDisciplina;
         private System.Windows.Forms.ComboBox cbAnnoFine;
@@ -697,5 +713,9 @@ namespace Cattedre
         private System.Windows.Forms.CheckedListBox clbIndirizzi;
         private System.Windows.Forms.CheckedListBox clbDipartimenti;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox cbAnnoSuccessivo;
+        private System.Windows.Forms.ComboBox cbDisciplinaSpeciale;
     }
 }

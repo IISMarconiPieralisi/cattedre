@@ -1,0 +1,2196 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Creato il: Mag 04, 2026 alle 18:20
+-- Versione del server: 10.5.8-MariaDB-log
+-- Versione PHP: 8.2.27
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `cattedre`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `afferire`
+--
+
+CREATE TABLE `afferire` (
+  `ID` int(11) NOT NULL,
+  `IDdipartimento` int(10) UNSIGNED DEFAULT NULL,
+  `IDutente` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `afferire`
+--
+
+INSERT INTO `afferire` (`ID`, `IDdipartimento`, `IDutente`) VALUES
+(4, 3, 8),
+(6, 1, 4),
+(9, 1, 5),
+(10, 1, 9),
+(11, 3, 7),
+(12, 1, 18),
+(14, 1, 20),
+(15, 1, 21),
+(16, 1, 22),
+(17, 1, 23),
+(18, 1, 24),
+(19, 1, 25),
+(20, 7, 26),
+(21, 7, 27),
+(22, 7, 28),
+(23, 7, 29),
+(24, 7, 30),
+(25, 7, 31),
+(26, 7, 32),
+(27, 7, 33),
+(28, 7, 34),
+(29, 7, 35),
+(30, 7, 36),
+(31, 7, 37),
+(32, 7, 38),
+(33, 7, 39),
+(34, 7, 40),
+(35, 7, 41),
+(36, 7, 42),
+(37, 7, 43),
+(38, 7, 44),
+(39, 9, 45),
+(40, 9, 46),
+(41, 9, 47),
+(42, 9, 48),
+(43, 8, 49),
+(44, 8, 50),
+(45, 8, 51),
+(46, 8, 52),
+(47, 8, 53),
+(48, 8, 54),
+(49, 8, 55),
+(50, 8, 56),
+(51, 8, 57),
+(52, 2, 58),
+(53, 2, 59),
+(54, 2, 60),
+(55, 2, 61),
+(56, 2, 62),
+(57, 2, 63),
+(58, 2, 64),
+(59, 2, 65),
+(60, 2, 66),
+(61, 2, 67),
+(62, 2, 68),
+(63, 9, 69),
+(64, 9, 70),
+(65, 9, 71),
+(66, 9, 72),
+(67, 1, 73),
+(68, 1, 74),
+(69, 1, 75),
+(70, 1, 76),
+(71, 1, 77),
+(72, 1, 78),
+(73, 9, 79);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `anniscolastici`
+--
+
+CREATE TABLE `anniscolastici` (
+  `ID` int(10) UNSIGNED NOT NULL,
+  `sigla` char(5) NOT NULL,
+  `datainizio` date NOT NULL,
+  `datafine` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `anniscolastici`
+--
+
+INSERT INTO `anniscolastici` (`ID`, `sigla`, `datainizio`, `datafine`) VALUES
+(1, '24-25', '2024-09-11', '2025-06-05'),
+(2, '25-26', '2025-09-15', '2026-06-06'),
+(10, '26-27', '2026-04-02', '2027-04-02');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `appartenere`
+--
+
+CREATE TABLE `appartenere` (
+  `IDindirizzo` int(10) UNSIGNED DEFAULT NULL,
+  `IDdisciplina` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `appartenere`
+--
+
+INSERT INTO `appartenere` (`IDindirizzo`, `IDdisciplina`) VALUES
+(1, 1),
+(1, 2),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13),
+(1, 19),
+(1, 20),
+(1, 21),
+(1, 22),
+(1, 23),
+(1, 24),
+(1, 25),
+(1, 26),
+(1, 36),
+(1, 37),
+(1, 38),
+(1, 39),
+(1, 41),
+(1, 43),
+(1, 44),
+(1, 45),
+(1, 46),
+(1, 47),
+(1, 48),
+(1, 49),
+(1, 50),
+(1, 51),
+(1, 52),
+(1, 53),
+(1, 54),
+(1, 55),
+(1, 57),
+(1, 58),
+(1, 59),
+(1, 60),
+(1, 61),
+(1, 62),
+(1, 63),
+(1, 64),
+(1, 65),
+(1, 66),
+(1, 69),
+(1, 70),
+(1, 71),
+(1, 72),
+(1, 73),
+(1, 74),
+(1, 75),
+(1, 76),
+(1, 77),
+(1, 78),
+(1, 83),
+(1, 84),
+(1, 85),
+(1, 86),
+(1, 87),
+(1, 88),
+(1, 89),
+(1, 93),
+(1, 94),
+(1, 97),
+(1, 99),
+(1, 100),
+(1, 102),
+(2, 1),
+(2, 9),
+(2, 14),
+(2, 15),
+(2, 16),
+(2, 17),
+(2, 37),
+(2, 38),
+(2, 43),
+(2, 44),
+(2, 45),
+(2, 46),
+(2, 47),
+(2, 48),
+(2, 49),
+(2, 50),
+(2, 51),
+(2, 52),
+(2, 53),
+(2, 54),
+(2, 55),
+(2, 57),
+(2, 58),
+(2, 59),
+(2, 60),
+(2, 61),
+(2, 62),
+(2, 63),
+(2, 64),
+(2, 65),
+(2, 66),
+(2, 69),
+(2, 70),
+(2, 71),
+(2, 72),
+(2, 73),
+(2, 74),
+(2, 75),
+(2, 76),
+(2, 77),
+(2, 78),
+(2, 83),
+(2, 84),
+(2, 85),
+(2, 86),
+(2, 87),
+(2, 88),
+(2, 89),
+(2, 93),
+(2, 94),
+(2, 97),
+(2, 100),
+(2, 101),
+(2, 102),
+(3, 1),
+(3, 14),
+(3, 15),
+(3, 16),
+(3, 18),
+(3, 37),
+(3, 38),
+(3, 43),
+(3, 44),
+(3, 45),
+(3, 46),
+(3, 47),
+(3, 48),
+(3, 49),
+(3, 50),
+(3, 51),
+(3, 52),
+(3, 53),
+(3, 54),
+(3, 55),
+(3, 57),
+(3, 58),
+(3, 59),
+(3, 60),
+(3, 61),
+(3, 62),
+(3, 63),
+(3, 64),
+(3, 65),
+(3, 66),
+(3, 69),
+(3, 70),
+(3, 71),
+(3, 72),
+(3, 73),
+(3, 74),
+(3, 75),
+(3, 76),
+(3, 77),
+(3, 78),
+(3, 83),
+(3, 84),
+(3, 85),
+(3, 86),
+(3, 87),
+(3, 88),
+(3, 89),
+(3, 93),
+(3, 94),
+(3, 97),
+(3, 100),
+(3, 101),
+(3, 102),
+(4, 1),
+(4, 37),
+(4, 38),
+(4, 42),
+(4, 43),
+(4, 44),
+(4, 45),
+(4, 46),
+(4, 47),
+(4, 48),
+(4, 49),
+(4, 50),
+(4, 51),
+(4, 52),
+(4, 53),
+(4, 54),
+(4, 55),
+(4, 57),
+(4, 58),
+(4, 59),
+(4, 60),
+(4, 61),
+(4, 62),
+(4, 63),
+(4, 64),
+(4, 65),
+(4, 66),
+(4, 69),
+(4, 70),
+(4, 71),
+(4, 72),
+(4, 73),
+(4, 74),
+(4, 75),
+(4, 76),
+(4, 77),
+(4, 78),
+(4, 83),
+(4, 84),
+(4, 85),
+(4, 86),
+(4, 87),
+(4, 88),
+(4, 89),
+(4, 93),
+(4, 94),
+(4, 97),
+(4, 100),
+(4, 102),
+(4, 103),
+(5, 43),
+(5, 44),
+(5, 45),
+(5, 46),
+(5, 47),
+(5, 48),
+(5, 49),
+(5, 50),
+(5, 51),
+(5, 52),
+(5, 53),
+(5, 54),
+(5, 56),
+(5, 57),
+(5, 58),
+(5, 64),
+(5, 69),
+(5, 70),
+(5, 71),
+(5, 72),
+(5, 73),
+(5, 74),
+(5, 75),
+(5, 76),
+(5, 77),
+(5, 78),
+(5, 80),
+(5, 81),
+(5, 82),
+(5, 83),
+(5, 84),
+(5, 85),
+(5, 86),
+(5, 90),
+(5, 91),
+(5, 92),
+(5, 93),
+(5, 94),
+(5, 95),
+(5, 96),
+(6, 43),
+(6, 44),
+(6, 45),
+(6, 46),
+(6, 47),
+(6, 48),
+(6, 49),
+(6, 50),
+(6, 51),
+(6, 52),
+(6, 53),
+(6, 54),
+(6, 56),
+(6, 57),
+(6, 58),
+(6, 63),
+(6, 64),
+(6, 69),
+(6, 70),
+(6, 71),
+(6, 72),
+(6, 73),
+(6, 74),
+(6, 75),
+(6, 76),
+(6, 77),
+(6, 78),
+(6, 81),
+(6, 82),
+(6, 83),
+(6, 84),
+(6, 85),
+(6, 86),
+(6, 90),
+(6, 91),
+(6, 92),
+(6, 93),
+(6, 94),
+(6, 95),
+(6, 96),
+(6, 104),
+(6, 105);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `assegnare`
+--
+
+CREATE TABLE `assegnare` (
+  `ID` int(10) UNSIGNED NOT NULL,
+  `dal` date DEFAULT NULL,
+  `al` date DEFAULT NULL,
+  `oreSpeciali` int(11) NOT NULL,
+  `IDannoscolastico` int(10) UNSIGNED DEFAULT NULL,
+  `IDutente` int(10) UNSIGNED DEFAULT NULL,
+  `IDdisciplina` int(10) UNSIGNED DEFAULT NULL,
+  `IDclasse` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `assegnare`
+--
+
+INSERT INTO `assegnare` (`ID`, `dal`, `al`, `oreSpeciali`, `IDannoscolastico`, `IDutente`, `IDdisciplina`, `IDclasse`) VALUES
+(3, '2024-09-11', '2025-06-07', 0, 1, 5, 2, 1),
+(5, '2024-09-11', '2025-06-07', 0, 1, 5, 23, 14),
+(6, '2024-09-11', '2025-06-07', 2, 1, 9, 36, NULL),
+(8, '2025-09-15', '2026-06-06', 0, 2, 5, 2, 15),
+(9, '2025-09-15', '2026-06-06', 0, 2, 5, 23, 7),
+(28, '2024-09-11', '2025-06-05', 0, 1, 20, 2, 10),
+(29, '2024-09-11', '2025-06-05', 0, 1, 21, 25, 14),
+(31, '2024-09-11', '2025-06-05', 0, 1, 23, 10, 18),
+(32, '2024-09-11', '2025-06-05', 0, 1, 23, 11, 18),
+(33, '2024-09-11', '2025-06-05', 0, 1, 23, 10, 10),
+(34, '2024-09-11', '2025-06-05', 0, 1, 23, 11, 10),
+(35, '2024-09-11', '2025-06-05', 2, 1, 23, 36, NULL),
+(36, '2024-09-11', '2025-06-05', 0, 1, 24, 12, 14),
+(37, '2024-09-11', '2025-06-05', 0, 1, 24, 39, 19),
+(38, '2024-09-11', '2025-06-05', 0, 1, 9, 23, 14),
+(39, '2025-09-15', '2026-06-06', 0, 2, 9, 2, 15),
+(53, '2025-09-15', '2026-06-06', 2, 2, 4, 36, NULL),
+(55, '2025-09-15', '2026-06-06', 8, 2, 9, 36, NULL),
+(58, '2025-09-15', '2026-06-06', 0, 2, 24, 12, 7),
+(59, '2025-09-15', '2026-06-06', 0, 2, 20, 23, 21),
+(63, '2025-09-15', '2026-06-06', 0, 2, 24, 39, 23),
+(64, '2025-09-15', '2026-06-06', 0, 2, 4, 11, 31),
+(65, '2025-09-15', '2026-06-06', 0, 2, 24, 39, 24),
+(66, '2025-09-15', '2026-06-06', 0, 2, 24, 38, 26),
+(68, '2025-09-15', '2026-06-06', 0, 2, 21, 21, 4),
+(76, '2025-09-15', '2026-06-06', 0, 2, 75, 25, 33),
+(78, '2025-09-15', '2026-06-06', 0, 2, 25, 22, 4),
+(83, '2025-09-15', '2026-06-06', 0, 2, 25, 13, 31),
+(84, '2025-09-15', '2026-06-06', 0, 2, 25, 21, 29),
+(86, '2025-09-15', '2026-06-06', 0, 2, 73, 20, 4),
+(90, '2025-09-15', '2026-06-06', 0, 2, 25, 2, 31),
+(91, '2025-09-15', '2026-06-06', 0, 2, 75, 2, 32),
+(92, '2025-09-15', '2026-06-06', 0, 2, 73, 24, 7),
+(94, '2025-09-15', '2026-06-06', 0, 2, 21, 26, 7),
+(95, '2025-09-15', '2026-06-06', 0, 2, 4, 26, 7),
+(97, '2025-09-15', '2026-06-06', 0, 2, 5, 19, 4),
+(98, '2025-09-15', '2026-06-06', 0, 2, 21, 19, 30),
+(99, '2025-09-15', '2026-06-06', 0, 2, 24, 38, 27),
+(100, '2025-09-15', '2026-06-06', 0, 2, 73, 39, 20),
+(102, '2025-09-15', '2026-06-06', 0, 2, 73, 38, 22),
+(104, '2025-09-15', '2026-06-06', 0, 2, 73, 9, 32),
+(106, '2025-09-15', '2026-06-06', 0, 2, 22, 9, 31),
+(107, '2025-09-15', '2026-06-06', 0, 2, 25, 9, 15),
+(109, '2025-09-15', '2026-06-06', 0, 2, 22, 24, 21),
+(110, '2025-09-15', '2026-06-06', 0, 2, 21, 26, 21),
+(111, '2025-09-15', '2026-06-06', 0, 2, 24, 12, 21),
+(112, '2025-09-15', '2026-06-06', 0, 2, 25, 24, 33),
+(113, '2025-09-15', '2026-06-06', 0, 2, 21, 26, 33),
+(114, '2025-09-15', '2026-06-06', 0, 2, 20, 39, 23),
+(115, '2025-09-15', '2026-06-06', 0, 2, 20, 39, 20),
+(116, '2025-09-15', '2026-06-06', 0, 2, 75, 39, 25),
+(118, '2025-09-15', '2026-06-06', 0, 2, 20, 19, 29),
+(119, '2025-09-15', '2026-06-06', 0, 2, 4, 21, 29),
+(120, '2025-09-15', '2026-06-06', 0, 2, 9, 19, 4),
+(121, '2025-09-15', '2026-06-06', 0, 2, 23, 20, 4),
+(122, '2025-09-15', '2026-06-06', 0, 2, 4, 21, 4),
+(123, '2025-09-15', '2026-06-06', 0, 2, 4, 19, 30),
+(124, '2025-09-15', '2026-06-06', 0, 2, 23, 20, 30),
+(125, '2025-09-15', '2026-06-06', 0, 2, 20, 2, 31),
+(126, '2025-09-15', '2026-06-06', 0, 2, 23, 9, 31),
+(127, '2025-09-15', '2026-06-06', 0, 2, 4, 10, 31),
+(128, '2025-09-15', '2026-06-06', 0, 2, 4, 2, 32),
+(129, '2025-09-15', '2026-06-06', 0, 2, 23, 10, 32),
+(130, '2025-09-15', '2026-06-06', 0, 2, 23, 11, 32),
+(131, '2025-09-15', '2026-06-06', 0, 2, 23, 26, 21),
+(132, '2025-09-15', '2026-06-06', 0, 2, 23, 26, 33),
+(133, '2025-09-15', '2026-06-06', 0, 2, 25, 24, 40),
+(134, '2025-09-15', '2026-06-06', 0, 2, 75, 12, 40),
+(135, '2025-09-15', '2026-06-06', 0, 2, 76, 12, 33),
+(136, '2025-09-15', '2026-06-06', 0, 2, 76, 26, 40),
+(137, '2025-09-15', '2026-06-06', 0, 2, 78, 24, 21),
+(138, '2025-09-15', '2026-06-06', 0, 2, 78, 24, 7),
+(139, '2025-09-15', '2026-06-06', 0, 2, 78, 24, 33),
+(140, '2025-09-15', '2026-06-06', 0, 2, 78, 24, 40),
+(141, '2025-09-15', '2026-06-06', 0, 2, 23, 26, 40),
+(142, '2025-09-15', '2026-06-06', 0, 2, 9, 23, 7),
+(143, '2025-09-15', '2026-06-06', 0, 2, 21, 23, 33),
+(144, '2025-09-15', '2026-06-06', 0, 2, 22, 23, 40),
+(145, '2025-09-15', '2026-06-06', 0, 2, 4, 23, 33),
+(146, '2025-09-15', '2026-06-06', 0, 2, 20, 23, 40),
+(147, '2025-09-15', '2026-06-06', 0, 2, 25, 25, 21),
+(148, '2025-09-15', '2026-06-06', 0, 2, 25, 25, 7),
+(149, '2025-09-15', '2026-06-06', 0, 2, 74, 25, 40),
+(150, '2025-09-15', '2026-06-06', 0, 2, 23, 25, 21),
+(151, '2025-09-15', '2026-06-06', 0, 2, 4, 25, 7),
+(152, '2025-09-15', '2026-06-06', 0, 2, 23, 25, 33),
+(153, '2025-09-15', '2026-06-06', 0, 2, 23, 25, 40),
+(154, '2025-09-15', '2026-06-06', 0, 2, 18, 23, 21);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `classi`
+--
+
+CREATE TABLE `classi` (
+  `ID` int(10) UNSIGNED NOT NULL,
+  `sigla` char(4) NOT NULL,
+  `anno` tinyint(3) UNSIGNED NOT NULL,
+  `sezione` char(3) NOT NULL,
+  `classeArticolataCon` int(10) UNSIGNED DEFAULT NULL,
+  `IDutente` int(10) UNSIGNED DEFAULT NULL COMMENT 'coordinatore di classe ',
+  `IDindirizzo` int(10) UNSIGNED DEFAULT NULL,
+  `IDannoscolastico` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `classi`
+--
+
+INSERT INTO `classi` (`ID`, `sigla`, `anno`, `sezione`, `classeArticolataCon`, `IDutente`, `IDindirizzo`, `IDannoscolastico`) VALUES
+(1, '4BM', 4, 'BM', NULL, 4, 1, 1),
+(2, '2MP', 2, 'MP', NULL, NULL, 5, 2),
+(4, '3BM', 3, 'BM', NULL, 54, 1, 2),
+(5, '4FM', 4, 'FM', 10, 7, 2, 1),
+(7, '5BM', 5, 'BM', NULL, 4, 1, 2),
+(9, '4HM', 4, 'HM', NULL, 8, 3, 1),
+(10, '4AM', 4, 'AM', 5, 5, 1, 1),
+(12, '5FM', 5, 'FM', 40, 7, 2, 2),
+(13, '5HM', 5, 'HM', NULL, 8, 3, 2),
+(14, '5BM', 5, 'BM', NULL, NULL, 1, 1),
+(15, '4BM', 4, 'BM', NULL, 42, 1, 2),
+(18, '4CM', 4, 'CM', NULL, 21, 1, 1),
+(19, '1CM', 1, 'CM', NULL, 23, 1, 1),
+(20, '1BM', 1, 'BM', NULL, 73, 1, 2),
+(21, '5AM', 5, 'AM', NULL, 56, 1, 2),
+(22, '2BM', 2, 'BM', NULL, 63, 1, 2),
+(23, '1AM', 1, 'AM', NULL, 37, 1, 2),
+(24, '1CM', 1, 'CM', NULL, 57, 1, 2),
+(25, '1GM', 1, 'GM', NULL, 75, 1, 2),
+(26, '2AM', 2, 'AM', NULL, NULL, 1, 2),
+(27, '2CM', 2, 'CM', NULL, 72, 1, 2),
+(28, '2DM', 2, 'DM', NULL, 52, 1, 2),
+(29, '3AM', 3, 'AM', NULL, 62, 1, 2),
+(30, '3CM', 3, 'CM', NULL, 26, 1, 2),
+(31, '4AM', 4, 'AM', NULL, 30, 1, 2),
+(32, '4CM', 4, 'CM', NULL, 61, 1, 2),
+(33, '5CM', 5, 'CM', NULL, 21, 1, 2),
+(34, '1AP', 1, 'AP', NULL, NULL, 6, 2),
+(35, '1BP', 1, 'BP', NULL, NULL, 6, 2),
+(36, '1FM', 1, 'FM', NULL, NULL, 2, 2),
+(37, '1LM', 1, 'LM', NULL, NULL, 2, 2),
+(38, '1MM', 1, 'MM', NULL, NULL, 4, 2),
+(39, '1MP', 1, 'MP', NULL, NULL, 5, 2),
+(40, '5DM', 5, 'DM', 12, 28, 1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `classidiconcorso`
+--
+
+CREATE TABLE `classidiconcorso` (
+  `ID` int(10) UNSIGNED NOT NULL,
+  `nome` varchar(150) NOT NULL,
+  `livello` varchar(50) NOT NULL,
+  `abilitazioniRichieste` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `classidiconcorso`
+--
+
+INSERT INTO `classidiconcorso` (`ID`, `nome`, `livello`, `abilitazioniRichieste`) VALUES
+(1, 'Scienze e Tecnologie Informatiche', 'A041', 'Laurea in Informatica, Ingegneria informatica, Scienze dell\'informazione'),
+(2, 'Matematica', 'A026', 'Laurea in Matematica, Fisica, Ingegneria'),
+(7, 'Laboratori di Informatica e Sistemi', 'B016', 'Diploma di istituto tecnico superiore'),
+(8, 'Scienze e tecnologie elettriche ed elettroniche', 'A040', 'Laurea in Elettronica, Ingegneria elettronica'),
+(10, 'Disegno e Storia dell\'Arte', 'AS01', 'Laurea in Storia dell\'Arte'),
+(11, 'Discipline Letterarie', 'A012', 'Laurea in Letteratura'),
+(12, 'Filosofia e Scienze Umane', 'A018', 'Laurea in Filosofia'),
+(13, 'Fisica', 'A020', 'Laurea in fisica'),
+(14, 'Geografia', 'A021', 'Laurea in Geografia'),
+(15, 'Inglese', 'A022', 'Laurea in inglese'),
+(16, 'Chimica', 'A034', 'Laurea in chimica'),
+(17, 'Tecnologie e Tecniche di Rappresentazione Grafica', 'A037', 'Laurea in Disegno Tecnico'),
+(18, 'Scienze e Tecnologie Meccaniche', 'A042', 'Laurea in meccanica'),
+(19, 'Scienze e tecnologie tessili dell\'abbigliamento e della moda', 'A044', 'Laurea in Moda'),
+(20, 'Scienze Economico Aziendali', 'A045', 'Laurea in scienze economico aziendali'),
+(21, 'Scienze Giuridico Economiche', 'A046', 'Laurea in scienze giuridiche economiche'),
+(22, 'Scienze Matematiche Applicate', 'A047', 'Laurea in scienze matematiche applicate'),
+(23, 'Scienze Motorie e Sportive', 'A048', 'Laurea in scienze motorie e sportive'),
+(24, 'Scienze Naturali, Chimiche e Biologiche', 'A050', 'Laurea in scienze naturali, chimiche e biologiche'),
+(25, 'Laboratorio di Fisica', 'B003', 'Diploma di istituto tecnico superiore'),
+(26, 'Laboratori di Scienze e Tecnologie Chimiche e Microbiologiche', 'B012', 'Diploma di istituto tecnico superiore'),
+(27, 'Laboratori di Elettronica e Telecomunicazioni', 'B015', 'Diploma di istituto tecnico superiore'),
+(28, 'Laboratori di Scienze e Tecnologie Meccaniche', 'B017', 'Diploma di istituto tecnico superiore'),
+(29, 'Laboratori di Scienze e Tecnologie Tessili dell\'Abbigliamento e della Moda', 'B018', 'Diploma di istituto tecnico superiore'),
+(30, 'Religione', 'IRC', 'Diploma di istituto tecnico superiore, Seminario');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `contratti`
+--
+
+CREATE TABLE `contratti` (
+  `ID` int(10) UNSIGNED NOT NULL,
+  `tipoContratto` char(1) NOT NULL,
+  `monteOre` smallint(6) NOT NULL,
+  `datainizio` date NOT NULL,
+  `datafine` date DEFAULT NULL,
+  `IDutente` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `contratti`
+--
+
+INSERT INTO `contratti` (`ID`, `tipoContratto`, `monteOre`, `datainizio`, `datafine`, `IDutente`) VALUES
+(2, 'I', 18, '2025-09-15', NULL, 5),
+(4, 'I', 18, '2019-09-15', NULL, 9),
+(5, 'D', 7, '2026-03-12', '2026-03-13', 18),
+(7, 'I', 8, '2026-03-26', NULL, 4),
+(8, 'I', 18, '2023-09-01', NULL, 20),
+(9, 'I', 18, '2023-09-01', NULL, 21),
+(10, 'I', 18, '2023-09-02', NULL, 22),
+(11, 'I', 18, '2023-09-02', NULL, 23),
+(12, 'I', 18, '2023-09-02', NULL, 24),
+(13, 'I', 18, '2024-09-16', NULL, 25),
+(14, 'I', 18, '2024-09-16', NULL, 26),
+(15, 'I', 18, '2024-09-16', NULL, 27),
+(16, 'I', 18, '2024-09-16', NULL, 28),
+(17, 'I', 18, '2024-09-16', NULL, 29),
+(18, 'I', 18, '2024-09-16', NULL, 30),
+(19, 'I', 18, '2024-09-16', NULL, 31),
+(20, 'I', 18, '2024-09-16', NULL, 32),
+(21, 'I', 18, '2024-09-16', NULL, 33),
+(22, 'I', 18, '2024-09-16', NULL, 34),
+(23, 'I', 18, '2024-09-16', NULL, 35),
+(24, 'I', 18, '2024-09-16', NULL, 36),
+(25, 'I', 18, '2024-09-16', NULL, 37),
+(26, 'I', 18, '2024-09-16', NULL, 38),
+(27, 'I', 18, '2024-09-16', NULL, 39),
+(28, 'I', 18, '2024-09-16', NULL, 40),
+(29, 'I', 18, '2024-09-16', NULL, 41),
+(30, 'I', 18, '2024-09-16', NULL, 42),
+(31, 'I', 18, '2024-09-16', NULL, 43),
+(32, 'I', 18, '2024-09-16', NULL, 44),
+(33, 'I', 18, '2024-09-16', NULL, 45),
+(34, 'I', 18, '2024-09-16', NULL, 46),
+(35, 'I', 18, '2024-09-16', NULL, 47),
+(36, 'I', 18, '2024-09-16', NULL, 48),
+(37, 'I', 18, '2024-09-16', NULL, 49),
+(38, 'I', 18, '2024-09-16', NULL, 50),
+(39, 'I', 18, '2024-09-16', NULL, 51),
+(40, 'I', 18, '2024-09-16', NULL, 52),
+(41, 'I', 18, '2024-09-16', NULL, 53),
+(42, 'I', 18, '2024-09-16', NULL, 54),
+(43, 'I', 18, '2024-09-16', NULL, 55),
+(44, 'I', 18, '2024-09-16', NULL, 56),
+(45, 'I', 18, '2024-09-16', NULL, 57),
+(46, 'I', 18, '2024-09-16', NULL, 58),
+(47, 'I', 18, '2024-09-16', NULL, 59),
+(48, 'I', 18, '2024-09-16', NULL, 60),
+(49, 'I', 18, '2024-09-16', NULL, 61),
+(50, 'I', 18, '2024-09-16', NULL, 62),
+(51, 'I', 18, '2024-09-16', NULL, 63),
+(52, 'I', 18, '2024-09-16', NULL, 64),
+(53, 'I', 18, '2024-09-16', NULL, 65),
+(54, 'I', 18, '2024-09-16', NULL, 66),
+(55, 'I', 18, '2024-09-16', NULL, 67),
+(56, 'I', 18, '2024-09-16', NULL, 68),
+(57, 'I', 18, '2024-09-16', NULL, 69),
+(58, 'I', 18, '2024-09-16', NULL, 70),
+(59, 'I', 18, '2024-09-16', NULL, 71),
+(60, 'I', 18, '2024-09-16', NULL, 72),
+(61, 'I', 18, '2024-09-16', NULL, 73),
+(62, 'I', 18, '2024-09-16', NULL, 74),
+(63, 'I', 18, '2024-09-16', NULL, 75),
+(64, 'I', 18, '2024-09-16', NULL, 76),
+(65, 'I', 18, '2024-09-16', NULL, 77),
+(66, 'I', 18, '2024-09-16', NULL, 78),
+(67, 'I', 18, '2024-09-16', NULL, 79);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `dipartimenti`
+--
+
+CREATE TABLE `dipartimenti` (
+  `ID` int(10) UNSIGNED NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `IDutente` int(10) UNSIGNED DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `dipartimenti`
+--
+
+INSERT INTO `dipartimenti` (`ID`, `nome`, `IDutente`) VALUES
+(1, 'Informatica', 25),
+(2, 'Matematico', NULL),
+(3, 'Elettronica e Automazione', 8),
+(4, 'Meccanica e Meccatronica', NULL),
+(5, 'Manutenzione e Assistenza Tecnica', NULL),
+(6, 'Industria e Artigianato per il Made in Italy - Moda', NULL),
+(7, 'Italiano e Storico sociale', 38),
+(8, 'Inglese', 57),
+(9, 'Scientifico Tecnologico', NULL),
+(10, 'Scienze motorie e Sportive', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `discipline`
+--
+
+CREATE TABLE `discipline` (
+  `ID` int(10) UNSIGNED NOT NULL,
+  `nome` varchar(50) NOT NULL,
+  `anno` tinyint(3) UNSIGNED NOT NULL,
+  `oreLaboratorio` tinyint(3) UNSIGNED NOT NULL,
+  `oreTeoria` tinyint(3) UNSIGNED NOT NULL,
+  `disciplinaSpeciale` varchar(50) DEFAULT NULL,
+  `IDdisciplinaSuccessiva` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `discipline`
+--
+
+INSERT INTO `discipline` (`ID`, `nome`, `anno`, `oreLaboratorio`, `oreTeoria`, `disciplinaSpeciale`, `IDdisciplinaSuccessiva`) VALUES
+(1, 'Matematica', 3, 0, 4, '', 55),
+(2, 'Informatica', 4, 3, 6, '', 23),
+(9, 'Sistemi e Reti', 4, 2, 4, '', 24),
+(10, 'TPSIT', 4, 1, 2, '', 25),
+(11, 'AI', 4, 1, 1, '', 26),
+(12, 'GPOI', 5, 0, 3, '', NULL),
+(13, 'Telecomunicazioni', 4, 2, 3, '', NULL),
+(14, 'TPSEE', 4, 3, 4, '', NULL),
+(15, 'Elettr/Elettrot', 4, 2, 5, '', NULL),
+(16, 'Sistemi automatici', 4, 2, 5, '', NULL),
+(17, 'Energie rinnovabili', 4, 2, 0, '', NULL),
+(18, 'Robotica industriale', 4, 2, 0, '', NULL),
+(19, 'Informatica', 3, 3, 6, '', 2),
+(20, 'Sistemi e Reti', 3, 2, 4, '', 9),
+(21, 'TPSIT', 3, 1, 3, '', 10),
+(22, 'Telecomunicazioni', 3, 2, 3, '', NULL),
+(23, 'Informatica', 5, 4, 6, '', NULL),
+(24, 'Sistemi e Reti', 5, 3, 4, '', NULL),
+(25, 'TPSIT', 5, 2, 3, '', NULL),
+(26, 'AI', 5, 1, 1, '', NULL),
+(36, 'Potenziamento B16', 0, 18, 0, 'potenziamento', NULL),
+(37, 'Matematica', 2, 0, 4, '', 1),
+(38, 'STA', 2, 0, 3, '', NULL),
+(39, 'TIC(I)', 1, 2, 4, '', 38),
+(41, 'Potenziamento A41', 0, 0, 6, 'potenziamento', NULL),
+(42, 'Tecnologie meccaniche e applicazioni', 3, 3, 5, NULL, NULL),
+(43, 'Lingua e Letteratura Italiana', 1, 0, 4, '', 44),
+(44, 'Lingua e Letteratura Italiana', 2, 0, 4, '', 45),
+(45, 'Lingua e Letteratura Italiana', 3, 0, 4, '', 46),
+(46, 'Lingua e Letteratura Italiana', 4, 0, 4, '', 47),
+(47, 'Lingua e Letteratura Italiana', 5, 0, 4, NULL, NULL),
+(48, 'Storia', 1, 0, 2, '', 49),
+(49, 'Storia', 2, 0, 2, '', 50),
+(50, 'Storia', 3, 0, 2, '', 51),
+(51, 'Storia', 4, 0, 2, '', 52),
+(52, 'Storia', 5, 0, 2, NULL, NULL),
+(53, 'Geografia', 1, 0, 1, NULL, NULL),
+(54, 'Matematica', 1, 0, 4, '', 37),
+(55, 'Matematica', 4, 0, 4, '', 97),
+(56, 'Matematica (IP)', 5, 0, 3, '', NULL),
+(57, 'Diritto ed economia', 1, 0, 2, '', 58),
+(58, 'Diritto ed economia', 2, 0, 2, NULL, NULL),
+(59, 'Scienze naturali', 1, 0, 2, '', 60),
+(60, 'Scienze naturali', 2, 0, 2, '', NULL),
+(61, 'Fisica', 1, 1, 3, '', 62),
+(62, 'Fisica', 2, 1, 3, '', NULL),
+(63, 'Chimica', 1, 1, 2, '', 64),
+(64, 'Chimica', 2, 1, 2, '', NULL),
+(65, 'Tecnologie e tecniche di rappresentazione grafica', 1, 1, 3, '', 66),
+(66, 'Tecnologie e tecniche di rappresentazione grafica', 2, 1, 3, NULL, NULL),
+(69, 'Scienze motorie e sportive', 1, 0, 2, '', 70),
+(70, 'Scienze motorie e sportive', 2, 0, 2, '', 71),
+(71, 'Scienze motorie e sportive', 3, 0, 2, '', 72),
+(72, 'Scienze motorie e sportive', 4, 0, 2, '', 73),
+(73, 'Scienze motorie e sportive', 5, 0, 2, NULL, NULL),
+(74, 'RC o attività alternative', 1, 0, 1, '', 75),
+(75, 'RC o attività alternative', 2, 0, 1, '', 76),
+(76, 'RC o attività alternative', 3, 0, 1, '', 77),
+(77, 'RC o attività alternative', 4, 0, 1, '', 78),
+(78, 'RC o attività alternative', 5, 0, 1, NULL, NULL),
+(80, 'Biologia (IP)', 1, 1, 2, '', NULL),
+(81, 'Chimica (IP)', 2, 1, 2, '', NULL),
+(82, 'Chimica (IP)', 1, 1, 2, '', 81),
+(83, 'Potenziamento A012', 0, 0, 3, 'potenziamento', NULL),
+(84, 'Potenziamento A018', 0, 0, 18, 'potenziamento', NULL),
+(85, 'Inglese', 1, 0, 3, '', 86),
+(86, 'Inglese', 2, 0, 3, '', 87),
+(87, 'Inglese', 3, 0, 3, '', 88),
+(88, 'Inglese', 4, 0, 3, '', 89),
+(89, 'Inglese', 5, 0, 3, NULL, NULL),
+(90, 'Inglese (IP)', 3, 0, 2, '', 91),
+(91, 'Inglese (IP)', 4, 0, 2, '', 92),
+(92, 'Inglese (IP)', 5, 0, 2, NULL, NULL),
+(93, 'Potenziamento A022', 0, 0, 8, 'potenziamento', NULL),
+(94, 'Potenziamento A026', 0, 0, 12, 'potenziamento', NULL),
+(95, 'Matematica (IP)', 3, 0, 3, '', 96),
+(96, 'Matematica (IP)', 4, 0, 3, '', 56),
+(97, 'Matematica', 5, 0, 3, NULL, NULL),
+(99, 'Informatica e Reti di Comunicazione', 1, 2, 2, '', NULL),
+(100, 'TTRG', 1, 1, 3, '', 102),
+(101, 'TIC(E/A)', 1, 2, 4, NULL, NULL),
+(102, 'TTRG', 2, 1, 3, NULL, NULL),
+(103, 'TIC(M)', 1, 2, 4, NULL, NULL),
+(104, 'TTRG (IP)', 1, 3, 3, '', 105),
+(105, 'TTRG (IP)', 2, 2, 2, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `dotare`
+--
+
+CREATE TABLE `dotare` (
+  `ID` int(10) UNSIGNED NOT NULL,
+  `IDannoscolastico` int(10) UNSIGNED NOT NULL,
+  `IDclassediconcorso` int(10) UNSIGNED NOT NULL,
+  `numcattedrediritto` int(11) NOT NULL,
+  `numcattedrefatto` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `dotare`
+--
+
+INSERT INTO `dotare` (`ID`, `IDannoscolastico`, `IDclassediconcorso`, `numcattedrediritto`, `numcattedrefatto`) VALUES
+(1, 1, 1, 10, 8),
+(2, 1, 2, 6, 4),
+(3, 1, 7, 6, 6),
+(4, 1, 8, 0, 0),
+(6, 1, 10, 5, 3),
+(7, 1, 11, 5, 5),
+(8, 1, 12, 5, 5),
+(9, 1, 13, 5, 5),
+(10, 1, 14, 5, 5),
+(11, 1, 15, 5, 5),
+(12, 1, 16, 5, 5),
+(13, 1, 17, 5, 5),
+(14, 1, 18, 5, 5),
+(15, 1, 19, 5, 5),
+(16, 1, 20, 5, 5),
+(17, 1, 21, 5, 5),
+(18, 1, 22, 5, 5),
+(19, 1, 23, 5, 5),
+(20, 1, 24, 5, 5),
+(21, 1, 25, 5, 5),
+(22, 1, 26, 1, 1),
+(23, 1, 27, 5, 5),
+(24, 1, 28, 10, 10),
+(25, 1, 29, 5, 5),
+(26, 1, 30, 5, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `gestire`
+--
+
+CREATE TABLE `gestire` (
+  `ID` int(11) NOT NULL,
+  `IDdipartimento` int(10) UNSIGNED NOT NULL,
+  `IDdisciplina` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `gestire`
+--
+
+INSERT INTO `gestire` (`ID`, `IDdipartimento`, `IDdisciplina`) VALUES
+(1, 2, 37),
+(2, 1, 19),
+(3, 2, 1),
+(4, 1, 20),
+(5, 1, 22),
+(6, 1, 21),
+(7, 1, 11),
+(8, 3, 15),
+(9, 3, 17),
+(10, 1, 2),
+(11, 3, 18),
+(12, 1, 9),
+(13, 3, 16),
+(14, 1, 13),
+(15, 3, 14),
+(16, 1, 10),
+(17, 1, 26),
+(18, 1, 12),
+(19, 1, 23),
+(20, 1, 24),
+(21, 1, 25),
+(23, 1, 38),
+(24, 1, 39),
+(26, 1, 36),
+(28, 1, 41),
+(29, 4, 42),
+(30, 7, 43),
+(31, 7, 44),
+(32, 7, 45),
+(33, 7, 46),
+(34, 7, 47),
+(35, 7, 48),
+(37, 7, 50),
+(38, 7, 49),
+(39, 7, 51),
+(40, 7, 52),
+(41, 7, 53),
+(42, 2, 54),
+(43, 2, 55),
+(44, 2, 56),
+(45, 7, 57),
+(46, 7, 58),
+(47, 9, 59),
+(48, 9, 60),
+(49, 9, 61),
+(50, 9, 62),
+(51, 9, 63),
+(52, 9, 64),
+(53, 9, 65),
+(54, 9, 66),
+(61, 3, 38),
+(62, 4, 38),
+(63, 10, 69),
+(64, 10, 70),
+(65, 10, 71),
+(66, 10, 72),
+(67, 10, 73),
+(68, 7, 74),
+(69, 7, 75),
+(70, 7, 76),
+(71, 7, 77),
+(72, 7, 78),
+(74, 9, 80),
+(75, 9, 64),
+(77, 9, 81),
+(78, 9, 63),
+(79, 9, 82),
+(80, 7, 83),
+(81, 7, 84),
+(82, 8, 85),
+(83, 8, 86),
+(84, 8, 87),
+(85, 8, 88),
+(86, 8, 89),
+(87, 8, 90),
+(88, 8, 91),
+(89, 8, 92),
+(90, 8, 93),
+(91, 2, 94),
+(93, 2, 95),
+(94, 2, 96),
+(95, 2, 97),
+(97, 1, 99),
+(98, 9, 100),
+(99, 3, 101),
+(100, 9, 102),
+(101, 4, 103),
+(102, 9, 104),
+(103, 9, 105);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `indirizzi`
+--
+
+CREATE TABLE `indirizzi` (
+  `ID` int(10) UNSIGNED NOT NULL,
+  `nome` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `indirizzi`
+--
+
+INSERT INTO `indirizzi` (`ID`, `nome`) VALUES
+(1, 'Informatica'),
+(2, 'Elettronica'),
+(3, 'Automazione'),
+(4, 'Meccatronica'),
+(5, 'Moda'),
+(6, 'MAT');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `richiedere`
+--
+
+CREATE TABLE `richiedere` (
+  `ID` int(11) NOT NULL,
+  `IDutente` int(10) UNSIGNED DEFAULT NULL,
+  `IDclasseDiConcorso` int(10) UNSIGNED DEFAULT NULL,
+  `IDdisciplina` int(10) UNSIGNED DEFAULT NULL,
+  `oreSpeciali` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `richiedere`
+--
+
+INSERT INTO `richiedere` (`ID`, `IDutente`, `IDclasseDiConcorso`, `IDdisciplina`, `oreSpeciali`) VALUES
+(2, NULL, 1, 2, 0),
+(6, NULL, 1, NULL, 0),
+(7, NULL, 7, NULL, 0),
+(8, 5, 1, NULL, 0),
+(10, 5, NULL, 2, 0),
+(11, 9, NULL, 2, 0),
+(13, 18, 1, NULL, 0),
+(14, 18, NULL, 2, 0),
+(15, NULL, 1, NULL, 0),
+(16, NULL, NULL, 2, 0),
+(17, NULL, 1, NULL, 0),
+(21, NULL, 1, 38, 0),
+(22, NULL, 7, 38, 0),
+(23, NULL, 1, 39, 0),
+(24, NULL, 7, 39, 0),
+(25, NULL, 1, 19, 0),
+(26, NULL, 7, 19, 0),
+(27, NULL, 1, 23, 0),
+(28, NULL, 7, 23, 0),
+(29, 20, 7, NULL, 0),
+(30, 20, NULL, 19, 0),
+(31, 20, NULL, 2, 0),
+(32, 20, NULL, 23, 0),
+(34, NULL, 1, 11, 0),
+(35, NULL, 1, 26, 0),
+(36, NULL, 1, 9, 0),
+(37, NULL, 7, 9, 0),
+(38, NULL, 1, 13, 0),
+(39, NULL, 7, 13, 0),
+(40, NULL, 1, 22, 0),
+(41, NULL, 7, 22, 0),
+(42, NULL, 1, 10, 0),
+(43, NULL, 7, 10, 0),
+(44, NULL, 1, 12, 0),
+(45, NULL, 1, 24, 0),
+(46, NULL, 7, 24, 0),
+(47, NULL, 1, 25, 0),
+(48, NULL, 7, 25, 0),
+(49, 21, 1, NULL, 0),
+(50, 21, NULL, 11, 0),
+(51, 21, NULL, 26, 0),
+(52, 21, NULL, 19, 0),
+(53, 21, NULL, 2, 0),
+(54, 21, NULL, 23, 0),
+(55, 21, NULL, 10, 0),
+(56, 21, NULL, 25, 0),
+(57, NULL, 1, 21, 0),
+(58, NULL, 7, 21, 0),
+(59, 21, NULL, 21, 0),
+(60, 22, 1, NULL, 0),
+(61, 22, NULL, 19, 0),
+(62, 22, NULL, 2, 0),
+(63, 22, NULL, 23, 0),
+(64, 22, NULL, 9, 0),
+(65, 22, NULL, 24, 0),
+(66, NULL, 1, 20, 0),
+(67, NULL, 7, 20, 0),
+(68, 22, NULL, 20, 0),
+(69, 23, 7, NULL, 0),
+(70, 23, NULL, 20, 0),
+(71, 23, NULL, 9, 0),
+(72, 23, NULL, 24, 0),
+(74, 23, NULL, 21, 0),
+(75, 23, NULL, 10, 0),
+(76, 23, NULL, 25, 0),
+(77, 24, 1, NULL, 0),
+(78, 24, NULL, 12, 0),
+(81, 9, 7, NULL, 0),
+(83, NULL, 7, 36, 0),
+(84, 5, NULL, 19, 0),
+(85, 5, NULL, 23, 0),
+(86, NULL, 1, NULL, 0),
+(87, NULL, 1, 41, 0),
+(88, 25, 1, NULL, 0),
+(89, 25, NULL, 20, 0),
+(90, 25, NULL, 9, 0),
+(91, 25, NULL, 24, 0),
+(92, 25, NULL, 21, 0),
+(93, 25, NULL, 10, 0),
+(94, 25, NULL, 25, 0),
+(95, NULL, NULL, 42, 0),
+(96, NULL, 11, 43, 0),
+(97, NULL, 11, 44, 0),
+(98, NULL, 11, 45, 0),
+(99, NULL, 11, 46, 0),
+(100, NULL, 11, 47, 0),
+(101, NULL, 11, 48, 0),
+(102, NULL, 11, 49, 0),
+(103, NULL, 11, 50, 0),
+(104, NULL, 11, 51, 0),
+(105, NULL, 11, 52, 0),
+(106, NULL, 14, 53, 0),
+(107, NULL, 2, 37, 0),
+(108, NULL, 2, 1, 0),
+(109, NULL, 2, 54, 0),
+(110, NULL, 2, 55, 0),
+(111, NULL, 2, 56, 0),
+(112, NULL, 21, 57, 0),
+(113, NULL, 21, 58, 0),
+(114, NULL, 24, 59, 0),
+(115, NULL, 24, 60, 0),
+(116, NULL, 13, 61, 0),
+(117, NULL, 13, 62, 0),
+(118, NULL, 16, 63, 0),
+(119, NULL, 16, 64, 0),
+(120, NULL, 18, 65, 0),
+(121, NULL, 18, 66, 0),
+(122, NULL, 1, NULL, 0),
+(123, NULL, 1, NULL, 0),
+(124, NULL, 8, NULL, 0),
+(125, NULL, 18, NULL, 0),
+(128, NULL, 8, 38, 0),
+(129, NULL, 18, 38, 0),
+(130, NULL, 23, 69, 0),
+(131, NULL, 23, 70, 0),
+(132, NULL, 23, 71, 0),
+(133, NULL, 23, 72, 0),
+(134, NULL, 23, 73, 0),
+(135, NULL, 30, 74, 0),
+(136, NULL, 30, 75, 0),
+(137, NULL, 30, 76, 0),
+(138, NULL, 30, 77, 0),
+(139, NULL, 30, 78, 0),
+(140, NULL, 14, NULL, 0),
+(141, NULL, 24, 80, 0),
+(142, NULL, 26, 63, 0),
+(143, NULL, 25, 61, 0),
+(144, NULL, 26, 80, 0),
+(145, NULL, 25, 62, 0),
+(146, NULL, 26, 64, 0),
+(147, NULL, 16, 64, 0),
+(148, NULL, 26, 64, 0),
+(149, NULL, 16, 81, 0),
+(150, NULL, 26, 81, 0),
+(151, 26, 11, NULL, 0),
+(152, 26, NULL, 43, 0),
+(153, 26, NULL, 44, 0),
+(154, 26, NULL, 45, 0),
+(155, 26, NULL, 46, 0),
+(156, 26, NULL, 47, 0),
+(157, 26, NULL, 48, 0),
+(158, 26, NULL, 49, 0),
+(159, 26, NULL, 50, 0),
+(160, 26, NULL, 51, 0),
+(161, 26, NULL, 52, 0),
+(162, 27, 11, NULL, 0),
+(163, 27, NULL, 43, 0),
+(164, 27, NULL, 44, 0),
+(165, 27, NULL, 45, 0),
+(166, 27, NULL, 46, 0),
+(167, 27, NULL, 47, 0),
+(168, 27, NULL, 48, 0),
+(169, 27, NULL, 49, 0),
+(170, 27, NULL, 50, 0),
+(171, 27, NULL, 51, 0),
+(172, 27, NULL, 52, 0),
+(173, 28, 11, NULL, 0),
+(174, 28, NULL, 43, 0),
+(175, 28, NULL, 44, 0),
+(176, 28, NULL, 45, 0),
+(177, 28, NULL, 46, 0),
+(178, 28, NULL, 47, 0),
+(179, 28, NULL, 48, 0),
+(180, 28, NULL, 49, 0),
+(181, 28, NULL, 50, 0),
+(182, 28, NULL, 51, 0),
+(183, 28, NULL, 52, 0),
+(184, 29, 11, NULL, 0),
+(185, 29, NULL, 43, 0),
+(186, 29, NULL, 44, 0),
+(187, 29, NULL, 45, 0),
+(188, 29, NULL, 46, 0),
+(189, 29, NULL, 47, 0),
+(190, 29, NULL, 48, 0),
+(191, 29, NULL, 49, 0),
+(192, 29, NULL, 50, 0),
+(193, 29, NULL, 51, 0),
+(194, 29, NULL, 52, 0),
+(195, NULL, 16, 63, 0),
+(196, NULL, 26, 63, 0),
+(197, 30, 11, NULL, 0),
+(198, 30, NULL, 43, 0),
+(199, 30, NULL, 44, 0),
+(200, 30, NULL, 45, 0),
+(201, 30, NULL, 46, 0),
+(202, 30, NULL, 47, 0),
+(203, 30, NULL, 48, 0),
+(204, 30, NULL, 49, 0),
+(205, 30, NULL, 50, 0),
+(206, 30, NULL, 51, 0),
+(207, 30, NULL, 52, 0),
+(208, 31, 11, NULL, 0),
+(209, 31, NULL, 43, 0),
+(210, 31, NULL, 44, 0),
+(211, 31, NULL, 45, 0),
+(212, 31, NULL, 46, 0),
+(213, 31, NULL, 47, 0),
+(214, 31, NULL, 48, 0),
+(215, 31, NULL, 49, 0),
+(216, 31, NULL, 50, 0),
+(217, 31, NULL, 51, 0),
+(218, 31, NULL, 52, 0),
+(219, NULL, 16, 82, 0),
+(220, NULL, 26, 82, 0),
+(221, 32, 11, NULL, 0),
+(222, 32, NULL, 43, 0),
+(223, 32, NULL, 44, 0),
+(224, 32, NULL, 45, 0),
+(225, 32, NULL, 46, 0),
+(226, 32, NULL, 47, 0),
+(227, 32, NULL, 48, 0),
+(228, 32, NULL, 49, 0),
+(229, 32, NULL, 50, 0),
+(230, 32, NULL, 51, 0),
+(231, 32, NULL, 52, 0),
+(232, 33, 11, NULL, 0),
+(233, 33, NULL, 43, 0),
+(234, 33, NULL, 44, 0),
+(235, 33, NULL, 45, 0),
+(236, 33, NULL, 46, 0),
+(237, 33, NULL, 47, 0),
+(238, 33, NULL, 48, 0),
+(239, 33, NULL, 49, 0),
+(240, 33, NULL, 50, 0),
+(241, 33, NULL, 51, 0),
+(242, 33, NULL, 52, 0),
+(243, 34, 11, NULL, 0),
+(244, 34, NULL, 43, 0),
+(245, 34, NULL, 44, 0),
+(246, 34, NULL, 45, 0),
+(247, 34, NULL, 46, 0),
+(248, 34, NULL, 47, 0),
+(249, 34, NULL, 48, 0),
+(250, 34, NULL, 49, 0),
+(251, 34, NULL, 50, 0),
+(252, 34, NULL, 51, 0),
+(253, 34, NULL, 52, 0),
+(254, 35, 11, NULL, 0),
+(255, 35, NULL, 43, 0),
+(256, 35, NULL, 44, 0),
+(257, 35, NULL, 45, 0),
+(258, 35, NULL, 46, 0),
+(259, 35, NULL, 47, 0),
+(260, 35, NULL, 48, 0),
+(261, 35, NULL, 49, 0),
+(262, 35, NULL, 50, 0),
+(263, 35, NULL, 51, 0),
+(264, 35, NULL, 52, 0),
+(265, 36, 11, NULL, 0),
+(266, 36, NULL, 43, 0),
+(267, 36, NULL, 44, 0),
+(268, 36, NULL, 45, 0),
+(269, 36, NULL, 46, 0),
+(270, 36, NULL, 47, 0),
+(271, 36, NULL, 48, 0),
+(272, 36, NULL, 49, 0),
+(273, 36, NULL, 50, 0),
+(274, 36, NULL, 51, 0),
+(275, 36, NULL, 52, 0),
+(276, 37, 11, NULL, 0),
+(277, 37, NULL, 43, 0),
+(278, 37, NULL, 44, 0),
+(279, 37, NULL, 45, 0),
+(280, 37, NULL, 46, 0),
+(281, 37, NULL, 47, 0),
+(282, 37, NULL, 48, 0),
+(283, 37, NULL, 49, 0),
+(284, 37, NULL, 50, 0),
+(285, 37, NULL, 51, 0),
+(286, 37, NULL, 52, 0),
+(287, 38, 11, NULL, 0),
+(288, 38, NULL, 43, 0),
+(289, 38, NULL, 44, 0),
+(290, 38, NULL, 45, 0),
+(291, 38, NULL, 46, 0),
+(292, 38, NULL, 47, 0),
+(293, 38, NULL, 48, 0),
+(294, 38, NULL, 49, 0),
+(295, 38, NULL, 50, 0),
+(296, 38, NULL, 51, 0),
+(297, 38, NULL, 52, 0),
+(298, 39, 11, NULL, 0),
+(299, 39, NULL, 43, 0),
+(300, 39, NULL, 44, 0),
+(301, 39, NULL, 45, 0),
+(302, 39, NULL, 46, 0),
+(303, 39, NULL, 47, 0),
+(304, 39, NULL, 48, 0),
+(305, 39, NULL, 49, 0),
+(306, 39, NULL, 50, 0),
+(307, 39, NULL, 51, 0),
+(308, 39, NULL, 52, 0),
+(309, 40, 11, NULL, 0),
+(310, 40, NULL, 43, 0),
+(311, 40, NULL, 44, 0),
+(312, 40, NULL, 45, 0),
+(313, 40, NULL, 46, 0),
+(314, 40, NULL, 47, 0),
+(315, 40, NULL, 48, 0),
+(316, 40, NULL, 49, 0),
+(317, 40, NULL, 50, 0),
+(318, 40, NULL, 51, 0),
+(319, 40, NULL, 52, 0),
+(320, 41, 11, NULL, 0),
+(321, 41, NULL, 43, 0),
+(322, 41, NULL, 44, 0),
+(323, 41, NULL, 45, 0),
+(324, 41, NULL, 46, 0),
+(325, 41, NULL, 47, 0),
+(326, 41, NULL, 48, 0),
+(327, 41, NULL, 49, 0),
+(328, 41, NULL, 50, 0),
+(329, 41, NULL, 51, 0),
+(330, 41, NULL, 52, 0),
+(331, 42, 11, NULL, 0),
+(332, 42, NULL, 43, 0),
+(333, 42, NULL, 44, 0),
+(334, 42, NULL, 45, 0),
+(335, 42, NULL, 46, 0),
+(336, 42, NULL, 47, 0),
+(337, 42, NULL, 48, 0),
+(338, 42, NULL, 49, 0),
+(339, 42, NULL, 50, 0),
+(340, 42, NULL, 51, 0),
+(341, 42, NULL, 52, 0),
+(342, NULL, 11, 83, 0),
+(343, 43, 11, NULL, 0),
+(344, 43, NULL, 43, 0),
+(345, 43, NULL, 44, 0),
+(346, 43, NULL, 45, 0),
+(347, 43, NULL, 46, 0),
+(348, 43, NULL, 47, 0),
+(349, 43, NULL, 48, 0),
+(350, 43, NULL, 49, 0),
+(351, 43, NULL, 50, 0),
+(352, 43, NULL, 51, 0),
+(353, 43, NULL, 52, 0),
+(354, 35, NULL, 83, 0),
+(355, 39, NULL, 83, 0),
+(356, 41, NULL, 83, 0),
+(357, NULL, 12, 84, 0),
+(358, 44, 12, NULL, 0),
+(359, 44, NULL, 84, 0),
+(360, 45, 13, NULL, 0),
+(361, 45, NULL, 61, 0),
+(362, 45, NULL, 62, 0),
+(363, 46, 13, NULL, 0),
+(364, 46, NULL, 61, 0),
+(365, 46, NULL, 62, 0),
+(366, 47, 13, NULL, 0),
+(367, 47, NULL, 61, 0),
+(368, 47, NULL, 62, 0),
+(369, 48, 14, NULL, 0),
+(370, 48, NULL, 53, 0),
+(371, NULL, 15, 85, 0),
+(372, NULL, 15, 86, 0),
+(373, NULL, 15, 87, 0),
+(374, NULL, 15, 88, 0),
+(375, NULL, 15, 89, 0),
+(376, NULL, 15, 90, 0),
+(377, NULL, 15, 91, 0),
+(378, NULL, 15, 92, 0),
+(379, 49, 15, NULL, 0),
+(380, 49, NULL, 85, 0),
+(381, 49, NULL, 86, 0),
+(382, 49, NULL, 87, 0),
+(383, 49, NULL, 88, 0),
+(384, 49, NULL, 89, 0),
+(385, 49, NULL, 90, 0),
+(386, 49, NULL, 91, 0),
+(387, 49, NULL, 92, 0),
+(388, 50, 15, NULL, 0),
+(389, 50, NULL, 85, 0),
+(390, 50, NULL, 86, 0),
+(391, 50, NULL, 87, 0),
+(392, 50, NULL, 88, 0),
+(393, 50, NULL, 89, 0),
+(394, 50, NULL, 90, 0),
+(395, 50, NULL, 91, 0),
+(396, 50, NULL, 92, 0),
+(397, 51, 15, NULL, 0),
+(398, 51, NULL, 85, 0),
+(399, 51, NULL, 86, 0),
+(400, 51, NULL, 87, 0),
+(401, 51, NULL, 88, 0),
+(402, 51, NULL, 89, 0),
+(403, 51, NULL, 90, 0),
+(404, 51, NULL, 91, 0),
+(405, 51, NULL, 92, 0),
+(406, 52, 15, NULL, 0),
+(407, 52, NULL, 85, 0),
+(408, 52, NULL, 86, 0),
+(409, 52, NULL, 87, 0),
+(410, 52, NULL, 88, 0),
+(411, 52, NULL, 89, 0),
+(412, 52, NULL, 90, 0),
+(413, 52, NULL, 91, 0),
+(414, 52, NULL, 92, 0),
+(415, 53, 15, NULL, 0),
+(416, 53, NULL, 85, 0),
+(417, 53, NULL, 86, 0),
+(418, 53, NULL, 87, 0),
+(419, 53, NULL, 88, 0),
+(420, 53, NULL, 89, 0),
+(421, 53, NULL, 90, 0),
+(422, 53, NULL, 91, 0),
+(423, 53, NULL, 92, 0),
+(424, 54, 15, NULL, 0),
+(425, 54, NULL, 85, 0),
+(426, 54, NULL, 86, 0),
+(427, 54, NULL, 87, 0),
+(428, 54, NULL, 88, 0),
+(429, 54, NULL, 89, 0),
+(430, 54, NULL, 90, 0),
+(431, 54, NULL, 91, 0),
+(432, 54, NULL, 92, 0),
+(433, NULL, 15, 93, 0),
+(434, 50, NULL, 93, 0),
+(435, 51, NULL, 93, 0),
+(436, 52, NULL, 93, 0),
+(437, 53, NULL, 93, 0),
+(438, 54, NULL, 93, 0),
+(439, 55, 15, NULL, 0),
+(440, 55, NULL, 85, 0),
+(441, 55, NULL, 86, 0),
+(442, 55, NULL, 87, 0),
+(443, 55, NULL, 88, 0),
+(444, 55, NULL, 89, 0),
+(445, 55, NULL, 90, 0),
+(446, 55, NULL, 91, 0),
+(447, 55, NULL, 92, 0),
+(448, 55, NULL, 93, 0),
+(449, 56, 15, NULL, 0),
+(450, 56, NULL, 85, 0),
+(451, 56, NULL, 86, 0),
+(452, 56, NULL, 87, 0),
+(453, 56, NULL, 88, 0),
+(454, 56, NULL, 89, 0),
+(455, 56, NULL, 90, 0),
+(456, 56, NULL, 91, 0),
+(457, 56, NULL, 92, 0),
+(458, 56, NULL, 93, 0),
+(459, 57, 15, NULL, 0),
+(460, 57, NULL, 85, 0),
+(461, 57, NULL, 86, 0),
+(462, 57, NULL, 87, 0),
+(463, 57, NULL, 88, 0),
+(464, 57, NULL, 89, 0),
+(465, 57, NULL, 90, 0),
+(466, 57, NULL, 91, 0),
+(467, 57, NULL, 92, 0),
+(468, 57, NULL, 93, 0),
+(469, NULL, 2, 94, 0),
+(471, NULL, 2, 96, 0),
+(472, NULL, 2, 95, 0),
+(473, NULL, 2, 97, 0),
+(474, 58, 2, NULL, 0),
+(475, 58, NULL, 54, 0),
+(476, 58, NULL, 37, 0),
+(477, 58, NULL, 1, 0),
+(478, 58, NULL, 55, 0),
+(479, 58, NULL, 97, 0),
+(480, 58, NULL, 95, 0),
+(481, 58, NULL, 96, 0),
+(482, 58, NULL, 56, 0),
+(483, 59, 2, NULL, 0),
+(484, 59, NULL, 54, 0),
+(485, 59, NULL, 37, 0),
+(486, 59, NULL, 1, 0),
+(487, 59, NULL, 55, 0),
+(488, 59, NULL, 97, 0),
+(489, 59, NULL, 95, 0),
+(490, 59, NULL, 96, 0),
+(491, 59, NULL, 56, 0),
+(492, 60, 2, NULL, 0),
+(493, 60, NULL, 54, 0),
+(494, 60, NULL, 37, 0),
+(495, 60, NULL, 1, 0),
+(496, 60, NULL, 55, 0),
+(497, 60, NULL, 97, 0),
+(498, 60, NULL, 95, 0),
+(499, 60, NULL, 96, 0),
+(500, 60, NULL, 56, 0),
+(501, 60, NULL, 94, 0),
+(502, 61, 2, NULL, 0),
+(503, 61, NULL, 54, 0),
+(504, 61, NULL, 37, 0),
+(505, 61, NULL, 1, 0),
+(506, 61, NULL, 55, 0),
+(507, 61, NULL, 97, 0),
+(508, 61, NULL, 95, 0),
+(509, 61, NULL, 96, 0),
+(510, 61, NULL, 56, 0),
+(511, 61, NULL, 94, 0),
+(512, 62, 2, NULL, 0),
+(513, 62, NULL, 54, 0),
+(514, 62, NULL, 37, 0),
+(515, 62, NULL, 1, 0),
+(516, 62, NULL, 55, 0),
+(517, 62, NULL, 97, 0),
+(518, 62, NULL, 95, 0),
+(519, 62, NULL, 96, 0),
+(520, 62, NULL, 56, 0),
+(521, 63, 2, NULL, 0),
+(522, 63, NULL, 54, 0),
+(523, 63, NULL, 37, 0),
+(524, 63, NULL, 1, 0),
+(525, 63, NULL, 55, 0),
+(526, 63, NULL, 97, 0),
+(527, 63, NULL, 95, 0),
+(528, 63, NULL, 96, 0),
+(529, 63, NULL, 56, 0),
+(530, 64, 2, NULL, 0),
+(531, 64, NULL, 54, 0),
+(532, 64, NULL, 37, 0),
+(533, 64, NULL, 1, 0),
+(534, 64, NULL, 55, 0),
+(535, 64, NULL, 97, 0),
+(536, 64, NULL, 95, 0),
+(537, 64, NULL, 96, 0),
+(538, 64, NULL, 56, 0),
+(539, 65, 2, NULL, 0),
+(540, 65, NULL, 54, 0),
+(541, 65, NULL, 37, 0),
+(542, 65, NULL, 1, 0),
+(543, 65, NULL, 55, 0),
+(544, 65, NULL, 97, 0),
+(545, 65, NULL, 95, 0),
+(546, 65, NULL, 96, 0),
+(547, 65, NULL, 56, 0),
+(548, 65, NULL, 94, 0),
+(549, 66, 2, NULL, 0),
+(550, 66, NULL, 54, 0),
+(551, 66, NULL, 37, 0),
+(552, 66, NULL, 1, 0),
+(553, 66, NULL, 55, 0),
+(554, 66, NULL, 97, 0),
+(555, 66, NULL, 95, 0),
+(556, 66, NULL, 96, 0),
+(557, 66, NULL, 56, 0),
+(558, 66, NULL, 94, 0),
+(559, 67, 2, NULL, 0),
+(560, 67, NULL, 54, 0),
+(561, 67, NULL, 37, 0),
+(562, 67, NULL, 1, 0),
+(563, 67, NULL, 55, 0),
+(564, 67, NULL, 97, 0),
+(565, 67, NULL, 95, 0),
+(566, 67, NULL, 96, 0),
+(567, 67, NULL, 56, 0),
+(568, 67, NULL, 94, 0),
+(569, 68, 2, NULL, 0),
+(570, 68, NULL, 54, 0),
+(571, 68, NULL, 37, 0),
+(572, 68, NULL, 1, 0),
+(573, 68, NULL, 55, 0),
+(574, 68, NULL, 97, 0),
+(575, 68, NULL, 95, 0),
+(576, 68, NULL, 96, 0),
+(577, 68, NULL, 56, 0),
+(578, NULL, 1, NULL, 0),
+(579, NULL, 7, NULL, 0),
+(580, NULL, 1, 99, 0),
+(581, NULL, 7, 99, 0),
+(582, 69, 16, NULL, 0),
+(583, 69, NULL, 63, 0),
+(584, 69, NULL, 64, 0),
+(585, 69, NULL, 82, 0),
+(586, 69, NULL, 81, 0),
+(587, 70, 16, NULL, 0),
+(588, 70, NULL, 63, 0),
+(589, 70, NULL, 64, 0),
+(590, 70, NULL, 82, 0),
+(591, 70, NULL, 81, 0),
+(592, 71, 16, NULL, 0),
+(593, 71, NULL, 63, 0),
+(594, 71, NULL, 64, 0),
+(595, 71, NULL, 82, 0),
+(596, 71, NULL, 81, 0),
+(597, NULL, 17, 100, 0),
+(598, NULL, 8, 101, 0),
+(599, NULL, 7, 101, 0),
+(600, NULL, 17, 102, 0),
+(601, NULL, 18, 103, 0),
+(602, NULL, 7, 103, 0),
+(603, NULL, 17, 104, 0),
+(604, NULL, 17, 105, 0),
+(605, 72, 17, NULL, 0),
+(606, 72, NULL, 100, 0),
+(607, 72, NULL, 102, 0),
+(608, 72, NULL, 104, 0),
+(609, 72, NULL, 105, 0),
+(610, 73, 1, NULL, 0),
+(611, 73, 7, NULL, 0),
+(612, 73, NULL, 20, 0),
+(613, 73, NULL, 9, 0),
+(614, 73, NULL, 24, 0),
+(615, 74, 1, NULL, 0),
+(616, 74, NULL, 11, 0),
+(617, 74, NULL, 26, 0),
+(618, 74, NULL, 12, 0),
+(619, 74, NULL, 19, 0),
+(620, 74, NULL, 2, 0),
+(621, 74, NULL, 23, 0),
+(622, 74, NULL, 99, 0),
+(623, 74, NULL, 20, 0),
+(624, 74, NULL, 9, 0),
+(625, 74, NULL, 24, 0),
+(626, 74, NULL, 38, 0),
+(628, 74, NULL, 13, 0),
+(629, 74, NULL, 39, 0),
+(630, 74, NULL, 21, 0),
+(631, 74, NULL, 10, 0),
+(632, 74, NULL, 25, 0),
+(633, 73, NULL, 11, 0),
+(634, 73, NULL, 26, 0),
+(635, 73, NULL, 12, 0),
+(636, 73, NULL, 19, 0),
+(637, 73, NULL, 2, 0),
+(638, 73, NULL, 23, 0),
+(639, 73, NULL, 99, 0),
+(640, 73, NULL, 38, 0),
+(642, 73, NULL, 13, 0),
+(643, 73, NULL, 101, 0),
+(644, 73, NULL, 39, 0),
+(645, 73, NULL, 103, 0),
+(646, 73, NULL, 21, 0),
+(647, 73, NULL, 10, 0),
+(648, 73, NULL, 25, 0),
+(649, 75, 1, NULL, 0),
+(650, 75, NULL, 11, 0),
+(651, 75, NULL, 26, 0),
+(652, 75, NULL, 12, 0),
+(653, 75, NULL, 19, 0),
+(654, 75, NULL, 2, 0),
+(655, 75, NULL, 23, 0),
+(656, 75, NULL, 99, 0),
+(657, 75, NULL, 20, 0),
+(658, 75, NULL, 9, 0),
+(659, 75, NULL, 24, 0),
+(660, 75, NULL, 38, 0),
+(662, 75, NULL, 13, 0),
+(663, 75, NULL, 39, 0),
+(664, 75, NULL, 21, 0),
+(665, 75, NULL, 10, 0),
+(666, 75, NULL, 25, 0),
+(667, 76, 1, NULL, 0),
+(668, 76, NULL, 11, 0),
+(669, 76, NULL, 26, 0),
+(670, 76, NULL, 12, 0),
+(671, 76, NULL, 19, 0),
+(672, 76, NULL, 2, 0),
+(673, 76, NULL, 23, 0),
+(674, 76, NULL, 99, 0),
+(675, 76, NULL, 20, 0),
+(676, 76, NULL, 9, 0),
+(677, 76, NULL, 24, 0),
+(678, 76, NULL, 38, 0),
+(680, 76, NULL, 13, 0),
+(681, 76, NULL, 39, 0),
+(682, 76, NULL, 21, 0),
+(683, 76, NULL, 10, 0),
+(684, 76, NULL, 25, 0),
+(690, 77, NULL, 19, 0),
+(692, 77, NULL, 23, 0),
+(693, 77, NULL, 99, 0),
+(694, 77, NULL, 20, 0),
+(695, 77, NULL, 9, 0),
+(696, 77, NULL, 24, 0),
+(697, 77, NULL, 38, 0),
+(699, 77, NULL, 13, 0),
+(701, 77, NULL, 39, 0),
+(703, 77, NULL, 21, 0),
+(704, 77, NULL, 10, 0),
+(705, 77, NULL, 25, 0),
+(712, 78, 7, NULL, 0),
+(713, 78, NULL, 19, 0),
+(714, 78, NULL, 2, 0),
+(715, 78, NULL, 23, 0),
+(716, 78, NULL, 99, 0),
+(717, 78, NULL, 20, 0),
+(718, 78, NULL, 9, 0),
+(719, 78, NULL, 24, 0),
+(720, 78, NULL, 38, 0),
+(722, 78, NULL, 13, 0),
+(723, 78, NULL, 101, 0),
+(724, 78, NULL, 39, 0),
+(725, 78, NULL, 103, 0),
+(726, 78, NULL, 21, 0),
+(727, 78, NULL, 10, 0),
+(728, 78, NULL, 25, 0),
+(729, 79, 24, NULL, 0),
+(730, 79, NULL, 80, 0),
+(731, 79, NULL, 59, 0),
+(732, 79, NULL, 60, 0),
+(733, 4, 7, NULL, 0),
+(734, 4, NULL, 2, 0),
+(735, 77, 7, NULL, 0),
+(736, 77, NULL, 101, 0),
+(737, 77, NULL, 103, 0),
+(738, NULL, 8, 22, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `utenti`
+--
+
+CREATE TABLE `utenti` (
+  `ID` int(10) UNSIGNED NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `cognome` varchar(50) NOT NULL,
+  `nome` varchar(50) NOT NULL,
+  `tipoUtente` char(1) CHARACTER SET armscii8 NOT NULL COMMENT 'P=Preside, A=Amministratore, D=Docente, C=Coordinatore del dipartimento ',
+  `tipoDocente` char(1) CHARACTER SET armscii8 DEFAULT NULL,
+  `colore` char(9) NOT NULL,
+  `token` char(248) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `utenti`
+--
+
+INSERT INTO `utenti` (`ID`, `email`, `password`, `cognome`, `nome`, `tipoUtente`, `tipoDocente`, `colore`, `token`) VALUES
+(3, 'mariarita.fiordelmondo@iismarconipieralisi.it', '7A2014A1737151457F58A4E066F61A10', 'Fiordelmondo', 'Maria Rita', 'P', '\0', '', NULL),
+(4, 'marco.aquilanti@iismarconipieralisi.it', 'maraqu00!', 'Aquilanti', 'Marco', 'D', 'L', '255255000', NULL),
+(5, 'marcello.pigini@iismarconipieralisi.it', 'B190FEC9A272CA31F7332F94152D6B80', 'Pigini', 'Marcello', 'D', 'T', '000255000', NULL),
+(7, 'simone.neri@iismarconipieralisi.it', 'simner00!', 'Neri', 'Simone', 'D', 'T', '#00ACC1', NULL),
+(8, 'alessandro.savore@iismarconipieralisi.it', 'alesav00!', 'Savore', 'Alessandro', 'C', 'T', '#6D4C41', NULL),
+(9, 'vittorio.alfieri@iismarconipieralisi.it', '6D792EA586DB47E7FE3D9D9EF1C8DBB0', 'Alfieri', 'Vittorio', 'A', 'L', '000000255', NULL),
+(18, 'lolli.andrea@iismarconipieralisi.it', '604AE9EA60DF49B4B752BFA38CA234AF', 'Lolli', 'Andrea', 'D', 'T', '255255255', NULL),
+(20, 'angelo.bracaccini@iismarconipieralisi.it', '8A37E3B3160E7A69547882A5C7976927', 'Bracaccini', 'Angelo', 'D', 'L', '255128255', NULL),
+(21, 'nicola.falcionelli@iismarconipieralisi.it', '17F2F1170B6C68AB354F01089F64B7CC', 'Falcionelli', 'Nicola', 'D', 'T', '255255128', NULL),
+(22, 'mirko.ricci@iismarconipieralisi.it', 'D31E26EDAE748004CADECDFA3CA9489B', 'Ricci', 'Mirko', 'D', 'T', '128255255', NULL),
+(23, 'elisabetta.zingaretti@iismarconipieralisi.it', '98341B97B8A9BCFE212527FBCEF2FD70', 'Zingaretti', 'Elisabetta', 'D', 'L', '000255128', NULL),
+(24, 'luca.fabbracci@iismarconipieralisi.it', 'B94BB0DBD13B11CFCE2BF89D4B3851AB', 'Fabbracci', 'Luca', 'D', 'T', '192192192', NULL),
+(25, 'stefano.bartoloni@iismarconipieralisi.it', '665436D8D49F0B9CED0C1AE0D25D7771', 'Bartoloni', 'Stefano', 'C', 'T', '255128064', NULL),
+(26, 'claudia.antolini@iismarconipieralisi.it', 'A8C2CD8EDF44F379D26AAA175A98989F', 'Antolini', 'Claudia', 'D', 'T', '255128128', NULL),
+(27, 'chiara.bergantino@iismarconipieralisi.it', 'B274CE736EB53B5839D71CC02F12B40E', 'Bergantino', 'Chiara', 'D', 'T', '255255128', NULL),
+(28, 'paolo.brandi@iismarconipieralisi.it', '26BC8F9A9EC27B0E576520BB10B012D0', 'Brandi', 'Paolo', 'D', 'T', '128255128', NULL),
+(29, 'mariateresa.brizzi@iismarconipieralisi.it', 'A96A0E3F35BA740BDE39DFBBF6F7CF48', 'Brizzi', 'Maria Teresa', 'D', 'T', '000255128', NULL),
+(30, 'susanna.campanelli@iismarconipieralisi.it', '6B5E2973582897C518ED112C1000F82F', 'Campanelli', 'Susanna', 'D', 'T', '128255255', NULL),
+(31, 'cristina.casagrande@iismarconipieralisi.it', 'B8B43F46178C2C59F9F4C67147124409', 'Casagrande', 'Cristina', 'D', 'T', '000128255', NULL),
+(32, 'silvia.cherubini@iismarconipieralisi.it', '4173FF57DA688D84AF1AF36797447680', 'Cherubini', 'Silvia', 'D', 'T', '255128192', NULL),
+(33, 'lucia.contessa@iismarconipieralisi.it', '9A1EF80DB9979287052FC6FEDCC0EDB6', 'Contessa', 'Lucia', 'D', 'T', '255128255', NULL),
+(34, 'marta.filipponi@iismarconipieralisi.it', 'E878813A6A1B6C1BD120352909D3FDCB', 'Filipponi', 'Marta', 'D', 'T', '128128192', NULL),
+(35, 'serenella.ilari@iismarconipieralisi.it', 'EBB275163EE324E7D02A74F8E8F74083', 'Ilari', 'Serenella', 'D', 'T', '128128064', NULL),
+(36, 'arianna.martelli@iismarconipieralisi.it', '903395D1340B26997979F9B7E987BB0E', 'Martelli', 'Arianna', 'D', 'T', '255128064', NULL),
+(37, 'giulia.montesi@iismarconipieralisi.it', '07A773B9F531471E431995EF1033436D', 'Montesi', 'Giulia', 'D', 'T', '128000255', NULL),
+(38, 'chiara.pongetti@iismarconipieralisi.it', '262836BF1125385951E5839EB1154DD2', 'Pongetti', 'Chiara', 'C', 'T', '000128128', NULL),
+(39, 'rossana.raffaeli@iismarconipieralisi.it', '9D070FE6E88090D811E64CB3BCE52F6C', 'Raffaeli', 'Rossana', 'D', 'T', '128064064', NULL),
+(40, 'patrizia.rosini@iismarconipieralisi.it', '50136BBF1790EE29B38476FC82F5D008', 'Rosini', 'Patrizia', 'D', 'T', '000255255', NULL),
+(41, 'ilaria.savelli@iismarconipieralisi.it', '1190DB1AFFF4CE5AB03761A9EFD1446E', 'Savelli', 'Ilaria', 'D', 'T', '128128000', NULL),
+(42, 'paola.soverchia@iismarconipieralisi.it', 'C314C3B211D4F53BF3F8B419414D0756', 'Soverchia', 'Paola', 'D', 'T', '000255064', NULL),
+(43, 'sara.latini@iismarconipieralisi.it', 'E8A14F3C5D12DE4AA80E502FA39F04A9', 'Latini', 'Sara', 'D', 'T', '255000000', NULL),
+(44, 'elena.cardinali@iismarconipieralisi.it', 'C97C9ECD9EF4AE4B20CD9E2D1B6B9760', 'Cardinali', 'Elena', 'D', 'T', '128000128', NULL),
+(45, 'martina.rossi@iismarconipieralisi.it', '81D3EC696797701C677F320CB3EFD546', 'Rossi', 'Martina', 'D', 'T', '255128128', NULL),
+(46, 'davide.vitali@iismarconipieralisi.it', '8069CFF43643FC57AC0ECFCE96603CE4', 'Vitali', 'Davide', 'D', 'T', '128255128', NULL),
+(47, 'paolo.santini@iismarconipieralisi.it', 'A6059D87B90243E7A994A67E28AB79EF', 'Santini', 'Paolo', 'D', 'T', '255255128', NULL),
+(48, 'katia.ramponi@iismarconipieralisi.it', '1620E970A77033461EB63D2C4EDFCCAA', 'Ramponi', 'Katia', 'D', 'T', '128255255', NULL),
+(49, 'rita.armati@iismarconipieralisi.it', '41899566290FE8A1F1527C439C9C26F5', 'Armati', 'Rita', 'D', 'T', '255128128', NULL),
+(50, 'mariaantonietta.catarinozzi@iismarconipieralisi.it', '76048B7447429939C4873657D2413F38', 'Catarinozzi', 'Maria Antonietta', 'D', 'T', '128255255', NULL),
+(51, 'pamela.brizzola@iismarconipieralisi.it', 'B92C8183BE71469D30049FC75EBC2663', 'Brizzola', 'Pamela', 'D', 'T', '255255128', NULL),
+(52, 'valentina.colasanti@iismarconipieralisi.it', '125FC11C6F856C9DE462FC17305B19BB', 'Colasanti', 'Valentina', 'D', 'T', '000255128', NULL),
+(53, 'laura.lorusso@iismarconipieralisi.it', '519823558A97C1E430DB38D03DAF1F98', 'Lorusso', 'Laura', 'D', 'T', '255128064', NULL),
+(54, 'martina.ciattaglia@iismarconipieralisi.it', '22880CEC5A11456BA1D28129818E0802', 'Ciattaglia', 'Martina', 'D', 'T', '255128255', NULL),
+(55, 'gloria.ventura@iismarconipieralisi.it', 'C98EE9354A236DCA8D2A3B362437FD05', 'Ventura', 'Gloria', 'D', 'T', '255128192', NULL),
+(56, 'martina.santini@iismarconipieralisi.it', '185AAF35DD32F0A624F9ACE7A3732527', 'Santini', 'Martina', 'D', 'T', '128128255', NULL),
+(57, 'ilaria.pettinari@iismarconipieralisi.it', '8C3033DD1293CD5318EEBFA9E243546E', 'Pettinari', 'Ilaria', 'C', 'T', '064128128', NULL),
+(58, 'emanuela.massei@iismarconipieralisi.it', '625C52CD3F48D8597671B3B81EBD0268', 'Massei', 'Emanuela', 'D', 'T', '255128128', NULL),
+(59, 'diego.bonci@iismarconipieralisi.it', 'D92EB8FDAADC6515C6425AD0B99FD5AC', 'Bonci', 'Diego', 'D', 'T', '255255128', NULL),
+(60, 'emmanuela.latini@iismarconipieralisi.it', '8D55E4A006236F2DD7DCD95E57CCC752', 'Latini', 'Emmanuela', 'D', 'T', '128255128', NULL),
+(61, 'andrea.taliani@iismarconipieralisi.it', 'E708ACD37EC8FEBDB9AF7D9FEA5F0931', 'Taliani', 'Andrea', 'D', 'T', '128255255', NULL),
+(62, 'federica.ranco@iismarconipieralisi.it', 'F5148D449C8D75870EC06B914209B238', 'Ranco', 'Federica', 'D', 'T', '255128255', NULL),
+(63, 'gianluca.santinelli@iismarconipieralisi.it', '7152908F0684A1F8B94AD61897A4DBA3', 'Santinelli', 'Gianluca', 'D', 'T', '000128255', NULL),
+(64, 'giulia.gastaldo@iismarconipieralisi.it', '7D05CE823631AD6D6C01929E40CC05D2', 'Gastaldo', 'Giulia', 'D', 'T', '064128128', NULL),
+(65, 'laura.mastronardi@iismarconipieralisi.it', '18279E9950AC91E470CD0D726FB14945', 'Mastronardi', 'Laura', 'D', 'T', '255128064', NULL),
+(66, 'cesare.peli@iismarconipieralisi.it', 'B19CF1DBBECE9A809A68947EB477EAA6', 'Peli', 'Cesare', 'D', 'T', '000255000', NULL),
+(67, 'marco.regni@iismarconipieralisi.it', '621A3481F17E0041584FE5E33EB7C321', 'Regni', 'Marco', 'D', 'T', '128128192', NULL),
+(68, 'monica.iommi@iismarconipieralisi.it', '7C906914C0EF3AAA7F9B12568DFD1BBD', 'Iommi', 'Monica', 'D', 'T', '255128192', NULL),
+(69, 'maila.maiolatesi@iismarconipieralisi.it', '792D305D3D2F4FD7D9087C83C7099D38', 'Maiolatesi', 'Maila', 'D', 'T', '192192192', NULL),
+(70, 'angelo.iannacone@iismarconipieralisi.it', 'B450B33BAB899B0FAE32A63AB1B17469', 'Iannacone', 'Angelo', 'D', 'T', '128128255', NULL),
+(71, 'susana.infasoni@iismarconipieralisi.it', 'EA9EBC6CCB2BD9E7F79D60B9AA0601D7', 'Infasoni', 'Susana', 'D', 'T', '064128128', NULL),
+(72, 'giovannibattista.pergolesi@iismarconipieralisi.it', 'B19D5E0B5D07D05EFA2E8D2D10D67C90', 'Pergolesi', 'Giovanni Battista', 'D', 'T', '000255000', NULL),
+(73, 'florinda.mariotti@iismarconipieralisi.it', '6ECB4951A9C4604F77CF8F1B52A5DCE9', 'Mariotti', 'Florinda', 'D', 'T', '128064000', NULL),
+(74, 'francesca.piersigilli@iismarconipieralisi.it', '0094ED39759B347D330E94C63828B76B', 'Piersigilli', 'Francesca', 'D', 'T', '064000064', NULL),
+(75, 'emanuele.pallotta@iismarconipieralisi.it', '78CB39BA0194EB4E3C38742B0D78640C', 'Pallotta', 'Emanuele', 'D', 'T', '128128000', NULL),
+(76, 'matteo.arcangeli@iismarconipieralisi.it', '3C3EDAA81B343DA22842E24AC0A9639D', 'Arcangeli', 'Matteo', 'D', 'T', '128000000', NULL),
+(77, 'annamaria.panza@iismarconipieralisi.it', 'BBAD312B4EDD464886BA4A762848C2F4', 'Panza', 'Anna Maria', 'D', 'L', '128064064', NULL),
+(78, 'andrea.cacciamani@iismarconipieralisi.it', 'FCE0269876A29FCAF421EFCC92326671', 'Cacciamani', 'Andrea', 'D', 'L', '255128000', NULL),
+(79, 'erika.tiberi@iismarconipieralisi.it', '89D89B62BD1B884E2A0610AECE359700', 'Tiberi', 'Erika', 'D', 'T', '000128000', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `vigere`
+--
+
+CREATE TABLE `vigere` (
+  `IDdisciplina` int(10) UNSIGNED NOT NULL,
+  `IDannoscolasticoinizio` int(10) UNSIGNED NOT NULL,
+  `IDannoscolasticofine` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `vigere`
+--
+
+INSERT INTO `vigere` (`IDdisciplina`, `IDannoscolasticoinizio`, `IDannoscolasticofine`) VALUES
+(2, 1, NULL),
+(9, 1, NULL),
+(10, 1, NULL),
+(11, 1, NULL),
+(12, 1, NULL),
+(13, 1, NULL),
+(19, 1, NULL),
+(20, 1, NULL),
+(21, 1, NULL),
+(22, 1, NULL),
+(23, 1, NULL),
+(24, 1, NULL),
+(25, 1, NULL),
+(26, 1, NULL),
+(36, 1, NULL),
+(38, 1, NULL),
+(39, 1, 2),
+(41, 1, NULL),
+(63, 1, NULL),
+(80, 1, NULL),
+(99, 10, NULL),
+(100, 1, NULL),
+(101, 1, NULL),
+(102, 1, NULL),
+(103, 1, NULL),
+(104, 1, NULL),
+(105, 1, NULL);
+
+--
+-- Indici per le tabelle scaricate
+--
+
+--
+-- Indici per le tabelle `afferire`
+--
+ALTER TABLE `afferire`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `IDdipartimento` (`IDdipartimento`) USING BTREE,
+  ADD KEY `IDutente` (`IDutente`) USING BTREE;
+
+--
+-- Indici per le tabelle `anniscolastici`
+--
+ALTER TABLE `anniscolastici`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `appartenere`
+--
+ALTER TABLE `appartenere`
+  ADD UNIQUE KEY `IDindirizzo` (`IDindirizzo`,`IDdisciplina`),
+  ADD KEY `IDdisciplinaAppartenere` (`IDdisciplina`);
+
+--
+-- Indici per le tabelle `assegnare`
+--
+ALTER TABLE `assegnare`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `IDannoscolastico` (`IDannoscolastico`) USING BTREE,
+  ADD KEY `IDutente` (`IDutente`) USING BTREE,
+  ADD KEY `IDclasse` (`IDclasse`) USING BTREE,
+  ADD KEY `IDdisciplina` (`IDdisciplina`) USING BTREE;
+
+--
+-- Indici per le tabelle `classi`
+--
+ALTER TABLE `classi`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `classeArticolataCon` (`classeArticolataCon`,`IDutente`),
+  ADD KEY `IDutenteClassi` (`IDutente`),
+  ADD KEY `IDindirizzo` (`IDindirizzo`) USING BTREE,
+  ADD KEY `IDannoscolasticoClassi` (`IDannoscolastico`);
+
+--
+-- Indici per le tabelle `classidiconcorso`
+--
+ALTER TABLE `classidiconcorso`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `contratti`
+--
+ALTER TABLE `contratti`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `IDutente` (`IDutente`);
+
+--
+-- Indici per le tabelle `dipartimenti`
+--
+ALTER TABLE `dipartimenti`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `IDutente` (`IDutente`);
+
+--
+-- Indici per le tabelle `discipline`
+--
+ALTER TABLE `discipline`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `dotare`
+--
+ALTER TABLE `dotare`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `IDannoscolastico` (`IDannoscolastico`),
+  ADD KEY `IDclassediconcorso` (`IDclassediconcorso`);
+
+--
+-- Indici per le tabelle `gestire`
+--
+ALTER TABLE `gestire`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `IDdipartimentoGestire` (`IDdipartimento`),
+  ADD KEY `IDdisciplinaGestire` (`IDdisciplina`);
+
+--
+-- Indici per le tabelle `indirizzi`
+--
+ALTER TABLE `indirizzi`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `richiedere`
+--
+ALTER TABLE `richiedere`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `IDdisciplia` (`IDdisciplina`) USING BTREE,
+  ADD KEY `IDutente` (`IDutente`) USING BTREE,
+  ADD KEY `IDclasseDiConcorso` (`IDclasseDiConcorso`) USING BTREE;
+
+--
+-- Indici per le tabelle `utenti`
+--
+ALTER TABLE `utenti`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indici per le tabelle `vigere`
+--
+ALTER TABLE `vigere`
+  ADD UNIQUE KEY `IDdisciplina` (`IDdisciplina`),
+  ADD KEY `IDannoscolasticoinizio` (`IDannoscolasticoinizio`),
+  ADD KEY `IDannoscolasticofine` (`IDannoscolasticofine`);
+
+--
+-- AUTO_INCREMENT per le tabelle scaricate
+--
+
+--
+-- AUTO_INCREMENT per la tabella `afferire`
+--
+ALTER TABLE `afferire`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+
+--
+-- AUTO_INCREMENT per la tabella `anniscolastici`
+--
+ALTER TABLE `anniscolastici`
+  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT per la tabella `assegnare`
+--
+ALTER TABLE `assegnare`
+  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+
+--
+-- AUTO_INCREMENT per la tabella `classi`
+--
+ALTER TABLE `classi`
+  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT per la tabella `classidiconcorso`
+--
+ALTER TABLE `classidiconcorso`
+  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT per la tabella `contratti`
+--
+ALTER TABLE `contratti`
+  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+
+--
+-- AUTO_INCREMENT per la tabella `dipartimenti`
+--
+ALTER TABLE `dipartimenti`
+  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT per la tabella `discipline`
+--
+ALTER TABLE `discipline`
+  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+
+--
+-- AUTO_INCREMENT per la tabella `dotare`
+--
+ALTER TABLE `dotare`
+  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT per la tabella `gestire`
+--
+ALTER TABLE `gestire`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+
+--
+-- AUTO_INCREMENT per la tabella `indirizzi`
+--
+ALTER TABLE `indirizzi`
+  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=203;
+
+--
+-- AUTO_INCREMENT per la tabella `richiedere`
+--
+ALTER TABLE `richiedere`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=739;
+
+--
+-- AUTO_INCREMENT per la tabella `utenti`
+--
+ALTER TABLE `utenti`
+  MODIFY `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+
+--
+-- Limiti per le tabelle scaricate
+--
+
+--
+-- Limiti per la tabella `afferire`
+--
+ALTER TABLE `afferire`
+  ADD CONSTRAINT `IDdipartimentoAfferire` FOREIGN KEY (`IDdipartimento`) REFERENCES `dipartimenti` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDutenteAfferire` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `appartenere`
+--
+ALTER TABLE `appartenere`
+  ADD CONSTRAINT `IDdisciplinaAppartenere` FOREIGN KEY (`IDdisciplina`) REFERENCES `discipline` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDindirizzoAppartenere` FOREIGN KEY (`IDindirizzo`) REFERENCES `indirizzi` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `assegnare`
+--
+ALTER TABLE `assegnare`
+  ADD CONSTRAINT `IDannoScolatiscoAssegnare` FOREIGN KEY (`IDannoscolastico`) REFERENCES `anniscolastici` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDclasseAssegnare` FOREIGN KEY (`IDclasse`) REFERENCES `classi` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDdisciplinaAssegnare` FOREIGN KEY (`IDdisciplina`) REFERENCES `discipline` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDutenteAssegnare` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE CASCADE;
+
+--
+-- Limiti per la tabella `classi`
+--
+ALTER TABLE `classi`
+  ADD CONSTRAINT `IDannoscolasticoClassi` FOREIGN KEY (`IDannoscolastico`) REFERENCES `anniscolastici` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDindirizzoClasse` FOREIGN KEY (`IDindirizzo`) REFERENCES `indirizzi` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDutenteClassi` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `classeArticolata` FOREIGN KEY (`classeArticolataCon`) REFERENCES `classi` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `contratti`
+--
+ALTER TABLE `contratti`
+  ADD CONSTRAINT `IDutenteContratti` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `dipartimenti`
+--
+ALTER TABLE `dipartimenti`
+  ADD CONSTRAINT `IDutenteDipartimenti` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `dotare`
+--
+ALTER TABLE `dotare`
+  ADD CONSTRAINT `fkAS` FOREIGN KEY (`IDannoscolastico`) REFERENCES `anniscolastici` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fkCdc` FOREIGN KEY (`IDclassediconcorso`) REFERENCES `classidiconcorso` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `gestire`
+--
+ALTER TABLE `gestire`
+  ADD CONSTRAINT `IDdipartimentoGestire` FOREIGN KEY (`IDdipartimento`) REFERENCES `dipartimenti` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDdisciplinaGestire` FOREIGN KEY (`IDdisciplina`) REFERENCES `discipline` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `richiedere`
+--
+ALTER TABLE `richiedere`
+  ADD CONSTRAINT `IDclasseDiConcorsoRichiedere` FOREIGN KEY (`IDclasseDiConcorso`) REFERENCES `classidiconcorso` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDdisciplinaRichiedere` FOREIGN KEY (`IDdisciplina`) REFERENCES `discipline` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDutenteRichiedere` FOREIGN KEY (`IDutente`) REFERENCES `utenti` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `vigere`
+--
+ALTER TABLE `vigere`
+  ADD CONSTRAINT `IDannoscolasticofinevigere` FOREIGN KEY (`IDannoscolasticofine`) REFERENCES `anniscolastici` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDannoscolasticoiniziovigere` FOREIGN KEY (`IDannoscolasticoinizio`) REFERENCES `anniscolastici` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `IDdisciplinavigere` FOREIGN KEY (`IDdisciplina`) REFERENCES `discipline` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

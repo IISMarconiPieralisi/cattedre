@@ -131,10 +131,8 @@ namespace Cattedre
             return cattedre;
         }
 
-        public static List<ClsDotareDL> CaricaDotare(Dictionary<string, List<string>> Filtri = null)
+        public static List<ClsDotareDL> CaricaDotare(long IDannoScolastico = 0, long IDCDC =0)
         {
-            if (Filtri == null)
-                Filtri = new Dictionary<string, List<string>>();
             List<ClsDotareDL> lista = new List<ClsDotareDL>();
             DataTable dt = new DataTable();
 
@@ -143,7 +141,7 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = CreaComandoRicerca(Filtri, conn))
+                    using (MySqlCommand cmd = CreaComandoRicerca(IDannoScolastico,IDCDC, conn))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
@@ -172,34 +170,27 @@ namespace Cattedre
             return lista;
         }
 
-        private static MySqlCommand CreaComandoRicerca(Dictionary<string, List<string>> filtri, MySqlConnection conn)
+        private static MySqlCommand CreaComandoRicerca(long IDannoScolastico , long IDCDC , MySqlConnection conn)
         {
-            string sql = @"SELECT ID, numcattedrediritto, numcattedrefatto, IDannoscolastico, IDclassediconcorso FROM dotare";
-            MySqlCommand cmd = new MySqlCommand();
-            cmd.Connection = conn;
+            string sql = @"SELECT d.ID, d.numcattedrediritto, numcattedrefatto, d.IDannoscolastico, d.IDclassediconcorso FROM dotare d
+                JOIN anniscolastici a ON a.ID = d.IDannoscolastico
+               JOIN classidiconcorso cdc ON cdc.ID = d.IDclassediconcorso ";
+            MySqlCommand cmd = new MySqlCommand("", conn);
             List<string> condizioni = new List<string>();
 
-            foreach (var filtro in filtri)
+            if (IDannoScolastico > 0)
             {
-                string colonna = filtro.Key;  
-                List<string> valori = filtro.Value;
-
-                if (valori == null || valori.Count == 0)
-                    continue;
-
-                List<string> orConditions = new List<string>();
-                foreach (var valore in valori)
-                {
-                    orConditions.Add($"{colonna} = {valore}");  // colonna diretta, valore parametrizzato
-                }
-
-                condizioni.Add("(" + string.Join(" OR ", orConditions) + ")");
+                condizioni.Add("IDannoscolastico = @IDannoscolastico");
+                cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoScolastico);
             }
-
+            if (IDCDC > 0)
+            {
+                condizioni.Add("IDclassediconcorso = @IDclassediconcorso");
+                cmd.Parameters.AddWithValue("@IDclassediconcorso", IDCDC);
+            }
             if (condizioni.Count > 0)
-            {
                 sql += " WHERE " + string.Join(" AND ", condizioni);
-            }
+            sql += " ORDER BY a.Sigla, cdc.Livello;";
 
             cmd.CommandText = sql;
             return cmd;

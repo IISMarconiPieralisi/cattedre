@@ -13,7 +13,7 @@ namespace Cattedre
         long _id, _idutente, _idindirizzo, _classeArticolataCon;
         string _sigla, _sezione;
         int _anno;
-        long _iddipartimento, _idannoscolastico;
+        long _idannoscolastico;
         #endregion
 
         #region COSTRUTTORI
@@ -76,7 +76,8 @@ namespace Cattedre
         public long Idutente
         {
             get => _idutente;
-            set => _idutente = value > 0 ? value : throw new ArgumentException("ID Utente non valido.");
+            set => _idutente = value;
+                // > 0 ? value : throw new ArgumentException("ID Utente non valido.")
         }
 
         public long Idindirizzo
@@ -84,8 +85,9 @@ namespace Cattedre
             get => _idindirizzo;
             set => _idindirizzo = value > 0 ? value : throw new ArgumentException("ID Indirizzo non valido.");
         }
-        public long IDdipartimento { get => _iddipartimento; set => _iddipartimento = value; }
         public long IDannoscolastico { get => _idannoscolastico; set => _idannoscolastico = value; }
+
+
 
         #endregion
     }

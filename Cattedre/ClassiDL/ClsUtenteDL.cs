@@ -154,7 +154,36 @@ namespace Cattedre
                 return BitConverter.ToString(hashBytes).Replace("-", ""); // "010203"
             }
         }
+        //
+        public string DisplayText
+        {
+            get
+            {
+                string testo = $"{Cognome} {Nome}".Trim();
+                int limite = CalcolaLimiteCaratteri(testo);
+                return testo.Length > limite ? testo.Substring(0, limite) + "." : testo;
+            }
+        }
+
+        private static int CalcolaLimiteCaratteri(string testo)
+        {
+            int caratteriStretti = testo.Count(c => "il1jrtf,.|!".Contains(c));
+            return caratteriStretti >= 2 ? 13 : 11;
+        }
+        public static bool UtenteAdmin(ClsUtenteDL ut)
+        {
+            return ut.TipoUtente == "A";
+        }
+        public static bool UtenteCRUD(ClsUtenteDL ut)
+        {
+            return ut.TipoUtente == "A" || ut.TipoUtente == "C";
+        }
+        public static bool UtenteDocente(ClsUtenteDL ut)
+        {
+            return ut.TipoUtente == "D";
+        }
         #endregion
+
 
     }
 }

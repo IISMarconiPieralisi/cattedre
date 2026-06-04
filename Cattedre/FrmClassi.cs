@@ -16,6 +16,9 @@ namespace Cattedre
         List<ClsUtenteDL> _coordinatori = new List<ClsUtenteDL>();
         List<ClsIndirizzoDL> _indirizzi = ClsIndirizzoBL.CaricaIndirizzi();
         List<ClsAnnoScolasticoDL> _anniScolastici = ClsAnnoScolasticoBL.CaricaAnniScolastici();
+        long IDindirizzo=0;
+        int annoClasse = 0;
+        long IDannoscolastico = 0;
         //inserisco il utenteLoggato a in questa pagina;
         ClsUtenteDL UtenteLoggato;
         public FrmClassi(ClsUtenteDL utenteLog)
@@ -26,43 +29,50 @@ namespace Cattedre
 
       
 
-        private void CaricaListView(List<ClsClasseDL> classi)
+        private void CaricaListView()
         {
+            classi = ClsClasseBL.CaricaClassi(IDindirizzo, IDannoscolastico,annoClasse);
             lvClassi.Items.Clear();
             foreach (ClsClasseDL classe in classi)
             {
                 ListViewItem lvi = new ListViewItem(classe.ID.ToString());
+                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(classe.IDannoscolastico));
                 lvi.SubItems.Add(classe.Sigla);
-                lvi.SubItems.Add(classe.Anno.ToString());
-                lvi.SubItems.Add(classe.Sezione);
                 lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(classe.ClasseArticolataCon));
                 lvi.SubItems.Add(ClsUtenteBL.RilevaNomeUtente(classe.Idutente));
                 lvi.SubItems.Add(ClsIndirizzoBL.RilevaNomeIndirizzo(classe.Idindirizzo));
-                lvi.SubItems.Add(ClsDipartimentoBL.RilevaNomeDipartimento(classe.IDdipartimento));
-                lvi.SubItems.Add(ClsAnnoScolasticoBL.RilevaSiglaAnnoScolastico(classe.IDannoscolastico));
                 lvi.Tag = classe.ID;
                 lvClassi.Items.Add(lvi);
             }
+            tbNumRecord.Text = classi.Count().ToString();
+
         }
 
         private void FrmClassi_Load(object sender, EventArgs e)
         {
-            classi = ClsClasseBL.CaricaClassi();
-            CaricaListView(classi);
             GestionePermessi();
-            //popolo combobox filtraggio
-            foreach (ClsClasseDL classe in classi)
-            {
-                if (!cbAnnoClasse.Items.Contains(classe.Anno))
-                    cbAnnoClasse.Items.Add(classe.Anno);
-            }
             //popol combobox filtraggio Indirizzi
             cbIndirizzi.DataSource = _indirizzi;
             cbIndirizzi.DisplayMember = "Nome";
             cbIndirizzi.ValueMember = "ID";
-            cbIndirizzi.SelectedIndex = -1;            
-            //popolamento filtri
-            GeneraFiltriAnnoScolastico();
+            cbIndirizzi.SelectedIndex = -1;
+
+            cbAnniScolastici.DataSource = _anniScolastici;
+            cbAnniScolastici.DisplayMember = "Sigla";
+            cbAnniScolastici.ValueMember = "ID";
+            cbAnniScolastici.SelectedIndex = -1;
+            
+            IDannoscolastico = ClsAnnoScolasticoBL.TrovaIDannoscolastico();
+            if(IDannoscolastico>0)
+                cbAnniScolastici.SelectedValue = IDannoscolastico;
+
+            if (ClsUtenteDL.UtenteAdmin(UtenteLoggato))
+            {
+                btClasseSuccessiva.Visible = true;
+                btClasseSuccessiva.Enabled = true;
+            }
+
+            CaricaListView();
         }
         private void GestionePermessi()
         {
@@ -82,6 +92,7 @@ namespace Cattedre
         }
         private void btInserisci_Click(object sender, EventArgs e)
         {
+            if (!ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
             try
             {
                 FrmClasse frmClasse = new FrmClasse();
@@ -89,10 +100,10 @@ namespace Cattedre
                 if (dr == DialogResult.OK)
                 {
                     ClsClasseBL.InserisciClasse(frmClasse._classe);
-                    classi = ClsClasseBL.CaricaClassi();
-                    CaricaListView(classi);
+                    CaricaListView();
                 }
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                  MessageBox.Show($"errore:{ex.Message}\n riprovare", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -101,6 +112,7 @@ namespace Cattedre
 
         private void brModifica_Click(object sender, EventArgs e)
         {
+            if (!ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
             if (lvClassi.SelectedIndices.Count == 1)
             {
 
@@ -114,10 +126,16 @@ namespace Cattedre
                     if (dr == DialogResult.OK)
                     {
                         ClsClasseBL.ModificaClasse(frmClasse._classe);
-                        classi = ClsClasseBL.CaricaClassi();
-                        CaricaListView(classi);
+                        //controllo se è stato cambiato il dipartimento di quella classe
+                        if(frmClasse._classe.Idindirizzo!=classeSelezionata.Idindirizzo)
+                        {
+                            //cancello i record di quella classe nelle assegnazioni
+                            ClsAssegnareBL.EliminaAssegnazioneGenerica(frmClasse._classe.ID,"IDclasse");
+                        }
+                        CaricaListView();
                     }
-                }catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                    MessageBox.Show($"errore:\n{ex.Message}\nRiprovare!", "errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -127,6 +145,7 @@ namespace Cattedre
 
         private void btElimina_Click(object sender, EventArgs e)
         {
+            if (!ClsUtenteDL.UtenteCRUD(UtenteLoggato)) return;
             if (lvClassi.SelectedIndices.Count == 1)
             {
                 int indiceDaEliminare = lvClassi.SelectedIndices[0];
@@ -135,9 +154,8 @@ namespace Cattedre
                 if (dr == DialogResult.Yes)
                 {
                     ClsClasseBL.EliminaClasse(idDaEliminare);
-                    classi = ClsClasseBL.CaricaClassi();
+                    CaricaListView();
                 }
-                CaricaListView(classi);
             }
         }
         #region  gestione classe successivo
@@ -175,10 +193,10 @@ namespace Cattedre
                 Cursor.Current = Cursors.Default;
                 if (NumeroClassiAggiunte>1)
                     MessageBox.Show($"Sono state aggiunte {NumeroClassiAggiunte} classi.", "Informazione", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                classi = ClsClasseBL.CaricaClassi();
-                CaricaListView(classi);
+                CaricaListView();
 
-           }else
+            }
+            else
            {
                 MessageBox.Show("Classe non selezionata", "ERRORE", MessageBoxButtons.OK, MessageBoxIcon.Warning);
            }
@@ -198,23 +216,27 @@ namespace Cattedre
         {
             try
             {
-                Dictionary<string, List<string>> Filtri = new Dictionary<string, List<string>>();
-                if(cbAnnoClasse.SelectedIndex!=-1)
+                bool ricercaPositiva = false;
+                if (cbAnnoClasse.SelectedIndex!=-1)
                 {
-                    Filtri.Add("anno",new List<string> { $"'{cbAnnoClasse.Text}'" });
+                    annoClasse = Convert.ToInt32(cbAnnoClasse.Text);
+                    ricercaPositiva = true;
                 }
                 if(cbIndirizzi.SelectedIndex!=-1)
                 {
-                    Filtri.Add("IDindirizzo", new List<string> { $"'{cbIndirizzi.SelectedValue}'" });
+                    IDindirizzo = Convert.ToInt32(cbIndirizzi.SelectedValue);
+                    ricercaPositiva = true;
+
                 }
-                ControlloSelezionatiAnniScolastici(Filtri);
+                if (cbAnniScolastici.SelectedIndex != -1)
+                {
+                    IDannoscolastico = Convert.ToInt32(cbAnniScolastici.SelectedValue);
+                    ricercaPositiva = true;
+                }
 
-                if (Filtri.Count<=0)
+                if (!ricercaPositiva)
                     throw new Exception("Inserire almeno un criterio di ricerca");
-
-                classi = ClsClasseBL.CaricaClassiFiltrate(Filtri);
-                CaricaListView(classi);
-                btRipristina.Enabled = true;
+                CaricaListView();
             }
             catch (Exception ex)
             {
@@ -224,57 +246,42 @@ namespace Cattedre
         }
         private void btRipristina_Click(object sender, EventArgs e)
         {
-            btRipristina.Enabled = false;
-            classi = ClsClasseBL.CaricaClassi();
-            CaricaListView(classi);
             cbAnnoClasse.SelectedIndex = -1;
             cbIndirizzi.SelectedIndex = -1;
-            DeselezionaCheckBox(tplAnniScolastici);
+            cbAnniScolastici.SelectedIndex = -1;
+            IDannoscolastico = 0;
+            IDindirizzo = 0;
+            annoClasse = 0;
+            CaricaListView();
+
 
         }
-        private void GeneraFiltriAnnoScolastico()
-        {
-            tplAnniScolastici.ColumnCount = _anniScolastici.Count;
-            int Sezioni = 0;
-            foreach( var anno in _anniScolastici )
-            {
-                CheckBox cb = new CheckBox();
-                cb.Name = $"{anno.ID}";
-                cb.Text = anno.Sigla;
-                cb.Dock = DockStyle.Fill;
-                cb.KeyDown += CheckBoxAnno_KeyDown;
-                tplAnniScolastici.Controls.Add(cb, Sezioni, 0);
-                Sezioni++;
-            }
-        }
-        private void ControlloSelezionatiAnniScolastici(Dictionary<string, List<string>> filtri)
-        {
-            if(tplAnniScolastici.Controls.OfType<CheckBox>().Any(cb=>cb.Checked))
-            {
-                var selezionati = tplAnniScolastici.Controls.OfType<CheckBox>().Where(cb => cb.Checked).Select(cb => cb.Name).ToList();
+        //private void GeneraFiltriAnnoScolastico()
+        //{
+        //    //tplAnniScolastici.ColumnCount = _anniScolastici.Count;
+        //    //tplAnniScolastici.RowCount = 1;
 
-                if (!selezionati.Any()) return;
+        //    // Imposta le colonne con larghezza automatica
+        //    //tplAnniScolastici.ColumnStyles.Clear();
+        //    //for (int i = 0; i < _anniScolastici.Count; i++)
+        //    //tplAnniScolastici.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
-                filtri.Add ( "IDannoScolastico", selezionati);
-            }
-        }
-        private void DeselezionaCheckBox(Control parent)
-        {
-            foreach (Control c in parent.Controls)
-            {
-                if (c is CheckBox cb)
-                    cb.Checked = false;
-            }
-        }
+        //    //cbAnniScolastici.DataSource = _anniScolastici;
+        //    //cbAnniScolastici.DisplayMember = "Sigla";
+        //    //cbAnniScolastici.ValueMember = "ID";
+        //    //cbAnniScolastici.SelectedIndex = -1;
+        //}
+       
         #endregion
-
+        #region  gestioni shortcut
         private void lvClassi_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode==Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
                 brModifica_Click(null, null);
-            }else if (e.KeyCode == Keys.Delete)
+            }
+            else if (e.KeyCode == Keys.Delete)
             {
                 e.SuppressKeyPress = true;
                 btElimina_Click(null, null);
@@ -295,46 +302,10 @@ namespace Cattedre
             if (e.KeyCode == Keys.Enter && cbIndirizzi.SelectedIndex != -1)
             {
                 e.SuppressKeyPress = true;
-                tplAnniScolastici.Controls.OfType<CheckBox>().FirstOrDefault()?.Focus();
+                cbAnniScolastici.Focus();
             }
         }
-
-        private DateTime _ultimoClickCheckBox = DateTime.MinValue;
-        private object _ultimoControlloClick = null;
-
-        private void CheckBoxAnno_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                if (sender is CheckBox cb)
-                {
-                    DateTime now = DateTime.Now;
-                    TimeSpan intervallo = now - _ultimoClickCheckBox;
-
-                    // Se è lo stesso controllo e il tempo è inferiore a 800ms (come in FrmUtente)
-                    if (_ultimoControlloClick == sender && intervallo.TotalMilliseconds < 800)
-                    {
-                        // Doppio click rapido -> passa a btCerca
-                        _ultimoControlloClick = null;
-                        _ultimoClickCheckBox = DateTime.MinValue;
-                        btCerca.Focus();
-                    }
-                    else
-                    {
-                        // Click singolo -> cambia lo stato della checkbox
-                        cb.Checked = !cb.Checked;
-                        _ultimoControlloClick = sender;
-                        _ultimoClickCheckBox = now;
-                    }
-                }
-            }
-            else
-            {
-                // Reset se premi altro tasto
-                _ultimoControlloClick = null;
-                _ultimoClickCheckBox = DateTime.MinValue;
-            }
-        }
+        #endregion
+    
     }
 }

@@ -14,13 +14,12 @@ namespace Cattedre
     {
         public static int _IDutente;
         public static List<long> IDutenti = new List<long>();
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
 
         public static List<ClsContrattoDL> CaricaContratti()
         {
             IDutenti.Clear();
 
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             DataTable ds = new DataTable();
             List<ClsContrattoDL> Contratti = new List<ClsContrattoDL>();
             try
@@ -61,7 +60,7 @@ namespace Cattedre
         public static void InserisciContratto(ClsContrattoDL contratto, long IDutente)
         {
 
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             IDutenti.Clear();
 
@@ -93,7 +92,7 @@ namespace Cattedre
         public static void ModificaContratto(ClsContrattoDL contratto, long IDutente)
         {
 
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             //se il contratto non esiste lo inserisco al posto di modificarlo
             if (cercaContratto(IDutente) == null)
             {
@@ -134,7 +133,7 @@ namespace Cattedre
         public static List<ClsContrattoDL> EliminaContratto(int id)
         {
 
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             List<ClsContrattoDL> contratti = new List<ClsContrattoDL>();
 
             try
@@ -164,7 +163,7 @@ namespace Cattedre
             string sql = @"SELECT * FROM contratti WHERE IDutente = @IdUtente";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -202,7 +201,7 @@ namespace Cattedre
             int monteOre = -1;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT monteOre FROM contratti WHERE IDutente = @id";

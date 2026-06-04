@@ -24,22 +24,25 @@ namespace Cattedre
         #region variabili globali
         //creazione degli array che verranno popolati con le query
         List<ClsClasseDiConcorsoDL> cdcs = ClsClasseDiConcorsoBL.CaricaCdcs();
-        List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti();
+        List<ClsDipartimentoDL> dipartimenti = ClsDipartimentoBL.CaricaDipartimenti().OrderBy(d=>d.Nome).ToList();
         List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDiscipline();
         int _oldValuedipCoord=0;
         bool _bloccoEvdipCoord = false;
         string _imputEmail;
-        string _colore=string.Empty;
+        string _colore = string.Empty;
+        ClsUtenteDL _utenteLoggato;
         //tenuti fuori in modo tale che  all'occorrenza non si deve riaprire ogni volta una connessione al db
         #endregion
-        public FrmUtente()
+        public FrmUtente(ClsUtenteDL utenteloggato)
         {
+            _utenteLoggato = utenteloggato;
             InitializeComponent();
-            cbTipoUtente.SelectionChangeCommitted += cbTipoUtente_SelectionChangeCommitted;
         }
-
-        private void btSalva_Click(object sender, EventArgs e)
+        
+        #region Salva annulla e load
+        private void BtSalva_Click(object sender, EventArgs e)
         {
+
             if (_utente == null)
                 _utente = new ClsUtenteDL();
 
@@ -53,18 +56,13 @@ namespace Cattedre
                 _utente.Email = tbEmail.Text.Trim();
                 _utente.Password =(tbPassword.Text== "********")?"": tbPassword.Text.Trim();
                 _utente.TipoUtente = GetTipoUtente();
-                _utente.Colore = _colore;
+                _utente.Colore =_colore;
 
                 bool isDocente = _utente.TipoUtente == "D" || _utente.TipoUtente == "C" || _utente.TipoUtente == "A";
                 //inserimento controlli Docente
                 if (isDocente)
                 {
                         _utente.TipoDocente = rbTeorico.Checked ? 'T' :(rbLaboratorio.Checked)? 'L': throw new Exception("seleziona un tipo di docente");
-                    //controllo colore
-                    if (string.IsNullOrEmpty(_utente.Colore))
-                        _utente.Colore = "255255255";
-                    
-
                     // controlli classe di concorso e disciplina
                     if (clbCLasseDiConcorso.CheckedItems.Count == 0)
                         throw new Exception("Seleziona almeno una classe di concorso.");
@@ -143,103 +141,210 @@ namespace Cattedre
 
                 }
 
+                //controllo se il colore è libero
+                foreach (var item in clbDipartimento.CheckedItems)
+                {
+                    string nomeDip = item.ToString();
+
+                    long idDip = ClsDipartimentoBL.RilevaIDdipartimento(nomeDip);
+
+                    //il bianco può essere riutilizzato
+                    if (_utente.Colore != "255255255")
+                    {
+                        if (ClsUtenteBL.ColoreOccupatoInDipartimento(_utente.Colore, idDip, _utente.ID))
+                            throw new Exception($"Colore occupato nel dipartimento: {nomeDip}");
+                    }
+                }
+                
                 // Se arrivi qui, tutto è valido
                 this.DialogResult = DialogResult.OK;
-        }
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.DialogResult = DialogResult.None;
             }
-}
-
+        }
+        private void btAnnulla_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         private void FrmUtente_Load(object sender, EventArgs e)
         {
+            InitializeControls();
 
-            //funzione per prendere solo i nomi delle cdc e non l'oggetto intero
-            popolaClbClasseDiConcorso(cdcs);
-            //funzione per popolare sia i dipartimenti coordinati anche se non visibili sia quelli in cui partecipare
-            //ancora non li filtro in base alla cdc selezionata funzione da fare
-            popolaDipartimenti(dipartimenti);
-
-            //controllo se l'utente passato ha dei dati da mostrare
-            if (_utente!= null && _utente.ID>0)
+            if (ModificaUtente())
             {
-                tbNome.Text = _utente.Nome;
-                tbCognome.Text = _utente.Cognome;
-                tbEmail.Text = _utente.Email;
-                    tbPassword.Text = "********";
-                //aggiungo il metodo enter e quando l'utente va su utente
-                tbPassword.Enter += tbPassword_Enter;
-                tbPassword.Leave += tbPassword_Leave;
-                cbTipoUtente.SelectedItem = GetNomeTipoUtente(_utente.TipoUtente);
-                if (_utente.TipoDocente == 'T') rbTeorico.Checked = true;
-                else if (_utente.TipoDocente == 'L')    rbLaboratorio.Checked = true;
-
-                if (_utente.TipoUtente == "C")
-                {
-                    ClsDipartimentoDL dipCoordinato = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utente.ID);
-                    if (dipCoordinato != null)
-                    {
-                        loadDipartimentoCoordinato(dipCoordinato);
-                    }
-
-                }
-                if(!string.IsNullOrEmpty(_utente.Colore))
-                {
-                    Color coloreUC = OttieniColore(_utente.Colore);
-                    cldColori.Color=(coloreUC);
-                    pnColore.BackColor = coloreUC;
-                }
+                LoadDatiUtente();
+                LoadContratto();
+                LoadAfferenze();
+                LoadClassiDiConcorso();
+                GestisciPermessi();
             }
-            //controllo se l'utente passato ha un contratto da mostrare
-            if (_contratto != null)
-            {
-                //se il contratto è terminato seleziono il radiobutton corrispondente
-                if (_contratto.TipoContratto == 'D')
-                    rbDeterminato.Checked = true;
-                else
-                    rbIndeterminato.Checked = true;
-                nudMonteOre.Value = Convert.ToDecimal(_contratto.MonteOre);
-                dtpDataInizio.Value = _contratto.DataInizioContratto;
-
-                //se la data di fine contratto non è valorizzata disabilito il controllo (se è indeterminato)
-                if (_contratto.DataFineContratto!=null)
-                    dtpDataFine.Value = _contratto.DataFineContratto.Value;
-                else
-                    dtpDataFine.Enabled = false;
-
-            }
-            //controllo afferanza
-            if(_afferenze!=null && _afferenze.Count>0)
-                loadDipartimenti();
-            //inserimento classe di concorso e discipline
-            if (_richieste != null)
-            {
-                clbCLasseDiConcorso.ItemCheck -= clbCLasseDiConcorso_ItemCheck;
-                loadCDC();
-                PopolaDisciplinePerCDC();
-                clbCLasseDiConcorso.ItemCheck += clbCLasseDiConcorso_ItemCheck;
-                LoadDiscipline();
-            }
+            ConfiguraPannelloCDC();
+            GestisciCoordinatoreDipartimento();
         }
 
-        private void cbTipoUtente_SelectionChangeCommitted(object sender, EventArgs e)
+        private void GestisciCoordinatoreDipartimento()
         {
-            if (cbTipoUtente.SelectedItem.ToString() == "D"  ||
-                cbTipoUtente.SelectedItem.ToString() == "C" ||
-                cbTipoUtente.SelectedItem.ToString() == "A")
+            clbDipartimento.Enabled = true;
+            if (!ClsUtenteDL.UtenteAdmin(_utenteLoggato))
             {
-                pnTipoDocente.Enabled = true;
-            }
-            //se l'utente selezionato è amministratore o preside non gli è possibile selezionare il tipo di docente
-
-            if (cbTipoUtente.SelectedItem.ToString() == "P")
-            {
-                pnTipoDocente.Enabled = false;
-
+                ClsDipartimentoDL dip = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utenteLoggato.ID);
+                if (dip.ID > 0)
+                {
+                    int indexDipartimento = dipartimenti.FindIndex(d => d.ID == dip.ID);
+                    if (indexDipartimento >= 0)
+                    {
+                        clbDipartimento.SetItemChecked(indexDipartimento, true);
+                    }
+                }
             }
         }
+
+        private void GestisciPermessi()
+        {
+            if (ClsUtenteDL.UtenteAdmin(_utenteLoggato) || _utente.ID==_utenteLoggato.ID) return;
+            //se è un coordinatore in modifica non permette la modifica della password
+            tbNome.Enabled = false;
+            tbCognome.Enabled = false;
+            tbPassword.Enabled = false;
+            cbAutoEmail.Enabled = false;
+            tbEmail.Enabled = false;
+            cbAutoPassword.Enabled = false;
+            cbTipoUtente.Enabled = false;
+            pnTipoDocente.Enabled = false;
+            //colore può essere modificato
+            //se trova un dipartimento lo im
+           
+
+        }
+
+        #region Inizializzazione
+
+        private void InitializeControls()
+        {
+            popolaClbClasseDiConcorso(cdcs);
+            popolaDipartimenti(dipartimenti);
+            cldColori.Color = Color.White;
+            popolacbTipiUtente();
+        }
+
+        private void popolacbTipiUtente()
+        {
+            cbTipoUtente.Items.Clear();
+            if(ClsUtenteDL.UtenteAdmin(_utenteLoggato))
+            {
+                cbTipoUtente.Items.Add("Preside");
+                cbTipoUtente.Items.Add("Amministratore");
+                cbTipoUtente.Items.Add("Coordinatore di dipartimento");
+                cbTipoUtente.SelectedIndex = -1;
+            }
+            cbTipoUtente.Items.Add("Docente");
+        }
+
+        private bool ModificaUtente() => _utente != null && _utente.ID > 0;
+
+        #endregion
+        #region Caricamento Utente
+
+        private void LoadDatiUtente()
+        {
+            tbNome.Text = _utente.Nome;
+            tbCognome.Text = _utente.Cognome;
+            tbEmail.Text = _utente.Email;
+            tbPassword.Text = "********";
+
+            tbPassword.Enter += tbPassword_Enter;
+            tbPassword.Leave += tbPassword_Leave;
+
+            cbTipoUtente.SelectedItem = GetNomeTipoUtente(_utente.TipoUtente);
+
+            LoadTipoDocente();
+            LoadDipartimentoCoordinato();
+            LoadColoreUtente();
+        }
+
+        private void LoadTipoDocente()
+        {
+            switch (_utente.TipoDocente)
+            {
+                case 'T': rbTeorico.Checked = true; break;
+                case 'L': rbLaboratorio.Checked = true; break;
+            }
+        }
+
+        private void LoadDipartimentoCoordinato()
+        {
+            if (_utente.TipoUtente != "C") return;
+
+            ClsDipartimentoDL dipCoordinato = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utente.ID);
+            if (dipCoordinato != null)
+                loadDipartimentoCoordinato(dipCoordinato);
+        }
+
+        private void LoadColoreUtente()
+        {
+            if (string.IsNullOrEmpty(_utente.Colore)) return;
+
+            _colore = _utente.Colore;
+            Color colore = OttieniColore(_utente.Colore);
+            cldColori.Color = colore;
+            pnColore.BackColor = colore;
+        }
+
+        #endregion
+        #region Caricamento Contratto
+
+        private void LoadContratto()
+        {
+            if (_contratto == null) return;
+
+            rbDeterminato.Checked = _contratto.TipoContratto == 'D';
+            rbIndeterminato.Checked = _contratto.TipoContratto != 'D';
+
+            nudMonteOre.Value = Convert.ToDecimal(_contratto.MonteOre);
+            dtpDataInizio.Value = _contratto.DataInizioContratto;
+
+            if (_contratto.DataFineContratto != null)
+                dtpDataFine.Value = _contratto.DataFineContratto.Value;
+            else
+                dtpDataFine.Enabled = false;
+        }
+
+        #endregion
+        #region Caricamento Afferenze e CDC
+
+        private void LoadAfferenze()
+        {
+            if (_afferenze?.Count > 0)
+                loadDipartimenti();
+        }
+
+        private void LoadClassiDiConcorso()
+        {
+            if (_richieste == null) return;
+
+            clbCLasseDiConcorso.ItemCheck -= clbCLasseDiConcorso_ItemCheck;
+            loadCDC();
+            PopolaDisciplinePerCDC();
+            clbCLasseDiConcorso.ItemCheck += clbCLasseDiConcorso_ItemCheck;
+            LoadDisciplineUtente();
+        }
+
+        /// <summary>
+        /// Il pannello CDC è attivo solo per Admin (A), Docente (D) e Coordinatore (C).
+        /// </summary>
+        private void ConfiguraPannelloCDC()
+        {
+            bool cdcAbilitata = _utente != null&& new[] { "A", "D", "C" }.Contains(_utente.TipoUtente);
+
+            pnCDCeDisc.Enabled = cdcAbilitata;   // oppure .Enabled se vuoi tenerlo visibile
+        }
+
+
+        #endregion
+        #endregion
         private void rbIndeterminato_CheckedChanged(object sender, EventArgs e)
         {
             if (rbIndeterminato.Checked)
@@ -259,7 +364,10 @@ namespace Cattedre
                 _imputEmail = tbEmail.Text;
                 if (!string.IsNullOrWhiteSpace(tbNome.Text) && !string.IsNullOrWhiteSpace(tbCognome.Text))
                 {
-                    string _Email = $"{tbNome.Text.ToLower()}.{tbCognome.Text.ToLower()}@iismarconipieralisi.it";
+                    string nomeSenzaSpazi = tbNome.Text.ToLower().Replace(" ", "");
+                    string cognomeSenzaSpazi = tbCognome.Text.ToLower().Replace(" ", "");
+
+                    string _Email = $"{nomeSenzaSpazi}.{cognomeSenzaSpazi}@iismarconipieralisi.it";
                     tbEmail.Enabled = false;
                     tbEmail.Text = _Email;
                 }
@@ -270,10 +378,11 @@ namespace Cattedre
                 tbEmail.Enabled = true;
                 tbEmail.Text = _imputEmail;    
             }
-        }
-        private void btAnnulla_Click(object sender, EventArgs e)
-        {
-            this.Close();
+            if(string.IsNullOrEmpty(tbNome.Text) && string.IsNullOrEmpty(tbCognome.Text))
+            {
+                MessageBox.Show("Per la mail automatica, compila i campi obbligatori ovvero: nome e cognome");
+                cbAutoEmail.Checked=false; 
+            }
         }
         #region gestioni tipi utente
         private String GetTipoUtente()
@@ -299,13 +408,13 @@ namespace Cattedre
         }
         private void cbTipoUtente_SelectedIndexChanged(object sender, EventArgs e)
         {
+            bool Admin = ClsUtenteDL.UtenteAdmin(_utenteLoggato);
             switch (cbTipoUtente.SelectedItem.ToString())
             {
                 case "Docente":
-                    pnCDC.Visible = true;
-                    pnDipartimento.Visible = true;
+                    pnCDCeDisc.Enabled = true;
+                    pnDipartimento.Enabled = Admin;
                     PnContratto.Enabled = true;
-                    PnContratto.Visible = true;
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
                     cbDipartimentoCoordinato.Text = string.Empty;
@@ -313,26 +422,25 @@ namespace Cattedre
                     break;
 
                 case "Coordinatore di dipartimento":
-                    pnCDC.Visible = true;
-                    pnDipartimento.Visible = true;
+                    pnCDCeDisc.Enabled = true;
+                    pnDipartimento.Enabled = Admin;
                     PnContratto.Enabled = true;
-                    PnContratto.Visible = true;
                     lbDcoordinato.Visible = true;
                     cbDipartimentoCoordinato.Visible = true;
                     pnTipoDocente.Enabled = true;
+
                     break;
                 case "Amministratore":
-                    pnCDC.Visible = true;
-                    pnDipartimento.Visible = true;
+                    pnCDCeDisc.Visible = true;
+                    pnDipartimento.Enabled = Admin;
                     PnContratto.Enabled = true;
-                    PnContratto.Visible = true;
                     lbDcoordinato.Visible = true;
                     cbDipartimentoCoordinato.Visible = true;
                     pnTipoDocente.Enabled = true;
                     break;
                 default:
-                    pnCDC.Visible = false;
-                    pnDipartimento.Visible = false;
+                    pnCDCeDisc.Enabled = false;
+                    pnDipartimento.Enabled = false;
                     PnContratto.Enabled = false;
                     lbDcoordinato.Visible = false;
                     cbDipartimentoCoordinato.Visible = false;
@@ -360,30 +468,6 @@ namespace Cattedre
                     return string.Empty;
             }
         }
-
-        #endregion
-        #region metodi di popolamento con query esterne
-        private void popolaClbClasseDiConcorso(List<ClsClasseDiConcorsoDL> cdcs)
-        {
-            clbCLasseDiConcorso.Items.Clear();
-            
-            foreach (ClsClasseDiConcorsoDL c in cdcs)
-            {
-                clbCLasseDiConcorso.Items.Add($"{c.Livello} | {c.Nome}");
-            }
-        }
-
-        private void popolaDipartimenti(List<ClsDipartimentoDL> dipartimenti)
-        {
-            cbDipartimentoCoordinato.Items.Clear();
-            clbDipartimento.Items.Clear();
-            foreach (ClsDipartimentoDL d in dipartimenti)
-            {
-                cbDipartimentoCoordinato.Items.Add(d.Nome);
-                clbDipartimento.Items.Add(d.Nome);
-            }
-
-        }
         #endregion
         #region controlli grafici dipartimenti
 
@@ -409,9 +493,9 @@ namespace Cattedre
             if (_bloccoEvdipCoord)
                 return;
             ClsUtenteDL coord = ClsDipartimentoBL.utenteCoordinaDiparimento(dipartimentoScelto);
-            if (coord != null && (_utente==null ||coord.ID != _utente.ID))
+            if (coord != null && (_utente == null || coord.ID != _utente.ID))
             {
-                DialogResult dr = MessageBox.Show($"Attualmente il dipartimento {dipartimentoScelto} viene coordinato da {coord.Cognome} {coord.Nome}; \nVuoi sostituirlo?","Cambio Coordinatore", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult dr = MessageBox.Show($"Attualmente il dipartimento {dipartimentoScelto} viene coordinato da {coord.Cognome} {coord.Nome}; \nVuoi sostituirlo?", "Cambio Coordinatore", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == DialogResult.No)
                 {
                     _bloccoEvdipCoord = true;
@@ -493,6 +577,17 @@ namespace Cattedre
         {
             _oldValuedipCoord = cbDipartimentoCoordinato.SelectedIndex;
         }
+        private void popolaDipartimenti(List<ClsDipartimentoDL> dipartimenti)
+        {
+            cbDipartimentoCoordinato.Items.Clear();
+            clbDipartimento.Items.Clear();
+            foreach (ClsDipartimentoDL d in dipartimenti)
+            {
+                cbDipartimentoCoordinato.Items.Add(d.Nome);
+                clbDipartimento.Items.Add(d.Nome);
+            }
+
+        }
         #endregion
         #region controllli grafici cds
         private void loadCDC()
@@ -506,8 +601,9 @@ namespace Cattedre
 
             // Creo l'elenco delle CDC dell'utente nel formato "Livello | Nome"
             HashSet<string> cdcUtenteScritta = new HashSet<string>(
-                    cdcUtente.Select(c => $"{c.Livello} | {c.Nome}"),
+                    cdcUtente.Select(c => CreaCDCAbbreviata(c)),
                     StringComparer.OrdinalIgnoreCase);
+
 
             // Scorro gli item della CheckedListBox
             for (int i = 0; i < clbCLasseDiConcorso.Items.Count; i++)
@@ -518,6 +614,20 @@ namespace Cattedre
                     clbCLasseDiConcorso.SetItemChecked(i, true);
             }
         }
+        private string CreaCDCAbbreviata(ClsClasseDiConcorsoDL cdc)
+        {
+            string nome = cdc.Nome.Length > 30 ? cdc.Nome.Substring(0, 30) + "..." : cdc.Nome;
+            return $"{cdc.Livello} | {nome}";
+        }
+        private void popolaClbClasseDiConcorso(List<ClsClasseDiConcorsoDL> cdcs)
+        {
+            clbCLasseDiConcorso.Items.Clear();
+            foreach (ClsClasseDiConcorsoDL c in cdcs)
+            {
+                clbCLasseDiConcorso.Items.Add(CreaCDCAbbreviata(c));
+            }
+        }
+
         private void PopolaDisciplinePerCDC()
         {
             clbDisciplina.Items.Clear();
@@ -538,7 +648,7 @@ namespace Cattedre
                 if (cdc != null)
                 {
                     List<ClsDisciplinaDL> discipline = ClsRichiedereBL.RilevaDiscipinaCDC(cdc.ID);
-
+                    
                     foreach (var d in discipline)
                     {
                         if (!disc.Any(esistente => esistente.ID == d.ID))
@@ -550,12 +660,11 @@ namespace Cattedre
             }
             if (disc.Count <= 0)
                 return;
-            foreach(var d in disc.OrderBy(d => d.Nome).ThenBy(d => d.Anno)) // le ordino per  anno e per sezione per comodità
-                clbDisciplina.Items.Add($"{d.Nome} {d.Anno}°");
-
+            foreach (var d in disc.OrderBy(d => d.Anno == 0).ThenBy(d => d.Nome).ThenBy(d => d.Anno))
+                clbDisciplina.Items.Add(d.Anno > 0 ? $"{d.Nome} {d.Anno}°" : d.Nome);
 
         }
-        private void LoadDiscipline()
+        private void LoadDisciplineUtente()
         {
             // Carico tutte le CDC dell'utente
             List<ClsDisciplinaDL> disciplineUtente =
@@ -565,7 +674,9 @@ namespace Cattedre
                 return;
 
             // Creo l'elenco delle CDC dell'utente nel formato "Nome anno°"
-            HashSet<string> disciplinaUtenteScritta = new HashSet<string>(disciplineUtente.Select(c => $"{c.Nome} {c.Anno}°"),StringComparer.OrdinalIgnoreCase);
+            HashSet<string> disciplinaUtenteScritta = new HashSet<string>(
+                disciplineUtente.Select(c => c.Anno != 0 ? $"{c.Nome} {c.Anno}°" : c.Nome),
+                StringComparer.OrdinalIgnoreCase);
 
             // Scorro gli item della CheckedListBox
             for (int i = 0; i < clbDisciplina.Items.Count; i++)
@@ -586,6 +697,18 @@ namespace Cattedre
             anno = Convert.ToInt16(item.Substring(item.Length - 2, 1));
             nome = item.Substring(0, item.Length - 3);
 
+        }
+        private void cbSelezionaTutti_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cbSelezionaTutti.Checked)
+            {
+                for (int i = 0; i < clbDisciplina.Items.Count; i++)
+                {
+                    string nomeItem = clbDisciplina.Items[i].ToString();
+                    if (nomeItem.Length >= 2 && nomeItem.Substring(nomeItem.Length-1,1)=="°")
+                        clbDisciplina.SetItemChecked(i, true);
+                }
+            }
         }
         #endregion
         #region gestione colore utente
@@ -701,7 +824,7 @@ namespace Cattedre
             if (e.KeyCode==Keys.Enter)
             {
                 if (GetTipoUtente() == "P") this.ActiveControl = btSalva;
-                else this.ActiveControl = clbDipartimento;
+                else this.ActiveControl = btColore;
             }
         }
 
@@ -738,7 +861,7 @@ namespace Cattedre
                 {
                     _lastTick = 0;
                     // Passa al prossimo controllo
-                    if (GetTipoUtente()=="D") clbCLasseDiConcorso.Focus();
+                    if (GetTipoUtente()=="D") rbDeterminato.Focus();
                     else cbDipartimentoCoordinato.Focus();
                 }else
                 {
@@ -757,7 +880,7 @@ namespace Cattedre
                 e.SuppressKeyPress = true; 
 
                 if (GetTipoUtente() == "A" || (GetTipoUtente() == "C" && cbDipartimentoCoordinato.SelectedIndex != -1))
-                    clbCLasseDiConcorso.Focus(); 
+                    rbDeterminato.Focus(); 
             }
 
         }
@@ -799,7 +922,7 @@ namespace Cattedre
                 {
                     _lastTick = 0;
                     // Passa al prossimo controllo
-                    rbDeterminato.Focus();
+                    clbDipartimento.Focus();
                 }
                 else
                 {
@@ -847,6 +970,38 @@ namespace Cattedre
         {
             if (dtpDataFine.Value <= dtpDataInizio.Value)
                 dtpDataFine.Value = dtpDataInizio.Value.AddDays(1);
+        }
+
+        private void tbNomativi_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(tbCognome.Text) && !string.IsNullOrEmpty(tbNome.Text))
+            {
+                cbAutoEmail.Enabled = true;
+                cbAutoPassword.Enabled = true;
+            }
+            else
+            {
+                cbAutoPassword.Enabled = false;
+                cbAutoEmail.Enabled = false;
+            }
+        }
+
+        private void btColore_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                clbCLasseDiConcorso.Focus();
+        }
+        private void cbAutoPassword_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (cbAutoPassword.Checked)
+            {
+                tbPassword.Text = $"{ tbNome.Text.ToLower().Trim().Substring(0, 3)}{tbCognome.Text.ToLower().Trim().Substring(0, 3)}00!";
+                tbPassword.Enabled = false;
+            }
+            else
+            {
+                tbPassword.Enabled = true;
+            }
         }
     }
     #endregion

@@ -11,9 +11,6 @@ namespace Cattedre
 {
     public static class ClsAppartenereBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
-
         public static List<ClsAppartenereDL> CaricaClassiAppartenere(long IDindirizzo)
         {
             List<ClsAppartenereDL> apparteneres = new List<ClsAppartenereDL>();
@@ -21,7 +18,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
 
                     conn.Open();
@@ -44,7 +41,7 @@ namespace Cattedre
                 foreach (DataRow row in dt.Rows)
                 {
                     ClsAppartenereDL app = new ClsAppartenereDL();
-                    app.IDdisicplina = Convert.ToInt32(row["IDdisciplina"]);
+                    app.IDdisciplina = Convert.ToInt32(row["IDdisciplina"]);
                     app.IDindirizzo = Convert.ToInt32(row["IDindirizzo"]);
                     apparteneres.Add(app);
                 }
@@ -65,7 +62,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -88,7 +85,7 @@ namespace Cattedre
                 foreach (DataRow row in dt.Rows)
                 {
                     ClsAppartenereDL app = new ClsAppartenereDL();
-                    app.IDdisicplina = Convert.ToInt32(row["IDdisciplina"]);
+                    app.IDdisciplina = Convert.ToInt32(row["IDdisciplina"]);
                     app.IDindirizzo = Convert.ToInt32(row["IDindirizzo"]);
                     apparteneres.Add(app);
                 }
@@ -105,7 +102,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
 
                     conn.Open();
@@ -115,7 +112,7 @@ namespace Cattedre
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDindirizzo", appartenere.IDindirizzo);
-                        cmd.Parameters.AddWithValue("@IDdisciplina", appartenere.IDdisicplina);
+                        cmd.Parameters.AddWithValue("@IDdisciplina", appartenere.IDdisciplina);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
                         if (righeCoinvolte == 0)
                             throw new InvalidOperationException("No rows were inserted.");
@@ -128,8 +125,6 @@ namespace Cattedre
                 throw new Exception($"errore nella query: {ex.Message}", ex);
             }
         }
-
-
         public static List<ClsDisciplinaDL> disciplinaAppartenuta(long IDindirizzo)
         {
             List<ClsDisciplinaDL> disc = new List<ClsDisciplinaDL>();
@@ -137,7 +132,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT d.ID, d.Nome, d.oreTeoria, d.oreLaboratorio
@@ -180,7 +175,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -220,7 +215,7 @@ namespace Cattedre
 
         public static void EliminaAppartenenza(ClsAppartenereDL app)
         {
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
 
             try
             {
@@ -229,7 +224,7 @@ namespace Cattedre
                             WHERE IDdisciplina= @IDdisciplina AND IDindirizzo= @IDindirizzo";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 {
-                    cmd.Parameters.AddWithValue("@IDdisciplina", app.IDdisicplina);
+                    cmd.Parameters.AddWithValue("@IDdisciplina", app.IDdisciplina);
                     cmd.Parameters.AddWithValue("@IDindirizzo", app.IDindirizzo);
                     int righeCoinvolte = cmd.ExecuteNonQuery();
                     if (righeCoinvolte <= 0)
@@ -255,7 +250,7 @@ namespace Cattedre
             List<ClsAppartenereDL> appartenenenzeDisciplina = CaricaClassiAppartenereByDisciplina(iddisciplina);
             foreach (ClsAppartenereDL  app in appartenenenzeDisciplina)
             {
-                app.IDdisicplina = iddisciplina;
+                app.IDdisciplina = iddisciplina;
                 //controllo se l'appartenenza è presente  nella lista delle afferenze modificate
                 if (!appartenenzaModifica.Any(a => a.IDindirizzo == app.IDindirizzo))
                     EliminaAppartenenza(app);
@@ -264,7 +259,7 @@ namespace Cattedre
             //carico le appartenenze create, cioè quelle aggiunte
             foreach (ClsAppartenereDL app in appartenenzaModifica)
             {
-                app.IDdisicplina = iddisciplina;
+                app.IDdisciplina = iddisciplina;
                 if (!appartenenenzeDisciplina.Any(a => a.IDindirizzo == app.IDindirizzo))
                     InserireAppartenere(app);
             }
@@ -276,7 +271,7 @@ namespace Cattedre
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT i.ID, i.nome FROM indirizzi i 

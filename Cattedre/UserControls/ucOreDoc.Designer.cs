@@ -39,49 +39,49 @@
             // lblOreDiCattedra
             // 
             this.lblOreDiCattedra.AutoSize = true;
-            this.lblOreDiCattedra.Location = new System.Drawing.Point(145, 18);
+            this.lblOreDiCattedra.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOreDiCattedra.Location = new System.Drawing.Point(145, 9);
             this.lblOreDiCattedra.Name = "lblOreDiCattedra";
-            this.lblOreDiCattedra.Size = new System.Drawing.Size(16, 13);
+            this.lblOreDiCattedra.Size = new System.Drawing.Size(17, 16);
             this.lblOreDiCattedra.TabIndex = 0;
             this.lblOreDiCattedra.Text = "...";
             // 
             // lblOreEffettive
             // 
             this.lblOreEffettive.AutoSize = true;
-            this.lblOreEffettive.Location = new System.Drawing.Point(227, 18);
+            this.lblOreEffettive.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOreEffettive.Location = new System.Drawing.Point(227, 9);
             this.lblOreEffettive.Name = "lblOreEffettive";
-            this.lblOreEffettive.Size = new System.Drawing.Size(16, 13);
+            this.lblOreEffettive.Size = new System.Drawing.Size(17, 16);
             this.lblOreEffettive.TabIndex = 1;
             this.lblOreEffettive.Text = "...";
             // 
             // lblOreTotali
             // 
             this.lblOreTotali.AutoSize = true;
-            this.lblOreTotali.Location = new System.Drawing.Point(367, 18);
+            this.lblOreTotali.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOreTotali.Location = new System.Drawing.Point(367, 9);
             this.lblOreTotali.Name = "lblOreTotali";
-            this.lblOreTotali.Size = new System.Drawing.Size(16, 13);
+            this.lblOreTotali.Size = new System.Drawing.Size(17, 16);
             this.lblOreTotali.TabIndex = 3;
             this.lblOreTotali.Text = "...";
             // 
             // lblDocente
             // 
             this.lblDocente.AutoSize = true;
-            this.lblDocente.Location = new System.Drawing.Point(8, 18);
+            this.lblDocente.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDocente.Location = new System.Drawing.Point(8, 9);
             this.lblDocente.Name = "lblDocente";
-            this.lblDocente.Size = new System.Drawing.Size(16, 13);
+            this.lblDocente.Size = new System.Drawing.Size(17, 16);
             this.lblDocente.TabIndex = 4;
             this.lblDocente.Text = "...";
             // 
             // nudOrePot
             // 
-            this.nudOrePot.Location = new System.Drawing.Point(295, 16);
-            this.nudOrePot.Maximum = new decimal(new int[] {
-            18,
-            0,
-            0,
-            0});
+            this.nudOrePot.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudOrePot.Location = new System.Drawing.Point(295, 7);
             this.nudOrePot.Name = "nudOrePot";
-            this.nudOrePot.Size = new System.Drawing.Size(35, 20);
+            this.nudOrePot.Size = new System.Drawing.Size(35, 21);
             this.nudOrePot.TabIndex = 10;
             this.nudOrePot.ValueChanged += new System.EventHandler(this.nudOrePot_ValueChanged);
             // 
@@ -95,7 +95,7 @@
             this.Controls.Add(this.lblOreEffettive);
             this.Controls.Add(this.lblOreDiCattedra);
             this.Name = "ucOreDoc";
-            this.Size = new System.Drawing.Size(414, 49);
+            this.Size = new System.Drawing.Size(414, 33);
             ((System.ComponentModel.ISupportInitialize)(this.nudOrePot)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

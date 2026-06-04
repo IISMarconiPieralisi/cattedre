@@ -11,13 +11,11 @@ namespace Cattedre
 {
     public static class ClsClasseBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
         public static ClsClasseDL CaricaClasse(long id)
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT * FROM classi WHERE ID = @id";
@@ -54,7 +52,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT * FROM classi
@@ -95,40 +93,40 @@ namespace Cattedre
             return null;
         }
 
-        public static long TrovaIndirizzoClasse(long IDclasse)
-        {
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = "SELECT IDindirizzo FROM classi WHERE ID = @IDclasse LIMIT 1";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
-                        DataTable dt = new DataTable();
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
-                            da.Fill(dt);
-                        }
-                        if (dt.Rows.Count > 0)
-                            return Convert.ToInt64(dt.Rows[0]["IDindirizzo"]);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Errore durante la ricerca dell'indirizzo della classe: " + ex.Message);
-            }
-            return 0;
-        }
+        //public static long TrovaIndirizzoClasse(long IDclasse)
+        //{
+        //    try
+        //    {
+        //        using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+        //        {
+        //            conn.Open();
+        //            string sql = "SELECT IDindirizzo FROM classi WHERE ID = @IDclasse LIMIT 1";
+        //            using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+        //            {
+        //                cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+        //                DataTable dt = new DataTable();
+        //                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+        //                {
+        //                    da.Fill(dt);
+        //                }
+        //                if (dt.Rows.Count > 0)
+        //                    return Convert.ToInt64(dt.Rows[0]["IDindirizzo"]);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Errore durante la ricerca dell'indirizzo della classe: " + ex.Message);
+        //    }
+        //    return 0;
+        //}
 
         public static string RilevaSiglaClasse(long id)
         {
             string _sigla = "-";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT sigla FROM classi WHERE ID = @id";
@@ -157,7 +155,7 @@ namespace Cattedre
             long _ID = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID FROM classi WHERE sigla = @sigla";
@@ -183,29 +181,89 @@ namespace Cattedre
 
 
         #region popolamenti Specifici
-        public static List<ClsClasseDL> CaricaClassiDipartimento(int IDdipartimento, long IDannoscolastico)
+        public static void CaricaClassiDisciplineDipartimento(long IDannoscolastico,long IDdipartimento, out List<ClsDisciplinaDL> discipline, out List<ClsClasseDL> classi)
+        {
+            List<long> indirizziTrovati = new List<long>();
+            discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(IDannoscolastico, IDdipartimento, out indirizziTrovati);
+            classi = ClsClasseBL.CaricaClassiIndirizzo(indirizziTrovati, IDannoscolastico);
+
+            // Aggiungi le classi di altri indirizzi che fanno discipline di questo dipartimento
+            List<ClsClasseDL> classiEsterne = ClsClasseBL.CaricaClassiEsterneCheFannoDisciplineDipartimento(IDdipartimento, IDannoscolastico);
+
+            foreach (var classe in classiEsterne)
+            {
+                if (!classi.Any(c => c.ID == classe.ID))
+                    classi.Add(classe);
+            }
+
+            classi = classi.OrderBy(c => c.Sigla).ToList();
+            classi = classi.Where(c => ClsClasseBL.controllaDisciplinaInsegnataClasse(c.ID, IDdipartimento,IDannoscolastico)).ToList();
+        }
+
+        private static bool controllaDisciplinaInsegnataClasse(long IDclasse, long IDdipartimento, long IDannoscolastico)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT COUNT(*)
+                                    FROM classi cl
+                                    JOIN appartenere app ON app.IDindirizzo = cl.IDindirizzo
+                                    JOIN discipline d ON d.ID = app.IDdisciplina AND d.anno = cl.anno
+                                    JOIN gestire g ON g.IDdisciplina = d.ID AND g.IDdipartimento = @IDdipartimento
+                                    JOIN vigere v ON v.IDdisciplina = d.ID AND v.IDannoscolasticoinizio <= @IDannoscolastico
+                                        AND (v.IDannoscolasticofine >= @IDannoscolastico OR v.IDannoscolasticofine IS NULL)
+                                    WHERE cl.ID = @IDclasse";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+                        return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore ClasseHaDisciplinaDipartimento: " + ex.Message);
+            }
+        }
+
+            public static List<ClsClasseDL> CaricaClassiIndirizzo(List<long> IDindirizzi, long IDannoscolastico)
         {
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
+            if (IDindirizzi == null || IDindirizzi.Count == 0)
+                return classi;
+
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM classi " +
-                                 "WHERE classi.IDdipartimento = @IDdipartimento " +
-                                 "AND classi.IDannoscolastico = @IDannoscolastico";
+
+                    // Costruisce i placeholder: @id0, @id1, @id2 ...
+                    string placeholders = string.Join(", ",
+                        IDindirizzi.Select((_, i) => $"@id{i}"));
+
+                    string sql = $@"SELECT DISTINCT c.* FROM classi c 
+                            WHERE c.IDindirizzo IN ({placeholders})
+                            AND c.IDannoscolastico = @IDannoscolastico 
+                            ORDER BY c.anno, c.sezione";
+
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        for (int i = 0; i < IDindirizzi.Count; i++)
+                            cmd.Parameters.AddWithValue($"@id{i}", IDindirizzi[i]);
+
                         cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                        {
                             da.Fill(dt);
-                        }
                     }
-                    conn.Close();
                 }
+
                 foreach (DataRow row in dt.Rows)
                 {
                     ClsClasseDL _classe = new ClsClasseDL();
@@ -217,7 +275,6 @@ namespace Cattedre
                     _classe.Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
                     _classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
                     _classe.IDannoscolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]);
-                    _classe.IDdipartimento = (row["IDdipartimento"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdipartimento"]);
                     classi.Add(_classe);
                 }
             }
@@ -227,16 +284,17 @@ namespace Cattedre
             }
             return classi;
         }
-        public static List<ClsClasseDL> CaricaClassiFiltrate(Dictionary <string,List<string>> Filtri)
+        public static List<ClsClasseDL> CaricaClassi(long IDindirizzo=0, long IDannoScolastico=0, int annoClasse =0)
         {
+
             List<ClsClasseDL> classi = new List<ClsClasseDL>();
             DataTable ds = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = CreaQueryFiltri(conn, Filtri))
+                    using (MySqlCommand cmd = CreaQueryFiltri(conn,IDindirizzo,IDannoScolastico,annoClasse))
                     {
                         using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
@@ -256,7 +314,6 @@ namespace Cattedre
                     classe.Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
                     classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
                     classe.IDannoscolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]);
-                    classe.IDdipartimento = (row["IDdipartimento"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdipartimento"]);
                     classi.Add(classe);
                 }
             }
@@ -266,95 +323,108 @@ namespace Cattedre
             }
             return classi;
         }
-        private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, Dictionary<string, List<string>> Filtri)
+        public static List<ClsClasseDL> CaricaClassiEsterneCheFannoDisciplineDipartimento(long IDdipartimento, long IDannoscolastico)
+        {
+            List<ClsClasseDL> classi = new List<ClsClasseDL>();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT DISTINCT classi.ID, classi.sigla, classi.anno, classi.sezione,
+                                  classi.classeArticolataCon, classi.IDutente,
+                                  classi.IDannoscolastico, classi.IDindirizzo
+                                FROM gestire
+                                JOIN discipline ON discipline.ID = gestire.IDdisciplina
+                                JOIN appartenere ON appartenere.IDdisciplina = discipline.ID
+                                JOIN indirizzi ON indirizzi.ID = appartenere.IDindirizzo
+                                JOIN classi ON classi.IDindirizzo = indirizzi.ID
+                                JOIN vigere ON vigere.IDdisciplina = discipline.ID
+                                JOIN anniscolastici ON anniscolastici.ID = classi.IDannoscolastico
+                                WHERE gestire.IDdipartimento = @IDdipartimento
+                                AND classi.IDannoscolastico = @IDannoscolastico
+                                AND classi.anno = discipline.anno
+                                AND vigere.IDannoscolasticoinizio <= @IDannoscolastico
+                                AND (vigere.IDannoscolasticofine IS NULL
+                                    OR vigere.IDannoscolasticofine >= @IDannoscolastico)
+                                ORDER BY classi.sigla";
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
+                        cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+                        DataTable dt = new DataTable();
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                            da.Fill(dt);
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            classi.Add(new ClsClasseDL
+                            {
+                                ID = Convert.ToInt64(row["ID"]),
+                                Sigla = row["sigla"].ToString(),
+                                Anno = Convert.ToInt32(row["anno"]),
+                                Sezione = row["sezione"].ToString(),
+                                ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]),
+                                Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]),
+                                IDannoscolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]),
+                                Idindirizzo = Convert.ToInt64(row["IDindirizzo"])
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Errore CaricaClassiCheFannoDisciplineDipartimento: " + ex.Message);
+            }
+            return classi;
+        }
+        private static MySqlCommand CreaQueryFiltri(MySqlConnection conn, long IDindirizzo = 0, long IDannoscolastico = 0, int annoClasse = 0)
         {
             try
             {
-                if (Filtri.Count <= 0)
-                    throw new Exception("non è stato inserito nessun parametro in cui filtrare,riprovare");
-                string sql = "SELECT * FROM classi WHERE ";
+                string sql = "SELECT * FROM classi";
                 MySqlCommand cmd = new MySqlCommand("", conn);
                 List<string> condizioni = new List<string>();
-                foreach (var filtro in Filtri)
-                {
-                    string Parametro = filtro.Key;
-                    List<string> valori = filtro.Value;
-                    if (valori == null || valori.Count == 0)
-                        continue;
-                    List<string> valoriRicerca = new List<string>();
-                    foreach(string valore in valori)
-                        valoriRicerca.Add($"{Parametro} = {valore}");
 
-                    // Combina valori dello stesso filtro con OR
-                    condizioni.Add("(" + string.Join(" OR ", valoriRicerca) + ")");
+                if (annoClasse > 0)
+                {
+                    condizioni.Add("anno = @anno");
+                    cmd.Parameters.AddWithValue("@anno", annoClasse);
                 }
+                if (IDindirizzo > 0)
+                {
+                    condizioni.Add("IDindirizzo = @IDindirizzo");
+                    cmd.Parameters.AddWithValue("@IDindirizzo", IDindirizzo);
+                }
+                if (IDannoscolastico > 0)
+                {
+                    condizioni.Add("IDannoscolastico = @IDannoscolastico");
+                    cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoscolastico);
+                }
+
                 if (condizioni.Count > 0)
-                {
-                    sql += string.Join(" AND ", condizioni);
-                }
+                    sql += " WHERE " + string.Join(" AND ", condizioni);
 
+                sql += " ORDER BY anno ASC, sigla ASC";
                 cmd.CommandText = sql;
                 return cmd;
-
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-
         }
         #endregion
         #region Operazioni Crud
-        public static List<ClsClasseDL> CaricaClassi()
-        {
-            List<ClsClasseDL> classi = new List<ClsClasseDL>();
-            DataTable ds = new DataTable();
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string sql = "SELECT * FROM classi " +
-                                 "ORDER BY anno";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
-                    {
-                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
-                        {
-                            dr.Fill(ds);
-                        }
-                        conn.Close();
-                    }
-                }
-                foreach (DataRow row in ds.Rows)
-                {
-                    ClsClasseDL classe = new ClsClasseDL();
-                    classe.ID = Convert.ToInt64(row["ID"]);
-                    classe.Sigla = row["sigla"].ToString();
-                    classe.Anno = Convert.ToInt32(row["anno"]);
-                    classe.Sezione = row["sezione"].ToString();
-                    classe.ClasseArticolataCon = (row["classeArticolataCon"] == DBNull.Value) ? 0 : Convert.ToInt32(row["classeArticolataCon"]);
-                    classe.Idutente = (row["IDutente"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDutente"]);
-                    classe.Idindirizzo = Convert.ToInt64(row["IDindirizzo"]);
-                    classe.IDannoscolastico = (row["IDannoscolastico"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDannoscolastico"]);
-                    classe.IDdipartimento = (row["IDdipartimento"] == DBNull.Value) ? 0 : Convert.ToInt64(row["IDdipartimento"]);
-                    classi.Add(classe);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return classi;
-        }
         public static void InserisciClasse(ClsClasseDL classe)
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo,IDdipartimento,IDannoscolastico) 
-                       VALUES (@sigla, @anno, @sezione, @classeArticolataCon, @IDutente, @IDindirizzo,@IDdipartimento,@IDannoscolastico)";
+                    string sql = @"INSERT INTO classi (sigla, anno, sezione, classeArticolataCon, IDutente, IDindirizzo, IDannoscolastico) 
+                       VALUES (@sigla, @anno, @sezione, @classeArticolataCon, @IDutente, @IDindirizzo,@IDannoscolastico)";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@sigla", classe.Anno.ToString() + classe.Sezione);
@@ -363,7 +433,6 @@ namespace Cattedre
                         cmd.Parameters.AddWithValue("@IDindirizzo", classe.Idindirizzo);
                         cmd.Parameters.AddWithValue("@classeArticolataCon", classe.ClasseArticolataCon > 0 ? (object)classe.ClasseArticolataCon : DBNull.Value);
                         cmd.Parameters.AddWithValue("@IDutente", classe.Idutente > 0 ? (object)classe.Idutente : DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IDdipartimento", classe.IDdipartimento > 0 ? (object)classe.IDdipartimento : DBNull.Value);
                         cmd.Parameters.AddWithValue("@IDannoscolastico", classe.IDannoscolastico > 0 ? (object)classe.IDannoscolastico : DBNull.Value);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
                         if (righeCoinvolte <= 0)
@@ -382,7 +451,8 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                long idVecchiaCompagnaA = ClasseArticolataConQuale(classe.ID);
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE classi 
@@ -392,7 +462,6 @@ namespace Cattedre
                            classeArticolataCon = @classeArticolataCon,
                            IDutente = @IDutente,
                            IDindirizzo = @IDindirizzo,
-                           IDdipartimento = @IDdipartimento,
                            IDannoscolastico = @IDannoscolastico
                        WHERE id = @id";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -403,7 +472,6 @@ namespace Cattedre
                         cmd.Parameters.AddWithValue("@IDindirizzo", classe.Idindirizzo);
                         cmd.Parameters.AddWithValue("@classeArticolataCon", classe.ClasseArticolataCon > 0 ? (object)classe.ClasseArticolataCon : DBNull.Value);
                         cmd.Parameters.AddWithValue("@IDutente", classe.Idutente > 0 ? (object)classe.Idutente : DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IDdipartimento", classe.IDdipartimento > 0 ? (object)classe.IDdipartimento : DBNull.Value);
                         cmd.Parameters.AddWithValue("@IDannoscolastico", classe.IDannoscolastico > 0 ? (object)classe.IDannoscolastico : DBNull.Value);
                         cmd.Parameters.AddWithValue("@id", classe.ID);
                         int righeCoinvolte = cmd.ExecuteNonQuery();
@@ -412,7 +480,7 @@ namespace Cattedre
                     }
                     conn.Close();
 
-                    ControllaClassiArticolate(classe);
+                    ControllaClassiArticolate(classe,idVecchiaCompagnaA);
                 }
             }
             catch (Exception ex)
@@ -426,7 +494,7 @@ namespace Cattedre
             try
             {
                 
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "DELETE FROM classi WHERE id = @id";
@@ -447,33 +515,40 @@ namespace Cattedre
         }
         #endregion
         #region gestioni classiArticolate
-        public static void ControllaClassiArticolate(ClsClasseDL classe)
+        public static void ControllaClassiArticolate(ClsClasseDL classe, long idVecchiaCompagnaA = -1)
         {
+            classe.ID = RilevaIDclasse(classe);
+
+            // Usa il valore passato, oppure leggilo (per InsertClasse non serve)
+            if (idVecchiaCompagnaA == -1)
+                idVecchiaCompagnaA = ClasseArticolataConQuale(classe.ID);
+
             if (classe.ClasseArticolataCon > 0)
             {
-                // 1. Recuperiamo l'ID della classe corrente (se non l'abbiamo già)
-                classe.ID = RilevaIDclasse(classe);
+                if (idVecchiaCompagnaA > 0 && idVecchiaCompagnaA != classe.ClasseArticolataCon)
+                    ModificaClasseArticolata(idVecchiaCompagnaA, -1);
 
-                // 2. Troviamo con chi era precedentemente articolata la classe target (B)
-                // per "liberare" la vecchia compagna (C)
-                long idVecchiaCompagnaTarget = ClasseArticolataConQuale(classe.ClasseArticolataCon);
+                long idVecchiaCompagnaC = ClasseArticolataConQuale(classe.ClasseArticolataCon);
+                if (idVecchiaCompagnaC > 0 && idVecchiaCompagnaC != classe.ID)
+                    ModificaClasseArticolata(idVecchiaCompagnaC, -1);
 
-                if (idVecchiaCompagnaTarget > 0 && idVecchiaCompagnaTarget != classe.ID)
-                {
-                    // Cancello il riferimento nella vecchia classe C, portandolo a -1 (o 0)
-                    ModificaClasseArticolata(idVecchiaCompagnaTarget, -1);
-                }
-
-                // 3. Infine, aggiorno la classe target (B) affinché punti alla classe corrente (A)
+                ModificaClasseArticolata(classe.ID, classe.ClasseArticolataCon);
                 ModificaClasseArticolata(classe.ClasseArticolataCon, classe.ID);
             }
+            else
+            {
+                if (idVecchiaCompagnaA > 0)
+                    ModificaClasseArticolata(idVecchiaCompagnaA, -1);
+                ModificaClasseArticolata(classe.ID, -1);
+            }
         }
+
         public static long RilevaIDclasse(ClsClasseDL classe)
         {
             long IDclasse = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID FROM classi 
@@ -481,8 +556,7 @@ namespace Cattedre
                           AND sigla = @sigla 
                           AND sezione = @sezione 
                           AND IDannoscolastico = @IDannoscolastico 
-                          AND IDindirizzo = @IDindirizzo 
-                          AND IDdipartimento = @IDdipartimento";
+                          AND IDindirizzo = @IDindirizzo";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@anno", classe.Anno);
@@ -490,7 +564,6 @@ namespace Cattedre
                         cmd.Parameters.AddWithValue("@sezione", classe.Sezione);
                         cmd.Parameters.AddWithValue("@IDannoscolastico", classe.IDannoscolastico > 0 ? (object)classe.IDannoscolastico : DBNull.Value);
                         cmd.Parameters.AddWithValue("@IDindirizzo", classe.Idindirizzo > 0 ? (object)classe.Idindirizzo : DBNull.Value);
-                        cmd.Parameters.AddWithValue("@IDdipartimento", classe.IDdipartimento > 0 ? (object)classe.IDdipartimento : DBNull.Value);
                         DataTable dt = new DataTable();
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
@@ -513,7 +586,7 @@ namespace Cattedre
             long classeArticolataCon = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT classeArticolataCon 
@@ -542,7 +615,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE classi 

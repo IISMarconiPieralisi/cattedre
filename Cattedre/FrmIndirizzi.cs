@@ -30,6 +30,7 @@ namespace Cattedre
                 lvi.Tag = indirizzo.ID;
                 lvIndirizzi.Items.Add(lvi);
             }
+            tbNumRecord.Text = indirizzi.Count().ToString();
         }
 
 
@@ -81,7 +82,7 @@ namespace Cattedre
             }
         }
         
-        private void btCerca_Click_1(object sender, EventArgs e)
+        private void btCerca_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(tbRicerca.Text))
             {
@@ -122,6 +123,34 @@ namespace Cattedre
                 btCerca.Enabled = true;
 
 
+        }
+
+        private void tbRicerca_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) //se si preme enter simula il click del pulsante
+            {
+                btCerca_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                tbRicerca.Text = string.Empty;
+                btAnnulla_Click(null, null);
+                btCerca_Click(null, null);
+            }
+        }
+
+        private void lvIndirizzi_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                brModifica_Click(null, null);
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+                btElimina_Click(null, null);
+            }
         }
     }
 }

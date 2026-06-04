@@ -11,14 +11,12 @@ namespace Cattedre
 {
     public static class ClsIndirizzoBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
         public static long RilevaIDindirizzo(string nome)
         {
             long ID = 0;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID FROM indirizzi WHERE nome = @nome";
@@ -47,7 +45,7 @@ namespace Cattedre
             string nome = "-";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT nome FROM indirizzi WHERE ID = @id";
@@ -79,7 +77,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = "SELECT ID,nome FROM indirizzi";
@@ -111,7 +109,7 @@ namespace Cattedre
         public static void InserisciIndirizzo(ClsIndirizzoDL indirizzo)
         {
             
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(Program.connectionString);
             try
             {
                 conn.Open();
@@ -139,7 +137,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"UPDATE indirizzi SET nome = @nome WHERE id = @id ";
@@ -168,7 +166,7 @@ namespace Cattedre
             
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"DELETE FROM indirizzi WHERE ID = @id";
@@ -195,7 +193,7 @@ namespace Cattedre
             _ricerca = $"%{_ricerca}%";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
                     string sql = @"SELECT ID,nome

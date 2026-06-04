@@ -11,8 +11,6 @@ namespace Cattedre
 {
     public class ClsDotareBL
     {
-        static string connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
-
         //public static int OrdinaDocentiPerCdc(long idCdc)
         //{
         //    DataTable dt = new DataTable();
@@ -60,7 +58,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -100,7 +98,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -133,27 +131,23 @@ namespace Cattedre
             return cattedre;
         }
 
-        public static List<ClsDotareDL> CaricaDotare()
+        public static List<ClsDotareDL> CaricaDotare(long IDannoScolastico = 0, long IDCDC =0)
         {
             List<ClsDotareDL> lista = new List<ClsDotareDL>();
             DataTable dt = new DataTable();
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-
-                    string sql = @"SELECT *
-                               FROM dotare
-                               ORDER BY IDannoScolastico";
-
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                    using (MySqlCommand cmd = CreaComandoRicerca(IDannoScolastico,IDCDC, conn))
                     {
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        using (MySqlDataAdapter dr = new MySqlDataAdapter(cmd))
                         {
-                            da.Fill(dt);
+                            dr.Fill(dt);
                         }
+                        conn.Close();
                     }
                 }
 
@@ -176,11 +170,37 @@ namespace Cattedre
             return lista;
         }
 
-        public static void InserisciDotare(ClsDotareDL d, long idCdc)
+        private static MySqlCommand CreaComandoRicerca(long IDannoScolastico , long IDCDC , MySqlConnection conn)
+        {
+            string sql = @"SELECT d.ID, d.numcattedrediritto, numcattedrefatto, d.IDannoscolastico, d.IDclassediconcorso FROM dotare d
+                JOIN anniscolastici a ON a.ID = d.IDannoscolastico
+               JOIN classidiconcorso cdc ON cdc.ID = d.IDclassediconcorso ";
+            MySqlCommand cmd = new MySqlCommand("", conn);
+            List<string> condizioni = new List<string>();
+
+            if (IDannoScolastico > 0)
+            {
+                condizioni.Add("IDannoscolastico = @IDannoscolastico");
+                cmd.Parameters.AddWithValue("@IDannoscolastico", IDannoScolastico);
+            }
+            if (IDCDC > 0)
+            {
+                condizioni.Add("IDclassediconcorso = @IDclassediconcorso");
+                cmd.Parameters.AddWithValue("@IDclassediconcorso", IDCDC);
+            }
+            if (condizioni.Count > 0)
+                sql += " WHERE " + string.Join(" AND ", condizioni);
+            sql += " ORDER BY a.Sigla, cdc.Livello;";
+
+            cmd.CommandText = sql;
+            return cmd;
+        }
+
+        public static void InserisciDotare(ClsDotareDL d)
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -191,7 +211,7 @@ namespace Cattedre
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@anno", d.IdAnnoscolastico);
-                        cmd.Parameters.AddWithValue("@cdc", idCdc);
+                        cmd.Parameters.AddWithValue("@cdc", d.IdClasseDiConcorso);
                         cmd.Parameters.AddWithValue("@fatto", d.NumcattedreFatto);
                         cmd.Parameters.AddWithValue("@diritto", d.NumcattedreDiritto);
 
@@ -210,7 +230,7 @@ namespace Cattedre
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -237,7 +257,7 @@ namespace Cattedre
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
 
@@ -278,10 +298,7 @@ namespace Cattedre
 
         public static void AggiornaDotare(ClsDotareDL dot)
         {
-            string connectionString = ConfigurationManager
-                .ConnectionStrings["cattedre"].ConnectionString;
-
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
             {
                 conn.Open();
 
@@ -289,8 +306,9 @@ namespace Cattedre
             UPDATE dotare
             SET numcattedrediritto = @cattedreDiritto,
                 numcattedrefatto = @cattedreFatto,
-                IDannoscolastico = @IDannoscolastico
-            WHERE IDclassediconcorso = @IDclasseDiConcorso;";
+                IDannoscolastico = @IDannoscolastico,
+                IDclassediconcorso = @IDclassediconcorso
+            WHERE ID = @id;";
 
                 using (MySqlCommand cmd = new MySqlCommand(updateSql, conn))
                 {
@@ -298,6 +316,7 @@ namespace Cattedre
                     cmd.Parameters.AddWithValue("@IDannoscolastico", dot.IdAnnoscolastico);
                     cmd.Parameters.AddWithValue("@cattedreDiritto", dot.NumcattedreDiritto);
                     cmd.Parameters.AddWithValue("@cattedreFatto", dot.NumcattedreFatto);
+                    cmd.Parameters.AddWithValue("@id", dot.Id);
 
                     int righe = cmd.ExecuteNonQuery();
                     if (righe <= 0)

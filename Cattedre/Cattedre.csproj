@@ -34,7 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>1-47b4fe04.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
@@ -72,6 +73,9 @@
     </Reference>
     <Reference Include="K4os.Hash.xxHash, Version=1.0.8.0, Culture=neutral, PublicKeyToken=32cd54395057cec3, processorArchitecture=MSIL">
       <HintPath>..\packages\K4os.Hash.xxHash.1.0.8\lib\netstandard2.0\K4os.Hash.xxHash.dll</HintPath>
+    </Reference>
+    <Reference Include="Krypton.Toolkit, Version=100.26.1.19, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Krypton.Toolkit.100.26.1.19\lib\net472\Krypton.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.0\lib\netstandard2.0\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -161,6 +165,15 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Xceed.Document.NET, Version=5.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.5.0.0\lib\net40\Xceed.Document.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Drawing.NET, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.5.0.0\lib\net40\Xceed.Drawing.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Words.NET, Version=5.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.5.0.0\lib\net40\Xceed.Words.NET.dll</HintPath>
+    </Reference>
     <Reference Include="ZstdSharp, Version=0.8.5.0, Culture=neutral, PublicKeyToken=8d151af33a4ad5cf, processorArchitecture=MSIL">
       <HintPath>..\packages\ZstdSharp.Port.0.8.5\lib\netstandard2.0\ZstdSharp.dll</HintPath>
     </Reference>
@@ -176,9 +189,11 @@
     <Compile Include="ClassiBL\ClsDipartimentoBL.cs" />
     <Compile Include="ClassiBL\ClsDisciplinaBL.cs" />
     <Compile Include="ClassiBL\ClsDotareBL.cs" />
+    <Compile Include="ClassiBL\ClsGenerazioneWord.cs" />
     <Compile Include="ClassiBL\ClsGestireBL.cs" />
     <Compile Include="ClassiBL\ClsIndirizzoBL.cs" />
     <Compile Include="ClassiBL\ClsUtenteBL.cs" />
+    <Compile Include="ClassiBL\ClsVigereBL.cs" />
     <Compile Include="ClassiDL\ClsAfferireDL.cs" />
     <Compile Include="ClassiDL\ClsAnnoScolasticoDL.cs" />
     <Compile Include="ClassiDL\ClsAppartenereDL.cs" />
@@ -195,6 +210,7 @@
     <Compile Include="ClassiDL\ClsUtenteDL.cs" />
     <Compile Include="ClassiBL\ClsRichiedereBL.cs" />
     <Compile Include="ClassiDL\ClsRichiedereDL.cs" />
+    <Compile Include="ClassiDL\ClsVigereDL.cs" />
     <Compile Include="FrmAnniScolastici.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -212,6 +228,12 @@
     </Compile>
     <Compile Include="FrmCattedre.Designer.cs">
       <DependentUpon>FrmCattedre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmCattedreUtente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCattedreUtente.Designer.cs">
+      <DependentUpon>FrmCattedreUtente.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmCdC.cs">
       <SubType>Form</SubType>
@@ -267,6 +289,18 @@
     <Compile Include="FrmDipartimenti.Designer.cs">
       <DependentUpon>FrmDipartimenti.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmDotazione.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDotazione.Designer.cs">
+      <DependentUpon>FrmDotazione.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmDotazioni.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDotazioni.Designer.cs">
+      <DependentUpon>FrmDotazioni.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmHome.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -297,18 +331,6 @@
     <Compile Include="UserControls\ucOreDoc.Designer.cs">
       <DependentUpon>ucOreDoc.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ucOreTotali.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ucOreTotali.Designer.cs">
-      <DependentUpon>ucOreTotali.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ucOreTotalixClasse.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ucOreTotalixClasse.Designer.cs">
-      <DependentUpon>ucOreTotalixClasse.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmUtente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -323,12 +345,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserControls\ucOre.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ucOre.Designer.cs">
-      <DependentUpon>ucOre.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ucAssegnazioni.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -355,6 +371,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCattedre.resx">
       <DependentUpon>FrmCattedre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmCattedreUtente.resx">
+      <DependentUpon>FrmCattedreUtente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCdC.resx">
       <DependentUpon>FrmCdC.cs</DependentUpon>
@@ -383,6 +402,12 @@
     <EmbeddedResource Include="FrmDipartimenti.resx">
       <DependentUpon>FrmDipartimenti.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmDotazione.resx">
+      <DependentUpon>FrmDotazione.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDotazioni.resx">
+      <DependentUpon>FrmDotazioni.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmHome.resx">
       <DependentUpon>FrmHome.cs</DependentUpon>
     </EmbeddedResource>
@@ -397,12 +422,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ucOreDoc.resx">
       <DependentUpon>ucOreDoc.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ucOreTotali.resx">
-      <DependentUpon>ucOreTotali.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ucOreTotalixClasse.resx">
-      <DependentUpon>ucOreTotalixClasse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmUtente.resx">
       <DependentUpon>FrmUtente.cs</DependentUpon>
@@ -428,9 +447,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ucDisciplina.resx">
       <DependentUpon>ucDisciplina.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ucOre.resx">
-      <DependentUpon>ucOre.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -459,6 +475,7 @@
     <Content Include="Resources\Immagini\vecchie immagini\LoginImg.png" />
     <Content Include="Resources\Immagini\vecchie immagini\Sfondo.png" />
     <Content Include="Resources\Immagini\vecchie immagini\user-account-management-logo-user-icon-11562867145a56rus2zwu.png" />
+    <None Include="Resources\user.png" />
     <None Include="Resources\incolla.png" />
     <None Include="Resources\copia.png" />
     <None Include="Resources\taglia.png" />

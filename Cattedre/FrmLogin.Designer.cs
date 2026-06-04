@@ -40,6 +40,7 @@ namespace Cattedre
             this.rbTest1 = new System.Windows.Forms.RadioButton();
             this.rbTest2 = new System.Windows.Forms.RadioButton();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.rbTest3 = new System.Windows.Forms.RadioButton();
             this.panel4 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.panel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -77,11 +78,10 @@ namespace Cattedre
             this.tbPassword.Margin = new System.Windows.Forms.Padding(2);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
-            this.tbPassword.Size = new System.Drawing.Size(296, 22);
+            this.tbPassword.Size = new System.Drawing.Size(296, 20);
             this.tbPassword.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbPassword.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.TabIndex = 11;
-            this.tbPassword.Text = "vitalf00!";
             this.tbPassword.Click += new System.EventHandler(this.tbPassword_Click);
             // 
             // tbNomeUtente
@@ -91,11 +91,10 @@ namespace Cattedre
             this.tbNomeUtente.Location = new System.Drawing.Point(228, 150);
             this.tbNomeUtente.Margin = new System.Windows.Forms.Padding(2);
             this.tbNomeUtente.Name = "tbNomeUtente";
-            this.tbNomeUtente.Size = new System.Drawing.Size(301, 22);
+            this.tbNomeUtente.Size = new System.Drawing.Size(301, 20);
             this.tbNomeUtente.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbNomeUtente.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNomeUtente.TabIndex = 10;
-            this.tbNomeUtente.Text = "vittorio.alfieri@iismarconipieralisi.it";
             this.tbNomeUtente.Click += new System.EventHandler(this.tbNomeUtente_Click);
             // 
             // panel1
@@ -410,12 +409,24 @@ namespace Cattedre
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.rbTest3);
             this.panel3.Controls.Add(this.rbTest1);
             this.panel3.Controls.Add(this.rbTest2);
-            this.panel3.Location = new System.Drawing.Point(246, 283);
+            this.panel3.Location = new System.Drawing.Point(245, 272);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(120, 49);
+            this.panel3.Size = new System.Drawing.Size(120, 71);
             this.panel3.TabIndex = 28;
+            // 
+            // rbTest3
+            // 
+            this.rbTest3.AutoSize = true;
+            this.rbTest3.Location = new System.Drawing.Point(3, 49);
+            this.rbTest3.Name = "rbTest3";
+            this.rbTest3.Size = new System.Drawing.Size(93, 17);
+            this.rbTest3.TabIndex = 28;
+            this.rbTest3.TabStop = true;
+            this.rbTest3.Text = "Marcello Pigini";
+            this.rbTest3.UseVisualStyleBackColor = true;
             // 
             // panel4
             // 
@@ -491,5 +502,6 @@ namespace Cattedre
         private System.Windows.Forms.RadioButton rbTest2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.RadioButton rbTest3;
     }
 }

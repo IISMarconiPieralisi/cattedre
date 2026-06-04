@@ -29,20 +29,37 @@ namespace Cattedre
                 .OrderBy(a => ClsClasseBL.RilevaSiglaClasse(a.IDClasse))
                 .ThenBy(a => ClsDisciplinaBL.RilevaDisciplina(a.IDDisciplina).Nome)
                 .ToList();
+
             lvCattedreUtente.Items.Clear();
 
-            // Calcolo ore effettive una volta sola, non per ogni riga
-            long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utente.ID);
-            int oreEffettive = ClsAssegnareBL.CalcolaOreEffettiveDocente(_utente.ID, idDipartimento, idanno);
+            int totaleOreSpeciali = 0;
 
             foreach (ClsAssegnareDL ass in _assegnazioni)
             {
+                totaleOreSpeciali += ass.OreSpeciali;
+
                 ListViewItem lvi = new ListViewItem(ass.ID.ToString());
                 lvi.SubItems.Add(ClsClasseBL.RilevaSiglaClasse(ass.IDClasse));
                 lvi.SubItems.Add(ClsDisciplinaBL.RilevaDisciplina(ass.IDDisciplina).Nome);
                 lvi.SubItems.Add(ass.OreSpeciali.ToString());
-                lvi.SubItems.Add(oreEffettive.ToString()); // ore effettive totali del docente
-                lvi.SubItems.Add((oreEffettive + ass.OreSpeciali).ToString());
+                int ore = 0;
+
+                if (!lvi.SubItems[2].Text.Contains("Potenziamento"))
+                {
+                    if (_utente.TipoDocente == 'L')
+                        ore = ClsDisciplinaBL.RilevaOreDocentePratico(ass.IDDisciplina);
+                    else if (_utente.TipoDocente == 'T')
+                        ore = ClsDisciplinaBL.RilevaOreDocenteTeorico(ass.IDDisciplina);
+
+                    lvi.SubItems.Add(ore.ToString());
+                }
+                else
+                {
+                    lvi.SubItems.Add("-");
+                    ore = 0;
+                }
+                
+                lvi.SubItems.Add((ore + ass.OreSpeciali).ToString());
                 lvCattedreUtente.Items.Add(lvi);
             }
         }
@@ -80,6 +97,8 @@ namespace Cattedre
             if (utenteLoggato.TipoUtente != "C" && utenteLoggato.TipoUtente != "A")
                 btElimina.Visible = false;
 
+            lblDocente.Text = _utente.Cognome + " " + _utente.Nome;
+
             CaricaCB(out _anniscolastici);
 
             DateTime oggi = DateTime.Today;
@@ -99,11 +118,20 @@ namespace Cattedre
                     break;
                 }
             }
+
+            //long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utente.ID);
+            //string anno = cbAnniScolastici.SelectedItem.ToString();
+            //int oreEffettive = ClsAssegnareBL.CalcolaOreEffettiveDocente(_utente.ID, idDipartimento, ClsAnnoScolasticoBL.RilevaIDanno(anno));
+            //lblOreTot.Text = oreEffettive.ToString();
         }
 
         private void cbAnniScolastici_SelectedIndexChanged(object sender, EventArgs e)
         {
+            long idDipartimento = ClsUtenteBL.TrovaIDdipartimento(_utente.ID);
             string anno = cbAnniScolastici.SelectedItem.ToString();
+            int oreEffettive = ClsAssegnareBL.CalcolaOreEffettiveDocente(_utente.ID, idDipartimento, ClsAnnoScolasticoBL.RilevaIDanno(anno));
+            int oreSpeciali = ClsAssegnareBL.RilevaOrePotDocente(_utente.ID, ClsAnnoScolasticoBL.RilevaIDanno(anno));
+            lblOreTot.Text = (oreEffettive + oreSpeciali).ToString();
             CaricaListView(ClsAnnoScolasticoBL.RilevaIDanno(anno));
         }
 

@@ -83,7 +83,13 @@ namespace Cattedre
         public void ImpostaFotoProfilo(Image foto)
         {
             _fotoProfilo = foto;
-            pbFotoProfilo.Image = null; // non lasciare che la picturebox disegni da sola
+
+            // Ricalcola la regione circolare (potrebbe non essere ancora stata applicata)
+            System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
+            path.AddEllipse(0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);
+            pbFotoProfilo.Region = new Region(path);
+
+            pbFotoProfilo.Image = null;
             pbFotoProfilo.Invalidate();
         }
 
@@ -91,13 +97,18 @@ namespace Cattedre
 
         private void RenderFotoTonda()
         {
-            if (_fotoProfilo == null)
-                return;
+            bool usaDefault = _fotoProfilo == null;
 
-            // taglia fisicamente la forma del controllo a cerchio
-            System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
-            path.AddEllipse(0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);
-            pbFotoProfilo.Region = new Region(path);
+            if (usaDefault)
+                _fotoProfilo = Properties.Resources.user;
+
+            // La regione circolare solo per la foto Google
+            if (!usaDefault)
+            {
+                System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
+                path.AddEllipse(0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);
+                pbFotoProfilo.Region = new Region(path);
+            }
 
             pbFotoProfilo.Paint += (s, e) =>
             {
@@ -106,9 +117,12 @@ namespace Cattedre
                 if (_fotoProfilo != null)
                     e.Graphics.DrawImage(_fotoProfilo, 0, 0, pbFotoProfilo.Width, pbFotoProfilo.Height);
 
-                // bordo
-                using (Pen pen = new Pen(Color.Gray, 2))
-                    e.Graphics.DrawEllipse(pen, 1, 1, pbFotoProfilo.Width - 2, pbFotoProfilo.Height - 2);
+                // Bordo circolare solo per la foto Google
+                if (!usaDefault)
+                {
+                    using (Pen pen = new Pen(Color.Gray, 2))
+                        e.Graphics.DrawEllipse(pen, 1, 1, pbFotoProfilo.Width - 2, pbFotoProfilo.Height - 2);
+                }
             };
         }
 

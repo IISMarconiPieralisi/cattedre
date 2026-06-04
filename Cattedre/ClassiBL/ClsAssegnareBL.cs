@@ -46,6 +46,10 @@ namespace Cattedre
             { 
                 DataTable assegnazioni = CaricaDocentiConAssegnazioni(IDdipartimento, IDannoCorrente);
 
+                DataTable esterniAssegnati = CaricaDocentiEsterniAssegnati(IDdipartimento, IDannoCorrente);
+                foreach (DataRow row in esterniAssegnati.Rows)
+                    assegnazioni.ImportRow(row);
+
                 foreach (DataRow r in assegnazioni.Rows)
                 {
                     if (r["IDclasse"] == DBNull.Value || r["IDdisciplina"] == DBNull.Value)
@@ -56,37 +60,28 @@ namespace Cattedre
                     long idDocente = Convert.ToInt64(r["IDutente"]);
 
                     ClsClasseDL classe = ClsClasseBL.CaricaClasse(idClasse);
-                    ClsDisciplinaDL disciplina = ClsDisciplinaBL.CaricaDisciplina(idDisciplina);
 
-                    int annoClasse = classe.Anno;
-                    int annoSuccessivoClasse;
+                    ClsDisciplinaDL nuovaDisciplina = ClsDisciplinaBL.TrovaDisciplinaSuccessiva(idDisciplina,IDannoSuccessivo);
+                    if (nuovaDisciplina == null)
+                        continue;
 
-                    if (annoClasse == 1) annoSuccessivoClasse = 2;
-                    else if (annoClasse == 2) annoSuccessivoClasse = 1;
-                    else if (annoClasse == 3) annoSuccessivoClasse = 4;
-                    else if (annoClasse == 4) annoSuccessivoClasse = 5;
-                    else annoSuccessivoClasse = 3;
+                    int annoClasse = nuovaDisciplina.Anno;
 
-                    ClsClasseDL nuovaClasse =
-                        ClsClasseBL.TrovaClasse(classe.Sezione, annoSuccessivoClasse, classe.Idindirizzo, IDannoSuccessivo);
+                    ClsClasseDL nuovaClasse = ClsClasseBL.TrovaClasse(classe.Sezione, annoClasse, classe.Idindirizzo, IDannoSuccessivo);
 
                     if (nuovaClasse == null)
                         continue;
 
-                    ClsDisciplinaDL nuovaDisciplina =
-                        ClsDisciplinaBL.TrovaDisciplinaNomeAnno(disciplina.Nome, annoSuccessivoClasse);
 
-                    if (nuovaDisciplina == null)
-                        continue;
+                    char tipoDocente = r["tipoDocente"]?.ToString().FirstOrDefault() ?? ' ';
 
-                    if (EsisteAssegnazione(nuovaClasse.ID, IDannoSuccessivo, nuovaDisciplina.ID))
+                    if (EsisteAssegnazione(nuovaClasse.ID, IDannoSuccessivo, nuovaDisciplina.ID, tipoDocente))
                         continue;
 
                     long idDoc = Convert.ToInt64(r["IDutente"]);
                     int oreSpeciali = Convert.ToInt32(r["oreSpeciali"]);
 
-                    ClsAnnoScolasticoDL annoSucc =
-                        ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(IDannoCorrente);
+                    ClsAnnoScolasticoDL annoSucc = ClsAnnoScolasticoBL.TrovaAnnoSuccessivo(IDannoCorrente);
 
                     DateTime dal = annoSucc.DataInizio;
                     DateTime al = annoSucc.DataFine;
@@ -173,7 +168,7 @@ namespace Cattedre
 
         public static void InserisciAssegnazione(long IDclasse,long IDannoscolastico, long IDdisciplina,long IDutente,
             int oreSpeciali,DateTime dal,DateTime al)
-        {
+            {
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
@@ -391,7 +386,7 @@ AND IDutente IN (
         }
         #endregion
         #region GestioneAssegnazioni
-        public static bool EsisteAssegnazione(long IDclasse, long IDanno, long IDdisciplina)
+        public static bool EsisteAssegnazione(long IDclasse, long IDanno, long IDdisciplina, char tipoDocente)
         {
             try
             { 
@@ -401,13 +396,16 @@ AND IDutente IN (
 
                     string sql = @"SELECT COUNT(*)
                            FROM assegnare
+                           JOIN utenti u ON u.ID = assegnare.IDutente
                            WHERE IDclasse = @IDclasse
+                           AND u.tipoDocente = @tipoDocente
                            AND IDannoscolastico = @IDanno
                            AND IDdisciplina = @IDdisciplina";
 
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
 
                     cmd.Parameters.AddWithValue("@IDclasse", IDclasse);
+                    cmd.Parameters.AddWithValue("@tipoDocente", tipoDocente);
                     cmd.Parameters.AddWithValue("@IDanno", IDanno);
                     cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
 
@@ -438,10 +436,11 @@ AND IDutente IN (
                                 FROM utenti u
                                 JOIN afferire af ON af.IDutente = u.ID
                                 LEFT JOIN contratti c ON c.IDutente = u.ID
-                                LEFT JOIN assegnare a ON a.IDutente = u.ID AND a.IDannoscolastico = @IDannoScolastico
-                                LEFT JOIN anniscolastici ans ON a.IDannoscolastico = ans.ID AND CURDATE() BETWEEN ans.datainizio AND ans.datafine
-
-                                WHERE af.IDdipartimento = @IDdipartimento AND u.tipoUtente IN('D','C','A')
+                                LEFT JOIN assegnare a ON a.IDutente = u.ID
+                                LEFT JOIN anniscolastici ans ON ans.ID = a.IDannoscolastico
+                                WHERE af.IDdipartimento = @IDdipartimento
+                                  AND a.IDannoscolastico = @IDannoScolastico
+                                  AND u.tipoUtente IN ('D', 'C', 'A')
                                 ORDER BY u.cognome, u.nome";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))

@@ -28,7 +28,8 @@ namespace Cattedre
 
         public ClsUtenteDL UtenteLoggato { get; private set; }
         public Image FotoProfilo { get; private set; }
-
+        // cache in memoria: email -> foto Google
+        private static Dictionary<string, Image> _cachefoto = new Dictionary<string, Image>(StringComparer.OrdinalIgnoreCase);
         private void btLogin_Click(object sender, EventArgs e)
         {
             try
@@ -68,7 +69,10 @@ namespace Cattedre
                     //FrmHome frmHome = new FrmHome(utenteLoggato);
                     //frmHome.Show();
                     //this.Hide();
-                    FotoProfilo = TrovaFotoProfiloByEmail(email);
+                    FotoProfilo = TrovaFotoProfiloByEmail(email);                
+                    // se non l'ha trovata dal token, prova dalla cache
+                    if (FotoProfilo == null && _cachefoto.ContainsKey(email))
+                        FotoProfilo = _cachefoto[email];
                     UtenteLoggato = utenteLoggato;
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -162,8 +166,16 @@ namespace Cattedre
                         //frmHome.Show();
                         //this.Hide();
                         if (!string.IsNullOrEmpty(userinfo.Picture))
+                        {
                             FotoProfilo = ScaricaFotoProfilo(userinfo.Picture);
-
+                            if (!string.IsNullOrEmpty(userinfo.Picture))
+                            {
+                                FotoProfilo = ScaricaFotoProfilo(userinfo.Picture);
+                                if (FotoProfilo != null)
+                                    _cachefoto[userinfo.Email] = FotoProfilo; // salva in cache
+                            }
+                        }
+                           
                         UtenteLoggato = utenteLoggato;
                         this.DialogResult = DialogResult.OK;
                         this.Close();
@@ -306,6 +318,15 @@ namespace Cattedre
                 tbPassword.Clear();
                 tbNomeUtente.Text = "stefano.bartoloni@iismarconipieralisi.it";
                 tbPassword.Text = "Bartoloni";
+            }
+            else
+            {
+                rbTest1.Checked = false;
+                rbTest2.Checked = false;
+                tbNomeUtente.Clear();
+                tbPassword.Clear();
+                tbNomeUtente.Text = "marcello.pigini@iismarconipieralisi.it";
+                tbPassword.Text = "Pigini";
             }
         }
 

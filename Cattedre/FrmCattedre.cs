@@ -1307,10 +1307,7 @@ namespace Cattedre
                 }
                 else
                 {
-                    DialogResult dr = MessageBox.Show(
-                        "Vuoi generare le cattedre per l'anno successivo?",
-                        "Generazione",
-                        MessageBoxButtons.YesNo);
+                    DialogResult dr = MessageBox.Show("Vuoi generare le cattedre per l'anno successivo?","Generazione",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
 
                     if (dr != DialogResult.Yes)
                         return;

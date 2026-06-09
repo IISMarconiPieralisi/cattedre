@@ -61,11 +61,11 @@ namespace Cattedre
 
                     ClsClasseDL classe = ClsClasseBL.CaricaClasse(idClasse);
 
-                    ClsDisciplinaDL nuovaDisciplina = ClsDisciplinaBL.TrovaDisciplinaSuccessiva(idDisciplina,IDannoSuccessivo);
-                    if (nuovaDisciplina == null)
+                    long IDdisciplinaSuccessiva = ClsDisciplinaBL.TrovaIDDisciplinaSuccessiva(idDisciplina,IDannoSuccessivo);
+                    if (IDdisciplinaSuccessiva <=0)
                         continue;
 
-                    int annoClasse = nuovaDisciplina.Anno;
+                    int annoClasse = ClsDisciplinaBL.CaricaDisciplina(IDdisciplinaSuccessiva).Anno;
 
                     ClsClasseDL nuovaClasse = ClsClasseBL.TrovaClasse(classe.Sezione, annoClasse, classe.Idindirizzo, IDannoSuccessivo);
 
@@ -75,7 +75,7 @@ namespace Cattedre
 
                     char tipoDocente = r["tipoDocente"]?.ToString().FirstOrDefault() ?? ' ';
 
-                    if (EsisteAssegnazione(nuovaClasse.ID, IDannoSuccessivo, nuovaDisciplina.ID, tipoDocente))
+                    if (EsisteAssegnazione(nuovaClasse.ID, IDannoSuccessivo, IDdisciplinaSuccessiva, tipoDocente))
                         continue;
 
                     long idDoc = Convert.ToInt64(r["IDutente"]);
@@ -86,7 +86,7 @@ namespace Cattedre
                     DateTime dal = annoSucc.DataInizio;
                     DateTime al = annoSucc.DataFine;
 
-                    InserisciAssegnazione(nuovaClasse.ID,IDannoSuccessivo,nuovaDisciplina.ID,idDoc,oreSpeciali,dal,al);
+                    InserisciAssegnazione(nuovaClasse.ID,IDannoSuccessivo, IDdisciplinaSuccessiva, idDoc,oreSpeciali,dal,al);
                 }
             }catch (Exception ex)
             {

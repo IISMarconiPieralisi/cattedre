@@ -50,17 +50,18 @@ namespace Cattedre
             return null;
         }
 
-        public static ClsDisciplinaDL TrovaDisciplinaSuccessiva(long IDdisciplina, long IDannoscolastico)
+        public static long TrovaIDDisciplinaSuccessiva(long IDdisciplina, long IDannoscolastico)
         {
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
-                    string sql = @"SELECT * FROM discipline d
-                                JOIN vigere v  ON v.IDdisciplina =d.ID 
-                           WHERE d.IDdisciplinaSuccessiva = @IDdisciplina  
-                           AND (v.IDannoscolasticofine >= @IDannoScolastico OR v.IDannoscolasticofine IS NULL)";
+                           string sql = @"SELECT IDdisciplinasuccessiva FROM discipline d
+                                    JOIN vigere v ON v.IDdisciplina = d.ID 
+                                WHERE d.ID = @IDdisciplina
+                                ORDER BY (SELECT COUNT(id) FROM assegnare a WHERE a.IDdisciplina = d.ID) DESC
+                           LIMIT 1";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdisciplina", IDdisciplina);
@@ -72,15 +73,11 @@ namespace Cattedre
                         }
                         if (dt.Rows.Count > 0)
                         {
+
                             DataRow row = dt.Rows[0];
-                            return new ClsDisciplinaDL
-                            {
-                                ID = Convert.ToInt64(row["ID"]),
-                                Nome = row["nome"].ToString(),
-                                Anno = Convert.ToInt32(row["anno"]),
-                                OreTeoria = Convert.ToInt32(row["oreTeoria"]),
-                                OreLaboratorio = Convert.ToInt32(row["oreLaboratorio"])
-                            };
+                            if (row["IDdisciplinasuccessiva"] == DBNull.Value)
+                                return 0;
+                            return Convert.ToInt64(row["IDdisciplinasuccessiva"]);
                         }
                     }
                 }
@@ -89,7 +86,7 @@ namespace Cattedre
             {
                 throw new Exception("Errore durante la ricerca della disciplina: " + ex.Message);
             }
-            return null;
+            return 0;
         }
         //metodo overload per rimuovoere l'out di IDindirizzi trovati
         public static List<ClsDisciplinaDL> CaricaDisciplineAnnoScolasticoDipartimento(long annoId, long dipartimentoId)

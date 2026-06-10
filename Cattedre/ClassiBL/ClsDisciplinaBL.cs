@@ -119,7 +119,7 @@ namespace Cattedre
                AND aTarget.dataInizio >= aInizio.dataInizio
                AND aTarget.dataFine <= COALESCE(aFine.dataFine, (SELECT MAX(dataFine) FROM anniscolastici))"
                        + (escludiPotenziamento ? " AND d.nome NOT LIKE '%otenziamento%'" : "")
-                       + " ORDER BY d.anno";
+                       + " ORDER BY d.anno, d.nome";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDannoScolastico", IDannoScolastico);
@@ -573,7 +573,7 @@ namespace Cattedre
             if (condizioni.Count > 0)
                 sql += " WHERE " + string.Join(" AND ", condizioni);
 
-            sql += " ORDER BY d.anno ASC;";
+            sql += " ORDER BY d.anno, d.nome;";
             cmd.CommandText = sql;
             return cmd;
         }

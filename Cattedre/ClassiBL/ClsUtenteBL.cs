@@ -653,7 +653,7 @@ namespace Cattedre
                     sql = sql.Replace("LEFT JOIN", "JOIN");
                 sql += " WHERE " + string.Join(" AND ", condizioni);
             }
-            sql += " ORDER BY cognome,nome";
+            sql += " ORDER BY cognome, nome";
             cmd.CommandText = sql;
             return cmd;
         }

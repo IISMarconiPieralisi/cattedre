@@ -298,7 +298,6 @@ namespace Cattedre
                 filtri.Clear();
                 btAnnullaFiltra.Enabled = true;
 
-
                 AggiungiFiltro(filtri, "tipoUtente", CaricaElementiSelezionati(gbTipiUtenti, typeof(CheckBox)), mappaUtenti);
                 AggiungiFiltro(filtri, "tipoDocente", CaricaElementiSelezionati(gBtipoDocente, typeof(RadioButton)), mappaTipoDocente);
 
@@ -436,13 +435,25 @@ namespace Cattedre
                 gbTipiUtenti.Enabled = false;
             }
 
-                if (_utenteLoggato?.TipoUtente == "D")
+            if (_utenteLoggato?.TipoUtente == "D")
             {
-
                 btInserisci.Enabled = false;
                 btModifica.Enabled = false;
                 btElimina.Enabled = false;
             }
+            else if (_utenteLoggato?.TipoUtente == "C")
+            {
+                btInserisci.Enabled = true;
+                btModifica.Enabled = true;
+                btElimina.Enabled = false;
+            }
+            else if (_utenteLoggato?.TipoUtente == "A")
+            {
+                btInserisci.Enabled = true;
+                btModifica.Enabled = true;
+                btElimina.Enabled = true;
+            }
+
         }
         #endregion
         #region mappattura tasti

@@ -48,7 +48,7 @@ namespace Cattedre
         //private ToolTip toolTipDiscipline;
         HScrollBar hScrollOrizzontale;
         #endregion
-        #region Costruttore Load Show  complilamento form
+        #region Costruttore Load Show  popolamento form
         public FrmCattedre(ClsUtenteDL utente)
         {
             InitializeComponent();

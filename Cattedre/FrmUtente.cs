@@ -206,6 +206,7 @@ namespace Cattedre
         {
             if (ClsUtenteDL.UtenteAdmin(_utenteLoggato) || _utente.ID==_utenteLoggato.ID) return;
             //se è un coordinatore in modifica non permette la modifica della password
+
             tbNome.Enabled = false;
             tbCognome.Enabled = false;
             tbPassword.Enabled = false;
@@ -216,6 +217,25 @@ namespace Cattedre
             pnTipoDocente.Enabled = false;
             //colore può essere modificato
             //se trova un dipartimento lo im
+
+            if (_utenteLoggato?.TipoUtente == "C")
+            {
+                tbNome.Enabled = true;
+                tbCognome.Enabled = true;
+                pnTipoDocente.Enabled = true;
+            }
+            else if (_utenteLoggato?.TipoUtente == "A")
+            {
+                tbNome.Enabled = true;
+                tbCognome.Enabled = true;
+                tbPassword.Enabled = true;
+                cbAutoEmail.Enabled = true;
+                tbEmail.Enabled = true;
+                cbAutoPassword.Enabled = true;
+                cbTipoUtente.Enabled = true;
+                pnTipoDocente.Enabled = true;
+            }
+            
            
 
         }

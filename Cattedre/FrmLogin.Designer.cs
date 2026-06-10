@@ -54,7 +54,7 @@ namespace Cattedre
             // 
             this.label2.LabelStyle = Krypton.Toolkit.LabelStyle.NormalControl;
             this.label2.Location = new System.Drawing.Point(299, 241);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.label2.Margin = new System.Windows.Forms.Padding(4);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(121, 30);
             this.label2.StateCommon.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -65,7 +65,7 @@ namespace Cattedre
             // 
             this.label1.LabelStyle = Krypton.Toolkit.LabelStyle.NormalControl;
             this.label1.Location = new System.Drawing.Point(299, 150);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.label1.Margin = new System.Windows.Forms.Padding(4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(79, 30);
             this.label1.StateCommon.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -104,7 +104,7 @@ namespace Cattedre
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Location = new System.Drawing.Point(304, 207);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.PanelBackStyle = Krypton.Toolkit.PaletteBackStyle.PanelAlternate;
             this.panel1.Size = new System.Drawing.Size(399, 2);
@@ -118,7 +118,7 @@ namespace Cattedre
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(291, 558);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -130,7 +130,7 @@ namespace Cattedre
             this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
             this.pictureBox2.Location = new System.Drawing.Point(291, 0);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(488, 143);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -166,7 +166,7 @@ namespace Cattedre
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.Location = new System.Drawing.Point(481, 484);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.label3.Margin = new System.Windows.Forms.Padding(4);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(87, 25);
             this.label3.StateCommon.ShortText.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -220,7 +220,7 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btLogin.Location = new System.Drawing.Point(455, 430);
-            this.btLogin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btLogin.Margin = new System.Windows.Forms.Padding(4);
             this.btLogin.Name = "btLogin";
             this.btLogin.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btLogin.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -291,7 +291,7 @@ namespace Cattedre
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btLoginGoogle.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btLoginGoogle.Location = new System.Drawing.Point(411, 516);
-            this.btLoginGoogle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btLoginGoogle.Margin = new System.Windows.Forms.Padding(4);
             this.btLoginGoogle.Name = "btLoginGoogle";
             this.btLoginGoogle.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
             this.btLoginGoogle.OverrideDefault.Back.Color2 = System.Drawing.Color.CornflowerBlue;
@@ -361,7 +361,7 @@ namespace Cattedre
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.Location = new System.Drawing.Point(304, 299);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
             this.panel2.PanelBackStyle = Krypton.Toolkit.PaletteBackStyle.PanelAlternate;
             this.panel2.Size = new System.Drawing.Size(399, 2);
@@ -373,7 +373,7 @@ namespace Cattedre
             // 
             this.rbDBprova.AutoSize = true;
             this.rbDBprova.Location = new System.Drawing.Point(4, 6);
-            this.rbDBprova.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbDBprova.Margin = new System.Windows.Forms.Padding(4);
             this.rbDBprova.Name = "rbDBprova";
             this.rbDBprova.Size = new System.Drawing.Size(89, 21);
             this.rbDBprova.TabIndex = 24;
@@ -386,7 +386,7 @@ namespace Cattedre
             // 
             this.rbDBufficiale.AutoSize = true;
             this.rbDBufficiale.Location = new System.Drawing.Point(4, 36);
-            this.rbDBufficiale.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbDBufficiale.Margin = new System.Windows.Forms.Padding(4);
             this.rbDBufficiale.Name = "rbDBufficiale";
             this.rbDBufficiale.Size = new System.Drawing.Size(100, 21);
             this.rbDBufficiale.TabIndex = 25;
@@ -399,7 +399,7 @@ namespace Cattedre
             // 
             this.rbTest1.AutoSize = true;
             this.rbTest1.Location = new System.Drawing.Point(4, 4);
-            this.rbTest1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbTest1.Margin = new System.Windows.Forms.Padding(4);
             this.rbTest1.Name = "rbTest1";
             this.rbTest1.Size = new System.Drawing.Size(112, 21);
             this.rbTest1.TabIndex = 26;
@@ -412,7 +412,7 @@ namespace Cattedre
             // 
             this.rbTest2.AutoSize = true;
             this.rbTest2.Location = new System.Drawing.Point(4, 32);
-            this.rbTest2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbTest2.Margin = new System.Windows.Forms.Padding(4);
             this.rbTest2.Name = "rbTest2";
             this.rbTest2.Size = new System.Drawing.Size(138, 21);
             this.rbTest2.TabIndex = 27;
@@ -426,7 +426,7 @@ namespace Cattedre
             this.panel3.Controls.Add(this.rbTest1);
             this.panel3.Controls.Add(this.rbTest2);
             this.panel3.Location = new System.Drawing.Point(327, 335);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel3.Margin = new System.Windows.Forms.Padding(4);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(160, 87);
             this.panel3.TabIndex = 28;
@@ -436,7 +436,7 @@ namespace Cattedre
             // 
             this.rbTest3.AutoSize = true;
             this.rbTest3.Location = new System.Drawing.Point(4, 60);
-            this.rbTest3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbTest3.Margin = new System.Windows.Forms.Padding(4);
             this.rbTest3.Name = "rbTest3";
             this.rbTest3.Size = new System.Drawing.Size(120, 21);
             this.rbTest3.TabIndex = 28;
@@ -449,7 +449,7 @@ namespace Cattedre
             this.panel4.Controls.Add(this.rbDBufficiale);
             this.panel4.Controls.Add(this.rbDBprova);
             this.panel4.Location = new System.Drawing.Point(579, 348);
-            this.panel4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel4.Margin = new System.Windows.Forms.Padding(4);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(127, 60);
             this.panel4.TabIndex = 29;

@@ -761,22 +761,30 @@ namespace Cattedre
                 .Distinct()
                 .Count(id => ClsRichiedereBL.RilevaCDCDocente(id).Any(c => c.ID == cdc.ID));
 
+            // x debug
+            List<long> listaIdUtenti = dtDocentiAssegnazioni.AsEnumerable()
+                .Where(r => r["IDutente"] != DBNull.Value)
+                .Select(r => Convert.ToInt64(r["IDutente"]))
+                .Distinct()
+                .Where(id => ClsRichiedereBL.RilevaCDCDocente(id).Any(c => c.ID == cdc.ID))
+                .ToList();
+
             string statoTesto;
             Color statoColore;
 
             if (numDocentiAssegnati == numCattedreDiFatto)
             {
-                statoTesto = "COPERTE";
+                statoTesto = "OK";
                 statoColore = Color.Green;
             }
             else if (numDocentiAssegnati < numCattedreDiFatto)
             {
-                statoTesto = "SCOPERTE";
+                statoTesto = "DA ASSEGNARE";
                 statoColore = Color.Red;
             }
             else
             {
-                statoTesto = "SOVRAFFOLLATE";
+                statoTesto = "ORE RESIDUE";
                 statoColore = Color.OrangeRed;
             }
 

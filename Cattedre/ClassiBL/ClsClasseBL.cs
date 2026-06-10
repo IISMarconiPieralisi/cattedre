@@ -196,7 +196,7 @@ namespace Cattedre
                     classi.Add(classe);
             }
 
-            classi = classi.OrderBy(c => c.Sigla).ToList();
+            classi = classi.OrderBy(c => c.Anno).ThenBy(c => c.Idindirizzo).ThenBy(c => c.Sezione).ToList();
             classi = classi.Where(c => ClsClasseBL.controllaDisciplinaInsegnataClasse(c.ID, IDdipartimento,IDannoscolastico)).ToList();
         }
 
@@ -250,7 +250,7 @@ namespace Cattedre
                     string sql = $@"SELECT DISTINCT c.* FROM classi c 
                             WHERE c.IDindirizzo IN ({placeholders})
                             AND c.IDannoscolastico = @IDannoscolastico 
-                            ORDER BY c.anno, c.sezione";
+                            ORDER BY c.anno, c.IDindirizzo, c.sezione";
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
@@ -347,7 +347,7 @@ namespace Cattedre
                                 AND vigere.IDannoscolasticoinizio <= @IDannoscolastico
                                 AND (vigere.IDannoscolasticofine IS NULL
                                     OR vigere.IDannoscolasticofine >= @IDannoscolastico)
-                                ORDER BY classi.sigla";
+                                ORDER BY classi.anno, classi.IDindirizzo, classi.sezione";
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@IDdipartimento", IDdipartimento);
@@ -405,7 +405,7 @@ namespace Cattedre
                 if (condizioni.Count > 0)
                     sql += " WHERE " + string.Join(" AND ", condizioni);
 
-                sql += " ORDER BY anno ASC, sigla ASC";
+                sql += " ORDER BY anno, IDindirizzo, sezione";
                 cmd.CommandText = sql;
                 return cmd;
             }

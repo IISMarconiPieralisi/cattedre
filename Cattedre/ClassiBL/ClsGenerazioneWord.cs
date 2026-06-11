@@ -33,9 +33,9 @@ namespace Cattedre
         {
             try
             { 
-                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID,anno.ID);
+                List<ClsAssegnareDL> assegnare = ClsAssegnareBL.PopolaAssegnazioniAnnoScolasticoDipartimento(dipartimento.ID, anno.ID);
                 List<ClsClasseDiConcorsoDL> cdc = ClsClasseDiConcorsoBL.CaricaCDCperDipartimento(dipartimento.ID);
-               List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(anno.ID,dipartimento.ID);
+                List<ClsDisciplinaDL> discipline = ClsDisciplinaBL.CaricaDisciplineAnnoScolasticoDipartimento(anno.ID, dipartimento.ID);
                 List<ClsDotareDL> Dotare = ClsDotareBL.CaricaDotare(anno.ID);
                 List<ClsClasseDL> classi = ClsClasseBL.CaricaClassi(0, anno.ID);         
                 GenerateFileWord(anno,dipartimento, cdc, assegnare, discipline, classi, Dotare, filePath);
@@ -66,12 +66,15 @@ namespace Cattedre
                         _altezzaCorrente = 0f; // reset ad ogni nuova pagina/CDC
                         //ClsDotareDL dotazione = listDotare
                         //    .FirstOrDefault(d => d.IdClasseDiConcorso == cdc.ID);
-                        ClsDotareDL dotazione = ClsDotareBL.CaricaDotare(annoScolastico.ID,cdc.ID).FirstOrDefault();
+                        ClsDotareDL dotazione = ClsDotareBL.CaricaDotare(annoScolastico.ID, cdc.ID).FirstOrDefault();
 
                         var DocentiFiltrati = ClsRichiedereBL.RilevaUtentiCDC(cdc.ID); //metodi per trovare gli utanti con quella  CDC
 
                         if (DocentiFiltrati.Count <= 0)
-                        { i++; continue; }
+                        {
+                            i++;
+                            continue;
+                        }
                         else
                             InserisciIntestazioneCDC(doc, cdc, dotazione, annoScolastico);
 
@@ -199,7 +202,7 @@ namespace Cattedre
         }
 
         private static void InserisciTabella(DocX doc, List<ClsAssegnareDL> assegnazioni,
-     List<ClsDisciplinaDL> listDiscipline, List<ClsClasseDL> listClassi, ClsUtenteDL Docente)
+                                            List<ClsDisciplinaDL> listDiscipline, List<ClsClasseDL> listClassi, ClsUtenteDL Docente)
         {
             // Monte ore dal contratto
             ClsContrattoDL contratto = ClsContrattoBL.cercaContratto(Docente.ID);
@@ -209,14 +212,9 @@ namespace Cattedre
             // Pre-ordina per disciplina speciale (in fondo)
             assegnazioni = assegnazioni
                 .Where(a => a != null)
-                .OrderBy(a => {
-                    var sigla = listClassi.FirstOrDefault(c => c != null && c.ID == a.IDClasse)?.Sigla ?? "";
-                    return sigla.Length > 0 ? sigla[0] : '9';
-                })
-                .ThenBy(a => !string.IsNullOrWhiteSpace(
-                    listDiscipline.FirstOrDefault(d => d != null && d.ID == a.IDDisciplina)?.DisciplinaSpeciale) ? 1 : 0)
+                .OrderBy(a => listClassi.FirstOrDefault(c => c != null && c.ID == a.IDClasse)?.Sigla ?? "ZZZ")
+                .ThenBy(a => !string.IsNullOrWhiteSpace(listDiscipline.FirstOrDefault(d => d != null && d.ID == a.IDDisciplina)?.DisciplinaSpeciale) ? 1 : 0)
                 .ThenBy(a => listDiscipline.FirstOrDefault(d => d != null && d.ID == a.IDDisciplina)?.Nome ?? "")
-                .ThenBy(a => listClassi.FirstOrDefault(c => c != null && c.ID == a.IDClasse)?.Sigla ?? "")
                 .ToList();
 
             // Pre-filtra le assegnazioni valide PRIMA di creare la tabella
@@ -227,7 +225,11 @@ namespace Cattedre
                         d2 != null &&
                         d2.ID == a.IDDisciplina &&
                         (!string.IsNullOrWhiteSpace(d2.DisciplinaSpeciale) || a.IDClasse > 0) &&
-                        (d2.OreLaboratorio + d2.OreTeoria > 0 || a.OreSpeciali > 0));
+                        (
+                            (Docente.TipoDocente == 'L' && (d2.OreLaboratorio > 0 || a.OreSpeciali > 0)) 
+                            ||
+                            (Docente.TipoDocente == 'T' && (d2.OreLaboratorio + d2.OreTeoria > 0 || a.OreSpeciali > 0))
+                        ));
                     return d != null;
                 })
                 .ToList();

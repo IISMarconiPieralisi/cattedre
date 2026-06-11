@@ -818,19 +818,9 @@ namespace Cattedre
                 Font = new Font(Font, FontStyle.Bold),
                 ForeColor = Color.SteelBlue,
                 AutoSize = false,
-                Width = 75,
+                Width = 55,
                 Height = 22,
                 Location = new Point(COL_DOCENTE, 2),
-                TextAlign = ContentAlignment.MiddleLeft
-            };
-
-            Label lblFatto = new Label
-            {
-                Text = $"Fatto: {numCattedreDiFatto}",
-                AutoSize = false,
-                Width = 65,
-                Height = 22,
-                Location = new Point(COL_ORECATTEDRA + 25, 2),
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
@@ -838,9 +828,29 @@ namespace Cattedre
             {
                 Text = $"Diritto: {numCattedreDiDiritto}",
                 AutoSize = false,
+                Width = 55,
+                Height = 22,
+                Location = new Point(COL_ORECATTEDRA - 10, 2),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            Label lblFatto = new Label
+            {
+                Text = $"Fatto: {numCattedreDiFatto}",
+                AutoSize = false,
+                Width = 55,
+                Height = 22,
+                Location = new Point(COL_ORECATTEDRA + 60, 2),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            Label lblAssegnate = new Label
+            {
+                Text = $"Assegnate: {numDocentiAssegnati}",
+                AutoSize = false,
                 Width = 75,
                 Height = 22,
-                Location = new Point(COL_OREEFF, 2),
+                Location = new Point(COL_OREEFF + 25, 2),
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
@@ -852,11 +862,11 @@ namespace Cattedre
                 AutoSize = false,
                 Width = 110,
                 Height = 22,
-                Location = new Point(COL_OREPOT, 2),
+                Location = new Point(COL_OREPOT + 35, 2),
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
-            pnl.Controls.AddRange(new Control[] { lblCDC, lblFatto, lblDiritto, lblStato });
+            pnl.Controls.AddRange(new Control[] { lblCDC, lblDiritto, lblFatto, lblAssegnate, lblStato });
 
             // Applica l'offset nel chiamante: in LoadOreDoc usa new Point(offsetSinistro, y)
             pnl.Tag = offsetSinistro;
@@ -1342,17 +1352,17 @@ namespace Cattedre
                 string filePath=string.Empty;
                 //controlli iniziali di errori
                 if (IDannoscolastico <= 0) throw new Exception("Selezionare un Anno scolastico valido");
-                if(IDdipartimento<=0) throw new Exception("Selezionare un dipartimento valido");
+                if (IDdipartimento<=0) throw new Exception("Selezionare un dipartimento valido");
 
-                //creazione oggetti IDannoscolastico e dipartimento dai loro ID
-                ClsAnnoScolasticoDL anno=ClsAnnoScolasticoBL.CercaAnnoScolastico(IDannoscolastico);
+                //creazione oggetti annoscolastico e dipartimento dai loro ID
+                ClsAnnoScolasticoDL anno = ClsAnnoScolasticoBL.CercaAnnoScolastico(IDannoscolastico);
                 ClsDipartimentoDL dipartimento = ClsDipartimentoBL.CaricaDipartimento(IDdipartimento);
 
                 //gestione percorso file
-                filePath = ClsGenerazioneWord.GestisciPercorsoFile(anno,dipartimento);
+                filePath = ClsGenerazioneWord.GestisciPercorsoFile(anno, dipartimento);
                 if (string.IsNullOrEmpty(filePath)) throw new Exception("Seleziona un percorso file per la creazione del .docx");
 
-                //metodo del effettiva creazione del file
+                //metodo dell'effettiva creazione del file
                 ClsGenerazioneWord.PreparazioneCreazioneFile(anno,dipartimento,filePath);
 
                 //finistra di successo e richiesta di apertura del file

@@ -39,15 +39,15 @@ namespace Cattedre
             this.rbDBufficiale = new System.Windows.Forms.RadioButton();
             this.rbTest1 = new System.Windows.Forms.RadioButton();
             this.rbTest2 = new System.Windows.Forms.RadioButton();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.pnlDebug = new System.Windows.Forms.Panel();
             this.rbTest3 = new System.Windows.Forms.RadioButton();
-            this.panel4 = new System.Windows.Forms.Panel();
+            this.pnlDB = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.panel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panel2)).BeginInit();
-            this.panel3.SuspendLayout();
-            this.panel4.SuspendLayout();
+            this.pnlDebug.SuspendLayout();
+            this.pnlDB.SuspendLayout();
             this.SuspendLayout();
             // 
             // label2
@@ -80,7 +80,7 @@ namespace Cattedre
             this.tbPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
-            this.tbPassword.Size = new System.Drawing.Size(395, 24);
+            this.tbPassword.Size = new System.Drawing.Size(409, 24);
             this.tbPassword.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbPassword.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbPassword.TabIndex = 11;
@@ -93,7 +93,7 @@ namespace Cattedre
             this.tbNomeUtente.Location = new System.Drawing.Point(304, 185);
             this.tbNomeUtente.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbNomeUtente.Name = "tbNomeUtente";
-            this.tbNomeUtente.Size = new System.Drawing.Size(401, 24);
+            this.tbNomeUtente.Size = new System.Drawing.Size(415, 24);
             this.tbNomeUtente.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             this.tbNomeUtente.StateCommon.Content.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbNomeUtente.TabIndex = 10;
@@ -107,7 +107,7 @@ namespace Cattedre
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.PanelBackStyle = Krypton.Toolkit.PaletteBackStyle.PanelAlternate;
-            this.panel1.Size = new System.Drawing.Size(399, 2);
+            this.panel1.Size = new System.Drawing.Size(413, 2);
             this.panel1.StateCommon.Color1 = System.Drawing.Color.RoyalBlue;
             this.panel1.StateCommon.Color2 = System.Drawing.Color.RoyalBlue;
             this.panel1.TabIndex = 8;
@@ -132,7 +132,7 @@ namespace Cattedre
             this.pictureBox2.Location = new System.Drawing.Point(291, 0);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(488, 143);
+            this.pictureBox2.Size = new System.Drawing.Size(502, 143);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 15;
             this.pictureBox2.TabStop = false;
@@ -165,7 +165,7 @@ namespace Cattedre
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.Location = new System.Drawing.Point(481, 484);
+            this.label3.Location = new System.Drawing.Point(455, 473);
             this.label3.Margin = new System.Windows.Forms.Padding(4);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(87, 25);
@@ -216,10 +216,9 @@ namespace Cattedre
             // 
             // btLogin
             // 
-            this.btLogin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btLogin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btLogin.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btLogin.Location = new System.Drawing.Point(455, 430);
+            this.btLogin.Location = new System.Drawing.Point(299, 461);
             this.btLogin.Margin = new System.Windows.Forms.Padding(4);
             this.btLogin.Name = "btLogin";
             this.btLogin.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
@@ -287,10 +286,9 @@ namespace Cattedre
             // 
             // btLoginGoogle
             // 
-            this.btLoginGoogle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btLoginGoogle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btLoginGoogle.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btLoginGoogle.Location = new System.Drawing.Point(411, 516);
+            this.btLoginGoogle.Location = new System.Drawing.Point(548, 461);
             this.btLoginGoogle.Margin = new System.Windows.Forms.Padding(4);
             this.btLoginGoogle.Name = "btLoginGoogle";
             this.btLoginGoogle.OverrideDefault.Back.Color1 = System.Drawing.Color.RoyalBlue;
@@ -364,7 +362,7 @@ namespace Cattedre
             this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
             this.panel2.PanelBackStyle = Krypton.Toolkit.PaletteBackStyle.PanelAlternate;
-            this.panel2.Size = new System.Drawing.Size(399, 2);
+            this.panel2.Size = new System.Drawing.Size(413, 2);
             this.panel2.StateCommon.Color1 = System.Drawing.Color.RoyalBlue;
             this.panel2.StateCommon.Color2 = System.Drawing.Color.RoyalBlue;
             this.panel2.TabIndex = 23;
@@ -420,17 +418,17 @@ namespace Cattedre
             this.rbTest2.Text = "Stefano Bartoloni";
             this.rbTest2.UseVisualStyleBackColor = true;
             // 
-            // panel3
+            // pnlDebug
             // 
-            this.panel3.Controls.Add(this.rbTest3);
-            this.panel3.Controls.Add(this.rbTest1);
-            this.panel3.Controls.Add(this.rbTest2);
-            this.panel3.Location = new System.Drawing.Point(327, 335);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(160, 87);
-            this.panel3.TabIndex = 28;
-            this.panel3.Visible = false;
+            this.pnlDebug.Controls.Add(this.rbTest3);
+            this.pnlDebug.Controls.Add(this.rbTest1);
+            this.pnlDebug.Controls.Add(this.rbTest2);
+            this.pnlDebug.Location = new System.Drawing.Point(593, 349);
+            this.pnlDebug.Margin = new System.Windows.Forms.Padding(4);
+            this.pnlDebug.Name = "pnlDebug";
+            this.pnlDebug.Size = new System.Drawing.Size(160, 87);
+            this.pnlDebug.TabIndex = 28;
+            this.pnlDebug.Visible = false;
             // 
             // rbTest3
             // 
@@ -444,24 +442,24 @@ namespace Cattedre
             this.rbTest3.Text = "Marcello Pigini";
             this.rbTest3.UseVisualStyleBackColor = true;
             // 
-            // panel4
+            // pnlDB
             // 
-            this.panel4.Controls.Add(this.rbDBufficiale);
-            this.panel4.Controls.Add(this.rbDBprova);
-            this.panel4.Location = new System.Drawing.Point(579, 348);
-            this.panel4.Margin = new System.Windows.Forms.Padding(4);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(127, 60);
-            this.panel4.TabIndex = 29;
+            this.pnlDB.Controls.Add(this.rbDBufficiale);
+            this.pnlDB.Controls.Add(this.rbDBprova);
+            this.pnlDB.Location = new System.Drawing.Point(304, 349);
+            this.pnlDB.Margin = new System.Windows.Forms.Padding(4);
+            this.pnlDB.Name = "pnlDB";
+            this.pnlDB.Size = new System.Drawing.Size(127, 60);
+            this.pnlDB.TabIndex = 29;
             // 
             // FrmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
-            this.ClientSize = new System.Drawing.Size(779, 558);
-            this.Controls.Add(this.panel4);
-            this.Controls.Add(this.panel3);
+            this.ClientSize = new System.Drawing.Size(793, 558);
+            this.Controls.Add(this.pnlDB);
+            this.Controls.Add(this.pnlDebug);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tbNomeUtente);
             this.Controls.Add(this.panel2);
@@ -487,10 +485,10 @@ namespace Cattedre
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panel2)).EndInit();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
+            this.pnlDebug.ResumeLayout(false);
+            this.pnlDebug.PerformLayout();
+            this.pnlDB.ResumeLayout(false);
+            this.pnlDB.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -517,8 +515,8 @@ namespace Cattedre
         private System.Windows.Forms.RadioButton rbDBufficiale;
         private System.Windows.Forms.RadioButton rbTest1;
         private System.Windows.Forms.RadioButton rbTest2;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel pnlDebug;
+        private System.Windows.Forms.Panel pnlDB;
         private System.Windows.Forms.RadioButton rbTest3;
     }
 }

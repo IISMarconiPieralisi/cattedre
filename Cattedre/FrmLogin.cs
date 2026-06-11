@@ -300,37 +300,42 @@ namespace Cattedre
 
         private void FrmLogin_Load(object sender, EventArgs e)
         {
+#if DEBUG
+            pnlDebug.Visible = true;
+#endif
             rbTest1.Checked = true;
             rbDBufficiale.Checked = true;
         }
 
         private void rbTest1_CheckedChanged(object sender, EventArgs e)
         {
-            //if (rbTest1.Checked == true)
-            //{
-            //    tbNomeUtente.Text = "vittorio.alfieri@iismarconipieralisi.it";
-            //    tbPassword.Text = "vitalf00!";
-            //}
-            //else if (rbTest2.Checked == true )
-            //{
-            //    rbTest1.Checked = false;
-            //    tbNomeUtente.Clear();
-            //    tbPassword.Clear();
-            //    tbNomeUtente.Text = "stefano.bartoloni@iismarconipieralisi.it";
-            //    tbPassword.Text = "Bartoloni";
-            //}
-            //else
-            //{
-            //    rbTest1.Checked = false;
-            //    rbTest2.Checked = false;
-            //    tbNomeUtente.Clear();
-            //    tbPassword.Clear();
-            //    tbNomeUtente.Text = "marcello.pigini@iismarconipieralisi.it";
-            //    tbPassword.Text = "Pigini";
-            //}
+#if DEBUG
+            if (rbTest1.Checked == true)
+            {
+                tbNomeUtente.Text = "vittorio.alfieri@iismarconipieralisi.it";
+                tbPassword.Text = "vitalf00!";
+            }
+            else if (rbTest2.Checked == true)
+            {
+                rbTest1.Checked = false;
+                tbNomeUtente.Clear();
+                tbPassword.Clear();
+                tbNomeUtente.Text = "stefano.bartoloni@iismarconipieralisi.it";
+                tbPassword.Text = "Bartoloni";
+            }
+            else
+            {
+                rbTest1.Checked = false;
+                rbTest2.Checked = false;
+                tbNomeUtente.Clear();
+                tbPassword.Clear();
+                tbNomeUtente.Text = "marcello.pigini@iismarconipieralisi.it";
+                tbPassword.Text = "Pigini";
+            }
+#endif
         }
 
-      
+
 
         private void rbDBufficiale_CheckedChanged(object sender, EventArgs e)
         {

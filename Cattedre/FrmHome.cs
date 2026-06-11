@@ -76,6 +76,11 @@ namespace Cattedre
             // AggiornaLabel(lblEmail.Text, lblEmail);
             InitSidebar();
             CentraControlli();
+#if DEBUG
+            int _posPass = Program.connectionString.LastIndexOf("pass");
+            lblDB.Text = Program.connectionString.Substring(0, _posPass);
+#endif
+
         }
 
         #region immagine profilo

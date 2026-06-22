@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -76,9 +77,14 @@ namespace Cattedre
             // AggiornaLabel(lblEmail.Text, lblEmail);
             InitSidebar();
             CentraControlli();
+
+            string _Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+            //string _Product = Application.CompanyName + "\n " + Application.ProductName + "\n " + _Version;
+
+            lblVer_DB.Text = "Versione: " + _Version;
 #if DEBUG
             int _posPass = Program.connectionString.LastIndexOf("pass");
-            lblDB.Text = Program.connectionString.Substring(0, _posPass);
+            lblVer_DB.Text += " - " + Program.connectionString.Substring(0, _posPass);
 #endif
 
         }

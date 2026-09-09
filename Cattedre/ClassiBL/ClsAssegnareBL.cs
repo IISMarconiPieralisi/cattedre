@@ -435,7 +435,7 @@ AND IDutente IN (
                                           c.tipoContratto,1 AS isInterno
                                 FROM utenti u
                                 JOIN afferire af ON af.IDutente = u.ID
-                                LEFT JOIN contratti c ON c.IDutente = u.ID
+                                JOIN contratti c ON c.IDutente = u.ID
                                 LEFT JOIN assegnare a ON a.IDutente = u.ID
                                 LEFT JOIN anniscolastici ans ON ans.ID = a.IDannoscolastico
                                 WHERE af.IDdipartimento = @IDdipartimento
@@ -474,7 +474,7 @@ AND IDutente IN (
                                 FROM utenti u
                                 JOIN assegnare a ON a.IDutente = u.ID AND a.IDannoscolastico = @IDannoScolastico
                                 JOIN gestire g ON g.IDdisciplina = a.IDdisciplina AND g.IDdipartimento = @IDdipartimento
-                                LEFT JOIN contratti c ON c.IDutente = u.ID
+                                JOIN contratti c ON c.IDutente = u.ID
                                 WHERE u.tipoUtente IN ('D','C','A')
                                 AND NOT EXISTS (
                                     SELECT 1 FROM afferire af

@@ -296,7 +296,7 @@ namespace Cattedre
             }
             return utente;
         }
-        public static List<ClsUtenteDL> OttieniUtentiDipartimento(long IDdiparimento)
+        public static List<ClsUtenteDL> OttieniUtentiDipartimento(long IDdiparimento, bool inservizio)
         {
             List<ClsUtenteDL> utenti = new List<ClsUtenteDL>();
             DataTable dt = new DataTable();
@@ -305,9 +305,12 @@ namespace Cattedre
                 using (MySqlConnection conn = new MySqlConnection(Program.connectionString))
                 {
                     conn.Open();
+
+                    string _inservizio = (inservizio) ? "AND (c.datafine IS NULL OR c.datafine > CURDATE())" : "";
                     string sql = @"SELECT u.ID,u.cognome,u.nome,tipoUtente,colore,tipoDocente FROM utenti u
                                     JOIN afferire a ON u.ID = a.IDutente
-                                    WHERE a.IDdipartimento = @IDdipartimento";
+                                    JOIN contratti c ON c.IDutente = u.ID
+                                    WHERE a.IDdipartimento = @IDdipartimento " + _inservizio;
 
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {

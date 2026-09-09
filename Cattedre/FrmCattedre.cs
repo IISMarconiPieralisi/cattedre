@@ -440,7 +440,7 @@ namespace Cattedre
             // QUERY UNICA x recuperare tutti i docenti del dipartimento
             docenti = ClsAssegnareBL.CaricaDocentiConAssegnazioni(IDdipartimento, IDannoscolastico);
 
-            // Aggiunti i docenti esterni già assegnati
+            // Aggiunti i docenti esterni al dipartimento già assegnati
             DataTable esterniAssegnati = ClsAssegnareBL.CaricaDocentiEsterniAssegnati(IDdipartimento, IDannoscolastico);
             foreach (DataRow row in esterniAssegnati.Rows)
                 docenti.ImportRow(row);
@@ -899,7 +899,7 @@ namespace Cattedre
             int y = 45;
 
             // Recupero docenti del dipartimento
-            List<ClsUtenteDL> docenti = ClsUtenteBL.OttieniUtentiDipartimento(IDdipartimento)
+            List<ClsUtenteDL> docenti = ClsUtenteBL.OttieniUtentiDipartimento(IDdipartimento, true)
                 .OrderBy(d =>
                 {
                     var cdcs = ClsRichiedereBL.RilevaCDCDocente(d.ID);

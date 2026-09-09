@@ -98,6 +98,14 @@ namespace Cattedre
                         if (dip != null)
                             _afferenze.Add(new ClsAfferireDL(dip.ID));
                     }
+                    // Se non selezionato assegno il dipartimento dell'utente loggato
+                    if (_afferenze.Count == 0)
+                    {
+                        // Recupero il dipartimento
+                        int _dipID = ClsUtenteBL.TrovaIDdipartimento(Program.utenteLoggato.ID);
+                        if (_dipID > 0)
+                            _afferenze.Add(new ClsAfferireDL(_dipID));
+                    }
                     //controlli richiedere e inserimento
 
                     // gestione Classi di concorso
@@ -191,7 +199,7 @@ namespace Cattedre
             if (!ClsUtenteDL.UtenteAdmin(_utenteLoggato))
             {
                 ClsDipartimentoDL dip = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utenteLoggato.ID);
-                if (dip.ID > 0)
+                if (dip != null && dip.ID > 0)
                 {
                     int indexDipartimento = dipartimenti.FindIndex(d => d.ID == dip.ID);
                     if (indexDipartimento >= 0)
@@ -1013,7 +1021,7 @@ namespace Cattedre
         }
         private void cbAutoPassword_CheckedChanged_1(object sender, EventArgs e)
         {
-            if (cbAutoPassword.Checked)
+            if (cbAutoPassword.Checked && tbNome.Text.Length >= 3 && tbCognome.Text.Length >= 3)
             {
                 tbPassword.Text = $"{ tbNome.Text.ToLower().Trim().Substring(0, 3)}{tbCognome.Text.ToLower().Trim().Substring(0, 3)}00!";
                 tbPassword.Enabled = false;

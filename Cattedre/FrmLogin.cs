@@ -74,6 +74,7 @@ namespace Cattedre
                     if (FotoProfilo == null && _cachefoto.ContainsKey(email))
                         FotoProfilo = _cachefoto[email];
                     UtenteLoggato = utenteLoggato;
+                    Program.utenteLoggato = utenteLoggato;
                     this.DialogResult = DialogResult.OK;
                     this.Close();
 
@@ -177,6 +178,7 @@ namespace Cattedre
                         }
                            
                         UtenteLoggato = utenteLoggato;
+                        Program.utenteLoggato = utenteLoggato;
                         this.DialogResult = DialogResult.OK;
                         this.Close();
 
@@ -344,7 +346,7 @@ namespace Cattedre
 
         private void rbDBprova_CheckedChanged(object sender, EventArgs e)
         {
-            Program.connectionString = ConfigurationManager.ConnectionStrings["cattedre"].ConnectionString;
+            Program.connectionString = ConfigurationManager.ConnectionStrings["locale"].ConnectionString;
         }
     }
     

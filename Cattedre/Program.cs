@@ -11,6 +11,7 @@ namespace Cattedre
     {
         public static string connectionString;
         //public static string connectionString = ConfigurationManager.ConnectionStrings["srvcattedre"].ConnectionString;
+        public static ClsUtenteDL utenteLoggato;
 
         /// <summary>
         /// Punto di ingresso principale dell'applicazione.

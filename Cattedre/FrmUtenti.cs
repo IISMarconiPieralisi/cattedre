@@ -416,9 +416,20 @@ namespace Cattedre
 
                 if (_utenteLoggato.TipoUtente == "C")
                 {
-                    long idDip = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utenteLoggato.ID).ID;
-                    idDipartimenti.Add(idDip.ToString());
-                    cbDipartimento.SelectedValue = idDip;
+                    ClsDipartimentoDL _dip = ClsDipartimentoBL.UtenteCoordinaDipartimento(_utenteLoggato.ID);
+                    if (_dip != null)
+                    {
+                        long idDip = _dip.ID;
+                        idDipartimenti.Add(idDip.ToString());
+                        cbDipartimento.SelectedValue = idDip;
+                    }
+                    else
+                    {
+                        long idDip = ClsUtenteBL.TrovaIDdipartimento(_utenteLoggato.ID);
+                        idDipartimenti.Add(idDip.ToString());
+                        cbDipartimento.SelectedValue = idDip;
+                    }
+
                 }
                 else // D
                 {

@@ -44,6 +44,7 @@ namespace Cattedre
             this.kryptonButton1 = new Krypton.Toolkit.KryptonButton();
             this.mtbSezione = new Krypton.Toolkit.KryptonMaskedTextBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.btnDisarticola = new Krypton.Toolkit.KryptonButton();
             ((System.ComponentModel.ISupportInitialize)(this.nudAnno)).BeginInit();
             this.SuspendLayout();
             // 
@@ -168,7 +169,7 @@ namespace Cattedre
             this.cbClasseArticolataCon.Location = new System.Drawing.Point(165, 260);
             this.cbClasseArticolataCon.Margin = new System.Windows.Forms.Padding(4);
             this.cbClasseArticolataCon.Name = "cbClasseArticolataCon";
-            this.cbClasseArticolataCon.Size = new System.Drawing.Size(221, 25);
+            this.cbClasseArticolataCon.Size = new System.Drawing.Size(174, 25);
             this.cbClasseArticolataCon.TabIndex = 3;
             this.cbClasseArticolataCon.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbClasseArticolataCon_KeyDown);
             // 
@@ -356,11 +357,81 @@ namespace Cattedre
             this.label10.TabIndex = 47;
             this.label10.Text = "Gestisci classe:";
             // 
+            // btnDisarticola
+            // 
+            this.btnDisarticola.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnDisarticola.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnDisarticola.Location = new System.Drawing.Point(346, 256);
+            this.btnDisarticola.Name = "btnDisarticola";
+            this.btnDisarticola.OverrideDefault.Back.Color1 = System.Drawing.Color.DarkRed;
+            this.btnDisarticola.OverrideDefault.Back.Color2 = System.Drawing.Color.Red;
+            this.btnDisarticola.OverrideDefault.Back.ColorAngle = 45F;
+            this.btnDisarticola.OverrideDefault.Border.Color1 = System.Drawing.Color.Red;
+            this.btnDisarticola.OverrideDefault.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.btnDisarticola.OverrideDefault.Border.ColorAngle = 45F;
+            this.btnDisarticola.OverrideDefault.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btnDisarticola.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btnDisarticola.OverrideDefault.Border.Rounding = 20F;
+            this.btnDisarticola.OverrideDefault.Border.Width = 1;
+            this.btnDisarticola.Size = new System.Drawing.Size(40, 32);
+            this.btnDisarticola.StateCommon.Back.Color1 = System.Drawing.Color.Red;
+            this.btnDisarticola.StateCommon.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btnDisarticola.StateCommon.Back.ColorAngle = 45F;
+            this.btnDisarticola.StateCommon.Border.Color1 = System.Drawing.Color.Red;
+            this.btnDisarticola.StateCommon.Border.Color2 = System.Drawing.Color.DarkRed;
+            this.btnDisarticola.StateCommon.Border.ColorAngle = 45F;
+            this.btnDisarticola.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btnDisarticola.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btnDisarticola.StateCommon.Border.Rounding = 20F;
+            this.btnDisarticola.StateCommon.Border.Width = 1;
+            this.btnDisarticola.StateCommon.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.btnDisarticola.StateCommon.Content.ShortText.Color2 = System.Drawing.Color.White;
+            this.btnDisarticola.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDisarticola.StateNormal.Back.Color1 = System.Drawing.Color.Red;
+            this.btnDisarticola.StateNormal.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btnDisarticola.StateNormal.Border.Color1 = System.Drawing.Color.DarkRed;
+            this.btnDisarticola.StateNormal.Border.Color2 = System.Drawing.Color.Red;
+            this.btnDisarticola.StateNormal.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btnDisarticola.StatePressed.Back.Color1 = System.Drawing.Color.Red;
+            this.btnDisarticola.StatePressed.Back.Color2 = System.Drawing.Color.Yellow;
+            this.btnDisarticola.StatePressed.Back.ColorAngle = 135F;
+            this.btnDisarticola.StatePressed.Border.Color1 = System.Drawing.Color.Yellow;
+            this.btnDisarticola.StatePressed.Border.Color2 = System.Drawing.Color.Red;
+            this.btnDisarticola.StatePressed.Border.ColorAngle = 135F;
+            this.btnDisarticola.StatePressed.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btnDisarticola.StatePressed.Border.Rounding = 20F;
+            this.btnDisarticola.StatePressed.Border.Width = 1;
+            this.btnDisarticola.StateTracking.Back.Color1 = System.Drawing.Color.Red;
+            this.btnDisarticola.StateTracking.Back.Color2 = System.Drawing.Color.DarkRed;
+            this.btnDisarticola.StateTracking.Back.ColorAngle = 45F;
+            this.btnDisarticola.StateTracking.Border.Color1 = System.Drawing.Color.DarkRed;
+            this.btnDisarticola.StateTracking.Border.Color2 = System.Drawing.Color.Red;
+            this.btnDisarticola.StateTracking.Border.ColorAngle = 45F;
+            this.btnDisarticola.StateTracking.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.btnDisarticola.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.btnDisarticola.StateTracking.Border.Rounding = 20F;
+            this.btnDisarticola.StateTracking.Border.Width = 1;
+            this.btnDisarticola.TabIndex = 48;
+            this.btnDisarticola.Values.DropDownArrowColor = System.Drawing.Color.Empty;
+            this.btnDisarticola.Values.Text = "X";
+            this.btnDisarticola.Click += new System.EventHandler(this.btnDisarticola_Click);
+            // 
             // FrmClasse
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(399, 487);
+            this.Controls.Add(this.btnDisarticola);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.mtbSezione);
             this.Controls.Add(this.btSalva);
@@ -404,5 +475,6 @@ namespace Cattedre
         private Krypton.Toolkit.KryptonButton kryptonButton1;
         private Krypton.Toolkit.KryptonMaskedTextBox mtbSezione;
         private System.Windows.Forms.Label label10;
+        private Krypton.Toolkit.KryptonButton btnDisarticola;
     }
 }

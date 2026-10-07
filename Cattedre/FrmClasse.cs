@@ -296,5 +296,9 @@ namespace Cattedre
         }
         #endregion
 
+        private void btnDisarticola_Click(object sender, EventArgs e)
+        {
+            cbClasseArticolataCon.SelectedIndex = -1;
+        }
     }
 }
